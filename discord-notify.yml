@@ -1,0 +1,62 @@
+name: Discord Notification
+
+on:
+  pull_request:
+    types: [opened, closed] # PR이 열리거나 닫힐 때만 트리거
+
+jobs:
+  discord-notify:
+    runs-on: ubuntu-latest
+    steps:
+      # 1. PR이 생성(Open)되었을 때 실행
+      - name: Notify PR Opened
+        if: github.event.action == 'opened'
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        run: |
+          curl -H "Content-Type: application/json" \
+          -d '{
+            "username": "GitHub Actions",
+            "content": "📢 **새로운 PR이 도착했습니다!**",
+            "embeds": [{
+              "title": "${{ github.event.pull_request.title }}",
+              "url": "${{ github.event.pull_request.html_url }}",
+              "description": "요청자: ${{ github.actor }}",
+              "color": 3447003
+            }]
+          }' $DISCORD_WEBHOOK
+
+      # 2. PR이 병합(Merged)되었을 때 실행
+      # (closed 상태이면서 merged가 true인 경우)
+      - name: Notify PR Merged
+        if: github.event.action == 'closed' && github.event.pull_request.merged == true
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        run: |
+          curl -H "Content-Type: application/json" \
+          -d '{
+            "username": "GitHub Actions",
+            "content": "✅ **PR이 병합되었습니다!**",
+            "embeds": [{
+              "title": "${{ github.event.pull_request.title }}",
+              "url": "${{ github.event.pull_request.html_url }}",
+              "description": "병합된 브랜치: ${{ github.base_ref }}",
+              "color": 3066993
+            }]
+          }' $DISCORD_WEBHOOK
+
+      # (선택사항) 3. PR이 병합되지 않고 닫혔을 때 (거절/취소)
+      - name: Notify PR Closed (Not Merged)
+        if: github.event.action == 'closed' && github.event.pull_request.merged == false
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        run: |
+          curl -H "Content-Type: application/json" \
+          -d '{
+            "username": "GitHub Actions",
+            "content": "🚫 **PR이 닫혔습니다 (병합 거절 or 취소).**",
+            "embeds": [{
+              "title": "${{ github.event.pull_request.title }}",
+              "color": 15158332
+            }]
+          }' $DISCORD_WEBHOOK
