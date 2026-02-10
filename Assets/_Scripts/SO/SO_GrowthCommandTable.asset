@@ -1,0 +1,180 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a4eda2de14259b4a8210c880c29686c, type: 3}
+  m_Name: SO_GrowthCommandTable
+  m_EditorClassIdentifier: Assembly-CSharp::GrowthCommandTableSO
+  _rows:
+  - index: 1001
+    name: "\uB2E8\uCCB4 \uD6C8\uB828"
+    icon: 
+    parentIndex: 0
+    btnType: 0
+    facilityReq: 2
+    facilityLv: 1
+    target: 0
+    hpCost: 0
+    mental: 0
+    shoot: 0
+    speed: 0
+    defense: 0
+    stamina: 0
+    linkedEventId: 0
+  - index: 1002
+    name: "\uAC1C\uC778 \uD6C8\uB828"
+    icon: 
+    parentIndex: 0
+    btnType: 0
+    facilityReq: 2
+    facilityLv: 1
+    target: 0
+    hpCost: 0
+    mental: 0
+    shoot: 0
+    speed: 0
+    defense: 0
+    stamina: 0
+    linkedEventId: 0
+  - index: 1003
+    name: "\uC0C1\uB2F4"
+    icon: 
+    parentIndex: 0
+    btnType: 1
+    facilityReq: 4
+    facilityLv: 1
+    target: 2
+    hpCost: -10
+    mental: 10
+    shoot: 0
+    speed: 0
+    defense: 0
+    stamina: 0
+    linkedEventId: 0
+  - index: 1004
+    name: "\uD734\uC2DD"
+    icon: 
+    parentIndex: 0
+    btnType: 1
+    facilityReq: 3
+    facilityLv: 1
+    target: 1
+    hpCost: -25
+    mental: 5
+    shoot: 0
+    speed: 0
+    defense: 0
+    stamina: 0
+    linkedEventId: 0
+  - index: 1101
+    name: "\uC6E8\uC774\uD2B8 \uD2B8\uB808\uC774\uB2DD"
+    icon: 
+    parentIndex: 1001
+    btnType: 1
+    facilityReq: 2
+    facilityLv: 1
+    target: 1
+    hpCost: 15
+    mental: 0
+    shoot: 0
+    speed: 0
+    defense: 2
+    stamina: 1
+    linkedEventId: 0
+  - index: 1102
+    name: "\uC154\uD2C0\uB7F0"
+    icon: 
+    parentIndex: 1001
+    btnType: 1
+    facilityReq: 2
+    facilityLv: 1
+    target: 1
+    hpCost: 30
+    mental: -5
+    shoot: 0
+    speed: 2
+    defense: 0
+    stamina: 3
+    linkedEventId: 0
+  - index: 1103
+    name: "\uC804\uC220\uD6C8\uB828"
+    icon: 
+    parentIndex: 1001
+    btnType: 1
+    facilityReq: 2
+    facilityLv: 1
+    target: 1
+    hpCost: 10
+    mental: 0
+    shoot: 0
+    speed: 0
+    defense: 1
+    stamina: 0
+    linkedEventId: 0
+  - index: 1201
+    name: "\uC288\uD305 \uB4DC\uB9B4"
+    icon: 
+    parentIndex: 1002
+    btnType: 1
+    facilityReq: 2
+    facilityLv: 1
+    target: 2
+    hpCost: 25
+    mental: 0
+    shoot: 2
+    speed: 0
+    defense: 0
+    stamina: 0
+    linkedEventId: 0
+  - index: 1202
+    name: "\uD3EC\uC2A4\uD2B8\uC5C5 & \uB9AC\uBC14\uC6B4\uB4DC"
+    icon: 
+    parentIndex: 1002
+    btnType: 1
+    facilityReq: 2
+    facilityLv: 1
+    target: 2
+    hpCost: 25
+    mental: 0
+    shoot: 1
+    speed: 0
+    defense: 1
+    stamina: 0
+    linkedEventId: 0
+  - index: 1203
+    name: "\uB514\uD39C\uC2A4 \uC6CC\uD06C"
+    icon: 
+    parentIndex: 1002
+    btnType: 1
+    facilityReq: 2
+    facilityLv: 1
+    target: 2
+    hpCost: 25
+    mental: 0
+    shoot: 0
+    speed: 0
+    defense: 2
+    stamina: 0
+    linkedEventId: 0
+  - index: 1204
+    name: "\uD578\uB4E4\uB9C1 & \uAC1C\uC778\uAE30"
+    icon: 
+    parentIndex: 1002
+    btnType: 1
+    facilityReq: 2
+    facilityLv: 1
+    target: 2
+    hpCost: 25
+    mental: 0
+    shoot: 0
+    speed: 1
+    defense: 1
+    stamina: 0
+    linkedEventId: 0
