@@ -1,0 +1,13 @@
+index,name,icon,parent_index,btn_type,facility_req,facility_lv,target,hp_cost,mental,shoot,speed,defense,stamina,linked_event_id
+int,string,string,int,enum,enum,int,enum,int,int,float,float,float,float,enum
+1001,단체 훈련,-,-,category,gym,1,-,-,-,-,-,-,-,-
+1002,개인 훈련,-,-,category,gym,1,-,-,-,-,-,-,-,-
+1003,상담,-,-,action,counselingcenter,1,individual,-10,10,0,0,0,0,-
+1004,휴식,-,-,action,cafeteria,1,team,-25,5,0,0,0,0,-
+1101,웨이트 트레이닝,-,1001,action,gym,1,team,15,0,0,0,2,1,-
+1102,셔틀런,-,1001,action,gym,1,team,30,-5,0,2,0,3,-
+1103,전술훈련,-,1001,action,gym,1,team,10,0,0,0,1,0,-
+1201,슈팅 드릴,-,1002,action,gym,1,individual,25,0,2,0,0,0,-
+1202,포스트업 & 리바운드,-,1002,action,gym,1,individual,25,0,1,0,1,0,-
+1203,디펜스 워크,-,1002,action,gym,1,individual,25,0,0,0,2,0,-
+1204,핸들링 & 개인기,-,1002,action,gym,1,individual,25,0,0,1,1,0,-
