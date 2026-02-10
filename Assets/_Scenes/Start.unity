@@ -1024,7 +1024,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StartManager
   _loadingSlider: {fileID: 269886561}
-  _debugText: {fileID: 1698672233}
+  _statusText: {fileID: 1698672233}
   _growthCommandTableReference:
     m_AssetGUID: 1be4142f5ad0d00488680016784a973c
     m_SubObjectName: 
