@@ -49,6 +49,29 @@ public class DateManager
 
     public DateManager() : this(new DateTime(2026, 3, 1)) { }
 
+    //게임 시작일 기준 학기/입학 이벤트 발행 (Start에서 한 번 호출)
+    //AdvanceDay는 전날->오늘 전환 시에만 판정하므로 시작일 자체의 이벤트는 별도 처리
+    public void InitStartDayEvents()
+    {
+        int month = _currentDate.Month;
+
+        if (month == ENROLLMENT_MONTH)
+        {
+            OnEnrollmentTriggered?.Invoke();
+        }
+
+        if (month == GRADUATION_MONTH)
+        {
+            OnGraduationTriggered?.Invoke();
+        }
+
+        int semester = CurrentSemester;
+        if (semester != 0)
+        {
+            OnSemesterStarted?.Invoke(semester);
+        }
+    }
+
     //하루 전진 (내부에서 학기/연도/졸업/입학 전환을 판정하고 이벤트 발행)
     public void AdvanceDay()
     {
@@ -68,13 +91,13 @@ public class DateManager
         }
 
         //졸업 판정
-        if (newMonth == GRADUATION_MONTH && prevMonth != newMonth)
+        if (newMonth == GRADUATION_MONTH && prevMonth != GRADUATION_MONTH)
         {
             OnGraduationTriggered?.Invoke();
         }
 
         //입학 판정
-        if (newMonth == ENROLLMENT_MONTH && prevMonth != newMonth)
+        if (newMonth == ENROLLMENT_MONTH && prevMonth != ENROLLMENT_MONTH)
         {
             OnEnrollmentTriggered?.Invoke();
         }
