@@ -13,6 +13,11 @@ public static class SuddenEventEffectTableCsvImporter
         if (string.IsNullOrEmpty(csvPath))
             return;
 
+        ImportFromPath(csvPath);
+    }
+
+    public static void ImportFromPath(string csvPath)
+    {
         const string assetPath = "Assets/_Scripts/SO/SO_SuddenEventEffectTable.asset";
 
         var csvText = File.ReadAllText(csvPath);
