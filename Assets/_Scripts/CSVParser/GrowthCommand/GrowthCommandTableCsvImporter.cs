@@ -13,6 +13,11 @@ public static class GrowthCommandTableCsvImporter
         if (string.IsNullOrEmpty(csvPath))
             return;
 
+        ImportFromPath(csvPath);
+    }
+
+    public static void ImportFromPath(string csvPath)
+    {
         const string assetPath = "Assets/_Scripts/SO/SO_GrowthCommandTable.asset";
 
         var csvText = File.ReadAllText(csvPath);
