@@ -1,0 +1,18 @@
+ID,Index,Text,Description
+String,int,String,String
+ID_Text_StatusName_01,1,멘탈,"컨디션 방어 및 상태이상 회복 능력, 컨디션 MAX 수치 결정"
+ID_Text_StatusName_02,2,슈팅,슛 성공률 보정 (공격 성능)
+ID_Text_StatusName_03,3,속도,속공 우선권 및 팀 선공 결정(팀원 속도 총합 비교)
+ID_Text_StatusName_04,4,점프력,블록 및 리바운드 성공률 보정
+ID_Text_StatusName_05,5,지구력,활동에 따른 스탯 감소 속도(체력 유지 핵심 수치)
+ID_Text_StatusName_06,6,컨디션,캐릭터의 상태이상 발동에 영향
+ID_Text_StatusName_10,10,돈,플레이어의 소비 재화1
+ID_Text_StatusName_11,11,명성치,플레이어의 소비 재화2
+ID_Text_StatusName_random,1,멘탈,"컨디션 방어 및 상태이상 회복 능력, 컨디션 MAX 수치 결정"
+ID_Text_StatusName_random,2,슈팅,슛 성공률 보정 (공격 성능)
+ID_Text_StatusName_random,3,속도,속공 우선권 및 팀 선공 결정(팀원 속도 총합 비교)
+ID_Text_StatusName_random,4,점프력,블록 및 리바운드 성공률 보정
+ID_Text_StatusName_random,5,지구력,활동에 따른 스탯 감소 속도(체력 유지 핵심 수치)
+ID_Text_StatusName_random,6,컨디션,캐릭터의 상태이상 발동에 영향
+ID_Text_StatusName_random,10,돈,플레이어의 소비 재화1
+ID_Text_StatusName_random,11,명성치,플레이어의 소비 재화2
