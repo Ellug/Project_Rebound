@@ -1,46 +1,91 @@
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
-// [docs] 메인 로비 화면 및 기능 버튼 관리
+// 메인 로비 UI 관리
 public class LobbyUI : UIBase
 {
-    [Header("Lobby Menu Buttons")]
-    [SerializeField] private Button _btnSchedule;    // 일과 시작 (훈련/휴식)
-    [SerializeField] private Button _btnStudentMgmt; // 학생 관리 (드래그앤드롭)
-    [SerializeField] private Button _btnFacility;    // 설비 (상점)
-    [SerializeField] private Button _btnCoach;       // 감독 노드 (특성)
+    [Header("Top Left Info")]
+    [SerializeField] private TMP_Text _txtSchoolName;
+    [SerializeField] private TMP_Text _txtDate;
+    [SerializeField] private TMP_Text _txtDDay;
+    [SerializeField] private TMP_Text _txtMoney;
+    [SerializeField] private TMP_Text _txtFame;
+
+    [Header("Top Right Buttons")]
+    [SerializeField] private Button _btnLog;     // 로그 (기록)
+    [SerializeField] private Button _btnSetting; // 설정
+
+    [Header("Popups")]
+    [SerializeField] private UIPopup _optionPopupPrefab; // 설정 팝업 프리팹
+    // [SerializeField] private UIPopup _trainingPopupPrefab; // 훈련 팝업 (추후 추가)
+
+    [Header("Center Message")]
+    [SerializeField] private TMP_Text _txtMessage;
+
+    [Header("Bottom Navigation Buttons")]
+    [SerializeField] private Button _btnTraining; // 훈련 (구 일과)
+    [SerializeField] private Button _btnStudent;  // 학생 관리
+    [SerializeField] private Button _btnFacility; // 시설 (MVP 개발 X)
+    [SerializeField] private Button _btnCoach;    // 감독 노드 (MVP 개발 X)
+    [SerializeField] private Button _btnShop;     // 상점 (MVP 개발 X)
 
     public override void Init()
     {
         base.Init();
         BindEvents();
+        UpdateUI(); // 초기 데이터 표시
     }
 
     private void BindEvents()
     {
-        // 각 버튼 클릭 시 해당 기능의 팝업을 열도록 연결
-        // 아직 팝업 프리팹이 없으므로 로그만 찍거나 주석 처리
-
-        _btnSchedule.onClick.AddListener(() =>
+        // 1. 상단 버튼
+        _btnLog.onClick.AddListener(() => Debug.Log("Open Log Popup"));
+        _btnSetting.onClick.AddListener(() =>
         {
-            Debug.Log("Open Schedule Popup");
-            // UIManager.Instance.Show<Popup_Schedule>("UI/Popup_Schedule"); 
+            if (_optionPopupPrefab != null)
+                UIManager.Instance.Show(_optionPopupPrefab);
+            else
+                Debug.LogWarning("설정 팝업 프리팹이 연결되지 않았습니다.");
         });
 
-        _btnStudentMgmt.onClick.AddListener(() =>
-        {
-            Debug.Log("Open Student Management Popup");
-            // UIManager.Instance.Show<Popup_Student>("UI/Popup_Student");
-        });
+        // 2. 하단 네비게이션
+        _btnTraining.onClick.AddListener(OnClickTraining);
+        _btnStudent.onClick.AddListener(OnClickStudent);
 
-        _btnFacility.onClick.AddListener(() => Debug.Log("Open Facility Popup"));
-        _btnCoach.onClick.AddListener(() => Debug.Log("Open Coach Popup"));
+        // MVP 미구현 기능들은 '준비중' 알림
+        _btnFacility.onClick.AddListener(() => ShowNotImplemented("시설"));
+        _btnCoach.onClick.AddListener(() => ShowNotImplemented("감독 노드"));
+        _btnShop.onClick.AddListener(() => ShowNotImplemented("상점"));
     }
 
-    // [docs] 로비에서 뒤로가기 키를 누르면 게임 종료 팝업 등을 띄움
-    public override void OnBackKey()
+    private void OnClickTraining()
     {
-        Debug.Log("Show Game Exit Confirmation");
-        // Popup_Exit 같은 확인창 띄우기
+        Debug.Log("훈련 팝업 열기");
+        // UIManager.Instance.Show<Popup_Training>();
+    }
+
+    private void OnClickStudent()
+    {
+        Debug.Log("학생 관리 팝업 열기");
+        // UIManager.Instance.Show<Popup_StudentManagement>();
+    }
+
+    private void ShowNotImplemented(string featureName)
+    {
+        Debug.LogWarning($"[MVP] {featureName} 기능은 아직 개발되지 않았습니다.");
+        // 추후 Toast Message나 알림 팝업으로 대체 가능
+    }
+
+    // 데이터 매니저 등에서 정보를 받아와 UI 갱신
+    public void UpdateUI()
+    {
+        // 예시 데이터 바인딩
+        if (_txtSchoolName) _txtSchoolName.text = "한울고등학교";
+        if (_txtDate) _txtDate.text = "2000.03.02";
+        if (_txtDDay) _txtDDay.text = "D-100";
+        if (_txtMoney) _txtMoney.text = "5000 G";
+        if (_txtFame) _txtFame.text = "150";
+        if (_txtMessage) _txtMessage.text = "감독님, 신입생들이 입학했습니다. 훈련 일정을 잡아주세요.";
     }
 }
