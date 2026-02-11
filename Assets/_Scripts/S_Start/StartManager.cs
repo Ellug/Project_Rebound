@@ -19,8 +19,12 @@ public class StartManager : MonoBehaviour
     [SerializeField] private AssetReference _suddenEventTextTableRef;
     [SerializeField] private AssetReference _statusTextTableRef;
 
-    // 로드된 테이블들 (나중에 DataManager로 옮길 예정)
-    private static readonly Dictionary<System.Type, ScriptableObject> _loadedTables = new();
+    // 로드된 테이블들 (임시 저장용)
+    private GrowthCommandTableSO _growthCommandTable;
+    private SuddenEventTableSO _suddenEventTable;
+    private SuddenEventEffectTableSO _suddenEventEffectTable;
+    private SuddenEventTextTableSO _suddenEventTextTable;
+    private StatusTextTableSO _statusTextTable;
 
     private readonly WaitForSeconds _waitOneSecond = new(1f);
 
@@ -130,30 +134,43 @@ public class StartManager : MonoBehaviour
         // 5. Loading game data (80% ~ 90%)
         _statusText.text = "Loading game data...";
 
-        // 모든 테이블 로드
-        yield return LoadTable<GrowthCommandTableSO>(_growthCommandTableRef);
+        // 모든 테이블 로드 ( 테이블 추가 될 때마다 수동 추가... )
+        yield return LoadTable<GrowthCommandTableSO>(_growthCommandTableRef, t => _growthCommandTable = t);
         progress = 0.82f;
         _loadingSlider.value = progress;
 
-        yield return LoadTable<SuddenEventTableSO>(_suddenEventTableRef);
+        yield return LoadTable<SuddenEventTableSO>(_suddenEventTableRef, t => _suddenEventTable = t);
         progress = 0.84f;
         _loadingSlider.value = progress;
 
-        yield return LoadTable<SuddenEventEffectTableSO>(_suddenEventEffectTableRef);
+        yield return LoadTable<SuddenEventEffectTableSO>(_suddenEventEffectTableRef, t => _suddenEventEffectTable = t);
         progress = 0.86f;
         _loadingSlider.value = progress;
 
-        yield return LoadTable<SuddenEventTextTableSO>(_suddenEventTextTableRef);
+        yield return LoadTable<SuddenEventTextTableSO>(_suddenEventTextTableRef, t => _suddenEventTextTable = t);
         progress = 0.88f;
         _loadingSlider.value = progress;
 
-        yield return LoadTable<StatusTextTableSO>(_statusTextTableRef);
+        yield return LoadTable<StatusTextTableSO>(_statusTextTableRef, t => _statusTextTable = t);
         progress = 0.9f;
         _loadingSlider.value = progress;
 
-        // 6. Finalizing (90% ~ 100%)
+        // 6. Initializing DataManager (90% ~ 95%)
         _statusText.text = "Initializing...";
 
+        // DataManager에 테이블 등록
+        CachedSOData.RegisterTables(
+            _growthCommandTable,
+            _suddenEventTable,
+            _suddenEventEffectTable,
+            _suddenEventTextTable,
+            _statusTextTable
+        );
+
+        progress = 0.95f;
+        _loadingSlider.value = progress;
+
+        // 7. Finalizing (95% ~ 100%)
         while (progress < 1f)
         {
             progress += Time.deltaTime * 0.5f;
@@ -170,14 +187,15 @@ public class StartManager : MonoBehaviour
         SceneManager.LoadScene("Title");
     }
 
-    private IEnumerator LoadTable<T>(AssetReference assetRef) where T : ScriptableObject
+    // 제네릭 테이블 로드 메서드
+    private IEnumerator LoadTable<T>(AssetReference assetRef, System.Action<T> onLoaded) where T : ScriptableObject
     {
         var loadHandle = assetRef.LoadAssetAsync<T>();
         yield return loadHandle;
 
         if (loadHandle.Status == AsyncOperationStatus.Succeeded)
-        {
-            _loadedTables[typeof(T)] = loadHandle.Result;
-        }
+            onLoaded?.Invoke(loadHandle.Result);
+        else
+            Debug.LogError($"[LoadTable] Failed to load {typeof(T).Name}: {loadHandle.Status}");
     }
 }
