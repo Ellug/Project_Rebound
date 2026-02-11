@@ -1,21 +1,38 @@
-using System;
+using System.Collections.Generic;
+using UnityEngine;
 
-
-public abstract class GameEvent
+[CreateAssetMenu(menuName = "Event/GameEvent")]
+public class GameEvent : ScriptableObject
 {
-    public string EventName { get; protected set; }
-    public EventCondition Condition { get; protected set; }
+    private List<GameEventListener> listeners = new();
 
-    protected GameEvent(string eventName, EventCondition condition)
+    public void Raise()
     {
-        EventName = eventName;
-        Condition = condition;
+        Debug.Log("이벤트 발생");
+
+        for (int i = listeners.Count - 1; i >= 0; i--)
+        {
+            if (listeners[i] != null)
+            {
+                listeners[i].OnEventRaised();
+            }
+        }
     }
 
-    public bool CanExecute(int currentTurn, DateTime currentDate)
+    public void Register(GameEventListener listener)
     {
-        return Condition.IsSatisfied(currentTurn, currentDate);
+        if (!listeners.Contains(listener))
+            listeners.Add(listener);
     }
 
-    public abstract void Execute();
+    public void Unregister(GameEventListener listener)
+    {
+        if (listeners.Contains(listener))
+            listeners.Remove(listener);
+    }
+
+    private void OnDisable()
+    {
+        listeners.Clear();
+    }
 }
