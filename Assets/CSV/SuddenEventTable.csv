@@ -1,0 +1,5 @@
+ID,eventName,context,condition,scope,range_min,range_max,term_min,term_max,term_scale,effect1,amount1,effect2,amount2,effect3,amount3,probability,message
+Strinig,String,enum,enum,enum,int ,,int ,int ,enum,String,int,String,int,String,int,float,String
+ID_SuddenEvent_000001,밤샘,PreProcess,Daily,Member,1,3,1,1,Day,ID_EventEffect_1_condition_m5,,,,,,0.5,ID_Text_SuddenEvent_000001
+ID_SuddenEvent_000002,의기소침,PreProcess,Match,Team_Key_Member,1,5,1,4,Quarter,ID_EventEffect_1_random_m3,,,,,,0.3,ID_Text_SuddenEvent_000002
+ID_SuddenEvent_000003,부담감,PreProcess,School | Match,Team_Key_Member,1,5,1,4,Quarter,ID_EventEffect_1_random_m5,,,,,,0.2,ID_Text_SuddenEvent_000003

@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -10,21 +11,39 @@ public class StartManager : MonoBehaviour
 {
     [SerializeField] private Slider _loadingSlider;
     [SerializeField] private TMP_Text _statusText;
-    [SerializeField] private AssetReference _growthCommandTableReference;
+
+    [Header("Game Data Tables")]
+    [SerializeField] private AssetReference _growthCommandTableRef;
+    [SerializeField] private AssetReference _suddenEventTableRef;
+    [SerializeField] private AssetReference _suddenEventEffectTableRef;
+    [SerializeField] private AssetReference _suddenEventTextTableRef;
+    [SerializeField] private AssetReference _statusTextTableRef;
+
+    // 로드된 테이블들 (나중에 DataManager로 옮길 예정)
+    private static readonly Dictionary<System.Type, ScriptableObject> _loadedTables = new();
 
     private readonly WaitForSeconds _waitOneSecond = new(1f);
 
-    private void Start()
+    void Start()
     {
         StartCoroutine(LoadingProcess());
     }
 
     private IEnumerator LoadingProcess()
     {
+        // 테이블 레퍼런스 수집
+        var allTableRefs = new List<AssetReference>
+        {
+            _growthCommandTableRef,
+            _suddenEventTableRef,
+            _suddenEventEffectTableRef,
+            _suddenEventTextTableRef,
+            _statusTextTableRef
+        };
+
         // 1. Checking for updates (0% ~ 30%)
         _statusText.text = "Checking for updates...";
 
-        // 서버에 카탈로그 조회
         var checkHandle = Addressables.CheckForCatalogUpdates(false);
         float progress;
         while (!checkHandle.IsDone)
@@ -43,7 +62,6 @@ public class StartManager : MonoBehaviour
             {
                 _statusText.text = "Updating game data...";
 
-                // 카탈로그 다운로드 및 적용
                 var updateHandle = Addressables.UpdateCatalogs(catalogsToUpdate, false);
                 while (!updateHandle.IsDone)
                 {
@@ -52,7 +70,6 @@ public class StartManager : MonoBehaviour
                     yield return null;
                 }
 
-                // 더 이상 사용하지 않는 핸들은 메모리 해제
                 Addressables.Release(updateHandle);
             }
             else
@@ -67,41 +84,42 @@ public class StartManager : MonoBehaviour
         // 3. Calculating download size (60% ~ 70%)
         _statusText.text = "Verifying resources...";
 
-        // 다운로드가 필요한 에셋의 총 용량 확인
-        var sizeHandle = Addressables.GetDownloadSizeAsync(_growthCommandTableReference);
-        while (!sizeHandle.IsDone)
+        long totalDownloadSize = 0;
+        foreach (var tableRef in allTableRefs)
         {
-            progress = 0.6f + (sizeHandle.PercentComplete * 0.1f);
-            _loadingSlider.value = progress;
-            yield return null;
+            var sizeHandle = Addressables.GetDownloadSizeAsync(tableRef);
+            yield return sizeHandle;
+
+            if (sizeHandle.Status == AsyncOperationStatus.Succeeded)
+                totalDownloadSize += sizeHandle.Result;
+
+            Addressables.Release(sizeHandle);
         }
 
-        long downloadSize = 0;
-        if (sizeHandle.Status == AsyncOperationStatus.Succeeded)
-        {
-            downloadSize = sizeHandle.Result; // 바이트 단위
-        }
-
-        Addressables.Release(sizeHandle);
+        progress = 0.7f;
+        _loadingSlider.value = progress;
 
         // 4. Downloading assets (70% ~ 80%)
-        if (downloadSize > 0)
+        if (totalDownloadSize > 0)
         {
-            // 실제 에셋 번들 파일들을 서버에서 다운로드
-            var downloadHandle = Addressables.DownloadDependenciesAsync(_growthCommandTableReference);
-            while (!downloadHandle.IsDone)
+            _statusText.text = "Downloading game data...";
+
+            int downloadedCount = 0;
+            foreach (var tableRef in allTableRefs)
             {
-                progress = 0.7f + (downloadHandle.PercentComplete * 0.1f);
-                _loadingSlider.value = progress;
+                var downloadHandle = Addressables.DownloadDependenciesAsync(tableRef);
+                while (!downloadHandle.IsDone)
+                {
+                    float tableProgress = downloadHandle.PercentComplete / allTableRefs.Count;
+                    progress = 0.7f + ((downloadedCount + tableProgress) / allTableRefs.Count) * 0.1f;
+                    _loadingSlider.value = progress;
 
-                float downloadedKB = downloadHandle.PercentComplete * downloadSize / 1024f;
-                float totalKB = downloadSize / 1024f;
-                _statusText.text = $"Downloading... {downloadedKB:F1}/{totalKB:F1} KB";
+                    yield return null;
+                }
 
-                yield return null;
+                Addressables.Release(downloadHandle);
+                downloadedCount++;
             }
-
-            Addressables.Release(downloadHandle);
         }
         else
         {
@@ -112,15 +130,24 @@ public class StartManager : MonoBehaviour
         // 5. Loading game data (80% ~ 90%)
         _statusText.text = "Loading game data...";
 
-        // 다운로드한 에셋을 메모리에 로드 => 실제 사용 가능한 상태로 만듦
-        var loadHandle = _growthCommandTableReference.LoadAssetAsync<GrowthCommandTableSO>();
-        while (!loadHandle.IsDone)
-        {
-            progress = 0.8f + (loadHandle.PercentComplete * 0.1f);
-            _loadingSlider.value = progress;
-            yield return null;
-        }
+        // 모든 테이블 로드
+        yield return LoadTable<GrowthCommandTableSO>(_growthCommandTableRef);
+        progress = 0.82f;
+        _loadingSlider.value = progress;
 
+        yield return LoadTable<SuddenEventTableSO>(_suddenEventTableRef);
+        progress = 0.84f;
+        _loadingSlider.value = progress;
+
+        yield return LoadTable<SuddenEventEffectTableSO>(_suddenEventEffectTableRef);
+        progress = 0.86f;
+        _loadingSlider.value = progress;
+
+        yield return LoadTable<SuddenEventTextTableSO>(_suddenEventTextTableRef);
+        progress = 0.88f;
+        _loadingSlider.value = progress;
+
+        yield return LoadTable<StatusTextTableSO>(_statusTextTableRef);
         progress = 0.9f;
         _loadingSlider.value = progress;
 
@@ -141,5 +168,16 @@ public class StartManager : MonoBehaviour
 
         yield return _waitOneSecond;
         SceneManager.LoadScene("Title");
+    }
+
+    private IEnumerator LoadTable<T>(AssetReference assetRef) where T : ScriptableObject
+    {
+        var loadHandle = assetRef.LoadAssetAsync<T>();
+        yield return loadHandle;
+
+        if (loadHandle.Status == AsyncOperationStatus.Succeeded)
+        {
+            _loadedTables[typeof(T)] = loadHandle.Result;
+        }
     }
 }

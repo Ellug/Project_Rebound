@@ -1,0 +1,5 @@
+ID,range,speaker,text
+Strinig,int,String,String
+ID_Text_SuddenEvent_000001,1,[SYSTEM],"$""{target1.name}이 늦잠을 잤다.\n<color=grey>{target1.name} 컨디션 감소 -5<\color>"""
+ID_Text_SuddenEvent_000001,2,[SYSTEM],"$""{target1.name}, {target2.name}이 늦잠을 잤다.\n<color=grey>{target1.name}, {target2.name} 컨디션 감소 -5<\color>"""
+ID_Text_SuddenEvent_000001,3,[SYSTEM],"$""{target1.name}, {target2.name}, {target3.name}이 늦잠을 잤다.\n<color=grey>{target1.name}, {target2.name}, {target3.name} 컨디션 감소 -5<\color>"""
