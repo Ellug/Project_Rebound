@@ -1,6 +1,9 @@
 using System;
 using UnityEngine;
 
+// 지금 재화 추가, 사용 있음
+// 재화 초기값 변경
+// 세이브 로드 나중에 추가
 public class MoneyManager : Singleton<MoneyManager>
 {
     private const int DEFAULT_GOLD = 2000;
@@ -67,5 +70,11 @@ public class MoneyManager : Singleton<MoneyManager>
         _reputation -= amount;
         OnReputationChanged?.Invoke(_reputation);
         return true;
+    }
+
+    public void ResetGold()
+    {
+        _gold = DEFAULT_GOLD;
+        OnGoldChanged?.Invoke(_gold);
     }
 }
