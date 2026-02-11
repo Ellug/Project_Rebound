@@ -1,0 +1,605 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c71ef474960ddd418b67106ac6abff5, type: 3}
+  m_Name: SO_SuddenEventEffectTable
+  m_EditorClassIdentifier: Assembly-CSharp::SuddenEventEffectTableSO
+  _rows:
+  - id: ID_EventEffect_1_mental_p
+    type: 1
+    targetNameId: ID_Text_StatusName_01
+    targetStatMin: 1
+    targetStatMax: 1
+  - id: ID_EventEffect_1_mental_m
+    type: 1
+    targetNameId: ID_Text_StatusName_01
+    targetStatMin: 1
+    targetStatMax: 1
+  - id: ID_EventEffect_2_mental_p
+    type: 2
+    targetNameId: ID_Text_StatusName_01
+    targetStatMin: 1
+    targetStatMax: 1
+  - id: ID_EventEffect_2_mental_m
+    type: 2
+    targetNameId: ID_Text_StatusName_01
+    targetStatMin: 1
+    targetStatMax: 1
+  - id: ID_EventEffect_1_shoot_p
+    type: 1
+    targetNameId: ID_Text_StatusName_02
+    targetStatMin: 2
+    targetStatMax: 2
+  - id: ID_EventEffect_1_shoot_m
+    type: 1
+    targetNameId: ID_Text_StatusName_02
+    targetStatMin: 2
+    targetStatMax: 2
+  - id: ID_EventEffect_2_shoot_p5
+    type: 2
+    targetNameId: ID_Text_StatusName_02
+    targetStatMin: 2
+    targetStatMax: 2
+  - id: ID_EventEffect_2_shoot_p21
+    type: 2
+    targetNameId: ID_Text_StatusName_02
+    targetStatMin: 2
+    targetStatMax: 2
+  - id: ID_EventEffect_2_shoot_p25
+    type: 2
+    targetNameId: ID_Text_StatusName_02
+    targetStatMin: 2
+    targetStatMax: 2
+  - id: ID_EventEffect_2_shoot_p21
+    type: 2
+    targetNameId: ID_Text_StatusName_02
+    targetStatMin: 2
+    targetStatMax: 2
+  - id: ID_EventEffect_2_shoot_m5
+    type: 2
+    targetNameId: ID_Text_StatusName_02
+    targetStatMin: 2
+    targetStatMax: 2
+  - id: ID_EventEffect_2_shoot_m21
+    type: 2
+    targetNameId: ID_Text_StatusName_02
+    targetStatMin: 2
+    targetStatMax: 2
+  - id: ID_EventEffect_2_shoot_m25
+    type: 2
+    targetNameId: ID_Text_StatusName_02
+    targetStatMin: 2
+    targetStatMax: 2
+  - id: ID_EventEffect_2_shoot_m21
+    type: 2
+    targetNameId: ID_Text_StatusName_02
+    targetStatMin: 2
+    targetStatMax: 2
+  - id: ID_EventEffect_1_speed_p5
+    type: 1
+    targetNameId: ID_Text_StatusName_03
+    targetStatMin: 3
+    targetStatMax: 3
+  - id: ID_EventEffect_1_speed_p21
+    type: 1
+    targetNameId: ID_Text_StatusName_03
+    targetStatMin: 3
+    targetStatMax: 3
+  - id: ID_EventEffect_1_speed_p25
+    type: 1
+    targetNameId: ID_Text_StatusName_03
+    targetStatMin: 3
+    targetStatMax: 3
+  - id: ID_EventEffect_1_speed_p21
+    type: 1
+    targetNameId: ID_Text_StatusName_03
+    targetStatMin: 3
+    targetStatMax: 3
+  - id: ID_EventEffect_1_speed_m5
+    type: 1
+    targetNameId: ID_Text_StatusName_03
+    targetStatMin: 3
+    targetStatMax: 3
+  - id: ID_EventEffect_1_speed_m21
+    type: 1
+    targetNameId: ID_Text_StatusName_03
+    targetStatMin: 3
+    targetStatMax: 3
+  - id: ID_EventEffect_1_speed_m25
+    type: 1
+    targetNameId: ID_Text_StatusName_03
+    targetStatMin: 3
+    targetStatMax: 3
+  - id: ID_EventEffect_1_speed_m21
+    type: 1
+    targetNameId: ID_Text_StatusName_03
+    targetStatMin: 3
+    targetStatMax: 3
+  - id: ID_EventEffect_2_speed_p5
+    type: 2
+    targetNameId: ID_Text_StatusName_03
+    targetStatMin: 3
+    targetStatMax: 3
+  - id: ID_EventEffect_2_speed_p21
+    type: 2
+    targetNameId: ID_Text_StatusName_03
+    targetStatMin: 3
+    targetStatMax: 3
+  - id: ID_EventEffect_2_speed_p25
+    type: 2
+    targetNameId: ID_Text_StatusName_03
+    targetStatMin: 3
+    targetStatMax: 3
+  - id: ID_EventEffect_2_speed_p21
+    type: 2
+    targetNameId: ID_Text_StatusName_03
+    targetStatMin: 3
+    targetStatMax: 3
+  - id: ID_EventEffect_2_speed_m5
+    type: 2
+    targetNameId: ID_Text_StatusName_03
+    targetStatMin: 3
+    targetStatMax: 3
+  - id: ID_EventEffect_2_speed_m21
+    type: 2
+    targetNameId: ID_Text_StatusName_03
+    targetStatMin: 3
+    targetStatMax: 3
+  - id: ID_EventEffect_2_speed_m25
+    type: 2
+    targetNameId: ID_Text_StatusName_03
+    targetStatMin: 3
+    targetStatMax: 3
+  - id: ID_EventEffect_2_speed_m21
+    type: 2
+    targetNameId: ID_Text_StatusName_03
+    targetStatMin: 3
+    targetStatMax: 3
+  - id: ID_EventEffect_1_jump_p5
+    type: 1
+    targetNameId: ID_Text_StatusName_04
+    targetStatMin: 4
+    targetStatMax: 4
+  - id: ID_EventEffect_1_jump_p21
+    type: 1
+    targetNameId: ID_Text_StatusName_04
+    targetStatMin: 4
+    targetStatMax: 4
+  - id: ID_EventEffect_1_jump_p25
+    type: 1
+    targetNameId: ID_Text_StatusName_04
+    targetStatMin: 4
+    targetStatMax: 4
+  - id: ID_EventEffect_1_jump_p21
+    type: 1
+    targetNameId: ID_Text_StatusName_04
+    targetStatMin: 4
+    targetStatMax: 4
+  - id: ID_EventEffect_1_jump_m5
+    type: 1
+    targetNameId: ID_Text_StatusName_04
+    targetStatMin: 4
+    targetStatMax: 4
+  - id: ID_EventEffect_1_jump_m21
+    type: 1
+    targetNameId: ID_Text_StatusName_04
+    targetStatMin: 4
+    targetStatMax: 4
+  - id: ID_EventEffect_1_jump_m25
+    type: 1
+    targetNameId: ID_Text_StatusName_04
+    targetStatMin: 4
+    targetStatMax: 4
+  - id: ID_EventEffect_1_jump_m21
+    type: 1
+    targetNameId: ID_Text_StatusName_04
+    targetStatMin: 4
+    targetStatMax: 4
+  - id: ID_EventEffect_2_jump_p5
+    type: 2
+    targetNameId: ID_Text_StatusName_04
+    targetStatMin: 4
+    targetStatMax: 4
+  - id: ID_EventEffect_2_jump_p21
+    type: 2
+    targetNameId: ID_Text_StatusName_04
+    targetStatMin: 4
+    targetStatMax: 4
+  - id: ID_EventEffect_2_jump_p25
+    type: 2
+    targetNameId: ID_Text_StatusName_04
+    targetStatMin: 4
+    targetStatMax: 4
+  - id: ID_EventEffect_2_jump_p21
+    type: 2
+    targetNameId: ID_Text_StatusName_04
+    targetStatMin: 4
+    targetStatMax: 4
+  - id: ID_EventEffect_2_jump_m5
+    type: 2
+    targetNameId: ID_Text_StatusName_04
+    targetStatMin: 4
+    targetStatMax: 4
+  - id: ID_EventEffect_2_jump_m21
+    type: 2
+    targetNameId: ID_Text_StatusName_04
+    targetStatMin: 4
+    targetStatMax: 4
+  - id: ID_EventEffect_2_jump_m25
+    type: 2
+    targetNameId: ID_Text_StatusName_04
+    targetStatMin: 4
+    targetStatMax: 4
+  - id: ID_EventEffect_2_jump_m21
+    type: 2
+    targetNameId: ID_Text_StatusName_04
+    targetStatMin: 4
+    targetStatMax: 4
+  - id: ID_EventEffect_1_vital_p5
+    type: 1
+    targetNameId: ID_Text_StatusName_05
+    targetStatMin: 5
+    targetStatMax: 5
+  - id: ID_EventEffect_1_vital_p21
+    type: 1
+    targetNameId: ID_Text_StatusName_05
+    targetStatMin: 5
+    targetStatMax: 5
+  - id: ID_EventEffect_1_vital_p25
+    type: 1
+    targetNameId: ID_Text_StatusName_05
+    targetStatMin: 5
+    targetStatMax: 5
+  - id: ID_EventEffect_1_vital_p21
+    type: 1
+    targetNameId: ID_Text_StatusName_05
+    targetStatMin: 5
+    targetStatMax: 5
+  - id: ID_EventEffect_1_vital_m5
+    type: 1
+    targetNameId: ID_Text_StatusName_05
+    targetStatMin: 5
+    targetStatMax: 5
+  - id: ID_EventEffect_1_vital_m21
+    type: 1
+    targetNameId: ID_Text_StatusName_05
+    targetStatMin: 5
+    targetStatMax: 5
+  - id: ID_EventEffect_1_vital_m25
+    type: 1
+    targetNameId: ID_Text_StatusName_05
+    targetStatMin: 5
+    targetStatMax: 5
+  - id: ID_EventEffect_1_vital_m21
+    type: 1
+    targetNameId: ID_Text_StatusName_05
+    targetStatMin: 5
+    targetStatMax: 5
+  - id: ID_EventEffect_2_vital_p5
+    type: 2
+    targetNameId: ID_Text_StatusName_05
+    targetStatMin: 5
+    targetStatMax: 5
+  - id: ID_EventEffect_2_vital_p21
+    type: 2
+    targetNameId: ID_Text_StatusName_05
+    targetStatMin: 5
+    targetStatMax: 5
+  - id: ID_EventEffect_2_vital_p25
+    type: 2
+    targetNameId: ID_Text_StatusName_05
+    targetStatMin: 5
+    targetStatMax: 5
+  - id: ID_EventEffect_2_vital_p21
+    type: 2
+    targetNameId: ID_Text_StatusName_05
+    targetStatMin: 5
+    targetStatMax: 5
+  - id: ID_EventEffect_2_vital_m5
+    type: 2
+    targetNameId: ID_Text_StatusName_05
+    targetStatMin: 5
+    targetStatMax: 5
+  - id: ID_EventEffect_2_vital_m21
+    type: 2
+    targetNameId: ID_Text_StatusName_05
+    targetStatMin: 5
+    targetStatMax: 5
+  - id: ID_EventEffect_2_vital_m25
+    type: 2
+    targetNameId: ID_Text_StatusName_05
+    targetStatMin: 5
+    targetStatMax: 5
+  - id: ID_EventEffect_2_vital_m21
+    type: 2
+    targetNameId: ID_Text_StatusName_05
+    targetStatMin: 5
+    targetStatMax: 5
+  - id: ID_EventEffect_1_condition_p5
+    type: 1
+    targetNameId: ID_Text_StatusName_06
+    targetStatMin: 6
+    targetStatMax: 6
+  - id: ID_EventEffect_1_condition_p21
+    type: 1
+    targetNameId: ID_Text_StatusName_06
+    targetStatMin: 6
+    targetStatMax: 6
+  - id: ID_EventEffect_1_condition_p25
+    type: 1
+    targetNameId: ID_Text_StatusName_06
+    targetStatMin: 6
+    targetStatMax: 6
+  - id: ID_EventEffect_1_condition_p21
+    type: 1
+    targetNameId: ID_Text_StatusName_06
+    targetStatMin: 6
+    targetStatMax: 6
+  - id: ID_EventEffect_1_condition_m5
+    type: 1
+    targetNameId: ID_Text_StatusName_06
+    targetStatMin: 6
+    targetStatMax: 6
+  - id: ID_EventEffect_1_condition_m21
+    type: 1
+    targetNameId: ID_Text_StatusName_06
+    targetStatMin: 6
+    targetStatMax: 6
+  - id: ID_EventEffect_1_condition_m25
+    type: 1
+    targetNameId: ID_Text_StatusName_06
+    targetStatMin: 6
+    targetStatMax: 6
+  - id: ID_EventEffect_1_condition_m21
+    type: 1
+    targetNameId: ID_Text_StatusName_06
+    targetStatMin: 6
+    targetStatMax: 6
+  - id: ID_EventEffect_2_condition_p5
+    type: 2
+    targetNameId: ID_Text_StatusName_06
+    targetStatMin: 6
+    targetStatMax: 6
+  - id: ID_EventEffect_2_condition_p21
+    type: 2
+    targetNameId: ID_Text_StatusName_06
+    targetStatMin: 6
+    targetStatMax: 6
+  - id: ID_EventEffect_2_condition_p25
+    type: 2
+    targetNameId: ID_Text_StatusName_06
+    targetStatMin: 6
+    targetStatMax: 6
+  - id: ID_EventEffect_2_condition_p21
+    type: 2
+    targetNameId: ID_Text_StatusName_06
+    targetStatMin: 6
+    targetStatMax: 6
+  - id: ID_EventEffect_2_condition_m5
+    type: 2
+    targetNameId: ID_Text_StatusName_06
+    targetStatMin: 6
+    targetStatMax: 6
+  - id: ID_EventEffect_2_condition_m21
+    type: 2
+    targetNameId: ID_Text_StatusName_06
+    targetStatMin: 6
+    targetStatMax: 6
+  - id: ID_EventEffect_2_condition_m25
+    type: 2
+    targetNameId: ID_Text_StatusName_06
+    targetStatMin: 6
+    targetStatMax: 6
+  - id: ID_EventEffect_2_condition_m21
+    type: 2
+    targetNameId: ID_Text_StatusName_06
+    targetStatMin: 6
+    targetStatMax: 6
+  - id: ID_EventEffect_1_money_p211
+    type: 1
+    targetNameId: ID_Text_StatusName_10
+    targetStatMin: 10
+    targetStatMax: 10
+  - id: ID_EventEffect_1_money_p211
+    type: 1
+    targetNameId: ID_Text_StatusName_10
+    targetStatMin: 10
+    targetStatMax: 10
+  - id: ID_EventEffect_1_money_p511
+    type: 1
+    targetNameId: ID_Text_StatusName_10
+    targetStatMin: 10
+    targetStatMax: 10
+  - id: ID_EventEffect_1_money_p21111
+    type: 1
+    targetNameId: ID_Text_StatusName_10
+    targetStatMin: 10
+    targetStatMax: 10
+  - id: ID_EventEffect_1_money_m211
+    type: 1
+    targetNameId: ID_Text_StatusName_10
+    targetStatMin: 10
+    targetStatMax: 10
+  - id: ID_EventEffect_1_money_m211
+    type: 1
+    targetNameId: ID_Text_StatusName_10
+    targetStatMin: 10
+    targetStatMax: 10
+  - id: ID_EventEffect_1_money_m511
+    type: 1
+    targetNameId: ID_Text_StatusName_10
+    targetStatMin: 10
+    targetStatMax: 10
+  - id: ID_EventEffect_1_money_m21111
+    type: 1
+    targetNameId: ID_Text_StatusName_10
+    targetStatMin: 10
+    targetStatMax: 10
+  - id: ID_EventEffect_2_money_p211
+    type: 2
+    targetNameId: ID_Text_StatusName_10
+    targetStatMin: 10
+    targetStatMax: 10
+  - id: ID_EventEffect_2_money_p211
+    type: 2
+    targetNameId: ID_Text_StatusName_10
+    targetStatMin: 10
+    targetStatMax: 10
+  - id: ID_EventEffect_2_money_p511
+    type: 2
+    targetNameId: ID_Text_StatusName_10
+    targetStatMin: 10
+    targetStatMax: 10
+  - id: ID_EventEffect_2_money_p21111
+    type: 2
+    targetNameId: ID_Text_StatusName_10
+    targetStatMin: 10
+    targetStatMax: 10
+  - id: ID_EventEffect_2_money_m211
+    type: 2
+    targetNameId: ID_Text_StatusName_10
+    targetStatMin: 10
+    targetStatMax: 10
+  - id: ID_EventEffect_2_money_m211
+    type: 2
+    targetNameId: ID_Text_StatusName_10
+    targetStatMin: 10
+    targetStatMax: 10
+  - id: ID_EventEffect_2_money_m511
+    type: 2
+    targetNameId: ID_Text_StatusName_10
+    targetStatMin: 10
+    targetStatMax: 10
+  - id: ID_EventEffect_2_money_m21111
+    type: 2
+    targetNameId: ID_Text_StatusName_10
+    targetStatMin: 10
+    targetStatMax: 10
+  - id: ID_EventEffect_1_fame_p2
+    type: 1
+    targetNameId: ID_Text_StatusName_11
+    targetStatMin: 11
+    targetStatMax: 11
+  - id: ID_EventEffect_1_fame_p2
+    type: 1
+    targetNameId: ID_Text_StatusName_11
+    targetStatMin: 11
+    targetStatMax: 11
+  - id: ID_EventEffect_1_fame_p3
+    type: 1
+    targetNameId: ID_Text_StatusName_11
+    targetStatMin: 11
+    targetStatMax: 11
+  - id: ID_EventEffect_1_fame_p5
+    type: 1
+    targetNameId: ID_Text_StatusName_11
+    targetStatMin: 11
+    targetStatMax: 11
+  - id: ID_EventEffect_1_fame_m2
+    type: 1
+    targetNameId: ID_Text_StatusName_11
+    targetStatMin: 11
+    targetStatMax: 11
+  - id: ID_EventEffect_1_fame_m2
+    type: 1
+    targetNameId: ID_Text_StatusName_11
+    targetStatMin: 11
+    targetStatMax: 11
+  - id: ID_EventEffect_1_fame_m3
+    type: 1
+    targetNameId: ID_Text_StatusName_11
+    targetStatMin: 11
+    targetStatMax: 11
+  - id: ID_EventEffect_1_fame_m5
+    type: 1
+    targetNameId: ID_Text_StatusName_11
+    targetStatMin: 11
+    targetStatMax: 11
+  - id: ID_EventEffect_2_fame_p2
+    type: 2
+    targetNameId: ID_Text_StatusName_11
+    targetStatMin: 11
+    targetStatMax: 11
+  - id: ID_EventEffect_2_fame_p2
+    type: 2
+    targetNameId: ID_Text_StatusName_11
+    targetStatMin: 11
+    targetStatMax: 11
+  - id: ID_EventEffect_2_fame_p3
+    type: 2
+    targetNameId: ID_Text_StatusName_11
+    targetStatMin: 11
+    targetStatMax: 11
+  - id: ID_EventEffect_2_fame_p5
+    type: 2
+    targetNameId: ID_Text_StatusName_11
+    targetStatMin: 11
+    targetStatMax: 11
+  - id: ID_EventEffect_2_fame_m2
+    type: 2
+    targetNameId: ID_Text_StatusName_11
+    targetStatMin: 11
+    targetStatMax: 11
+  - id: ID_EventEffect_2_fame_m2
+    type: 2
+    targetNameId: ID_Text_StatusName_11
+    targetStatMin: 11
+    targetStatMax: 11
+  - id: ID_EventEffect_2_fame_m3
+    type: 2
+    targetNameId: ID_Text_StatusName_11
+    targetStatMin: 11
+    targetStatMax: 11
+  - id: ID_EventEffect_2_fame_m5
+    type: 2
+    targetNameId: ID_Text_StatusName_11
+    targetStatMin: 11
+    targetStatMax: 11
+  - id: ID_EventEffect_1_randomPlayerStat_m5
+    type: 1
+    targetNameId: ID_Text_StatusName_random
+    targetStatMin: 1
+    targetStatMax: 6
+  - id: ID_EventEffect_1_randomPlayerStat_m21
+    type: 1
+    targetNameId: ID_Text_StatusName_random
+    targetStatMin: 1
+    targetStatMax: 6
+  - id: ID_EventEffect_1_randomPlayerStat_m25
+    type: 1
+    targetNameId: ID_Text_StatusName_random
+    targetStatMin: 1
+    targetStatMax: 6
+  - id: ID_EventEffect_1_randomPlayerStat_m21
+    type: 1
+    targetNameId: ID_Text_StatusName_random
+    targetStatMin: 1
+    targetStatMax: 6
+  - id: ID_EventEffect_1_randomPlayerStat_p5
+    type: 1
+    targetNameId: ID_Text_StatusName_random
+    targetStatMin: 1
+    targetStatMax: 6
+  - id: ID_EventEffect_1_randomPlayerStat_p21
+    type: 1
+    targetNameId: ID_Text_StatusName_random
+    targetStatMin: 1
+    targetStatMax: 6
+  - id: ID_EventEffect_1_randomPlayerStat_p25
+    type: 1
+    targetNameId: ID_Text_StatusName_random
+    targetStatMin: 1
+    targetStatMax: 6
+  - id: ID_EventEffect_1_randomPlayerStat_p21
+    type: 1
+    targetNameId: ID_Text_StatusName_random
+    targetStatMin: 1
+    targetStatMax: 6

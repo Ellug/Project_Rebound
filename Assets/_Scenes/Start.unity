@@ -1025,8 +1025,32 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::StartManager
   _loadingSlider: {fileID: 269886561}
   _statusText: {fileID: 1698672233}
-  _growthCommandTableReference:
+  _growthCommandTableRef:
     m_AssetGUID: 1be4142f5ad0d00488680016784a973c
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
+  _suddenEventTableRef:
+    m_AssetGUID: 297009e9d4477b04dbfbe141e4b753cd
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
+  _suddenEventEffectTableRef:
+    m_AssetGUID: b28b376e195049e4aa15bd274d043a6a
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
+  _suddenEventTextTableRef:
+    m_AssetGUID: 81ba605268fde034a974bdbd32fffc40
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
+  _statusTextTableRef:
+    m_AssetGUID: 76f9b9a7a5bafe547901a63789d1045b
     m_SubObjectName: 
     m_SubObjectType: 
     m_SubObjectGUID: 

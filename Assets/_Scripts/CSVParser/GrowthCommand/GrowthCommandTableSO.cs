@@ -64,7 +64,7 @@ public sealed class GrowthCommandTableSO : ScriptableObject
 
     public IReadOnlyList<GrowthCommandRow> Rows => _rows;
 
-    private void OnEnable()
+    void OnEnable()
     {
         BuildCache();
     }
@@ -91,19 +91,13 @@ public sealed class GrowthCommandTableSO : ScriptableObject
     }
 
     public bool TryGet(int index, out GrowthCommandRow row)
-    {
-        if (_byIndex != null && _byIndex.TryGetValue(index, out row))
-            return true;
-
-        row = null;
-        return false;
-    }
+        => _byIndex.TryGetValue(index, out row);
 
     public GrowthCommandRow GetOrNull(int index)
-        => (_byIndex != null && _byIndex.TryGetValue(index, out var r)) ? r : null;
+        => _byIndex.TryGetValue(index, out var r) ? r : null;
 
     public IReadOnlyList<GrowthCommandRow> GetChildren(int parentIndex)
-        => (_children != null && _children.TryGetValue(parentIndex, out var list)) ? list : Array.Empty<GrowthCommandRow>();
+        => _children.TryGetValue(parentIndex, out var list) ? list : Array.Empty<GrowthCommandRow>();
 
 #if UNITY_EDITOR
     // 에디터 Importer가 갱신할 때 사용

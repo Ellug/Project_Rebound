@@ -20,6 +20,26 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 297009e9d4477b04dbfbe141e4b753cd
+    m_Address: Assets/_Scripts/SO/SO_SuddenEventTable.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 76f9b9a7a5bafe547901a63789d1045b
+    m_Address: Assets/_Scripts/SO/SO_StatusTextTable.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 81ba605268fde034a974bdbd32fffc40
+    m_Address: Assets/_Scripts/SO/SO_SuddenEventTextTable.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b28b376e195049e4aa15bd274d043a6a
+    m_Address: Assets/_Scripts/SO/SO_SuddenEventEffectTable.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: d3179b69a3360a04d9911317df1a1a42, type: 2}
   m_SchemaSet:
