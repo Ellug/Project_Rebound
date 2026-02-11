@@ -5,6 +5,7 @@ public class GameState
 {
     public DateTime CurrentDate { get; private set; }
     public int CurrentTurn { get; private set; }
+    public bool IsLeagueOpened { get; private set; }
 
     public GameState(DateTime startDate)
     {
@@ -16,6 +17,11 @@ public class GameState
     {
         CurrentTurn++;
         CurrentDate = CurrentDate.AddDays(1);
+    }
+
+    public void OpenLeague()
+    {
+        IsLeagueOpened = true;
     }
 
     //CurrentDate -> ¿À´Ã ³¯Â¥

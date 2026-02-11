@@ -12,6 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8839582c12ee12644a9a4018adf527f9, type: 3}
   m_Name: EventData
   m_EditorClassIdentifier: Assembly-CSharp::GameEventData
-  _eventName: 
+  _eventName: "\uC0DD\uC77C~"
+  _year: 2026
+  _month: 2
+  _day: 20
   _isOneTimeEvent: 1
-  _executor: {fileID: 0}
+  _executor: {fileID: 11400000, guid: 9a763535678f95f4cb571d46bf588427, type: 2}
