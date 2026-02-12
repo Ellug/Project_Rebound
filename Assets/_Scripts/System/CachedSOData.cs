@@ -1,5 +1,3 @@
-using UnityEngine;
-
 public static class CachedSOData
 {
     // Loaded Tables
