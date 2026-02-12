@@ -7,18 +7,24 @@ public class LeagueStartEventExecutor : EventExecutor
 
     public override void Execute(GameState gameState)
     {
+        
+
         if (gameState == null)
         {
             return;
         }
 
         gameState.OpenLeague();
+        ;
 
         if (_leagueStartNotifyEvent != null)
         {
             _leagueStartNotifyEvent.Raise();
+            
         }
-
-        Debug.Log("[League] OpenLeague executed.");
+        else
+        {
+            Debug.LogWarning("[League] Notify event is NULL");
+        }
     }
 }

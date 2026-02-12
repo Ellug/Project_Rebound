@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8839582c12ee12644a9a4018adf527f9, type: 3}
-  m_Name: EventData
+  m_Name: EventData_LeagueStart
   m_EditorClassIdentifier: Assembly-CSharp::GameEventData
-  _eventName: "\uC0DD\uC77C~"
-  _year: 2026
-  _month: 2
-  _day: 20
+  _eventName: 
+  _year: 0
+  _month: 0
+  _day: 0
   _isOneTimeEvent: 1
-  _executor: {fileID: 11400000, guid: 9a763535678f95f4cb571d46bf588427, type: 2}
+  _executor: {fileID: 0}
