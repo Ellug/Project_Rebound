@@ -1,0 +1,69 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5cf1a81aef4cb474b972be9be9f65cb2, type: 3}
+  m_Name: SO_SuddenEventTable
+  m_EditorClassIdentifier: Assembly-CSharp::SuddenEventTableSO
+  _rows:
+  - id: ID_SuddenEvent_000001
+    eventName: "\uBC24\uC0D8"
+    context: 1
+    condition: 1
+    scope: 1
+    rangeMin: 1
+    rangeMax: 3
+    termMin: 1
+    termMax: 1
+    termScale: 1
+    effect1: ID_EventEffect_1_condition_m5
+    amount1: 0
+    effect2: 
+    amount2: 0
+    effect3: 
+    amount3: 0
+    probability: 0.5
+    messageId: ID_Text_SuddenEvent_000001
+  - id: ID_SuddenEvent_000002
+    eventName: "\uC758\uAE30\uC18C\uCE68"
+    context: 1
+    condition: 8
+    scope: 3
+    rangeMin: 1
+    rangeMax: 5
+    termMin: 1
+    termMax: 4
+    termScale: 2
+    effect1: ID_EventEffect_1_random_m3
+    amount1: 0
+    effect2: 
+    amount2: 0
+    effect3: 
+    amount3: 0
+    probability: 0.3
+    messageId: ID_Text_SuddenEvent_000002
+  - id: ID_SuddenEvent_000003
+    eventName: "\uBD80\uB2F4\uAC10"
+    context: 1
+    condition: 10
+    scope: 3
+    rangeMin: 1
+    rangeMax: 5
+    termMin: 1
+    termMax: 4
+    termScale: 2
+    effect1: ID_EventEffect_1_random_m5
+    amount1: 0
+    effect2: 
+    amount2: 0
+    effect3: 
+    amount3: 0
+    probability: 0.2
+    messageId: ID_Text_SuddenEvent_000003

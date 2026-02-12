@@ -1,0 +1,48 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Default Local Group
+  m_EditorClassIdentifier: Unity.Addressables.Editor::UnityEditor.AddressableAssets.Settings.AddressableAssetGroup
+  m_GroupName: Default Local Group
+  m_GUID: c63a1636634c9254b8a68dd081a2d9d7
+  m_SerializeEntries:
+  - m_GUID: 1be4142f5ad0d00488680016784a973c
+    m_Address: Assets/_Scripts/SO/SO_GrowthCommandTable.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 297009e9d4477b04dbfbe141e4b753cd
+    m_Address: Assets/_Scripts/SO/SO_SuddenEventTable.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 76f9b9a7a5bafe547901a63789d1045b
+    m_Address: Assets/_Scripts/SO/SO_StatusTextTable.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 81ba605268fde034a974bdbd32fffc40
+    m_Address: Assets/_Scripts/SO/SO_SuddenEventTextTable.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b28b376e195049e4aa15bd274d043a6a
+    m_Address: Assets/_Scripts/SO/SO_SuddenEventEffectTable.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: d3179b69a3360a04d9911317df1a1a42, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 8b60061110ab26e40a1a832c4d1c0045, type: 2}
+    - {fileID: 11400000, guid: 4f68aca725106a94fb90f29927303a42, type: 2}
