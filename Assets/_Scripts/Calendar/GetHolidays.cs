@@ -162,7 +162,7 @@ public class GetHoliday
 
     static void Save(List<HolidayEntry> list)
     {
-        string path = "Assets/HolidayDatabase.asset";
+        string path = "Assets/_Scripts/SO/HolidayDatabase.asset";
 
         AssetDatabase.DeleteAsset(path);
 
