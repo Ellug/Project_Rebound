@@ -1,5 +1,4 @@
-﻿using NUnit.Framework.Interfaces;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -38,6 +37,12 @@ public class TurnManager : MonoBehaviour
     {
         _dateManager = new DateManager(new DateTime(_startYear, _startMonth, _startDay));
         _turnIndex = 0;
+    }
+
+    void Start()
+    {
+        //시작일 기준 학기/입학 이벤트 발행 (구독자 등록 이후 호출되도록 Start에서 실행)
+        _dateManager.InitStartDayEvents();
     }
 
     //ITurnModule 구현체 등록 (Priority 낮을수록 먼저 실행)
