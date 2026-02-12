@@ -1,0 +1,5 @@
+id,position_name,spawn_rate,main_stats,sub_stats,design_intent
+int,string,int,string,string,string
+01,가드(G),40,"속도,슈팅","멘탈, 지구력",주로 공격연계 및 공격 담당
+02,포워드(F),40,"슈팅, 점프력","지구력, 속도",공격에 특화
+03,센터(C),20,"점프력, 지구력","멘탈, 슈팅",수비에 특화
