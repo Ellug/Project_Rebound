@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.InputSystem;
 
 // 전체 UI의 스택 관리 및 뒤로가기 입력을 제어하는 매니저
 public class UIManager : Singleton<UIManager>
@@ -19,7 +20,7 @@ public class UIManager : Singleton<UIManager>
     private void Update()
     {
         // 안드로이드 백버튼 입력 감지
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame)
         {
             if (_uiStack.Count > 0)
             {
