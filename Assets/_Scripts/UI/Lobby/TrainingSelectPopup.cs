@@ -10,7 +10,7 @@ public class TrainingSelectPopup : UIPopup
 
     [Header("Training UI")]
     [SerializeField] private Transform _buttonContainer;        // 버튼 부모 (VerticalLayoutGroup)
-    [SerializeField] private TrainingButtonItem _buttonPrefab;
+    [SerializeField] private TrainingButtonItem _buttonPrefab2; // 부모와 자식에서 같은 이름을 쓰면 유니티에서 허용하지 않음.
 
     [Header("Navigation")]
     [SerializeField] private Button _btnBack;
@@ -65,7 +65,7 @@ public class TrainingSelectPopup : UIPopup
         _currentPageIndex = pageIndex;
         TrainingPageInfo page = _pageData.pages[pageIndex];
 
-        SetTitle(page.pageTitle);
+        // SetTitle(page.pageTitle);
         ClearButtons();
         SpawnButtons(page);
         UpdateBackButtonVisibility();
@@ -76,7 +76,7 @@ public class TrainingSelectPopup : UIPopup
     {
         foreach (TrainingButtonData btnData in page.buttons)
         {
-            TrainingButtonItem item = Instantiate(_buttonPrefab, _buttonContainer);
+            TrainingButtonItem item = Instantiate(_buttonPrefab2, _buttonContainer);
             item.gameObject.SetActive(true);
 
             // 클로저 캡처용 로컬 변수
@@ -109,31 +109,31 @@ public class TrainingSelectPopup : UIPopup
             return;
         }
 
-        var confirm = UIManager.Instance.Show(_confirmPopupPrefab);
-        confirm.SetTitle("훈련 시작");
-        confirm.Setup(
-            data.trainingKey,
-            data.trainingName,
-            data.conditionDelta,
-            data.trainingDesc,
-            data.previewSprite
-        );
+        // var confirm = UIManager.Instance.Show(_confirmPopupPrefab);
+        // confirm.SetTitle("훈련 시작");
+        // confirm.Setup(
+        //     data.trainingKey,
+        //     data.trainingName,
+        //     data.conditionDelta,
+        //     data.trainingDesc,
+        //     data.previewSprite
+        // );
 
-        // 중복 구독 방지: 로컬 핸들러로 구독 후 즉시 해제
-        System.Action<string> handler = null;
-        handler = (key) =>
-        {
-            confirm.OnConfirm -= handler;
+        // // 중복 구독 방지: 로컬 핸들러로 구독 후 즉시 해제
+        // System.Action<string> handler = null;
+        // handler = (key) =>
+        // {
+        //     confirm.OnConfirm -= handler;
 
-            // 최종 확정 콜백
-            OnTrainingSelected?.Invoke(key);
+        //     // 최종 확정 콜백
+        //     OnTrainingSelected?.Invoke(key);
 
-            // confirm은 자기 버튼에서 CloseTop()로 닫히고,
-            // 그 다음 스택 최상단(= TrainingSelectPopup)을 닫고 싶으면 아래 한 번 더
-            UIManager.Instance.CloseTop();
-        };
+        //     // confirm은 자기 버튼에서 CloseTop()로 닫히고,
+        //     // 그 다음 스택 최상단(= TrainingSelectPopup)을 닫고 싶으면 아래 한 번 더
+        //     UIManager.Instance.CloseTop();
+        // };
 
-        confirm.OnConfirm += handler;
+        // confirm.OnConfirm += handler;
     }
 
     // 이전 페이지로 복귀

@@ -52,15 +52,15 @@ public class LobbyUI : UIBase
         if (_btnSetting != null)
             _btnSetting.onClick.AddListener(() =>
             {
-                if (_optionPopupPrefab != null)
-                    UIManager.Instance.Show(_optionPopupPrefab);
-                else
-                    Debug.LogWarning("설정 팝업 프리팹이 연결되지 않았습니다.");
+                // if (_optionPopupPrefab != null)
+                //     UIManager.Instance.Show(_optionPopupPrefab);
+                // else
+                //     Debug.LogWarning("설정 팝업 프리팹이 연결되지 않았습니다.");
             });
 
         // 2. 하단 네비게이션
         if (_btnTraining != null)
-            _btnTraining.onClick.AddListener(OnClickTraining);
+            // _btnTraining.onClick.AddListener(OnClickTraining);
         if (_btnStudent != null)
             _btnStudent.onClick.AddListener(OnClickStudent);
 
@@ -84,16 +84,16 @@ public class LobbyUI : UIBase
         }
 
         Debug.Log("[LobbyUI] UIManager.Show 호출 시도");
-        TrainingSelectPopup popup = UIManager.Instance.Show(_trainingPopupPrefab);
+        // TrainingSelectPopup popup = UIManager.Instance.Show(_trainingPopupPrefab);
 
-        if (popup == null)
-        {
-            Debug.LogError("[LobbyUI] UIManager.Show가 null을 반환했습니다!");
-            return;
-        }
+        // if (popup == null)
+        // {
+        //     Debug.LogError("[LobbyUI] UIManager.Show가 null을 반환했습니다!");
+        //     return;
+        // }
 
         Debug.Log("[LobbyUI] 팝업 생성 성공, 이벤트 구독");
-        popup.OnTrainingSelected += HandleTrainingSelected;
+        // popup.OnTrainingSelected += HandleTrainingSelected;
     }
 
     // 훈련 최종 선택 시 호출
