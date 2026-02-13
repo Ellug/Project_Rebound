@@ -133,7 +133,8 @@ public class TrainingSelectPopup : UIPopup
             data.trainingName,
             data.conditionDelta,
             data.trainingDesc,
-            data.previewSprite
+            data.previewSprite,
+            data.requiresStudentSelection
         );
         confirm.Open();
 

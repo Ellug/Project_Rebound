@@ -27,6 +27,8 @@ public class TrainingConfirmPopup : UIPopup
     // 훈련 선택 팝업 참조 (확인 팝업에서 훈련 선택 팝업을 닫기 위해 사용)
     private TrainingSelectPopup _ownerSelectPopup;
 
+    private bool _requiresStudentSelection = true;
+
     // 훈련 선택 팝업에서 Confirm 생성 직후 주입
     public void SetOwner(TrainingSelectPopup owner)
     {
@@ -51,9 +53,10 @@ public class TrainingConfirmPopup : UIPopup
     }
 
     // 팝업 내용 설정
-    public void Setup(string trainingKey, string name, int conditionDelta, string desc, Sprite previewSprite)
+    public void Setup(string trainingKey, string name, int conditionDelta, string desc, Sprite previewSprite, bool requiresStudentSelection = true)
     {
         _trainingKey = trainingKey;
+        _requiresStudentSelection = requiresStudentSelection;
 
         // 이름 출력
         if (_txtName != null)
@@ -109,30 +112,41 @@ public class TrainingConfirmPopup : UIPopup
 
     private void OnClickStart()
     {
-        // (선택) 훈련 확정 이벤트가 필요하면 유지
         OnConfirm?.Invoke(_trainingKey);
 
+        // 휴식(학생 선택 불필요) -> 학생 선택 안 띄우고 전부 닫기
+        if (!_requiresStudentSelection)
+        {
+            if (_ownerSelectPopup != null)
+            {
+                _ownerSelectPopup.ForceCloseFromChild(); // 훈련 선택 닫기
+            }
+
+            CloseAndDestroy(); // 훈련 확인 닫기
+            return;
+        }
+
+        // 학생 선택 필요 -> 학생 선택만 남기기
         if (_studentSelectPopupPrefab == null)
         {
             Debug.LogError("[TrainingConfirmPopup] _studentSelectPopupPrefab이 null입니다!");
             return;
         }
 
-        // 1) 학생 선택 팝업 띄우기
-        // ConfirmPopup은 transform.parent에 생성되고 있으므로 동일한 루트에 생성
+        // 학생 선택 팝업 띄우기
         Transform popupRoot = transform.parent != null ? transform.parent : transform.root;
 
         StudentSelectPopup studentPopup = Instantiate(_studentSelectPopupPrefab, popupRoot);
         studentPopup.Init();
         studentPopup.Open();
 
-        // 2) 훈련 선택 팝업 닫기 (씬 배치 방식이므로 Close로 비활성화)
+        // 훈련 선택 닫기
         if (_ownerSelectPopup != null)
         {
             _ownerSelectPopup.ForceCloseFromChild();
         }
 
-        // 3) 훈련 확인 팝업 닫기 (현재 팝업)
+        // 훈련 확인 닫기
         CloseAndDestroy();
     }
 }
