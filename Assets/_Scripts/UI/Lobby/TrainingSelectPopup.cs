@@ -126,6 +126,7 @@ public class TrainingSelectPopup : UIPopup
 
         // 확인 팝업 생성 (Instantiate → 자체 관리, UIManager 스택 미사용)
         TrainingConfirmPopup confirm = Instantiate(_confirmPopupPrefab, transform.parent);
+        confirm.SetOwner(this);
         confirm.Init();
         confirm.Setup(
             data.trainingKey,
@@ -140,11 +141,6 @@ public class TrainingSelectPopup : UIPopup
         confirm.OnConfirm += (key) =>
         {
             OnTrainingSelected?.Invoke(key);
-            // confirm은 자체 CloseAndDestroy()로 파괴됨
-            // 훈련 선택 팝업도 닫기
-            ClearPageHistory();
-            ClearButtons();
-            Close();
         };
     }
 
@@ -186,5 +182,21 @@ public class TrainingSelectPopup : UIPopup
     private void ClearPageHistory()
     {
         _pageHistory.Clear();
+    }
+
+    // 자식 팝업(훈련 확인)에서 호출: 훈련 선택 팝업 정리 후 닫기
+    public void ForceCloseFromChild()
+    {
+        ClearPageHistory();
+        ClearButtons();
+        Close();
+    }
+
+    public override void Open()
+    {
+        base.Open();
+
+        // 열릴 때마다 초기 페이지 다시 구성
+        ShowPage(0, pushHistory: false);
     }
 }

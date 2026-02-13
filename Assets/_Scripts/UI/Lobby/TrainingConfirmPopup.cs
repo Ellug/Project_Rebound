@@ -19,29 +19,34 @@ public class TrainingConfirmPopup : UIPopup
     [SerializeField] private Button _btnCancel;              // 취소 버튼
     [SerializeField] private Button _btnStart;               // 시작 버튼
 
+    [SerializeField] private StudentSelectPopup _studentSelectPopupPrefab;
+
     private string _trainingKey;                             // 현재 설정된 훈련의 고유 키
-    public event Action<string> OnConfirm;                   // 확인(시작) 버튼 클릭 시 호출되는 이벤트
+    public event Action<string> OnConfirm;                   // 확인 버튼 클릭 시 호출되는 이벤트
+
+    // 훈련 선택 팝업 참조 (확인 팝업에서 훈련 선택 팝업을 닫기 위해 사용)
+    private TrainingSelectPopup _ownerSelectPopup;
+
+    // 훈련 선택 팝업에서 Confirm 생성 직후 주입
+    public void SetOwner(TrainingSelectPopup owner)
+    {
+        _ownerSelectPopup = owner;
+    }
 
     public override void Init()
     {
         base.Init();
 
-        // 취소 버튼 → 공통 닫기 로직 재사용
+        if (_btnStart != null)
+        {
+            _btnStart.onClick.RemoveAllListeners();
+            _btnStart.onClick.AddListener(OnClickStart);
+        }
+
         if (_btnCancel != null)
         {
             _btnCancel.onClick.RemoveAllListeners();
             _btnCancel.onClick.AddListener(CloseAndDestroy);
-        }
-
-        // 시작 버튼
-        if (_btnStart != null)
-        {
-            _btnStart.onClick.RemoveAllListeners();
-            _btnStart.onClick.AddListener(() =>
-            {
-                OnConfirm?.Invoke(_trainingKey);
-                CloseAndDestroy();
-            });
         }
     }
 
@@ -94,11 +99,40 @@ public class TrainingConfirmPopup : UIPopup
         CloseAndDestroy();
     }
 
-    // 닫기 공통 처리 (취소, X, 시작 후 모두 여기로)
+    // 닫기 공통 처리
     private void CloseAndDestroy()
     {
         OnConfirm = null; // 이벤트 정리
         Close();
         Destroy(gameObject);
+    }
+
+    private void OnClickStart()
+    {
+        // (선택) 훈련 확정 이벤트가 필요하면 유지
+        OnConfirm?.Invoke(_trainingKey);
+
+        if (_studentSelectPopupPrefab == null)
+        {
+            Debug.LogError("[TrainingConfirmPopup] _studentSelectPopupPrefab이 null입니다!");
+            return;
+        }
+
+        // 1) 학생 선택 팝업 띄우기
+        // ConfirmPopup은 transform.parent에 생성되고 있으므로 동일한 루트에 생성
+        Transform popupRoot = transform.parent != null ? transform.parent : transform.root;
+
+        StudentSelectPopup studentPopup = Instantiate(_studentSelectPopupPrefab, popupRoot);
+        studentPopup.Init();
+        studentPopup.Open();
+
+        // 2) 훈련 선택 팝업 닫기 (씬 배치 방식이므로 Close로 비활성화)
+        if (_ownerSelectPopup != null)
+        {
+            _ownerSelectPopup.ForceCloseFromChild();
+        }
+
+        // 3) 훈련 확인 팝업 닫기 (현재 팝업)
+        CloseAndDestroy();
     }
 }

@@ -1239,3 +1239,4 @@ MonoBehaviour:
   _txtDesc: {fileID: 972888752505486911}
   _btnCancel: {fileID: 6303972239010338143}
   _btnStart: {fileID: 5612330384217949691}
+  _studentSelectPopupPrefab: {fileID: 5655431246991369327, guid: 2eefce8b8a34e304b82db8b2d577031f, type: 3}
