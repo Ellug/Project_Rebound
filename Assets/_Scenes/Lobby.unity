@@ -1092,7 +1092,6 @@ MonoBehaviour:
   _txtFame: {fileID: 1793366692}
   _btnLog: {fileID: 571121498}
   _btnSetting: {fileID: 572142185}
-  _optionPopupPrefab: {fileID: 0}
   _trainingSelectPopup: {fileID: 1345795867}
   _txtMessage: {fileID: 428056466}
   _btnTraining: {fileID: 230197822}
@@ -1100,6 +1099,7 @@ MonoBehaviour:
   _btnFacility: {fileID: 1815318507}
   _btnCoach: {fileID: 194940980}
   _btnShop: {fileID: 679567094}
+  _testSprite: {fileID: 8037539321571114111, guid: 7515a6442954d74499bd13e864a3efb3, type: 3}
 --- !u!1001 &3963552931024711877
 PrefabInstance:
   m_ObjectHideFlags: 0
