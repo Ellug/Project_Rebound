@@ -1,8 +1,8 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-// ¸ŞÀÎ ·Îºñ UI °ü¸®
+// ë©”ì¸ ë¡œë¹„ UI ê´€ë¦¬
 public class LobbyUI : UIBase
 {
     [Header("Top Left Info")]
@@ -13,79 +13,116 @@ public class LobbyUI : UIBase
     [SerializeField] private TMP_Text _txtFame;
 
     [Header("Top Right Buttons")]
-    [SerializeField] private Button _btnLog;     // ·Î±× (±â·Ï)
-    [SerializeField] private Button _btnSetting; // ¼³Á¤
+    [SerializeField] private Button _btnLog;     // ë¡œê·¸ (ê¸°ë¡)
+    [SerializeField] private Button _btnSetting; // ì„¤ì •
 
     [Header("Popups")]
-    [SerializeField] private UIPopup _optionPopupPrefab; // ¼³Á¤ ÆË¾÷ ÇÁ¸®ÆÕ
-    // [SerializeField] private UIPopup _trainingPopupPrefab; // ÈÆ·Ã ÆË¾÷ (ÃßÈÄ Ãß°¡)
+    [SerializeField] private UIPopup _optionPopupPrefab;              // ì„¤ì • íŒì—… í”„ë¦¬íŒ¹
+    [SerializeField] private TrainingSelectPopup _trainingPopupPrefab; // í›ˆë ¨ ì„ íƒ íŒì—… í”„ë¦¬íŒ¹
 
     [Header("Center Message")]
     [SerializeField] private TMP_Text _txtMessage;
 
     [Header("Bottom Navigation Buttons")]
-    [SerializeField] private Button _btnTraining; // ÈÆ·Ã (±¸ ÀÏ°ú)
-    [SerializeField] private Button _btnStudent;  // ÇĞ»ı °ü¸®
-    [SerializeField] private Button _btnFacility; // ½Ã¼³ (MVP °³¹ß X)
-    [SerializeField] private Button _btnCoach;    // °¨µ¶ ³ëµå (MVP °³¹ß X)
-    [SerializeField] private Button _btnShop;     // »óÁ¡ (MVP °³¹ß X)
+    [SerializeField] private Button _btnTraining; // í›ˆë ¨ (êµ¬ ì¼ê³¼)
+    [SerializeField] private Button _btnStudent;  // í•™ìƒ ê´€ë¦¬
+    [SerializeField] private Button _btnFacility; // ì‹œì„¤ (MVP ê°œë°œ X)
+    [SerializeField] private Button _btnCoach;    // ê°ë… ë…¸ë“œ (MVP ê°œë°œ X)
+    [SerializeField] private Button _btnShop;     // ìƒì  (MVP ê°œë°œ X)
+
+    // ì”¬ì— ë¯¸ë¦¬ ë°°ì¹˜ëœ ê²½ìš° Startì—ì„œ ì´ˆê¸°í™”
+    void Start()
+    {
+        Init();
+    }
 
     public override void Init()
     {
         base.Init();
         BindEvents();
-        UpdateUI(); // ÃÊ±â µ¥ÀÌÅÍ Ç¥½Ã
+        UpdateUI(); // ì´ˆê¸° ë°ì´í„° í‘œì‹œ
     }
 
     private void BindEvents()
     {
-        // 1. »ó´Ü ¹öÆ°
-        _btnLog.onClick.AddListener(() => Debug.Log("Open Log Popup"));
-        _btnSetting.onClick.AddListener(() =>
-        {
-            if (_optionPopupPrefab != null)
-                UIManager.Instance.Show(_optionPopupPrefab);
-            else
-                Debug.LogWarning("¼³Á¤ ÆË¾÷ ÇÁ¸®ÆÕÀÌ ¿¬°áµÇÁö ¾Ê¾Ò½À´Ï´Ù.");
-        });
+        // 1. ìƒë‹¨ ë²„íŠ¼
+        if (_btnLog != null)
+            _btnLog.onClick.AddListener(() => Debug.Log("Open Log Popup"));
+        if (_btnSetting != null)
+            _btnSetting.onClick.AddListener(() =>
+            {
+                if (_optionPopupPrefab != null)
+                    UIManager.Instance.Show(_optionPopupPrefab);
+                else
+                    Debug.LogWarning("ì„¤ì • íŒì—… í”„ë¦¬íŒ¹ì´ ì—°ê²°ë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤.");
+            });
 
-        // 2. ÇÏ´Ü ³×ºñ°ÔÀÌ¼Ç
-        _btnTraining.onClick.AddListener(OnClickTraining);
-        _btnStudent.onClick.AddListener(OnClickStudent);
+        // 2. í•˜ë‹¨ ë„¤ë¹„ê²Œì´ì…˜
+        if (_btnTraining != null)
+            _btnTraining.onClick.AddListener(OnClickTraining);
+        if (_btnStudent != null)
+            _btnStudent.onClick.AddListener(OnClickStudent);
 
-        // MVP ¹Ì±¸Çö ±â´ÉµéÀº 'ÁØºñÁß' ¾Ë¸²
-        _btnFacility.onClick.AddListener(() => ShowNotImplemented("½Ã¼³"));
-        _btnCoach.onClick.AddListener(() => ShowNotImplemented("°¨µ¶ ³ëµå"));
-        _btnShop.onClick.AddListener(() => ShowNotImplemented("»óÁ¡"));
+        // MVP ë¯¸êµ¬í˜„ ê¸°ëŠ¥ë“¤ì€ 'ì¤€ë¹„ì¤‘' ì•Œë¦¼
+        if (_btnFacility != null)
+            _btnFacility.onClick.AddListener(() => ShowNotImplemented("ì‹œì„¤"));
+        if (_btnCoach != null)
+            _btnCoach.onClick.AddListener(() => ShowNotImplemented("ê°ë… ë…¸ë“œ"));
+        if (_btnShop != null)
+            _btnShop.onClick.AddListener(() => ShowNotImplemented("ìƒì "));
     }
 
     private void OnClickTraining()
     {
-        Debug.Log("ÈÆ·Ã ÆË¾÷ ¿­±â");
-        // UIManager.Instance.Show<Popup_Training>();
+        Debug.Log("[LobbyUI] OnClickTraining í˜¸ì¶œë¨");
+
+        if (_trainingPopupPrefab == null)
+        {
+            Debug.LogError("[LobbyUI] _trainingPopupPrefabì´ nullì…ë‹ˆë‹¤!");
+            return;
+        }
+
+        Debug.Log("[LobbyUI] UIManager.Show í˜¸ì¶œ ì‹œë„");
+        TrainingSelectPopup popup = UIManager.Instance.Show(_trainingPopupPrefab);
+
+        if (popup == null)
+        {
+            Debug.LogError("[LobbyUI] UIManager.Showê°€ nullì„ ë°˜í™˜í–ˆìŠµë‹ˆë‹¤!");
+            return;
+        }
+
+        Debug.Log("[LobbyUI] íŒì—… ìƒì„± ì„±ê³µ, ì´ë²¤íŠ¸ êµ¬ë…");
+        popup.OnTrainingSelected += HandleTrainingSelected;
+    }
+
+    // í›ˆë ¨ ìµœì¢… ì„ íƒ ì‹œ í˜¸ì¶œ
+    private void HandleTrainingSelected(string trainingKey)
+    {
+        Debug.Log($"[LobbyUI] ì„ íƒëœ í›ˆë ¨: {trainingKey}");
+        // TODO: TrainingManagerë¥¼ í†µí•œ í›ˆë ¨ ì‹¤í–‰ ì²˜ë¦¬
     }
 
     private void OnClickStudent()
     {
-        Debug.Log("ÇĞ»ı °ü¸® ÆË¾÷ ¿­±â");
+        Debug.Log("í•™ìƒ ê´€ë¦¬ íŒì—… ì—´ê¸°");
         // UIManager.Instance.Show<Popup_StudentManagement>();
     }
 
     private void ShowNotImplemented(string featureName)
     {
-        Debug.LogWarning($"[MVP] {featureName} ±â´ÉÀº ¾ÆÁ÷ °³¹ßµÇÁö ¾Ê¾Ò½À´Ï´Ù.");
-        // ÃßÈÄ Toast Message³ª ¾Ë¸² ÆË¾÷À¸·Î ´ëÃ¼ °¡´É
+        Debug.LogWarning($"[MVP] {featureName} ê¸°ëŠ¥ì€ ì•„ì§ ê°œë°œë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤.");
+        // ì¶”í›„ Toast Messageë‚˜ ì•Œë¦¼ íŒì—…ìœ¼ë¡œ ëŒ€ì²´ ê°€ëŠ¥
     }
 
-    // µ¥ÀÌÅÍ ¸Å´ÏÀú µî¿¡¼­ Á¤º¸¸¦ ¹Ş¾Æ¿Í UI °»½Å
+    // ë°ì´í„° ë§¤ë‹ˆì € ë“±ì—ì„œ ì •ë³´ë¥¼ ë°›ì•„ì™€ UI ê°±ì‹ 
     public void UpdateUI()
     {
-        // ¿¹½Ã µ¥ÀÌÅÍ ¹ÙÀÎµù
-        if (_txtSchoolName) _txtSchoolName.text = "ÇÑ¿ï°íµîÇĞ±³";
+        // ì˜ˆì‹œ ë°ì´í„° ë°”ì¸ë”©
+        if (_txtSchoolName) _txtSchoolName.text = "í•œìš¸ê³ ë“±í•™êµ";
         if (_txtDate) _txtDate.text = "2000.03.02";
         if (_txtDDay) _txtDDay.text = "D-100";
         if (_txtMoney) _txtMoney.text = "5000 G";
         if (_txtFame) _txtFame.text = "150";
-        if (_txtMessage) _txtMessage.text = "°¨µ¶´Ô, ½ÅÀÔ»ıµéÀÌ ÀÔÇĞÇß½À´Ï´Ù. ÈÆ·Ã ÀÏÁ¤À» Àâ¾ÆÁÖ¼¼¿ä.";
+        if (_txtMessage) _txtMessage.text = "ê°ë…ë‹˜, ì‹ ì…ìƒë“¤ì´ ì…í•™í–ˆìŠµë‹ˆë‹¤. í›ˆë ¨ ì¼ì •ì„ ì¡ì•„ì£¼ì„¸ìš”.";
     }
 }
