@@ -1,8 +1,8 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using System.Collections.Generic;
 
+// ë©”ì¸ ë¡œë¹„ UI ê´€ë¦¬
 public class LobbyUI : UIBase
 {
     [Header("Top Info")]
@@ -12,21 +12,25 @@ public class LobbyUI : UIBase
     [SerializeField] private TMP_Text _txtMoney;
     [SerializeField] private TMP_Text _txtFame;
 
-    [Header("Top Buttons")]
-    [SerializeField] private Button _btnLog;
-    [SerializeField] private Button _btnSetting;
+    [Header("Top Right Buttons")]
+    [SerializeField] private Button _btnLog;     // ë¡œê·¸ (ê¸°ë¡)
+    [SerializeField] private Button _btnSetting; // ì„¤ì •
+
+    [Header("Popups")]
+    [SerializeField] private UIPopup _optionPopupPrefab;              // ì„¤ì • íŒì—… í”„ë¦¬íŒ¹
+    [SerializeField] private TrainingSelectPopup _trainingSelectPopup; // ì”¬ì— ë°°ì¹˜ëœ í›ˆë ¨ ì„ íƒ íŒì—… (ì§ì ‘ ì°¸ì¡°)
 
     [Header("Center Message")]
     [SerializeField] private TMP_Text _txtMessage;
 
-    [Header("Bottom Nav Buttons")]
-    [SerializeField] private Button _btnTraining;
-    [SerializeField] private Button _btnStudent;
-    [SerializeField] private Button _btnFacility;
-    [SerializeField] private Button _btnCoach;
-    [SerializeField] private Button _btnShop;
+    [Header("Bottom Navigation Buttons")]
+    [SerializeField] private Button _btnTraining; // í›ˆë ¨ (êµ¬ ì¼ê³¼)
+    [SerializeField] private Button _btnStudent;  // í•™ìƒ ê´€ë¦¬
+    [SerializeField] private Button _btnFacility; // ì‹œì„¤ (MVP ê°œë°œ X)
+    [SerializeField] private Button _btnCoach;    // ê°ë… ë…¸ë“œ (MVP ê°œë°œ X)
+    [SerializeField] private Button _btnShop;     // ìƒì  (MVP ê°œë°œ X)
 
-
+    // ì”¬ì— ë¯¸ë¦¬ ë°°ì¹˜ëœ ê²½ìš° Startì—ì„œ ì´ˆê¸°í™”
     void Start()
     {
         Init();
@@ -36,67 +40,86 @@ public class LobbyUI : UIBase
     {
         base.Init();
         BindEvents();
-        UpdateUI();
+        UpdateUI(); // ì´ˆê¸° ë°ì´í„° í‘œì‹œ
     }
 
     private void BindEvents()
     {
-        // 1. ¼³Á¤ ¹öÆ°: ±â´É ¹öÆ° ¿¹½Ã
-        _btnSetting.onClick.AddListener(() =>
-        {
-            // °£´ÜÇÑ È®ÀÎ ÆË¾÷
-            UIManager.Instance.ShowPopup("¼³Á¤", "È¯°æ¼³Á¤ ±â´ÉÀº ÁØºñ ÁßÀÔ´Ï´Ù.");
-        });
-
-        // 2. ÈÆ·Ã ¹öÆ°: ¼±ÅÃÁö°¡ ÇÊ¿äÇÑ ÆË¾÷ ¿¹½Ã
-        _btnTraining.onClick.AddListener(() =>
-        {
-            var buttons = new List<PopupButtonInfo>
+        // 1. ìƒë‹¨ ë²„íŠ¼
+        if (_btnLog != null)
+            _btnLog.onClick.AddListener(() => Debug.Log("Open Log Popup"));
+        if (_btnSetting != null)
+            _btnSetting.onClick.AddListener(() =>
             {
-                new PopupButtonInfo("±âÃÊ ÈÆ·Ã", () => Debug.Log("±âÃÊ ÈÆ·Ã ½ÃÀÛ")),
-                new PopupButtonInfo("Àü¼ú ÈÆ·Ã", () => Debug.Log("Àü¼ú ÈÆ·Ã ½ÃÀÛ")),
-                new PopupButtonInfo("ÈŞ½Ä", () => Debug.Log("ÈŞ½Ä ÁøÇà")),
-                new PopupButtonInfo("´İ±â", null)
-            };
+                if (_optionPopupPrefab != null)
+                    UIManager.Instance.ShowPopup("ì„¤ì •", "ì„¤ì • ê¸°ëŠ¥ ì¤€ë¹„ì¤‘");
+                else
+                    Debug.LogWarning("ì„¤ì • íŒì—… í”„ë¦¬íŒ¹ì´ ì—°ê²°ë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤.");
+            });
 
-            UIManager.Instance.ShowPopup(new PopupData(
-                "ÀÏ°ú ¼±ÅÃ",
-                "ÁøÇàÇÒ ÈÆ·Ã ½ºÄÉÁÙÀ» ¼±ÅÃÇØÁÖ¼¼¿ä.\nÃ¼·ÂÀÌ ºÎÁ·ÇÏ¸é ºÎ»ó À§ÇèÀÌ ÀÖ½À´Ï´Ù.",
-                buttons
-            ));
-        });
+        // 2. í•˜ë‹¨ ë„¤ë¹„ê²Œì´ì…˜
+        if (_btnTraining != null)
+            _btnTraining.onClick.AddListener(OnClickTraining);
+        if (_btnStudent != null)
+            _btnStudent.onClick.AddListener(OnClickStudent);
 
-        // 3. ÇĞ»ı °ü¸® ¹öÆ°: È­¸é ÀÌµ¿ ¿¹½Ã (Yes/No)
-        _btnStudent.onClick.AddListener(() =>
-        {
-            var buttons = new List<PopupButtonInfo>
-            {
-                new PopupButtonInfo("ÀÌµ¿", () => Debug.Log("ÇĞ»ı °ü¸® ¾À/ÆĞ³Î·Î ÀÌµ¿ ·ÎÁ÷")),
-                new PopupButtonInfo("Ãë¼Ò", null)
-            };
-
-            UIManager.Instance.ShowPopup(new PopupData("ÇĞ»ı °ü¸®", "ÇĞ»ı °ü¸® ¸Ş´º·Î ÀÌµ¿ÇÏ½Ã°Ú½À´Ï±î?", buttons));
-        });
-
-        // 4. ¹Ì±¸Çö ±â´Éµé
-        _btnFacility.onClick.AddListener(() => ShowNotImplemented("½Ã¼³"));
-        _btnCoach.onClick.AddListener(() => ShowNotImplemented("°¨µ¶ ³ëµå"));
-        _btnShop.onClick.AddListener(() => ShowNotImplemented("»óÁ¡"));
+        // MVP ë¯¸êµ¬í˜„ ê¸°ëŠ¥ë“¤ì€ 'ì¤€ë¹„ì¤‘' ì•Œë¦¼
+        if (_btnFacility != null)
+            _btnFacility.onClick.AddListener(() => ShowNotImplemented("ì‹œì„¤"));
+        if (_btnCoach != null)
+            _btnCoach.onClick.AddListener(() => ShowNotImplemented("ê°ë… ë…¸ë“œ"));
+        if (_btnShop != null)
+            _btnShop.onClick.AddListener(() => ShowNotImplemented("ìƒì "));
     }
 
-    private void ShowNotImplemented(string feature)
+    private void OnClickTraining()
     {
-        UIManager.Instance.ShowPopup("¾Ë¸²", $"{feature} ±â´ÉÀº ¾ÆÁ÷ °³¹ß ÁßÀÔ´Ï´Ù.");
+        Debug.Log("[LobbyUI] OnClickTraining í˜¸ì¶œë¨");
+
+        if (_trainingSelectPopup == null)
+        {
+            Debug.LogError("[LobbyUI] _trainingSelectPopupì´ nullì…ë‹ˆë‹¤!");
+            return;
+        }
+
+        // ì”¬ì— ë°°ì¹˜ëœ íŒì—…ì„ ì§ì ‘ ì—´ê¸°
+        _trainingSelectPopup.Init();
+        _trainingSelectPopup.Open();
+
+        // ì´ë²¤íŠ¸ ì¤‘ë³µ êµ¬ë… ë°©ì§€ í›„ êµ¬ë…
+        _trainingSelectPopup.OnTrainingSelected -= HandleTrainingSelected;
+        _trainingSelectPopup.OnTrainingSelected += HandleTrainingSelected;
+
+        Debug.Log("[LobbyUI] í›ˆë ¨ ì„ íƒ íŒì—… ì—´ë¦¼");
     }
 
+    // í›ˆë ¨ ìµœì¢… ì„ íƒ ì‹œ í˜¸ì¶œ
+    private void HandleTrainingSelected(string trainingKey)
+    {
+        Debug.Log($"[LobbyUI] ì„ íƒëœ í›ˆë ¨: {trainingKey}");
+        // TODO: TrainingManagerë¥¼ í†µí•œ í›ˆë ¨ ì‹¤í–‰ ì²˜ë¦¬
+    }
+
+    private void OnClickStudent()
+    {
+        Debug.Log("í•™ìƒ ê´€ë¦¬ íŒì—… ì—´ê¸°");
+    }
+
+    // ë°ì´í„° ë§¤ë‹ˆì € ë“±ì—ì„œ ì •ë³´ë¥¼ ë°›ì•„ì™€ UI ê°±ì‹ 
+    private void ShowNotImplemented(string featureName)
+    {
+        Debug.LogWarning($"[MVP] {featureName} ê¸°ëŠ¥ì€ ì•„ì§ ê°œë°œë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤.");
+    }
+
+    // ë°ì´í„° ë§¤ë‹ˆì €ì—ì„œ ì •ë³´ë¥¼ ë°›ì•„ì™€ UI ê°±ì‹ 
     public void UpdateUI()
     {
-        // TODO: ½ÇÁ¦ µ¥ÀÌÅÍ ¸Å´ÏÀú ¿¬µ¿ ÇÊ¿ä
-        if (_txtSchoolName) _txtSchoolName.text = "ÇÑ¿ï°íµîÇĞ±³";
+        // ì˜ˆì‹œ ë°ì´í„° ë°”ì¸ë”©
+        if (_txtSchoolName) _txtSchoolName.text = "í•œìš¸ê³ ë“±í•™êµ";
         if (_txtDate) _txtDate.text = "2000.03.02";
         if (_txtDDay) _txtDDay.text = "D-100";
         if (_txtMoney) _txtMoney.text = "5000 G";
         if (_txtFame) _txtFame.text = "150";
-        if (_txtMessage) _txtMessage.text = "°¨µ¶´Ô, ÈÆ·Ã ÀÏÁ¤À» Á¤ÇØÁÖ¼¼¿ä.";
+        if (_txtMessage) _txtMessage.text = "ê°ë…ë‹˜, ì‹ ì…ìƒë“¤ì´ ì…í•™í–ˆìŠµë‹ˆë‹¤. í›ˆë ¨ ì¼ì •ì„ ì¡ì•„ì£¼ì„¸ìš”.";
     }
 }
