@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba2e4df4ff554704780cc1ff19b25e67, type: 3}
   m_Name: NotifyExecutor_Holiday
   m_EditorClassIdentifier: Assembly-CSharp::NotifyEventExecutor
-  _notifyEvent: {fileID: 0}
+  _notifyEvent: {fileID: 11400000, guid: de3e7a57fb2b1184cbd0fb7865809b48, type: 2}

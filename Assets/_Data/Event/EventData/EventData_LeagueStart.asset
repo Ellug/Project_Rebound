@@ -12,9 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8839582c12ee12644a9a4018adf527f9, type: 3}
   m_Name: EventData_LeagueStart
   m_EditorClassIdentifier: Assembly-CSharp::GameEventData
-  _eventName: 
-  _year: 0
-  _month: 0
-  _day: 0
+  _eventName: "\uB9AC\uADF8"
   _isOneTimeEvent: 1
-  _executor: {fileID: 0}
+  _executor: {fileID: 11400000, guid: aa53b2170854c674f88116e0e567c914, type: 2}
+  _triggerType: 0
+  _triggerTurn: 8
+  _year: 2026
+  _month: 2
+  _day: 20

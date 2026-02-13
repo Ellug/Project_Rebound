@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90368b7f171dad5409fb0c50a0083e1a, type: 3}
   m_Name: LeagueStartExecutor_OpenLeague
   m_EditorClassIdentifier: Assembly-CSharp::LeagueStartEventExecutor
-  _leagueStartNotifyEvent: {fileID: 0}
+  _leagueStartNotifyEvent: {fileID: 11400000, guid: b4041d56a018e8948bf426ca7f030abe, type: 2}
