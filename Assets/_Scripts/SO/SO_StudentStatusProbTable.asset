@@ -1,0 +1,75 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce60be9b002d02542b239717d1b4a23e, type: 3}
+  m_Name: SO_StudentStatusProbTable
+  m_EditorClassIdentifier: Assembly-CSharp::StudentStatusProbTableSO
+  _rows:
+  - isInsane: 0
+    conditionMax: 70
+    probInsanity: 4
+    probInjury: 1
+    probDisease: 0
+    totalRisk: 5
+  - isInsane: 0
+    conditionMax: 50
+    probInsanity: 10
+    probInjury: 4
+    probDisease: 1
+    totalRisk: 15
+  - isInsane: 0
+    conditionMax: 40
+    probInsanity: 20
+    probInjury: 15
+    probDisease: 5
+    totalRisk: 40
+  - isInsane: 0
+    conditionMax: 20
+    probInsanity: 30
+    probInjury: 30
+    probDisease: 10
+    totalRisk: 70
+  - isInsane: 0
+    conditionMax: 10
+    probInsanity: 40
+    probInjury: 35
+    probDisease: 20
+    totalRisk: 95
+  - isInsane: 1
+    conditionMax: 70
+    probInsanity: 0
+    probInjury: 21
+    probDisease: 20
+    totalRisk: 41
+  - isInsane: 1
+    conditionMax: 50
+    probInsanity: 0
+    probInjury: 24
+    probDisease: 21
+    totalRisk: 45
+  - isInsane: 1
+    conditionMax: 40
+    probInsanity: 0
+    probInjury: 35
+    probDisease: 25
+    totalRisk: 60
+  - isInsane: 1
+    conditionMax: 20
+    probInsanity: 0
+    probInjury: 50
+    probDisease: 30
+    totalRisk: 80
+  - isInsane: 1
+    conditionMax: 10
+    probInsanity: 0
+    probInjury: 55
+    probDisease: 40
+    totalRisk: 90

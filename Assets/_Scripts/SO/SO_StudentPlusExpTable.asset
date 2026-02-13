@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63fd0a49282a503448c16f5f7e9eb382, type: 3}
+  m_Name: SO_StudentPlusExpTable
+  m_EditorClassIdentifier: Assembly-CSharp::StudentPlusExpTableSO
+  _rows:
+  - positionId: 1
+    positionName: "\uAC00\uB4DC(G)"
+    tier: 1
+    minValue: 100
+    maxValue: 400
+  - positionId: 1
+    positionName: "\uAC00\uB4DC(G)"
+    tier: 2
+    minValue: 0
+    maxValue: 400
+  - positionId: 1
+    positionName: "\uAC00\uB4DC(G)"
+    tier: 3
+    minValue: 0
+    maxValue: 400
+  - positionId: 2
+    positionName: "\uD3EC\uC6CC\uB4DC(F)"
+    tier: 1
+    minValue: 100
+    maxValue: 500
+  - positionId: 2
+    positionName: "\uD3EC\uC6CC\uB4DC(F)"
+    tier: 2
+    minValue: 0
+    maxValue: 400
+  - positionId: 2
+    positionName: "\uD3EC\uC6CC\uB4DC(F)"
+    tier: 3
+    minValue: 0
+    maxValue: 300
+  - positionId: 3
+    positionName: "\uC13C\uD130(C)"
+    tier: 1
+    minValue: 100
+    maxValue: 500
+  - positionId: 3
+    positionName: "\uC13C\uD130(C)"
+    tier: 2
+    minValue: 0
+    maxValue: 300
+  - positionId: 3
+    positionName: "\uC13C\uD130(C)"
+    tier: 3
+    minValue: 0
+    maxValue: 400

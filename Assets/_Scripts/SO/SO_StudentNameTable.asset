@@ -1,0 +1,415 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6bcd8920731489f429345428ba617055, type: 3}
+  m_Name: SO_StudentNameTable
+  m_EditorClassIdentifier: Assembly-CSharp::StudentNameTableSO
+  _rows:
+  - id: 1
+    name: "\uAE40\uB3C4\uC724"
+  - id: 2
+    name: "\uAE40\uD558\uC900"
+  - id: 3
+    name: "\uAE40\uC11C\uC900"
+  - id: 4
+    name: "\uAE40\uBBFC\uC900"
+  - id: 5
+    name: "\uAE40\uC2DC\uC6B0"
+  - id: 6
+    name: "\uAE40\uC9C0\uD638"
+  - id: 7
+    name: "\uAE40\uC608\uC900"
+  - id: 8
+    name: "\uAE40\uC8FC\uC6D0"
+  - id: 9
+    name: "\uAE40\uAC74\uC6B0"
+  - id: 10
+    name: "\uAE40\uBBFC\uC7AC"
+  - id: 11
+    name: "\uAE40\uD604\uC6B0"
+  - id: 12
+    name: "\uAE40\uB3C4\uD604"
+  - id: 13
+    name: "\uAE40\uC9C0\uD6C4"
+  - id: 14
+    name: "\uAE40\uC6B0\uC9C4"
+  - id: 15
+    name: "\uAE40\uC9C0\uC548"
+  - id: 16
+    name: "\uAE40\uD0DC\uC724"
+  - id: 17
+    name: "\uAE40\uC720\uC900"
+  - id: 18
+    name: "\uAE40\uC5F0\uC6B0"
+  - id: 19
+    name: "\uAE40\uC900\uC11C"
+  - id: 20
+    name: "\uAE40\uC218\uD604"
+  - id: 21
+    name: "\uAE40\uB3C4\uC728"
+  - id: 22
+    name: "\uAE40\uC2B9\uC6B0"
+  - id: 23
+    name: "\uAE40\uC18C\uC900"
+  - id: 24
+    name: "\uAE40\uB3D9\uD604"
+  - id: 25
+    name: "\uAE40\uBBFC\uADDC"
+  - id: 26
+    name: "\uAE40\uD604\uC900"
+  - id: 27
+    name: "\uAE40\uC900\uD6C4"
+  - id: 28
+    name: "\uAE40\uC9C0\uD55C"
+  - id: 29
+    name: "\uAE40\uC6B0\uC8FC"
+  - id: 30
+    name: "\uAE40\uC120\uD638"
+  - id: 31
+    name: "\uAE40\uC7AC\uC724"
+  - id: 32
+    name: "\uAE40\uC2B9\uD604"
+  - id: 33
+    name: "\uAE40\uBBFC\uD638"
+  - id: 34
+    name: "\uAE40\uC9C0\uD6C8"
+  - id: 35
+    name: "\uAE40\uC131\uD6C8"
+  - id: 36
+    name: "\uAE40\uBBFC\uC218"
+  - id: 37
+    name: "\uAE40\uD0DC\uBBFC"
+  - id: 38
+    name: "\uAE40\uB3C4\uACBD"
+  - id: 39
+    name: "\uAE40\uC8FC\uD615"
+  - id: 40
+    name: "\uAE40\uC9C4\uC6B0"
+  - id: 41
+    name: "\uAE40\uD558\uB298"
+  - id: 42
+    name: "\uAE40\uC815\uC6B0"
+  - id: 43
+    name: "\uAE40\uB3D9\uD558"
+  - id: 44
+    name: "\uAE40\uC900\uD601"
+  - id: 45
+    name: "\uAE40\uCC2C\uC601"
+  - id: 46
+    name: "\uAE40\uC7AC\uD604"
+  - id: 47
+    name: "\uAE40\uD0DC\uC6B0"
+  - id: 48
+    name: "\uAE40\uB3C4\uC6B4"
+  - id: 49
+    name: "\uAE40\uD0DC\uACBD"
+  - id: 50
+    name: "\uAE40\uC131\uBBFC"
+  - id: 51
+    name: "\uCD5C\uC9C0\uD604"
+  - id: 52
+    name: "\uC774\uB3C4\uD604"
+  - id: 53
+    name: "\uC774\uC2DC\uC6B0"
+  - id: 54
+    name: "\uC774\uC900\uC11C"
+  - id: 55
+    name: "\uC774\uC6B0\uC9C4"
+  - id: 56
+    name: "\uC774\uC7AC\uC774"
+  - id: 57
+    name: "\uC774\uC724\uD6C4"
+  - id: 58
+    name: "\uC774\uC815\uC6B0"
+  - id: 59
+    name: "\uC774\uC2B9\uBBFC"
+  - id: 60
+    name: "\uC774\uD604\uC131"
+  - id: 61
+    name: "\uC774\uC900\uD601"
+  - id: 62
+    name: "\uC774\uC740\uC6B0"
+  - id: 63
+    name: "\uC774\uC120\uC6B0"
+  - id: 64
+    name: "\uC774\uB3C4\uC601"
+  - id: 65
+    name: "\uC774\uD0DC\uC900"
+  - id: 66
+    name: "\uC774\uC900\uD6C4"
+  - id: 67
+    name: "\uD53C\uD558\uC2AC"
+  - id: 68
+    name: "\uC774\uC2B9\uD604"
+  - id: 69
+    name: "\uC774\uC131\uBBFC"
+  - id: 70
+    name: "\uC774\uBBFC\uD601"
+  - id: 71
+    name: "\uC774\uC9C4\uC6B0"
+  - id: 72
+    name: "\uC774\uC601\uC900"
+  - id: 73
+    name: "\uC774\uD0DC\uC591"
+  - id: 74
+    name: "\uC774\uC740\uC131"
+  - id: 75
+    name: "\uC774\uAC15\uC778"
+  - id: 76
+    name: "\uC774\uC7AC\uC6B1"
+  - id: 77
+    name: "\uC774\uD558\uC900"
+  - id: 78
+    name: "\uC774\uC131\uC9C4"
+  - id: 79
+    name: "\uC774\uD55C\uBCC4"
+  - id: 80
+    name: "\uC774\uD604\uC900"
+  - id: 81
+    name: "\uC774\uBBFC\uC131"
+  - id: 82
+    name: "\uC774\uADDC\uBE48"
+  - id: 83
+    name: "\uC774\uD0DC\uBBFC"
+  - id: 84
+    name: "\uC774\uB3C4\uC6D0"
+  - id: 85
+    name: "\uC774\uC9C0\uD658"
+  - id: 86
+    name: "\uC774\uC218\uD601"
+  - id: 87
+    name: "\uC774\uC900\uC601"
+  - id: 88
+    name: "\uC774\uC2B9\uC7AC"
+  - id: 89
+    name: "\uC774\uC11C\uC900"
+  - id: 90
+    name: "\uC774\uCC2C\uC6B0"
+  - id: 91
+    name: "\uC774\uAC15\uBBFC"
+  - id: 92
+    name: "\uC774\uC900\uAE30"
+  - id: 93
+    name: "\uC774\uC6B0\uBE48"
+  - id: 94
+    name: "\uC774\uD638\uC900"
+  - id: 95
+    name: "\uC774\uC740\uD638"
+  - id: 96
+    name: "\uC774\uD55C\uACB0"
+  - id: 97
+    name: "\uC774\uBBFC\uAE30"
+  - id: 98
+    name: "\uC774\uC11C\uC9C4"
+  - id: 99
+    name: "\uC774\uC7AC\uBBFC"
+  - id: 100
+    name: "\uC774\uD6A8\uC900"
+  - id: 101
+    name: "\uBC15\uC11C\uC900"
+  - id: 102
+    name: "\uBC15\uC9C0\uD6C4"
+  - id: 103
+    name: "\uBC15\uAC74\uC6B0"
+  - id: 104
+    name: "\uBC15\uC608\uC900"
+  - id: 105
+    name: "\uBC15\uC2DC\uD604"
+  - id: 106
+    name: "\uBC15\uC131\uC900"
+  - id: 107
+    name: "\uCD5C\uBBFC\uC11C"
+  - id: 108
+    name: "\uCD5C\uC6B0\uC11D"
+  - id: 109
+    name: "\uCD5C\uC2B9\uC6B0"
+  - id: 110
+    name: "\uCD5C\uAC15\uBBFC"
+  - id: 111
+    name: "\uC815\uC9C0\uC6B0"
+  - id: 112
+    name: "\uC815\uD604\uC900"
+  - id: 113
+    name: "\uC815\uBBFC\uADDC"
+  - id: 114
+    name: "\uC815\uC6B0\uC9C4"
+  - id: 115
+    name: "\uC815\uC724\uC6B0"
+  - id: 116
+    name: "\uBC15\uBBFC\uD601"
+  - id: 117
+    name: "\uBC15\uC218\uD638"
+  - id: 118
+    name: "\uBC15\uC720\uC900"
+  - id: 119
+    name: "\uCD5C\uBBFC\uAE30"
+  - id: 120
+    name: "\uCD5C\uC9C0\uD601"
+  - id: 121
+    name: "\uC815\uC7AC\uD6C8"
+  - id: 122
+    name: "\uC815\uB2E4\uC628"
+  - id: 123
+    name: "\uBC15\uB3C4\uC728"
+  - id: 124
+    name: "\uBC15\uC9C0\uBBFC"
+  - id: 125
+    name: "\uBC15\uC7AC\uC724"
+  - id: 126
+    name: "\uCD5C\uB3D9\uD604"
+  - id: 127
+    name: "\uCD5C\uC5F0\uC6B0"
+  - id: 128
+    name: "\uCD5C\uC7AC\uBBFC"
+  - id: 129
+    name: "\uC815\uB2E4\uD6C8"
+  - id: 130
+    name: "\uC815\uC2DC\uC6D0"
+  - id: 131
+    name: "\uBC15\uC0C1\uC6B0"
+  - id: 132
+    name: "\uBC15\uACBD\uC900"
+  - id: 133
+    name: "\uBC15\uC900\uC601"
+  - id: 134
+    name: "\uCD5C\uD558\uC900"
+  - id: 135
+    name: "\uCD5C\uC9C4\uD601"
+  - id: 136
+    name: "\uC815\uD0DC\uC591"
+  - id: 137
+    name: "\uC815\uBBFC\uD638"
+  - id: 138
+    name: "\uBC15\uC885\uD601"
+  - id: 139
+    name: "\uBC15\uAC74\uD558"
+  - id: 140
+    name: "\uCD5C\uD55C\uACB0"
+  - id: 141
+    name: "\uCD5C\uC720\uC131"
+  - id: 142
+    name: "\uC815\uD0DC\uC724"
+  - id: 143
+    name: "\uC815\uD574\uC778"
+  - id: 144
+    name: "\uBC15\uCC2C\uD76C"
+  - id: 145
+    name: "\uBC15\uB3C4\uACB8"
+  - id: 146
+    name: "\uCD5C\uC6D0\uC6B0"
+  - id: 147
+    name: "\uCD5C\uC724\uC131"
+  - id: 148
+    name: "\uC815\uD604\uC6B0"
+  - id: 149
+    name: "\uC815\uB3D9\uC724"
+  - id: 150
+    name: "\uBC15\uD0DC\uC900"
+  - id: 151
+    name: "\uAC15\uC6B0\uC9C4"
+  - id: 152
+    name: "\uAC15\uBBFC\uC7AC"
+  - id: 153
+    name: "\uC870\uD604\uC6B0"
+  - id: 154
+    name: "\uC870\uC724\uC131"
+  - id: 155
+    name: "\uC724\uC11C\uC9C4"
+  - id: 156
+    name: "\uC724\uC900\uC6B0"
+  - id: 157
+    name: "\uC7A5\uB3C4\uD6C8"
+  - id: 158
+    name: "\uC7A5\uC9C0\uC548"
+  - id: 159
+    name: "\uC784\uD604\uC9C4"
+  - id: 160
+    name: "\uC784\uC11C\uD558"
+  - id: 161
+    name: "\uD55C\uACB0\uC774"
+  - id: 162
+    name: "\uD55C\uC9C0\uBBFC"
+  - id: 163
+    name: "\uC624\uC2B9\uD604"
+  - id: 164
+    name: "\uC624\uC720\uCC2C"
+  - id: 165
+    name: "\uC11C\uB3D9\uD558"
+  - id: 166
+    name: "\uC11C\uC9C4\uC6B0"
+  - id: 167
+    name: "\uC2E0\uC7AC\uC724"
+  - id: 168
+    name: "\uC2E0\uD558\uC900"
+  - id: 169
+    name: "\uAD8C\uB3C4\uC601"
+  - id: 170
+    name: "\uAD8C\uD0DC\uD558"
+  - id: 171
+    name: "\uD669\uC8FC\uD638"
+  - id: 172
+    name: "\uD669\uC2DC\uD6C4"
+  - id: 173
+    name: "\uC1A1\uBBFC\uADDC"
+  - id: 174
+    name: "\uC1A1\uC544\uC900"
+  - id: 175
+    name: "\uC804\uC6B0\uBE48"
+  - id: 176
+    name: "\uC804\uC774\uC900"
+  - id: 177
+    name: "\uD64D\uC900\uAE30"
+  - id: 178
+    name: "\uCD5C\uC11C\uC724"
+  - id: 179
+    name: "\uC720\uD558\uC724"
+  - id: 180
+    name: "\uC720\uC2B9\uD638"
+  - id: 181
+    name: "\uACE0\uD0DC\uC591"
+  - id: 182
+    name: "\uACE0\uC740\uCC2C"
+  - id: 183
+    name: "\uBB38\uC9C0\uD6C8"
+  - id: 184
+    name: "\uBB38\uAC15\uC6B0"
+  - id: 185
+    name: "\uC591\uC6B0\uC8FC"
+  - id: 186
+    name: "\uC591\uC900\uBAA8"
+  - id: 187
+    name: "\uBC31\uD604\uC6B0"
+  - id: 188
+    name: "\uBC31\uC11C\uC9C4"
+  - id: 189
+    name: "\uBC30\uC131\uC724"
+  - id: 190
+    name: "\uBC15\uC11C\uC601"
+  - id: 191
+    name: "\uB0A8\uB3C4\uC724"
+  - id: 192
+    name: "\uB0A8\uAD81\uC900"
+  - id: 193
+    name: "\uC2EC\uC7AC\uD604"
+  - id: 194
+    name: "\uC2EC\uADDC\uBBFC"
+  - id: 195
+    name: "\uB178\uC774\uC548"
+  - id: 196
+    name: "\uB178\uC2B9\uC6B0"
+  - id: 197
+    name: "\uD558\uC900\uC218"
+  - id: 198
+    name: "\uD558\uB3C4\uC601"
+  - id: 199
+    name: "\uACFD\uBBFC\uC131"
+  - id: 200
+    name: "\uC131\uC9C4\uC6B0"
