@@ -26,7 +26,16 @@ public static class CsvBatchImporter
             ("SuddenEventTable.csv", SuddenEventTableCsvImporter.ImportFromPath, "Sudden Event"),
             ("SuddenEventEffectTable.csv", SuddenEventEffectTableCsvImporter.ImportFromPath, "Sudden Event Effect"),
             ("SuddenEventTextTable.csv", SuddenEventTextTableCsvImporter.ImportFromPath, "Sudden Event Text"),
-            ("StatusTextTable.csv", StatusTextTableCsvImporter.ImportFromPath, "Status Text")
+            ("StatusTextTable.csv", StatusTextTableCsvImporter.ImportFromPath, "Status Text"),
+            ("StudentNameTable.csv", StudentNameTableCsvImporter.ImportFromPath, "Student Name"),
+            ("StudentBodyTable.csv", StudentBodyTableCsvImporter.ImportFromPath, "Student Body"),
+            ("StudentStatTable.csv", StudentStatTableCsvImporter.ImportFromPath, "Student Stat"),
+            ("StudentStartStatTable.csv", StudentStartStatTableCsvImporter.ImportFromPath, "Student Start State"),
+            ("StudentPotentialTable.csv", StudentPotentialTableCsvImporter.ImportFromPath, "Student Potential"),
+            ("StudentStatusProbTable.csv", StudentStatusProbTableCsvImporter.ImportFromPath, "Student Status Prob"),
+            ("StudentStatExpTable.csv", StudentStatExpTableCsvImporter.ImportFromPath, "Student Stat Exp"),
+            ("StudentPlusExpTable.csv", StudentPlusExpTableCsvImporter.ImportFromPath, "Student Plus Exp"),
+            ("StudentPositionTable.csv", StudentPositionTableCsvImporter.ImportFromPath, "Student Position")
         };
 
         int totalCount = importTasks.Count;
