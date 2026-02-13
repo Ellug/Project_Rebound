@@ -617,6 +617,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::UIManager
   _dontDestroyOnLoad: 1
   _canvasRoot: {fileID: 1542067910}
+  _masterPopupPrefab: {fileID: 1674150225427852445, guid: 44ae66d0eb2488d428f1d2b1acb9979a, type: 3}
 --- !u!4 &1317058962
 Transform:
   m_ObjectHideFlags: 0
@@ -973,7 +974,6 @@ MonoBehaviour:
   _txtFame: {fileID: 1793366692}
   _btnLog: {fileID: 571121498}
   _btnSetting: {fileID: 572142185}
-  _optionPopupPrefab: {fileID: 0}
   _txtMessage: {fileID: 428056466}
   _btnTraining: {fileID: 230197822}
   _btnStudent: {fileID: 1255258255}
