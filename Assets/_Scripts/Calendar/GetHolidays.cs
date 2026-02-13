@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 using UnityEngine;
 using UnityEditor;
 using System;
@@ -174,3 +175,4 @@ public class GetHoliday
         AssetDatabase.Refresh();
     }
 }
+#endif
