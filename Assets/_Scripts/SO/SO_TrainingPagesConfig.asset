@@ -1,0 +1,100 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d89322c80460de84791974dece736d90, type: 3}
+  m_Name: SO_TrainingPagesConfig
+  m_EditorClassIdentifier: Assembly-CSharp::TrainingPageData
+  pages:
+  - pageTitle: "\uD6C8\uB828 \uC120\uD0DD"
+    buttons:
+    - trainingName: "\uB2E8\uCCB4\uD6C8\uB828"
+      trainingDesc: 
+      statModifierText: 
+      conditionDelta: 0
+      navigateToPageIndex: 1
+      trainingKey: 
+      previewSprite: {fileID: 0}
+    - trainingName: "\uAC1C\uC778\uD6C8\uB828"
+      trainingDesc: 
+      statModifierText: 
+      conditionDelta: 0
+      navigateToPageIndex: 2
+      trainingKey: 
+      previewSprite: {fileID: 0}
+    - trainingName: "\uC0C1\uB2F4"
+      trainingDesc: "\uD559\uC0DD\uACFC \uC0C1\uB2F4\uC744 \uC9C4\uD589\uD569\uB2C8\uB2E4."
+      statModifierText: 
+      conditionDelta: 0
+      navigateToPageIndex: -1
+      trainingKey: counseling
+      previewSprite: {fileID: 8037539321571114111, guid: 7515a6442954d74499bd13e864a3efb3, type: 3}
+    - trainingName: "\uD734\uC2DD"
+      trainingDesc: "\uD6C8\uB828\uC744 \uD734\uC2DD\uD569\uB2C8\uB2E4."
+      statModifierText: 
+      conditionDelta: 0
+      navigateToPageIndex: -1
+      trainingKey: rest
+      previewSprite: {fileID: 8037539321571114111, guid: 7515a6442954d74499bd13e864a3efb3, type: 3}
+  - pageTitle: "\uB2E8\uCCB4 \uD6C8\uB828"
+    buttons:
+    - trainingName: "\uC6E8\uC774\uD2B8 \uD2B8\uB808\uC774\uB2DD"
+      trainingDesc: "\uC6E8\uC774\uD2B8 \uD2B8\uB808\uC774\uB2DD\uC744 \uC9C4\uD589\uD569\uB2C8\uB2E4."
+      statModifierText: "\uC810\uD504 +2"
+      conditionDelta: -15
+      navigateToPageIndex: -1
+      trainingKey: group_weight
+      previewSprite: {fileID: 8037539321571114111, guid: 7515a6442954d74499bd13e864a3efb3, type: 3}
+    - trainingName: "\uC154\uD2C0\uB7F0"
+      trainingDesc: "\uC154\uD2C0\uB7F0\uC744 \uC9C4\uD589\uD569\uB2C8\uB2E4."
+      statModifierText: "\uC18D\uB3C4 +2"
+      conditionDelta: -15
+      navigateToPageIndex: -1
+      trainingKey: group_shuttle
+      previewSprite: {fileID: 8037539321571114111, guid: 7515a6442954d74499bd13e864a3efb3, type: 3}
+    - trainingName: "\uC804\uC220\uD6C8\uB828"
+      trainingDesc: "\uC804\uC220\uD6C8\uB828\uC744 \uC9C4\uD589\uD569\uB2C8\uB2E4."
+      statModifierText: "\uC810\uD504 +1"
+      conditionDelta: -15
+      navigateToPageIndex: -1
+      trainingKey: group_tactics
+      previewSprite: {fileID: 8037539321571114111, guid: 7515a6442954d74499bd13e864a3efb3, type: 3}
+  - pageTitle: "\uAC1C\uC778 \uD6C8\uB828"
+    buttons:
+    - trainingName: "\uC288\uD305 \uB4DC\uB9B4"
+      trainingDesc: "\uC288\uD305 \uB4DC\uB9B4 \uD6C8\uB828\uC744 \uC9C4\uD589\uD569\uB2C8\uB2E4"
+      statModifierText: "\uC288\uD305 +1"
+      conditionDelta: -15
+      navigateToPageIndex: -1
+      trainingKey: personal_shooting
+      previewSprite: {fileID: 8037539321571114111, guid: 7515a6442954d74499bd13e864a3efb3, type: 3}
+    - trainingName: "\uD3EC\uC2A4\uD2B8\uC5C5 & \uB9AC\uBC14\uC6B4\uB4DC"
+      trainingDesc: "\uD3EC\uC2A4\uD2B8\uC5C5\uACFC \uB9AC\uBC14\uC6B4\uB4DC \uD6C8\uB828\uC744
+        \uC9C4\uD589\uD569\uB2C8\uB2E4"
+      statModifierText: "\uC288\uD305 +1, \uC810\uD504 +1"
+      conditionDelta: -15
+      navigateToPageIndex: -1
+      trainingKey: personal_postup
+      previewSprite: {fileID: 8037539321571114111, guid: 7515a6442954d74499bd13e864a3efb3, type: 3}
+    - trainingName: "\uB514\uD39C\uC2A4 \uB371"
+      trainingDesc: "\uB514\uD39C\uC2A4 \uB371 \uD6C8\uB828\uC744 \uC9C4\uD589\uD569\uB2C8\uB2E4."
+      statModifierText: "\uC810\uD504 +1"
+      conditionDelta: -15
+      navigateToPageIndex: -1
+      trainingKey: personal_defense
+      previewSprite: {fileID: 8037539321571114111, guid: 7515a6442954d74499bd13e864a3efb3, type: 3}
+    - trainingName: "\uD578\uB4E4\uB9C1 & \uAC8C\uC774\uBC0D\uAE30"
+      trainingDesc: "\uD578\uB4E4\uB9C1\uACFC \uAC8C\uC774\uBC0D\uAE30 \uD6C8\uB828\uC744
+        \uC9C4\uD589\uD569\uB2C8\uB2E4."
+      statModifierText: "\uC18D\uB3C4 +1, \uC810\uD504 +1"
+      conditionDelta: -15
+      navigateToPageIndex: -1
+      trainingKey: personal_handling
+      previewSprite: {fileID: 8037539321571114111, guid: 7515a6442954d74499bd13e864a3efb3, type: 3}
