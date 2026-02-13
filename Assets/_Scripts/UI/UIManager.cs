@@ -1,53 +1,84 @@
 using UnityEngine;
 using System.Collections.Generic;
-using UnityEngine.InputSystem;
+using UnityEngine.InputSystem; // New Input System
 
-// 전체 UI의 스택 관리 및 뒤로가기 입력을 제어하는 매니저
 public class UIManager : Singleton<UIManager>
 {
     // UI 관리용 스택
     private Stack<UIBase> _uiStack = new Stack<UIBase>();
 
-    // 팝업들이 생성될 부모 캔버스 (인스펙터에서 할당)
-    [SerializeField] private Transform _canvasRoot;
+    [Header("Settings")]
+    [SerializeField] private Transform _canvasRoot;      // 팝업이 생성될 캔버스
+    [SerializeField] private UIPopup _masterPopupPrefab; // 기본 팝업 프리팹 
 
-    // 싱글톤 초기화 시 호출
+    // Input Action Asset으로 생성된 C# 클래스
+    private InputSystem_Actions _input;
+
     protected override void OnSingletonAwake()
     {
-        // 씬 전환 시 스택 초기화가 필요하다면 이벤트 연결 등 처리
+        // 1. 인풋 클래스 생성
+        _input = new InputSystem_Actions();
+
+        // 2. 이벤트 바인딩 
+        // UI맵의 Cancel액션이 발동되면 HandleBackKey 함수 실행
+        _input.UI.Cancel.performed += ctx => HandleBackKey();
     }
 
-    private void Update()
+    // 매니저가 활성화될 때 인풋도 켜기
+    void OnEnable()
     {
-        // 안드로이드 백버튼 입력 감지
-        if (Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame)
+        _input?.Enable();
+    }
+
+    // 매니저가 비활성화될 때 인풋도 끄기 
+    void OnDisable()
+    {
+        _input?.Disable();
+    }
+
+    private void HandleBackKey()
+    {
+        if (_uiStack.Count > 0)
         {
-            if (_uiStack.Count > 0)
-            {
-                // 스택 최상단 UI의 뒤로가기 로직 수행
-                _uiStack.Peek().OnBackKey();
-            }
-            else
-            {
-                // 스택에 UI가 없을 때 -> 종료 팝업 로직
-                HandleExitInput();
-            }
+            // 스택 최상단 팝업의 뒤로가기 로직 수행
+            _uiStack.Peek().OnBackKey();
+        }
+        else
+        {
+            // 스택에 팝업이 없으면 종료 팝업 띄우기
+            ShowExitPopup();
         }
     }
 
-    // UI 프리팹을 받아서 띄우고 스택에 추가
-    public T Show<T>(T uiPrefab) where T : UIBase
+    // 팝업 호출 메서드
+    public void ShowPopup(PopupData data)
     {
-        // 인스턴스화
-        T uiInstance = Instantiate(uiPrefab, _canvasRoot);
+        if (_masterPopupPrefab == null)
+        {
+            Debug.LogError("[UIManager] Master Popup Prefab이 연결되지 않았습니다!");
+            return;
+        }
 
-        uiInstance.Init();
-        uiInstance.Open();
+        // 1. 프리팹 생성
+        UIPopup popupInstance = Instantiate(_masterPopupPrefab, _canvasRoot);
 
-        // 스택에 푸시
-        _uiStack.Push(uiInstance);
+        // 2. 초기화 및 데이터 주입
+        popupInstance.Init();
+        popupInstance.SetData(data); // 데이터 밀어넣기
+        popupInstance.Open();
 
-        return uiInstance;
+        // 3. 스택에 추가
+        _uiStack.Push(popupInstance);
+    }
+
+    // 편의용 오버로딩
+    public void ShowPopup(string title, string content, string confirmText = "확인", System.Action onConfirm = null)
+    {
+        var buttons = new List<PopupButtonInfo>
+        {
+            new PopupButtonInfo(confirmText, onConfirm)
+        };
+        ShowPopup(new PopupData(title, content, buttons));
     }
 
     // 스택 최상단 UI 닫기
@@ -55,17 +86,19 @@ public class UIManager : Singleton<UIManager>
     {
         if (_uiStack.Count == 0) return;
 
-        // 스택에서 제거 및 닫기 처리
         UIBase topUI = _uiStack.Pop();
         topUI.Close();
-
-        // 생성된 객체 파괴
         Destroy(topUI.gameObject);
     }
 
-    // 앱 종료 처리 또는 종료 확인 팝업
-    private void HandleExitInput()
+    // 종료 팝업 예시
+    private void ShowExitPopup()
     {
-        Debug.Log("종료 팝업 호출 필요");
+        var buttons = new List<PopupButtonInfo>
+        {
+            new PopupButtonInfo("종료", () => Application.Quit()),
+            new PopupButtonInfo("취소", null)
+        };
+        ShowPopup(new PopupData("게임 종료", "게임을 종료하시겠습니까?", buttons));
     }
 }
