@@ -334,8 +334,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6625f6b595cc5ca49a7822704948d809, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LoadUI
-  _loadPrefab: {fileID: 2650845959754721191, guid: 55991bd166cde16479cad1042964cba3, type: 3}
+  _loadPrefab: {fileID: 6979051064495429984, guid: 55991bd166cde16479cad1042964cba3, type: 3}
   _loadListpanel: {fileID: 360746006}
+  _openPanel: {fileID: 8390640128475669580}
 --- !u!4 &456247468
 Transform:
   m_ObjectHideFlags: 0
@@ -1090,6 +1091,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: TitleButton
       objectReference: {fileID: 0}
+    - target: {fileID: 4209901669952194490, guid: 91b23fa264a2a004c8be9a2cf1ce0b82, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5863047856944862878, guid: 91b23fa264a2a004c8be9a2cf1ce0b82, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -1249,15 +1254,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5576843417618369560, guid: becd30a474ad3af448de87853ae54a9c, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 5576843417618369560, guid: becd30a474ad3af448de87853ae54a9c, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 5576843417618369560, guid: becd30a474ad3af448de87853ae54a9c, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 5576843417618369560, guid: becd30a474ad3af448de87853ae54a9c, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -1284,6 +1289,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: becd30a474ad3af448de87853ae54a9c, type: 3}
+--- !u!114 &8390640128475669580 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6898297809286638921, guid: becd30a474ad3af448de87853ae54a9c, type: 3}
+  m_PrefabInstance: {fileID: 8390640128475669578}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 587d7e89bb39ad240be94c081911a4e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LoadConfirmPanel
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
