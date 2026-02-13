@@ -1,6 +1,7 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
+﻿using System.Collections.Generic;
 using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
 
 // 메인 로비 UI 관리
 public class LobbyUI : UIBase
@@ -17,7 +18,6 @@ public class LobbyUI : UIBase
     [SerializeField] private Button _btnSetting; // 설정
 
     [Header("Popups")]
-    [SerializeField] private UIPopup _optionPopupPrefab;              // 설정 팝업 프리팹
     [SerializeField] private TrainingSelectPopup _trainingSelectPopup; // 씬에 배치된 훈련 선택 팝업 (직접 참조)
 
     [Header("Center Message")]
@@ -29,6 +29,9 @@ public class LobbyUI : UIBase
     [SerializeField] private Button _btnFacility; // 시설 (MVP 개발 X)
     [SerializeField] private Button _btnCoach;    // 감독 노드 (MVP 개발 X)
     [SerializeField] private Button _btnShop;     // 상점 (MVP 개발 X)
+
+    [Header("Test")]
+    [SerializeField] private Sprite _testSprite;
 
     // 씬에 미리 배치된 경우 Start에서 초기화
     void Start()
@@ -47,14 +50,33 @@ public class LobbyUI : UIBase
     {
         // 1. 상단 버튼
         if (_btnLog != null)
-            _btnLog.onClick.AddListener(() => Debug.Log("Open Log Popup"));
+        {
+            _btnLog.onClick.RemoveAllListeners(); // 혹시 모를 중복 방지
+            _btnLog.onClick.AddListener(() =>
+            {
+                // [2] 이미지 + 서브텍스트가 포함된 팝업 데이터 생성
+                var buttons = new List<PopupButtonInfo>
+                {
+                    new PopupButtonInfo("취소", null),
+                    new PopupButtonInfo("확인", () => Debug.Log("이미지 팝업 확인됨"))
+                };
+
+                UIManager.Instance.ShowPopup(new PopupData(
+                    title: "특수 훈련",
+                    content: "이 훈련은 부상 위험이 높지만\n성장 속도가 매우 빠릅니다.",
+                    subContent: "체력 소모 -30 / 부상 확률 10%", // 서브 텍스트
+                    image: _testSprite,                     // 테스트 이미지
+                    buttons: buttons
+                ));
+            });
+        }
         if (_btnSetting != null)
             _btnSetting.onClick.AddListener(() =>
             {
-                if (_optionPopupPrefab != null)
-                    UIManager.Instance.ShowPopup("설정", "설정 기능 준비중");
-                else
-                    Debug.LogWarning("설정 팝업 프리팹이 연결되지 않았습니다.");
+                UIManager.Instance.ShowPopup(new PopupData(
+                    title: "설정",
+                    content: "환경설정 기능은 준비 중입니다."
+                ));
             });
 
         // 2. 하단 네비게이션
@@ -102,13 +124,26 @@ public class LobbyUI : UIBase
 
     private void OnClickStudent()
     {
-        Debug.Log("학생 관리 팝업 열기");
+        var buttons = new List<PopupButtonInfo>
+        {
+            new PopupButtonInfo("취소", null),
+            new PopupButtonInfo("이동", () => Debug.Log("학생 관리 씬 이동"))
+        };
+
+        UIManager.Instance.ShowPopup(new PopupData(
+            title: "학생 관리",
+            content: "학생 관리 메뉴로 이동하시겠습니까?",
+            buttons: buttons
+        ));
     }
 
     // 데이터 매니저 등에서 정보를 받아와 UI 갱신
     private void ShowNotImplemented(string featureName)
     {
-        Debug.LogWarning($"[MVP] {featureName} 기능은 아직 개발되지 않았습니다.");
+        UIManager.Instance.ShowPopup(new PopupData(
+             title: "알림",
+             content: $"{featureName} 기능은 아직 개발되지 않았습니다."
+         ));
     }
 
     // 데이터 매니저에서 정보를 받아와 UI 갱신
