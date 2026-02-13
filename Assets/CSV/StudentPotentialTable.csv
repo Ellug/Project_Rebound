@@ -1,0 +1,5 @@
+position_id,position_name,tier1_stat,tier1_prob,tier2_stat,tier2_prob,tier3_stat,tier3_prob
+int,string,string,int,string,int,string,int
+01,가드(G),슈팅,20,속도,40,지구력,40
+02,포워드(F),속도,20,점프력,40,지구력,40
+03,센터(C),점프력,20,슈팅,40,지구력,40

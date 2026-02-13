@@ -886,8 +886,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Loading Text
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 25469c45530030c42a9062afcacd417b, type: 2}
-  m_sharedMaterial: {fileID: -4319160955693528781, guid: 25469c45530030c42a9062afcacd417b, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 9291a7438c2005e48b00352476c10c41, type: 2}
+  m_sharedMaterial: {fileID: -6666201437410415903, guid: 9291a7438c2005e48b00352476c10c41, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1051,6 +1051,60 @@ MonoBehaviour:
     m_EditorAssetChanged: 0
   _statusTextTableRef:
     m_AssetGUID: 76f9b9a7a5bafe547901a63789d1045b
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
+  _studentNameTableRef:
+    m_AssetGUID: 631270dd11a216045883df32cf0abce8
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
+  _studentBodyTableRef:
+    m_AssetGUID: 7a59732e8646a4848860f6ee542a095b
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
+  _studentStatTableRef:
+    m_AssetGUID: 8fdba17a9453c0247b9cc87d22e05a7b
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
+  _studentStartStateTableRef:
+    m_AssetGUID: 31dc3a478bf62d346b78bda77784c0b5
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
+  _studentPotentialTableRef:
+    m_AssetGUID: 6abbea51538ab21478d1457122d25438
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
+  _studentStatusProbTableRef:
+    m_AssetGUID: b0389c1f9d1729044b4be41a31819b3e
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
+  _studentStatExpTableRef:
+    m_AssetGUID: 8fdba17a9453c0247b9cc87d22e05a7b
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
+  _studentPlusExpTableRef:
+    m_AssetGUID: 670af9d20bdffc745bd6cb06953e1677
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
+  _studentPositionTableRef:
+    m_AssetGUID: 1b898e76ac68cc84b9e7882d5f6cd035
     m_SubObjectName: 
     m_SubObjectType: 
     m_SubObjectGUID: 

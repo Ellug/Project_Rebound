@@ -1,11 +1,12 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Collections.Generic;
 
 // 메인 로비 UI 관리
 public class LobbyUI : UIBase
 {
-    [Header("Top Left Info")]
+    [Header("Top Info")]
     [SerializeField] private TMP_Text _txtSchoolName;
     [SerializeField] private TMP_Text _txtDate;
     [SerializeField] private TMP_Text _txtDDay;
@@ -72,7 +73,7 @@ public class LobbyUI : UIBase
             _btnShop.onClick.AddListener(() => ShowNotImplemented("상점"));
     }
 
-    private void OnClickTraining()
+    private void ShowNotImplemented(string feature)
     {
         Debug.Log("[LobbyUI] OnClickTraining 호출됨");
 
@@ -106,12 +107,6 @@ public class LobbyUI : UIBase
     {
         Debug.Log("학생 관리 팝업 열기");
         // UIManager.Instance.Show<Popup_StudentManagement>();
-    }
-
-    private void ShowNotImplemented(string featureName)
-    {
-        Debug.LogWarning($"[MVP] {featureName} 기능은 아직 개발되지 않았습니다.");
-        // 추후 Toast Message나 알림 팝업으로 대체 가능
     }
 
     // 데이터 매니저 등에서 정보를 받아와 UI 갱신
