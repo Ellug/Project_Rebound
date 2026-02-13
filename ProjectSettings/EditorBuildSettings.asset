@@ -6,8 +6,18 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/_Scenes/Start.unity
+    guid: 759708a3db18b254cb6ecb7f9eb76c01
+  - enabled: 1
     path: Assets/_Scenes/Title.unity
     guid: 8c9cfa26abfee488c85f1582747f6a02
+  - enabled: 1
+    path: Assets/_Scenes/Lobby.unity
+    guid: 3ac5421a69e279246b47d38b0bdf8918
+  - enabled: 1
+    path: Assets/_Scenes/Tournament.unity
+    guid: 30db9172fb440114b8c540dbf31ff389
   m_configObjects:
+    com.unity.addressableassets: {fileID: 11400000, guid: b3fce02e7b306f64eb53db8d7fada9dc, type: 2}
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0

@@ -1,0 +1,93 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Default Local Group
+  m_EditorClassIdentifier: Unity.Addressables.Editor::UnityEditor.AddressableAssets.Settings.AddressableAssetGroup
+  m_GroupName: Default Local Group
+  m_GUID: c63a1636634c9254b8a68dd081a2d9d7
+  m_SerializeEntries:
+  - m_GUID: 1b898e76ac68cc84b9e7882d5f6cd035
+    m_Address: Assets/_Scripts/SO/SO_StudentPositionTable.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1be4142f5ad0d00488680016784a973c
+    m_Address: Assets/_Scripts/SO/SO_GrowthCommandTable.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 297009e9d4477b04dbfbe141e4b753cd
+    m_Address: Assets/_Scripts/SO/SO_SuddenEventTable.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 31dc3a478bf62d346b78bda77784c0b5
+    m_Address: Assets/_Scripts/SO/SO_StudentStartStatTable.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 37ec3c6c7315fe64197064036e64fd1a
+    m_Address: Assets/_Scripts/SO/SO_StudentStatTable.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 631270dd11a216045883df32cf0abce8
+    m_Address: Assets/_Scripts/SO/SO_StudentNameTable.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 670af9d20bdffc745bd6cb06953e1677
+    m_Address: Assets/_Scripts/SO/SO_StudentPlusExpTable.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6abbea51538ab21478d1457122d25438
+    m_Address: Assets/_Scripts/SO/SO_StudentPotentialTable.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 76f9b9a7a5bafe547901a63789d1045b
+    m_Address: Assets/_Scripts/SO/SO_StatusTextTable.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7a59732e8646a4848860f6ee542a095b
+    m_Address: Assets/_Scripts/SO/SO_StudentBodyTable.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 81ba605268fde034a974bdbd32fffc40
+    m_Address: Assets/_Scripts/SO/SO_SuddenEventTextTable.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8fdba17a9453c0247b9cc87d22e05a7b
+    m_Address: Assets/_Scripts/SO/SO_StudentStatExpTable.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b0389c1f9d1729044b4be41a31819b3e
+    m_Address: Assets/_Scripts/SO/SO_StudentStatusProbTable.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b28b376e195049e4aa15bd274d043a6a
+    m_Address: Assets/_Scripts/SO/SO_SuddenEventEffectTable.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: d3179b69a3360a04d9911317df1a1a42, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 8b60061110ab26e40a1a832c4d1c0045, type: 2}
+    - {fileID: 11400000, guid: 4f68aca725106a94fb90f29927303a42, type: 2}
