@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 // 훈련 선택 팝업 (훈련 선택 / 단체 훈련 / 개인 훈련을 하나의 프리팹에서 페이지 전환으로 처리)
 public class TrainingSelectPopup : UIPopup
@@ -9,6 +10,7 @@ public class TrainingSelectPopup : UIPopup
     [SerializeField] private TrainingPageData _pageData;
 
     [Header("Training UI")]
+    [SerializeField] private TMP_Text _txtPageTitle;
     [SerializeField] private Transform _buttonContainer;        // 버튼 부모 (VerticalLayoutGroup)
     [SerializeField] private TrainingButtonItem _buttonPrefab2; // 부모와 자식에서 같은 이름을 쓰면 유니티에서 허용하지 않음.
 
@@ -44,7 +46,7 @@ public class TrainingSelectPopup : UIPopup
     {
         ClearPageHistory();
         ClearButtons();
-        base.OnCloseButtonClicked();
+        Close();
     }
 
     // 지정 인덱스의 페이지로 전환
@@ -65,7 +67,11 @@ public class TrainingSelectPopup : UIPopup
         _currentPageIndex = pageIndex;
         TrainingPageInfo page = _pageData.pages[pageIndex];
 
-        // SetTitle(page.pageTitle);
+        if (_txtPageTitle != null)
+        {
+            _txtPageTitle.text = page.pageTitle;
+        }
+
         ClearButtons();
         SpawnButtons(page);
         UpdateBackButtonVisibility();
@@ -92,7 +98,7 @@ public class TrainingSelectPopup : UIPopup
         }
     }
 
-    // 페이지 이동 or 훈련 실행 전 확인 팝업 분기 처리
+    // 페이지 이동 or 확인 팝업 분기 처리
     private void HandleTrainingButton(TrainingButtonData data)
     {
         // 1) 페이지 이동 버튼
@@ -103,37 +109,43 @@ public class TrainingSelectPopup : UIPopup
         }
 
         // 2) 최종 실행 버튼 -> 확인 팝업 띄우기
+        OpenConfirmPopup(data);
+    }
+
+    // 훈련 확인 팝업 열기
+    private void OpenConfirmPopup(TrainingButtonData data)
+    {
+        // 확인 팝업 프리팹이 없으면 바로 선택 완료
         if (_confirmPopupPrefab == null)
         {
-            Debug.LogError("[TrainingSelectPopup] _confirmPopupPrefab이 null입니다!");
+            Debug.Log($"[TrainingSelectPopup] 확인 팝업 없이 바로 실행: {data.trainingKey}");
+            OnTrainingSelected?.Invoke(data.trainingKey);
+            Close();
             return;
         }
 
-        // var confirm = UIManager.Instance.Show(_confirmPopupPrefab);
-        // confirm.SetTitle("훈련 시작");
-        // confirm.Setup(
-        //     data.trainingKey,
-        //     data.trainingName,
-        //     data.conditionDelta,
-        //     data.trainingDesc,
-        //     data.previewSprite
-        // );
+        // 확인 팝업 생성 (Instantiate → 자체 관리, UIManager 스택 미사용)
+        TrainingConfirmPopup confirm = Instantiate(_confirmPopupPrefab, transform.parent);
+        confirm.Init();
+        confirm.Setup(
+            data.trainingKey,
+            data.trainingName,
+            data.conditionDelta,
+            data.trainingDesc,
+            data.previewSprite
+        );
+        confirm.Open();
 
-        // // 중복 구독 방지: 로컬 핸들러로 구독 후 즉시 해제
-        // System.Action<string> handler = null;
-        // handler = (key) =>
-        // {
-        //     confirm.OnConfirm -= handler;
-
-        //     // 최종 확정 콜백
-        //     OnTrainingSelected?.Invoke(key);
-
-        //     // confirm은 자기 버튼에서 CloseTop()로 닫히고,
-        //     // 그 다음 스택 최상단(= TrainingSelectPopup)을 닫고 싶으면 아래 한 번 더
-        //     UIManager.Instance.CloseTop();
-        // };
-
-        // confirm.OnConfirm += handler;
+        // 확인(시작) 버튼 클릭 시
+        confirm.OnConfirm += (key) =>
+        {
+            OnTrainingSelected?.Invoke(key);
+            // confirm은 자체 CloseAndDestroy()로 파괴됨
+            // 훈련 선택 팝업도 닫기
+            ClearPageHistory();
+            ClearButtons();
+            Close();
+        };
     }
 
     // 이전 페이지로 복귀
@@ -143,6 +155,10 @@ public class TrainingSelectPopup : UIPopup
         {
             int prevPage = _pageHistory.Pop();
             ShowPage(prevPage, pushHistory: false);
+        }
+        else
+        {
+            Close();
         }
     }
 
@@ -159,7 +175,10 @@ public class TrainingSelectPopup : UIPopup
     {
         foreach (TrainingButtonItem item in _spawnedButtons)
         {
-            if (item != null) Destroy(item.gameObject);
+            if (item != null)
+            {
+                Destroy(item.gameObject);
+            }
         }
         _spawnedButtons.Clear();
     }

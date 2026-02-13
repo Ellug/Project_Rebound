@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using System.Collections.Generic;
 
 // 메인 로비 UI 관리
 public class LobbyUI : UIBase
@@ -19,7 +18,7 @@ public class LobbyUI : UIBase
 
     [Header("Popups")]
     [SerializeField] private UIPopup _optionPopupPrefab;              // 설정 팝업 프리팹
-    [SerializeField] private TrainingSelectPopup _trainingPopupPrefab; // 훈련 선택 팝업 프리팹
+    [SerializeField] private TrainingSelectPopup _trainingSelectPopup; // 씬에 배치된 훈련 선택 팝업 (직접 참조)
 
     [Header("Center Message")]
     [SerializeField] private TMP_Text _txtMessage;
@@ -52,15 +51,15 @@ public class LobbyUI : UIBase
         if (_btnSetting != null)
             _btnSetting.onClick.AddListener(() =>
             {
-                // if (_optionPopupPrefab != null)
-                //     UIManager.Instance.Show(_optionPopupPrefab);
-                // else
-                //     Debug.LogWarning("설정 팝업 프리팹이 연결되지 않았습니다.");
+                if (_optionPopupPrefab != null)
+                    UIManager.Instance.ShowPopup("설정", "설정 기능 준비중");
+                else
+                    Debug.LogWarning("설정 팝업 프리팹이 연결되지 않았습니다.");
             });
 
         // 2. 하단 네비게이션
         if (_btnTraining != null)
-            // _btnTraining.onClick.AddListener(OnClickTraining);
+            _btnTraining.onClick.AddListener(OnClickTraining);
         if (_btnStudent != null)
             _btnStudent.onClick.AddListener(OnClickStudent);
 
@@ -73,27 +72,25 @@ public class LobbyUI : UIBase
             _btnShop.onClick.AddListener(() => ShowNotImplemented("상점"));
     }
 
-    private void ShowNotImplemented(string feature)
+    private void OnClickTraining()
     {
         Debug.Log("[LobbyUI] OnClickTraining 호출됨");
 
-        if (_trainingPopupPrefab == null)
+        if (_trainingSelectPopup == null)
         {
-            Debug.LogError("[LobbyUI] _trainingPopupPrefab이 null입니다!");
+            Debug.LogError("[LobbyUI] _trainingSelectPopup이 null입니다!");
             return;
         }
 
-        Debug.Log("[LobbyUI] UIManager.Show 호출 시도");
-        // TrainingSelectPopup popup = UIManager.Instance.Show(_trainingPopupPrefab);
+        // 씬에 배치된 팝업을 직접 열기
+        _trainingSelectPopup.Init();
+        _trainingSelectPopup.Open();
 
-        // if (popup == null)
-        // {
-        //     Debug.LogError("[LobbyUI] UIManager.Show가 null을 반환했습니다!");
-        //     return;
-        // }
+        // 이벤트 중복 구독 방지 후 구독
+        _trainingSelectPopup.OnTrainingSelected -= HandleTrainingSelected;
+        _trainingSelectPopup.OnTrainingSelected += HandleTrainingSelected;
 
-        Debug.Log("[LobbyUI] 팝업 생성 성공, 이벤트 구독");
-        // popup.OnTrainingSelected += HandleTrainingSelected;
+        Debug.Log("[LobbyUI] 훈련 선택 팝업 열림");
     }
 
     // 훈련 최종 선택 시 호출
@@ -106,10 +103,15 @@ public class LobbyUI : UIBase
     private void OnClickStudent()
     {
         Debug.Log("학생 관리 팝업 열기");
-        // UIManager.Instance.Show<Popup_StudentManagement>();
     }
 
     // 데이터 매니저 등에서 정보를 받아와 UI 갱신
+    private void ShowNotImplemented(string featureName)
+    {
+        Debug.LogWarning($"[MVP] {featureName} 기능은 아직 개발되지 않았습니다.");
+    }
+
+    // 데이터 매니저에서 정보를 받아와 UI 갱신
     public void UpdateUI()
     {
         // 예시 데이터 바인딩
