@@ -33,6 +33,8 @@ public class LobbyUI : UIBase
     [Header("Test")]
     [SerializeField] private Sprite _testSprite;
 
+    private bool _inited;
+    
     // 씬에 미리 배치된 경우 Start에서 초기화
     void Start()
     {
@@ -96,23 +98,25 @@ public class LobbyUI : UIBase
 
     private void OnClickTraining()
     {
-        Debug.Log("[LobbyUI] OnClickTraining 호출됨");
-
         if (_trainingSelectPopup == null)
         {
             Debug.LogError("[LobbyUI] _trainingSelectPopup이 null입니다!");
             return;
         }
 
-        // 씬에 배치된 팝업을 직접 열기
-        _trainingSelectPopup.Init();
-        _trainingSelectPopup.Open();
+        if (!_inited)
+        {
+            _trainingSelectPopup.Init();
+            _inited = true;
+        }
 
-        // 이벤트 중복 구독 방지 후 구독
         _trainingSelectPopup.OnTrainingSelected -= HandleTrainingSelected;
         _trainingSelectPopup.OnTrainingSelected += HandleTrainingSelected;
 
-        Debug.Log("[LobbyUI] 훈련 선택 팝업 열림");
+        _trainingSelectPopup.Open();
+
+        
+        _trainingSelectPopup.ShowPage(0, pushHistory: false);
     }
 
     // 훈련 최종 선택 시 호출

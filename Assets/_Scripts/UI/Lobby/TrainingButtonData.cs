@@ -12,4 +12,7 @@ public class TrainingButtonData
     public int navigateToPageIndex = -1;  //이동할 페이지 인덱스 (-1이면 바로 실행)
     public string trainingKey;            //훈련 고유 식별 키
     public Sprite previewSprite;          //팝업창에 표시할 이미지
+
+    //휴식/전체 실행 같은 항목은 학생 선택을 건너뛰기
+    public bool requiresStudentSelection = true;
 }
