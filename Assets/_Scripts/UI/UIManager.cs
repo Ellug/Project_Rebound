@@ -78,7 +78,7 @@ public class UIManager : Singleton<UIManager>
         {
             new PopupButtonInfo(confirmText, onConfirm)
         };
-        ShowPopup(new PopupData(title, content, buttons));
+        ShowPopup(new PopupData(title, content, buttons: buttons));
     }
 
     // 스택 최상단 UI 닫기
@@ -96,9 +96,9 @@ public class UIManager : Singleton<UIManager>
     {
         var buttons = new List<PopupButtonInfo>
         {
-            new PopupButtonInfo("종료", () => Application.Quit()),
-            new PopupButtonInfo("취소", null)
+            new PopupButtonInfo("취소", null),
+            new PopupButtonInfo("종료", () => Application.Quit())            
         };
-        ShowPopup(new PopupData("게임 종료", "게임을 종료하시겠습니까?", buttons));
+        ShowPopup(new PopupData("게임 종료", "게임을 종료하시겠습니까?", buttons: buttons));
     }
 }

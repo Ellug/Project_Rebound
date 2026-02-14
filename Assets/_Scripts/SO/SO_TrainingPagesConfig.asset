@@ -22,6 +22,7 @@ MonoBehaviour:
       navigateToPageIndex: 1
       trainingKey: 
       previewSprite: {fileID: 0}
+      requiresStudentSelection: 0
     - trainingName: "\uAC1C\uC778\uD6C8\uB828"
       trainingDesc: 
       statModifierText: 
@@ -29,6 +30,7 @@ MonoBehaviour:
       navigateToPageIndex: 2
       trainingKey: 
       previewSprite: {fileID: 0}
+      requiresStudentSelection: 0
     - trainingName: "\uC0C1\uB2F4"
       trainingDesc: "\uD559\uC0DD\uACFC \uC0C1\uB2F4\uC744 \uC9C4\uD589\uD569\uB2C8\uB2E4."
       statModifierText: 
@@ -36,6 +38,7 @@ MonoBehaviour:
       navigateToPageIndex: -1
       trainingKey: counseling
       previewSprite: {fileID: 8037539321571114111, guid: 7515a6442954d74499bd13e864a3efb3, type: 3}
+      requiresStudentSelection: 1
     - trainingName: "\uD734\uC2DD"
       trainingDesc: "\uD6C8\uB828\uC744 \uD734\uC2DD\uD569\uB2C8\uB2E4."
       statModifierText: 
@@ -43,6 +46,7 @@ MonoBehaviour:
       navigateToPageIndex: -1
       trainingKey: rest
       previewSprite: {fileID: 8037539321571114111, guid: 7515a6442954d74499bd13e864a3efb3, type: 3}
+      requiresStudentSelection: 0
   - pageTitle: "\uB2E8\uCCB4 \uD6C8\uB828"
     buttons:
     - trainingName: "\uC6E8\uC774\uD2B8 \uD2B8\uB808\uC774\uB2DD"
@@ -52,6 +56,7 @@ MonoBehaviour:
       navigateToPageIndex: -1
       trainingKey: group_weight
       previewSprite: {fileID: 8037539321571114111, guid: 7515a6442954d74499bd13e864a3efb3, type: 3}
+      requiresStudentSelection: 1
     - trainingName: "\uC154\uD2C0\uB7F0"
       trainingDesc: "\uC154\uD2C0\uB7F0\uC744 \uC9C4\uD589\uD569\uB2C8\uB2E4."
       statModifierText: "\uC18D\uB3C4 +2"
@@ -59,6 +64,7 @@ MonoBehaviour:
       navigateToPageIndex: -1
       trainingKey: group_shuttle
       previewSprite: {fileID: 8037539321571114111, guid: 7515a6442954d74499bd13e864a3efb3, type: 3}
+      requiresStudentSelection: 1
     - trainingName: "\uC804\uC220\uD6C8\uB828"
       trainingDesc: "\uC804\uC220\uD6C8\uB828\uC744 \uC9C4\uD589\uD569\uB2C8\uB2E4."
       statModifierText: "\uC810\uD504 +1"
@@ -66,6 +72,7 @@ MonoBehaviour:
       navigateToPageIndex: -1
       trainingKey: group_tactics
       previewSprite: {fileID: 8037539321571114111, guid: 7515a6442954d74499bd13e864a3efb3, type: 3}
+      requiresStudentSelection: 1
   - pageTitle: "\uAC1C\uC778 \uD6C8\uB828"
     buttons:
     - trainingName: "\uC288\uD305 \uB4DC\uB9B4"
@@ -75,6 +82,7 @@ MonoBehaviour:
       navigateToPageIndex: -1
       trainingKey: personal_shooting
       previewSprite: {fileID: 8037539321571114111, guid: 7515a6442954d74499bd13e864a3efb3, type: 3}
+      requiresStudentSelection: 1
     - trainingName: "\uD3EC\uC2A4\uD2B8\uC5C5 & \uB9AC\uBC14\uC6B4\uB4DC"
       trainingDesc: "\uD3EC\uC2A4\uD2B8\uC5C5\uACFC \uB9AC\uBC14\uC6B4\uB4DC \uD6C8\uB828\uC744
         \uC9C4\uD589\uD569\uB2C8\uB2E4"
@@ -83,6 +91,7 @@ MonoBehaviour:
       navigateToPageIndex: -1
       trainingKey: personal_postup
       previewSprite: {fileID: 8037539321571114111, guid: 7515a6442954d74499bd13e864a3efb3, type: 3}
+      requiresStudentSelection: 1
     - trainingName: "\uB514\uD39C\uC2A4 \uB371"
       trainingDesc: "\uB514\uD39C\uC2A4 \uB371 \uD6C8\uB828\uC744 \uC9C4\uD589\uD569\uB2C8\uB2E4."
       statModifierText: "\uC810\uD504 +1"
@@ -90,6 +99,7 @@ MonoBehaviour:
       navigateToPageIndex: -1
       trainingKey: personal_defense
       previewSprite: {fileID: 8037539321571114111, guid: 7515a6442954d74499bd13e864a3efb3, type: 3}
+      requiresStudentSelection: 1
     - trainingName: "\uD578\uB4E4\uB9C1 & \uAC8C\uC774\uBC0D\uAE30"
       trainingDesc: "\uD578\uB4E4\uB9C1\uACFC \uAC8C\uC774\uBC0D\uAE30 \uD6C8\uB828\uC744
         \uC9C4\uD589\uD569\uB2C8\uB2E4."
@@ -98,3 +108,4 @@ MonoBehaviour:
       navigateToPageIndex: -1
       trainingKey: personal_handling
       previewSprite: {fileID: 8037539321571114111, guid: 7515a6442954d74499bd13e864a3efb3, type: 3}
+      requiresStudentSelection: 1
