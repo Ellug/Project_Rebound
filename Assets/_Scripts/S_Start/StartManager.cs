@@ -160,6 +160,10 @@ public class StartManager : MonoBehaviour
             _loadingSlider.value = progress;
         }
 
+        // 이 위에까지 다운로드 과정은 웹에서 번들 받아서 로컬의 번들 갱신하는 과정
+        
+        // 이 아래는 갱신된 로컬의 번들에서 Load 해오는 과정
+
         // 5. Loading game data (80% ~ 90%)
         _statusText.text = "Loading game data...";
 

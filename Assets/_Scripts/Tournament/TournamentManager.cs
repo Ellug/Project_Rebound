@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,6 +14,11 @@ public class TournamentManager : MonoBehaviour
     [SerializeField] private int _teamCount = 32;
     [SerializeField] private string _mySchoolName = "한울고등학교";
 
+    [Header("Match")]
+    [SerializeField] private GameObject _matchGamePanel;
+    [SerializeField] private TMP_Text _leftSchoolText;
+    [SerializeField] private TMP_Text _rightSchoolText;
+
     // 나중에 데이터 테이블 들어올 거임 그때 SO 참조하도록
     private static readonly string[] TempSchoolPrefixes =
     {
@@ -21,6 +27,8 @@ public class TournamentManager : MonoBehaviour
         "소담", "오름", "유진", "주원", "채움", "태강", "푸름", "하늘",
         "다솔", "별빛", "초원", "청운", "해솔", "백운", "동해", "남강",
     };
+    private const string LeftSchoolTextPath = "Conainer/Score Panel/LeftTeam Panel/School Text (TMP)";
+    private const string RightSchoolTextPath = "Conainer/Score Panel/RightTeam Panel/School Text (TMP)";
 
     // 토너먼트 진행 데이터
     private readonly List<List<Matchup>> _allRounds = new(); // 라운드별 매치업 리스트 (32강, 16강, 8강, 4강, 결승)
@@ -37,6 +45,7 @@ public class TournamentManager : MonoBehaviour
 
     void Start()
     {
+        CacheMatchGameSchoolTexts();
         GenerateTemporaryTournament();
     }
 
@@ -86,20 +95,17 @@ public class TournamentManager : MonoBehaviour
 
         // 현재 라운드의 모든 매치가 끝났는지 확인
         if (IsCurrentRoundComplete())
-        {
             AdvanceToNextRound();
-        }
     }
 
     // 현재 라운드 완료 여부 확인
     private bool IsCurrentRoundComplete()
     {
         List<Matchup> currentRound = _allRounds[_currentRoundIndex];
+
         foreach (Matchup matchup in currentRound)
-        {
-            if (matchup.Winner == null)
-                return false;
-        }
+            if (matchup.Winner == null) return false;
+
         return true;
     }
 
@@ -116,10 +122,9 @@ public class TournamentManager : MonoBehaviour
         // 현재 라운드 승자들 수집
         List<Matchup> currentRound = _allRounds[_currentRoundIndex];
         List<string> winners = new();
+
         foreach (Matchup matchup in currentRound)
-        {
             winners.Add(matchup.Winner);
-        }
 
         // 다음 라운드 매치업 생성
         _currentRoundIndex++;
@@ -148,22 +153,6 @@ public class TournamentManager : MonoBehaviour
     {
         string champion = _allRounds[_currentRoundIndex][0].Winner;
         Debug.Log($"[TournamentManager] 토너먼트 우승: {champion}");
-    }
-
-    // 테스트용: 현재 라운드의 모든 매치를 랜덤으로 진행
-    public void AutoProgressCurrentRound()
-    {
-        List<Matchup> currentRound = _allRounds[_currentRoundIndex];
-        for (int i = 0; i < currentRound.Count; i++)
-        {
-            Matchup matchup = currentRound[i];
-            if (matchup.Winner == null)
-            {
-                // 랜덤으로 승자 선택
-                string winner = Random.value > 0.5f ? matchup.UpTeam : matchup.DownTeam;
-                SetMatchWinner(i, winner);
-            }
-        }
     }
 
     private void RefreshUI()
@@ -220,5 +209,125 @@ public class TournamentManager : MonoBehaviour
             childObject.SetActive(false);
             Destroy(childObject);
         }
+    }
+
+    // 확인 버튼에 인스펙터에서 연결. 현재 라운드 진행 (내 학교 제외)
+    public void ProgressCurrentRound()
+    {
+        List<Matchup> currentRound = _allRounds[_currentRoundIndex];
+        for (int i = 0; i < currentRound.Count; i++)
+        {
+            Matchup matchup = currentRound[i];
+            if (matchup.Winner == null && !matchup.IncludeMySchool)
+            {
+                // 내 학교 아닌 매치만 랜덤으로 승자 선택
+                string winner = Random.value > 0.5f ? matchup.UpTeam : matchup.DownTeam;
+                SetMatchWinner(i, winner);
+            }
+        }
+
+        // 내 학교 매치가 있으면 매치 게임 패널 활성화
+        if (TryGetPendingMySchoolMatch(out Matchup mySchoolMatchup))
+        {
+            UpdateMatchGameSchoolTexts(mySchoolMatchup);
+
+            if (_matchGamePanel != null)
+                _matchGamePanel.SetActive(true);
+            else
+                Debug.LogWarning("[TournamentManager] MatchGame Panel 참조가 비어 있습니다.");
+        }
+        else
+            Debug.Log("[TournamentManager] 내 학교 매치가 없어서 자동 진행됨");
+    }
+
+    private bool TryGetPendingMySchoolMatch(out Matchup mySchoolMatchup)
+    {
+        List<Matchup> currentRound = _allRounds[_currentRoundIndex];
+
+        foreach (Matchup matchup in currentRound)
+        {
+            if (matchup.IncludeMySchool && matchup.Winner == null)
+            {
+                mySchoolMatchup = matchup;
+                return true;
+            }
+        }
+
+        mySchoolMatchup = null;
+        return false;
+    }
+
+    // 내 학교 승리 처리
+    public void OnMySchoolWin()
+    {
+        SetMySchoolMatchResult(true);
+        _matchGamePanel.SetActive(false);
+        Debug.Log("[TournamentManager] 우리 학교 승리!");
+    }
+
+    // 내 학교 패배 처리
+    public void OnMySchoolLose()
+    {
+        SetMySchoolMatchResult(false);
+        _matchGamePanel.SetActive(false);
+        Debug.Log("[TournamentManager] 우리 학교 패배...");
+    }
+
+    // 내 학교 매치 승자 처리
+    private void SetMySchoolMatchResult(bool didWin)
+    {
+        List<Matchup> currentRound = _allRounds[_currentRoundIndex];
+        for (int i = 0; i < currentRound.Count; i++)
+        {
+            Matchup matchup = currentRound[i];
+            if (matchup.IncludeMySchool && matchup.Winner == null)
+            {
+                string winner = didWin ? _mySchoolName : (matchup.UpTeam == _mySchoolName ? matchup.DownTeam : matchup.UpTeam);
+                SetMatchWinner(i, winner);
+                return;
+            }
+        }
+    }
+
+    private void CacheMatchGameSchoolTexts()
+    {
+        if (_matchGamePanel == null) return;
+
+        if (_leftSchoolText == null)
+            _leftSchoolText = FindSchoolText("LeftTeam Panel", LeftSchoolTextPath);
+
+        if (_rightSchoolText == null)
+            _rightSchoolText = FindSchoolText("RightTeam Panel", RightSchoolTextPath);
+    }
+
+    private TMP_Text FindSchoolText(string teamPanelName, string relativePath)
+    {
+        Transform schoolTextTransform = _matchGamePanel.transform.Find(relativePath);
+        if (schoolTextTransform != null)
+            return schoolTextTransform.GetComponent<TMP_Text>();
+
+        TMP_Text[] allTexts = _matchGamePanel.GetComponentsInChildren<TMP_Text>(true);
+        foreach (TMP_Text text in allTexts)
+        {
+            Transform parent = text.transform.parent;
+            if (parent != null && parent.name == teamPanelName && text.gameObject.name == "School Text (TMP)")
+                return text;
+        }
+
+        return null;
+    }
+
+    private void UpdateMatchGameSchoolTexts(Matchup mySchoolMatchup)
+    {
+        CacheMatchGameSchoolTexts();
+
+        if (_leftSchoolText != null)
+            _leftSchoolText.text = mySchoolMatchup.UpTeam;
+
+        if (_rightSchoolText != null)
+            _rightSchoolText.text = mySchoolMatchup.DownTeam;
+
+        if (_leftSchoolText == null || _rightSchoolText == null)
+            Debug.LogWarning("[TournamentManager] Score Panel School Text 참조를 찾지 못했습니다.");
     }
 }
