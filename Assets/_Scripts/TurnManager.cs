@@ -164,6 +164,14 @@ public class TurnManager : MonoBehaviour
         OnTurnStateChanged?.Invoke(newState);
     }
 
+    // 로비로 복구시 턴, 데이트 데이터 복구
+    public void RestoreRuntimeState(DateTime currentDate, int turnIndex, int dayIndex, int currentYear, GamePhase phase)
+    {
+        _dateManager.SetState(currentDate, dayIndex, currentYear);
+        _turnIndex = Mathf.Max(0, turnIndex);
+        _currentPhase = phase;
+    }
+
     #if UNITY_EDITOR
     [ContextMenu("Debug - Execute Rest Turn")]
     private void DebugExecuteRestTurn()

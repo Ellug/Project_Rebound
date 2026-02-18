@@ -1,5 +1,6 @@
 using UnityEngine;
 
+// 리그 시작 이벤트 실행기 (GameManager의 리그 상태를 오픈)
 [CreateAssetMenu(menuName = "Game/Event/Executor/LeagueStartExecutor")]
 public class LeagueStartEventExecutor : EventExecutor
 {
@@ -7,24 +8,21 @@ public class LeagueStartEventExecutor : EventExecutor
 
     public override void Execute(GameState gameState)
     {
-        
-
-        if (gameState == null)
+        if (GameManager.Instance == null)
         {
+            Debug.LogWarning("[LeagueStartExecutor] GameManager가 없습니다.");
             return;
         }
 
-        gameState.OpenLeague();
-        ;
+        GameManager.Instance.OpenLeague();
 
         if (_leagueStartNotifyEvent != null)
         {
             _leagueStartNotifyEvent.Raise();
-            
         }
         else
         {
-            Debug.LogWarning("[League] Notify event is NULL");
+            Debug.LogWarning("[LeagueStartExecutor] Notify event is NULL");
         }
     }
 }

@@ -15,8 +15,8 @@ MonoBehaviour:
   _eventName: "\uB9AC\uADF8"
   _isOneTimeEvent: 1
   _executor: {fileID: 11400000, guid: aa53b2170854c674f88116e0e567c914, type: 2}
-  _triggerType: 0
+  _triggerType: 1
   _triggerTurn: 8
   _year: 2026
-  _month: 2
+  _month: 3
   _day: 20

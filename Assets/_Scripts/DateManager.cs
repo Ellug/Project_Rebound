@@ -122,4 +122,12 @@ public class DateManager
     {
         return _currentDate.Month == month && _currentDate.Day == day;
     }
+
+    // Date 데이터 TM에서 세팅용
+    public void SetState(DateTime currentDate, int dayIndex, int currentYear)
+    {
+        _currentDate = currentDate;
+        _dayIndex = dayIndex < 0 ? 0 : dayIndex;
+        _currentYear = currentYear < 1 ? 1 : currentYear;
+    }
 }

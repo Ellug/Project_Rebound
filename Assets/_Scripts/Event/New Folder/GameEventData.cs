@@ -22,10 +22,14 @@ public class GameEventData : ScriptableObject
     [SerializeField] private int _month = 1;
     [SerializeField] private int _day = 1;
 
-    [NonSerialized] private bool _hasExecuted; // ¸í½ÃÀûÀ¸·Î ·±Å¸ÀÓ Àü¿ë
+    [NonSerialized] private bool _hasExecuted; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Å¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
     public string EventName => _eventName;
     public TriggerType Type => _triggerType;
+    public int Year => _year;
+    public int Month => _month;
+    public int Day => _day;
+    public EventExecutor Executor => _executor;
 
     public void ResetRuntimeState()
     {

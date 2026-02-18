@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -34,7 +35,7 @@ public class LobbyUI : UIBase
     [SerializeField] private Sprite _testSprite;
 
     private bool _inited;
-    
+
     // 씬에 미리 배치된 경우 Start에서 초기화
     void Start()
     {
@@ -114,8 +115,6 @@ public class LobbyUI : UIBase
         _trainingSelectPopup.OnTrainingSelected += HandleTrainingSelected;
 
         _trainingSelectPopup.Open();
-
-        
         _trainingSelectPopup.ShowPage(0, pushHistory: false);
     }
 
@@ -123,7 +122,10 @@ public class LobbyUI : UIBase
     private void HandleTrainingSelected(string trainingKey)
     {
         Debug.Log($"[LobbyUI] 선택된 훈련: {trainingKey}");
-        // TODO: TrainingManager를 통한 훈련 실행 처리
+
+        // 병합용: 훈련 선택을 실제 턴 실행 요청으로 연결한다.
+        if (GameManager.Instance != null)
+            GameManager.Instance.TryExecuteLobbyTurn(MapTrainingKeyToAction(trainingKey));
     }
 
     private void OnClickStudent()
@@ -155,10 +157,38 @@ public class LobbyUI : UIBase
     {
         // 예시 데이터 바인딩
         if (_txtSchoolName) _txtSchoolName.text = "한울고등학교";
-        if (_txtDate) _txtDate.text = "2000.03.02";
-        if (_txtDDay) _txtDDay.text = "D-100";
         if (_txtMoney) _txtMoney.text = "5000 G";
         if (_txtFame) _txtFame.text = "150";
         if (_txtMessage) _txtMessage.text = "감독님, 신입생들이 입학했습니다. 훈련 일정을 잡아주세요.";
+    }
+
+    // 턴 시스템이 계산한 현재 날짜/D-Day를 로비 상단에 반영
+    public void UpdateDateAndDday(DateTime currentDate, int dDay)
+    {
+        if (_txtDate)
+            _txtDate.text = currentDate.ToString("yyyy.MM.dd");
+
+        if (_txtDDay)
+            _txtDDay.text = dDay < 0 ? "D-?" : (dDay == 0 ? "D-DAY" : $"D-{dDay}");
+    }
+
+    // 이벤트/토너먼트 결과 메시지를 중앙 문구로 갱신
+    public void SetStatusMessage(string message)
+    {
+        if (_txtMessage)
+            _txtMessage.text = message;
+    }
+
+    private static TurnActionType MapTrainingKeyToAction(string trainingKey)
+    {
+        if (string.IsNullOrEmpty(trainingKey))
+            return TurnActionType.Training;
+
+        string loweredKey = trainingKey.ToLowerInvariant();
+        if (loweredKey.Contains("personal")) return TurnActionType.PersonalTraining;
+        if (loweredKey.Contains("counsel")) return TurnActionType.Counseling;
+        if (loweredKey.Contains("rest")) return TurnActionType.Rest;
+
+        return TurnActionType.Training;
     }
 }
