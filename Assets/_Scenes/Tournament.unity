@@ -2947,6 +2947,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1599233415}
   - component: {fileID: 1599233414}
+  - component: {fileID: 1599233416}
   m_Layer: 0
   m_Name: TournamentManager
   m_TagString: Untagged
@@ -2966,14 +2967,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05ad575cdd095644593dd2a6a9a78aae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TournamentManager
-  _scrollRect: {fileID: 1405683095}
-  _contentRoot: {fileID: 1142517121}
-  _matchupContainerPrefab: {fileID: 5675338778479033557, guid: fbfe6e48f9bb18d4ca817fa5aeca14cf, type: 3}
+  _tournamentUi: {fileID: 1599233416}
   _teamCount: 32
   _mySchoolName: "\uD55C\uC6B8 \uACE0\uB4F1\uD559\uAD50"
-  _matchGamePanel: {fileID: 1097273075}
-  _leftSchoolText: {fileID: 489301156}
-  _rightSchoolText: {fileID: 848383905}
 --- !u!4 &1599233415
 Transform:
   m_ObjectHideFlags: 0
@@ -2989,6 +2985,24 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1599233416
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1599233413}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3c3d6d96e454fe4b9d51c5cbf2994fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TournamentUIController
+  _scrollRect: {fileID: 1405683095}
+  _contentRoot: {fileID: 1142517121}
+  _matchupContainerPrefab: {fileID: 5675338778479033557, guid: fbfe6e48f9bb18d4ca817fa5aeca14cf, type: 3}
+  _matchGamePanel: {fileID: 1097273075}
+  _leftSchoolText: {fileID: 489301156}
+  _rightSchoolText: {fileID: 848383905}
 --- !u!1 &1623171168
 GameObject:
   m_ObjectHideFlags: 0
