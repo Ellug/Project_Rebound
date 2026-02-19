@@ -3,7 +3,6 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-[DisallowMultipleComponent]
 public class TournamentUI : MonoBehaviour
 {
     [Header("Round List")]
