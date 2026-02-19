@@ -8,11 +8,12 @@ public class GameManager : Singleton<GameManager>
     private const string TournamentScene = "Tournament";
     private const string TitleScene = "Title";
 
-    private TurnManager _turnManager;       // Lobby 씬의 TurnManager (씬별 런타임 참조)
-    private EventManager _eventManager;     // Lobby 씬의 EventManager
-    private LobbyUI _lobbyUI;               // Lobby 씬의 LobbyUI
-    private GameState _gameState;           // 이벤트 시스템용 게임 상태
-    private bool _isLoadingTournament;      // 토너먼트 씬 로딩 중 플래그
+    private TurnManager _turnManager;               // Lobby 씬의 TurnManager (씬별 런타임 참조)
+    // private EventManager _eventManager;             // Lobby 씬의 EventManager
+    private AlwaysEventManager _alwaysEventManager; // Lobby 씬의 AlwaysEventManager
+    private LobbyUI _lobbyUI;                       // Lobby 씬의 LobbyUI
+    private GameState _gameState;                   // 이벤트 시스템용 게임 상태
+    private bool _isLoadingTournament;              // 토너먼트 씬 로딩 중 플래그
 
     private GameFlowData _flowData = GameFlowData.Default;
     private TournamentData _tournamentData = TournamentData.Default;
@@ -100,8 +101,12 @@ public class GameManager : Singleton<GameManager>
     {
         UnsubscribeTurnManager();
 
+        if (_alwaysEventManager != null)
+            _alwaysEventManager.Unbind();
+
         _turnManager = null;
-        _eventManager = null;
+        // _eventManager = null;
+        _alwaysEventManager = null;
         _lobbyUI = null;
         _gameState = null;
         _isLoadingTournament = false;
@@ -149,10 +154,10 @@ public class GameManager : Singleton<GameManager>
     // 토너먼트 시작 날짜 도달 여부 확인
     private bool IsTournamentDateReached()
     {
-        if (_eventManager == null || _turnManager == null)
+        if (_turnManager == null || _alwaysEventManager == null)
             return false;
 
-        if (!_eventManager.TryGetNextLeagueDate(_turnManager.DateManager.CurrentDate, out DateTime nextLeagueDate))
+        if (!_alwaysEventManager.TryGetNextLeagueDate(_turnManager.DateManager.CurrentDate, out DateTime nextLeagueDate))
             return false;
 
         return _turnManager.DateManager.CurrentDate.Date >= nextLeagueDate.Date;
@@ -161,10 +166,10 @@ public class GameManager : Singleton<GameManager>
     // 다음 토너먼트까지 남은 일수 계산
     private int GetTournamentDday()
     {
-        if (_eventManager == null || _turnManager == null)
+        if (_turnManager == null || _alwaysEventManager == null)
             return -1;
 
-        if (!_eventManager.TryGetNextLeagueDate(_turnManager.DateManager.CurrentDate, out DateTime nextLeagueDate))
+        if (!_alwaysEventManager.TryGetNextLeagueDate(_turnManager.DateManager.CurrentDate, out DateTime nextLeagueDate))
             return -1;
 
         return (nextLeagueDate.Date - _turnManager.DateManager.CurrentDate.Date).Days;
@@ -191,7 +196,8 @@ public class GameManager : Singleton<GameManager>
     private void CacheSceneReferences()
     {
         _turnManager = FindFirstObjectByType<TurnManager>();
-        _eventManager = FindFirstObjectByType<EventManager>();
+        // _eventManager = FindFirstObjectByType<EventManager>();
+        _alwaysEventManager = FindFirstObjectByType<AlwaysEventManager>();
         _lobbyUI = FindFirstObjectByType<LobbyUI>();
         _isLoadingTournament = false;
     }
@@ -236,12 +242,18 @@ public class GameManager : Singleton<GameManager>
         _gameState.SyncState(_turnManager.DateManager.CurrentDate, _turnManager.TurnIndex);
     }
 
-    // EventManager 초기화 (씬 복귀 시 이벤트 런타임 상태 리셋 여부 전달)
+    // EventManager 초기화 (ActiveEventIds를 GameFlowData에서 직접 전달 — 씬 전환과 무관하게 유지됨)
     private void InitializeEventManager()
     {
-        if (_eventManager == null) return;
+        if (_alwaysEventManager == null) return;
 
-        _eventManager.Initialize(_gameState, resetRuntimeState: !_flowData.HasFlowState);
+        if (!_flowData.HasFlowState)
+            _flowData.ActiveEventIds.Clear();   // 새 게임: 활성 이벤트 초기화
+
+        // if (_eventManager != null)
+        //     _eventManager.Initialize(_gameState, resetRuntimeState: !_flowData.HasFlowState);
+
+        _alwaysEventManager.Bind(_turnManager, _gameState, _flowData.ActiveEventIds);
     }
 
     // 초기 게임 페이즈 설정 (Init이면 DailyTraining으로 전환)
@@ -267,6 +279,10 @@ public class GameManager : Singleton<GameManager>
             _turnManager.SetPhase(GamePhase.DailyTraining);
         }
 
+        // 다음 리그 정상 처리를 위해 플래그 초기화
+        _flowData.IsLeagueOpened = false;
+        _flowData.IsLeagueHandled = false;
+
         if (_lobbyUI != null)
             _lobbyUI.SetStatusMessage($"{champion} 우승. 토너먼트 종료.");
     }
@@ -279,8 +295,8 @@ public class GameManager : Singleton<GameManager>
 
         _gameState?.SyncState(_turnManager.DateManager.CurrentDate, _turnManager.TurnIndex);
 
-        if (_eventManager != null)
-            _eventManager.CheckEvents();
+        // if (_eventManager != null)
+        //     _eventManager.CheckEvents();
 
         SyncFlowStateFromLobby();
         RefreshLobbyTopInfo();
