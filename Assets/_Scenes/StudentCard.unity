@@ -198,6 +198,52 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &408243430
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 408243432}
+  - component: {fileID: 408243431}
+  m_Layer: 0
+  m_Name: TestManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &408243431
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 408243430}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f77fb251dd1b2904db38466e8da93bca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TempTestManager
+  testCard: {fileID: 962780308}
+  testSlot: {fileID: 1553577154}
+--- !u!4 &408243432
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 408243430}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 308.43097, y: 1174.0543, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!224 &685443932 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5898448831996863163, guid: 47493739c6c80c543856a14b66e45b4b, type: 3}
@@ -208,6 +254,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 6614058737596260056, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
   m_PrefabInstance: {fileID: 934783700732523307}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &962780308 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7588747088348285409, guid: 47493739c6c80c543856a14b66e45b4b, type: 3}
+  m_PrefabInstance: {fileID: 7886211469816757338}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89e8ae08c2bfa2846888fdf8ec6de718, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::StudentCard
 --- !u!1 &1111072373
 GameObject:
   m_ObjectHideFlags: 0
@@ -478,6 +535,27 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1462346167 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3451884487665455593, guid: 47493739c6c80c543856a14b66e45b4b, type: 3}
+  m_PrefabInstance: {fileID: 7886211469816757338}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1553577154 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 319084010097847465, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
+  m_PrefabInstance: {fileID: 934783700732523307}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eaeb5928d7a8c77439b69856ee1f983a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::StudentSlot
+--- !u!1 &2035885392 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5828102029925406719, guid: 47493739c6c80c543856a14b66e45b4b, type: 3}
+  m_PrefabInstance: {fileID: 7886211469816757338}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2118843971
 GameObject:
   m_ObjectHideFlags: 0
@@ -688,9 +766,25 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2118843975}
     m_Modifications:
+    - target: {fileID: 2007080894007022794, guid: 47493739c6c80c543856a14b66e45b4b, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3451884487665455593, guid: 47493739c6c80c543856a14b66e45b4b, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5403918060238178195, guid: 47493739c6c80c543856a14b66e45b4b, type: 3}
       propertyPath: m_Name
       value: StudentCard_Prefab
+      objectReference: {fileID: 0}
+    - target: {fileID: 5828102029925406719, guid: 47493739c6c80c543856a14b66e45b4b, type: 3}
+      propertyPath: m_Name
+      value: StatsOverlay_Panel
+      objectReference: {fileID: 0}
+    - target: {fileID: 5828102029925406719, guid: 47493739c6c80c543856a14b66e45b4b, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5898448831996863163, guid: 47493739c6c80c543856a14b66e45b4b, type: 3}
       propertyPath: m_Pivot.x
@@ -772,6 +866,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5927522595995228087, guid: 47493739c6c80c543856a14b66e45b4b, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7588747088348285409, guid: 47493739c6c80c543856a14b66e45b4b, type: 3}
+      propertyPath: _statsOverlayPanel
+      value: 
+      objectReference: {fileID: 2035885392}
+    - target: {fileID: 7588747088348285409, guid: 47493739c6c80c543856a14b66e45b4b, type: 3}
+      propertyPath: _placingOverlayPanel
+      value: 
+      objectReference: {fileID: 1462346167}
+    - target: {fileID: 8929074757973393203, guid: 47493739c6c80c543856a14b66e45b4b, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -784,3 +894,4 @@ SceneRoots:
   - {fileID: 1448342297}
   - {fileID: 2118843975}
   - {fileID: 163496520}
+  - {fileID: 408243432}
