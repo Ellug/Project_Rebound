@@ -260,7 +260,12 @@ public class GameManager : Singleton<GameManager>
             return;
 
         if (_turnManager != null)
+        {
+            // 토너먼트가 끝난 날은 별도 액션 없이 하루 경과 처리
             _turnManager.SetPhase(GamePhase.DailyTraining);
+            _turnManager.ExecuteTurn(TurnActionType.Rest);
+            _turnManager.SetPhase(GamePhase.DailyTraining);
+        }
 
         if (_lobbyUI != null)
             _lobbyUI.SetStatusMessage($"{champion} 우승. 토너먼트 종료.");

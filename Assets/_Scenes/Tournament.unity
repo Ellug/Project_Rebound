@@ -2969,7 +2969,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TournamentManager
   _tournamentUi: {fileID: 1599233416}
   _teamCount: 32
-  _mySchoolName: "\uD55C\uC6B8 \uACE0\uB4F1\uD559\uAD50"
+  _mySchoolName: "\uD55C\uC6B8\uACE0\uB4F1\uD559\uAD50"
 --- !u!4 &1599233415
 Transform:
   m_ObjectHideFlags: 0
