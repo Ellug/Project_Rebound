@@ -40,6 +40,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 41c1d4c214c73e4469337a604d487db5
+    m_Address: Assets/_Scripts/SO/SO_AlwaysEventTable.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 631270dd11a216045883df32cf0abce8
     m_Address: Assets/_Scripts/SO/SO_StudentNameTable.asset
     m_ReadOnly: 0
@@ -70,6 +75,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 822b261be3079c2469ad4864b5df848d
+    m_Address: Assets/_Scripts/SO/SO_SchoolNameTable.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 8fdba17a9453c0247b9cc87d22e05a7b
     m_Address: Assets/_Scripts/SO/SO_StudentStatExpTable.asset
     m_ReadOnly: 0
@@ -82,6 +92,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b28b376e195049e4aa15bd274d043a6a
     m_Address: Assets/_Scripts/SO/SO_SuddenEventEffectTable.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d5c7b49864c1b0a43a98661e33b6d09c
+    m_Address: Assets/_Scripts/SO/SO_AlwaysEffectTable.asset
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

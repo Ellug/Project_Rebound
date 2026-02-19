@@ -67,6 +67,10 @@ public static class StudentStatusProbTableCsvImporter
                 totalRisk = CsvImportUtil.ReadInt(cells, col, "total_risk", 0)
             };
 
+            // total_risk가 비어있으면 개별 확률 합으로 자동 계산
+            if (r.totalRisk <= 0)
+                r.totalRisk = r.probInsanity + r.probInjury + r.probDisease;
+
             result.Add(r);
         }
 

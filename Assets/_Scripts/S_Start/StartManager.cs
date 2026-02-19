@@ -14,10 +14,13 @@ public class StartManager : MonoBehaviour
 
     [Header("Game Data Tables")]
     [SerializeField] private AssetReference _growthCommandTableRef;
+    [SerializeField] private AssetReference _alwaysEffectTableRef;
+    [SerializeField] private AssetReference _alwaysEventTableRef;
     [SerializeField] private AssetReference _suddenEventTableRef;
     [SerializeField] private AssetReference _suddenEventEffectTableRef;
     [SerializeField] private AssetReference _suddenEventTextTableRef;
     [SerializeField] private AssetReference _statusTextTableRef;
+    [SerializeField] private AssetReference _schoolNameTableRef;
 
     [Header("Student Data Tables")]
     [SerializeField] private AssetReference _studentNameTableRef;
@@ -32,10 +35,13 @@ public class StartManager : MonoBehaviour
 
     // 로드된 테이블들 (임시 저장용)
     private GrowthCommandTableSO _growthCommandTable;
+    private AlwaysEffectTableSO _alwaysEffectTable;
+    private AlwaysEventTableSO _alwaysEventTable;
     private SuddenEventTableSO _suddenEventTable;
     private SuddenEventEffectTableSO _suddenEventEffectTable;
     private SuddenEventTextTableSO _suddenEventTextTable;
     private StatusTextTableSO _statusTextTable;
+    private SchoolNameTableSO _schoolNameTable;
     private StudentNameTableSO _studentNameTable;
     private StudentBodyTableSO _studentBodyTable;
     private StudentStatTableSO _studentStatTable;
@@ -59,10 +65,13 @@ public class StartManager : MonoBehaviour
         var allTableRefs = new List<AssetReference>
         {
             _growthCommandTableRef,
+            _alwaysEffectTableRef,
+            _alwaysEventTableRef,
             _suddenEventTableRef,
             _suddenEventEffectTableRef,
             _suddenEventTextTableRef,
             _statusTextTableRef,
+            _schoolNameTableRef,
             _studentNameTableRef,
             _studentBodyTableRef,
             _studentStatTableRef,
@@ -169,55 +178,67 @@ public class StartManager : MonoBehaviour
 
         // 모든 테이블 로드
         yield return LoadTable<GrowthCommandTableSO>(_growthCommandTableRef, t => _growthCommandTable = t);
-        progress = 0.8071f;
+        progress = 0.8059f;
+        _loadingSlider.value = progress;
+
+        yield return LoadTable<AlwaysEffectTableSO>(_alwaysEffectTableRef, t => _alwaysEffectTable = t);
+        progress = 0.8118f;
+        _loadingSlider.value = progress;
+
+        yield return LoadTable<AlwaysEventTableSO>(_alwaysEventTableRef, t => _alwaysEventTable = t);
+        progress = 0.8176f;
         _loadingSlider.value = progress;
 
         yield return LoadTable<SuddenEventTableSO>(_suddenEventTableRef, t => _suddenEventTable = t);
-        progress = 0.8143f;
+        progress = 0.8235f;
         _loadingSlider.value = progress;
 
         yield return LoadTable<SuddenEventEffectTableSO>(_suddenEventEffectTableRef, t => _suddenEventEffectTable = t);
-        progress = 0.8214f;
+        progress = 0.8294f;
         _loadingSlider.value = progress;
 
         yield return LoadTable<SuddenEventTextTableSO>(_suddenEventTextTableRef, t => _suddenEventTextTable = t);
-        progress = 0.8286f;
+        progress = 0.8353f;
         _loadingSlider.value = progress;
 
         yield return LoadTable<StatusTextTableSO>(_statusTextTableRef, t => _statusTextTable = t);
-        progress = 0.8357f;
+        progress = 0.8412f;
+        _loadingSlider.value = progress;
+
+        yield return LoadTable<SchoolNameTableSO>(_schoolNameTableRef, t => _schoolNameTable = t);
+        progress = 0.8471f;
         _loadingSlider.value = progress;
 
         yield return LoadTable<StudentNameTableSO>(_studentNameTableRef, t => _studentNameTable = t);
-        progress = 0.8429f;
+        progress = 0.8529f;
         _loadingSlider.value = progress;
 
         yield return LoadTable<StudentBodyTableSO>(_studentBodyTableRef, t => _studentBodyTable = t);
-        progress = 0.85f;
+        progress = 0.8588f;
         _loadingSlider.value = progress;
 
         yield return LoadTable<StudentStatTableSO>(_studentStatTableRef, t => _studentStatTable = t);
-        progress = 0.8571f;
+        progress = 0.8647f;
         _loadingSlider.value = progress;
 
         yield return LoadTable<StudentStartStatTableSO>(_studentStartStateTableRef, t => _studentStartStateTable = t);
-        progress = 0.8643f;
+        progress = 0.8706f;
         _loadingSlider.value = progress;
 
         yield return LoadTable<StudentPotentialTableSO>(_studentPotentialTableRef, t => _studentPotentialTable = t);
-        progress = 0.8714f;
+        progress = 0.8765f;
         _loadingSlider.value = progress;
 
         yield return LoadTable<StudentStatusProbTableSO>(_studentStatusProbTableRef, t => _studentStatusProbTable = t);
-        progress = 0.8786f;
+        progress = 0.8824f;
         _loadingSlider.value = progress;
 
         yield return LoadTable<StudentStatExpTableSO>(_studentStatExpTableRef, t => _studentStatExpTable = t);
-        progress = 0.8857f;
+        progress = 0.8882f;
         _loadingSlider.value = progress;
 
         yield return LoadTable<StudentPlusExpTableSO>(_studentPlusExpTableRef, t => _studentPlusExpTable = t);
-        progress = 0.8929f;
+        progress = 0.8941f;
         _loadingSlider.value = progress;
 
         yield return LoadTable<StudentPositionTableSO>(_studentPositionTableRef, t => _studentPositionTable = t);
@@ -230,10 +251,13 @@ public class StartManager : MonoBehaviour
         // DataManager에 테이블 등록
         CachedSOData.RegisterTables(
             _growthCommandTable,
+            _alwaysEffectTable,
+            _alwaysEventTable,
             _suddenEventTable,
             _suddenEventEffectTable,
             _suddenEventTextTable,
             _statusTextTable,
+            _schoolNameTable,
             _studentNameTable,
             _studentBodyTable,
             _studentStatTable,

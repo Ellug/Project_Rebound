@@ -64,10 +64,18 @@ public static class SuddenEventTableCsvImporter
             var id = CsvImportUtil.ReadString(cells, col, "ID");
             if (string.IsNullOrEmpty(id)) continue;
 
+            var eventName = CsvImportUtil.ReadString(cells, col, "name");
+            if (string.IsNullOrEmpty(eventName))
+                eventName = CsvImportUtil.ReadString(cells, col, "eventName");
+
+            var description = CsvImportUtil.ReadString(cells, col, "description");
+            if (string.IsNullOrEmpty(description))
+                description = CsvImportUtil.ReadString(cells, col, "message");
+
             var r = new SuddenEventRow
             {
                 id = id,
-                eventName = CsvImportUtil.ReadString(cells, col, "eventName"),
+                name = eventName,
 
                 context = CsvImportUtil.ReadFlags<SuddenEventContextFlags>(cells, col, "context"),
                 condition = CsvImportUtil.ReadFlags<SuddenEventConditionFlags>(cells, col, "condition"),
@@ -79,32 +87,38 @@ public static class SuddenEventTableCsvImporter
                 termScale = CsvImportUtil.ReadEnumSingle(cells, col, "term_scale", SuddenEventTermScale.Day),
 
                 effect1 = CsvImportUtil.ReadString(cells, col, "effect1"),
-                amount1 = CsvImportUtil.ReadInt(cells, col, "amount1", 0),
-
                 effect2 = CsvImportUtil.ReadString(cells, col, "effect2"),
-                amount2 = CsvImportUtil.ReadInt(cells, col, "amount2", 0),
-
                 effect3 = CsvImportUtil.ReadString(cells, col, "effect3"),
-                amount3 = CsvImportUtil.ReadInt(cells, col, "amount3", 0),
 
                 probability = CsvImportUtil.ReadFloat(cells, col, "probability", 0f),
-                messageId = CsvImportUtil.ReadString(cells, col, "message"),
+                description = description
             };
 
-            if (col.ContainsKey("range"))
+            // 최신 CSV는 target_min/target_max를 사용. 구버전 range_* 컬럼은 하위호환으로 유지.
+            if (col.ContainsKey("target_min") || col.ContainsKey("target_max"))
+            {
+                r.targetMin = CsvImportUtil.ReadInt(cells, col, "target_min", 0);
+                r.targetMax = CsvImportUtil.ReadInt(cells, col, "target_max", r.targetMin);
+            }
+            else if (col.ContainsKey("range_min") || col.ContainsKey("range_max"))
+            {
+                r.targetMin = CsvImportUtil.ReadInt(cells, col, "range_min", 0);
+                r.targetMax = CsvImportUtil.ReadInt(cells, col, "range_max", r.targetMin);
+            }
+            else if (col.ContainsKey("range"))
             {
                 var v = CsvImportUtil.ReadInt(cells, col, "range", 0);
-                r.rangeMin = v;
-                r.rangeMax = v;
+                r.targetMin = v;
+                r.targetMax = v;
             }
             else
             {
-                r.rangeMin = CsvImportUtil.ReadInt(cells, col, "range_min", 0);
-                r.rangeMax = CsvImportUtil.ReadInt(cells, col, "range_max", r.rangeMin);
+                r.targetMin = 0;
+                r.targetMax = 0;
             }
 
             // min/max 보정 (csv 기입 에러시 시스템상 에러 방지 용도)
-            if (r.rangeMax < r.rangeMin) r.rangeMax = r.rangeMin;
+            if (r.targetMax < r.targetMin) r.targetMax = r.targetMin;
             if (r.termMax < r.termMin) r.termMax = r.termMin;
 
             result.Add(r);

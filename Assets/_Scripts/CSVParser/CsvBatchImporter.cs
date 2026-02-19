@@ -23,10 +23,13 @@ public static class CsvBatchImporter
         var importTasks = new List<(string csvFileName, System.Action<string> importAction, string tableName)>
         {
             ("GrowthCommandTable.csv", GrowthCommandTableCsvImporter.ImportFromPath, "Growth Command"),
+            ("AlwaysEffectTable.csv", AlwaysEffectTableCsvImporter.ImportFromPath, "Always Effect"),
+            ("AlwaysEventTable.csv", AlwaysEventTableCsvImporter.ImportFromPath, "Always Event"),
             ("SuddenEventTable.csv", SuddenEventTableCsvImporter.ImportFromPath, "Sudden Event"),
             ("SuddenEventEffectTable.csv", SuddenEventEffectTableCsvImporter.ImportFromPath, "Sudden Event Effect"),
             ("SuddenEventTextTable.csv", SuddenEventTextTableCsvImporter.ImportFromPath, "Sudden Event Text"),
             ("StatusTextTable.csv", StatusTextTableCsvImporter.ImportFromPath, "Status Text"),
+            ("SchoolNameTable.csv", SchoolNameTableCsvImporter.ImportFromPath, "School Name"),
             ("StudentNameTable.csv", StudentNameTableCsvImporter.ImportFromPath, "Student Name"),
             ("StudentBodyTable.csv", StudentBodyTableCsvImporter.ImportFromPath, "Student Body"),
             ("StudentStatTable.csv", StudentStatTableCsvImporter.ImportFromPath, "Student Stat"),

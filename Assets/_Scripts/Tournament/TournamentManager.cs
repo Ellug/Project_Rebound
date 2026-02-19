@@ -13,16 +13,6 @@ public class TournamentManager : MonoBehaviour
     [SerializeField] private int _teamCount = 32;
     [SerializeField] private string _mySchoolName = "한울고등학교";
 
-
-    // TODO : 나중에 데이터 테이블 들어올 거임 그때 SO 참조하도록 수정
-    private static readonly string[] TempSchoolPrefixes =
-    {
-        "가람", "나래", "다온", "라온", "마루", "보람", "서림", "아람",
-        "자람", "차온", "하람", "고운", "누리", "도담", "로하", "모아",
-        "소담", "오름", "유진", "주원", "채움", "태강", "푸름", "하늘",
-        "다솔", "별빛", "초원", "청운", "해솔", "백운", "동해", "남강",
-    };
-
     // 토너먼트 진행 데이터
     private readonly List<List<Matchup>> _allRounds = new(); // 라운드별 매치업 리스트 (32강, 16강, 8강, 4강, 결승)
     private int _currentRoundIndex;
@@ -38,11 +28,11 @@ public class TournamentManager : MonoBehaviour
 
     void Start()
     {
-        GenerateTemporaryTournament();
+        GenerateTournament();
     }
 
-    // 임시 토너먼트 대진표 생성
-    public void GenerateTemporaryTournament()
+    // 토너먼트 대진표 생성
+    public void GenerateTournament()
     {
         // 학교 목록 생성 및 셔플
         List<string> schools = BuildSchoolList();
@@ -172,12 +162,29 @@ public class TournamentManager : MonoBehaviour
         _tournamentUi.RenderRound(matchViewData);
     }
 
+    // CachedSOData 에서 참조해 학교 리스트 출력
     private List<string> BuildSchoolList()
     {
-        List<string> schools = new(_teamCount) { _mySchoolName };
+        var schoolTable = CachedSOData.SchoolNameTable;
+        List<string> schools = new(_teamCount);
+        var usedNames = new HashSet<string>(System.StringComparer.Ordinal);
 
-        for (int i = 0; i < _teamCount - 1; i++)
-            schools.Add($"{TempSchoolPrefixes[i]} 고등학교");
+        string mySchoolName = (_mySchoolName ?? "").Trim();
+        if (!string.IsNullOrEmpty(mySchoolName) && usedNames.Add(mySchoolName))
+            schools.Add(mySchoolName);
+
+        var rows = schoolTable.Rows;
+        for (int i = 0; i < rows.Count && schools.Count < _teamCount; i++)
+        {
+            var row = rows[i];
+            if (row == null) continue;
+
+            string schoolName = (row.name ?? "").Trim();
+            if (string.IsNullOrEmpty(schoolName)) continue;
+            if (!usedNames.Add(schoolName)) continue;
+
+            schools.Add(schoolName);
+        }
 
         return schools;
     }
