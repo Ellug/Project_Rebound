@@ -1031,6 +1031,18 @@ MonoBehaviour:
     m_SubObjectType: 
     m_SubObjectGUID: 
     m_EditorAssetChanged: 0
+  _alwaysEffectTableRef:
+    m_AssetGUID: d5c7b49864c1b0a43a98661e33b6d09c
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
+  _alwaysEventTableRef:
+    m_AssetGUID: 41c1d4c214c73e4469337a604d487db5
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
   _suddenEventTableRef:
     m_AssetGUID: 297009e9d4477b04dbfbe141e4b753cd
     m_SubObjectName: 
@@ -1055,6 +1067,12 @@ MonoBehaviour:
     m_SubObjectType: 
     m_SubObjectGUID: 
     m_EditorAssetChanged: 0
+  _schoolNameTableRef:
+    m_AssetGUID: 822b261be3079c2469ad4864b5df848d
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
   _studentNameTableRef:
     m_AssetGUID: 631270dd11a216045883df32cf0abce8
     m_SubObjectName: 
@@ -1068,7 +1086,7 @@ MonoBehaviour:
     m_SubObjectGUID: 
     m_EditorAssetChanged: 0
   _studentStatTableRef:
-    m_AssetGUID: 8fdba17a9453c0247b9cc87d22e05a7b
+    m_AssetGUID: 37ec3c6c7315fe64197064036e64fd1a
     m_SubObjectName: 
     m_SubObjectType: 
     m_SubObjectGUID: 
