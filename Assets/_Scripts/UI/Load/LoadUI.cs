@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 public class LoadUI : MonoBehaviour
 {
     [SerializeField] private GameObject _loadPrefab;
+    [SerializeField] private GameObject _viewLoadPanel;
     [SerializeField] private Transform _loadListpanel;
     [SerializeField] private LoadConfirmPanel _openPanel;
 
@@ -38,7 +39,7 @@ public class LoadUI : MonoBehaviour
 
     public void TitleSceneLoad()
     {
-        SceneManager.LoadScene("Title");
+        _viewLoadPanel.SetActive(false);
     }
 
     public void OpenConfirmPanel(int slotIndex)
