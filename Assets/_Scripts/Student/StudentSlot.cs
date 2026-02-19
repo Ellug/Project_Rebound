@@ -1,7 +1,8 @@
+using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class StudentSlot : MonoBehaviour, IDropHandler
+public class StudentSlot : MonoBehaviour, IPointerClickHandler
 {
     public enum SlotType
     {
@@ -12,42 +13,31 @@ public class StudentSlot : MonoBehaviour, IDropHandler
 
     [SerializeField] private SlotType _slotType;
 
-    public void OnDrop(PointerEventData eventData)
+    // 슬롯에 배치된 학생 데이터를 저장
+    private Student _assignedStudent;
+    public Student AssignedStudent => _assignedStudent;
+    public bool IsEmpty => _assignedStudent == null;
+    public SlotType Type => _slotType;
+
+    // 외부(매니저/팝업)에서 슬롯 클릭을 감지할 수 있도록 이벤트 제공
+    public event Action<StudentSlot> OnSlotClicked;
+
+    public void AssignStudent(Student student)
     {
-        if (eventData.pointerDrag == null)
-        {
-            return;
-        }
-
-        StudentCard card = eventData.pointerDrag.GetComponent<StudentCard>();
-
-        if (card != null)
-        {
-            AcceptCard(card);
-        }
+        _assignedStudent = student;
+        // TODO: 슬롯 위에 해당 학생의 초상화 이미지를 띄우는 UI 갱신 로직 추가
+        Debug.Log($"[StudentSlot] {_slotType} 슬롯에 {student.studentName} 배치됨.");
     }
 
-    private void AcceptCard(StudentCard card)
+    public void ClearSlot()
     {
-        // 현재 슬롯에 이미 다른 카드가 있는지 확인
-        if (transform.childCount > 0)
-        {
-            // 빈 자리가 없을 경우 드롭을 거부하고 원래 위치로 돌아가게 함
-            Debug.Log("[StudentSlot] Slot is already full.");
-            return;
-        }
+        _assignedStudent = null;
+        // TODO: 슬롯 이미지를 다시 빈칸으로 갱신
+        Debug.Log($"[StudentSlot] {_slotType} 슬롯 비워짐.");
+    }
 
-        // 카드의 부모를 해당 슬롯으로 변경
-        card.transform.SetParent(this.transform);
-
-        // 카드 위치를 슬롯 정중앙으로 정렬
-        RectTransform cardRect = card.GetComponent<RectTransform>();
-        if (cardRect != null)
-        {
-            cardRect.anchoredPosition = Vector2.zero;
-        }
-
-        string studentName = card.StudentData != null ? card.StudentData.studentName : "Unknown";
-        Debug.Log($"[StudentSlot] {studentName} moved to {_slotType}");
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        OnSlotClicked?.Invoke(this);
     }
 }
