@@ -45,31 +45,26 @@ public enum SuddenEventTermScale
 public sealed class SuddenEventRow
 {
     public string id;
-    public string eventName;
+    public string name;
 
     public SuddenEventContextFlags context;
     public SuddenEventConditionFlags condition;
 
     public SuddenEventScope scope;
 
-    public int rangeMin;
-    public int rangeMax;
+    public int targetMin;
+    public int targetMax;
 
     public int termMin;
     public int termMax;
     public SuddenEventTermScale termScale;
 
     public string effect1;
-    public int amount1;
-
     public string effect2;
-    public int amount2;
-
     public string effect3;
-    public int amount3;
 
     public float probability; // 0~1
-    public string messageId;  // SuddenEventTextTable 참조
+    public string description; // SuddenEventTextTable 참조 ID
 }
 
 [CreateAssetMenu(menuName = "Game/Data/SuddenEventTable", fileName = "SO_SuddenEventTable")]

@@ -6,9 +6,9 @@ using UnityEngine;
 public sealed class SuddenEventTextRow
 {
     public string id;     // 예: ID_Text_SuddenEvent_000001
-    public int range;
+    public int target;
     public string speaker;
-    public string text;
+    public string description;
 }
 
 [CreateAssetMenu(menuName = "Game/Data/SuddenEventTextTable", fileName = "SO_SuddenEventTextTable")]
@@ -16,7 +16,7 @@ public sealed class SuddenEventTextTableSO : ScriptableObject
 {
     [SerializeField] private List<SuddenEventTextRow> _rows = new();
 
-    // key = $"{id}:{range}"
+    // key = $"{id}:{target}"
     private Dictionary<string, SuddenEventTextRow> _byKey;
 
     public IReadOnlyList<SuddenEventTextRow> Rows => _rows;
@@ -36,16 +36,16 @@ public sealed class SuddenEventTextTableSO : ScriptableObject
             if (r == null) continue;
             if (string.IsNullOrEmpty(r.id)) continue;
 
-            var key = MakeKey(r.id, r.range);
+            var key = MakeKey(r.id, r.target);
             _byKey[key] = r; // 중복이면 마지막 값으로 덮어씀
         }
     }
 
-    public bool TryGet(string id, int range, out SuddenEventTextRow row)
-        => _byKey.TryGetValue(MakeKey(id, range), out row);
+    public bool TryGet(string id, int target, out SuddenEventTextRow row)
+        => _byKey.TryGetValue(MakeKey(id, target), out row);
 
-    private static string MakeKey(string id, int range)
-        => $"{id}:{range}";
+    private static string MakeKey(string id, int target)
+        => $"{id}:{target}";
 
 #if UNITY_EDITOR
     public void ReplaceAll(List<SuddenEventTextRow> newRows)

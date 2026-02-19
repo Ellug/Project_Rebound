@@ -62,23 +62,27 @@ public static class SuddenEventTextTableCsvImporter
             var id = CsvImportUtil.ReadString(cells, col, "ID");
             if (string.IsNullOrEmpty(id)) continue;
 
+            var description = CsvImportUtil.ReadString(cells, col, "description");
+            if (string.IsNullOrEmpty(description))
+                description = CsvImportUtil.ReadString(cells, col, "text");
+
             var r = new SuddenEventTextRow
             {
                 id = id,
-                range = CsvImportUtil.ReadInt(cells, col, "range", 0),
+                target = ReadTarget(cells, col),
                 speaker = CsvImportUtil.ReadString(cells, col, "speaker"),
-                text = CsvImportUtil.ReadString(cells, col, "text"),
+                description = description,
             };
 
             result.Add(r);
         }
 
-        // (id, range) 중복 경고
+        // (id, target) 중복 경고
         var dup = new HashSet<string>();
         var dupList = new List<string>();
         foreach (var row in result)
         {
-            var key = $"{row.id}:{row.range}";
+            var key = $"{row.id}:{row.target}";
             if (!dup.Add(key))
                 dupList.Add(key);
         }
@@ -91,6 +95,14 @@ public static class SuddenEventTextTableCsvImporter
         }
 
         return result;
+    }
+
+    private static int ReadTarget(List<string> cells, Dictionary<string, int> col)
+    {
+        if (col.ContainsKey("target"))
+            return CsvImportUtil.ReadInt(cells, col, "target", 0);
+
+        return CsvImportUtil.ReadInt(cells, col, "range", 0);
     }
 }
 #endif

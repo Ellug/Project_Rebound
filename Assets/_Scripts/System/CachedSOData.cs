@@ -2,10 +2,13 @@ public static class CachedSOData
 {
     // Loaded Tables
     private static GrowthCommandTableSO _growthCommandTable;
+    private static AlwaysEffectTableSO _alwaysEffectTable;
+    private static AlwaysEventTableSO _alwaysEventTable;
     private static SuddenEventTableSO _suddenEventTable;
     private static SuddenEventEffectTableSO _suddenEventEffectTable;
     private static SuddenEventTextTableSO _suddenEventTextTable;
     private static StatusTextTableSO _statusTextTable;
+    private static SchoolNameTableSO _schoolNameTable;
     private static StudentNameTableSO _studentNameTable;
     private static StudentBodyTableSO _studentBodyTable;
     private static StudentStatTableSO _studentStatTable;
@@ -18,10 +21,13 @@ public static class CachedSOData
 
     // Properties
     public static GrowthCommandTableSO GrowthCommandTable => _growthCommandTable;
+    public static AlwaysEffectTableSO AlwaysEffectTable => _alwaysEffectTable;
+    public static AlwaysEventTableSO AlwaysEventTable => _alwaysEventTable;
     public static SuddenEventTableSO SuddenEventTable => _suddenEventTable;
     public static SuddenEventEffectTableSO SuddenEventEffectTable => _suddenEventEffectTable;
     public static SuddenEventTextTableSO SuddenEventTextTable => _suddenEventTextTable;
     public static StatusTextTableSO StatusTextTable => _statusTextTable;
+    public static SchoolNameTableSO SchoolNameTable => _schoolNameTable;
     public static StudentNameTableSO StudentNameTable => _studentNameTable;
     public static StudentBodyTableSO StudentBodyTable => _studentBodyTable;
     public static StudentStatTableSO StudentStatTable => _studentStatTable;
@@ -35,10 +41,13 @@ public static class CachedSOData
     // StartManager에서 로드된 테이블을 등록
     public static void RegisterTables(
         GrowthCommandTableSO growthCommand,
+        AlwaysEffectTableSO alwaysEffect,
+        AlwaysEventTableSO alwaysEvent,
         SuddenEventTableSO suddenEvent,
         SuddenEventEffectTableSO suddenEventEffect,
         SuddenEventTextTableSO suddenEventText,
         StatusTextTableSO statusText,
+        SchoolNameTableSO schoolName,
         StudentNameTableSO studentName,
         StudentBodyTableSO studentBody,
         StudentStatTableSO studentStat,
@@ -50,10 +59,13 @@ public static class CachedSOData
         StudentPositionTableSO studentPosition)
     {
         _growthCommandTable = growthCommand;
+        _alwaysEffectTable = alwaysEffect;
+        _alwaysEventTable = alwaysEvent;
         _suddenEventTable = suddenEvent;
         _suddenEventEffectTable = suddenEventEffect;
         _suddenEventTextTable = suddenEventText;
         _statusTextTable = statusText;
+        _schoolNameTable = schoolName;
         _studentNameTable = studentName;
         _studentBodyTable = studentBody;
         _studentStatTable = studentStat;
@@ -69,10 +81,13 @@ public static class CachedSOData
     public static void Clear()
     {
         _growthCommandTable = null;
+        _alwaysEffectTable = null;
+        _alwaysEventTable = null;
         _suddenEventTable = null;
         _suddenEventEffectTable = null;
         _suddenEventTextTable = null;
         _statusTextTable = null;
+        _schoolNameTable = null;
         _studentNameTable = null;
         _studentBodyTable = null;
         _studentStatTable = null;

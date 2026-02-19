@@ -61,18 +61,42 @@ public static class SuddenEventEffectTableCsvImporter
             var id = CsvImportUtil.ReadString(cells, col, "ID");
             if (string.IsNullOrEmpty(id)) continue;
 
+            var targetName = CsvImportUtil.ReadString(cells, col, "target_name");
+            if (string.IsNullOrEmpty(targetName))
+                targetName = CsvImportUtil.ReadString(cells, col, "targetName");
+
+            PlayerStat targetMin;
+            PlayerStat targetMax;
+
+            if (col.ContainsKey("target_min") || col.ContainsKey("target_max"))
+            {
+                targetMin = ReadPlayerStat(CsvImportUtil.ReadString(cells, col, "target_min"));
+                targetMax = ReadPlayerStat(CsvImportUtil.ReadString(cells, col, "target_max"));
+            }
+            else
+            {
+                targetMin = ReadPlayerStat(CsvImportUtil.ReadString(cells, col, "targetStat_min"));
+                targetMax = ReadPlayerStat(CsvImportUtil.ReadString(cells, col, "targetStat_max"));
+            }
+
             var r = new SuddenEventEffectRow
             {
                 id = id,
                 type = ReadEffectType(CsvImportUtil.ReadString(cells, col, "type")),
-                targetNameId = CsvImportUtil.ReadString(cells, col, "targetName"),
-                targetStatMin = ReadPlayerStat(CsvImportUtil.ReadString(cells, col, "targetStat_min")),
-                targetStatMax = ReadPlayerStat(CsvImportUtil.ReadString(cells, col, "targetStat_max")),
+                targetName = targetName,
+                targetMin = targetMin,
+                targetMax = targetMax,
+                amountMin = CsvImportUtil.ReadInt(cells, col, "amount_min", 0),
+                amountMax = CsvImportUtil.ReadInt(cells, col, "amount_max", 0),
             };
 
             // max가 비어있으면 min으로 보정
-            if (r.targetStatMax == PlayerStat.None)
-                r.targetStatMax = r.targetStatMin;
+            if (r.targetMax == PlayerStat.None)
+                r.targetMax = r.targetMin;
+
+            // min/max 보정 (csv 기입 에러시 시스템상 에러 방지 용도)
+            if (r.amountMax < r.amountMin)
+                r.amountMax = r.amountMin;
 
             result.Add(r);
         }
