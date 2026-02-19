@@ -4,9 +4,9 @@ string,string,string,string,string,int,int,enum,string,string
 1st_finalexam,first_final_exam,exam,260629,260702,4,3,0,exam_effect,1학기 기말고사로 인해 학생들이 많이 지쳐한다!
 2nd_midexam,second_midterm_exam,exam,260928,261001,4,3,0,exam_effect,2학기 중간고사로 인해 학생들이 많이 지쳐한다!
 2nd_finalexam,second_final_exam,exam,261130,261203,4,3,0,exam_effect,2학기 기말고사로 인해 학생들이 많이 지쳐한다!
-sports_day,festival_sports_day,festival,260710,260710,1,4,0,festival_effect,체육대회가 시작했다! 그동안의 피로를 풀 수 있는 하루를 보내자!
+sports_day,festival_sports_day,festival,260515,260515,1,4,0,festival_effect,체육대회가 시작했다! 그동안의 피로를 풀 수 있는 하루를 보내자!
 school_event,festival_school,festival,261008,261008,1,4,0,festival_effect,학교제가 시작했다! 그동안의 피로를 풀 수 있는 하루를 보내자!
-summer_break,vacation_summer,vacation,260720,260816,1,1,0,vacation_effect,
+summer_break,vacation_summer,vacation,260710,260809,1,1,0,vacation_effect,
 winter_break,vacation_winter,vacation,261228,270228,1,1,0,vacation_effect,
 independence,holiday_independence,holiday,260301,260302,1,2,0,holiday_effect,삼일절이다! 공휴일로 학생들이 의욕으로 가득 찼다
 children_day,holiday_children_day,holiday,260505,260505,1,2,0,holiday_effect,"어린이날이다! 모처럼의 휴일, 학생들이 들뜬 분위기다!"

@@ -60,8 +60,8 @@ MonoBehaviour:
   - id: sports_day
     name: festival_sports_day
     type: festival
-    termStart: 260710
-    termEnd: 260710
+    termStart: 260515
+    termEnd: 260515
     term: 1
     priority: 4
     range: 0
@@ -82,8 +82,8 @@ MonoBehaviour:
   - id: summer_break
     name: vacation_summer
     type: vacation
-    termStart: 260720
-    termEnd: 260817
+    termStart: 260710
+    termEnd: 260809
     term: 1
     priority: 1
     range: 0
