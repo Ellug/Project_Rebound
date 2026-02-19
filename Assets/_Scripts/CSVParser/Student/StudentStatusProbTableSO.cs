@@ -52,13 +52,16 @@ public sealed class StudentStatusProbTableSO : ScriptableObject
     public StudentStatusProbRow GetByCondition(bool isInsane, int conditionValue)
     {
         var targetList = isInsane ? _insaneRows : _saneRows;
+        if (targetList.Count == 0) return null;
 
         foreach (var r in targetList)
         {
             if (conditionValue <= r.conditionMax)
                 return r;
         }
-        return null;
+
+        // 최대 conditionMax를 넘어가는 값은 마지막 구간 값을 사용
+        return targetList[targetList.Count - 1];
     }
 
 #if UNITY_EDITOR

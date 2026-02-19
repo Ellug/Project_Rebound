@@ -1,0 +1,6 @@
+ID,training_state,condition_increase,condition_decline,condition_recovery_up,condition_recovery_down,training_increase,training_decline
+string,bool,int,int,int,int,float,float
+exam_effect,TRUE,3,0,0,4,0,1.5
+festival_effect,FALSE,0,0,10,0,0,0
+vacation_effect,FALSE,0,0,0,0,0,0
+holiday_effect,TRUE,0,4,5,0,1.5,0
