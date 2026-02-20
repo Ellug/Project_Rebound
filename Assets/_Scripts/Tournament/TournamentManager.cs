@@ -169,7 +169,7 @@ public class TournamentManager : MonoBehaviour
             matchViewData.Add(new TournamentMatchViewData(matchup.UpTeam, matchup.DownTeam, matchup.IncludeMySchool));
         }
 
-        _tournamentUi.RenderRound(matchViewData);
+        _tournamentUi.RenderRound(matchViewData, _mySchoolName);
     }
 
     // CachedSOData 에서 참조해 학교 리스트 출력
