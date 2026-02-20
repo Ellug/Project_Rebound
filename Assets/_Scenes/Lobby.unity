@@ -836,7 +836,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TurnManager
   _startYear: 2026
   _startMonth: 7
-  _startDay: 15
+  _startDay: 1
 --- !u!4 &842935343
 Transform:
   m_ObjectHideFlags: 0

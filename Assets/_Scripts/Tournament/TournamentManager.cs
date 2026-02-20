@@ -16,6 +16,7 @@ public class TournamentManager : MonoBehaviour
     // 토너먼트 진행 데이터
     private readonly List<List<Matchup>> _allRounds = new(); // 라운드별 매치업 리스트 (32강, 16강, 8강, 4강, 결승)
     private int _currentRoundIndex;
+    private bool _isWaitingForResultNext;
 
     // 매치업 데이터
     private class Matchup
@@ -41,6 +42,7 @@ public class TournamentManager : MonoBehaviour
         // 토너먼트 초기화 - 32강부터 결승까지 구조 생성
         _allRounds.Clear();
         _currentRoundIndex = 0;
+        _isWaitingForResultNext = false;
 
         // 첫 라운드 매치업 생성 (32강)
         List<Matchup> firstRound = new();
@@ -67,17 +69,23 @@ public class TournamentManager : MonoBehaviour
             nextRoundCount /= 2;
         }
 
+        if (_tournamentUi != null)
+        {
+            _tournamentUi.HideMatchGamePanel();
+            _tournamentUi.HideMatchResultPanel();
+        }
+
         RefreshUI();
     }
 
     // 매치 승자 처리 (외부에서 호출 가능)
-    public void SetMatchWinner(int matchIndex, string winnerTeamName)
+    public void SetMatchWinner(int matchIndex, string winnerTeamName, bool advanceWhenRoundComplete = true)
     {
         List<Matchup> currentRound = _allRounds[_currentRoundIndex];
         currentRound[matchIndex].Winner = winnerTeamName;
 
         // 현재 라운드의 모든 매치가 끝났는지 확인
-        if (IsCurrentRoundComplete())
+        if (advanceWhenRoundComplete && IsCurrentRoundComplete())
             AdvanceToNextRound();
     }
 
@@ -242,21 +250,17 @@ public class TournamentManager : MonoBehaviour
     // 내 학교 승리 처리
     public void OnMySchoolWin()
     {
-        SetMySchoolMatchResult(true);
-        _tournamentUi.HideMatchGamePanel();
-        Debug.Log("[TournamentManager] 우리 학교 승리!");
+        ResolveMySchoolMatchAndShowResult(true);
     }
 
     // 내 학교 패배 처리
     public void OnMySchoolLose()
     {
-        SetMySchoolMatchResult(false);
-        _tournamentUi.HideMatchGamePanel();
-        Debug.Log("[TournamentManager] 우리 학교 패배...");
+        ResolveMySchoolMatchAndShowResult(false);
     }
 
     // 내 학교 매치 승자 처리
-    private void SetMySchoolMatchResult(bool didWin)
+    private bool SetMySchoolMatchResult(bool didWin)
     {
         List<Matchup> currentRound = _allRounds[_currentRoundIndex];
         for (int i = 0; i < currentRound.Count; i++)
@@ -265,10 +269,44 @@ public class TournamentManager : MonoBehaviour
             if (matchup.IncludeMySchool && matchup.Winner == null)
             {
                 string winner = didWin ? _mySchoolName : (matchup.UpTeam == _mySchoolName ? matchup.DownTeam : matchup.UpTeam);
-                SetMatchWinner(i, winner);
-                return;
+                SetMatchWinner(i, winner, advanceWhenRoundComplete: false);
+                return true;
             }
         }
+
+        return false;
+    }
+
+    // 결과 패널의 다음 버튼에 연결
+    public void OnClickNextAfterMatchResult()
+    {
+        if (!_isWaitingForResultNext)
+            return;
+
+        _isWaitingForResultNext = false;
+        if (_tournamentUi != null)
+            _tournamentUi.HideMatchResultPanel();
+
+        if (IsCurrentRoundComplete())
+            AdvanceToNextRound();
+    }
+
+    private void ResolveMySchoolMatchAndShowResult(bool didWin)
+    {
+        if (!SetMySchoolMatchResult(didWin))
+        {
+            Debug.LogWarning("[TournamentManager] 진행 중인 우리 학교 매치를 찾지 못했습니다.");
+            return;
+        }
+
+        if (_tournamentUi != null)
+        {
+            _tournamentUi.HideMatchGamePanel();
+            _tournamentUi.ShowMatchResultPanel(didWin ? "승리!" : "패배...");
+        }
+
+        _isWaitingForResultNext = true;
+        Debug.Log(didWin ? "[TournamentManager] 우리 학교 승리!" : "[TournamentManager] 우리 학교 패배...");
     }
 
 }

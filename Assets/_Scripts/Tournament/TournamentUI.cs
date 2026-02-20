@@ -15,6 +15,10 @@ public class TournamentUI : MonoBehaviour
     [SerializeField] private TMP_Text _leftSchoolText;
     [SerializeField] private TMP_Text _rightSchoolText;
 
+    [Header("Match Result Panel")]
+    [SerializeField] private GameObject _matchResultPanel;
+    [SerializeField] private TMP_Text _matchResultText;
+
     // 현재 라운드의 매치업 목록을 UI에 표시
     public void RenderRound(IReadOnlyList<TournamentMatchViewData> matchups)
     {
@@ -61,6 +65,23 @@ public class TournamentUI : MonoBehaviour
     {
         if (_matchGamePanel != null)
             _matchGamePanel.SetActive(false);
+    }
+
+    // 경기 결과 패널 표시
+    public void ShowMatchResultPanel(string resultText)
+    {
+        if (_matchResultText != null)
+            _matchResultText.text = resultText;
+
+        if (_matchResultPanel != null)
+            _matchResultPanel.SetActive(true);
+    }
+
+    // 경기 결과 패널 숨김
+    public void HideMatchResultPanel()
+    {
+        if (_matchResultPanel != null)
+            _matchResultPanel.SetActive(false);
     }
 
     // 기존 라운드 UI 아이템 전부 제거
