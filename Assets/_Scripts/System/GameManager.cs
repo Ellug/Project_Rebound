@@ -12,6 +12,7 @@ public class GameManager : Singleton<GameManager>
     // private EventManager _eventManager;             // Lobby 씬의 EventManager
     private AlwaysEventManager _alwaysEventManager; // Lobby 씬의 AlwaysEventManager
     private LobbyUI _lobbyUI;                       // Lobby 씬의 LobbyUI
+    private TournamentResultUI _tournamentResultUI; // Lobby 씬의 TournamentResultUI
     private GameState _gameState;                   // 이벤트 시스템용 게임 상태
     private bool _isLoadingTournament;              // 토너먼트 씬 로딩 중 플래그
 
@@ -108,6 +109,7 @@ public class GameManager : Singleton<GameManager>
         // _eventManager = null;
         _alwaysEventManager = null;
         _lobbyUI = null;
+        _tournamentResultUI = null;
         _gameState = null;
         _isLoadingTournament = false;
 
@@ -121,16 +123,16 @@ public class GameManager : Singleton<GameManager>
         Debug.Log("[GameManager] 리그가 오픈되었습니다.");
     }
 
-    // Tournament 씬에서 우승팀 결과 저장
-    public void SetPendingTournamentChampion(string champion)
+    // Tournament 씬에서 토너먼트 결과 저장
+    public void SetPendingTournamentResult(string champion, int mySchoolReachedRoundTeamCount)
     {
-        _tournamentData.SetChampion(champion);
+        _tournamentData.SetResult(champion, mySchoolReachedRoundTeamCount);
     }
 
-    // Lobby 씬에서 우승팀 결과 소비 (한 번만 읽고 클리어)
-    public bool TryConsumePendingTournamentChampion(out string champion)
+    // Lobby 씬에서 토너먼트 결과 전체 소비 (한 번만 읽고 클리어)
+    public bool TryConsumePendingTournamentResult(out TournamentData tournamentResultData)
     {
-        return _tournamentData.TryConsumeChampion(out champion);
+        return _tournamentData.TryConsumeResult(out tournamentResultData);
     }
 
     // 토너먼트 씬 진입 조건 확인 및 씬 전환
@@ -199,6 +201,7 @@ public class GameManager : Singleton<GameManager>
         // _eventManager = FindFirstObjectByType<EventManager>();
         _alwaysEventManager = FindFirstObjectByType<AlwaysEventManager>();
         _lobbyUI = FindFirstObjectByType<LobbyUI>();
+        _tournamentResultUI = FindFirstObjectByType<TournamentResultUI>(FindObjectsInactive.Include);
         _isLoadingTournament = false;
     }
 
@@ -268,7 +271,7 @@ public class GameManager : Singleton<GameManager>
     // 토너먼트 결과 처리 (우승팀 표시 및 페이즈 복원)
     private void HandleTournamentResult()
     {
-        if (!TryConsumePendingTournamentChampion(out string champion))
+        if (!TryConsumePendingTournamentResult(out TournamentData tournamentResultData))
             return;
 
         if (_turnManager != null)
@@ -283,8 +286,8 @@ public class GameManager : Singleton<GameManager>
         _flowData.IsLeagueOpened = false;
         _flowData.IsLeagueHandled = false;
 
-        if (_lobbyUI != null)
-            _lobbyUI.SetStatusMessage($"{champion} 우승. 토너먼트 종료.");
+        if (_tournamentResultUI != null)
+            _tournamentResultUI.ShowResult(tournamentResultData);
     }
 
     // 턴 완료 시 호출되는 이벤트 핸들러
