@@ -1130,6 +1130,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1542067910}
     m_Modifications:
+    - target: {fileID: 1615639825876362209, guid: f83a7c9a91670574cb61e1e10b1104bb, type: 3}
+      propertyPath: _pageData
+      value: 
+      objectReference: {fileID: 11400000, guid: 5ed67b5c12455fd43be8793b02caea46, type: 2}
     - target: {fileID: 3628699852627155980, guid: f83a7c9a91670574cb61e1e10b1104bb, type: 3}
       propertyPath: m_Name
       value: TrainingSelectPopup
@@ -2638,3 +2642,4 @@ SceneRoots:
   - {fileID: 281826198}
   - {fileID: 902345671}
   - {fileID: 336958192}
+  - {fileID: 66605661}

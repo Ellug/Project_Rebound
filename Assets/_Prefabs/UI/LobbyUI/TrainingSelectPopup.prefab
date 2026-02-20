@@ -268,12 +268,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TrainingSelectPopup
   _isModal: 1
+  _windowRect: {fileID: 0}
+  _windowLayoutGroup: {fileID: 0}
+  _paddingTopWithImage: 100
+  _paddingTopNoImage: 40
+  _contentImage: {fileID: 0}
   _txtTitle: {fileID: 0}
+  _txtSubContent: {fileID: 0}
   _txtContent: {fileID: 0}
   _buttonGridRoot: {fileID: 0}
   _buttonPrefab: {fileID: 0}
   _closeButton: {fileID: 8492441179596455127}
-  _pageData: {fileID: 11400000, guid: 603195a027d2b6d41b0e0baac938ca26, type: 2}
+  _pageData: {fileID: 11400000, guid: 5ed67b5c12455fd43be8793b02caea46, type: 2}
   _txtPageTitle: {fileID: 7136305615716536926}
   _buttonContainer: {fileID: 8542345879783783503}
   _buttonPrefab2: {fileID: 3387496933141027459, guid: 285603cd3b126a444b5726d63a1f8d55, type: 3}
