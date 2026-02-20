@@ -31,7 +31,7 @@ public class StudentSelectPopup : UIPopup
     private readonly List<Student> _selectedStudents = new List<Student>();
 
     // 최대 선택 인원 (0이면 무제한)
-    private int _maxSelectableCount = 0;
+    // private int _maxSelectableCount = 0;
 
     // 선택/해제 시각적 표현을 위한 매핑
     private readonly Dictionary<Student, GameObject> _studentCardMap = new Dictionary<Student, GameObject>();

@@ -17,6 +17,7 @@ public class TournamentManager : MonoBehaviour
     private readonly List<List<Matchup>> _allRounds = new(); // 라운드별 매치업 리스트 (32강, 16강, 8강, 4강, 결승)
     private int _currentRoundIndex;
     private bool _isWaitingForResultNext;
+    private int _mySchoolReachedRoundTeamCount;
 
     // 매치업 데이터
     private class Matchup
@@ -43,6 +44,7 @@ public class TournamentManager : MonoBehaviour
         _allRounds.Clear();
         _currentRoundIndex = 0;
         _isWaitingForResultNext = false;
+        _mySchoolReachedRoundTeamCount = _teamCount;
 
         // 첫 라운드 매치업 생성 (32강)
         List<Matchup> firstRound = new();
@@ -147,7 +149,7 @@ public class TournamentManager : MonoBehaviour
 
         // 우승 결과 캐싱 후 로비로 복귀
         if (GameManager.Instance != null)
-            GameManager.Instance.SetPendingTournamentChampion(champion);
+            GameManager.Instance.SetPendingTournamentResult(champion, _mySchoolReachedRoundTeamCount);
         else
             Debug.LogWarning("[TournamentManager] GameManager가 없어 우승 결과를 저장하지 못했습니다.");
 
@@ -232,17 +234,25 @@ public class TournamentManager : MonoBehaviour
 
     private bool TryGetPendingMySchoolMatch(out Matchup mySchoolMatchup)
     {
+        return TryGetPendingMySchoolMatch(out _, out mySchoolMatchup);
+    }
+
+    private bool TryGetPendingMySchoolMatch(out int matchIndex, out Matchup mySchoolMatchup)
+    {
         List<Matchup> currentRound = _allRounds[_currentRoundIndex];
 
-        foreach (Matchup matchup in currentRound)
+        for (int i = 0; i < currentRound.Count; i++)
         {
+            Matchup matchup = currentRound[i];
             if (matchup.IncludeMySchool && matchup.Winner == null)
             {
+                matchIndex = i;
                 mySchoolMatchup = matchup;
                 return true;
             }
         }
 
+        matchIndex = -1;
         mySchoolMatchup = null;
         return false;
     }
@@ -262,19 +272,12 @@ public class TournamentManager : MonoBehaviour
     // 내 학교 매치 승자 처리
     private bool SetMySchoolMatchResult(bool didWin)
     {
-        List<Matchup> currentRound = _allRounds[_currentRoundIndex];
-        for (int i = 0; i < currentRound.Count; i++)
-        {
-            Matchup matchup = currentRound[i];
-            if (matchup.IncludeMySchool && matchup.Winner == null)
-            {
-                string winner = didWin ? _mySchoolName : (matchup.UpTeam == _mySchoolName ? matchup.DownTeam : matchup.UpTeam);
-                SetMatchWinner(i, winner, advanceWhenRoundComplete: false);
-                return true;
-            }
-        }
+        if (!TryGetPendingMySchoolMatch(out int matchIndex, out Matchup matchup))
+            return false;
 
-        return false;
+        string winner = didWin ? _mySchoolName : (matchup.UpTeam == _mySchoolName ? matchup.DownTeam : matchup.UpTeam);
+        SetMatchWinner(matchIndex, winner, advanceWhenRoundComplete: false);
+        return true;
     }
 
     // 결과 패널의 다음 버튼에 연결
@@ -299,6 +302,8 @@ public class TournamentManager : MonoBehaviour
             return;
         }
 
+        UpdateMySchoolTournamentProgress(didWin);
+
         if (_tournamentUi != null)
         {
             _tournamentUi.HideMatchGamePanel();
@@ -307,6 +312,33 @@ public class TournamentManager : MonoBehaviour
 
         _isWaitingForResultNext = true;
         Debug.Log(didWin ? "[TournamentManager] 우리 학교 승리!" : "[TournamentManager] 우리 학교 패배...");
+    }
+
+    private void UpdateMySchoolTournamentProgress(bool didWin)
+    {
+        int currentRoundTeamCount = GetCurrentRoundTeamCount();
+        if (currentRoundTeamCount <= 0)
+            return;
+
+        if (didWin)
+        {
+            if (currentRoundTeamCount <= 2)
+                _mySchoolReachedRoundTeamCount = 1;
+            else
+                _mySchoolReachedRoundTeamCount = currentRoundTeamCount / 2;
+        }
+        else
+        {
+            _mySchoolReachedRoundTeamCount = currentRoundTeamCount;
+        }
+    }
+
+    private int GetCurrentRoundTeamCount()
+    {
+        if (_currentRoundIndex < 0 || _currentRoundIndex >= _allRounds.Count)
+            return 0;
+
+        return _allRounds[_currentRoundIndex].Count * 2;
     }
 
 }
