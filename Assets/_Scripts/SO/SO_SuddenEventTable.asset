@@ -14,56 +14,47 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SuddenEventTableSO
   _rows:
   - id: ID_SuddenEvent_000001
-    eventName: "\uBC24\uC0D8"
+    name: "\uBC24\uC0D8"
     context: 1
     condition: 1
     scope: 1
-    rangeMin: 1
-    rangeMax: 3
+    targetMin: 1
+    targetMax: 3
     termMin: 1
     termMax: 1
     termScale: 1
-    effect1: ID_EventEffect_1_condition_m5
-    amount1: 0
+    effect1: ID_EventEffect_1_condition_m
     effect2: 
-    amount2: 0
     effect3: 
-    amount3: 0
     probability: 0.5
-    messageId: ID_Text_SuddenEvent_000001
+    description: ID_Text_SuddenEvent_000001
   - id: ID_SuddenEvent_000002
-    eventName: "\uC758\uAE30\uC18C\uCE68"
+    name: "\uC758\uAE30\uC18C\uCE68"
     context: 1
     condition: 8
     scope: 3
-    rangeMin: 1
-    rangeMax: 5
+    targetMin: 1
+    targetMax: 5
     termMin: 1
     termMax: 4
     termScale: 2
-    effect1: ID_EventEffect_1_random_m3
-    amount1: 0
+    effect1: ID_EventEffect_1_random_m
     effect2: 
-    amount2: 0
     effect3: 
-    amount3: 0
     probability: 0.3
-    messageId: ID_Text_SuddenEvent_000002
+    description: ID_Text_SuddenEvent_000002
   - id: ID_SuddenEvent_000003
-    eventName: "\uBD80\uB2F4\uAC10"
+    name: "\uBD80\uB2F4\uAC10"
     context: 1
     condition: 10
     scope: 3
-    rangeMin: 1
-    rangeMax: 5
+    targetMin: 1
+    targetMax: 5
     termMin: 1
     termMax: 4
     termScale: 2
-    effect1: ID_EventEffect_1_random_m5
-    amount1: 0
+    effect1: ID_EventEffect_1_random_m
     effect2: 
-    amount2: 0
     effect3: 
-    amount3: 0
     probability: 0.2
-    messageId: ID_Text_SuddenEvent_000003
+    description: ID_Text_SuddenEvent_000003

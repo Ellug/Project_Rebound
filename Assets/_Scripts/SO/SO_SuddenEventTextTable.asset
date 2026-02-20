@@ -14,18 +14,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SuddenEventTextTableSO
   _rows:
   - id: ID_Text_SuddenEvent_000001
-    range: 1
+    target: 1
     speaker: '[SYSTEM]'
-    text: "$\"{target1.name}\uC774 \uB2A6\uC7A0\uC744 \uC7A4\uB2E4.\\n<color=grey>{target1.name}
+    description: "$\"{target1.name}\uC774 \uB2A6\uC7A0\uC744 \uC7A4\uB2E4.\\n<color=grey>{target1.name}
       \uCEE8\uB514\uC158 \uAC10\uC18C -5<\\color>\""
   - id: ID_Text_SuddenEvent_000001
-    range: 2
+    target: 2
     speaker: '[SYSTEM]'
-    text: "$\"{target1.name}, {target2.name}\uC774 \uB2A6\uC7A0\uC744 \uC7A4\uB2E4.\\n<color=grey>{target1.name},
+    description: "$\"{target1.name}, {target2.name}\uC774 \uB2A6\uC7A0\uC744 \uC7A4\uB2E4.\\n<color=grey>{target1.name},
       {target2.name} \uCEE8\uB514\uC158 \uAC10\uC18C -5<\\color>\""
   - id: ID_Text_SuddenEvent_000001
-    range: 3
+    target: 3
     speaker: '[SYSTEM]'
-    text: "$\"{target1.name}, {target2.name}, {target3.name}\uC774 \uB2A6\uC7A0\uC744
+    description: "$\"{target1.name}, {target2.name}, {target3.name}\uC774 \uB2A6\uC7A0\uC744
       \uC7A4\uB2E4.\\n<color=grey>{target1.name}, {target2.name}, {target3.name}
       \uCEE8\uB514\uC158 \uAC10\uC18C -5<\\color>\""

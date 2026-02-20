@@ -114,7 +114,7 @@ public class LobbyUI : UIBase
         _trainingSelectPopup.OnTrainingSelected -= HandleTrainingSelected;
         _trainingSelectPopup.OnTrainingSelected += HandleTrainingSelected;
 
-        _trainingSelectPopup.Open();
+        _trainingSelectPopup.Open();           // Open() 내부에서 BuildPageDataFromTable() 호출
         _trainingSelectPopup.ShowPage(0, pushHistory: false);
     }
 
