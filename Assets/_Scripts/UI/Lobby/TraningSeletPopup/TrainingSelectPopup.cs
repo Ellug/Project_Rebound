@@ -4,7 +4,8 @@ using UnityEngine.UI;
 using TMPro;
 
 // 훈련 선택 팝업 (페이지 전환 방식)
-// FlowController 호출을 여기서 담당 (씬에 배치되어 항상 살아있으므로 콜백 안전)
+// FlowController 호출을 여기서 담당
+// Init 시 TrainingPageBuilder로 TrainingPageData를 GrowthCommandTableSO 기준으로 채움
 public class TrainingSelectPopup : UIPopup
 {
     [Header("Page Config")]
@@ -45,6 +46,46 @@ public class TrainingSelectPopup : UIPopup
         }
 
         ShowPage(0, pushHistory: false);
+    }
+
+    public override void Open()
+    {
+        BuildPageDataFromTable();  // ← Init에서 여기로 이동
+        base.Open();
+    }
+
+    // GrowthCommandTableSO 데이터로 _pageData를 채운다
+    private void BuildPageDataFromTable()
+    {
+        GrowthCommandTableSO table = CachedSOData.GrowthCommandTable;
+
+#if UNITY_EDITOR
+        // 에디터에서 Lobby 씬 직접 실행 시 테이블 미등록 상태 대응
+        if (table == null)
+        {
+            const string assetPath = "Assets/_Scripts/SO/SO_GrowthCommandTable.asset";
+            table = UnityEditor.AssetDatabase.LoadAssetAtPath<GrowthCommandTableSO>(assetPath);
+
+            if (table != null)
+                Debug.Log("[TrainingSelectPopup] 에디터 직접 실행 감지 — SO를 직접 로드했습니다.");
+            else
+                Debug.LogError("[TrainingSelectPopup] SO 로드 실패 — 경로를 확인하세요: " + assetPath);
+        }
+#endif
+
+        if (table == null)
+        {
+            Debug.LogError("[TrainingSelectPopup] 테이블 미등록 — StartManager 실행 순서 확인 필요");
+            return;
+        }
+
+        if (_pageData == null)
+        {
+            Debug.LogWarning("[TrainingSelectPopup] _pageData SO가 연결되지 않았습니다.");
+            return;
+        }
+
+        TrainingPageBuilder.Build(_pageData, table);
     }
 
     protected override void OnCloseButtonClicked()
