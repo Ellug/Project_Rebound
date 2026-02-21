@@ -547,7 +547,7 @@ MonoBehaviour:
     m_Left: 31
     m_Right: 0
     m_Top: 199
-    m_Bottom: 0
+    m_Bottom: 80
   m_ChildAlignment: 0
   m_StartCorner: 0
   m_StartAxis: 0
@@ -634,9 +634,10 @@ MonoBehaviour:
   _scrollRect: {fileID: 4858785308997978918}
   _btnClose: {fileID: 6595630166075277478}
   _cardRoot: {fileID: 6488850486929087961}
-  _cardPrefab: {fileID: 7579971008839400233, guid: 9412ea4ed9645824c878473fb79701e6, type: 3}
+  _cardPrefab: {fileID: 27691284790498517, guid: 47493739c6c80c543856a14b66e45b4b, type: 3}
   _btnComplete: {fileID: 3023424442386322666}
   _txtComplete: {fileID: 1651729042115086910}
+  _showStatsOnOpen: 0
 --- !u!1 &6435418160760961662
 GameObject:
   m_ObjectHideFlags: 0

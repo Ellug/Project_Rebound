@@ -154,152 +154,47 @@ MonoBehaviour:
     studentName: "\uD64D\uAE38\uB3D9"
     positionName: 
     grade: 0
-    height: 10
-    weight: 10
+    height: 0
+    weight: 0
     mental: 10
     shoot: 10
     speed: 10
     jump: 10
     stamina: 10
-    potential_tier: 10
-    potential: 1
-    condition: 10
-    trust: 10
+    potential_tier: 0
+    potential: 
+    condition: 20
+    trust: 0
   - id: 1
-    studentName: "\uAE40\uC9C4\uC6B0"
-    positionName: 
-    grade: 0
-    height: 10
-    weight: 10
-    mental: 10
-    shoot: 10
-    speed: 10
-    jump: 10
-    stamina: 10
-    potential_tier: 10
-    potential: 1
-    condition: 10
-    trust: 10
-  - id: 2
-    studentName: "\uC774\uB355\uAE30"
-    positionName: 
-    grade: 0
-    height: 10
-    weight: 10
-    mental: 10
-    shoot: 10
-    speed: 10
-    jump: 10
-    stamina: 10
-    potential_tier: 10
-    potential: 1
-    condition: 10
-    trust: 10
-  - id: 3
-    studentName: "\uB178\uC8FC\uD615"
-    positionName: 
-    grade: 0
-    height: 10
-    weight: 10
-    mental: 10
-    shoot: 10
-    speed: 10
-    jump: 10
-    stamina: 10
-    potential_tier: 10
-    potential: 1
-    condition: 10
-    trust: 10
-  - id: 4
-    studentName: "\uAD8C\uC7AC\uBBFC"
-    positionName: 
-    grade: 0
-    height: 10
-    weight: 10
-    mental: 10
-    shoot: 10
-    speed: 10
-    jump: 10
-    stamina: 10
-    potential_tier: 10
-    potential: 1
-    condition: 10
-    trust: 10
-  - id: 5
     studentName: "\uC7A5\uC6B0\uBE48"
     positionName: 
     grade: 0
-    height: 10
-    weight: 10
-    mental: 10
-    shoot: 10
-    speed: 10
-    jump: 10
-    stamina: 10
-    potential_tier: 10
-    potential: 1
-    condition: 10
-    trust: 10
-  - id: 6
-    studentName: "\uC774\uC218\uD638"
+    height: 0
+    weight: 0
+    mental: 20
+    shoot: 30
+    speed: 20
+    jump: 30
+    stamina: 20
+    potential_tier: 0
+    potential: 
+    condition: 20
+    trust: 0
+  - id: 3
+    studentName: "\uAE40\uC9C4\uC6B0"
     positionName: 
     grade: 0
-    height: 10
-    weight: 10
-    mental: 10
-    shoot: 10
-    speed: 10
-    jump: 10
-    stamina: 10
-    potential_tier: 10
-    potential: 1
-    condition: 10
-    trust: 10
-  - id: 7
-    studentName: "\uBC15\uC2E0\uD615"
-    positionName: 
-    grade: 0
-    height: 10
-    weight: 10
-    mental: 10
-    shoot: 10
-    speed: 10
-    jump: 10
-    stamina: 10
-    potential_tier: 10
-    potential: 1
-    condition: 10
-    trust: 10
-  - id: 8
-    studentName: "\uAE40\uC778\uC5FD"
-    positionName: 
-    grade: 0
-    height: 10
-    weight: 10
-    mental: 10
-    shoot: 10
-    speed: 10
-    jump: 10
-    stamina: 10
-    potential_tier: 10
-    potential: 1
-    condition: 10
-    trust: 10
-  - id: 9
-    studentName: "\uD669\uC601\uC7AC"
-    positionName: 
-    grade: 0
-    height: 10
-    weight: 10
-    mental: 10
-    shoot: 10
-    speed: 10
-    jump: 10
-    stamina: 10
-    potential_tier: 10
-    potential: 1
-    condition: 10
-    trust: 10
+    height: 0
+    weight: 0
+    mental: 20
+    shoot: 30
+    speed: 20
+    jump: 30
+    stamina: 20
+    potential_tier: 0
+    potential: 
+    condition: 20
+    trust: 0
 --- !u!4 &66605661
 Transform:
   m_ObjectHideFlags: 0
@@ -517,7 +412,6 @@ MonoBehaviour:
   _fameIcon: {fileID: 0}
   _achievedTitleFormat: "{PLACEMENT} \uB2EC\uC131!"
   _failedTitle: "\uD0C8\uB77D..."
-  _resultSubContentFormat: "\uC6B0\uB9AC \uD559\uAD50 \uACB0\uACFC: {PLACEMENT}"
   _achievedContentTemplate: "{PLACEMENT} \uB2EC\uC131 \uCD95\uD558\uB4DC\uB9BD\uB2C8\uB2E4!\n\uB2E4\uC74C
     \uD559\uAE30\uC5D0\uB3C4 \uD300\uC744 \uC774\uB04C\uC5B4 \uC8FC\uC138\uC694!\n\n\uB2E4\uC74C
     \uC790\uC6D0\uC744 \uD68D\uB4DD\uD588\uC2B5\uB2C8\uB2E4."
@@ -2935,6 +2829,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1542067910}
     m_Modifications:
+    - target: {fileID: 387351481154729178, guid: 6e6bd5fd7f5bcbc4ebe52421d92bc071, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 387351481154729178, guid: 6e6bd5fd7f5bcbc4ebe52421d92bc071, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 387351481154729178, guid: 6e6bd5fd7f5bcbc4ebe52421d92bc071, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: -24.9889
+      objectReference: {fileID: 0}
     - target: {fileID: 653458733751462416, guid: 6e6bd5fd7f5bcbc4ebe52421d92bc071, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -3015,9 +2921,37 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5397177492536680875, guid: 6e6bd5fd7f5bcbc4ebe52421d92bc071, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5397177492536680875, guid: 6e6bd5fd7f5bcbc4ebe52421d92bc071, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5397177492536680875, guid: 6e6bd5fd7f5bcbc4ebe52421d92bc071, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5864692297516954995, guid: 6e6bd5fd7f5bcbc4ebe52421d92bc071, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 28.72
+      objectReference: {fileID: 0}
+    - target: {fileID: 5864692297516954995, guid: 6e6bd5fd7f5bcbc4ebe52421d92bc071, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -0.000061035156
+      objectReference: {fileID: 0}
+    - target: {fileID: 6285076152036237076, guid: 6e6bd5fd7f5bcbc4ebe52421d92bc071, type: 3}
+      propertyPath: m_Padding.m_Bottom
+      value: 260
+      objectReference: {fileID: 0}
     - target: {fileID: 8050011418291093143, guid: 6e6bd5fd7f5bcbc4ebe52421d92bc071, type: 3}
       propertyPath: m_Name
       value: TrainingResultPopup
+      objectReference: {fileID: 0}
+    - target: {fileID: 8050011418291093143, guid: 6e6bd5fd7f5bcbc4ebe52421d92bc071, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

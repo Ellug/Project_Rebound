@@ -1,42 +1,56 @@
-using System;
+﻿using System;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using TMPro;
 
+/// <summary>
+/// 학생 카드 컴포넌트
+/// 팝업 종류에 따라 3가지 뷰 상태를 전환한다.
+///
+/// Normal    : 초상화만 표시 (Image 1 - 학생 선택 팝업 기본)
+/// ShowStats : 스탯 오버레이 표시 (Image 2 - 카드 선택 시)
+/// Placing   : 배치 완료 체크 오버레이
+/// </summary>
 [RequireComponent(typeof(Image))]
 public class StudentCard : MonoBehaviour, IPointerClickHandler
 {
-    // 카드의 시각적 상태 정의
     public enum CardViewState
     {
-        Normal,     // 기본 (초상화만)
-        ShowStats,  // 스탯 표시 (훈련 창 등)
-        Placing     // 배치 중 (검은 화면에 체크 표시)
+        Normal,
+        ShowStats,
+        Placing
     }
 
-    [Header("Basic Info")]
+    [Header("공통 - 초상화")]
     [SerializeField] private Image _portraitImage;
 
-    [Header("Overlays")]
+    [Header("ShowStats 오버레이")]
     [SerializeField] private GameObject _statsOverlayPanel;
-    [SerializeField] private GameObject _placingOverlayPanel; // 배치 중(V표시) 패널
-
-    [Header("UI References")]
     [SerializeField] private TMP_Text _nameText;
     [SerializeField] private TMP_Text _gradeText;
     [SerializeField] private TMP_Text _positionText;
-    [SerializeField] private TMP_Text _staminaText;
-    [SerializeField] private TMP_Text _mentalText;
-    [SerializeField] private TMP_Text _shootText;
-    [SerializeField] private TMP_Text _jumpText;
-    [SerializeField] private TMP_Text _speedText;
-    [SerializeField] private TMP_Text _conditionText;
+    // ConditionGauge (부모) : 배경 이미지
+    // Fill (자식)           : Filled 타입, fillAmount로 게이지 표시, 색상 제어
+    [SerializeField] private Image _conditionGaugeBg;   // ConditionGauge 오브젝트
+    [SerializeField] private Image _conditionGaugeFill; // Fill 오브젝트 — Image Type: Filled, Fill Method: Horizontal
+    [SerializeField] private TMP_Text _mentalText;      // stat_id 01
+    [SerializeField] private TMP_Text _shootText;       // stat_id 02
+    [SerializeField] private TMP_Text _speedText;       // stat_id 03
+    [SerializeField] private TMP_Text _jumpText;        // stat_id 04
+    [SerializeField] private TMP_Text _staminaText;     // stat_id 05
+    [SerializeField] private GameObject _potentialBadgeRoot;
+    [SerializeField] private TMP_Text _potentialBadgeText;
+
+    [Header("Placing 오버레이")]
+    [SerializeField] private GameObject _placingOverlayPanel;
 
     private Student _studentData;
-    public Student StudentData => _studentData;
+    private CardViewState _currentState = CardViewState.Normal;
 
-    // 외부(매니저/팝업)에서 카드 클릭을 감지할 수 있도록 이벤트 제공
+    public Student StudentData => _studentData;
+    public CardViewState CurrentState => _currentState;
+
     public event Action<StudentCard> OnCardClicked;
 
     void Awake()
@@ -44,38 +58,90 @@ public class StudentCard : MonoBehaviour, IPointerClickHandler
         SetViewState(CardViewState.Normal);
     }
 
+    // 공개 API
+
     public void SetStudentData(Student student)
     {
         _studentData = student;
-        UpdateUI();
+        RefreshShowStatsUI();
     }
 
-    private void UpdateUI()
-    {
-        if (_studentData == null) return;
-
-        if (_nameText != null) _nameText.text = _studentData.studentName;
-        if (_gradeText != null) _gradeText.text = $"{_studentData.grade}학년";
-        if (_positionText != null) _positionText.text = _studentData.positionName;
-
-        if (_staminaText != null) _staminaText.text = $"지구력 {_studentData.stamina}";
-        if (_mentalText != null) _mentalText.text = $"멘탈 {_studentData.mental}";
-        if (_shootText != null) _shootText.text = $"슈팅 {_studentData.shoot}";
-        if (_jumpText != null) _jumpText.text = $"점프력 {_studentData.jump}";
-        if (_speedText != null) _speedText.text = $"속도 {_studentData.speed}";
-        if (_conditionText != null) _conditionText.text = $"컨디션 {_studentData.condition}";
-    }
-
-    // 외부에서 카드의 시각적 상태를 강제로 변경할 때 사용
     public void SetViewState(CardViewState state)
     {
-        _statsOverlayPanel.SetActive(state == CardViewState.ShowStats);
-        _placingOverlayPanel.SetActive(state == CardViewState.Placing);
+        _currentState = state;
+
+        SafeSetActive(_statsOverlayPanel, state == CardViewState.ShowStats);
+        SafeSetActive(_placingOverlayPanel, state == CardViewState.Placing);
+
+        if (_portraitImage != null)
+            _portraitImage.gameObject.SetActive(true);
+
+        if (state == CardViewState.ShowStats && _studentData != null)
+            RefreshShowStatsUI();
     }
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        // 스스로 뭔가를 결정하지 않고, 자신을 클릭했다고 외부로 알리기만 함
         OnCardClicked?.Invoke(this);
+    }
+
+    // UI 갱신
+
+    private void RefreshShowStatsUI()
+    {
+        if (_studentData == null) return;
+
+        SafeSetText(_nameText, _studentData.studentName);
+        SafeSetText(_gradeText, $"{_studentData.grade}학년");
+        SafeSetText(_positionText, _studentData.positionName);
+
+        RefreshConditionBar();
+        RefreshStatTexts();
+        RefreshPotentialBadge();
+    }
+
+    // 컨디션 게이지 갱신
+    // _conditionGaugeFill(자식 Fill)의 fillAmount와 색상만 제어
+    // _conditionGaugeBg(부모)는 고정 배경이므로 별도 조작 불필요
+    private void RefreshConditionBar()
+    {
+        if (_conditionGaugeFill == null) return;
+
+        // 최댓값 = mental + 20 (StudentFactory 기준)
+        int condMax = Mathf.Max(_studentData.mental + 20, _studentData.condition, 1);
+        _conditionGaugeFill.fillAmount = (float)_studentData.condition / condMax;
+    }
+
+    // 스탯 텍스트 갱신 (StudentStatTable.csv stat_id 01~05 순서)
+    private void RefreshStatTexts()
+    {
+        SafeSetText(_mentalText, $"멘탈 {_studentData.mental}");
+        SafeSetText(_shootText, $"슈팅 {_studentData.shoot}");
+        SafeSetText(_speedText, $"속도 {_studentData.speed}");
+        SafeSetText(_jumpText, $"점프력 {_studentData.jump}");
+        SafeSetText(_staminaText, $"지구력 {_studentData.stamina}");
+    }
+
+    // 잠재력 뱃지 표시 여부 갱신 (tier 1 = 최고 등급만 강조)
+    private void RefreshPotentialBadge()
+    {
+        bool showBadge = _studentData.potential_tier == 1
+                         && !string.IsNullOrEmpty(_studentData.potential);
+
+        SafeSetActive(_potentialBadgeRoot, showBadge);
+
+        if (showBadge && _potentialBadgeText != null)
+            _potentialBadgeText.text = _studentData.potential;
+    }
+
+    
+    private static void SafeSetText(TMP_Text target, string value)
+    {
+        if (target != null) target.text = value;
+    }
+
+    private static void SafeSetActive(GameObject target, bool active)
+    {
+        if (target != null) target.SetActive(active);
     }
 }
