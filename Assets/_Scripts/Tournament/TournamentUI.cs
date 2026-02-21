@@ -3,6 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+// 라운드 대진표를 표시하는 View: 결승전은 집중 패널, 그 외는 스크롤 리스트로 렌더링
 public class TournamentUI : MonoBehaviour
 {
     [Header("Tournament Panel")]
@@ -10,7 +11,6 @@ public class TournamentUI : MonoBehaviour
     [SerializeField] private GameObject _roundListPanel;
     [SerializeField] private GameObject _focusedMatchPanel;
     [SerializeField] private TMP_Text _focusedMySchoolText;
-    [SerializeField] private TMP_Text _focusedVsText;
     [SerializeField] private TMP_Text _focusedOpponentSchoolText;
     [SerializeField] private string _roundTitleFormat = "{ROUND} 토너먼트 표";
     [SerializeField] private string _finalRoundTitle = "결승";
@@ -20,15 +20,6 @@ public class TournamentUI : MonoBehaviour
     [SerializeField] private ScrollRect _scrollRect;
     [SerializeField] private RectTransform _contentRoot;
     [SerializeField] private GameObject _matchupContainerPrefab;
-
-    [Header("Match Panel")]
-    [SerializeField] private GameObject _matchGamePanel;
-    [SerializeField] private TMP_Text _leftSchoolText;
-    [SerializeField] private TMP_Text _rightSchoolText;
-
-    [Header("Match Result Panel")]
-    [SerializeField] private GameObject _matchResultPanel;
-    [SerializeField] private TMP_Text _matchResultText;
 
     // 현재 라운드의 매치업 목록을 UI에 표시
     public void RenderRound(IReadOnlyList<TournamentMatchViewData> matchups)
@@ -43,21 +34,12 @@ public class TournamentUI : MonoBehaviour
 
         UpdateRoundTitle(roundTeamCount);
 
-        if (_roundListPanel != null)
-            _roundListPanel.SetActive(!isFinalRound);
-
-        if (_focusedMatchPanel != null)
-            _focusedMatchPanel.SetActive(isFinalRound);
+        _roundListPanel.SetActive(!isFinalRound);
+        _focusedMatchPanel.SetActive(isFinalRound);
 
         if (isFinalRound)
         {
             UpdateFocusedMatchPanel(matchups, mySchoolName);
-            return;
-        }
-
-        if (_contentRoot == null || _matchupContainerPrefab == null)
-        {
-            Debug.LogWarning("[TournamentUI] 라운드 UI 참조가 비어 있습니다.");
             return;
         }
 
@@ -71,20 +53,15 @@ public class TournamentUI : MonoBehaviour
             matchupObject.SetActive(true);
 
             MatchupContainerUI matchupUi = matchupObject.GetComponent<MatchupContainerUI>();
-            if (matchupUi != null)
-                matchupUi.SetData(matchup.UpTeam, matchup.DownTeam, matchup.IsHighlighted);
+            matchupUi.SetData(matchup.UpTeam, matchup.DownTeam, matchup.IsHighlighted);
         }
 
         LayoutRebuilder.ForceRebuildLayoutImmediate(_contentRoot);
-        if (_scrollRect != null)
-            _scrollRect.verticalNormalizedPosition = 1f;
+        _scrollRect.verticalNormalizedPosition = 1f;
     }
 
     private void UpdateRoundTitle(int roundTeamCount)
     {
-        if (_roundTitleText == null)
-            return;
-
         if (roundTeamCount <= 0)
             return;
 
@@ -151,54 +128,11 @@ public class TournamentUI : MonoBehaviour
             }
         }
 
-        if (_focusedMySchoolText != null)
-            _focusedMySchoolText.text = myTeam;
-
-        if (_focusedVsText != null)
-            _focusedVsText.text = "VS";
-
-        if (_focusedOpponentSchoolText != null)
-            _focusedOpponentSchoolText.text = opponentTeam;
+        _focusedMySchoolText.text = myTeam;
+        _focusedOpponentSchoolText.text = opponentTeam;
     }
 
-    // 매치 게임 패널 표시 (학교명 설정)
-    public void ShowMatchGamePanel(string leftSchoolName, string rightSchoolName)
-    {
-        if (_leftSchoolText != null)
-            _leftSchoolText.text = leftSchoolName;
-
-        if (_rightSchoolText != null)
-            _rightSchoolText.text = rightSchoolName;
-
-        if (_matchGamePanel != null)
-            _matchGamePanel.SetActive(true);
-    }
-
-    // 매치 게임 패널 숨김
-    public void HideMatchGamePanel()
-    {
-        if (_matchGamePanel != null)
-            _matchGamePanel.SetActive(false);
-    }
-
-    // 경기 결과 패널 표시
-    public void ShowMatchResultPanel(string resultText)
-    {
-        if (_matchResultText != null)
-            _matchResultText.text = resultText;
-
-        if (_matchResultPanel != null)
-            _matchResultPanel.SetActive(true);
-    }
-
-    // 경기 결과 패널 숨김
-    public void HideMatchResultPanel()
-    {
-        if (_matchResultPanel != null)
-            _matchResultPanel.SetActive(false);
-    }
-
-    // 기존 라운드 UI 아이템 전부 제거
+    // contentRoot의 자식 오브젝트를 역순으로 비활성화 후 Destroy (라운드 전환 시 호출)
     private void ClearRoundItems()
     {
         for (int i = _contentRoot.childCount - 1; i >= 0; i--)
