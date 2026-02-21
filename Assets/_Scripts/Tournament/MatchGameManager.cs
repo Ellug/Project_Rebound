@@ -6,7 +6,7 @@ using UnityEngine.Serialization;
 // 경기 전체 흐름을 조율하는 컨트롤러 : 쿼터 > 공방 > 하프타임 > 경기 종료 순서를 관리
 public class MatchGameManager : MonoBehaviour
 {
-    private const string Divider = "------------------------------";
+    private const string Divider = "----------------------------------------";
 
     // 경기 종료 시 MatchResult를 전달. TournamentManager가 구독해 승패 처리
     public event Action<MatchResult> OnMatchFinished;

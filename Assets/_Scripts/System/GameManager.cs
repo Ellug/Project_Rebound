@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -143,6 +144,37 @@ public class GameManager : Singleton<GameManager>
 
         bool shouldEnterTournament = _flowData.IsLeagueOpened || IsTournamentDateReached();
         if (!shouldEnterTournament)
+            return;
+
+        ShowTournamentEntryPopup();
+    }
+
+    // 토너먼트 진입 확인 팝업 표시
+    private void ShowTournamentEntryPopup()
+    {
+        if (UIManager.Instance == null)
+        {
+            Debug.LogWarning("[GameManager] UIManager가 없어 토너먼트 확인 팝업 없이 바로 진입합니다.");
+            EnterTournament();
+            return;
+        }
+
+        var buttons = new List<PopupButtonInfo>
+        {
+            new("확인", () => { EnterTournament(); })
+        };
+
+        UIManager.Instance.ShowPopup(new PopupData(
+            title: "토너먼트",
+            content: "토너먼트에 진입하시겠습니까?",
+            buttons: buttons
+        ));
+    }
+
+    // 토너먼트 씬 진입 처리
+    private void EnterTournament()
+    {
+        if (_isLoadingTournament || _flowData.IsLeagueHandled || _turnManager == null)
             return;
 
         _flowData.IsLeagueHandled = true;
