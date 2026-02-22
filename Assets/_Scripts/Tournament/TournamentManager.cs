@@ -1,23 +1,27 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+// 토너먼트 전체 흐름을 관리: 대진 생성 → 라운드 진행 → 결과 판정 → 로비 복귀
 public class TournamentManager : MonoBehaviour
 {
     private const string LobbyScene = "Lobby";
 
     [Header("References")]
     [SerializeField] private TournamentUI _tournamentUi;
+    [SerializeField] private MatchGameUI _matchGameUi;
+    [SerializeField] private MatchGameManager _matchGameManager;
 
     [Header("Tournament")]
     [SerializeField] private int _teamCount = 32;
     [SerializeField] private string _mySchoolName = "한울고등학교";
 
-    // 토너먼트 진행 데이터
-    private readonly List<List<Matchup>> _allRounds = new(); // 라운드별 매치업 리스트 (32강, 16강, 8강, 4강, 결승)
+    // 라운드별 매치업 전체: _allRounds[0]=32강, [1]=16강 ... [n]=결승
+    private readonly List<List<Matchup>> _allRounds = new();
     private int _currentRoundIndex;
-    private bool _isWaitingForResultNext;
-    private int _mySchoolReachedRoundTeamCount;
+    private bool _isWaitingForResultNext;            // 결과 패널 표시 중 다음 버튼 중복 클릭 방지
+    private int _mySchoolReachedRoundTeamCount;      // 토너먼트 종료 시 로비에 전달할 성적 (팀 수 기준)
 
     // 매치업 데이터
     private class Matchup
@@ -30,7 +34,13 @@ public class TournamentManager : MonoBehaviour
 
     void Start()
     {
+        _matchGameManager.OnMatchFinished += HandleMySchoolMatchFinished;
         GenerateTournament();
+    }
+
+    private void OnDestroy()
+    {
+        _matchGameManager.OnMatchFinished -= HandleMySchoolMatchFinished;
     }
 
     // 토너먼트 대진표 생성
@@ -71,11 +81,9 @@ public class TournamentManager : MonoBehaviour
             nextRoundCount /= 2;
         }
 
-        if (_tournamentUi != null)
-        {
-            _tournamentUi.HideMatchGamePanel();
-            _tournamentUi.HideMatchResultPanel();
-        }
+        _matchGameUi.HideMatchGamePanel();
+        _matchGameUi.HideMatchResultPanel();
+        _matchGameManager.AbortCurrentMatch();
 
         RefreshUI();
     }
@@ -158,9 +166,6 @@ public class TournamentManager : MonoBehaviour
 
     private void RefreshUI()
     {
-        if (_tournamentUi == null)
-            return;
-
         List<Matchup> currentRound = _allRounds[_currentRoundIndex];
         List<TournamentMatchViewData> matchViewData = new(currentRound.Count);
         for (int i = 0; i < currentRound.Count; i++)
@@ -203,7 +208,7 @@ public class TournamentManager : MonoBehaviour
     {
         for (int i = list.Count - 1; i > 0; i--)
         {
-            int randomIndex = Random.Range(0, i + 1);
+            int randomIndex = UnityEngine.Random.Range(0, i + 1);
             (list[randomIndex], list[i]) = (list[i], list[randomIndex]);
         }
     }
@@ -218,18 +223,22 @@ public class TournamentManager : MonoBehaviour
             if (matchup.Winner == null && !matchup.IncludeMySchool)
             {
                 // 내 학교 아닌 매치만 랜덤으로 승자 선택
-                string winner = Random.value > 0.5f ? matchup.UpTeam : matchup.DownTeam;
+                string winner = UnityEngine.Random.value > 0.5f ? matchup.UpTeam : matchup.DownTeam;
                 SetMatchWinner(i, winner);
             }
         }
 
-        // 내 학교 매치가 있으면 매치 게임 패널 활성화
+        // 내 학교 매치가 있으면 매치 시뮬레이션 시작
         if (TryGetPendingMySchoolMatch(out Matchup mySchoolMatchup))
-        {
-            _tournamentUi.ShowMatchGamePanel(mySchoolMatchup.UpTeam, mySchoolMatchup.DownTeam);
-        }
+            _matchGameManager.StartMatch(mySchoolMatchup.UpTeam, mySchoolMatchup.DownTeam, _mySchoolName);
         else
-            Debug.Log("[TournamentManager] 내 학교 매치가 없어서 자동 진행됨");
+            Debug.Log("[TournamentManager] 내 학교 매치가 없어서 자동 진행");
+    }
+
+    // 경기 진행 버튼에 연결. 쿼터/공방/하프타임을 한 버튼으로 순차 진행
+    public void OnClickProgressMySchoolMatch()
+    {
+        _matchGameManager.ProgressMatchStep();
     }
 
     private bool TryGetPendingMySchoolMatch(out Matchup mySchoolMatchup)
@@ -287,8 +296,7 @@ public class TournamentManager : MonoBehaviour
             return;
 
         _isWaitingForResultNext = false;
-        if (_tournamentUi != null)
-            _tournamentUi.HideMatchResultPanel();
+        _matchGameUi.HideMatchResultPanel();
 
         if (IsCurrentRoundComplete())
             AdvanceToNextRound();
@@ -302,13 +310,12 @@ public class TournamentManager : MonoBehaviour
             return;
         }
 
+        _matchGameManager.AbortCurrentMatch();
+
         UpdateMySchoolTournamentProgress(didWin);
 
-        if (_tournamentUi != null)
-        {
-            _tournamentUi.HideMatchGamePanel();
-            _tournamentUi.ShowMatchResultPanel(didWin ? "승리!" : "패배...");
-        }
+        _matchGameUi.HideMatchGamePanel();
+        _matchGameUi.ShowMatchResultPanel(didWin ? "승리!" : "패배...");
 
         _isWaitingForResultNext = true;
         Debug.Log(didWin ? "[TournamentManager] 우리 학교 승리!" : "[TournamentManager] 우리 학교 패배...");
@@ -339,6 +346,20 @@ public class TournamentManager : MonoBehaviour
             return 0;
 
         return _allRounds[_currentRoundIndex].Count * 2;
+    }
+
+    private void HandleMySchoolMatchFinished(MatchResult matchResult)
+    {
+        if (matchResult == null)
+            return;
+
+        bool didWin = string.Equals(matchResult.winnerTeamName, _mySchoolName, StringComparison.Ordinal);
+        Debug.Log($"[TournamentManager] MatchResult 수신 - Winner: {matchResult.winnerTeamName}, Score: {matchResult.finalScore.mySchoolScore}:{matchResult.finalScore.opponentScore}");
+
+        if (didWin)
+            OnMySchoolWin();
+        else
+            OnMySchoolLose();
     }
 
 }
