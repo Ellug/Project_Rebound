@@ -1238,10 +1238,10 @@ MonoBehaviour:
   _buttonGridRoot: {fileID: 0}
   _buttonPrefab: {fileID: 0}
   _closeButton: {fileID: 0}
-  _imgPreview: {fileID: 2131610214326238014}
-  _defaultPreview: {fileID: 8037539321571114111, guid: 7515a6442954d74499bd13e864a3efb3, type: 3}
-  _txtTitle2: {fileID: 4697294983345126648}
+  _txtName: {fileID: 4697294983345126648}
+  _txtSub: {fileID: 0}
   _txtMessage: {fileID: 972888752505486911}
+  _imgPreview: {fileID: 2131610214326238014}
   _btnSecondary: {fileID: 6303972239010338143}
   _txtSecondary: {fileID: 4937959074579074949}
   _btnPrimary: {fileID: 5612330384217949691}
