@@ -5,12 +5,6 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-// 학생 영입 팝업
-// 모든 확인/알림 팝업 → UIManager.ShowPopup (UIPopup) 으로 통일
-// - 영입 확인    : UIPopup (포기 / 확인)
-// - 영입 취소    : UIPopup (포기 / 확인)
-// - 최대 인원    : UIPopup (확인)
-// - 합류 완료    : UIPopup (확인) - 학생 목록 없음
 public class RecruitmentPopup : UIPopup
 {
     [Header("Scroll")]
@@ -18,7 +12,7 @@ public class RecruitmentPopup : UIPopup
 
     [Header("Header")]
     [SerializeField] private TMP_Text _txtName;
-    [SerializeField] private TMP_Text _txtSelectCount; // "N/최대" 표시
+    [SerializeField] private TMP_Text _txtSelectCount;
 
     [Header("Close")]
     [SerializeField] private Button _btnClose;
@@ -35,7 +29,6 @@ public class RecruitmentPopup : UIPopup
     private readonly List<Student> _selectedStudents = new();
     private readonly Dictionary<Student, StudentCard> _cardMap = new();
 
-    // 최대 영입 가능 인원 (0 = 무제한)
     private int _maxRecruitCount = 0;
 
     public event Action<List<Student>> OnRecruitmentConfirmed;
@@ -71,7 +64,6 @@ public class RecruitmentPopup : UIPopup
         StartCoroutine(ForceScrollTopRoutine());
     }
 
-    // 영입 후보 카드 생성
     private void SpawnCandidateCards()
     {
         ClearCards();
@@ -114,8 +106,6 @@ public class RecruitmentPopup : UIPopup
         _spawnedCards.Add(cardObj);
     }
 
-    // 카드 클릭: Normal → Placing 토글
-    // 최대 인원 초과 시 경고 팝업
     private void HandleCardClicked(Student student, StudentCard card)
     {
         if (_selectedStudents.Contains(student))
@@ -144,11 +134,18 @@ public class RecruitmentPopup : UIPopup
         return _maxRecruitCount > 0 && _selectedStudents.Count >= _maxRecruitCount;
     }
 
-    // ── UIPopup 팝업들 ──────────────────────────────────────────────
+    // 영입 팝업이 "로비보다 위"에 유지되도록, 오버레이 팝업 띄우기 직전에 최상단으로 올린다.
+    private void BringToFrontForOverlay()
+    {
+        transform.SetAsLastSibling();
+    }
 
-    // 최대 인원 도달 팝업
     private void ShowMaxReachedPopup()
     {
+        if (UIManager.Instance == null) return;
+
+        BringToFrontForOverlay();
+
         UIManager.Instance.ShowPopup(new PopupData(
             title: "최대 인원 도달",
             content: "더 이상 모집이 불가능합니다.",
@@ -157,16 +154,16 @@ public class RecruitmentPopup : UIPopup
                 new PopupButtonInfo("확인", null)
             }
         ));
-        // UIPopup이 위에 표시되도록 자신을 뒤로 이동
-        transform.SetAsFirstSibling();
     }
 
-    // 선택 완료 버튼 → 영입 확인 팝업
     private void HandleCompleteButton()
     {
         if (_selectedStudents.Count == 0) return;
+        if (UIManager.Instance == null) return;
 
         List<Student> snapshot = new(_selectedStudents);
+
+        BringToFrontForOverlay();
 
         UIManager.Instance.ShowPopup(new PopupData(
             title: "학생 영입",
@@ -177,13 +174,15 @@ public class RecruitmentPopup : UIPopup
                 new PopupButtonInfo("확인", () => ShowJoinCompletePopup(snapshot))
             }
         ));
-        // UIPopup이 위에 표시되도록 자신을 뒤로 이동
-        transform.SetAsFirstSibling();
     }
 
-    // 합류 완료 팝업 (학생 목록 없음)
     private void ShowJoinCompletePopup(List<Student> recruits)
     {
+        if (UIManager.Instance == null) return;
+
+        // 여기서도 영입 팝업은 유지된 채, 그 위로 완료 팝업이 한 번 더 뜨는 구조
+        BringToFrontForOverlay();
+
         UIManager.Instance.ShowPopup(new PopupData(
             title: "학생 영입",
             content: "새로운 학생이 팀에 합류했습니다.\n여기 팀 운영에 큰 변화를 불러올 것입니다.",
@@ -191,6 +190,7 @@ public class RecruitmentPopup : UIPopup
             {
                 new PopupButtonInfo("확인", () =>
                 {
+                    // 이 순간에만 영입 팝업을 닫는다.
                     OnRecruitmentConfirmed?.Invoke(recruits);
                     CloseAndDestroy();
                 })
@@ -198,9 +198,12 @@ public class RecruitmentPopup : UIPopup
         ));
     }
 
-    // X 버튼 → 영입 취소 확인 팝업
     private void HandleCloseButton()
     {
+        if (UIManager.Instance == null) return;
+
+        BringToFrontForOverlay();
+
         UIManager.Instance.ShowPopup(new PopupData(
             title: "영입 취소",
             content: "해당 학생 선택을 취소하시겠습니까?",
@@ -214,16 +217,12 @@ public class RecruitmentPopup : UIPopup
                 })
             }
         ));
-        // UIPopup이 위에 표시되도록 자신을 뒤로 이동
-        transform.SetAsFirstSibling();
     }
 
     protected override void OnCloseButtonClicked()
     {
         HandleCloseButton();
     }
-
-    // ── UI 갱신 ─────────────────────────────────────────────────────
 
     private void RefreshHeader()
     {
@@ -248,8 +247,6 @@ public class RecruitmentPopup : UIPopup
                 : $"선택 완료 ({_selectedStudents.Count}명)";
         }
     }
-
-    // ── 공통 유틸 ───────────────────────────────────────────────────
 
     private void CloseAndDestroy()
     {

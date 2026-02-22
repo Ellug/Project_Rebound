@@ -2308,7 +2308,7 @@ PrefabInstance:
     - target: {fileID: 8913316296741631172, guid: df1df13b385a43645b5902ed830013aa, type: 3}
       propertyPath: _imgBackground
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1296495326}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2319,6 +2319,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 7372118617542321803, guid: df1df13b385a43645b5902ed830013aa, type: 3}
   m_PrefabInstance: {fileID: 1296495324}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1296495326 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8208459115265765917, guid: df1df13b385a43645b5902ed830013aa, type: 3}
+  m_PrefabInstance: {fileID: 1296495324}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
 --- !u!1 &1317058960
 GameObject:
   m_ObjectHideFlags: 0
@@ -2351,6 +2362,7 @@ MonoBehaviour:
   _dontDestroyOnLoad: 1
   _canvasRoot: {fileID: 1542067910}
   _masterPopupPrefab: {fileID: 1674150225427852445, guid: 44ae66d0eb2488d428f1d2b1acb9979a, type: 3}
+  _confirmPopupPrefab: {fileID: 5383841626071397101, guid: 839358bec67113f46be13a6c4104ba02, type: 3}
 --- !u!4 &1317058962
 Transform:
   m_ObjectHideFlags: 0

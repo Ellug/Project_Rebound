@@ -34,6 +34,8 @@ public class LobbyUI : UIBase
     [Header("Test")]
     [SerializeField] private Sprite _testSprite;
 
+    [SerializeField] private RecruitmentManager _recruitmentManager;
+
     private bool _inited;
 
     // 씬에 미리 배치된 경우 Start에서 초기화
@@ -71,6 +73,9 @@ public class LobbyUI : UIBase
                     image: _testSprite,                     // 테스트 이미지
                     buttons: buttons
                 ));
+
+                 if (_recruitmentManager != null)
+            _recruitmentManager.TryStartRecruitment();
             });
         }
         if (_btnSetting != null)
@@ -95,6 +100,8 @@ public class LobbyUI : UIBase
             _btnCoach.onClick.AddListener(() => ShowNotImplemented("감독 노드"));
         if (_btnShop != null)
             _btnShop.onClick.AddListener(() => ShowNotImplemented("상점"));
+
+
     }
 
     private void OnClickTraining()

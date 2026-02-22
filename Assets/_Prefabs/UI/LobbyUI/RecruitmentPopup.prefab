@@ -687,7 +687,7 @@ MonoBehaviour:
   _buttonPrefab: {fileID: 0}
   _closeButton: {fileID: 0}
   _scrollRect: {fileID: 430354150601350267}
-  _txtTitle: {fileID: 2178422988507314994}
+  _txtName: {fileID: 2178422988507314994}
   _txtSelectCount: {fileID: 921101949342847173}
   _btnClose: {fileID: 0}
   _cardRoot: {fileID: 5514716723435341451}
