@@ -598,7 +598,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::StatChangeRow
   _txtStatName: {fileID: 5476888867793168255}
   _txtOriginal: {fileID: 7316233661493014865}
-  _lblOriginal: {fileID: 7316233661493014865}
   _txtChanged: {fileID: 1066551575210815908}
-  _lblChanged: {fileID: 1066551575210815908}
   _arrowIcon: {fileID: 5679709916975137964}

@@ -3,15 +3,10 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-
-// 훈련 결과 팝업 내 학생 1명 행 (Image 3)
 public class TrainingResultStudentRow : MonoBehaviour
 {
     [Header("이름 + 컨디션 행")]
     [SerializeField] private TMP_Text _txtName;
-    // Slider 대신 Image(Filled) 사용 — 클릭/드래그 입력 없음
-    // ConditionGauge (부모) : 배경 이미지
-    // Fill (자식)           : Filled 타입, fillAmount로 게이지 표시, 색상 제어
     [SerializeField] private Image _conditionGaugeBg;   // ConditionGauge 오브젝트
     [SerializeField] private Image _conditionGaugeFill; // Fill 오브젝트 — Image Type: Filled, Fill Method: Horizontal
     [SerializeField] private TMP_Text _txtConditionDelta;   // 우측 컨디션 가감치 (+N / -N)
@@ -44,10 +39,7 @@ public class TrainingResultStudentRow : MonoBehaviour
         RefreshConditionDelta(before, after);
     }
 
-    // 컨디션 게이지 fillAmount와 색상 갱신
-    // 컨디션 게이지 갱신
-    // _conditionGaugeFill(자식 Fill)의 fillAmount와 색상만 제어
-    // _conditionGaugeBg(부모)는 고정 배경이므로 별도 조작 불필요
+
     private void RefreshConditionBar(Student after)
     {
         if (_conditionGaugeFill == null) return;
@@ -56,7 +48,7 @@ public class TrainingResultStudentRow : MonoBehaviour
         _conditionGaugeFill.fillAmount = (float)after.condition / condMax;
     }
 
-    // 컨디션 가감치 텍스트 표시 (+N은 파랑, -N은 빨강, 0이면 숨김)
+    // 컨디션 가감치 텍스트 표시 (+N은 빨강, -N은 파랑, 0이면 숨김)
     private void RefreshConditionDelta(Student before, Student after)
     {
         if (_txtConditionDelta == null) return;
@@ -82,7 +74,7 @@ public class TrainingResultStudentRow : MonoBehaviour
     {
         ClearStatRows();
 
-        List<(string name, int original, int changed)> changes = CollectStatChanges(before, after);
+        List<StatChange> changes = CollectStatChanges(before, after);
 
         if (changes.Count == 0)
         {
@@ -93,7 +85,19 @@ public class TrainingResultStudentRow : MonoBehaviour
         if (_statRowPrefab != null && _statRowContainer != null)
         {
             SafeSetActive(_txtFallback?.gameObject, false);
-            SpawnStatRows(changes);
+
+            foreach (StatChange c in changes)
+            {
+                StatChangeRow row = Instantiate(_statRowPrefab, _statRowContainer);
+
+                if (c.IsFloat)
+                    row.Setup(c.Name, c.OriginalF, c.ChangedF, c.Decimals);
+                else
+                    row.Setup(c.Name, c.OriginalI, c.ChangedI);
+
+                row.gameObject.SetActive(true);
+                _spawnedRows.Add(row);
+            }
         }
         else
         {
@@ -101,35 +105,91 @@ public class TrainingResultStudentRow : MonoBehaviour
         }
     }
 
-    // 변화한 스탯을 StatChangeRow 프리팹으로 하나씩 생성
-    private void SpawnStatRows(List<(string name, int original, int changed)> changes)
+
+    private struct StatChange
     {
-        foreach (var (statName, original, changed) in changes)
-        {
-            StatChangeRow row = Instantiate(_statRowPrefab, _statRowContainer);
-            row.Setup(statName, original, changed);
-            row.gameObject.SetActive(true);
-            _spawnedRows.Add(row);
-        }
+        public string Name;
+
+        public bool IsFloat;
+        public int Decimals;
+
+        public int OriginalI;
+        public int ChangedI;
+
+        public float OriginalF;
+        public float ChangedF;
     }
 
-    // 스탯 변화 수집 (StudentStatTable.csv stat_id 01~05 순서)
-
-    private static List<(string name, int original, int changed)> CollectStatChanges(
-        Student before, Student after)
+    private static List<StatChange> CollectStatChanges(Student before, Student after)
     {
-        var list = new List<(string, int, int)>(5);
+        const float EPS = 0.0001f;
 
-        if (after.mental != before.mental) list.Add(("멘탈", before.mental, after.mental));
-        if (after.shoot != before.shoot) list.Add(("슈팅", before.shoot, after.shoot));
-        if (after.speed != before.speed) list.Add(("속도", before.speed, after.speed));
-        if (after.jump != before.jump) list.Add(("점프력", before.jump, after.jump));
-        if (after.stamina != before.stamina) list.Add(("지구력", before.stamina, after.stamina));
+        var list = new List<StatChange>(8);
+
+        // 컨디션도 변화 행에 포함 (휴식/단체에서 체감됨)
+        if (after.condition != before.condition)
+        {
+            list.Add(new StatChange
+            {
+                Name = "컨디션",
+                IsFloat = false,
+                OriginalI = before.condition,
+                ChangedI = after.condition
+            });
+        }
+
+        // mental은 int로 가정
+        if (after.mental != before.mental)
+        {
+            list.Add(new StatChange
+            {
+                Name = "멘탈",
+                IsFloat = false,
+                OriginalI = before.mental,
+                ChangedI = after.mental
+            });
+        }
+
+        // 아래는 Student의 타입에 따라 수정해야 하는데,
+        // "프로젝트에서 shoot/speed/jump/stamina가 int인 경우" 그대로 동작하고,
+        // "float인 경우"에도 동작하도록 float 경로로 작성.
+
+        AddFloatOrInt(list, "슈팅", before.shoot, after.shoot, EPS);
+        AddFloatOrInt(list, "속도", before.speed, after.speed, EPS);
+        AddFloatOrInt(list, "점프력", before.jump, after.jump, EPS);
+        AddFloatOrInt(list, "지구력", before.stamina, after.stamina, EPS);
 
         return list;
     }
 
-    // 폴백
+    // Student.shoot 등이 int면 자동으로 int 연산 경로로 컴파일되고,
+    // float면 float 경로로 컴파일되도록 오버로드 제공.
+    private static void AddFloatOrInt(List<StatChange> list, string name, int before, int after, float eps)
+    {
+        if (after == before) return;
+
+        list.Add(new StatChange
+        {
+            Name = name,
+            IsFloat = false,
+            OriginalI = before,
+            ChangedI = after
+        });
+    }
+
+    private static void AddFloatOrInt(List<StatChange> list, string name, float before, float after, float eps)
+    {
+        if (Mathf.Abs(after - before) <= eps) return;
+
+        list.Add(new StatChange
+        {
+            Name = name,
+            IsFloat = true,
+            Decimals = 0,
+            OriginalF = before,
+            ChangedF = after
+        });
+    }
 
     private void ShowFallback(string message)
     {
@@ -138,20 +198,28 @@ public class TrainingResultStudentRow : MonoBehaviour
         _txtFallback.text = message;
     }
 
-    // 프리팹 없을 때 스탯 변화를 한 줄 텍스트로 요약
-    private static string BuildFallbackText(List<(string name, int original, int changed)> changes)
+    private static string BuildFallbackText(List<StatChange> changes)
     {
-        var parts = new System.Text.StringBuilder();
-        foreach (var (name, original, changed) in changes)
-        {
-            int delta = changed - original;
-            string sign = delta > 0 ? "+" : "";
-            parts.Append($"{name} {original}→{changed}({sign}{delta})  ");
-        }
-        return parts.ToString().TrimEnd();
-    }
+        var sb = new System.Text.StringBuilder();
 
-    // 정리
+        foreach (StatChange c in changes)
+        {
+            if (c.IsFloat)
+            {
+                float delta = c.ChangedF - c.OriginalF;
+                string sign = delta > 0 ? "+" : "";
+                sb.Append($"{c.Name} {Mathf.RoundToInt(c.OriginalF)}→{Mathf.RoundToInt(c.ChangedF)}({sign}{Mathf.RoundToInt(delta)})  ");
+            }
+            else
+            {
+                int delta = c.ChangedI - c.OriginalI;
+                string sign = delta > 0 ? "+" : "";
+                sb.Append($"{c.Name} {c.OriginalI}→{c.ChangedI}({sign}{delta})  ");
+            }
+        }
+
+        return sb.ToString().TrimEnd();
+    }
 
     private void ClearStatRows()
     {
