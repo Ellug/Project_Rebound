@@ -1,7 +1,8 @@
 ﻿using TMPro;
 using UnityEngine;
 
-// 훈련 결과 팝업 내 스탯 변화 1행
+// 훈련 결과 팝업 내 스탯 변화 1행 (프리팹 컴포넌트)
+// 요구사항: "원래 -> 변화" 라벨/필드 없이, 수치 -> 수치만 표시
 public class StatChangeRow : MonoBehaviour
 {
     [Header("스탯명")]
@@ -13,60 +14,33 @@ public class StatChangeRow : MonoBehaviour
     [Header("변화 수치")]
     [SerializeField] private TMP_Text _txtChanged;
 
-    // int 전용
+    // 공개 API
     public void Setup(string statName, int original, int changed)
     {
-        if (_txtStatName != null)
-            _txtStatName.text = statName;
+        if (_txtStatName != null) _txtStatName.text = statName;
+        if (_txtOriginal != null) _txtOriginal.text = original.ToString();
 
-        if (_txtOriginal != null)
-            _txtOriginal.text = original.ToString();
-
-        if (_txtChanged != null)
-            _txtChanged.text = changed.ToString();
-
-        ApplyChangedColor(changed - original);
+        SetupChangedText(original, changed);
     }
 
-    // float 대응
-    public void Setup(string statName, float original, float changed, int decimals = 0)
-    {
-        if (_txtStatName != null)
-            _txtStatName.text = statName;
-
-        if (_txtOriginal != null)
-            _txtOriginal.text = FormatFloat(original, decimals);
-
-        if (_txtChanged != null)
-            _txtChanged.text = FormatFloat(changed, decimals);
-
-        ApplyChangedColor(changed - original);
-    }
-
-    // 증가/감소 색상 강조
-    private void ApplyChangedColor(float delta)
+    // 변화값 텍스트 및 색상 설정 (증가: 빨강 / 감소: 파랑 / 동일: 회색)
+    private void SetupChangedText(int original, int changed)
     {
         if (_txtChanged == null) return;
 
-        if (delta > 0f)
+        _txtChanged.text = changed.ToString();
+
+        if (changed > original)
         {
             _txtChanged.color = new Color(0.90f, 0.25f, 0.25f); // 빨강
         }
-        else if (delta < 0f)
+        else if (changed < original)
         {
             _txtChanged.color = new Color(0.25f, 0.55f, 1.00f); // 파랑
         }
         else
         {
-            _txtChanged.color = Color.white;
+            _txtChanged.color = Color.gray;
         }
-    }
-
-    private static string FormatFloat(float value, int decimals)
-    {
-        if (decimals <= 0)
-            return Mathf.RoundToInt(value).ToString();
-
-        return value.ToString($"F{decimals}");
     }
 }
