@@ -1232,7 +1232,7 @@ MonoBehaviour:
   _paddingTopWithImage: 100
   _paddingTopNoImage: 40
   _contentImage: {fileID: 0}
-  _txtTitle: {fileID: 0}
+  _txtTitle: {fileID: 4697294983345126648}
   _txtSubContent: {fileID: 0}
   _txtContent: {fileID: 0}
   _buttonGridRoot: {fileID: 0}
@@ -1244,6 +1244,7 @@ MonoBehaviour:
   _txtConditionModifier: {fileID: 4387824663842073557}
   _txtDesc: {fileID: 972888752505486911}
   _btnCancel: {fileID: 6303972239010338143}
+  _txtCancel: {fileID: 4937959074579074949}
   _btnStart: {fileID: 5612330384217949691}
+  _txtStart: {fileID: 2503474150881966671}
   _studentSelectPrefab: {fileID: 5655431246991369327, guid: 2eefce8b8a34e304b82db8b2d577031f, type: 3}
-  _trainingFlow: {fileID: 8313116447302640032, guid: 2872640eb66560844bb5942b4e01d542, type: 3}

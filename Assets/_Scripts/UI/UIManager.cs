@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.InputSystem; // New Input System
 using UnityEngine.SceneManagement;
@@ -45,6 +45,9 @@ public class UIManager : Singleton<UIManager>
         SceneManager.sceneLoaded -= HandleSceneLoaded;
     }
 
+    // 외부에서 캔버스 루트 참조 시 사용 (RecruitmentManager 등)
+    public Transform GetCanvasRoot() => _canvasRoot;
+
     private void HandleBackKey()
     {
         if (_uiStack.Count > 0)
@@ -84,7 +87,7 @@ public class UIManager : Singleton<UIManager>
 
         // 1. 프리팹 생성
         UIPopup popupInstance = Instantiate(popupPrefab, _canvasRoot, false);
-        popupInstance.transform.SetAsLastSibling();
+        popupInstance.transform.SetAsLastSibling(); // 항상 최상단에 표시
 
         // 2. 초기화 및 데이터 주입
         popupInstance.Init();

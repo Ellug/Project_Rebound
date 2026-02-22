@@ -1,69 +1,69 @@
-using UnityEngine;
-
-public class TempTestManager : MonoBehaviour
-{
-    [Header("Å×½ºÆ®¿ë ¿ÀºêÁ§Æ® ¿¬°á")]
-    public StudentCard testCard;
-    public StudentSlot testSlot;
-
-    // ÇöÀç ¼±ÅÃÇØ¼­ ¼Õ¿¡ Áã°í ÀÖ´Â Ä«µå¸¦ ±â¾ïÇÏ´Â º¯¼ö
-    private StudentCard _selectedCard;
-
-    void Start()
-    {
-        // 1. °¡Â¥ µ¥ÀÌÅÍ ÁÖÀÔ
-        Student dummyData = new Student
-        {
-            studentName = "¼­ÅÂ¿õ",
-            grade = 1,
-            positionName = "SF",
-            stamina = 80,
-            shoot = 95,
-            condition = 90
-        };
-        testCard.SetStudentData(dummyData);
-
-        // 2. ÀÌº¥Æ® ±¸µ¶
-        testCard.OnCardClicked += HandleCardClicked;
-        testSlot.OnSlotClicked += HandleSlotClicked;
-    }
-
-    private void HandleCardClicked(StudentCard card)
-    {
-        // µ¿ÀÛ 4: ÀÌ¹Ì ÄÚÆ®¿¡ ¹èÄ¡µÈ ÇĞ»ıÀ» ´Ù½Ã ÅÍÄ¡ÇßÀ» ¶§ (¹èÄ¡ ÇØÁ¦)
-        if (testSlot.AssignedStudent != null && testSlot.AssignedStudent.id == card.StudentData.id)
-        {
-            Debug.Log("[½Ã½ºÅÛ] ¹èÄ¡¸¦ ÇØÁ¦ÇÏ½Ã°Ú½À´Ï±î? -> (¿¹ ¹öÆ°À» ´­·¶´Ù°í °¡Á¤)");
-
-            testSlot.ClearSlot(); // ½½·Ô ºñ¿ì±â
-            card.SetViewState(StudentCard.CardViewState.Normal); // Ä«µå¿¡¼­ '¹èÄ¡ Áß' ÆĞ³Î ²ô±â
-            _selectedCard = null;
-        }
-        // µ¿ÀÛ 2: ¸®½ºÆ®¿¡ ÀÖ´Â ÇĞ»ıÀ» Ã³À½ ÅÍÄ¡ÇßÀ» ¶§
-        else
-        {
-            Debug.Log($"[½Ã½ºÅÛ] {card.StudentData.studentName} ÇĞ»ı ¼±ÅÃµÊ! (ÇÏ´Ü¿¡ Á¤º¸ ÆË¾÷ÀÌ ¶¹´Ù°í °¡Á¤)");
-            _selectedCard = card; // ÀÌ Ä«µå¸¦ ¼±ÅÃ »óÅÂ·Î ±â¾ï
-        }
-    }
-
-    private void HandleSlotClicked(StudentSlot slot)
-    {
-        // µ¿ÀÛ 3: ÇĞ»ıÀ» ¼±ÅÃÇÑ »óÅÂ·Î ºó ½½·ÔÀ» ÅÍÄ¡ÇßÀ» ¶§ (¹èÄ¡ ¿Ï·á)
-        if (_selectedCard != null && slot.IsEmpty)
-        {
-            Debug.Log($"[½Ã½ºÅÛ] {slot.Type} ½½·Ô¿¡ {_selectedCard.StudentData.studentName} ¹èÄ¡ ¿Ï·á!");
-
-            slot.AssignStudent(_selectedCard.StudentData); // ½½·Ô¿¡ µ¥ÀÌÅÍ Àü´Ş
-
-            // ÄÚÆ®¿¡ ¹èÄ¡µÇ¾úÀ¸¹Ç·Î Ä«µåÀÇ »óÅÂ¸¦ '¹èÄ¡ Áß'À¸·Î º¯°æ!
-            _selectedCard.SetViewState(StudentCard.CardViewState.Placing);
-
-            _selectedCard = null; // ¹èÄ¡°¡ ³¡³µÀ¸´Ï ¼ÕÀ» ºñ¿ò
-        }
-        else if (slot.IsEmpty == false)
-        {
-            Debug.Log("[½Ã½ºÅÛ] ÀÌ¹Ì ´Ù¸¥ ÇĞ»ıÀÌ ¹èÄ¡µÈ ½½·ÔÀÔ´Ï´Ù.");
-        }
-    }
-}
+ï»¿//using UnityEngine;
+//
+//public class TempTestManager : MonoBehaviour
+//{
+//    [Header("í…ŒìŠ¤íŠ¸ìš© ì˜¤ë¸Œì íŠ¸ ì—°ê²°")]
+//    public StudentCard testCard;
+//    public StudentSlot testSlot;
+//
+//    // í˜„ì¬ ì„ íƒí•´ì„œ ì†ì— ì¥ê³  ìˆëŠ” ì¹´ë“œë¥¼ ê¸°ì–µí•˜ëŠ” ë³€ìˆ˜
+//    private StudentCard _selectedCard;
+//
+//    void Start()
+//    {
+//        // 1. ê°€ì§œ ë°ì´í„° ì£¼ì…
+//        Student dummyData = new Student
+//        {
+//            studentName = "ì„œíƒœì›…",
+//            grade = 1,
+//            positionName = "SF",
+//            stamina = 80,
+//            shoot = 95,
+//            condition = 90
+//        };
+//        testCard.SetStudentData(dummyData);
+//
+//        // 2. ì´ë²¤íŠ¸ êµ¬ë…
+//        testCard.OnCardClicked += HandleCardClicked;
+//        testSlot.OnSlotClicked += HandleSlotClicked;
+//    }
+//
+//    private void HandleCardClicked(StudentCard card)
+//    {
+//        // ë™ì‘ 4: ì´ë¯¸ ì½”íŠ¸ì— ë°°ì¹˜ëœ í•™ìƒì„ ë‹¤ì‹œ í„°ì¹˜í–ˆì„ ë•Œ (ë°°ì¹˜ í•´ì œ)
+//        if (testSlot.AssignedStudent != null && testSlot.AssignedStudent.id == card.StudentData.id)
+//        {
+//            Debug.Log("[ì‹œìŠ¤í…œ] ë°°ì¹˜ë¥¼ í•´ì œí•˜ì‹œê² ìŠµë‹ˆê¹Œ? -> (ì˜ˆ ë²„íŠ¼ì„ ëˆŒë €ë‹¤ê³  ê°€ì •)");
+//
+//            testSlot.ClearSlot(); // ìŠ¬ë¡¯ ë¹„ìš°ê¸°
+//            card.SetViewState(StudentCard.CardViewState.Normal); // ì¹´ë“œì—ì„œ 'ë°°ì¹˜ ì¤‘' íŒ¨ë„ ë„ê¸°
+//            _selectedCard = null;
+//        }
+//        // ë™ì‘ 2: ë¦¬ìŠ¤íŠ¸ì— ìˆëŠ” í•™ìƒì„ ì²˜ìŒ í„°ì¹˜í–ˆì„ ë•Œ
+//        else
+//        {
+//            Debug.Log($"[ì‹œìŠ¤í…œ] {card.StudentData.studentName} í•™ìƒ ì„ íƒë¨! (í•˜ë‹¨ì— ì •ë³´ íŒì—…ì´ ë–´ë‹¤ê³  ê°€ì •)");
+//            _selectedCard = card; // ì´ ì¹´ë“œë¥¼ ì„ íƒ ìƒíƒœë¡œ ê¸°ì–µ
+//        }
+//    }
+//
+//    private void HandleSlotClicked(StudentSlot slot)
+//    {
+//        // ë™ì‘ 3: í•™ìƒì„ ì„ íƒí•œ ìƒíƒœë¡œ ë¹ˆ ìŠ¬ë¡¯ì„ í„°ì¹˜í–ˆì„ ë•Œ (ë°°ì¹˜ ì™„ë£Œ)
+//        if (_selectedCard != null && slot.IsEmpty)
+//        {
+//            Debug.Log($"[ì‹œìŠ¤í…œ] {slot.Type} ìŠ¬ë¡¯ì— {_selectedCard.StudentData.studentName} ë°°ì¹˜ ì™„ë£Œ!");
+//
+//            slot.AssignStudent(_selectedCard.StudentData); // ìŠ¬ë¡¯ì— ë°ì´í„° ì „ë‹¬
+//
+//            // ì½”íŠ¸ì— ë°°ì¹˜ë˜ì—ˆìœ¼ë¯€ë¡œ ì¹´ë“œì˜ ìƒíƒœë¥¼ 'ë°°ì¹˜ ì¤‘'ìœ¼ë¡œ ë³€ê²½!
+//            _selectedCard.SetViewState(StudentCard.CardViewState.Placing);
+//
+//            _selectedCard = null; // ë°°ì¹˜ê°€ ëë‚¬ìœ¼ë‹ˆ ì†ì„ ë¹„ì›€
+//        }
+//        else if (slot.IsEmpty == false)
+//        {
+//            Debug.Log("[ì‹œìŠ¤í…œ] ì´ë¯¸ ë‹¤ë¥¸ í•™ìƒì´ ë°°ì¹˜ëœ ìŠ¬ë¡¯ì…ë‹ˆë‹¤.");
+//        }
+//    }
+//}
