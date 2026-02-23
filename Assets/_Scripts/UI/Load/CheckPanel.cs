@@ -2,24 +2,36 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class LoadConfirmPanel : MonoBehaviour
+public class CheckPanel : MonoBehaviour
 {
     [SerializeField] private TMP_Text _fileNumText;
     [SerializeField] private TMP_Text _playTimeText;
-    [SerializeField] private Button _checkButtonn;
+    [SerializeField] private Button _checkButton;
     [SerializeField] private Button _cancelButton;
 
     private int _slotIndex;
     private LoadUI _parent;
     private bool _bound;
 
+    void Awake()
+    {
+        gameObject.SetActive(false);
+    }
+
     public void Open(int slotIndex, string playTime, LoadUI parent)
     {
         _slotIndex = slotIndex;
         _parent = parent;
 
-        _fileNumText.text = $"FILE {slotIndex}";
-        _playTimeText.text = playTime;
+        if (_fileNumText != null)
+        {
+            _fileNumText.text = $"FILE {slotIndex}";
+        }
+
+        if (_playTimeText != null)
+        {
+            _playTimeText.text = playTime;
+        }
 
         gameObject.SetActive(true);
         Bind();
@@ -27,29 +39,59 @@ public class LoadConfirmPanel : MonoBehaviour
 
     private void Bind()
     {
-        if (_bound) Unbind();
+        if (_bound)
+        {
+            Unbind();
+        }
 
-        _checkButtonn.onClick.AddListener(OnConfirm);
-        _cancelButton.onClick.AddListener(OnCancel);
+        if (_checkButton != null)
+        {
+            _checkButton.onClick.AddListener(OnConfirm);
+        }
+
+        if (_cancelButton != null)
+        {
+            _cancelButton.onClick.AddListener(OnCancel);
+        }
 
         _bound = true;
     }
 
     private void Unbind()
     {
-        _checkButtonn.onClick.RemoveListener(OnConfirm);
-        _cancelButton.onClick.RemoveListener(OnCancel);
+        if (_checkButton != null)
+        {
+            _checkButton.onClick.RemoveListener(OnConfirm);
+        }
+
+        if (_cancelButton != null)
+        {
+            _cancelButton.onClick.RemoveListener(OnCancel);
+        }
+
         _bound = false;
     }
+
+    private void Close()
+    {
+        Unbind();
+        gameObject.SetActive(false);
+    }
+
 
     private void OnConfirm()
     {
         _parent?.OnClickLoad(_slotIndex);
-        gameObject.SetActive(false);
+        Close();
     }
 
     private void OnCancel()
     {
-        gameObject.SetActive(false);
+        Close();
+    }
+
+    private void OnDestroy()
+    {
+        Unbind();
     }
 }
