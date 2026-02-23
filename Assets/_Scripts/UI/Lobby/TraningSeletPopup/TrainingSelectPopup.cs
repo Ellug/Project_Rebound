@@ -236,7 +236,10 @@ public class TrainingSelectPopup : UIPopup
         {
             if (student == null) continue;
 
-            
+            student.condition -= data.conditionDelta;
+
+            student.condition = Mathf.Max(0, student.condition);
+
             student.shoot += Mathf.RoundToInt(data.shootDelta);
             student.speed += Mathf.RoundToInt(data.speedDelta);
             student.stamina += Mathf.RoundToInt(data.staminaDelta);
