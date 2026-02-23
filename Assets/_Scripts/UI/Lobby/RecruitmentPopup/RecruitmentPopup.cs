@@ -25,6 +25,9 @@ public class RecruitmentPopup : UIPopup
     [SerializeField] private Button _btnComplete;
     [SerializeField] private TMP_Text _txtComplete;
 
+    [Header("Overlays")]
+    [SerializeField] private SelectStudentInfoPopup _studentInfoPopup;
+
     private readonly List<GameObject> _spawnedCards = new();
     private readonly List<Student> _selectedStudents = new();
     private readonly Dictionary<Student, StudentCard> _cardMap = new();
@@ -57,11 +60,16 @@ public class RecruitmentPopup : UIPopup
 
         _selectedStudents.Clear();
         _cardMap.Clear();
+
         SpawnCandidateCards();
         RefreshHeader();
         RefreshCompleteButton();
+    }
 
-        StartCoroutine(ForceScrollTopRoutine());
+    public override void Open()
+    {
+        base.Open();
+        StartCoroutine(ForceScrollTopRoutineSafe());
     }
 
     private void SpawnCandidateCards()
@@ -82,7 +90,9 @@ public class RecruitmentPopup : UIPopup
         }
 
         foreach (Student student in students)
+        {
             CreateCandidateCard(student);
+        }
     }
 
     private void CreateCandidateCard(Student student)
@@ -99,7 +109,8 @@ public class RecruitmentPopup : UIPopup
 
             Student captured = student;
             studentCard.OnCardClicked += card => HandleCardClicked(captured, card);
-            _cardMap[student] = studentCard;
+
+            _cardMap[captured] = studentCard;
         }
 
         cardObj.SetActive(true);
@@ -108,22 +119,75 @@ public class RecruitmentPopup : UIPopup
 
     private void HandleCardClicked(Student student, StudentCard card)
     {
+        if (student == null || card == null) return;
+
         if (_selectedStudents.Contains(student))
         {
-            _selectedStudents.Remove(student);
-            card.SetViewState(StudentCard.CardViewState.Normal);
+            ShowUnselectConfirmPopup(student, card);
+            return;
         }
-        else
-        {
-            if (IsMaxReached())
-            {
-                ShowMaxReachedPopup();
-                return;
-            }
 
-            _selectedStudents.Add(student);
-            card.SetViewState(StudentCard.CardViewState.Placing);
+        if (IsMaxReached())
+        {
+            ShowMaxReachedPopup();
+            return;
         }
+        SelectStudent(student, card);
+        ShowSelectStudentPopup(student);
+    }
+
+    private void ShowSelectStudentPopup(Student student)
+    {
+        if (_studentInfoPopup == null)
+        {
+            Debug.LogWarning("[RecruitmentPopup] _studentInfoPopup이 연결되지 않았습니다.");
+            return;
+        }
+
+        _studentInfoPopup.Init(); // 최초 1회만 하고 싶으면 bool로 가드
+        _studentInfoPopup.Setup("선택한 학생", student, null);
+        _studentInfoPopup.transform.SetAsLastSibling();
+        _studentInfoPopup.Open();
+    }
+
+
+    private void SelectStudent(Student student, StudentCard card)
+    {
+        if (_selectedStudents.Contains(student))
+            return;
+
+        _selectedStudents.Add(student);
+        card.SetViewState(StudentCard.CardViewState.Placing);
+
+        RefreshHeader();
+        RefreshCompleteButton();
+    }
+
+    private void ShowUnselectConfirmPopup(Student student, StudentCard card)
+    {
+        if (UIManager.Instance == null) return;
+
+        UIManager.Instance.ShowPopup(new PopupData(
+            title: "영입 취소",
+            content: "해당 학생 선택을 취소하시겠습니까?",
+            buttons: new List<PopupButtonInfo>
+            {
+                new PopupButtonInfo("취소", null),
+                new PopupButtonInfo("확인", () =>
+                {
+                    UnselectStudent(student, card);
+                })
+            }
+        ));
+    }
+
+    private void UnselectStudent(Student student, StudentCard card)
+    {
+        if (!_selectedStudents.Contains(student))
+            return;
+
+        _selectedStudents.Remove(student);
+        card.SetViewState(StudentCard.CardViewState.Normal);
 
         RefreshHeader();
         RefreshCompleteButton();
@@ -134,17 +198,9 @@ public class RecruitmentPopup : UIPopup
         return _maxRecruitCount > 0 && _selectedStudents.Count >= _maxRecruitCount;
     }
 
-    // 영입 팝업이 "로비보다 위"에 유지되도록, 오버레이 팝업 띄우기 직전에 최상단으로 올린다.
-    private void BringToFrontForOverlay()
-    {
-        transform.SetAsLastSibling();
-    }
-
     private void ShowMaxReachedPopup()
     {
         if (UIManager.Instance == null) return;
-
-        BringToFrontForOverlay();
 
         UIManager.Instance.ShowPopup(new PopupData(
             title: "최대 인원 도달",
@@ -163,8 +219,6 @@ public class RecruitmentPopup : UIPopup
 
         List<Student> snapshot = new(_selectedStudents);
 
-        BringToFrontForOverlay();
-
         UIManager.Instance.ShowPopup(new PopupData(
             title: "학생 영입",
             content: $"선택한 학생 {snapshot.Count}명을 영입하시겠습니까?",
@@ -180,9 +234,6 @@ public class RecruitmentPopup : UIPopup
     {
         if (UIManager.Instance == null) return;
 
-        // 여기서도 영입 팝업은 유지된 채, 그 위로 완료 팝업이 한 번 더 뜨는 구조
-        BringToFrontForOverlay();
-
         UIManager.Instance.ShowPopup(new PopupData(
             title: "학생 영입",
             content: "새로운 학생이 팀에 합류했습니다.\n여기 팀 운영에 큰 변화를 불러올 것입니다.",
@@ -190,7 +241,6 @@ public class RecruitmentPopup : UIPopup
             {
                 new PopupButtonInfo("확인", () =>
                 {
-                    // 이 순간에만 영입 팝업을 닫는다.
                     OnRecruitmentConfirmed?.Invoke(recruits);
                     CloseAndDestroy();
                 })
@@ -202,14 +252,12 @@ public class RecruitmentPopup : UIPopup
     {
         if (UIManager.Instance == null) return;
 
-        BringToFrontForOverlay();
-
         UIManager.Instance.ShowPopup(new PopupData(
             title: "영입 취소",
-            content: "해당 학생 선택을 취소하시겠습니까?",
+            content: "영입을 종료하고 로비로 돌아가시겠습니까?",
             buttons: new List<PopupButtonInfo>
             {
-                new PopupButtonInfo("포기", null),
+                new PopupButtonInfo("취소", null),
                 new PopupButtonInfo("확인", () =>
                 {
                     OnCancelled?.Invoke();
@@ -252,8 +300,10 @@ public class RecruitmentPopup : UIPopup
     {
         OnRecruitmentConfirmed = null;
         OnCancelled = null;
+
         _selectedStudents.Clear();
         _cardMap.Clear();
+
         ClearCards();
         Close();
         Destroy(gameObject);
@@ -275,6 +325,26 @@ public class RecruitmentPopup : UIPopup
         ForceScrollTop();
 
         yield return null;
+        Canvas.ForceUpdateCanvases();
+        ForceScrollTop();
+    }
+
+    private IEnumerator ForceScrollTopRoutineSafe()
+    {
+        // 활성화 보장
+        yield return null;
+
+        if (!isActiveAndEnabled)
+            yield break;
+
+        Canvas.ForceUpdateCanvases();
+        ForceScrollTop();
+
+        yield return null;
+
+        if (!isActiveAndEnabled)
+            yield break;
+
         Canvas.ForceUpdateCanvases();
         ForceScrollTop();
     }
