@@ -1,39 +1,103 @@
-using System;
+ï»¿using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class StudentSlot : MonoBehaviour, IPointerClickHandler
 {
     public enum SlotType
     {
         WaitList,
-        StartingMember,
+        FieldPosition,
         SubMember
     }
 
     [SerializeField] private SlotType _slotType;
 
-    // ½½·Ô¿¡ ¹èÄ¡µÈ ÇĞ»ı µ¥ÀÌÅÍ¸¦ ÀúÀå
+    [Header("Field Position Only")]
+    [SerializeField] private string _slotPositionName;
+
+    [Header("Recommend Highlight")]
+    [SerializeField] private GameObject _recommendHighlightRoot;
+
+    [Header("Assigned Student Icon")]
+    [SerializeField] private Image _imgAssignedIcon;
+
     private Student _assignedStudent;
+    private Sprite _assignedIconSprite;
+
     public Student AssignedStudent => _assignedStudent;
     public bool IsEmpty => _assignedStudent == null;
     public SlotType Type => _slotType;
+    public string SlotPositionName => _slotPositionName;
+    public Sprite AssignedIconSprite => _assignedIconSprite;
 
-    // ¿ÜºÎ(¸Å´ÏÀú/ÆË¾÷)¿¡¼­ ½½·Ô Å¬¸¯À» °¨ÁöÇÒ ¼ö ÀÖµµ·Ï ÀÌº¥Æ® Á¦°ø
     public event Action<StudentSlot> OnSlotClicked;
 
-    public void AssignStudent(Student student)
+    public bool IsRecommendedFor(Student student)
+    {
+        if (_slotType != SlotType.FieldPosition)
+            return false;
+
+        if (student == null)
+            return false;
+
+        if (string.IsNullOrEmpty(_slotPositionName))
+            return false;
+
+        if (string.IsNullOrEmpty(student.positionName))
+            return false;
+
+        return string.Equals(
+            student.positionName,
+            _slotPositionName,
+            StringComparison.OrdinalIgnoreCase
+        );
+    }
+
+    public void SetRecommendHighlight(bool isOn)
+    {
+        if (_recommendHighlightRoot == null)
+            return;
+
+        if (_recommendHighlightRoot == gameObject)
+            return;
+
+        _recommendHighlightRoot.SetActive(isOn);
+    }
+
+    public void AssignStudent(Student student, Sprite iconSprite)
     {
         _assignedStudent = student;
-        // TODO: ½½·Ô À§¿¡ ÇØ´ç ÇĞ»ıÀÇ ÃÊ»óÈ­ ÀÌ¹ÌÁö¸¦ ¶ç¿ì´Â UI °»½Å ·ÎÁ÷ Ãß°¡
-        Debug.Log($"[StudentSlot] {_slotType} ½½·Ô¿¡ {student.studentName} ¹èÄ¡µÊ.");
+        _assignedIconSprite = iconSprite;
+
+        ApplyAssignedIcon(iconSprite);
+
+        Debug.Log($"[StudentSlot] {_slotPositionName} ìŠ¬ë¡¯ì— {student.studentName} ë°°ì¹˜ë¨.");
     }
 
     public void ClearSlot()
     {
         _assignedStudent = null;
-        // TODO: ½½·Ô ÀÌ¹ÌÁö¸¦ ´Ù½Ã ºóÄ­À¸·Î °»½Å
-        Debug.Log($"[StudentSlot] {_slotType} ½½·Ô ºñ¿öÁü.");
+        _assignedIconSprite = null;
+
+        ApplyAssignedIcon(null);
+
+        Debug.Log($"[StudentSlot] {_slotPositionName} ìŠ¬ë¡¯ ë¹„ì›Œì§.");
+    }
+
+    private void ApplyAssignedIcon(Sprite sprite)
+    {
+        if (_imgAssignedIcon == null)
+            return;
+
+        bool has = sprite != null;
+
+        _imgAssignedIcon.gameObject.SetActive(has);
+        _imgAssignedIcon.sprite = sprite;
+
+        if (has)
+            _imgAssignedIcon.preserveAspect = true;
     }
 
     public void OnPointerClick(PointerEventData eventData)
