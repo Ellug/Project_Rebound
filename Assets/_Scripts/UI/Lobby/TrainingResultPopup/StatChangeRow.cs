@@ -32,11 +32,11 @@ public class StatChangeRow : MonoBehaviour
 
         if (changed > original)
         {
-            _txtChanged.color = new Color(0.90f, 0.25f, 0.25f); // 빨강
+            _txtChanged.color = new Color(0.25f, 0.55f, 1.00f); // 파랑
         }
         else if (changed < original)
         {
-            _txtChanged.color = new Color(0.25f, 0.55f, 1.00f); // 파랑
+             _txtChanged.color = new Color(0.90f, 0.25f, 0.25f); // 빨강
         }
         else
         {
