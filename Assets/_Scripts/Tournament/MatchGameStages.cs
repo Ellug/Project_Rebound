@@ -10,7 +10,7 @@ public static class MatchGameStages
         "하프타임",
         "3쿼터",
         "하프타임",
-        "경기 종료"
+        "4쿼터"
     };
 
     // 쿼터 종료 후 이동할 하프타임 스테이지 인덱스 반환
