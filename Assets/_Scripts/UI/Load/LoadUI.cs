@@ -10,12 +10,12 @@ public class LoadUI : MonoBehaviour
 
     // 테스트용 데이터 나중에 세이브 생기면 삭제 예정
     // 나중에 바꿀 때 TestSaveSlotViewData 검색 후 변경 필요 지금은 LoadPrefab에서 사용
-    private List<PlayData> _dummy = new()
-    {
-        new PlayData{ slotIndex=0, school="A", playTime="1:20", saveTime="2026-02-13" },
-        new PlayData{ slotIndex=1, school="B", playTime="2:10", saveTime="2026-02-12" },
-        new PlayData{ slotIndex=2, school="C", playTime="0:40", saveTime="2026-02-11" }
-    };
+    //private List<PlayData> _dummy = new()
+    //{
+    //    new PlayData{ slotIndex=0, school="A", playTime="1:20", saveTime="2026-02-13" },
+    //    new PlayData{ slotIndex=1, school="B", playTime="2:10", saveTime="2026-02-12" },
+    //    new PlayData{ slotIndex=2, school="C", playTime="0:40", saveTime="2026-02-11" }
+    //};
 
     void OnEnable()
     {
