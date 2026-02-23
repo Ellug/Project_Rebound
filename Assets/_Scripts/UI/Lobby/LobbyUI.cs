@@ -20,6 +20,7 @@ public class LobbyUI : UIBase
 
     [Header("Popups")]
     [SerializeField] private TrainingSelectPopup _trainingSelectPopup; // 씬에 배치된 훈련 선택 팝업 (직접 참조)
+    [SerializeField] private StudentManagementPopup _studentManagementPopup; // 씬에 배치된 학생 관리 팝업(비활성화 상태)
 
     [Header("Center Message")]
     [SerializeField] private TMP_Text _txtMessage;
@@ -37,6 +38,7 @@ public class LobbyUI : UIBase
     [SerializeField] private RecruitmentManager _recruitmentManager;
 
     private bool _inited;
+    private bool _isLobbyInited;
 
     // 씬에 미리 배치된 경우 Start에서 초기화
     void Start()
@@ -46,6 +48,9 @@ public class LobbyUI : UIBase
 
     public override void Init()
     {
+        if (_isLobbyInited) return;
+        _isLobbyInited = true;
+
         base.Init();
         BindEvents();
         UpdateUI(); // 초기 데이터 표시
@@ -137,17 +142,23 @@ public class LobbyUI : UIBase
 
     private void OnClickStudent()
     {
-        var buttons = new List<PopupButtonInfo>
+        if (_studentManagementPopup == null)
         {
-            new PopupButtonInfo("취소", null),
-            new PopupButtonInfo("이동", () => Debug.Log("학생 관리 씬 이동"))
-        };
+            Debug.LogWarning("[LobbyUI] _studentManagementPopup이 null입니다.");
+            return;
+        }
 
-        UIManager.Instance.ShowPopup(new PopupData(
-            title: "학생 관리",
-            content: "학생 관리 메뉴로 이동하시겠습니까?",
-            buttons: buttons
-        ));
+        // 이미 열려 있으면 닫기
+        if (_studentManagementPopup.gameObject.activeSelf)
+        {
+            _studentManagementPopup.Close();
+            return;
+        }
+
+        // 닫혀 있으면 열기
+        _studentManagementPopup.Init();
+        _studentManagementPopup.transform.SetAsLastSibling();
+        _studentManagementPopup.Open();
     }
 
     // 데이터 매니저 등에서 정보를 받아와 UI 갱신
