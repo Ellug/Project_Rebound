@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -14,8 +14,12 @@ public class GameManager : Singleton<GameManager>
     private AlwaysEventManager _alwaysEventManager; // Lobby 씬의 AlwaysEventManager
     private LobbyUI _lobbyUI;                       // Lobby 씬의 LobbyUI
     private TournamentResultUI _tournamentResultUI; // Lobby 씬의 TournamentResultUI
+    private RecruitmentManager _recruitmentManager; // Lobby 씬의 RecruitmentManager
     private GameState _gameState;                   // 이벤트 시스템용 게임 상태
     private bool _isLoadingTournament;              // 토너먼트 씬 로딩 중 플래그
+    private bool _initialRecruitmentTriggered;      // 게임 시작 시 최초 영입 트리거 여부 (중복 방지)
+    private bool _lobbyInitialized;                 // 로비 씬 초기화 완료 여부 (이중 호출 방지)
+    private bool _isNewGame;                        // 새 게임 여부 (SyncFlowState 실행 전에 판단해야 하므로 별도 보관)
 
     private GameFlowData _flowData = GameFlowData.Default;
     private TournamentData _tournamentData = TournamentData.Default;
@@ -68,6 +72,7 @@ public class GameManager : Singleton<GameManager>
     }
 
     // 새 게임 시작 시 모든 상태 초기화 => 타이틀에서 새게임시 실행해야할 듯
+    // GameManager가 로비 씬에만 존재하므로 TryInitializeLobbyFlow 내부에서 자동 처리됨
     public void StartNewGame()
     {
         StudentFactory.ResetUsedNames();
@@ -76,6 +81,7 @@ public class GameManager : Singleton<GameManager>
         if (StudentManager.Instance != null)
             StudentManager.Instance.ClearAllStudents();
 
+        _initialRecruitmentTriggered = false; // 새 게임 시 영입 트리거 초기화
         ClearFlowRuntimeState();
     }
 
@@ -111,8 +117,11 @@ public class GameManager : Singleton<GameManager>
         _alwaysEventManager = null;
         _lobbyUI = null;
         _tournamentResultUI = null;
+        _recruitmentManager = null;
         _gameState = null;
         _isLoadingTournament = false;
+        _lobbyInitialized = false; // 로비 초기화 플래그 리셋
+        _isNewGame = false;
 
         _flowData.Clear();
         _tournamentData.Clear();
@@ -209,11 +218,21 @@ public class GameManager : Singleton<GameManager>
         return (nextLeagueDate.Date - _turnManager.DateManager.CurrentDate.Date).Days;
     }
 
-    // Lobby 씬 로드 시 턴 흐름 초기화/복원 (9단계)
+    // Lobby 씬 로드 시 턴 흐름 초기화/복원 (10단계)
+    // _lobbyInitialized 플래그로 Start/OnSceneLoaded 이중 호출 방지
     private void TryInitializeLobbyFlow(Scene scene)
     {
         if (!scene.IsValid() || scene.name != LobbyScene)
             return;
+
+        if (_lobbyInitialized) return; // 이중 호출 방지
+        _lobbyInitialized = true;
+
+        // SyncFlowStateFromLobby 실행 전에 새 게임 여부를 먼저 저장
+        _isNewGame = !_flowData.HasFlowState;
+
+        if (_isNewGame)
+            ResetNewGameState();
 
         CacheSceneReferences();         // 1. 씬 오브젝트 참조 캐싱
         SubscribeTurnManager();         // 2. TurnManager 이벤트 구독
@@ -222,8 +241,22 @@ public class GameManager : Singleton<GameManager>
         InitializeEventManager();       // 5. EventManager 초기화
         SetInitialPhase();              // 6. 초기 페이즈 설정
         HandleTournamentResult();       // 7. 토너먼트 결과 처리
-        SyncFlowStateFromLobby();       // 8. GameFlowData 동기화
+        SyncFlowStateFromLobby();       // 8. GameFlowData 동기화 (이후 HasFlowState = true)
         RefreshLobbyTopInfo();          // 9. 로비 UI 갱신
+        TryTriggerInitialRecruitment(); // 10. 게임 시작 시 최초 영입 트리거
+    }
+
+    // 새 게임 상태 초기화
+    // GameManager가 타이틀 씬에 없으므로 로비 씬 최초 진입 시점에 처리
+    private void ResetNewGameState()
+    {
+        StudentFactory.ResetUsedNames();
+        StudentFactory.ResetStudentIdCounter();
+
+        if (StudentManager.Instance != null)
+            StudentManager.Instance.ClearAllStudents();
+
+        _initialRecruitmentTriggered = false;
     }
 
     // Lobby 씬 오브젝트 참조 캐싱
@@ -234,6 +267,7 @@ public class GameManager : Singleton<GameManager>
         _alwaysEventManager = FindFirstObjectByType<AlwaysEventManager>();
         _lobbyUI = FindFirstObjectByType<LobbyUI>();
         _tournamentResultUI = FindFirstObjectByType<TournamentResultUI>(FindObjectsInactive.Include);
+        _recruitmentManager = FindFirstObjectByType<RecruitmentManager>(); // 영입 매니저 참조
         _isLoadingTournament = false;
     }
 
@@ -320,6 +354,18 @@ public class GameManager : Singleton<GameManager>
 
         if (_tournamentResultUI != null)
             _tournamentResultUI.ShowResult(tournamentResultData);
+    }
+
+    // 게임 시작 시 최초 영입 트리거
+    // _isNewGame 플래그로 판단 (SyncFlowStateFromLobby 이후에도 새 게임 여부 유지)
+    private void TryTriggerInitialRecruitment()
+    {
+        if (_initialRecruitmentTriggered) return;   // 이미 트리거됨
+        if (!_isNewGame) return;                     // 새 게임이 아님 (씬 복귀)
+        if (_recruitmentManager == null) return;
+
+        _initialRecruitmentTriggered = true;
+        _recruitmentManager.TriggerInitialRecruitment();
     }
 
     // 턴 완료 시 호출되는 이벤트 핸들러

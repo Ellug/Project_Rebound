@@ -37,7 +37,6 @@ public class TrainingFlowController : MonoBehaviour
             return;
         }
 
-        // before 스냅샷
         List<TrainingResult> results = new List<TrainingResult>(students.Count);
         foreach (Student student in students)
         {
@@ -80,12 +79,15 @@ public class TrainingFlowController : MonoBehaviour
     private IEnumerator ProgressRoutine(float targetFill01, Action<float> onTick, Action onDone)
     {
         float elapsed = 0f;
+
         while (elapsed < _fillDuration)
         {
             elapsed += Time.deltaTime;
+
             float t = Mathf.Clamp01(elapsed / _fillDuration);
             float eased = 1f - Mathf.Pow(1f - t, 3f);
             float fill = eased * Mathf.Clamp01(targetFill01);
+
             onTick?.Invoke(fill);
             yield return null;
         }
@@ -106,24 +108,21 @@ public class TrainingFlowController : MonoBehaviour
         if (_progressUI != null)
             _progressUI.Hide();
 
-        // 스탯 적용
         if (applyEffect != null)
             applyEffect.Invoke(trainingKey, students);
         else
-            ApplyTempEffect(trainingKey, students);
+            Debug.LogWarning("[TrainingFlowController] applyEffect가 null이라 스탯 적용을 건너뜁니다.");
 
-        // 결과 표시
         ShowResultPopup(trainingName, results);
 
         _running = null;
     }
 
-    // TrainingFlowController.cs
     private void ShowResultPopup(string trainingName, List<TrainingResult> results)
     {
         if (_resultPopup == null)
         {
-            Debug.LogError("TrainingResultPopup 참조가 없습니다.");
+            Debug.LogError("[TrainingFlowController] TrainingResultPopup 참조가 없습니다.");
             OnFlowComplete?.Invoke();
             return;
         }
@@ -132,36 +131,16 @@ public class TrainingFlowController : MonoBehaviour
         _resultPopup.Setup(trainingName, results);
         _resultPopup.Open();
 
-        // 누적 방지
         _resultPopup.OnConfirm -= HandlePopupConfirm;
         _resultPopup.OnConfirm += HandlePopupConfirm;
     }
 
     private void HandlePopupConfirm()
     {
-        _resultPopup.OnConfirm -= HandlePopupConfirm;
+        if (_resultPopup != null)
+            _resultPopup.OnConfirm -= HandlePopupConfirm;
+
         OnFlowComplete?.Invoke();
-    }
-
-
-    private void ApplyTempEffect(string trainingKey, List<Student> students)
-    {
-        foreach (Student student in students)
-        {
-            switch (trainingKey)
-            {
-                case "group_weight": student.jump += 2; break;
-                case "group_shuttle": student.speed += 2; break;
-                case "group_tactics": student.jump += 1; break;
-                case "personal_shooting": student.shoot += 1; break;
-                case "personal_postup": student.shoot += 1; student.jump += 1; break;
-                case "personal_defense": student.jump += 1; break;
-                case "personal_handling": student.speed += 1; student.jump += 1; break;
-            }
-
-            if (StudentManager.Instance != null)
-                StudentManager.Instance.NotifyStudentModified(student);
-        }
     }
 
     private Student SnapshotStudent(Student original)
