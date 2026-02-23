@@ -640,7 +640,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &8123722422163413692
 RectTransform:
   m_ObjectHideFlags: 0
@@ -694,6 +694,7 @@ MonoBehaviour:
   _cardPrefab: {fileID: 27691284790498517, guid: 47493739c6c80c543856a14b66e45b4b, type: 3}
   _btnComplete: {fileID: 3906567063632620358}
   _txtComplete: {fileID: 2896457537139910420}
+  _studentInfoPopup: {fileID: 0}
 --- !u!1 &6211590148238264532
 GameObject:
   m_ObjectHideFlags: 0
