@@ -825,7 +825,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &653458733751462416
 RectTransform:
   m_ObjectHideFlags: 0
@@ -873,7 +873,7 @@ MonoBehaviour:
   _closeButton: {fileID: 0}
   _txtTrainingName: {fileID: 0}
   _rowContainer: {fileID: 5864692297516954995}
-  _rowPrefab: {fileID: 5324160979007333858, guid: 539fefc7057ed7d46a2d92ab34d1f3e2, type: 3}
+  _rowPrefab: {fileID: 3784909286202848375, guid: ea2924cb6549a374f83ef1a2f713abb6, type: 3}
   _btnConfirm: {fileID: 1230122939108499621}
 --- !u!1 &9025431560022641814
 GameObject:

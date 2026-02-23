@@ -6,8 +6,6 @@ using UnityEngine.UI;
 using TMPro;
 
 // 학생 선택 팝업
-// 기존 팀원 코드(ScrollRect, CardRoot, CardPrefab, BtnClose) 구조 유지
-// 학생 카드 프리팹 완성 전까지 임시 버튼으로 테스트 가능
 public class StudentSelectPopup : UIPopup
 {
     [Header("Scroll")]
@@ -17,46 +15,38 @@ public class StudentSelectPopup : UIPopup
     [SerializeField] private Button _btnClose;
 
     [Header("Card")]
-    [SerializeField] private Transform _cardRoot;       // Content (GridLayoutGroup)
-    [SerializeField] private GameObject _cardPrefab;    // 학생 카드 프리팹 (없으면 임시 버튼 생성)
+    [SerializeField] private Transform _cardRoot;
+    [SerializeField] private GameObject _cardPrefab;
 
     [Header("Complete Button")]
-    [SerializeField] private Button _btnComplete;       // 선택 완료 버튼 (기본 비활성화)
-    [SerializeField] private TMP_Text _txtComplete;     // 완료 버튼 텍스트
+    [SerializeField] private Button _btnComplete;
+    [SerializeField] private TMP_Text _txtComplete;
 
-    // 생성된 카드 오브젝트 목록
+    // 열릴 때 ShowStats(Image 2) 로 시작할지 여부 (false = Normal(Image 1) 기본)
+    [Header("View Settings")]
+    [SerializeField] private bool _showStatsOnOpen = false;
+
     private readonly List<GameObject> _spawnedCards = new List<GameObject>();
-
-    // 선택된 학생 목록
     private readonly List<Student> _selectedStudents = new List<Student>();
+    private readonly Dictionary<Student, StudentCard> _cardMap = new Dictionary<Student, StudentCard>();
 
-    // 최대 선택 인원 (0이면 무제한)
-    // private int _maxSelectableCount = 0;
-
-    // 선택/해제 시각적 표현을 위한 매핑
-    private readonly Dictionary<Student, GameObject> _studentCardMap = new Dictionary<Student, GameObject>();
-
-    // 최대 선택 가능 인원 (0이면 무제한)
     private int _maxSelectCount = 0;
 
-    // 이벤트
     public event Action<List<Student>> OnSelectionConfirmed;
     public event Action OnCancelled;
 
-    // 최대 선택 인원 설정 (Init 전에 호출)
-    public void SetMaxSelectableCount(int count)
-    {
-        _maxSelectCount = Mathf.Max(0, count);
-    }
-
-    // 기존 프로퍼티 유지
     public Transform CardRoot => _cardRoot;
     public GameObject CardPrefab => _cardPrefab;
 
-    // 최대 선택 인원 설정 (Init 전에 호출)
     public void SetMaxSelectCount(int max)
     {
-        _maxSelectCount = max;
+        _maxSelectCount = Mathf.Max(0, max);
+    }
+
+    // 기존 호환용
+    public void SetMaxSelectableCount(int count)
+    {
+        SetMaxSelectCount(count);
     }
 
     public override void Init()
@@ -80,9 +70,9 @@ public class StudentSelectPopup : UIPopup
         }
 
         _selectedStudents.Clear();
-        _studentCardMap.Clear();
+        _cardMap.Clear();
         SpawnCards();
-        UpdateCompleteButton();
+        RefreshCompleteButton();
 
         StartCoroutine(ForceScrollTopRoutine());
     }
@@ -106,47 +96,44 @@ public class StudentSelectPopup : UIPopup
         }
 
         foreach (Student student in students)
-        {
-            GameObject cardObj = CreateCard(student);
-            _spawnedCards.Add(cardObj);
-            _studentCardMap[student] = cardObj;
-        }
+            CreateCard(student);
     }
 
     // 카드 생성 (프리팹 있으면 사용, 없으면 임시 버튼)
-    private GameObject CreateCard(Student student)
+    private void CreateCard(Student student)
     {
         GameObject cardObj;
+        StudentCard studentCard = null;
 
         if (_cardPrefab != null)
         {
-            // 팀원이 만든 카드 프리팹 사용
             cardObj = Instantiate(_cardPrefab, _cardRoot);
+            studentCard = cardObj.GetComponent<StudentCard>();
 
-            // StudentCard 컴포넌트가 있으면 데이터 세팅
-            StudentCard studentCard = cardObj.GetComponent<StudentCard>();
             if (studentCard != null)
             {
                 studentCard.SetStudentData(student);
+                studentCard.SetViewState(_showStatsOnOpen
+                    ? StudentCard.CardViewState.ShowStats
+                    : StudentCard.CardViewState.Normal);
+
+                Student captured = student;
+                studentCard.OnCardClicked += card => HandleCardClicked(captured, card);
+                _cardMap[student] = studentCard;
             }
         }
         else
         {
-            // 임시 테스트 카드 생성
             cardObj = CreateTempCard(student);
+
+            Button btn = cardObj.GetComponent<Button>() ?? cardObj.AddComponent<Button>();
+            Student captured = student;
+            btn.onClick.RemoveAllListeners();
+            btn.onClick.AddListener(() => HandleTempCardClicked(captured));
         }
 
-        // 선택 기능 추가 (버튼 클릭 시 토글)
-        Button btn = cardObj.GetComponent<Button>();
-        if (btn == null)
-            btn = cardObj.AddComponent<Button>();
-
-        Student captured = student;
-        btn.onClick.RemoveAllListeners();
-        btn.onClick.AddListener(() => HandleCardClicked(captured));
-
         cardObj.SetActive(true);
-        return cardObj;
+        _spawnedCards.Add(cardObj);
     }
 
     // 임시 테스트 카드 (프리팹 없을 때)
@@ -155,15 +142,12 @@ public class StudentSelectPopup : UIPopup
         GameObject cardObj = new GameObject($"Card_{student.studentName}");
         cardObj.transform.SetParent(_cardRoot, false);
 
-        // RectTransform
         RectTransform rt = cardObj.AddComponent<RectTransform>();
         rt.sizeDelta = new Vector2(160f, 200f);
 
-        // 배경 이미지
         Image bg = cardObj.AddComponent<Image>();
         bg.color = new Color(0.85f, 0.85f, 0.85f, 1f);
 
-        // 이름 텍스트
         GameObject txtObj = new GameObject("TxtName");
         txtObj.transform.SetParent(cardObj.transform, false);
         RectTransform txtRt = txtObj.AddComponent<RectTransform>();
@@ -182,48 +166,69 @@ public class StudentSelectPopup : UIPopup
         return cardObj;
     }
 
-    // 카드 클릭 (토글 선택)
-    private void HandleCardClicked(Student student)
+    // StudentCard 프리팹 방식 클릭 처리 — Normal ↔ ShowStats 토글
+    private void HandleCardClicked(Student student, StudentCard card)
     {
         if (_selectedStudents.Contains(student))
         {
-            // 선택 해제
             _selectedStudents.Remove(student);
-            SetCardSelected(student, false);
+            card.SetViewState(StudentCard.CardViewState.Normal);
         }
         else
         {
-            // 최대 인원 체크 (0이면 무제한)
             if (_maxSelectCount > 0 && _selectedStudents.Count >= _maxSelectCount)
             {
                 Debug.Log($"[StudentSelectPopup] 최대 {_maxSelectCount}명까지 선택 가능");
                 return;
             }
 
-            // 선택
             _selectedStudents.Add(student);
-            SetCardSelected(student, true);
+            card.SetViewState(StudentCard.CardViewState.ShowStats);
         }
 
-        UpdateCompleteButton();
+        RefreshCompleteButton();
     }
 
-    // 카드 선택 시각 표현
-    private void SetCardSelected(Student student, bool selected)
+    // 임시 카드 클릭 처리 (배경색으로 선택 표시)
+    private void HandleTempCardClicked(Student student)
     {
-        if (!_studentCardMap.TryGetValue(student, out GameObject cardObj)) return;
-
-        Image bg = cardObj.GetComponent<Image>();
-        if (bg != null)
+        if (_selectedStudents.Contains(student))
         {
-            bg.color = selected
-                ? new Color(0.4f, 0.6f, 1f, 1f)   // 선택: 파란색
-                : new Color(0.85f, 0.85f, 0.85f, 1f); // 미선택: 회색
+            _selectedStudents.Remove(student);
+            SetTempCardColor(student, false);
+        }
+        else
+        {
+            if (_maxSelectCount > 0 && _selectedStudents.Count >= _maxSelectCount)
+                return;
+
+            _selectedStudents.Add(student);
+            SetTempCardColor(student, true);
+        }
+
+        RefreshCompleteButton();
+    }
+
+    // 임시 카드 선택 시각 표현
+    private void SetTempCardColor(Student student, bool selected)
+    {
+        foreach (Transform child in _cardRoot)
+        {
+            if (child.name != $"Card_{student.studentName}") continue;
+
+            Image bg = child.GetComponent<Image>();
+            if (bg != null)
+            {
+                bg.color = selected
+                    ? new Color(0.4f, 0.6f, 1f, 1f)
+                    : new Color(0.85f, 0.85f, 0.85f, 1f);
+            }
+            break;
         }
     }
 
-    // 선택 완료 버튼 (1명 이상 선택 시 활성화)
-    private void UpdateCompleteButton()
+    // 선택 완료 버튼 표시 상태 갱신 (1명 이상 선택 시 활성화)
+    private void RefreshCompleteButton()
     {
         bool hasSelection = _selectedStudents.Count > 0;
 
@@ -232,10 +237,9 @@ public class StudentSelectPopup : UIPopup
 
         if (_txtComplete != null && hasSelection)
         {
-            if (_maxSelectCount > 0)
-                _txtComplete.text = $"선택 완료 ({_selectedStudents.Count}/{_maxSelectCount})";
-            else
-                _txtComplete.text = $"선택 완료 ({_selectedStudents.Count}명)";
+            _txtComplete.text = _maxSelectCount > 0
+                ? $"선택 완료 ({_selectedStudents.Count}/{_maxSelectCount})"
+                : $"선택 완료 ({_selectedStudents.Count}명)";
         }
     }
 
@@ -264,7 +268,7 @@ public class StudentSelectPopup : UIPopup
         OnSelectionConfirmed = null;
         OnCancelled = null;
         _selectedStudents.Clear();
-        _studentCardMap.Clear();
+        _cardMap.Clear();
         ClearCards();
         Close();
         Destroy(gameObject);

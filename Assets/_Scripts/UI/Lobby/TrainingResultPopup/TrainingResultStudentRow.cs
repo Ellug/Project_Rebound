@@ -1,24 +1,176 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
+﻿using System.Collections.Generic;
 using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
 
-// 훈련 결과 팝업 내 학생 1줄 (이름 + 스탯 변화)
-// 프리팹은 학생 카드 프리팹 완성 후 제작 예정
-// 현재는 인터페이스만 정의
 public class TrainingResultStudentRow : MonoBehaviour
 {
-    [Header("Student Info")]
-    [SerializeField] private TMP_Text _txtName;          // 학생 이름
+    [Header("이름 + 컨디션 행")]
+    [SerializeField] private TMP_Text _txtName;
 
-    [Header("Stat Row (프리팹화 예정)")]
-    [SerializeField] private TMP_Text _txtStatName;      // 스탯 이름 ("슈팅")
-    [SerializeField] private TMP_Text _txtOriginal;      // 원래 스탯 ("50")
-    [SerializeField] private TMP_Text _txtChanged;       // 변화 스탯 ("52")
-    [SerializeField] private Slider _statBar;            // 스탯 바 (선택사항)
+    [SerializeField] private Image _conditionGaugeFill; // 회색(기존치)
+    [SerializeField] private Image _deltaFill;          // 증감치(빨강/파랑)
+    [SerializeField] private TMP_Text _txtConditionDelta;
+
+    [Header("스탯 변화 행")]
+    [SerializeField] private Transform _statRowContainer;
+    [SerializeField] private StatChangeRow _statRowPrefab;
+
+    [Header("폴백 텍스트")]
+    [SerializeField] private TMP_Text _txtFallback;
+
+    private readonly List<StatChangeRow> _spawnedRows = new();
 
     public void Setup(Student before, Student after)
     {
+        SetupNameAndCondition(before, after);
+        SetupStatChangeRows(before, after);
+    }
+
+    private void SetupNameAndCondition(Student before, Student after)
+    {
         if (_txtName != null)
             _txtName.text = after.studentName;
+
+        RefreshConditionBar3Layer(before, after);
+        RefreshConditionDelta(before, after);
+    }
+
+    private void RefreshConditionBar3Layer(Student before, Student after)
+    {
+        if (_conditionGaugeFill == null || _deltaFill == null)
+            return;
+
+        int beforeValue = Mathf.Max(0, before.condition);
+        int afterValue = Mathf.Max(0, after.condition);
+
+        int condMax = GetConditionMax(beforeValue, afterValue);
+
+        float before01 = Mathf.Clamp01((float)beforeValue / condMax);
+        float after01 = Mathf.Clamp01((float)afterValue / condMax);
+
+        // 회색 = 기존치
+        _conditionGaugeFill.fillAmount = before01;
+
+        // 증감치 오버레이
+        int delta = afterValue - beforeValue;
+
+        if (delta == 0)
+        {
+            _deltaFill.gameObject.SetActive(false);
+            return;
+        }
+
+        _deltaFill.gameObject.SetActive(true);
+
+        // 증가(빨강): before~after 구간만큼 덮기
+        if (delta > 0)
+        {
+            _deltaFill.color = new Color(0.90f, 0.25f, 0.25f); // 빨강
+            _deltaFill.fillAmount = after01;
+        }
+        else
+        {
+            _deltaFill.color = new Color(0.25f, 0.55f, 1.00f); // 파랑
+            _deltaFill.fillAmount = before01;
+        }
+    }
+
+    
+    private static int GetConditionMax(int beforeValue, int afterValue)
+    {
+        int v = Mathf.Max(beforeValue, afterValue, 100);
+        int rounded = ((v + 9) / 10) * 10;   // 10단위 올림
+        return Mathf.Max(rounded, 1);
+    }
+
+    private void RefreshConditionDelta(Student before, Student after)
+    {
+        if (_txtConditionDelta == null) return;
+
+        int delta = after.condition - before.condition;
+
+        if (delta == 0)
+        {
+            _txtConditionDelta.gameObject.SetActive(false);
+            return;
+        }
+
+        _txtConditionDelta.gameObject.SetActive(true);
+        _txtConditionDelta.text = delta > 0 ? $"+{delta}" : delta.ToString();
+        _txtConditionDelta.color = delta > 0
+            ? new Color(0.90f, 0.25f, 0.25f)   // 빨강
+            : new Color(0.25f, 0.55f, 1.00f);  // 파랑
+    }
+
+    private void SetupStatChangeRows(Student before, Student after)
+    {
+        ClearStatRows();
+
+        var changes = CollectStatChanges(before, after);
+
+        if (changes.Count == 0)
+        {
+            ShowFallback("변화 없음");
+            return;
+        }
+
+        if (_statRowPrefab != null && _statRowContainer != null)
+        {
+            if (_txtFallback != null) _txtFallback.gameObject.SetActive(false);
+
+            foreach (var (statName, original, changed) in changes)
+            {
+                StatChangeRow row = Instantiate(_statRowPrefab, _statRowContainer);
+                row.Setup(statName, original, changed);
+                row.gameObject.SetActive(true);
+                _spawnedRows.Add(row);
+            }
+        }
+        else
+        {
+            ShowFallback(BuildFallbackText(changes));
+        }
+    }
+
+    private static List<(string name, int original, int changed)> CollectStatChanges(Student before, Student after)
+    {
+        var list = new List<(string, int, int)>(5);
+
+        if (after.mental != before.mental) list.Add(("멘탈", before.mental, after.mental));
+        if (after.shoot != before.shoot) list.Add(("슈팅", before.shoot, after.shoot));
+        if (after.speed != before.speed) list.Add(("속도", before.speed, after.speed));
+        if (after.jump != before.jump) list.Add(("점프력", before.jump, after.jump));
+        if (after.stamina != before.stamina) list.Add(("지구력", before.stamina, after.stamina));
+
+        return list;
+    }
+
+    private void ShowFallback(string message)
+    {
+        if (_txtFallback == null) return;
+        _txtFallback.gameObject.SetActive(true);
+        _txtFallback.text = message;
+    }
+
+    private static string BuildFallbackText(List<(string name, int original, int changed)> changes)
+    {
+        var sb = new System.Text.StringBuilder();
+        foreach (var (name, original, changed) in changes)
+        {
+            int d = changed - original;
+            string sign = d > 0 ? "+" : "";
+            sb.Append($"{name} {original}→{changed}({sign}{d})  ");
+        }
+        return sb.ToString().TrimEnd();
+    }
+
+    private void ClearStatRows()
+    {
+        foreach (var row in _spawnedRows)
+        {
+            if (row != null) Destroy(row.gameObject);
+        }
+        _spawnedRows.Clear();
     }
 }
