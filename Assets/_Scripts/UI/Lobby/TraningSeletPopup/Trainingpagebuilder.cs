@@ -5,18 +5,20 @@ using UnityEngine;
 // SO는 페이지 타이틀과 commandIndices만 관리, 버튼 데이터는 CSV 기준으로 자동 생성
 public static class TrainingPageBuilder
 {
-    public static void Build(TrainingPageData pageData, GrowthCommandTableSO table)
+    public static bool Build(TrainingPageData pageData, GrowthCommandTableSO table)
     {
         if (pageData == null || table == null)
         {
             Debug.LogWarning("[TrainingPageBuilder] pageData 또는 table이 null입니다.");
-            return;
+            return false;
         }
 
         if (pageData.pages == null || pageData.pages.Count == 0)
             BuildAutoPages(pageData, table);
         else
             FillButtonsIntoPages(pageData, table);
+
+        return true;
     }
 
     // SO가 비어있을 때 : CSV parent_index 구조 기준으로 자동 생성

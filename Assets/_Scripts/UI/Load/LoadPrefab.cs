@@ -16,7 +16,7 @@ public class LoadPrefab : MonoBehaviour
     private LoadUI _parent;
     private bool _bound;
 
-    public void Initialize(TestSaveSlotViewData data, LoadUI parent)
+    public void Initialize(PlayData data, LoadUI parent)
     {
         _slotIndex = data.slotIndex;
         _parent = parent;

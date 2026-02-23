@@ -46,40 +46,25 @@ public class TrainingSelectPopup : UIPopup
 
     public override void Open()
     {
-        BuildPageDataFromTable();
+        if (!TryBuildPageDataFromCache()) return;
+
         base.Open();
     }
 
-    private void BuildPageDataFromTable()
+    private bool TryBuildPageDataFromCache()
     {
-        GrowthCommandTableSO table = CachedSOData.GrowthCommandTable;
-
-#if UNITY_EDITOR
-        if (table == null)
-        {
-            const string assetPath = "Assets/_Scripts/SO/SO_GrowthCommandTable.asset";
-            table = UnityEditor.AssetDatabase.LoadAssetAtPath<GrowthCommandTableSO>(assetPath);
-
-            if (table != null)
-                Debug.Log("[TrainingSelectPopup] 에디터 직접 실행 감지 — SO를 직접 로드했습니다.");
-            else
-                Debug.LogError("[TrainingSelectPopup] SO 로드 실패 — 경로를 확인하세요: " + assetPath);
-        }
-#endif
-
-        if (table == null)
-        {
-            Debug.LogError("[TrainingSelectPopup] 테이블 미등록 — StartManager 실행 순서 확인 필요");
-            return;
-        }
-
         if (_pageData == null)
         {
             Debug.LogWarning("[TrainingSelectPopup] _pageData SO가 연결되지 않았습니다.");
-            return;
+            return false;
         }
 
-        TrainingPageBuilder.Build(_pageData, table);
+        GrowthCommandTableSO table = CachedSOData.GrowthCommandTable;
+
+        if (!TrainingPageBuilder.Build(_pageData, table))
+            return false;
+
+        return true;
     }
 
     protected override void OnCloseButtonClicked()
