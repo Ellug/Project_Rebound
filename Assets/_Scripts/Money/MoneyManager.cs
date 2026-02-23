@@ -16,6 +16,7 @@ public class MoneyManager : Singleton<MoneyManager>
     public event Action<int> OnGoldChanged;
     public event Action<int> OnReputationChanged;
 
+    // 자금 추가
     public void AddGold(int amount)
     {
         if (amount <= 0)
@@ -27,6 +28,7 @@ public class MoneyManager : Singleton<MoneyManager>
         OnGoldChanged?.Invoke(_gold);
     }
 
+    // 자금 사용
     public bool TrySpendGold(int amount)
     {
         if (amount <= 0)
@@ -44,6 +46,7 @@ public class MoneyManager : Singleton<MoneyManager>
         return true;
     }
 
+    // 명성치 추가
     public void AddReputation(int amount)
     {
         if (amount <= 0)
@@ -55,6 +58,7 @@ public class MoneyManager : Singleton<MoneyManager>
         OnReputationChanged?.Invoke(_reputation);
     }
 
+    // 명성치 사용
     public bool TrySpendReputation(int amount)
     {
         if (amount <= 0)
@@ -72,9 +76,19 @@ public class MoneyManager : Singleton<MoneyManager>
         return true;
     }
 
+    // 자금 초기화
     public void ResetGold()
     {
         _gold = DEFAULT_GOLD;
         OnGoldChanged?.Invoke(_gold);
+    }
+
+    public void ApplySaveData(int gold, int reputation)
+    {
+        _gold = gold;
+        _reputation = reputation;
+
+        OnGoldChanged?.Invoke(_gold);
+        OnReputationChanged?.Invoke(_reputation);
     }
 }

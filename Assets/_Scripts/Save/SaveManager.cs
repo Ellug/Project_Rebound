@@ -16,6 +16,12 @@ public class SaveManager : Singleton<SaveManager>
         }
 
         CurrentData = data;
+
+        if (MoneyManager.Instance != null)
+        {
+            MoneyManager.Instance.ApplySaveData(data.gold, data.reputation);
+        }
+
         SceneManager.LoadScene(sceneName);
     }
 
@@ -31,6 +37,9 @@ public class SaveManager : Singleton<SaveManager>
             Debug.LogWarning("저장할 데이터 없음");
             return;
         }
+
+        CurrentData.gold = MoneyManager.Instance.Gold;
+        CurrentData.reputation = MoneyManager.Instance.Reputation;
 
         SaveSystem.Instance.Save(CurrentData);
     }

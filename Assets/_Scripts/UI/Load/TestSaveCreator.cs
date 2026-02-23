@@ -11,8 +11,8 @@ public class TestSaveCreator : MonoBehaviour
             school = "유니티고",
             playTime = "01:23:45",
             saveTime = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm"),
-            gold = 500,
-            reputation = 2
+            gold = MoneyManager.Instance.Gold,
+            reputation = MoneyManager.Instance.Reputation
         };
 
         SaveSystem.Instance.Save(data);
