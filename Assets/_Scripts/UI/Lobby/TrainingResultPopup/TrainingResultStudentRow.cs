@@ -49,39 +49,41 @@ public class TrainingResultStudentRow : MonoBehaviour
         float before01 = Mathf.Clamp01((float)beforeValue / condMax);
         float after01 = Mathf.Clamp01((float)afterValue / condMax);
 
-        // 회색 = 기존치
-        _conditionGaugeFill.fillAmount = before01;
-
-        // 증감치 오버레이
         int delta = afterValue - beforeValue;
 
         if (delta == 0)
         {
             _deltaFill.gameObject.SetActive(false);
+
+            _conditionGaugeFill.fillAmount = after01;
+            _conditionGaugeFill.color = Color.gray;
             return;
         }
 
         _deltaFill.gameObject.SetActive(true);
 
-        // 증가(빨강): before~after 구간만큼 덮기
-        if (delta > 0)
+        // 1. 감소 (훈련): 깎인 만큼 빨간색 꼬리 남기기
+        if (delta < 0)
         {
+            // 밑장(_deltaFill)에 깎이기 전 원래 길이를 빨간색으로 채움
             _deltaFill.color = new Color(0.90f, 0.25f, 0.25f); // 빨강
-            _deltaFill.fillAmount = after01;
+            _deltaFill.fillAmount = before01;
+
+            // 윗장(_conditionGaugeFill)으로 깎인 후 길이만큼 회색으로 덮음
+            _conditionGaugeFill.color = Color.gray;
+            _conditionGaugeFill.fillAmount = after01;
         }
+        // 2. 증가 (휴식): 늘어난 만큼 파란색 꼬리 보여주기
         else
         {
+            // 밑장(_deltaFill)에 회복된 후의 최종 길이를 파란색으로 채움
             _deltaFill.color = new Color(0.25f, 0.55f, 1.00f); // 파랑
-            _deltaFill.fillAmount = before01;
-        }
-    }
+            _deltaFill.fillAmount = after01;
 
-    
-    private static int GetConditionMax(int beforeValue, int afterValue)
-    {
-        int v = Mathf.Max(beforeValue, afterValue, 100);
-        int rounded = ((v + 9) / 10) * 10;   // 10단위 올림
-        return Mathf.Max(rounded, 1);
+            // 윗장(_conditionGaugeFill)으로 회복 전 길이만큼 회색으로 덮음
+            _conditionGaugeFill.color = Color.gray;
+            _conditionGaugeFill.fillAmount = before01;
+        }
     }
 
     private void RefreshConditionDelta(Student before, Student after)
@@ -98,11 +100,22 @@ public class TrainingResultStudentRow : MonoBehaviour
 
         _txtConditionDelta.gameObject.SetActive(true);
         _txtConditionDelta.text = delta > 0 ? $"+{delta}" : delta.ToString();
-        _txtConditionDelta.color = delta > 0
+
+        // 텍스트 색상도 감소(-)일 때 빨강, 증가(+)일 때 파랑으로 맞춤
+        _txtConditionDelta.color = delta < 0
             ? new Color(0.90f, 0.25f, 0.25f)   // 빨강
             : new Color(0.25f, 0.55f, 1.00f);  // 파랑
     }
 
+
+    private static int GetConditionMax(int beforeValue, int afterValue)
+    {
+        int v = Mathf.Max(beforeValue, afterValue, 100);
+        int rounded = ((v + 9) / 10) * 10;   // 10단위 올림
+        return Mathf.Max(rounded, 1);
+    }
+
+  
     private void SetupStatChangeRows(Student before, Student after)
     {
         ClearStatRows();
