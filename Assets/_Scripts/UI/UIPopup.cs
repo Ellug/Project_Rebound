@@ -1,4 +1,4 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.Collections.Generic;
@@ -6,23 +6,23 @@ using System.Collections.Generic;
 public class UIPopup : UIBase
 {
     [Header("Layout")]
-    [SerializeField] private RectTransform _windowRect; // Å©±â ÀçÁ¶Á¤À» À§ÇÑ ¹è°æ RectTransform
-    [SerializeField] private VerticalLayoutGroup _windowLayoutGroup; // ÆĞµù Á¶ÀıÀ» À§ÇØ ÇÊ¿ä
+    [SerializeField] private RectTransform _windowRect; // í¬ê¸° ì¬ì¡°ì •ì„ ìœ„í•œ ë°°ê²½ RectTransform
+    [SerializeField] private VerticalLayoutGroup _windowLayoutGroup; // íŒ¨ë”© ì¡°ì ˆì„ ìœ„í•´ í•„ìš”
 
     [Header("Padding Settings")]
-    [SerializeField] private int _paddingTopWithImage = 100;    // ÀÌ¹ÌÁö°¡ ÀÖÀ» ¶§ »ó´Ü ÆĞµù
-    [SerializeField] private int _paddingTopNoImage = 40;     // ÀÌ¹ÌÁö°¡ ¾øÀ» ¶§ »ó´Ü ÆĞµù
+    [SerializeField] private int _paddingTopWithImage = 100;    // ì´ë¯¸ì§€ê°€ ìˆì„ ë•Œ ìƒë‹¨ íŒ¨ë”©
+    [SerializeField] private int _paddingTopNoImage = 40;     // ì´ë¯¸ì§€ê°€ ì—†ì„ ë•Œ ìƒë‹¨ íŒ¨ë”©
 
     [Header("Content")]
-    [SerializeField] private Image _contentImage;       // »ó´Ü ÀÌ¹ÌÁö 
-    [SerializeField] private TMP_Text _txtTitle;        // Á¦¸ñ
-    [SerializeField] private TMP_Text _txtSubContent;   // ºÎ°¡ ¼³¸í
-    [SerializeField] private TMP_Text _txtContent;      // º»¹®
+    [SerializeField] private Image _contentImage;       // ìƒë‹¨ ì´ë¯¸ì§€ 
+    [SerializeField] protected TMP_Text _txtTitle;        // ì œëª©
+    [SerializeField] protected TMP_Text _txtSubContent;   // ë¶€ê°€ ì„¤ëª…
+    [SerializeField] protected TMP_Text _txtContent;      // ë³¸ë¬¸
 
     [Header("Buttons")]
-    [SerializeField] private Transform _buttonGridRoot; // ¹öÆ° ºÎ¸ğ
-    [SerializeField] private Button _buttonPrefab;      // ¹öÆ° ÇÁ¸®ÆÕ
-    [SerializeField] private Button _closeButton;       // X ¹öÆ°
+    [SerializeField] private Transform _buttonGridRoot; // ë²„íŠ¼ ë¶€ëª¨
+    [SerializeField] private Button _buttonPrefab;      // ë²„íŠ¼ í”„ë¦¬íŒ¹
+    [SerializeField] private Button _closeButton;       // X ë²„íŠ¼
 
     public override void Init()
     {
@@ -36,7 +36,7 @@ public class UIPopup : UIBase
 
     public void SetData(PopupData data)
     {
-        // 1. ÀÌ¹ÌÁö Ã³¸®
+        // 1. ì´ë¯¸ì§€ ì²˜ë¦¬
         bool hasImage = data.Image != null;
 
         if (data.Image != null && _contentImage != null)
@@ -52,17 +52,17 @@ public class UIPopup : UIBase
 
         if (_windowLayoutGroup != null)
         {
-            // ±¸Á¶Ã¼(RectOffset)´Â Á÷Á¢ ¼öÁ¤ÀÌ ¾È µÅ¼­ º¹»çÇØ¼­ ³Ö¾î¾ß ÇÔ
+            // êµ¬ì¡°ì²´(RectOffset)ëŠ” ì§ì ‘ ìˆ˜ì •ì´ ì•ˆ ë¼ì„œ ë³µì‚¬í•´ì„œ ë„£ì–´ì•¼ í•¨
             RectOffset newPadding = _windowLayoutGroup.padding;
             newPadding.top = hasImage ? _paddingTopWithImage : _paddingTopNoImage;
             _windowLayoutGroup.padding = newPadding;
         }
 
-        // 2. ÅØ½ºÆ® Ã³¸®
-        if (_txtTitle) _txtTitle.text = data.Title;
-        if (_txtContent) _txtContent.text = data.Content;
+        // 2. í…ìŠ¤íŠ¸ ì²˜ë¦¬
+        if (_txtTitle != null) _txtTitle.text = data.Title;
+        if (_txtContent != null) _txtContent.text = data.Content;
 
-        // 3. ¼­ºê ÅØ½ºÆ® Ã³¸®
+        // 3. ì„œë¸Œ í…ìŠ¤íŠ¸ ì²˜ë¦¬
         if (!string.IsNullOrEmpty(data.SubContent) && _txtSubContent != null)
         {
             _txtSubContent.gameObject.SetActive(true);
@@ -73,10 +73,10 @@ public class UIPopup : UIBase
             _txtSubContent.gameObject.SetActive(false);
         }
 
-        // 4. ¹öÆ° »ı¼º
+        // 4. ë²„íŠ¼ ìƒì„±
         SetButtons(data.Buttons);
 
-        // 5. ³»¿ë¹°¿¡ ¸ÂÃç Ã¢ Å©±â Áï½Ã °»½Å
+        // 5. ë‚´ìš©ë¬¼ì— ë§ì¶° ì°½ í¬ê¸° ì¦‰ì‹œ ê°±ì‹ 
         if (_windowRect != null)
         {
             LayoutRebuilder.ForceRebuildLayoutImmediate(_windowRect);
@@ -85,28 +85,44 @@ public class UIPopup : UIBase
 
     private void SetButtons(List<PopupButtonInfo> buttons)
     {
-        foreach (Transform child in _buttonGridRoot) Destroy(child.gameObject);
+        if (_buttonGridRoot == null || _buttonPrefab == null) return;
 
-        if (buttons != null)
+        foreach (Transform child in _buttonGridRoot)
+            Destroy(child.gameObject);
+
+        if (buttons == null) return;
+
+        foreach (PopupButtonInfo btnInfo in buttons)
         {
-            foreach (var btnInfo in buttons)
-            {
-                Button newBtn = Instantiate(_buttonPrefab, _buttonGridRoot);
-                TMP_Text btnText = newBtn.GetComponentInChildren<TMP_Text>();
-                if (btnText) btnText.text = btnInfo.Text;
+            PopupButtonInfo captured = btnInfo;
 
-                newBtn.onClick.AddListener(() =>
+            Button newBtn = Instantiate(_buttonPrefab, _buttonGridRoot);
+            TMP_Text btnText = newBtn.GetComponentInChildren<TMP_Text>();
+            if (btnText != null) btnText.text = captured.Text;
+
+            newBtn.onClick.RemoveAllListeners();
+            newBtn.onClick.AddListener(() =>
+            {
+                captured.OnClick?.Invoke();
+
+                if (captured.AutoClose && UIManager.Instance != null)
                 {
-                    btnInfo.OnClick?.Invoke();
-                    if (btnInfo.AutoClose) UIManager.Instance.CloseTop();
-                });
-                newBtn.gameObject.SetActive(true);
-            }
+                    UIManager.Instance.Close(this);
+                }
+            });
+            newBtn.gameObject.SetActive(true);
         }
     }
 
     protected virtual void OnCloseButtonClicked()
     {
-        UIManager.Instance.CloseTop();
+        UIManager.Instance.Close(this);
+    }
+
+    protected void SetBaseTextAreaActive(bool isActive)
+    {
+        if (_txtTitle != null) _txtTitle.gameObject.SetActive(isActive);
+        if (_txtSubContent != null) _txtSubContent.gameObject.SetActive(isActive);
+        if (_txtContent != null) _txtContent.gameObject.SetActive(isActive);
     }
 }

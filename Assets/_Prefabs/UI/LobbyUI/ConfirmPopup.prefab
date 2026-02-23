@@ -1147,7 +1147,7 @@ GameObject:
   - component: {fileID: 9028720410152557439}
   - component: {fileID: 5383841626071397101}
   m_Layer: 5
-  m_Name: TrainingConfirmPopup
+  m_Name: ConfirmPopup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1223,7 +1223,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7961618611463623987}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6ce3c33d236a63545bac4527007f926d, type: 3}
+  m_Script: {fileID: 11500000, guid: cb45451e026fb4e4499d40badfec127f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TrainingConfirmPopup
   _isModal: 1
@@ -1237,13 +1237,13 @@ MonoBehaviour:
   _txtContent: {fileID: 0}
   _buttonGridRoot: {fileID: 0}
   _buttonPrefab: {fileID: 0}
-  _closeButton: {fileID: 6303972239010338143}
-  _imgPreview: {fileID: 2131610214326238014}
-  _defaultPreview: {fileID: 8037539321571114111, guid: 7515a6442954d74499bd13e864a3efb3, type: 3}
+  _closeButton: {fileID: 0}
   _txtName: {fileID: 4697294983345126648}
-  _txtConditionModifier: {fileID: 4387824663842073557}
-  _txtDesc: {fileID: 972888752505486911}
-  _btnCancel: {fileID: 6303972239010338143}
-  _btnStart: {fileID: 5612330384217949691}
+  _txtSub: {fileID: 0}
+  _txtMessage: {fileID: 972888752505486911}
+  _imgPreview: {fileID: 2131610214326238014}
+  _btnSecondary: {fileID: 6303972239010338143}
+  _txtSecondary: {fileID: 4937959074579074949}
+  _btnPrimary: {fileID: 5612330384217949691}
+  _txtPrimary: {fileID: 2503474150881966671}
   _studentSelectPrefab: {fileID: 5655431246991369327, guid: 2eefce8b8a34e304b82db8b2d577031f, type: 3}
-  _trainingFlow: {fileID: 8313116447302640032, guid: 2872640eb66560844bb5942b4e01d542, type: 3}

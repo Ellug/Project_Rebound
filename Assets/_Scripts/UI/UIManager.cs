@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.InputSystem; // New Input System
 using UnityEngine.SceneManagement;
@@ -11,6 +11,7 @@ public class UIManager : Singleton<UIManager>
     [Header("Settings")]
     [SerializeField] private Transform _canvasRoot;      // 팝업이 생성될 캔버스
     [SerializeField] private UIPopup _masterPopupPrefab; // 기본 팝업 프리팹
+    [SerializeField] private ConfirmPopup _confirmPopupPrefab;
 
     // Input Action Asset으로 생성된 C# 클래스
     private InputSystem_Actions _input;
@@ -44,6 +45,9 @@ public class UIManager : Singleton<UIManager>
     {
         SceneManager.sceneLoaded -= HandleSceneLoaded;
     }
+
+    // 외부에서 캔버스 루트 참조 시 사용 (RecruitmentManager 등)
+    public Transform GetCanvasRoot() => _canvasRoot;
 
     private void HandleBackKey()
     {
@@ -84,7 +88,7 @@ public class UIManager : Singleton<UIManager>
 
         // 1. 프리팹 생성
         UIPopup popupInstance = Instantiate(popupPrefab, _canvasRoot, false);
-        popupInstance.transform.SetAsLastSibling();
+        popupInstance.transform.SetAsLastSibling(); // 항상 최상단에 표시
 
         // 2. 초기화 및 데이터 주입
         popupInstance.Init();
@@ -115,7 +119,48 @@ public class UIManager : Singleton<UIManager>
         Destroy(topUI.gameObject);
     }
 
-    // 종료 팝업 예시
+    // 특정 인스턴스를 닫기 (Top이 바뀌는 케이스 방지)
+    public void Close(UIBase target)
+    {
+        if (target == null) return;
+        if (_uiStack.Count == 0) return;
+
+        // 일반 케이스: target이 Top
+        if (_uiStack.Peek() == target)
+        {
+            CloseTop();
+            return;
+        }
+
+        // 예외 케이스: 중간에 끼어있는 UI 제거
+        Stack<UIBase> buffer = new Stack<UIBase>(_uiStack.Count);
+        bool removed = false;
+
+        while (_uiStack.Count > 0)
+        {
+            UIBase item = _uiStack.Pop();
+            if (item == target)
+            {
+                item.Close();
+                Destroy(item.gameObject);
+                removed = true;
+                break;
+            }
+
+            buffer.Push(item);
+        }
+
+        while (buffer.Count > 0)
+            _uiStack.Push(buffer.Pop());
+
+        if (!removed)
+        {
+            // 스택에 없으면 그냥 파괴만 수행 (직접 Instantiate된 팝업 등)
+            target.Close();
+            Destroy(target.gameObject);
+        }
+    }
+
     private void ShowExitPopup()
     {
         var buttons = new List<PopupButtonInfo>
@@ -170,5 +215,38 @@ public class UIManager : Singleton<UIManager>
 
         if (canvases.Length > 0 && canvases[0] != null)
             _canvasRoot = canvases[0].transform;
+    }
+
+    public void ShowConfirm(ConfirmPopupRequest request)
+    {
+        ShowConfirmWithPrefab(request, _confirmPopupPrefab);
+    }
+
+
+    public void ShowConfirm(ConfirmPopupRequest request, ConfirmPopup popupPrefab)
+    {
+        ShowConfirmWithPrefab(request, popupPrefab != null ? popupPrefab : _confirmPopupPrefab);
+    }
+
+
+    private void ShowConfirmWithPrefab(ConfirmPopupRequest request, ConfirmPopup popupPrefab)
+    {
+        if (popupPrefab == null)
+        {
+            Debug.LogError("[UIManager] ConfirmPopup Prefab이 연결되지 않았습니다.");
+            return;
+        }
+
+        if (!EnsureCanvasRoot())
+            return;
+
+        ConfirmPopup popupInstance = Instantiate(popupPrefab, _canvasRoot, false);
+        popupInstance.transform.SetAsLastSibling();
+
+        popupInstance.Init();
+        popupInstance.Setup(request);
+        popupInstance.Open();
+
+        _uiStack.Push(popupInstance);
     }
 }

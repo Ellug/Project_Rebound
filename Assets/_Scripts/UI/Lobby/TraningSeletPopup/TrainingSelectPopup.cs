@@ -4,8 +4,7 @@ using UnityEngine.UI;
 using TMPro;
 
 // 훈련 선택 팝업 (페이지 전환 방식)
-// FlowController 호출을 여기서 담당
-// Init 시 TrainingPageBuilder로 TrainingPageData를 GrowthCommandTableSO 기준으로 채움
+// ConfirmPopup(UIManager.ShowConfirm) 호출을 여기서 담당
 public class TrainingSelectPopup : UIPopup
 {
     [Header("Page Config")]
@@ -19,23 +18,20 @@ public class TrainingSelectPopup : UIPopup
     [Header("Navigation")]
     [SerializeField] private Button _btnBack;
 
-    [Header("Confirm Popup")]
-    [SerializeField] private TrainingConfirmPopup _confirmPopupPrefab;
-
-    private TrainingFlowController _trainingFlow; // 런타임에 Find
+    private TrainingFlowController _trainingFlow;
 
     private int _currentPageIndex = 0;
     private readonly Stack<int> _pageHistory = new Stack<int>();
     private readonly List<TrainingButtonItem> _spawnedButtons = new List<TrainingButtonItem>();
 
-    // 팀원 LobbyUI와 호환 (Action<string>)
     public event System.Action<string> OnTrainingSelected;
+
+    private string _currentTrainingKey;
 
     public override void Init()
     {
         base.Init();
 
-        // 씬에 배치된 FlowController 찾기
         if (_trainingFlow == null)
             _trainingFlow = FindFirstObjectByType<TrainingFlowController>();
 
@@ -50,17 +46,15 @@ public class TrainingSelectPopup : UIPopup
 
     public override void Open()
     {
-        BuildPageDataFromTable();  // ← Init에서 여기로 이동
+        BuildPageDataFromTable();
         base.Open();
     }
 
-    // GrowthCommandTableSO 데이터로 _pageData를 채운다
     private void BuildPageDataFromTable()
     {
         GrowthCommandTableSO table = CachedSOData.GrowthCommandTable;
 
 #if UNITY_EDITOR
-        // 에디터에서 Lobby 씬 직접 실행 시 테이블 미등록 상태 대응
         if (table == null)
         {
             const string assetPath = "Assets/_Scripts/SO/SO_GrowthCommandTable.asset";
@@ -120,6 +114,8 @@ public class TrainingSelectPopup : UIPopup
 
     private void SpawnButtons(TrainingPageInfo page)
     {
+        if (page == null || page.buttons == null) return;
+
         foreach (TrainingButtonData btnData in page.buttons)
         {
             TrainingButtonItem item = Instantiate(_buttonPrefab2, _buttonContainer);
@@ -138,6 +134,8 @@ public class TrainingSelectPopup : UIPopup
 
     private void HandleTrainingButton(TrainingButtonData data)
     {
+        if (data == null) return;
+
         if (data.navigateToPageIndex >= 0)
         {
             ShowPage(data.navigateToPageIndex);
@@ -147,56 +145,126 @@ public class TrainingSelectPopup : UIPopup
         OpenConfirmPopup(data);
     }
 
+    // 핵심: 학생선택 없는 케이스는 PrimaryAction에서 StartFlow를 직접 호출해야 함
     private void OpenConfirmPopup(TrainingButtonData data)
     {
-        if (_confirmPopupPrefab == null)
+        if (UIManager.Instance == null)
         {
-            Debug.Log($"[TrainingSelectPopup] 확인 팝업 없이 바로 실행: {data.trainingKey}");
-            OnTrainingSelected?.Invoke(data.trainingKey);
-            Close();
+            Debug.LogWarning("[TrainingSelectPopup] UIManager가 없습니다.");
             return;
         }
 
-        TrainingConfirmPopup confirm = Instantiate(_confirmPopupPrefab, transform.parent);
-        confirm.Init();
-        confirm.Setup(data);
-        confirm.Open();
+        ConfirmPopupRequest request = new ConfirmPopupRequest(
+            title: data.trainingName,
+            message: data.trainingDesc,
+            primaryLabel: "훈련 시작",
+            primaryAction: null,
+            secondaryLabel: "취소",
+            secondaryAction: null,
+            previewSprite: data.previewSprite,
+            subMessage: data.statModifierText
+        );
 
-        // ConfirmPopup에서 학생 확정 → FlowController 실행
-        confirm.OnTrainingConfirmed += (key, students) =>
+        request.IsModal = true;
+        request.AutoCloseOnPrimary = true;
+        request.AutoCloseOnSecondary = true;
+
+        request.RequiresStudentSelection = data.requiresStudentSelection;
+        request.MaxSelectCount = data.maxSelectCount;
+
+        if (request.RequiresStudentSelection)
         {
-            // confirm은 자기가 Destroy함
-            // 이 팝업(TrainingSelectPopup)을 닫고 게이지 시작
-            ClearPageHistory();
-            ClearButtons();
-            Close();
+            request.OnStudentsSelected = (students) =>
+            {
+                StartTrainingFlowFromConfirm(data, students);
+            };
+        }
+        else
+        {
+            request.PrimaryAction = () =>
+            {
+                List<Student> students = GetDefaultStudentsForNoSelect();
+                StartTrainingFlowFromConfirm(data, students);
+            };
+        }
 
-            StartFlow(key, data.trainingName, students, data.previewSprite);
-        };
+        UIManager.Instance.ShowConfirm(request);
     }
 
-    // FlowController 실행 (이 오브젝트는 씬에 배치되어 항상 살아있으므로 콜백 안전)
-    private void StartFlow(string key, string name, List<Student> students, Sprite bgSprite)
+    private void StartTrainingFlowFromConfirm(TrainingButtonData data, List<Student> students)
+    {
+        if (data == null)
+            return;
+
+        ClearPageHistory();
+        ClearButtons();
+        Close();
+
+        string key = data.trainingKey;
+        string name = data.trainingName;
+        Sprite bgSprite = data.previewSprite;
+
+        StartFlow(key, name, students, bgSprite, data);
+    }
+
+    private List<Student> GetDefaultStudentsForNoSelect()
+    {
+        if (StudentManager.Instance == null || StudentManager.Instance.Students == null)
+            return new List<Student>();
+
+        return new List<Student>(StudentManager.Instance.Students);
+    }
+
+    // FlowController 실행
+    private void StartFlow(string key, string name, List<Student> students, Sprite bgSprite, TrainingButtonData data)
     {
         if (_trainingFlow == null)
             _trainingFlow = FindFirstObjectByType<TrainingFlowController>();
 
-        if (_trainingFlow != null)
-        {
-            _trainingFlow.OnFlowComplete -= HandleFlowComplete;
-            _trainingFlow.OnFlowComplete += HandleFlowComplete;
-
-            _currentTrainingKey = key;
-            _trainingFlow.Execute(key, name, students, null, bgSprite);
-        }
-        else
+        if (_trainingFlow == null)
         {
             Debug.LogWarning("[TrainingSelectPopup] TrainingFlowController를 찾을 수 없습니다.");
             OnTrainingSelected?.Invoke(key);
+            return;
         }
+
+        _trainingFlow.OnFlowComplete -= HandleFlowComplete;
+        _trainingFlow.OnFlowComplete += HandleFlowComplete;
+
+        _currentTrainingKey = key;
+
+        _trainingFlow.Execute(
+            trainingKey: key,
+            trainingName: name,
+            students: students,
+            applyEffect: (k, list) => ApplyCsvEffect(data, list),
+            backgroundSprite: bgSprite
+        );
     }
 
-    private string _currentTrainingKey;
+    private void ApplyCsvEffect(TrainingButtonData data, List<Student> students)
+    {
+        if (data == null || students == null)
+            return;
+
+        foreach (Student student in students)
+        {
+            if (student == null) continue;
+
+            
+            student.shoot += Mathf.RoundToInt(data.shootDelta);
+            student.speed += Mathf.RoundToInt(data.speedDelta);
+            student.stamina += Mathf.RoundToInt(data.staminaDelta);
+
+            // jump는 GrowthCommandRow에 없어서 미적용
+            // student.jump += Mathf.RoundToInt(data.jumpDelta);
+
+            student.mental += data.mentalDelta;
+
+            if (StudentManager.Instance != null)
+                StudentManager.Instance.NotifyStudentModified(student);
+        }
+    }
 
     private void HandleFlowComplete()
     {
@@ -230,7 +298,8 @@ public class TrainingSelectPopup : UIPopup
     {
         foreach (TrainingButtonItem item in _spawnedButtons)
         {
-            if (item != null) Destroy(item.gameObject);
+            if (item != null)
+                Destroy(item.gameObject);
         }
         _spawnedButtons.Clear();
     }
