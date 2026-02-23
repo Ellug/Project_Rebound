@@ -21,7 +21,7 @@ public class Student
     public int jump;
     public int stamina;
 
-    // 잠재 능력 (미구현)
+    // 잠재 능력
     public int potential_tier;
     public string potential;
 
