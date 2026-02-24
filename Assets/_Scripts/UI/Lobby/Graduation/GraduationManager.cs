@@ -176,7 +176,7 @@ public class GraduationManager : MonoBehaviour
     }
 
 
-    // -----테스트용 F12 테스트 트리거-----
+    // -----테스트용-----
 
     private void Update()
     {

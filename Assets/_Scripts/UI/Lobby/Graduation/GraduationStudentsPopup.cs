@@ -5,10 +5,10 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-// 졸업생 목록 팝업 (3학년 카드 이미지 목록)
-// - RecruitmentPopup 패턴 재활용: 스크롤/카드 생성/ForceScrollTop
-// - 선택/영입 로직은 제거 (표시 전용)
-// - 하단 확인 버튼 -> 외부 콜백 실행
+
+// 졸업생 목록 표시 전용 팝업
+// - 3학년 학생 카드 나열
+// - 하단 확인 버튼 → 외부 콜백 실행
 public class GraduationStudentsPopup : UIBase
 {
     [Header("Scroll")]
@@ -25,9 +25,13 @@ public class GraduationStudentsPopup : UIBase
     [SerializeField] private Button _btnConfirm;
     [SerializeField] private TMP_Text _txtConfirm;
 
+    // 생성된 카드 캐싱
     private readonly List<GameObject> _spawnedCards = new();
 
+    // 외부에서 전달받은 졸업생 목록
     private List<Student> _graduates = new();
+
+    // 확인 버튼 클릭 시 실행될 콜백
     private Action _onConfirmed;
 
     private bool _isInited;
@@ -41,6 +45,7 @@ public class GraduationStudentsPopup : UIBase
 
         base.Init();
 
+        // 확인 버튼 바인딩
         if (_btnConfirm != null)
         {
             _btnConfirm.onClick.RemoveAllListeners();
@@ -48,21 +53,17 @@ public class GraduationStudentsPopup : UIBase
         }
 
         if (_txtConfirm != null)
-        {
             _txtConfirm.text = "확인";
-        }
     }
 
-    // 외부에서 졸업생 리스트 전달
+    // 졸업생 목록 설정
     public void Setup(List<Student> graduates, Action onConfirmed)
     {
         _graduates = graduates ?? new List<Student>();
         _onConfirmed = onConfirmed;
 
         if (_txtTitle != null)
-        {
             _txtTitle.text = "졸업생 목록";
-        }
 
         BuildCards();
     }
@@ -70,7 +71,7 @@ public class GraduationStudentsPopup : UIBase
     public override void Open()
     {
         base.Open();
-        StartCoroutine(ForceScrollTopRoutineSafe());
+        StartCoroutine(ForceScrollTopRoutineSafe()); // 스크롤 최상단 고정
     }
 
     public override void Close()
@@ -85,14 +86,16 @@ public class GraduationStudentsPopup : UIBase
         _onConfirmed = null;
     }
 
+    // 확인 버튼 클릭
     private void HandleConfirm()
     {
         if (_btnConfirm != null)
-            _btnConfirm.interactable = false;   // 중복 클릭 방지
+            _btnConfirm.interactable = false; // 중복 클릭 방지
 
         _onConfirmed?.Invoke();
     }
 
+    // 졸업생 카드 생성
     private void BuildCards()
     {
         ClearCards();
@@ -124,31 +127,29 @@ public class GraduationStudentsPopup : UIBase
                 card.SetViewState(StudentCard.CardViewState.Normal);
             }
 
+            // 카드 내부 버튼 비활성화 (읽기 전용)
             Button[] buttons = obj.GetComponentsInChildren<Button>(true);
             for (int b = 0; b < buttons.Length; b++)
-            {
                 buttons[b].interactable = false;
-            }
 
             obj.SetActive(true);
             _spawnedCards.Add(obj);
         }
     }
 
+    // 생성된 카드 정리
     private void ClearCards()
     {
         for (int i = 0; i < _spawnedCards.Count; i++)
         {
-            GameObject obj = _spawnedCards[i];
-            if (obj != null)
-            {
-                Destroy(obj);
-            }
+            if (_spawnedCards[i] != null)
+                Destroy(_spawnedCards[i]);
         }
 
         _spawnedCards.Clear();
     }
 
+    // UI 레이아웃 갱신 후 스크롤 위치 보정
     private IEnumerator ForceScrollTopRoutineSafe()
     {
         yield return null;
