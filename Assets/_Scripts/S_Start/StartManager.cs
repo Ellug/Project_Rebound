@@ -54,6 +54,11 @@ public class StartManager : MonoBehaviour
 
     private readonly WaitForSeconds _waitOneSecond = new(1f);
 
+    void Awake()
+    {
+        Application.targetFrameRate = 60;
+    }
+
     void Start()
     {
         StartCoroutine(LoadingProcess());
