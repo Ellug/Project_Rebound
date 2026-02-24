@@ -26,6 +26,10 @@ public class RecruitmentManager : MonoBehaviour
 
     public event Action<List<Student>> OnRecruitmentCompleted; // 영입 완료 콜백
 
+    // 후보 학생을 StudentManager(보유 학생)와 분리해서 관리
+    // 후보는 RecruitmentPopup에만 주입해서 UI/선택에만 사용
+    private readonly List<Student> _candidateStudents = new();
+
     void Start()
     {
         _turnManager = FindFirstObjectByType<TurnManager>();
@@ -41,6 +45,13 @@ public class RecruitmentManager : MonoBehaviour
     // 게임 시작 시 최초 영입 트리거
     public void TriggerInitialRecruitment()
     {
+        // 새 게임 시작 시점에만 보유 학생 전체 초기화
+        // 입학 영입(신입생 추가)에서는 기존 보유 학생이 유지되어야 함
+        if (StudentManager.Instance != null)
+        {
+            StudentManager.Instance.ClearAllStudents(); // 새 게임 시작 시에만 전체 초기화
+        }
+
         GenerateCandidateStudents();
         ShowRecruitmentEventConfirm(RecruitmentContext.GameStart);
     }
@@ -54,6 +65,8 @@ public class RecruitmentManager : MonoBehaviour
     // 새 학기 신입생 영입 트리거
     public void TriggerEnrollmentRecruitment()
     {
+        // 입학 영입에서는 StudentManager(보유 학생) 초기화 금지
+        // 후보는 _candidateStudents로만 생성/관리
         GenerateCandidateStudents();
         ShowRecruitmentEventConfirm(RecruitmentContext.NewSemester);
     }
@@ -77,6 +90,7 @@ public class RecruitmentManager : MonoBehaviour
     // 입학 이벤트 발생 시 자동 영입 흐름 시작
     private void HandleEnrollmentTriggered()
     {
+        // 자동 입학 영입도 동일하게 "후보만 생성" (보유 학생 삭제 금지)
         GenerateCandidateStudents();
         ShowRecruitmentEventConfirm(RecruitmentContext.NewSemester);
     }
@@ -121,8 +135,12 @@ public class RecruitmentManager : MonoBehaviour
         }
 
         RecruitmentPopup popup = Instantiate(_recruitmentPopupPrefab, canvasRoot);
-        popup.transform.SetAsLastSibling(); // 최상단 표시
+        popup.transform.SetAsLastSibling();
         popup.SetMaxRecruitCount(_maxRecruitCount);
+
+        // StudentManager가 아닌 "후보 리스트"를 팝업에 주입
+        popup.SetCandidates(_candidateStudents);
+
         popup.Init();
         popup.Open();
 
@@ -141,38 +159,44 @@ public class RecruitmentManager : MonoBehaviour
 
         if (StudentManager.Instance != null)
         {
-            StudentManager.Instance.ClearAllStudents();
-
+            // 영입 확정 시 "추가(Add)"만 수행 (입학 때 기존 학생 유지)
+            // 기존 로직의 ClearAllStudents() 제거 (새게임 시작에서만 초기화)
             foreach (Student student in recruits)
+            {
                 StudentManager.Instance.AddStudent(student);
+            }
         }
 
         Debug.Log($"[RecruitmentManager] 영입 완료: {recruits.Count}명");
         OnRecruitmentCompleted?.Invoke(recruits);
+
+        // 후보는 한 번 쓰고 버리는 성격이므로 정리
+        _candidateStudents.Clear();
     }
 
     // 영입 포기 → 후보 초기화
     private void HandleRecruitmentSkipped()
     {
-        StudentManager.Instance?.ClearAllStudents();
+        // 포기 시에도 StudentManager(보유 학생) 건드리지 않음
+        // 후보만 폐기
+        _candidateStudents.Clear();
         Debug.Log("[RecruitmentManager] 영입 포기");
     }
 
     // 후보 생성
     private void GenerateCandidateStudents()
     {
-        if (StudentManager.Instance == null) return;
-
-        StudentFactory.ResetUsedNames();     // 이름 중복 초기화
-        StudentManager.Instance.ClearAllStudents();
+        // 후보는 StudentManager가 아니라 _candidateStudents로만 생성
+        _candidateStudents.Clear();
 
         for (int i = 0; i < _recruitCandidateCount; i++)
-            StudentManager.Instance.AddStudent(StudentFactory.CreateStudent(grade: 1));
+        {
+            _candidateStudents.Add(StudentFactory.CreateStudent(grade: 1));
+        }
 
         Debug.Log($"[RecruitmentManager] 영입 후보 {_recruitCandidateCount}명 생성 완료");
     }
 
-    
     // 메시지 빌드
     private static string BuildEventMessage(RecruitmentContext context)
     {
