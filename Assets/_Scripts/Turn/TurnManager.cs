@@ -188,5 +188,19 @@ public class TurnManager : MonoBehaviour
             $"모듈={_modules.Count}개 | State={_turnState}"
         );
     }
-    #endif
+#endif
+
+    // 테스트 단계에서 쓸 날짜 지나게 하기
+    public void SkipDays(int days)
+    {
+        for (int i = 0; i < days; i++)
+        {
+            _dateManager.AdvanceDay();
+            _turnIndex++;
+        }
+        // 이게 갱신 시키는거 같음
+        InitTurnContext(TurnActionType.Rest);
+
+        OnTurnCompleted?.Invoke(_currentContext);
+    }
 }
