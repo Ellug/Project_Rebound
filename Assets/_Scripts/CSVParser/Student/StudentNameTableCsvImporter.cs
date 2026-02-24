@@ -57,7 +57,8 @@ public static class StudentNameTableCsvImporter
 
             var cells = CsvImportUtil.SplitCsvLine(line);
 
-            var id = CsvImportUtil.ReadInt(cells, col, "id", 0);
+            // id는 "name_001" 형식의 string 또는 순수 int 모두 지원
+            var id = CsvImportUtil.ReadPrefixedId(cells, col, "id");
             if (id == 0) continue;
 
             var r = new StudentNameRow

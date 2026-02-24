@@ -57,7 +57,8 @@ public static class StudentStatTableCsvImporter
 
             var cells = CsvImportUtil.SplitCsvLine(line);
 
-            var statId = CsvImportUtil.ReadInt(cells, col, "stat_id", 0);
+            // stat_id는 "stat_001" 형식의 string 또는 순수 int 모두 지원
+            var statId = CsvImportUtil.ReadPrefixedId(cells, col, "stat_id");
             if (statId == 0) continue;
 
             var r = new StudentStatRow

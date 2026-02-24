@@ -30,6 +30,7 @@ public static class CsvBatchImporter
             ("SuddenEventTextTable.csv", SuddenEventTextTableCsvImporter.ImportFromPath, "Sudden Event Text"),
             ("StatusTextTable.csv", StatusTextTableCsvImporter.ImportFromPath, "Status Text"),
             ("SchoolNameTable.csv", SchoolNameTableCsvImporter.ImportFromPath, "School Name"),
+            ("EnemyStatTable.csv", EnemyStatTableCsvImporter.ImportFromPath, "Enemy Stat"),
             ("StudentNameTable.csv", StudentNameTableCsvImporter.ImportFromPath, "Student Name"),
             ("StudentBodyTable.csv", StudentBodyTableCsvImporter.ImportFromPath, "Student Body"),
             ("StudentStatTable.csv", StudentStatTableCsvImporter.ImportFromPath, "Student Stat"),

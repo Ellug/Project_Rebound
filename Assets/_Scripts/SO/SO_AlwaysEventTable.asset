@@ -130,7 +130,7 @@ MonoBehaviour:
     priority: 2
     range: 0
     effectId: holiday_effect
-    description: "\uC11D\uAC00\uD0C4\uC2E0\uC77C\uC774\uB2E4! \uCC28\uBD84\uD55C
+    description: "\uBD80\uCC98\uB2D8 \uC624\uC2E0 \uB0A0\uC774\uB2E4! \uCC28\uBD84\uD55C
       \uBD84\uC704\uAE30 \uC18D\uC5D0\uC11C \uD558\uB8E8\uB97C \uBCF4\uB0B4\uBCF4\uC790!"
   - id: korean_memorial_day
     name: holiday_memorial_day

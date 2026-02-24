@@ -21,6 +21,19 @@ public enum SuddenEventConditionFlags
     Match = 8
 }
 
+[Flags]
+public enum SuddenEventCategoryFlags
+{
+    None = 0,
+    Positive = 1,
+    Negative = 2,
+    Neutral = 4,
+    Mental = 8,
+    Body = 16,
+    Social = 32,
+    Financial = 64
+}
+
 public enum SuddenEventScope
 {
     Non_Member = 0,
@@ -41,6 +54,19 @@ public enum SuddenEventTermScale
     Quarter = 2
 }
 
+public enum SuddenEventTriggerStatus
+{
+    None = 0,
+    Condition = 1
+}
+
+public enum SuddenEventTriggerCondition
+{
+    None = 0,
+    Less = 1,
+    Or_More = 2
+}
+
 [Serializable]
 public sealed class SuddenEventRow
 {
@@ -49,6 +75,7 @@ public sealed class SuddenEventRow
 
     public SuddenEventContextFlags context;
     public SuddenEventConditionFlags condition;
+    public SuddenEventCategoryFlags category;
 
     public SuddenEventScope scope;
 
@@ -59,10 +86,19 @@ public sealed class SuddenEventRow
     public int termMax;
     public SuddenEventTermScale termScale;
 
+    public bool isTrigger;
+    public SuddenEventTriggerStatus triggerStatus1;
+    public SuddenEventTriggerCondition triggerCondition1;
+    public int triggerThreshold1;
+    public SuddenEventTriggerStatus triggerStatus2;
+    public SuddenEventTriggerCondition triggerCondition2;
+    public int triggerThreshold2;
+
     public string effect1;
     public string effect2;
     public string effect3;
 
+    public bool isProbable;
     public float probability; // 0~1
     public string description; // SuddenEventTextTable 참조 ID
 }
@@ -77,7 +113,7 @@ public sealed class SuddenEventTableSO : ScriptableObject
     public IReadOnlyList<SuddenEventRow> Rows => _rows;
 
     void OnEnable()
-    {        
+    {
         BuildCache();
     }
 

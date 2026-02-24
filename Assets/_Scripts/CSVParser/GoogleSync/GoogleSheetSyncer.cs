@@ -171,6 +171,7 @@ public static class GoogleSheetSyncer
             case "SuddenEventTextTable.csv":   SuddenEventTextTableCsvImporter.ImportFromPath(csvPath);   break;
             case "StatusTextTable.csv":        StatusTextTableCsvImporter.ImportFromPath(csvPath);        break;
             case "SchoolNameTable.csv":        SchoolNameTableCsvImporter.ImportFromPath(csvPath);        break;
+            case "EnemyStatTable.csv":         EnemyStatTableCsvImporter.ImportFromPath(csvPath);         break;
             case "StudentNameTable.csv":       StudentNameTableCsvImporter.ImportFromPath(csvPath);       break;
             case "StudentBodyTable.csv":       StudentBodyTableCsvImporter.ImportFromPath(csvPath);       break;
             case "StudentStatTable.csv":       StudentStatTableCsvImporter.ImportFromPath(csvPath);       break;
