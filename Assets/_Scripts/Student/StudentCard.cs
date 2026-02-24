@@ -3,21 +3,17 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-// 학생 카드 프리팹 컴포넌트
-// CardViewState:
-//   Normal    - 기본 초상화만 표시
-//   ShowStats - 스탯 오버레이 표시 (훈련 선택 등)
-//   Placing   - 영입 선택 중 체크 오버레이 표시
+
 public class StudentCard : MonoBehaviour
 {
     public enum CardViewState
     {
         Normal,
         ShowStats,
-        Placing // 영입 선택 중 (체크 오버레이)
+        Placing,
+        Managing
     }
 
-    // 클릭 이벤트 (자기 자신을 파라미터로 전달)
     public event Action<StudentCard> OnCardClicked;
 
     [Header("공통 - 초상화")]
@@ -38,8 +34,11 @@ public class StudentCard : MonoBehaviour
     [SerializeField] private GameObject _potentialBadgeRoot;
     [SerializeField] private TMP_Text _txtPotentialBadge;
 
-    [Header("Placing 오버레이")]
-    [SerializeField] private GameObject _placingOverlayPanel; // 체크 아이콘 + "선택 중" 텍스트
+    [Header("Placing 오버레이 (영입 선택 중)")]
+    [SerializeField] private GameObject _placingOverlayPanel;
+
+    [Header("Managing 오버레이 (학생 관리 배치중)")]
+    [SerializeField] private GameObject _managingOverlayPanel;
 
     private Student _studentData;
     private CardViewState _currentState = CardViewState.Normal;
@@ -54,14 +53,12 @@ public class StudentCard : MonoBehaviour
         btn.onClick.AddListener(() => OnCardClicked?.Invoke(this));
     }
 
-    // 학생 데이터 바인딩
     public void SetStudentData(Student student)
     {
         _studentData = student;
         RefreshDisplay();
     }
 
-    // 뷰 상태 전환
     public void SetViewState(CardViewState state)
     {
         _currentState = state;
@@ -71,17 +68,22 @@ public class StudentCard : MonoBehaviour
     public CardViewState GetViewState() => _currentState;
     public Student GetStudentData() => _studentData;
 
-    // 현재 상태에 맞게 오버레이 패널 활성화/비활성화
+    public Sprite GetPortraitSprite()
+    {
+        return _portraitImage != null ? _portraitImage.sprite : null;
+    }
+
     private void RefreshDisplay()
     {
         SafeSetActive(_statsOverlayPanel, _currentState == CardViewState.ShowStats);
         SafeSetActive(_placingOverlayPanel, _currentState == CardViewState.Placing);
+        SafeSetActive(_managingOverlayPanel, _currentState == CardViewState.Managing);
 
         if (_currentState == CardViewState.ShowStats && _studentData != null)
             PopulateStatsOverlay(_studentData);
     }
 
-    // 스탯 오버레이 데이터 채우기
+
     private void PopulateStatsOverlay(Student student)
     {
         SetText(_txtName, student.studentName);
@@ -97,7 +99,6 @@ public class StudentCard : MonoBehaviour
         RefreshPotentialBadge(student);
     }
 
-    // 컨디션 게이지 fillAmount 갱신
     private void RefreshConditionGauge(Student student)
     {
         if (_conditionGaugeFill == null) return;
@@ -106,7 +107,6 @@ public class StudentCard : MonoBehaviour
         _conditionGaugeFill.fillAmount = (float)student.condition / condMax;
     }
 
-    // 잠재력 배지 표시 (잠재력 있을 때만)
     private void RefreshPotentialBadge(Student student)
     {
         bool hasPotential = !string.IsNullOrEmpty(student.potential);

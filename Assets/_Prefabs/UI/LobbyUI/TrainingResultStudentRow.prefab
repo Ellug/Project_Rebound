@@ -30,8 +30,8 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 5978749744700741502}
   - {fileID: 1950017336778271765}
+  - {fileID: 5978749744700741502}
   m_Father: {fileID: 1169019549565333648}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -147,7 +147,7 @@ MonoBehaviour:
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 0
-  m_FillAmount: 0.783
+  m_FillAmount: 0.621
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
