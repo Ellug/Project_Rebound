@@ -905,7 +905,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 0
+  m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -1384,5 +1384,7 @@ MonoBehaviour:
   _imgPortrait: {fileID: 1970827654074137422}
   _txtName: {fileID: 9093357967290635055}
   _txtGrade: {fileID: 7119218777360924790}
+  _imgConditionFill: {fileID: 0}
+  _conditionMaxValue: 130
   _statListRoot: {fileID: 8676286738180894967}
   _statRowPrefab: {fileID: 6221017286530398922, guid: 66ceca9f093850146b3879ce2727e94d, type: 3}
