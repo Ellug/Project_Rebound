@@ -223,10 +223,9 @@ public class StudentManagementPopup : UIBase
 
             if (card == null) continue;
 
-            bool isSelected = _selectedStudent != null && student == _selectedStudent;
             bool isAssigned = IsStudentAssigned(student);
 
-            if (isSelected || isAssigned)
+            if (isAssigned)
                 card.SetViewState(StudentCard.CardViewState.Managing);
             else
                 card.SetViewState(StudentCard.CardViewState.Normal);
