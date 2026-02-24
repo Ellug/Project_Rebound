@@ -1,10 +1,14 @@
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using UnityEngine;
 
 public class AlwaysEventManager : MonoBehaviour
 {
+    // 이벤트가 새로 활성화될 때 발행 — 구독자가 row.type 또는 row.id로 분기 처리
+    public event Action<AlwaysEventRow> OnEventActivated;
+    // 이벤트가 만료될 때 발행
+    public event Action<AlwaysEventRow> OnEventExpired;
+
     private TurnManager _turnManager;
     private GameState _gameState;
     private HashSet<string> _activeEventIds; // GameFlowData.ActiveEventIds 참조
@@ -29,6 +33,9 @@ public class AlwaysEventManager : MonoBehaviour
         _turnManager = null;
         _gameState = null;
         _activeEventIds = null;
+
+        OnEventActivated = null;
+        OnEventExpired = null;
     }
 
     void OnDestroy()
@@ -83,6 +90,7 @@ public class AlwaysEventManager : MonoBehaviour
             if (today > termEndDate.Date)
             {
                 _activeEventIds.Remove(id);
+                OnEventExpired?.Invoke(row);
                 Debug.Log($"[AlwaysEvent] Ended: {id} ({today:yyyy-MM-dd})");
             }
         }
@@ -101,19 +109,13 @@ public class AlwaysEventManager : MonoBehaviour
             string id = GetRowId(row);
             if (!_activeEventIds.Add(id)) continue; // 이미 활성 중이면 스킵
 
-            // 신규 활성화 처리
-            if (IsLeagueBreakEvent(row))
-            {
-                if (GameManager.Instance != null)
-                    GameManager.Instance.OpenLeague();
-                Debug.Log($"[AlwaysEvent] League started: {id} ({today:yyyy-MM-dd})");
-            }
-            else
-                Debug.Log($"[AlwaysEvent] Started: {id} ({today:yyyy-MM-dd}) | type={row.type} | effect={row.effectId}");
+            // 신규 활성화 — 구독자가 타입/ID 기반으로 처리
+            OnEventActivated?.Invoke(row);
+            Debug.Log($"[AlwaysEvent] Activated: {id} ({today:yyyy-MM-dd}) | type={row.type} | effect={row.effectId}");
         }
     }
 
-    // GameManager가 다음 리그 날짜를 계산하기 위해 호출
+    // 다음 리그(vacation 타입) 시작 날짜 조회 — GameManager가 D-Day 계산에 사용
     public bool TryGetNextLeagueDate(DateTime currentDate, out DateTime nextLeagueDate)
     {
         nextLeagueDate = default;
@@ -165,50 +167,9 @@ public class AlwaysEventManager : MonoBehaviour
         return false;
     }
 
-    private static bool IsLeagueBreakEvent(AlwaysEventRow row)
+    public static bool IsLeagueBreakEvent(AlwaysEventRow row)
         => row.id == "summer_break" || row.id == "winter_break";
 
-    private bool TryParseTableDate(string value, out DateTime date)
-    {
-        date = default;
-        string s = (value ?? "").Trim();
-        if (string.IsNullOrEmpty(s) || s == "-")
-            return false;
-
-        // yyMMdd (예: 260720 => 2026-07-20)
-        if (s.Length == 6 &&
-            int.TryParse(s.Substring(0, 2), NumberStyles.Integer, CultureInfo.InvariantCulture, out int yy) &&
-            int.TryParse(s.Substring(2, 2), NumberStyles.Integer, CultureInfo.InvariantCulture, out int mm) &&
-            int.TryParse(s.Substring(4, 2), NumberStyles.Integer, CultureInfo.InvariantCulture, out int dd))
-        {
-            int year = 2000 + yy;
-            return TryMakeDate(year, mm, dd, out date);
-        }
-
-        // yyyyMMdd
-        if (s.Length == 8 &&
-            int.TryParse(s.Substring(0, 4), NumberStyles.Integer, CultureInfo.InvariantCulture, out int yyyy) &&
-            int.TryParse(s.Substring(4, 2), NumberStyles.Integer, CultureInfo.InvariantCulture, out int month) &&
-            int.TryParse(s.Substring(6, 2), NumberStyles.Integer, CultureInfo.InvariantCulture, out int day))
-        {
-            return TryMakeDate(yyyy, month, day, out date);
-        }
-
-        // 기타 포맷 fallback
-        return DateTime.TryParse(s, CultureInfo.InvariantCulture, DateTimeStyles.None, out date);
-    }
-
-    private bool TryMakeDate(int year, int month, int day, out DateTime date)
-    {
-        date = default;
-        try
-        {
-            date = new DateTime(year, month, day);
-            return true;
-        }
-        catch
-        {
-            return false;
-        }
-    }
+    private static bool TryParseTableDate(string value, out DateTime date)
+        => AlwaysEventDateUtil.TryParseTableDate(value, out date);
 }
