@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 // 학생 관리(배치) 팝업
 public class StudentManagementPopup : UIBase
@@ -13,6 +14,10 @@ public class StudentManagementPopup : UIBase
 
     [Header("학생 상세 팝업")]
     [SerializeField] private SelectStudentInfoPopup _studentInfoPopup;  // 상세 정보 팝업
+
+    [Header("포지션 안내")]
+    [SerializeField] private Button _btnPositionGuide;                  // "포지션 정보" 버튼
+    [SerializeField] private PositionGuidePopup _positionGuidePopup;    // 씬에 미리 배치된 팝업
 
     private readonly List<GameObject> _spawnedCards = new();            // 생성된 카드
     private readonly Dictionary<Student, StudentCard> _cardMap = new(); // 학생-카드 매핑
@@ -28,7 +33,7 @@ public class StudentManagementPopup : UIBase
         _isInited = true;
 
         base.Init();
-
+        BindPositionGuideButton();
         SpawnStudentCards();
         BindSlotEvents();
         RefreshCardStates();
@@ -45,6 +50,37 @@ public class StudentManagementPopup : UIBase
         SpawnStudentCards();
         RefreshCardStates();
         RefreshRecommendHighlights();
+    }
+
+    // 포지션 정보 버튼 이벤트 연결
+    private void BindPositionGuideButton()
+    {
+        if (_btnPositionGuide == null)
+            return;
+
+        _btnPositionGuide.onClick.RemoveAllListeners();
+        _btnPositionGuide.onClick.AddListener(OpenPositionGuidePopup);
+    }
+
+    // 씬에 미리 배치된 PositionGuidePopup을 활성화하여 표시
+    private void OpenPositionGuidePopup()
+    {
+        if (_positionGuidePopup == null)
+        {
+            Debug.LogWarning("[StudentManagementPopup] PositionGuidePopup 참조가 없습니다.");
+            return;
+        }
+
+        // 비활성 상태라면 먼저 활성화
+        if (!_positionGuidePopup.gameObject.activeSelf)
+            _positionGuidePopup.gameObject.SetActive(true);
+
+        // 최상단으로 올려서 다른 UI 위에 표시
+        _positionGuidePopup.transform.SetAsLastSibling();
+
+        // Init 누락 방지
+        _positionGuidePopup.Init();
+        _positionGuidePopup.Open();
     }
 
     // 학생 카드 생성
@@ -79,20 +115,13 @@ public class StudentManagementPopup : UIBase
         }
     }
 
-    // 카드 클릭 처리 (선택/해제)
+    // 카드 클릭 처리
     private void HandleCardClicked(StudentCard card)
     {
         if (card == null) return;
 
         Student student = card.GetStudentData();
         if (student == null) return;
-
-        // 같은 학생 재클릭 → 선택 해제
-        if (_selectedStudent == student)
-        {
-            ClearSelection();
-            return;
-        }
 
         _selectedStudent = student;
         _selectedStudentPortrait = card.GetPortraitSprite();
@@ -131,18 +160,15 @@ public class StudentManagementPopup : UIBase
     {
         if (slot == null) return;
 
-        // 슬롯에 학생이 있으면 → 제거 확인
         if (!slot.IsEmpty)
         {
             ShowRemoveConfirmPopup(slot);
             return;
         }
 
-        // 선택된 학생 없으면 무시
         if (_selectedStudent == null)
             return;
 
-        // 다른 슬롯에 이미 배치된 경우 → 이동 처리
         StudentSlot existing = FindSlotByStudent(_selectedStudent);
         if (existing != null && existing != slot)
         {
@@ -156,7 +182,6 @@ public class StudentManagementPopup : UIBase
         RefreshRecommendHighlights();
     }
 
-    // 학생 제거 확인 팝업
     private void ShowRemoveConfirmPopup(StudentSlot slot)
     {
         if (UIManager.Instance == null)
@@ -182,7 +207,6 @@ public class StudentManagementPopup : UIBase
         ));
     }
 
-    // 학생이 배치된 슬롯 찾기
     private StudentSlot FindSlotByStudent(Student student)
     {
         if (student == null) return null;
@@ -197,23 +221,20 @@ public class StudentManagementPopup : UIBase
         return null;
     }
 
-    // 학생 배치 여부 확인
     private bool IsStudentAssigned(Student student)
     {
         return FindSlotByStudent(student) != null;
     }
 
-    // 선택 초기화
     private void ClearSelection()
     {
         _selectedStudent = null;
         _selectedStudentPortrait = null;
 
-        RefreshCardStates();
         RefreshRecommendHighlights();
     }
 
-    // 카드 상태 갱신 (Normal / Managing)
+    // 배치된 학생은 Managing, 나머지는 Normal
     private void RefreshCardStates()
     {
         foreach (var pair in _cardMap)
@@ -224,11 +245,9 @@ public class StudentManagementPopup : UIBase
             if (card == null) continue;
 
             bool isAssigned = IsStudentAssigned(student);
-
-            if (isAssigned)
-                card.SetViewState(StudentCard.CardViewState.Managing);
-            else
-                card.SetViewState(StudentCard.CardViewState.Normal);
+            card.SetViewState(isAssigned
+                ? StudentCard.CardViewState.Managing
+                : StudentCard.CardViewState.Normal);
         }
     }
 
