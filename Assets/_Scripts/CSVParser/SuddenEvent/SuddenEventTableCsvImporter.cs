@@ -72,6 +72,13 @@ public static class SuddenEventTableCsvImporter
             if (string.IsNullOrEmpty(description))
                 description = CsvImportUtil.ReadString(cells, col, "message");
 
+            // trigger_treshold2는 CSV 오타 (h 누락) — 두 컬럼명 모두 시도
+            int threshold2 = -1;
+            if (col.ContainsKey("trigger_threshold2"))
+                threshold2 = CsvImportUtil.ReadInt(cells, col, "trigger_threshold2", -1);
+            else if (col.ContainsKey("trigger_treshold2"))
+                threshold2 = CsvImportUtil.ReadInt(cells, col, "trigger_treshold2", -1);
+
             var r = new SuddenEventRow
             {
                 id = id,
@@ -79,6 +86,7 @@ public static class SuddenEventTableCsvImporter
 
                 context = CsvImportUtil.ReadFlags<SuddenEventContextFlags>(cells, col, "context"),
                 condition = CsvImportUtil.ReadFlags<SuddenEventConditionFlags>(cells, col, "condition"),
+                category = CsvImportUtil.ReadFlags<SuddenEventCategoryFlags>(cells, col, "category"),
 
                 scope = CsvImportUtil.ReadEnumSingle(cells, col, "scope", SuddenEventScope.Member),
 
@@ -86,10 +94,19 @@ public static class SuddenEventTableCsvImporter
                 termMax = CsvImportUtil.ReadInt(cells, col, "term_max", 1),
                 termScale = CsvImportUtil.ReadEnumSingle(cells, col, "term_scale", SuddenEventTermScale.Day),
 
+                isTrigger = ReadBool(cells, col, "is_trigger"),
+                triggerStatus1 = ReadTriggerStatus(cells, col, "trigger_status1"),
+                triggerCondition1 = ReadTriggerCondition(cells, col, "trigger_condition1"),
+                triggerThreshold1 = CsvImportUtil.ReadInt(cells, col, "trigger_threshold1", -1),
+                triggerStatus2 = ReadTriggerStatus(cells, col, "trigger_status2"),
+                triggerCondition2 = ReadTriggerCondition(cells, col, "trigger_condition2"),
+                triggerThreshold2 = threshold2,
+
                 effect1 = CsvImportUtil.ReadString(cells, col, "effect1"),
                 effect2 = CsvImportUtil.ReadString(cells, col, "effect2"),
                 effect3 = CsvImportUtil.ReadString(cells, col, "effect3"),
 
+                isProbable = ReadBool(cells, col, "is_probable"),
                 probability = CsvImportUtil.ReadFloat(cells, col, "probability", 0f),
                 description = description
             };
@@ -141,6 +158,33 @@ public static class SuddenEventTableCsvImporter
         }
 
         return result;
-    }    
+    }
+
+    private static bool ReadBool(List<string> cells, System.Collections.Generic.Dictionary<string, int> col, string key)
+    {
+        var s = CsvImportUtil.ReadString(cells, col, key).Trim().ToUpperInvariant();
+        return s == "TRUE" || s == "1" || s == "YES";
+    }
+
+    private static SuddenEventTriggerStatus ReadTriggerStatus(List<string> cells, System.Collections.Generic.Dictionary<string, int> col, string key)
+    {
+        var s = CsvImportUtil.ReadString(cells, col, key).Trim().ToLowerInvariant();
+        return s switch
+        {
+            "condition" => SuddenEventTriggerStatus.Condition,
+            _ => SuddenEventTriggerStatus.None
+        };
+    }
+
+    private static SuddenEventTriggerCondition ReadTriggerCondition(List<string> cells, System.Collections.Generic.Dictionary<string, int> col, string key)
+    {
+        var s = CsvImportUtil.ReadString(cells, col, key).Trim().ToLowerInvariant();
+        return s switch
+        {
+            "less" => SuddenEventTriggerCondition.Less,
+            "or_more" => SuddenEventTriggerCondition.Or_More,
+            _ => SuddenEventTriggerCondition.None
+        };
+    }
 }
 #endif

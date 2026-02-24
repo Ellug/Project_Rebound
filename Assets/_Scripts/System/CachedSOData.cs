@@ -18,6 +18,7 @@ public static class CachedSOData
     private static StudentStatExpTableSO _studentStatExpTable;
     private static StudentPlusExpTableSO _studentPlusExpTable;
     private static StudentPositionTableSO _studentPositionTable;
+    private static EnemyStatTableSO _enemyStatTable;
 
     // Properties
     public static GrowthCommandTableSO GrowthCommandTable => _growthCommandTable;
@@ -37,6 +38,7 @@ public static class CachedSOData
     public static StudentStatExpTableSO StudentStatExpTable => _studentStatExpTable;
     public static StudentPlusExpTableSO StudentPlusExpTable => _studentPlusExpTable;
     public static StudentPositionTableSO StudentPositionTable => _studentPositionTable;
+    public static EnemyStatTableSO EnemyStatTable => _enemyStatTable;
 
     // StartManager에서 로드된 테이블을 등록
     public static void RegisterTables(
@@ -56,7 +58,8 @@ public static class CachedSOData
         StudentStatusProbTableSO studentStatusProb,
         StudentStatExpTableSO studentStatExp,
         StudentPlusExpTableSO studentPlusExp,
-        StudentPositionTableSO studentPosition)
+        StudentPositionTableSO studentPosition,
+        EnemyStatTableSO enemyStat)
     {
         _growthCommandTable = growthCommand;
         _alwaysEffectTable = alwaysEffect;
@@ -75,6 +78,7 @@ public static class CachedSOData
         _studentStatExpTable = studentStatExp;
         _studentPlusExpTable = studentPlusExp;
         _studentPositionTable = studentPosition;
+        _enemyStatTable = enemyStat;
     }
 
     // 모든 테이블 해제
@@ -97,5 +101,6 @@ public static class CachedSOData
         _studentStatExpTable = null;
         _studentPlusExpTable = null;
         _studentPositionTable = null;
+        _enemyStatTable = null;
     }
 }

@@ -13,48 +13,171 @@ MonoBehaviour:
   m_Name: SO_SuddenEventTable
   m_EditorClassIdentifier: Assembly-CSharp::SuddenEventTableSO
   _rows:
-  - id: ID_SuddenEvent_000001
+  - id: event_000001
     name: "\uBC24\uC0D8"
     context: 1
     condition: 1
+    category: 10
     scope: 1
     targetMin: 1
     targetMax: 3
     termMin: 1
     termMax: 1
     termScale: 1
-    effect1: ID_EventEffect_1_condition_m
+    isTrigger: 0
+    triggerStatus1: 0
+    triggerCondition1: 0
+    triggerThreshold1: -1
+    triggerStatus2: 0
+    triggerCondition2: 0
+    triggerThreshold2: -1
+    effect1: event_effect_1_condition_p5
     effect2: 
     effect3: 
-    probability: 0.5
+    isProbable: 1
+    probability: 0.4
     description: ID_Text_SuddenEvent_000001
-  - id: ID_SuddenEvent_000002
-    name: "\uC758\uAE30\uC18C\uCE68"
-    context: 1
-    condition: 8
-    scope: 3
-    targetMin: 1
-    targetMax: 5
-    termMin: 1
-    termMax: 4
-    termScale: 2
-    effect1: ID_EventEffect_1_random_m
-    effect2: 
-    effect3: 
-    probability: 0.3
-    description: ID_Text_SuddenEvent_000002
-  - id: ID_SuddenEvent_000003
+  - id: event_000002
     name: "\uBD80\uB2F4\uAC10"
     context: 1
-    condition: 10
+    condition: 8
+    category: 26
+    scope: 3
+    targetMin: 5
+    targetMax: 5
+    termMin: 1
+    termMax: 4
+    termScale: 2
+    isTrigger: 1
+    triggerStatus1: 1
+    triggerCondition1: 1
+    triggerThreshold1: 90
+    triggerStatus2: 1
+    triggerCondition2: 2
+    triggerThreshold2: 80
+    effect1: event_effect_1_randomPlayerStat_m3
+    effect2: 
+    effect3: 
+    isProbable: 1
+    probability: 0.2
+    description: ID_Text_SuddenEvent_000002
+  - id: event_000002
+    name: "\uBD80\uB2F4\uAC10"
+    context: 1
+    condition: 8
+    category: 26
+    scope: 3
+    targetMin: 5
+    targetMax: 5
+    termMin: 1
+    termMax: 4
+    termScale: 2
+    isTrigger: 1
+    triggerStatus1: 1
+    triggerCondition1: 1
+    triggerThreshold1: 80
+    triggerStatus2: 1
+    triggerCondition2: 2
+    triggerThreshold2: 70
+    effect1: event_effect_1_randomPlayerStat_m3
+    effect2: 
+    effect3: 
+    isProbable: 1
+    probability: 0.6
+    description: ID_Text_SuddenEvent_000002
+  - id: event_000002
+    name: "\uBD80\uB2F4\uAC10"
+    context: 1
+    condition: 8
+    category: 26
+    scope: 3
+    targetMin: 5
+    targetMax: 5
+    termMin: 1
+    termMax: 4
+    termScale: 2
+    isTrigger: 1
+    triggerStatus1: 1
+    triggerCondition1: 1
+    triggerThreshold1: 70
+    triggerStatus2: 0
+    triggerCondition2: 0
+    triggerThreshold2: -1
+    effect1: event_effect_1_randomPlayerStat_m3
+    effect2: 
+    effect3: 
+    isProbable: 1
+    probability: 0.8
+    description: ID_Text_SuddenEvent_000002
+  - id: event_000003
+    name: "\uBD80\uB2F4\uAC10"
+    context: 1
+    condition: 8
+    category: 26
     scope: 3
     targetMin: 1
     targetMax: 5
     termMin: 1
     termMax: 4
     termScale: 2
-    effect1: ID_EventEffect_1_random_m
+    isTrigger: 1
+    triggerStatus1: 1
+    triggerCondition1: 1
+    triggerThreshold1: 90
+    triggerStatus2: 1
+    triggerCondition2: 2
+    triggerThreshold2: 80
+    effect1: event_effect_1_randomPlayerStat_m3
     effect2: 
     effect3: 
+    isProbable: 1
     probability: 0.2
-    description: ID_Text_SuddenEvent_000003
+    description: ID_Text_SuddenEvent_000002
+  - id: event_000003
+    name: "\uBD80\uB2F4\uAC10"
+    context: 1
+    condition: 8
+    category: 26
+    scope: 3
+    targetMin: 1
+    targetMax: 5
+    termMin: 1
+    termMax: 4
+    termScale: 2
+    isTrigger: 1
+    triggerStatus1: 1
+    triggerCondition1: 1
+    triggerThreshold1: 80
+    triggerStatus2: 1
+    triggerCondition2: 2
+    triggerThreshold2: 70
+    effect1: event_effect_1_randomPlayerStat_m3
+    effect2: 
+    effect3: 
+    isProbable: 1
+    probability: 0.6
+    description: ID_Text_SuddenEvent_000002
+  - id: event_000003
+    name: "\uBD80\uB2F4\uAC10"
+    context: 1
+    condition: 8
+    category: 26
+    scope: 3
+    targetMin: 1
+    targetMax: 5
+    termMin: 1
+    termMax: 4
+    termScale: 2
+    isTrigger: 1
+    triggerStatus1: 1
+    triggerCondition1: 1
+    triggerThreshold1: 70
+    triggerStatus2: 0
+    triggerCondition2: 0
+    triggerThreshold2: -1
+    effect1: event_effect_1_randomPlayerStat_m3
+    effect2: 
+    effect3: 
+    isProbable: 1
+    probability: 0.8
+    description: ID_Text_SuddenEvent_000002

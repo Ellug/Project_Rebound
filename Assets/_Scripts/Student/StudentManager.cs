@@ -12,7 +12,7 @@ public class StudentManager : Singleton<StudentManager>
     public event Action<Student> OnStudentRemoved;
     public event Action<Student> OnStudentModified;
 
-    public IReadOnlyList<Student> Students => _students;
+    public List<Student> Students => _students; // 얘는 영입 완료해서 보유한 학생.
     public int GetStudentCount() => _students.Count;
 
 
