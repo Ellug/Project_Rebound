@@ -57,7 +57,14 @@ public static class StudentPlusExpTableCsvImporter
 
             var cells = CsvImportUtil.SplitCsvLine(line);
 
-            var positionId = CsvImportUtil.ReadInt(cells, col, "position_id", 0);
+            // id 컬럼 우선, 없으면 구버전 position_id 폴백
+            // "position_001" 형식의 string id를 int로 파싱
+            int positionId;
+            if (col.ContainsKey("id"))
+                positionId = CsvImportUtil.ReadPrefixedId(cells, col, "id");
+            else
+                positionId = CsvImportUtil.ReadPrefixedId(cells, col, "position_id");
+
             if (positionId == 0) continue;
 
             var r = new StudentPlusExpRow

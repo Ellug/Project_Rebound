@@ -1,0 +1,2211 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f2e4e235cc06f449a3e571f6f475f4b, type: 3}
+  m_Name: SO_EnemyStatTable
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyStatTableSO
+  _rows:
+  - day: 1
+    mental: 45
+    shoot: 45
+    speed: 40
+    jump: 45
+    condition: 45
+  - day: 2
+    mental: 45
+    shoot: 45
+    speed: 40
+    jump: 45
+    condition: 45
+  - day: 3
+    mental: 45
+    shoot: 45
+    speed: 40
+    jump: 45
+    condition: 45
+  - day: 4
+    mental: 45
+    shoot: 45
+    speed: 40
+    jump: 45
+    condition: 45
+  - day: 5
+    mental: 45
+    shoot: 45
+    speed: 40
+    jump: 45
+    condition: 45
+  - day: 6
+    mental: 45
+    shoot: 45
+    speed: 40
+    jump: 45
+    condition: 45
+  - day: 7
+    mental: 45
+    shoot: 45
+    speed: 40
+    jump: 45
+    condition: 45
+  - day: 8
+    mental: 45
+    shoot: 45
+    speed: 40
+    jump: 45
+    condition: 45
+  - day: 9
+    mental: 46
+    shoot: 46
+    speed: 40
+    jump: 46
+    condition: 46
+  - day: 10
+    mental: 46
+    shoot: 46
+    speed: 40
+    jump: 46
+    condition: 46
+  - day: 11
+    mental: 46
+    shoot: 46
+    speed: 41
+    jump: 46
+    condition: 46
+  - day: 12
+    mental: 46
+    shoot: 46
+    speed: 41
+    jump: 46
+    condition: 46
+  - day: 13
+    mental: 46
+    shoot: 46
+    speed: 41
+    jump: 46
+    condition: 46
+  - day: 14
+    mental: 46
+    shoot: 46
+    speed: 41
+    jump: 46
+    condition: 46
+  - day: 15
+    mental: 46
+    shoot: 46
+    speed: 41
+    jump: 46
+    condition: 46
+  - day: 16
+    mental: 46
+    shoot: 46
+    speed: 41
+    jump: 46
+    condition: 46
+  - day: 17
+    mental: 47
+    shoot: 47
+    speed: 41
+    jump: 47
+    condition: 47
+  - day: 18
+    mental: 47
+    shoot: 47
+    speed: 41
+    jump: 47
+    condition: 47
+  - day: 19
+    mental: 47
+    shoot: 47
+    speed: 41
+    jump: 47
+    condition: 47
+  - day: 20
+    mental: 47
+    shoot: 47
+    speed: 41
+    jump: 47
+    condition: 47
+  - day: 21
+    mental: 47
+    shoot: 47
+    speed: 42
+    jump: 47
+    condition: 47
+  - day: 22
+    mental: 47
+    shoot: 47
+    speed: 42
+    jump: 47
+    condition: 47
+  - day: 23
+    mental: 47
+    shoot: 47
+    speed: 42
+    jump: 47
+    condition: 47
+  - day: 24
+    mental: 47
+    shoot: 47
+    speed: 42
+    jump: 47
+    condition: 47
+  - day: 25
+    mental: 48
+    shoot: 48
+    speed: 42
+    jump: 48
+    condition: 48
+  - day: 26
+    mental: 48
+    shoot: 48
+    speed: 42
+    jump: 48
+    condition: 48
+  - day: 27
+    mental: 48
+    shoot: 48
+    speed: 42
+    jump: 48
+    condition: 48
+  - day: 28
+    mental: 48
+    shoot: 48
+    speed: 42
+    jump: 48
+    condition: 48
+  - day: 29
+    mental: 48
+    shoot: 48
+    speed: 42
+    jump: 48
+    condition: 48
+  - day: 30
+    mental: 48
+    shoot: 48
+    speed: 42
+    jump: 48
+    condition: 48
+  - day: 31
+    mental: 48
+    shoot: 48
+    speed: 43
+    jump: 48
+    condition: 48
+  - day: 32
+    mental: 48
+    shoot: 48
+    speed: 43
+    jump: 48
+    condition: 48
+  - day: 33
+    mental: 49
+    shoot: 49
+    speed: 43
+    jump: 49
+    condition: 49
+  - day: 34
+    mental: 49
+    shoot: 49
+    speed: 43
+    jump: 49
+    condition: 49
+  - day: 35
+    mental: 49
+    shoot: 49
+    speed: 43
+    jump: 49
+    condition: 49
+  - day: 36
+    mental: 49
+    shoot: 49
+    speed: 43
+    jump: 49
+    condition: 49
+  - day: 37
+    mental: 49
+    shoot: 49
+    speed: 43
+    jump: 49
+    condition: 49
+  - day: 38
+    mental: 49
+    shoot: 49
+    speed: 43
+    jump: 49
+    condition: 49
+  - day: 39
+    mental: 49
+    shoot: 49
+    speed: 43
+    jump: 49
+    condition: 49
+  - day: 40
+    mental: 49
+    shoot: 49
+    speed: 43
+    jump: 49
+    condition: 49
+  - day: 41
+    mental: 50
+    shoot: 50
+    speed: 44
+    jump: 50
+    condition: 50
+  - day: 42
+    mental: 50
+    shoot: 50
+    speed: 44
+    jump: 50
+    condition: 50
+  - day: 43
+    mental: 50
+    shoot: 50
+    speed: 44
+    jump: 50
+    condition: 50
+  - day: 44
+    mental: 50
+    shoot: 50
+    speed: 44
+    jump: 50
+    condition: 50
+  - day: 45
+    mental: 50
+    shoot: 50
+    speed: 44
+    jump: 50
+    condition: 50
+  - day: 46
+    mental: 50
+    shoot: 50
+    speed: 44
+    jump: 50
+    condition: 50
+  - day: 47
+    mental: 50
+    shoot: 50
+    speed: 44
+    jump: 50
+    condition: 50
+  - day: 48
+    mental: 50
+    shoot: 50
+    speed: 44
+    jump: 50
+    condition: 50
+  - day: 49
+    mental: 50
+    shoot: 50
+    speed: 44
+    jump: 50
+    condition: 50
+  - day: 50
+    mental: 51
+    shoot: 51
+    speed: 44
+    jump: 51
+    condition: 51
+  - day: 51
+    mental: 51
+    shoot: 51
+    speed: 45
+    jump: 51
+    condition: 51
+  - day: 52
+    mental: 51
+    shoot: 51
+    speed: 45
+    jump: 51
+    condition: 51
+  - day: 53
+    mental: 51
+    shoot: 51
+    speed: 45
+    jump: 51
+    condition: 51
+  - day: 54
+    mental: 51
+    shoot: 51
+    speed: 45
+    jump: 51
+    condition: 51
+  - day: 55
+    mental: 51
+    shoot: 51
+    speed: 45
+    jump: 51
+    condition: 51
+  - day: 56
+    mental: 51
+    shoot: 51
+    speed: 45
+    jump: 51
+    condition: 51
+  - day: 57
+    mental: 51
+    shoot: 51
+    speed: 45
+    jump: 51
+    condition: 51
+  - day: 58
+    mental: 52
+    shoot: 52
+    speed: 45
+    jump: 52
+    condition: 52
+  - day: 59
+    mental: 52
+    shoot: 52
+    speed: 45
+    jump: 52
+    condition: 52
+  - day: 60
+    mental: 52
+    shoot: 52
+    speed: 45
+    jump: 52
+    condition: 52
+  - day: 61
+    mental: 52
+    shoot: 52
+    speed: 46
+    jump: 52
+    condition: 52
+  - day: 62
+    mental: 52
+    shoot: 52
+    speed: 46
+    jump: 52
+    condition: 52
+  - day: 63
+    mental: 52
+    shoot: 52
+    speed: 46
+    jump: 52
+    condition: 52
+  - day: 64
+    mental: 52
+    shoot: 52
+    speed: 46
+    jump: 52
+    condition: 52
+  - day: 65
+    mental: 52
+    shoot: 52
+    speed: 46
+    jump: 52
+    condition: 52
+  - day: 66
+    mental: 53
+    shoot: 53
+    speed: 46
+    jump: 53
+    condition: 53
+  - day: 67
+    mental: 53
+    shoot: 53
+    speed: 46
+    jump: 53
+    condition: 53
+  - day: 68
+    mental: 53
+    shoot: 53
+    speed: 46
+    jump: 53
+    condition: 53
+  - day: 69
+    mental: 53
+    shoot: 53
+    speed: 46
+    jump: 53
+    condition: 53
+  - day: 70
+    mental: 53
+    shoot: 53
+    speed: 46
+    jump: 53
+    condition: 53
+  - day: 71
+    mental: 53
+    shoot: 53
+    speed: 47
+    jump: 53
+    condition: 53
+  - day: 72
+    mental: 53
+    shoot: 53
+    speed: 47
+    jump: 53
+    condition: 53
+  - day: 73
+    mental: 53
+    shoot: 53
+    speed: 47
+    jump: 53
+    condition: 53
+  - day: 74
+    mental: 54
+    shoot: 54
+    speed: 47
+    jump: 54
+    condition: 54
+  - day: 75
+    mental: 54
+    shoot: 54
+    speed: 47
+    jump: 54
+    condition: 54
+  - day: 76
+    mental: 54
+    shoot: 54
+    speed: 47
+    jump: 54
+    condition: 54
+  - day: 77
+    mental: 54
+    shoot: 54
+    speed: 47
+    jump: 54
+    condition: 54
+  - day: 78
+    mental: 54
+    shoot: 54
+    speed: 47
+    jump: 54
+    condition: 54
+  - day: 79
+    mental: 54
+    shoot: 54
+    speed: 47
+    jump: 54
+    condition: 54
+  - day: 80
+    mental: 54
+    shoot: 54
+    speed: 47
+    jump: 54
+    condition: 54
+  - day: 81
+    mental: 54
+    shoot: 54
+    speed: 48
+    jump: 54
+    condition: 54
+  - day: 82
+    mental: 55
+    shoot: 55
+    speed: 48
+    jump: 55
+    condition: 55
+  - day: 83
+    mental: 55
+    shoot: 55
+    speed: 48
+    jump: 55
+    condition: 55
+  - day: 84
+    mental: 55
+    shoot: 55
+    speed: 48
+    jump: 55
+    condition: 55
+  - day: 85
+    mental: 55
+    shoot: 55
+    speed: 48
+    jump: 55
+    condition: 55
+  - day: 86
+    mental: 55
+    shoot: 55
+    speed: 48
+    jump: 55
+    condition: 55
+  - day: 87
+    mental: 55
+    shoot: 55
+    speed: 48
+    jump: 55
+    condition: 55
+  - day: 88
+    mental: 55
+    shoot: 55
+    speed: 48
+    jump: 55
+    condition: 55
+  - day: 89
+    mental: 55
+    shoot: 55
+    speed: 48
+    jump: 55
+    condition: 55
+  - day: 90
+    mental: 56
+    shoot: 56
+    speed: 48
+    jump: 56
+    condition: 56
+  - day: 91
+    mental: 56
+    shoot: 56
+    speed: 49
+    jump: 56
+    condition: 56
+  - day: 92
+    mental: 56
+    shoot: 56
+    speed: 49
+    jump: 56
+    condition: 56
+  - day: 93
+    mental: 56
+    shoot: 56
+    speed: 49
+    jump: 56
+    condition: 56
+  - day: 94
+    mental: 56
+    shoot: 56
+    speed: 49
+    jump: 56
+    condition: 56
+  - day: 95
+    mental: 56
+    shoot: 56
+    speed: 49
+    jump: 56
+    condition: 56
+  - day: 96
+    mental: 56
+    shoot: 56
+    speed: 49
+    jump: 56
+    condition: 56
+  - day: 97
+    mental: 56
+    shoot: 56
+    speed: 49
+    jump: 56
+    condition: 56
+  - day: 98
+    mental: 57
+    shoot: 57
+    speed: 49
+    jump: 57
+    condition: 57
+  - day: 99
+    mental: 57
+    shoot: 57
+    speed: 49
+    jump: 57
+    condition: 57
+  - day: 100
+    mental: 57
+    shoot: 57
+    speed: 49
+    jump: 57
+    condition: 57
+  - day: 101
+    mental: 57
+    shoot: 57
+    speed: 50
+    jump: 57
+    condition: 57
+  - day: 102
+    mental: 57
+    shoot: 57
+    speed: 50
+    jump: 57
+    condition: 57
+  - day: 103
+    mental: 57
+    shoot: 57
+    speed: 50
+    jump: 57
+    condition: 57
+  - day: 104
+    mental: 57
+    shoot: 57
+    speed: 50
+    jump: 57
+    condition: 57
+  - day: 105
+    mental: 57
+    shoot: 57
+    speed: 50
+    jump: 57
+    condition: 57
+  - day: 106
+    mental: 58
+    shoot: 58
+    speed: 50
+    jump: 58
+    condition: 58
+  - day: 107
+    mental: 58
+    shoot: 58
+    speed: 50
+    jump: 58
+    condition: 58
+  - day: 108
+    mental: 58
+    shoot: 58
+    speed: 50
+    jump: 58
+    condition: 58
+  - day: 109
+    mental: 58
+    shoot: 58
+    speed: 50
+    jump: 58
+    condition: 58
+  - day: 110
+    mental: 58
+    shoot: 58
+    speed: 50
+    jump: 58
+    condition: 58
+  - day: 111
+    mental: 58
+    shoot: 58
+    speed: 51
+    jump: 58
+    condition: 58
+  - day: 112
+    mental: 58
+    shoot: 58
+    speed: 51
+    jump: 58
+    condition: 58
+  - day: 113
+    mental: 58
+    shoot: 58
+    speed: 51
+    jump: 58
+    condition: 58
+  - day: 114
+    mental: 59
+    shoot: 59
+    speed: 51
+    jump: 59
+    condition: 59
+  - day: 115
+    mental: 59
+    shoot: 59
+    speed: 51
+    jump: 59
+    condition: 59
+  - day: 116
+    mental: 59
+    shoot: 59
+    speed: 51
+    jump: 59
+    condition: 59
+  - day: 117
+    mental: 59
+    shoot: 59
+    speed: 51
+    jump: 59
+    condition: 59
+  - day: 118
+    mental: 59
+    shoot: 59
+    speed: 51
+    jump: 59
+    condition: 59
+  - day: 119
+    mental: 59
+    shoot: 59
+    speed: 51
+    jump: 59
+    condition: 59
+  - day: 120
+    mental: 59
+    shoot: 59
+    speed: 51
+    jump: 59
+    condition: 59
+  - day: 121
+    mental: 59
+    shoot: 59
+    speed: 52
+    jump: 59
+    condition: 59
+  - day: 122
+    mental: 60
+    shoot: 60
+    speed: 52
+    jump: 60
+    condition: 60
+  - day: 123
+    mental: 60
+    shoot: 60
+    speed: 52
+    jump: 60
+    condition: 60
+  - day: 124
+    mental: 60
+    shoot: 60
+    speed: 52
+    jump: 60
+    condition: 60
+  - day: 125
+    mental: 60
+    shoot: 60
+    speed: 52
+    jump: 60
+    condition: 60
+  - day: 126
+    mental: 60
+    shoot: 60
+    speed: 52
+    jump: 60
+    condition: 60
+  - day: 127
+    mental: 60
+    shoot: 60
+    speed: 52
+    jump: 60
+    condition: 60
+  - day: 128
+    mental: 60
+    shoot: 60
+    speed: 52
+    jump: 60
+    condition: 60
+  - day: 129
+    mental: 60
+    shoot: 60
+    speed: 52
+    jump: 60
+    condition: 60
+  - day: 130
+    mental: 61
+    shoot: 61
+    speed: 52
+    jump: 61
+    condition: 61
+  - day: 131
+    mental: 61
+    shoot: 61
+    speed: 53
+    jump: 61
+    condition: 61
+  - day: 132
+    mental: 61
+    shoot: 61
+    speed: 53
+    jump: 61
+    condition: 61
+  - day: 133
+    mental: 61
+    shoot: 61
+    speed: 53
+    jump: 61
+    condition: 61
+  - day: 134
+    mental: 61
+    shoot: 61
+    speed: 53
+    jump: 61
+    condition: 61
+  - day: 135
+    mental: 61
+    shoot: 61
+    speed: 53
+    jump: 61
+    condition: 61
+  - day: 136
+    mental: 61
+    shoot: 61
+    speed: 53
+    jump: 61
+    condition: 61
+  - day: 137
+    mental: 61
+    shoot: 61
+    speed: 53
+    jump: 61
+    condition: 61
+  - day: 138
+    mental: 62
+    shoot: 62
+    speed: 53
+    jump: 62
+    condition: 62
+  - day: 139
+    mental: 62
+    shoot: 62
+    speed: 53
+    jump: 62
+    condition: 62
+  - day: 140
+    mental: 62
+    shoot: 62
+    speed: 53
+    jump: 62
+    condition: 62
+  - day: 141
+    mental: 62
+    shoot: 62
+    speed: 54
+    jump: 62
+    condition: 62
+  - day: 142
+    mental: 62
+    shoot: 62
+    speed: 54
+    jump: 62
+    condition: 62
+  - day: 143
+    mental: 62
+    shoot: 62
+    speed: 54
+    jump: 62
+    condition: 62
+  - day: 144
+    mental: 62
+    shoot: 62
+    speed: 54
+    jump: 62
+    condition: 62
+  - day: 145
+    mental: 62
+    shoot: 62
+    speed: 54
+    jump: 62
+    condition: 62
+  - day: 146
+    mental: 63
+    shoot: 63
+    speed: 54
+    jump: 63
+    condition: 63
+  - day: 147
+    mental: 63
+    shoot: 63
+    speed: 54
+    jump: 63
+    condition: 63
+  - day: 148
+    mental: 63
+    shoot: 63
+    speed: 54
+    jump: 63
+    condition: 63
+  - day: 149
+    mental: 63
+    shoot: 63
+    speed: 54
+    jump: 63
+    condition: 63
+  - day: 150
+    mental: 63
+    shoot: 63
+    speed: 54
+    jump: 63
+    condition: 63
+  - day: 151
+    mental: 63
+    shoot: 63
+    speed: 55
+    jump: 63
+    condition: 63
+  - day: 152
+    mental: 63
+    shoot: 63
+    speed: 55
+    jump: 63
+    condition: 63
+  - day: 153
+    mental: 63
+    shoot: 63
+    speed: 55
+    jump: 63
+    condition: 63
+  - day: 154
+    mental: 64
+    shoot: 64
+    speed: 55
+    jump: 64
+    condition: 64
+  - day: 155
+    mental: 64
+    shoot: 64
+    speed: 55
+    jump: 64
+    condition: 64
+  - day: 156
+    mental: 64
+    shoot: 64
+    speed: 55
+    jump: 64
+    condition: 64
+  - day: 157
+    mental: 64
+    shoot: 64
+    speed: 55
+    jump: 64
+    condition: 64
+  - day: 158
+    mental: 64
+    shoot: 64
+    speed: 55
+    jump: 64
+    condition: 64
+  - day: 159
+    mental: 64
+    shoot: 64
+    speed: 55
+    jump: 64
+    condition: 64
+  - day: 160
+    mental: 64
+    shoot: 64
+    speed: 55
+    jump: 64
+    condition: 64
+  - day: 161
+    mental: 64
+    shoot: 64
+    speed: 56
+    jump: 64
+    condition: 64
+  - day: 162
+    mental: 65
+    shoot: 65
+    speed: 56
+    jump: 65
+    condition: 65
+  - day: 163
+    mental: 65
+    shoot: 65
+    speed: 56
+    jump: 65
+    condition: 65
+  - day: 164
+    mental: 65
+    shoot: 65
+    speed: 56
+    jump: 65
+    condition: 65
+  - day: 165
+    mental: 65
+    shoot: 65
+    speed: 56
+    jump: 65
+    condition: 65
+  - day: 166
+    mental: 65
+    shoot: 65
+    speed: 56
+    jump: 65
+    condition: 65
+  - day: 167
+    mental: 65
+    shoot: 65
+    speed: 56
+    jump: 65
+    condition: 65
+  - day: 168
+    mental: 65
+    shoot: 65
+    speed: 56
+    jump: 65
+    condition: 65
+  - day: 169
+    mental: 65
+    shoot: 65
+    speed: 56
+    jump: 65
+    condition: 65
+  - day: 170
+    mental: 66
+    shoot: 66
+    speed: 56
+    jump: 66
+    condition: 66
+  - day: 171
+    mental: 66
+    shoot: 66
+    speed: 57
+    jump: 66
+    condition: 66
+  - day: 172
+    mental: 66
+    shoot: 66
+    speed: 57
+    jump: 66
+    condition: 66
+  - day: 173
+    mental: 66
+    shoot: 66
+    speed: 57
+    jump: 66
+    condition: 66
+  - day: 174
+    mental: 66
+    shoot: 66
+    speed: 57
+    jump: 66
+    condition: 66
+  - day: 175
+    mental: 66
+    shoot: 66
+    speed: 57
+    jump: 66
+    condition: 66
+  - day: 176
+    mental: 66
+    shoot: 66
+    speed: 57
+    jump: 66
+    condition: 66
+  - day: 177
+    mental: 66
+    shoot: 66
+    speed: 57
+    jump: 66
+    condition: 66
+  - day: 178
+    mental: 67
+    shoot: 67
+    speed: 57
+    jump: 67
+    condition: 67
+  - day: 179
+    mental: 67
+    shoot: 67
+    speed: 57
+    jump: 67
+    condition: 67
+  - day: 180
+    mental: 67
+    shoot: 67
+    speed: 57
+    jump: 67
+    condition: 67
+  - day: 181
+    mental: 67
+    shoot: 67
+    speed: 58
+    jump: 67
+    condition: 67
+  - day: 182
+    mental: 67
+    shoot: 67
+    speed: 58
+    jump: 67
+    condition: 67
+  - day: 183
+    mental: 67
+    shoot: 67
+    speed: 58
+    jump: 67
+    condition: 67
+  - day: 184
+    mental: 67
+    shoot: 67
+    speed: 58
+    jump: 67
+    condition: 67
+  - day: 185
+    mental: 67
+    shoot: 67
+    speed: 58
+    jump: 67
+    condition: 67
+  - day: 186
+    mental: 68
+    shoot: 68
+    speed: 58
+    jump: 68
+    condition: 68
+  - day: 187
+    mental: 68
+    shoot: 68
+    speed: 58
+    jump: 68
+    condition: 68
+  - day: 188
+    mental: 68
+    shoot: 68
+    speed: 58
+    jump: 68
+    condition: 68
+  - day: 189
+    mental: 68
+    shoot: 68
+    speed: 58
+    jump: 68
+    condition: 68
+  - day: 190
+    mental: 68
+    shoot: 68
+    speed: 58
+    jump: 68
+    condition: 68
+  - day: 191
+    mental: 68
+    shoot: 68
+    speed: 59
+    jump: 68
+    condition: 68
+  - day: 192
+    mental: 68
+    shoot: 68
+    speed: 59
+    jump: 68
+    condition: 68
+  - day: 193
+    mental: 68
+    shoot: 68
+    speed: 59
+    jump: 68
+    condition: 68
+  - day: 194
+    mental: 69
+    shoot: 69
+    speed: 59
+    jump: 69
+    condition: 69
+  - day: 195
+    mental: 69
+    shoot: 69
+    speed: 59
+    jump: 69
+    condition: 69
+  - day: 196
+    mental: 69
+    shoot: 69
+    speed: 59
+    jump: 69
+    condition: 69
+  - day: 197
+    mental: 69
+    shoot: 69
+    speed: 59
+    jump: 69
+    condition: 69
+  - day: 198
+    mental: 69
+    shoot: 69
+    speed: 59
+    jump: 69
+    condition: 69
+  - day: 199
+    mental: 69
+    shoot: 69
+    speed: 59
+    jump: 69
+    condition: 69
+  - day: 200
+    mental: 69
+    shoot: 69
+    speed: 59
+    jump: 69
+    condition: 69
+  - day: 201
+    mental: 69
+    shoot: 69
+    speed: 60
+    jump: 69
+    condition: 69
+  - day: 202
+    mental: 70
+    shoot: 70
+    speed: 60
+    jump: 70
+    condition: 70
+  - day: 203
+    mental: 70
+    shoot: 70
+    speed: 60
+    jump: 70
+    condition: 70
+  - day: 204
+    mental: 70
+    shoot: 70
+    speed: 60
+    jump: 70
+    condition: 70
+  - day: 205
+    mental: 70
+    shoot: 70
+    speed: 60
+    jump: 70
+    condition: 70
+  - day: 206
+    mental: 70
+    shoot: 70
+    speed: 60
+    jump: 70
+    condition: 70
+  - day: 207
+    mental: 70
+    shoot: 70
+    speed: 60
+    jump: 70
+    condition: 70
+  - day: 208
+    mental: 70
+    shoot: 70
+    speed: 60
+    jump: 70
+    condition: 70
+  - day: 209
+    mental: 70
+    shoot: 70
+    speed: 60
+    jump: 70
+    condition: 70
+  - day: 210
+    mental: 71
+    shoot: 71
+    speed: 60
+    jump: 71
+    condition: 71
+  - day: 211
+    mental: 71
+    shoot: 71
+    speed: 61
+    jump: 71
+    condition: 71
+  - day: 212
+    mental: 71
+    shoot: 71
+    speed: 61
+    jump: 71
+    condition: 71
+  - day: 213
+    mental: 71
+    shoot: 71
+    speed: 61
+    jump: 71
+    condition: 71
+  - day: 214
+    mental: 71
+    shoot: 71
+    speed: 61
+    jump: 71
+    condition: 71
+  - day: 215
+    mental: 71
+    shoot: 71
+    speed: 61
+    jump: 71
+    condition: 71
+  - day: 216
+    mental: 71
+    shoot: 71
+    speed: 61
+    jump: 71
+    condition: 71
+  - day: 217
+    mental: 71
+    shoot: 71
+    speed: 61
+    jump: 71
+    condition: 71
+  - day: 218
+    mental: 72
+    shoot: 72
+    speed: 61
+    jump: 72
+    condition: 72
+  - day: 219
+    mental: 72
+    shoot: 72
+    speed: 61
+    jump: 72
+    condition: 72
+  - day: 220
+    mental: 72
+    shoot: 72
+    speed: 61
+    jump: 72
+    condition: 72
+  - day: 221
+    mental: 72
+    shoot: 72
+    speed: 62
+    jump: 72
+    condition: 72
+  - day: 222
+    mental: 72
+    shoot: 72
+    speed: 62
+    jump: 72
+    condition: 72
+  - day: 223
+    mental: 72
+    shoot: 72
+    speed: 62
+    jump: 72
+    condition: 72
+  - day: 224
+    mental: 72
+    shoot: 72
+    speed: 62
+    jump: 72
+    condition: 72
+  - day: 225
+    mental: 72
+    shoot: 72
+    speed: 62
+    jump: 72
+    condition: 72
+  - day: 226
+    mental: 73
+    shoot: 73
+    speed: 62
+    jump: 73
+    condition: 73
+  - day: 227
+    mental: 73
+    shoot: 73
+    speed: 62
+    jump: 73
+    condition: 73
+  - day: 228
+    mental: 73
+    shoot: 73
+    speed: 62
+    jump: 73
+    condition: 73
+  - day: 229
+    mental: 73
+    shoot: 73
+    speed: 62
+    jump: 73
+    condition: 73
+  - day: 230
+    mental: 73
+    shoot: 73
+    speed: 62
+    jump: 73
+    condition: 73
+  - day: 231
+    mental: 73
+    shoot: 73
+    speed: 63
+    jump: 73
+    condition: 73
+  - day: 232
+    mental: 73
+    shoot: 73
+    speed: 63
+    jump: 73
+    condition: 73
+  - day: 233
+    mental: 73
+    shoot: 73
+    speed: 63
+    jump: 73
+    condition: 73
+  - day: 234
+    mental: 74
+    shoot: 74
+    speed: 63
+    jump: 74
+    condition: 74
+  - day: 235
+    mental: 74
+    shoot: 74
+    speed: 63
+    jump: 74
+    condition: 74
+  - day: 236
+    mental: 74
+    shoot: 74
+    speed: 63
+    jump: 74
+    condition: 74
+  - day: 237
+    mental: 74
+    shoot: 74
+    speed: 63
+    jump: 74
+    condition: 74
+  - day: 238
+    mental: 74
+    shoot: 74
+    speed: 63
+    jump: 74
+    condition: 74
+  - day: 239
+    mental: 74
+    shoot: 74
+    speed: 63
+    jump: 74
+    condition: 74
+  - day: 240
+    mental: 74
+    shoot: 74
+    speed: 63
+    jump: 74
+    condition: 74
+  - day: 241
+    mental: 74
+    shoot: 74
+    speed: 64
+    jump: 74
+    condition: 74
+  - day: 242
+    mental: 75
+    shoot: 75
+    speed: 64
+    jump: 75
+    condition: 75
+  - day: 243
+    mental: 75
+    shoot: 75
+    speed: 64
+    jump: 75
+    condition: 75
+  - day: 244
+    mental: 75
+    shoot: 75
+    speed: 64
+    jump: 75
+    condition: 75
+  - day: 245
+    mental: 75
+    shoot: 75
+    speed: 64
+    jump: 75
+    condition: 75
+  - day: 246
+    mental: 75
+    shoot: 75
+    speed: 64
+    jump: 75
+    condition: 75
+  - day: 247
+    mental: 75
+    shoot: 75
+    speed: 64
+    jump: 75
+    condition: 75
+  - day: 248
+    mental: 75
+    shoot: 75
+    speed: 64
+    jump: 75
+    condition: 75
+  - day: 249
+    mental: 75
+    shoot: 75
+    speed: 64
+    jump: 75
+    condition: 75
+  - day: 250
+    mental: 76
+    shoot: 76
+    speed: 64
+    jump: 76
+    condition: 76
+  - day: 251
+    mental: 76
+    shoot: 76
+    speed: 65
+    jump: 76
+    condition: 76
+  - day: 252
+    mental: 76
+    shoot: 76
+    speed: 65
+    jump: 76
+    condition: 76
+  - day: 253
+    mental: 76
+    shoot: 76
+    speed: 65
+    jump: 76
+    condition: 76
+  - day: 254
+    mental: 76
+    shoot: 76
+    speed: 65
+    jump: 76
+    condition: 76
+  - day: 255
+    mental: 76
+    shoot: 76
+    speed: 65
+    jump: 76
+    condition: 76
+  - day: 256
+    mental: 76
+    shoot: 76
+    speed: 65
+    jump: 76
+    condition: 76
+  - day: 257
+    mental: 76
+    shoot: 76
+    speed: 65
+    jump: 76
+    condition: 76
+  - day: 258
+    mental: 77
+    shoot: 77
+    speed: 65
+    jump: 77
+    condition: 77
+  - day: 259
+    mental: 77
+    shoot: 77
+    speed: 65
+    jump: 77
+    condition: 77
+  - day: 260
+    mental: 77
+    shoot: 77
+    speed: 65
+    jump: 77
+    condition: 77
+  - day: 261
+    mental: 77
+    shoot: 77
+    speed: 66
+    jump: 77
+    condition: 77
+  - day: 262
+    mental: 77
+    shoot: 77
+    speed: 66
+    jump: 77
+    condition: 77
+  - day: 263
+    mental: 77
+    shoot: 77
+    speed: 66
+    jump: 77
+    condition: 77
+  - day: 264
+    mental: 77
+    shoot: 77
+    speed: 66
+    jump: 77
+    condition: 77
+  - day: 265
+    mental: 77
+    shoot: 77
+    speed: 66
+    jump: 77
+    condition: 77
+  - day: 266
+    mental: 78
+    shoot: 78
+    speed: 66
+    jump: 78
+    condition: 78
+  - day: 267
+    mental: 78
+    shoot: 78
+    speed: 66
+    jump: 78
+    condition: 78
+  - day: 268
+    mental: 78
+    shoot: 78
+    speed: 66
+    jump: 78
+    condition: 78
+  - day: 269
+    mental: 78
+    shoot: 78
+    speed: 66
+    jump: 78
+    condition: 78
+  - day: 270
+    mental: 78
+    shoot: 78
+    speed: 66
+    jump: 78
+    condition: 78
+  - day: 271
+    mental: 78
+    shoot: 78
+    speed: 67
+    jump: 78
+    condition: 78
+  - day: 272
+    mental: 78
+    shoot: 78
+    speed: 67
+    jump: 78
+    condition: 78
+  - day: 273
+    mental: 78
+    shoot: 78
+    speed: 67
+    jump: 78
+    condition: 78
+  - day: 274
+    mental: 79
+    shoot: 79
+    speed: 67
+    jump: 79
+    condition: 79
+  - day: 275
+    mental: 79
+    shoot: 79
+    speed: 67
+    jump: 79
+    condition: 79
+  - day: 276
+    mental: 79
+    shoot: 79
+    speed: 67
+    jump: 79
+    condition: 79
+  - day: 277
+    mental: 79
+    shoot: 79
+    speed: 67
+    jump: 79
+    condition: 79
+  - day: 278
+    mental: 79
+    shoot: 79
+    speed: 67
+    jump: 79
+    condition: 79
+  - day: 279
+    mental: 79
+    shoot: 79
+    speed: 67
+    jump: 79
+    condition: 79
+  - day: 280
+    mental: 79
+    shoot: 79
+    speed: 67
+    jump: 79
+    condition: 79
+  - day: 281
+    mental: 79
+    shoot: 79
+    speed: 68
+    jump: 79
+    condition: 79
+  - day: 282
+    mental: 80
+    shoot: 80
+    speed: 68
+    jump: 80
+    condition: 80
+  - day: 283
+    mental: 80
+    shoot: 80
+    speed: 68
+    jump: 80
+    condition: 80
+  - day: 284
+    mental: 80
+    shoot: 80
+    speed: 68
+    jump: 80
+    condition: 80
+  - day: 285
+    mental: 80
+    shoot: 80
+    speed: 68
+    jump: 80
+    condition: 80
+  - day: 286
+    mental: 80
+    shoot: 80
+    speed: 68
+    jump: 80
+    condition: 80
+  - day: 287
+    mental: 80
+    shoot: 80
+    speed: 68
+    jump: 80
+    condition: 80
+  - day: 288
+    mental: 80
+    shoot: 80
+    speed: 68
+    jump: 80
+    condition: 80
+  - day: 289
+    mental: 80
+    shoot: 80
+    speed: 68
+    jump: 80
+    condition: 80
+  - day: 290
+    mental: 81
+    shoot: 81
+    speed: 68
+    jump: 81
+    condition: 81
+  - day: 291
+    mental: 81
+    shoot: 81
+    speed: 69
+    jump: 81
+    condition: 81
+  - day: 292
+    mental: 81
+    shoot: 81
+    speed: 69
+    jump: 81
+    condition: 81
+  - day: 293
+    mental: 81
+    shoot: 81
+    speed: 69
+    jump: 81
+    condition: 81
+  - day: 294
+    mental: 81
+    shoot: 81
+    speed: 69
+    jump: 81
+    condition: 81
+  - day: 295
+    mental: 81
+    shoot: 81
+    speed: 69
+    jump: 81
+    condition: 81
+  - day: 296
+    mental: 81
+    shoot: 81
+    speed: 69
+    jump: 81
+    condition: 81
+  - day: 297
+    mental: 81
+    shoot: 81
+    speed: 69
+    jump: 81
+    condition: 81
+  - day: 298
+    mental: 82
+    shoot: 82
+    speed: 69
+    jump: 82
+    condition: 82
+  - day: 299
+    mental: 82
+    shoot: 82
+    speed: 69
+    jump: 82
+    condition: 82
+  - day: 300
+    mental: 82
+    shoot: 82
+    speed: 69
+    jump: 82
+    condition: 82
+  - day: 301
+    mental: 82
+    shoot: 82
+    speed: 70
+    jump: 82
+    condition: 82
+  - day: 302
+    mental: 82
+    shoot: 82
+    speed: 70
+    jump: 82
+    condition: 82
+  - day: 303
+    mental: 82
+    shoot: 82
+    speed: 70
+    jump: 82
+    condition: 82
+  - day: 304
+    mental: 82
+    shoot: 82
+    speed: 70
+    jump: 82
+    condition: 82
+  - day: 305
+    mental: 82
+    shoot: 82
+    speed: 70
+    jump: 82
+    condition: 82
+  - day: 306
+    mental: 83
+    shoot: 83
+    speed: 70
+    jump: 83
+    condition: 83
+  - day: 307
+    mental: 83
+    shoot: 83
+    speed: 70
+    jump: 83
+    condition: 83
+  - day: 308
+    mental: 83
+    shoot: 83
+    speed: 70
+    jump: 83
+    condition: 83
+  - day: 309
+    mental: 83
+    shoot: 83
+    speed: 70
+    jump: 83
+    condition: 83
+  - day: 310
+    mental: 83
+    shoot: 83
+    speed: 70
+    jump: 83
+    condition: 83
+  - day: 311
+    mental: 83
+    shoot: 83
+    speed: 71
+    jump: 83
+    condition: 83
+  - day: 312
+    mental: 83
+    shoot: 83
+    speed: 71
+    jump: 83
+    condition: 83
+  - day: 313
+    mental: 83
+    shoot: 83
+    speed: 71
+    jump: 83
+    condition: 83
+  - day: 314
+    mental: 84
+    shoot: 84
+    speed: 71
+    jump: 84
+    condition: 84
+  - day: 315
+    mental: 84
+    shoot: 84
+    speed: 71
+    jump: 84
+    condition: 84
+  - day: 316
+    mental: 84
+    shoot: 84
+    speed: 71
+    jump: 84
+    condition: 84
+  - day: 317
+    mental: 84
+    shoot: 84
+    speed: 71
+    jump: 84
+    condition: 84
+  - day: 318
+    mental: 84
+    shoot: 84
+    speed: 71
+    jump: 84
+    condition: 84
+  - day: 319
+    mental: 84
+    shoot: 84
+    speed: 71
+    jump: 84
+    condition: 84
+  - day: 320
+    mental: 84
+    shoot: 84
+    speed: 71
+    jump: 84
+    condition: 84
+  - day: 321
+    mental: 84
+    shoot: 84
+    speed: 72
+    jump: 84
+    condition: 84
+  - day: 322
+    mental: 85
+    shoot: 85
+    speed: 72
+    jump: 85
+    condition: 85
+  - day: 323
+    mental: 85
+    shoot: 85
+    speed: 72
+    jump: 85
+    condition: 85
+  - day: 324
+    mental: 85
+    shoot: 85
+    speed: 72
+    jump: 85
+    condition: 85
+  - day: 325
+    mental: 85
+    shoot: 85
+    speed: 72
+    jump: 85
+    condition: 85
+  - day: 326
+    mental: 85
+    shoot: 85
+    speed: 72
+    jump: 85
+    condition: 85
+  - day: 327
+    mental: 85
+    shoot: 85
+    speed: 72
+    jump: 85
+    condition: 85
+  - day: 328
+    mental: 85
+    shoot: 85
+    speed: 72
+    jump: 85
+    condition: 85
+  - day: 329
+    mental: 85
+    shoot: 85
+    speed: 72
+    jump: 85
+    condition: 85
+  - day: 330
+    mental: 86
+    shoot: 86
+    speed: 72
+    jump: 86
+    condition: 86
+  - day: 331
+    mental: 86
+    shoot: 86
+    speed: 73
+    jump: 86
+    condition: 86
+  - day: 332
+    mental: 86
+    shoot: 86
+    speed: 73
+    jump: 86
+    condition: 86
+  - day: 333
+    mental: 86
+    shoot: 86
+    speed: 73
+    jump: 86
+    condition: 86
+  - day: 334
+    mental: 86
+    shoot: 86
+    speed: 73
+    jump: 86
+    condition: 86
+  - day: 335
+    mental: 86
+    shoot: 86
+    speed: 73
+    jump: 86
+    condition: 86
+  - day: 336
+    mental: 86
+    shoot: 86
+    speed: 73
+    jump: 86
+    condition: 86
+  - day: 337
+    mental: 86
+    shoot: 86
+    speed: 73
+    jump: 86
+    condition: 86
+  - day: 338
+    mental: 87
+    shoot: 87
+    speed: 73
+    jump: 87
+    condition: 87
+  - day: 339
+    mental: 87
+    shoot: 87
+    speed: 73
+    jump: 87
+    condition: 87
+  - day: 340
+    mental: 87
+    shoot: 87
+    speed: 73
+    jump: 87
+    condition: 87
+  - day: 341
+    mental: 87
+    shoot: 87
+    speed: 74
+    jump: 87
+    condition: 87
+  - day: 342
+    mental: 87
+    shoot: 87
+    speed: 74
+    jump: 87
+    condition: 87
+  - day: 343
+    mental: 87
+    shoot: 87
+    speed: 74
+    jump: 87
+    condition: 87
+  - day: 344
+    mental: 87
+    shoot: 87
+    speed: 74
+    jump: 87
+    condition: 87
+  - day: 345
+    mental: 87
+    shoot: 87
+    speed: 74
+    jump: 87
+    condition: 87
+  - day: 346
+    mental: 88
+    shoot: 88
+    speed: 74
+    jump: 88
+    condition: 88
+  - day: 347
+    mental: 88
+    shoot: 88
+    speed: 74
+    jump: 88
+    condition: 88
+  - day: 348
+    mental: 88
+    shoot: 88
+    speed: 74
+    jump: 88
+    condition: 88
+  - day: 349
+    mental: 88
+    shoot: 88
+    speed: 74
+    jump: 88
+    condition: 88
+  - day: 350
+    mental: 88
+    shoot: 88
+    speed: 74
+    jump: 88
+    condition: 88
+  - day: 351
+    mental: 88
+    shoot: 88
+    speed: 75
+    jump: 88
+    condition: 88
+  - day: 352
+    mental: 88
+    shoot: 88
+    speed: 75
+    jump: 88
+    condition: 88
+  - day: 353
+    mental: 88
+    shoot: 88
+    speed: 75
+    jump: 88
+    condition: 88
+  - day: 354
+    mental: 89
+    shoot: 89
+    speed: 75
+    jump: 89
+    condition: 89
+  - day: 355
+    mental: 89
+    shoot: 89
+    speed: 75
+    jump: 89
+    condition: 89
+  - day: 356
+    mental: 89
+    shoot: 89
+    speed: 75
+    jump: 89
+    condition: 89
+  - day: 357
+    mental: 89
+    shoot: 89
+    speed: 75
+    jump: 89
+    condition: 89
+  - day: 358
+    mental: 89
+    shoot: 89
+    speed: 75
+    jump: 89
+    condition: 89
+  - day: 359
+    mental: 89
+    shoot: 89
+    speed: 75
+    jump: 89
+    condition: 89
+  - day: 360
+    mental: 89
+    shoot: 89
+    speed: 75
+    jump: 89
+    condition: 89
+  - day: 361
+    mental: 89
+    shoot: 89
+    speed: 76
+    jump: 89
+    condition: 89
+  - day: 362
+    mental: 90
+    shoot: 90
+    speed: 76
+    jump: 90
+    condition: 90
+  - day: 363
+    mental: 90
+    shoot: 90
+    speed: 76
+    jump: 90
+    condition: 90
+  - day: 364
+    mental: 90
+    shoot: 90
+    speed: 76
+    jump: 90
+    condition: 90
+  - day: 365
+    mental: 90
+    shoot: 90
+    speed: 76
+    jump: 90
+    condition: 90
+  - day: 366
+    mental: 90
+    shoot: 90
+    speed: 76
+    jump: 90
+    condition: 90

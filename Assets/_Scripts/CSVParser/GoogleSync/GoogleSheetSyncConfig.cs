@@ -16,6 +16,7 @@ public static class GoogleSheetSyncConfig
     private const string GID_SUDDEN_EVENT_TEXT     = "0";
     private const string GID_STATUS_TEXT           = "0";
     private const string GID_SCHOOL_NAME           = "0";
+    private const string GID_ENEMY_STAT            = "0";
     private const string GID_STUDENT_NAME          = "0";
     private const string GID_STUDENT_BODY          = "0";
     private const string GID_STUDENT_STAT          = "0";
@@ -29,7 +30,7 @@ public static class GoogleSheetSyncConfig
     private static string Url(string gid) =>
         $"https://docs.google.com/spreadsheets/d/{SHEET_ID}/export?format=csv&gid={gid}";
 
-    public static readonly IReadOnlyList<SheetTableEntry> Tables = new List<SheetTableEntry>(17)
+    public static readonly IReadOnlyList<SheetTableEntry> Tables = new List<SheetTableEntry>(18)
     {
         new("GrowthCommandTable.csv",     "Growth Command",        Url(GID_GROWTH_COMMAND)),
         new("AlwaysEffectTable.csv",      "Always Effect",         Url(GID_ALWAYS_EFFECT)),
@@ -39,6 +40,7 @@ public static class GoogleSheetSyncConfig
         new("SuddenEventTextTable.csv",   "Sudden Event Text",     Url(GID_SUDDEN_EVENT_TEXT)),
         new("StatusTextTable.csv",        "Status Text",           Url(GID_STATUS_TEXT)),
         new("SchoolNameTable.csv",        "School Name",           Url(GID_SCHOOL_NAME)),
+        new("EnemyStatTable.csv",         "Enemy Stat",            Url(GID_ENEMY_STAT)),
         new("StudentNameTable.csv",       "Student Name",          Url(GID_STUDENT_NAME)),
         new("StudentBodyTable.csv",       "Student Body",          Url(GID_STUDENT_BODY)),
         new("StudentStatTable.csv",       "Student Stat",          Url(GID_STUDENT_STAT)),

@@ -85,6 +85,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a0f3c45ce00981b42b445cd7e7e2e9d4
+    m_Address: Assets/_Scripts/SO/SO_EnemyStatTable.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b0389c1f9d1729044b4be41a31819b3e
     m_Address: Assets/_Scripts/SO/SO_StudentStatusProbTable.asset
     m_ReadOnly: 0

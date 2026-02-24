@@ -4,12 +4,12 @@ using System.IO;
 using UnityEditor;
 using UnityEngine;
 
-public static class SchoolNameTableCsvImporter
+public static class EnemyStatTableCsvImporter
 {
-    [MenuItem("Tools/Data/Import School Name CSV -> SO")]
+    [MenuItem("Tools/Data/Import Enemy Stat CSV -> SO")]
     public static void Import()
     {
-        var csvPath = EditorUtility.OpenFilePanel("Select School Name CSV", Application.dataPath, "csv");
+        var csvPath = EditorUtility.OpenFilePanel("Select Enemy Stat CSV", Application.dataPath, "csv");
         if (string.IsNullOrEmpty(csvPath))
             return;
 
@@ -18,25 +18,25 @@ public static class SchoolNameTableCsvImporter
 
     public static void ImportFromPath(string csvPath)
     {
-        const string assetPath = "Assets/_Scripts/SO/SO_SchoolNameTable.asset";
+        const string assetPath = "Assets/_Scripts/SO/SO_EnemyStatTable.asset";
 
         var csvText = File.ReadAllText(csvPath);
         var rows = ParseCsvToRows(csvText);
 
-        var so = CsvImportUtil.LoadOrCreateSO<SchoolNameTableSO>(assetPath);
+        var so = CsvImportUtil.LoadOrCreateSO<EnemyStatTableSO>(assetPath);
         so.ReplaceAll(rows);
 
         EditorUtility.SetDirty(so);
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
 
-        Debug.Log($"[SchoolNameTable] Imported {rows.Count} rows -> {assetPath}");
+        Debug.Log($"[EnemyStatTable] Imported {rows.Count} rows -> {assetPath}");
     }
 
-    private static List<SchoolNameRow> ParseCsvToRows(string csv)
+    private static List<EnemyStatRow> ParseCsvToRows(string csv)
     {
         var lines = CsvImportUtil.SplitLines(csv);
-        var result = new List<SchoolNameRow>(Mathf.Max(16, lines.Count - 1));
+        var result = new List<EnemyStatRow>(Mathf.Max(16, lines.Count - 1));
         if (lines.Count <= 1) return result;
 
         var header = CsvImportUtil.SplitCsvLine(lines[0]);
@@ -57,14 +57,17 @@ public static class SchoolNameTableCsvImporter
 
             var cells = CsvImportUtil.SplitCsvLine(line);
 
-            // id는 "school_001" 형식의 string 또는 순수 int 모두 지원
-            var id = CsvImportUtil.ReadPrefixedId(cells, col, "id");
-            if (id == 0) continue;
+            var day = CsvImportUtil.ReadInt(cells, col, "day", 0);
+            if (day == 0) continue;
 
-            var r = new SchoolNameRow
+            var r = new EnemyStatRow
             {
-                id = id,
-                name = CsvImportUtil.ReadString(cells, col, "name")
+                day = day,
+                mental = CsvImportUtil.ReadInt(cells, col, "mental", 0),
+                shoot = CsvImportUtil.ReadInt(cells, col, "shoot", 0),
+                speed = CsvImportUtil.ReadInt(cells, col, "speed", 0),
+                jump = CsvImportUtil.ReadInt(cells, col, "jump", 0),
+                condition = CsvImportUtil.ReadInt(cells, col, "condition", 0)
             };
 
             result.Add(r);

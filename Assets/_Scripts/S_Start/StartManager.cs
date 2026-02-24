@@ -21,6 +21,7 @@ public class StartManager : MonoBehaviour
     [SerializeField] private AssetReference _suddenEventTextTableRef;
     [SerializeField] private AssetReference _statusTextTableRef;
     [SerializeField] private AssetReference _schoolNameTableRef;
+    [SerializeField] private AssetReference _enemyStatTableRef;
 
     [Header("Student Data Tables")]
     [SerializeField] private AssetReference _studentNameTableRef;
@@ -42,6 +43,7 @@ public class StartManager : MonoBehaviour
     private SuddenEventTextTableSO _suddenEventTextTable;
     private StatusTextTableSO _statusTextTable;
     private SchoolNameTableSO _schoolNameTable;
+    private EnemyStatTableSO _enemyStatTable;
     private StudentNameTableSO _studentNameTable;
     private StudentBodyTableSO _studentBodyTable;
     private StudentStatTableSO _studentStatTable;
@@ -77,6 +79,7 @@ public class StartManager : MonoBehaviour
             _suddenEventTextTableRef,
             _statusTextTableRef,
             _schoolNameTableRef,
+            _enemyStatTableRef,
             _studentNameTableRef,
             _studentBodyTableRef,
             _studentStatTableRef,
@@ -175,80 +178,86 @@ public class StartManager : MonoBehaviour
         }
 
         // 이 위에까지 다운로드 과정은 웹에서 번들 받아서 로컬의 번들 갱신하는 과정
-        
+
         // 이 아래는 갱신된 로컬의 번들에서 Load 해오는 과정
 
         // 5. Loading game data (80% ~ 90%)
         _statusText.text = "Loading game data...";
 
-        // 모든 테이블 로드
+        int tableCount = 18;
+        float tableStep = 0.1f / tableCount;
+        float baseProgress = 0.8f;
+
         yield return LoadTable<GrowthCommandTableSO>(_growthCommandTableRef, t => _growthCommandTable = t);
-        progress = 0.8059f;
-        _loadingSlider.value = progress;
+        baseProgress += tableStep;
+        _loadingSlider.value = baseProgress;
 
         yield return LoadTable<AlwaysEffectTableSO>(_alwaysEffectTableRef, t => _alwaysEffectTable = t);
-        progress = 0.8118f;
-        _loadingSlider.value = progress;
+        baseProgress += tableStep;
+        _loadingSlider.value = baseProgress;
 
         yield return LoadTable<AlwaysEventTableSO>(_alwaysEventTableRef, t => _alwaysEventTable = t);
-        progress = 0.8176f;
-        _loadingSlider.value = progress;
+        baseProgress += tableStep;
+        _loadingSlider.value = baseProgress;
 
         yield return LoadTable<SuddenEventTableSO>(_suddenEventTableRef, t => _suddenEventTable = t);
-        progress = 0.8235f;
-        _loadingSlider.value = progress;
+        baseProgress += tableStep;
+        _loadingSlider.value = baseProgress;
 
         yield return LoadTable<SuddenEventEffectTableSO>(_suddenEventEffectTableRef, t => _suddenEventEffectTable = t);
-        progress = 0.8294f;
-        _loadingSlider.value = progress;
+        baseProgress += tableStep;
+        _loadingSlider.value = baseProgress;
 
         yield return LoadTable<SuddenEventTextTableSO>(_suddenEventTextTableRef, t => _suddenEventTextTable = t);
-        progress = 0.8353f;
-        _loadingSlider.value = progress;
+        baseProgress += tableStep;
+        _loadingSlider.value = baseProgress;
 
         yield return LoadTable<StatusTextTableSO>(_statusTextTableRef, t => _statusTextTable = t);
-        progress = 0.8412f;
-        _loadingSlider.value = progress;
+        baseProgress += tableStep;
+        _loadingSlider.value = baseProgress;
 
         yield return LoadTable<SchoolNameTableSO>(_schoolNameTableRef, t => _schoolNameTable = t);
-        progress = 0.8471f;
-        _loadingSlider.value = progress;
+        baseProgress += tableStep;
+        _loadingSlider.value = baseProgress;
+
+        yield return LoadTable<EnemyStatTableSO>(_enemyStatTableRef, t => _enemyStatTable = t);
+        baseProgress += tableStep;
+        _loadingSlider.value = baseProgress;
 
         yield return LoadTable<StudentNameTableSO>(_studentNameTableRef, t => _studentNameTable = t);
-        progress = 0.8529f;
-        _loadingSlider.value = progress;
+        baseProgress += tableStep;
+        _loadingSlider.value = baseProgress;
 
         yield return LoadTable<StudentBodyTableSO>(_studentBodyTableRef, t => _studentBodyTable = t);
-        progress = 0.8588f;
-        _loadingSlider.value = progress;
+        baseProgress += tableStep;
+        _loadingSlider.value = baseProgress;
 
         yield return LoadTable<StudentStatTableSO>(_studentStatTableRef, t => _studentStatTable = t);
-        progress = 0.8647f;
-        _loadingSlider.value = progress;
+        baseProgress += tableStep;
+        _loadingSlider.value = baseProgress;
 
         yield return LoadTable<StudentStartStatTableSO>(_studentStartStateTableRef, t => _studentStartStateTable = t);
-        progress = 0.8706f;
-        _loadingSlider.value = progress;
+        baseProgress += tableStep;
+        _loadingSlider.value = baseProgress;
 
         yield return LoadTable<StudentPotentialTableSO>(_studentPotentialTableRef, t => _studentPotentialTable = t);
-        progress = 0.8765f;
-        _loadingSlider.value = progress;
+        baseProgress += tableStep;
+        _loadingSlider.value = baseProgress;
 
         yield return LoadTable<StudentStatusProbTableSO>(_studentStatusProbTableRef, t => _studentStatusProbTable = t);
-        progress = 0.8824f;
-        _loadingSlider.value = progress;
+        baseProgress += tableStep;
+        _loadingSlider.value = baseProgress;
 
         yield return LoadTable<StudentStatExpTableSO>(_studentStatExpTableRef, t => _studentStatExpTable = t);
-        progress = 0.8882f;
-        _loadingSlider.value = progress;
+        baseProgress += tableStep;
+        _loadingSlider.value = baseProgress;
 
         yield return LoadTable<StudentPlusExpTableSO>(_studentPlusExpTableRef, t => _studentPlusExpTable = t);
-        progress = 0.8941f;
-        _loadingSlider.value = progress;
+        baseProgress += tableStep;
+        _loadingSlider.value = baseProgress;
 
         yield return LoadTable<StudentPositionTableSO>(_studentPositionTableRef, t => _studentPositionTable = t);
-        progress = 0.9f;
-        _loadingSlider.value = progress;
+        _loadingSlider.value = 0.9f;
 
         // 6. Initializing DataManager (90% ~ 95%)
         _statusText.text = "Initializing...";
@@ -271,7 +280,8 @@ public class StartManager : MonoBehaviour
             _studentStatusProbTable,
             _studentStatExpTable,
             _studentPlusExpTable,
-            _studentPositionTable
+            _studentPositionTable,
+            _enemyStatTable
         );
 
         progress = 0.95f;

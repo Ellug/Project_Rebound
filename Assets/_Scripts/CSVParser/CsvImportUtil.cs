@@ -206,6 +206,35 @@ public static class CsvImportUtil
         catch { return default; }
     }
 
+    // ---- ID Parsing ----
+    // "prefix_NNN" 형식의 string id를 int로 변환 (예: "stat_001" -> 1, "position_01" -> 1)
+    // 변환 실패 시 defaultValue 반환
+    public static int ParsePrefixedId(string idStr, int defaultValue = 0)
+    {
+        if (string.IsNullOrEmpty(idStr)) return defaultValue;
+
+        int underscoreIdx = idStr.LastIndexOf('_');
+        if (underscoreIdx >= 0 && underscoreIdx < idStr.Length - 1)
+        {
+            var numStr = idStr.Substring(underscoreIdx + 1);
+            if (int.TryParse(numStr, NumberStyles.Integer, CultureInfo.InvariantCulture, out var v))
+                return v;
+        }
+
+        // 언더스코어가 없거나 뒤가 숫자가 아니면 전체 파싱 시도
+        if (int.TryParse(idStr, NumberStyles.Integer, CultureInfo.InvariantCulture, out var fallback))
+            return fallback;
+
+        return defaultValue;
+    }
+
+    // 컬럼에서 "prefix_NNN" 형식의 ID를 읽어 int로 반환
+    public static int ReadPrefixedId(List<string> cells, Dictionary<string, int> col, string key, int defaultValue = 0)
+    {
+        var s = ReadString(cells, col, key);
+        return ParsePrefixedId(s, defaultValue);
+    }
+
     // ---- Asset ----
     // ScriptableObject 로드 또는 생성 (없으면 새로 생성)
     public static T LoadOrCreateSO<T>(string assetPath) where T : ScriptableObject

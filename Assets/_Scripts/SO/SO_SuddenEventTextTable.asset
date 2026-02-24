@@ -29,3 +29,43 @@ MonoBehaviour:
     description: "$\"{target1.name}, {target2.name}, {target3.name}\uC774 \uB2A6\uC7A0\uC744
       \uC7A4\uB2E4.\\n<color=grey>{target1.name}, {target2.name}, {target3.name}
       \uCEE8\uB514\uC158 \uAC10\uC18C -5<\\color>\""
+  - id: ID_Text_SuddenEvent_000002
+    target: 1
+    speaker: '[SYSTEM]'
+    description: 
+  - id: ID_Text_SuddenEvent_000002
+    target: 2
+    speaker: '[SYSTEM]'
+    description: 
+  - id: ID_Text_SuddenEvent_000002
+    target: 3
+    speaker: '[SYSTEM]'
+    description: 
+  - id: ID_Text_SuddenEvent_000002
+    target: 4
+    speaker: '[SYSTEM]'
+    description: 
+  - id: ID_Text_SuddenEvent_000002
+    target: 5
+    speaker: '[SYSTEM]'
+    description: 
+  - id: ID_Text_SuddenEvent_000003
+    target: 1
+    speaker: '[SYSTEM]'
+    description: 
+  - id: ID_Text_SuddenEvent_000003
+    target: 2
+    speaker: '[SYSTEM]'
+    description: 
+  - id: ID_Text_SuddenEvent_000003
+    target: 3
+    speaker: '[SYSTEM]'
+    description: 
+  - id: ID_Text_SuddenEvent_000003
+    target: 4
+    speaker: '[SYSTEM]'
+    description: 
+  - id: ID_Text_SuddenEvent_000003
+    target: 5
+    speaker: '[SYSTEM]'
+    description: 
