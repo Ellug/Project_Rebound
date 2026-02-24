@@ -55,6 +55,10 @@ public class GameManager : Singleton<GameManager>
         if (scene.name == TitleScene)
             CleanupManagers();
 
+        // 다른 씬으로 이동하면 가드를 해제해 다음 Lobby 복귀 때 재초기화
+        if (scene.name != LobbyScene)
+            _lobbyInitialized = false;
+
         TryInitializeLobbyFlow(scene);
     }
 
