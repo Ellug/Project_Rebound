@@ -19,48 +19,46 @@ public class RecruitmentManager : MonoBehaviour
 
     private TurnManager _turnManager;
 
+    // UIManager 기준 Canvas 루트 참조
     private Transform CanvasRoot => UIManager.Instance != null
         ? UIManager.Instance.GetCanvasRoot()
         : null;
 
-    public event Action<List<Student>> OnRecruitmentCompleted;
+    public event Action<List<Student>> OnRecruitmentCompleted; // 영입 완료 콜백
 
     void Start()
     {
         _turnManager = FindFirstObjectByType<TurnManager>();
-        SubscribeDateEvents();
+        SubscribeDateEvents(); // 날짜 이벤트 연결
     }
 
     void OnDestroy()
     {
-        UnsubscribeDateEvents();
+        UnsubscribeDateEvents(); // 이벤트 해제
     }
 
-    
     // 외부 호출 API
-    // 게임 시작 시 GameManager에서 호출 (기존 API 유지)
+    // 게임 시작 시 최초 영입 트리거
     public void TriggerInitialRecruitment()
     {
         GenerateCandidateStudents();
         ShowRecruitmentEventConfirm(RecruitmentContext.GameStart);
     }
 
-    // LobbyUI 호환용 엔트리포인트 (기존 호출부 수정 없이 유지)
+    // 기존 LobbyUI 호출 유지용 래퍼
     public void TryStartRecruitment()
     {
         TriggerInitialRecruitment();
     }
 
-    // 새 학기 입학 이벤트 트리거가 외부에 있는 경우를 대비한 API (선택)
+    // 새 학기 신입생 영입 트리거
     public void TriggerEnrollmentRecruitment()
     {
         GenerateCandidateStudents();
         ShowRecruitmentEventConfirm(RecruitmentContext.NewSemester);
     }
 
-    
     // DateManager 이벤트 구독
-
     private void SubscribeDateEvents()
     {
         if (_turnManager == null) return;
@@ -76,15 +74,14 @@ public class RecruitmentManager : MonoBehaviour
         _turnManager.DateManager.OnEnrollmentTriggered -= HandleEnrollmentTriggered;
     }
 
+    // 입학 이벤트 발생 시 자동 영입 흐름 시작
     private void HandleEnrollmentTriggered()
     {
         GenerateCandidateStudents();
         ShowRecruitmentEventConfirm(RecruitmentContext.NewSemester);
     }
 
-    
     // 1단계: 이벤트 안내 ConfirmPopup
-    
     private void ShowRecruitmentEventConfirm(RecruitmentContext context)
     {
         if (UIManager.Instance == null)
@@ -107,9 +104,7 @@ public class RecruitmentManager : MonoBehaviour
         UIManager.Instance.ShowConfirm(request);
     }
 
-    
     // 2단계: 카드 선택 팝업
-
     private void OpenRecruitmentPopup()
     {
         if (_recruitmentPopupPrefab == null)
@@ -126,7 +121,7 @@ public class RecruitmentManager : MonoBehaviour
         }
 
         RecruitmentPopup popup = Instantiate(_recruitmentPopupPrefab, canvasRoot);
-        popup.transform.SetAsLastSibling();
+        popup.transform.SetAsLastSibling(); // 최상단 표시
         popup.SetMaxRecruitCount(_maxRecruitCount);
         popup.Init();
         popup.Open();
@@ -138,7 +133,8 @@ public class RecruitmentManager : MonoBehaviour
         popup.OnCancelled += HandleRecruitmentSkipped;
     }
 
-    // 영입 확정 → StudentManager에 확정 학생만 재등록
+    // 영입 결과 처리
+    // 영입 확정 → 선택된 학생만 팀에 등록
     private void HandleRecruitmentConfirmed(List<Student> recruits)
     {
         if (recruits == null || recruits.Count == 0) return;
@@ -155,20 +151,19 @@ public class RecruitmentManager : MonoBehaviour
         OnRecruitmentCompleted?.Invoke(recruits);
     }
 
-    // 영입 포기 → 후보 목록 정리
+    // 영입 포기 → 후보 초기화
     private void HandleRecruitmentSkipped()
     {
         StudentManager.Instance?.ClearAllStudents();
         Debug.Log("[RecruitmentManager] 영입 포기");
     }
 
-    
     // 후보 생성
     private void GenerateCandidateStudents()
     {
         if (StudentManager.Instance == null) return;
 
-        StudentFactory.ResetUsedNames();
+        StudentFactory.ResetUsedNames();     // 이름 중복 초기화
         StudentManager.Instance.ClearAllStudents();
 
         for (int i = 0; i < _recruitCandidateCount; i++)
@@ -178,7 +173,7 @@ public class RecruitmentManager : MonoBehaviour
     }
 
     
-    // 메시지
+    // 메시지 빌드
     private static string BuildEventMessage(RecruitmentContext context)
     {
         return context switch
@@ -196,6 +191,7 @@ public class RecruitmentManager : MonoBehaviour
     }
 
 #if UNITY_EDITOR
+    // 디버그용 컨텍스트 메뉴
     [ContextMenu("Debug - Trigger Initial Recruitment")]
     private void DebugTriggerInitial() => TriggerInitialRecruitment();
 

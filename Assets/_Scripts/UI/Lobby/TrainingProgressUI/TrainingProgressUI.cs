@@ -2,20 +2,22 @@
 using UnityEngine.UI;
 using TMPro;
 
-// 훈련 진행 게이지 UI (전체 화면)
-// FlowController가 SetProgress01()로 직접 제어
+// 훈련 진행 전체 화면 게이지 UI
+// TrainingFlowController가 직접 제어
 public class TrainingProgressUI : UIBase
 {
     [Header("UI")]
-    [SerializeField] private Image _imgBackground;
-    [SerializeField] private Image _imgGaugeFill;
-    [SerializeField] private TMP_Text _txtPercent;
-    [SerializeField] private TMP_Text _txtStatus;
+    [SerializeField] private Image _imgBackground;   // 배경 이미지
+    [SerializeField] private Image _imgGaugeFill;    // 게이지 Fill
+    [SerializeField] private TMP_Text _txtPercent;   // 퍼센트 표시
+    [SerializeField] private TMP_Text _txtStatus;    // 상태 텍스트
 
+    // UI 표시 및 초기화
     public void Show(Sprite backgroundSprite = null)
     {
         gameObject.SetActive(true);
 
+        // 배경 설정
         if (_imgBackground != null)
         {
             if (backgroundSprite != null)
@@ -33,6 +35,7 @@ public class TrainingProgressUI : UIBase
         SetStatus("진행중..");
     }
 
+    // 진행률 설정 (0~1)
     public void SetProgress01(float fill01)
     {
         fill01 = Mathf.Clamp01(fill01);
@@ -44,12 +47,14 @@ public class TrainingProgressUI : UIBase
             _txtPercent.text = Mathf.RoundToInt(fill01 * 100f).ToString();
     }
 
+    // 상태 텍스트 변경
     public void SetStatus(string status)
     {
         if (_txtStatus != null)
             _txtStatus.text = status;
     }
 
+    // UI 숨김
     public void Hide()
     {
         gameObject.SetActive(false);

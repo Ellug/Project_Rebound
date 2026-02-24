@@ -6,33 +6,29 @@ using UnityEngine;
 // - 이벤트/훈련/모달 전부 대응
 public sealed class ConfirmPopupRequest
 {
-    // Texts
-    public string Title;
-    public string Message;
-    public string SubMessage;
+    public string Title;                                // 제목
+    public string Message;                              // 본문 메시지
+    public string SubMessage;                           // 서브 메시지
 
-    // Buttons
-    public string PrimaryLabel;
-    public Action PrimaryAction;
+    public string PrimaryLabel;                         // 확인 버튼 라벨
+    public Action PrimaryAction;                        // 확인 버튼 액션
 
-    public string SecondaryLabel;
-    public Action SecondaryAction;
+    public string SecondaryLabel;                       // 취소 버튼 라벨
+    public Action SecondaryAction;                      // 취소 버튼 액션
 
-    // Optional preview
-    public Sprite PreviewSprite;
+    public Sprite PreviewSprite;                        // 미리보기 이미지
 
-    // Modal behavior
-    public bool IsModal = true;
+    public bool IsModal = true;                         // 모달 여부
 
     // Auto close flags (ConfirmPopup.cs가 이 이름으로 접근함)
-    public bool AutoCloseOnPrimary = true;
-    public bool AutoCloseOnSecondary = true;
+    public bool AutoCloseOnPrimary = true;              // 확인 후 자동 닫기
+    public bool AutoCloseOnSecondary = true;            // 취소 후 자동 닫기
 
-    // Student selection support
-    public bool RequiresStudentSelection = false;
-    public int MaxSelectCount = 0;
-    public Action<List<Student>> OnStudentsSelected;
+    public bool RequiresStudentSelection = false;       // 학생 선택 필요 여부
+    public int MaxSelectCount = 0;                      // 최대 선택 인원
+    public Action<List<Student>> OnStudentsSelected;    // 학생 선택 완료 콜백
 
+    // 기본 생성자 (필수 값 중심)
     public ConfirmPopupRequest(
         string title,
         string message,
@@ -56,32 +52,41 @@ public sealed class ConfirmPopupRequest
         PreviewSprite = previewSprite;
     }
 
-    // 선택사항: 호출부에서 설정 편하게 쓰는 Setter들
+    // Fluent Setter 영역
+
+    // 모달 설정
     public ConfirmPopupRequest SetModal(bool isModal)
     {
         IsModal = isModal;
         return this;
     }
 
+    // 서브 메시지 설정
     public ConfirmPopupRequest SetSubMessage(string subMessage)
     {
         SubMessage = subMessage;
         return this;
     }
 
+    // 확인 버튼 자동 닫기 여부 설정
     public ConfirmPopupRequest SetAutoCloseOnPrimary(bool autoClose)
     {
         AutoCloseOnPrimary = autoClose;
         return this;
     }
 
+    // 취소 버튼 자동 닫기 여부 설정
     public ConfirmPopupRequest SetAutoCloseOnSecondary(bool autoClose)
     {
         AutoCloseOnSecondary = autoClose;
         return this;
     }
 
-    public ConfirmPopupRequest SetStudentSelection(bool requiresStudentSelection, int maxSelectCount, Action<List<Student>> onStudentsSelected)
+    // 학생 선택 설정 (Fluent 방식)
+    public ConfirmPopupRequest SetStudentSelection(
+        bool requiresStudentSelection,
+        int maxSelectCount,
+        Action<List<Student>> onStudentsSelected)
     {
         RequiresStudentSelection = requiresStudentSelection;
         MaxSelectCount = Mathf.Max(0, maxSelectCount);
