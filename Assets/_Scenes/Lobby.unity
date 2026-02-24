@@ -2571,8 +2571,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GraduationManager
   _graduationPopup: {fileID: 7954122590088524366}
   _turnManager: {fileID: 842935342}
-  _testCreateGrade3Count: 12
-  _testClearStudentsBeforeCreate: 0
+  _enableF12Test: 1
+  _f12ClearBeforeCreate: 0
+  _f12CreateGrade3Count: 8
 --- !u!1 &902345670
 GameObject:
   m_ObjectHideFlags: 0
@@ -6576,6 +6577,10 @@ PrefabInstance:
     - target: {fileID: 756956718245759808, guid: 1d86e78e2d96561478b3f49e51533e2b, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3345892901533320301, guid: 1d86e78e2d96561478b3f49e51533e2b, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6051020520282397757, guid: 1d86e78e2d96561478b3f49e51533e2b, type: 3}
       propertyPath: m_Pivot.x
