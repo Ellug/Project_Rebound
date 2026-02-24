@@ -112,10 +112,15 @@ public class LobbyUI : UIBase
     private void OnClickTraining()
     {
         if (_trainingSelectPopup == null)
-        {
-            Debug.LogError("[LobbyUI] _trainingSelectPopup이 null입니다!");
             return;
-        }
+
+        bool wasActive = _trainingSelectPopup.gameObject.activeSelf;
+
+        CloseAllLobbyPopups();
+
+        // 이미 열려있던 경우 → 토글로 닫기만 하고 종료
+        if (wasActive)
+            return;
 
         if (!_inited)
         {
@@ -126,8 +131,9 @@ public class LobbyUI : UIBase
         _trainingSelectPopup.OnTrainingSelected -= HandleTrainingSelected;
         _trainingSelectPopup.OnTrainingSelected += HandleTrainingSelected;
 
-        _trainingSelectPopup.Open();           // Open() 내부에서 CachedSOData 기반 페이지 빌드
-        _trainingSelectPopup.ShowPage(0, pushHistory: false);
+        _trainingSelectPopup.transform.SetAsLastSibling();
+        _trainingSelectPopup.Open();
+        _trainingSelectPopup.ShowPage(0, false);
     }
 
     // 훈련 최종 선택 시 호출
@@ -148,14 +154,14 @@ public class LobbyUI : UIBase
             return;
         }
 
-        // 이미 열려 있으면 닫기
-        if (_studentManagementPopup.gameObject.activeSelf)
-        {
-            _studentManagementPopup.Close();
-            return;
-        }
+        bool wasActive = _studentManagementPopup.gameObject.activeSelf;
 
-        // 닫혀 있으면 열기
+        CloseAllLobbyPopups();
+
+        // 이미 열려있던 경우 → 토글로 닫기만 하고 종료
+        if (wasActive)
+            return;
+
         _studentManagementPopup.Init();
         _studentManagementPopup.transform.SetAsLastSibling();
         _studentManagementPopup.Open();
@@ -208,5 +214,19 @@ public class LobbyUI : UIBase
         if (loweredKey.Contains("rest")) return TurnActionType.Rest;
 
         return TurnActionType.Training;
+    }
+
+    // 팝업창 정리 - 팝업이 동시에 열리는 것을 방지
+    private void CloseAllLobbyPopups()
+    {
+        if (_trainingSelectPopup != null && _trainingSelectPopup.gameObject.activeSelf)
+        {
+            _trainingSelectPopup.Close();
+        }
+
+        if (_studentManagementPopup != null && _studentManagementPopup.gameObject.activeSelf)
+        {
+            _studentManagementPopup.Close();
+        }
     }
 }
