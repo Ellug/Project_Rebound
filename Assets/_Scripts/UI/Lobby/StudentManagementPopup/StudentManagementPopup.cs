@@ -2,30 +2,23 @@
 using UnityEngine;
 
 // 학생 관리(배치) 팝업
-// - 카드 기본: Normal(초상화만)
-// - 카드 선택: Managing(배치중 오버레이)
-// - 이미 배치된 학생 카드: Managing 오버레이 항상 표시
-// - 슬롯 클릭:
-//   - 슬롯에 학생이 있으면: 학생 빼기 팝업
-//   - 슬롯이 비어있으면: 선택된 학생 배치(중복 배치 방지: 기존 슬롯에서 자동 해제 후 이동)
-// - 추천 슬롯 강조: 선택된 학생 포지션과 슬롯 포지션 일치 시 강조
 public class StudentManagementPopup : UIBase
 {
     [Header("학생 카드 영역")]
-    [SerializeField] private Transform _cardRoot;
-    [SerializeField] private GameObject _cardPrefab;
+    [SerializeField] private Transform _cardRoot;                       // 카드 부모
+    [SerializeField] private GameObject _cardPrefab;                    // 카드 프리팹
 
     [Header("포지션 슬롯")]
-    [SerializeField] private List<StudentSlot> _fieldSlots = new();
+    [SerializeField] private List<StudentSlot> _fieldSlots = new();     // 배치 슬롯 목록
 
     [Header("학생 상세 팝업")]
-    [SerializeField] private SelectStudentInfoPopup _studentInfoPopup;
+    [SerializeField] private SelectStudentInfoPopup _studentInfoPopup;  // 상세 정보 팝업
 
-    private readonly List<GameObject> _spawnedCards = new();
-    private readonly Dictionary<Student, StudentCard> _cardMap = new();
+    private readonly List<GameObject> _spawnedCards = new();            // 생성된 카드
+    private readonly Dictionary<Student, StudentCard> _cardMap = new(); // 학생-카드 매핑
 
-    private Student _selectedStudent;
-    private Sprite _selectedStudentPortrait;
+    private Student _selectedStudent;                                   // 현재 선택된 학생
+    private Sprite _selectedStudentPortrait;                            // 선택 학생 초상화
 
     private bool _isInited;
 
@@ -54,6 +47,7 @@ public class StudentManagementPopup : UIBase
         RefreshRecommendHighlights();
     }
 
+    // 학생 카드 생성
     private void SpawnStudentCards()
     {
         ClearCards();
@@ -85,6 +79,7 @@ public class StudentManagementPopup : UIBase
         }
     }
 
+    // 카드 클릭 처리 (선택/해제)
     private void HandleCardClicked(StudentCard card)
     {
         if (card == null) return;
@@ -92,6 +87,7 @@ public class StudentManagementPopup : UIBase
         Student student = card.GetStudentData();
         if (student == null) return;
 
+        // 같은 학생 재클릭 → 선택 해제
         if (_selectedStudent == student)
         {
             ClearSelection();
@@ -106,6 +102,7 @@ public class StudentManagementPopup : UIBase
         ShowStudentInfo(student);
     }
 
+    // 상세 정보 팝업 표시
     private void ShowStudentInfo(Student student)
     {
         if (_studentInfoPopup == null)
@@ -117,6 +114,7 @@ public class StudentManagementPopup : UIBase
         _studentInfoPopup.Open();
     }
 
+    // 슬롯 클릭 이벤트 바인딩
     private void BindSlotEvents()
     {
         foreach (StudentSlot slot in _fieldSlots)
@@ -128,23 +126,23 @@ public class StudentManagementPopup : UIBase
         }
     }
 
+    // 슬롯 클릭 처리
     private void HandleSlotClicked(StudentSlot slot)
     {
         if (slot == null) return;
 
-        // 슬롯에 이미 학생이 있으면: 무조건 학생 빼기 팝업
-        // (같은 슬롯에 같은 학생을 배치하려는 경우도 여기로 들어옴)
+        // 슬롯에 학생이 있으면 → 제거 확인
         if (!slot.IsEmpty)
         {
             ShowRemoveConfirmPopup(slot);
             return;
         }
 
-        // 빈 슬롯인데 선택된 학생이 없으면 아무 것도 안 함
+        // 선택된 학생 없으면 무시
         if (_selectedStudent == null)
             return;
 
-        // 중복 배치 방지: 다른 슬롯에 이미 배치된 학생이면 그 슬롯에서 먼저 빼고 이동
+        // 다른 슬롯에 이미 배치된 경우 → 이동 처리
         StudentSlot existing = FindSlotByStudent(_selectedStudent);
         if (existing != null && existing != slot)
         {
@@ -158,6 +156,7 @@ public class StudentManagementPopup : UIBase
         RefreshRecommendHighlights();
     }
 
+    // 학생 제거 확인 팝업
     private void ShowRemoveConfirmPopup(StudentSlot slot)
     {
         if (UIManager.Instance == null)
@@ -171,18 +170,19 @@ public class StudentManagementPopup : UIBase
             content: $"{name}을(를) 이 슬롯에서 빼시겠습니까?",
             buttons: new List<PopupButtonInfo>
             {
-            new PopupButtonInfo("취소", null),
-            new PopupButtonInfo("확인", () =>
-            {
-                slot.ClearSlot();
-                ClearSelection(); // 선택중 카드도 Normal로
-                RefreshCardStates();
-                RefreshRecommendHighlights();
-            })
+                new PopupButtonInfo("취소", null),
+                new PopupButtonInfo("확인", () =>
+                {
+                    slot.ClearSlot();
+                    ClearSelection();
+                    RefreshCardStates();
+                    RefreshRecommendHighlights();
+                })
             }
         ));
     }
 
+    // 학생이 배치된 슬롯 찾기
     private StudentSlot FindSlotByStudent(Student student)
     {
         if (student == null) return null;
@@ -197,11 +197,13 @@ public class StudentManagementPopup : UIBase
         return null;
     }
 
+    // 학생 배치 여부 확인
     private bool IsStudentAssigned(Student student)
     {
         return FindSlotByStudent(student) != null;
     }
 
+    // 선택 초기화
     private void ClearSelection()
     {
         _selectedStudent = null;
@@ -211,6 +213,7 @@ public class StudentManagementPopup : UIBase
         RefreshRecommendHighlights();
     }
 
+    // 카드 상태 갱신 (Normal / Managing)
     private void RefreshCardStates()
     {
         foreach (var pair in _cardMap)
@@ -223,7 +226,6 @@ public class StudentManagementPopup : UIBase
             bool isSelected = _selectedStudent != null && student == _selectedStudent;
             bool isAssigned = IsStudentAssigned(student);
 
-            // 이미 배치된 학생은 Managing 오버레이 유지
             if (isSelected || isAssigned)
                 card.SetViewState(StudentCard.CardViewState.Managing);
             else
@@ -231,6 +233,7 @@ public class StudentManagementPopup : UIBase
         }
     }
 
+    // 추천 슬롯 강조 갱신
     private void RefreshRecommendHighlights()
     {
         foreach (StudentSlot slot in _fieldSlots)
@@ -242,6 +245,7 @@ public class StudentManagementPopup : UIBase
         }
     }
 
+    // 생성된 카드 정리
     private void ClearCards()
     {
         foreach (GameObject obj in _spawnedCards)

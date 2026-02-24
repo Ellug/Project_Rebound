@@ -3,6 +3,8 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+// 훈련 결과 학생 1명 표시용 Row
+// 컨디션 변화 + 스탯 변화 표시
 public class TrainingResultStudentRow : MonoBehaviour
 {
     [Header("이름 + 컨디션 행")]
@@ -13,20 +15,19 @@ public class TrainingResultStudentRow : MonoBehaviour
     [SerializeField] private TMP_Text _txtConditionDelta;
 
     [Header("스탯 변화 행")]
-    [SerializeField] private Transform _statRowContainer;
+    [SerializeField] private Transform _statRowContainer;      // 스탯 변화 행 부모
     [SerializeField] private StatChangeRow _statRowPrefab;
 
-    [Header("폴백 텍스트")]
-    [SerializeField] private TMP_Text _txtFallback;
+    private readonly List<StatChangeRow> _spawnedRows = new(); // 동적 생성된 스탯 행
 
-    private readonly List<StatChangeRow> _spawnedRows = new();
-
+    // 외부에서 before/after 전달받아 전체 UI 구성
     public void Setup(Student before, Student after)
     {
         SetupNameAndCondition(before, after);
         SetupStatChangeRows(before, after);
     }
 
+    // 이름 + 컨디션 영역 구성
     private void SetupNameAndCondition(Student before, Student after)
     {
         if (_txtName != null)
@@ -36,6 +37,7 @@ public class TrainingResultStudentRow : MonoBehaviour
         RefreshConditionDelta(before, after);
     }
 
+    // 3레이어 방식 컨디션 게이지 표현
     private void RefreshConditionBar3Layer(Student before, Student after)
     {
         if (_conditionGaugeFill == null || _deltaFill == null)
@@ -86,6 +88,7 @@ public class TrainingResultStudentRow : MonoBehaviour
         }
     }
 
+    // 컨디션 수치 증감 텍스트 표시
     private void RefreshConditionDelta(Student before, Student after)
     {
         if (_txtConditionDelta == null) return;
@@ -107,7 +110,7 @@ public class TrainingResultStudentRow : MonoBehaviour
             : new Color(0.25f, 0.55f, 1.00f);  // 파랑
     }
 
-
+    // 컨디션 게이지 최대값 계산 (10단위 올림)
     private static int GetConditionMax(int beforeValue, int afterValue)
     {
         int v = Mathf.Max(beforeValue, afterValue, 100);
@@ -115,37 +118,27 @@ public class TrainingResultStudentRow : MonoBehaviour
         return Mathf.Max(rounded, 1);
     }
 
-  
+    // 스탯 변화 행 구성
     private void SetupStatChangeRows(Student before, Student after)
     {
         ClearStatRows();
 
+        if (_statRowPrefab == null || _statRowContainer == null)
+            return;
+
         var changes = CollectStatChanges(before, after);
 
-        if (changes.Count == 0)
+        // 변경된 스탯만 동적 생성
+        foreach (var (statName, original, changed) in changes)
         {
-            ShowFallback("변화 없음");
-            return;
-        }
-
-        if (_statRowPrefab != null && _statRowContainer != null)
-        {
-            if (_txtFallback != null) _txtFallback.gameObject.SetActive(false);
-
-            foreach (var (statName, original, changed) in changes)
-            {
-                StatChangeRow row = Instantiate(_statRowPrefab, _statRowContainer);
-                row.Setup(statName, original, changed);
-                row.gameObject.SetActive(true);
-                _spawnedRows.Add(row);
-            }
-        }
-        else
-        {
-            ShowFallback(BuildFallbackText(changes));
+            StatChangeRow row = Instantiate(_statRowPrefab, _statRowContainer);
+            row.Setup(statName, original, changed);
+            row.gameObject.SetActive(true);
+            _spawnedRows.Add(row);
         }
     }
 
+    // 변경된 스탯 목록 수집
     private static List<(string name, int original, int changed)> CollectStatChanges(Student before, Student after)
     {
         var list = new List<(string, int, int)>(5);
@@ -159,25 +152,7 @@ public class TrainingResultStudentRow : MonoBehaviour
         return list;
     }
 
-    private void ShowFallback(string message)
-    {
-        if (_txtFallback == null) return;
-        _txtFallback.gameObject.SetActive(true);
-        _txtFallback.text = message;
-    }
-
-    private static string BuildFallbackText(List<(string name, int original, int changed)> changes)
-    {
-        var sb = new System.Text.StringBuilder();
-        foreach (var (name, original, changed) in changes)
-        {
-            int d = changed - original;
-            string sign = d > 0 ? "+" : "";
-            sb.Append($"{name} {original}→{changed}({sign}{d})  ");
-        }
-        return sb.ToString().TrimEnd();
-    }
-
+    // 생성된 스탯 행 정리
     private void ClearStatRows()
     {
         foreach (var row in _spawnedRows)

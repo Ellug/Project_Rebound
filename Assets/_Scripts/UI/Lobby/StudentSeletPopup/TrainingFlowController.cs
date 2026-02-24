@@ -4,25 +4,25 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-// 훈련 UI 흐름 관리 (게이지 연출 → 스탯 적용 → 결과 표시)
-// 씬에 항상 활성화 상태로 배치 (코루틴 실행 주체)
+// 훈련 전체 흐름 관리
+// 게이지 연출 → 스탯 적용 → 결과 팝업 표시
 public class TrainingFlowController : MonoBehaviour
 {
     [Header("UI References")]
-    [SerializeField] private TrainingProgressUI _progressUI;
-    [SerializeField] private TrainingResultPopup _resultPopup;
+    [SerializeField] private TrainingProgressUI _progressUI;     // 진행 게이지 UI
+    [SerializeField] private TrainingResultPopup _resultPopup;   // 결과 팝업
 
     [Header("Canvas")]
-    [SerializeField] private Transform _popupParent;
+    [SerializeField] private Transform _popupParent;             // 팝업 부모
 
     [Header("Progress Settings")]
-    [SerializeField] private float _fillDuration = 2.0f;
-    [SerializeField] private float _holdDuration = 0.5f;
+    [SerializeField] private float _fillDuration = 2.0f;         // 게이지 채우는 시간
+    [SerializeField] private float _holdDuration = 0.5f;         // 완료 후 대기 시간
 
-    public event Action OnFlowComplete;
+    public event Action OnFlowComplete;                          // 전체 흐름 종료 콜백
+    private Coroutine _running;                                  // 실행중 코루틴
 
-    private Coroutine _running;
-
+    // 훈련 실행 진입점
     public void Execute(
         string trainingKey,
         string trainingName,
@@ -37,6 +37,7 @@ public class TrainingFlowController : MonoBehaviour
             return;
         }
 
+        // 훈련 전 상태 스냅샷 저장
         List<TrainingResult> results = new List<TrainingResult>(students.Count);
         foreach (Student student in students)
         {
@@ -47,15 +48,18 @@ public class TrainingFlowController : MonoBehaviour
             });
         }
 
+        // 기존 코루틴 중지
         if (_running != null)
         {
             StopCoroutine(_running);
             _running = null;
         }
 
+        // 진행 UI 표시
         if (_progressUI != null)
             _progressUI.Show(backgroundSprite);
 
+        // 게이지 연출 시작
         _running = StartCoroutine(ProgressRoutine(
             targetFill01: 1f,
             onTick: (fill01) =>
@@ -76,6 +80,7 @@ public class TrainingFlowController : MonoBehaviour
         ));
     }
 
+    // 게이지 채우기 코루틴
     private IEnumerator ProgressRoutine(float targetFill01, Action<float> onTick, Action onDone)
     {
         float elapsed = 0f;
@@ -96,6 +101,7 @@ public class TrainingFlowController : MonoBehaviour
         onDone?.Invoke();
     }
 
+    // 완료 후 대기 → 효과 적용 → 결과 팝업
     private IEnumerator HoldAndFinish(
         string trainingKey,
         string trainingName,
@@ -108,6 +114,7 @@ public class TrainingFlowController : MonoBehaviour
         if (_progressUI != null)
             _progressUI.Hide();
 
+        // 스탯 적용
         if (applyEffect != null)
             applyEffect.Invoke(trainingKey, students);
         else
@@ -118,6 +125,7 @@ public class TrainingFlowController : MonoBehaviour
         _running = null;
     }
 
+    // 결과 팝업 표시
     private void ShowResultPopup(string trainingName, List<TrainingResult> results)
     {
         if (_resultPopup == null)
@@ -135,6 +143,7 @@ public class TrainingFlowController : MonoBehaviour
         _resultPopup.OnConfirm += HandlePopupConfirm;
     }
 
+    // 결과 팝업 확인 시 흐름 종료
     private void HandlePopupConfirm()
     {
         if (_resultPopup != null)
@@ -143,6 +152,7 @@ public class TrainingFlowController : MonoBehaviour
         OnFlowComplete?.Invoke();
     }
 
+    // 학생 상태 복사 (훈련 전 상태 저장용)
     private Student SnapshotStudent(Student original)
     {
         return new Student

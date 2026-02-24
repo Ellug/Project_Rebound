@@ -18,21 +18,22 @@ public class TrainingResult
 public class TrainingResultPopup : UIPopup
 {
     [Header("Content")]
-    [SerializeField] private TMP_Text _txtTrainingName;
-    [SerializeField] private Transform _rowContainer;               // 학생 행 부모 (Vertical Layout Group)
-    [SerializeField] private TrainingResultStudentRow _rowPrefab;   // 학생 행 프리팹 (없어도 동작)
+    [SerializeField] private TMP_Text _txtTrainingName;                 // 훈련 이름 표시
+    [SerializeField] private Transform _rowContainer;                   // 학생 행 부모 (Vertical Layout Group)
+    [SerializeField] private TrainingResultStudentRow _rowPrefab;       // 학생 행 프리팹 (없어도 동작)
 
     [Header("Buttons")]
-    [SerializeField] private Button _btnConfirm;
+    [SerializeField] private Button _btnConfirm;                        // 확인 버튼
 
-    private readonly List<TrainingResultStudentRow> _spawnedRows = new List<TrainingResultStudentRow>();
+    private readonly List<TrainingResultStudentRow> _spawnedRows = new List<TrainingResultStudentRow>(); // 생성된 Row 목록
 
-    public event Action OnConfirm;
+    public event Action OnConfirm; // 확인 버튼 클릭 이벤트
 
     public override void Init()
     {
         base.Init();
 
+        // 확인 버튼 이벤트 바인딩
         if (_btnConfirm != null)
         {
             _btnConfirm.onClick.RemoveAllListeners();
@@ -40,6 +41,7 @@ public class TrainingResultPopup : UIPopup
         }
     }
 
+    // 외부에서 결과 데이터 세팅
     public void Setup(string trainingName, List<TrainingResult> results)
     {
         if (_txtTrainingName != null)
@@ -66,13 +68,14 @@ public class TrainingResultPopup : UIPopup
         }
     }
 
-    // 콘솔에 결과 출력 (프리팹 없을 때 디버그용, 있어도 출력)
+    // 콘솔에 결과 출력 (디버그용)
     private void LogResult(TrainingResult result)
     {
         Student b = result.before;
         Student a = result.after;
 
         string log = $"[TrainingResult] {a.studentName}: ";
+
         if (a.mental != b.mental) log += $"멘탈 {b.mental}→{a.mental} ";
         if (a.shoot != b.shoot) log += $"슈팅 {b.shoot}→{a.shoot} ";
         if (a.speed != b.speed) log += $"속도 {b.speed}→{a.speed} ";
@@ -82,9 +85,10 @@ public class TrainingResultPopup : UIPopup
         Debug.Log(log);
     }
 
+    // 확인 버튼 처리
     private void HandleConfirm()
     {
-        OnConfirm?.Invoke();
+        OnConfirm?.Invoke();   // 외부에 흐름 완료 알림
         CloseAndCleanup();
     }
 
@@ -93,19 +97,23 @@ public class TrainingResultPopup : UIPopup
         CloseAndCleanup();
     }
 
+    // 팝업 종료 및 내부 정리
     private void CloseAndCleanup()
     {
-        OnConfirm = null;   // 내부 이벤트 초기화는 OK
+        OnConfirm = null;   // 이벤트 초기화
         ClearRows();
         Close();
     }
 
+    // 생성된 Row 제거
     private void ClearRows()
     {
         foreach (TrainingResultStudentRow row in _spawnedRows)
         {
-            if (row != null) Destroy(row.gameObject);
+            if (row != null)
+                Destroy(row.gameObject);
         }
+
         _spawnedRows.Clear();
     }
 }

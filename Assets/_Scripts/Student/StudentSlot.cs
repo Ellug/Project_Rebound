@@ -5,26 +5,27 @@ using UnityEngine.UI;
 
 public class StudentSlot : MonoBehaviour, IPointerClickHandler
 {
+    // 슬롯 종류
     public enum SlotType
     {
-        WaitList,
-        FieldPosition,
-        SubMember
+        WaitList,       // 대기 명단
+        FieldPosition,  // 필드 포지션
+        SubMember       // 교체 멤버
     }
 
     [SerializeField] private SlotType _slotType;
 
     [Header("Field Position Only")]
-    [SerializeField] private string _slotPositionName;
+    [SerializeField] private string _slotPositionName;           // 포지션 이름 (예: FW, GK 등)
 
     [Header("Recommend Highlight")]
-    [SerializeField] private GameObject _recommendHighlightRoot;
+    [SerializeField] private GameObject _recommendHighlightRoot; // 추천 강조 오브젝트
 
     [Header("Assigned Student Icon")]
-    [SerializeField] private Image _imgAssignedIcon;
+    [SerializeField] private Image _imgAssignedIcon;             // 배치된 학생 아이콘
 
-    private Student _assignedStudent;
-    private Sprite _assignedIconSprite;
+    private Student _assignedStudent;                            // 현재 배치된 학생
+    private Sprite _assignedIconSprite;                          // 아이콘 캐싱
 
     public Student AssignedStudent => _assignedStudent;
     public bool IsEmpty => _assignedStudent == null;
@@ -32,8 +33,9 @@ public class StudentSlot : MonoBehaviour, IPointerClickHandler
     public string SlotPositionName => _slotPositionName;
     public Sprite AssignedIconSprite => _assignedIconSprite;
 
-    public event Action<StudentSlot> OnSlotClicked;
+    public event Action<StudentSlot> OnSlotClicked;             // 슬롯 클릭 이벤트
 
+    // 해당 학생이 이 슬롯에 추천 대상인지 판단
     public bool IsRecommendedFor(Student student)
     {
         if (_slotType != SlotType.FieldPosition)
@@ -55,6 +57,7 @@ public class StudentSlot : MonoBehaviour, IPointerClickHandler
         );
     }
 
+    // 추천 강조 표시 On/Off
     public void SetRecommendHighlight(bool isOn)
     {
         if (_recommendHighlightRoot == null)
@@ -66,6 +69,7 @@ public class StudentSlot : MonoBehaviour, IPointerClickHandler
         _recommendHighlightRoot.SetActive(isOn);
     }
 
+    // 학생 배치
     public void AssignStudent(Student student, Sprite iconSprite)
     {
         _assignedStudent = student;
@@ -76,6 +80,7 @@ public class StudentSlot : MonoBehaviour, IPointerClickHandler
         Debug.Log($"[StudentSlot] {_slotPositionName} 슬롯에 {student.studentName} 배치됨.");
     }
 
+    // 슬롯 비우기
     public void ClearSlot()
     {
         _assignedStudent = null;
@@ -86,6 +91,7 @@ public class StudentSlot : MonoBehaviour, IPointerClickHandler
         Debug.Log($"[StudentSlot] {_slotPositionName} 슬롯 비워짐.");
     }
 
+    // 아이콘 적용
     private void ApplyAssignedIcon(Sprite sprite)
     {
         if (_imgAssignedIcon == null)
@@ -100,6 +106,7 @@ public class StudentSlot : MonoBehaviour, IPointerClickHandler
             _imgAssignedIcon.preserveAspect = true;
     }
 
+    // UI 클릭 처리
     public void OnPointerClick(PointerEventData eventData)
     {
         OnSlotClicked?.Invoke(this);
