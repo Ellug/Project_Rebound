@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -108,9 +108,7 @@ public class GameManager : Singleton<GameManager>
     public void ClearFlowRuntimeState()
     {
         UnsubscribeTurnManager();
-
-        if (_alwaysEventManager != null)
-            _alwaysEventManager.Unbind();
+        UnbindAlwaysEventManager();
 
         _turnManager = null;
         // _eventManager = null;
@@ -194,25 +192,25 @@ public class GameManager : Singleton<GameManager>
         SceneManager.LoadScene(TournamentScene);
     }
 
-    // 토너먼트 시작 날짜 도달 여부 확인
+    // 토너먼트 시작 날짜 도달 여부 확인 — CachedSOData를 직접 읽어 AEM 의존 없음
     private bool IsTournamentDateReached()
     {
-        if (_turnManager == null || _alwaysEventManager == null)
+        if (_turnManager == null)
             return false;
 
-        if (!_alwaysEventManager.TryGetNextLeagueDate(_turnManager.DateManager.CurrentDate, out DateTime nextLeagueDate))
+        if (!AlwaysEventDateUtil.TryGetNextLeagueDate(_turnManager.DateManager.CurrentDate, out DateTime nextLeagueDate))
             return false;
 
         return _turnManager.DateManager.CurrentDate.Date >= nextLeagueDate.Date;
     }
 
-    // 다음 토너먼트까지 남은 일수 계산
+    // 다음 토너먼트까지 남은 일수 계산 — CachedSOData를 직접 읽어 AEM 의존 없음
     private int GetTournamentDday()
     {
-        if (_turnManager == null || _alwaysEventManager == null)
+        if (_turnManager == null)
             return -1;
 
-        if (!_alwaysEventManager.TryGetNextLeagueDate(_turnManager.DateManager.CurrentDate, out DateTime nextLeagueDate))
+        if (!AlwaysEventDateUtil.TryGetNextLeagueDate(_turnManager.DateManager.CurrentDate, out DateTime nextLeagueDate))
             return -1;
 
         return (nextLeagueDate.Date - _turnManager.DateManager.CurrentDate.Date).Days;
@@ -287,6 +285,16 @@ public class GameManager : Singleton<GameManager>
             _turnManager.OnTurnCompleted -= HandleTurnCompleted;
     }
 
+    // AlwaysEventManager 이벤트 구독 해제 및 Unbind
+    private void UnbindAlwaysEventManager()
+    {
+        if (_alwaysEventManager == null) return;
+
+        _alwaysEventManager.OnEventActivated -= HandleAlwaysEventActivated;
+        _alwaysEventManager.OnEventExpired   -= HandleAlwaysEventExpired;
+        _alwaysEventManager.Unbind();
+    }
+
     // 씬 복귀 시 TurnManager 상태 복원
     private void RestoreTurnManagerState()
     {
@@ -323,6 +331,10 @@ public class GameManager : Singleton<GameManager>
         //     _eventManager.Initialize(_gameState, resetRuntimeState: !_flowData.HasFlowState);
 
         _alwaysEventManager.Bind(_turnManager, _gameState, _flowData.ActiveEventIds);
+
+        // AlwaysEventManager가 발행하는 이벤트를 GM이 구독 — AEM → GM 직접참조 제거
+        _alwaysEventManager.OnEventActivated += HandleAlwaysEventActivated;
+        _alwaysEventManager.OnEventExpired   += HandleAlwaysEventExpired;
     }
 
     // 초기 게임 페이즈 설정 (Init이면 DailyTraining으로 전환)
@@ -382,6 +394,19 @@ public class GameManager : Singleton<GameManager>
         SyncFlowStateFromLobby();
         RefreshLobbyTopInfo();
         TryEnterTournament();
+    }
+
+    // AlwaysEventManager가 이벤트 활성화를 알릴 때 호출 — row.type / row.id 기반으로 분기
+    private void HandleAlwaysEventActivated(AlwaysEventRow row)
+    {
+        if (AlwaysEventManager.IsLeagueBreakEvent(row))
+            OpenLeague();
+    }
+
+    // AlwaysEventManager가 이벤트 만료를 알릴 때 호출
+    private void HandleAlwaysEventExpired(AlwaysEventRow row)
+    {
+        // 현재는 만료 시 GM 측에서 별도 처리 없음 — 필요 시 여기서 분기
     }
 
     // Lobby 씬의 TurnManager 상태를 GameFlowData에 동기화
