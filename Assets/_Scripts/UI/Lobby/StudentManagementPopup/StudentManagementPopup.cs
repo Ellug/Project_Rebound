@@ -198,8 +198,8 @@ public class StudentManagementPopup : UIBase
         string name = assigned != null ? assigned.studentName : "학생";
 
         UIManager.Instance.ShowPopup(new PopupData(
-            title: "학생 빼기",
-            content: $"{name}을(를) 이 슬롯에서 빼시겠습니까?",
+            title: "배치 변경 안내",
+            content: $"이미 배치된 학생이 있습니다. \n선택한 학생으로 교체하시겠습니까?",
             buttons: new List<PopupButtonInfo>
             {
                 new PopupButtonInfo("취소", null),
