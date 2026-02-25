@@ -26,6 +26,11 @@ public class StudentSelectPopup : UIPopup
     [Header("View Settings")]
     [SerializeField] private bool _showStatsOnOpen = false;
 
+
+    //위아래로 슬라이드 되는 애니메이션 설정
+    [SerializeField] private float _slideInDuration = 0.2f;
+    [SerializeField] private float _slideOutDuration = 0.28f;
+
     private readonly List<GameObject> _spawnedCards = new List<GameObject>();
     private readonly List<Student> _selectedStudents = new List<Student>();
     private readonly Dictionary<Student, StudentCard> _cardMap = new Dictionary<Student, StudentCard>();
@@ -35,7 +40,8 @@ public class StudentSelectPopup : UIPopup
     public event Action<List<Student>> OnSelectionConfirmed;
     public event Action OnCancelled;
 
-    
+
+
     public void SetMaxSelectCount(int max)
     {
         _maxSelectCount = Mathf.Max(0, max);

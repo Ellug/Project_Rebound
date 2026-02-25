@@ -139,9 +139,12 @@ public class StudentManagementPopup : UIBase
             return;
 
         _studentInfoPopup.Init();
-        _studentInfoPopup.Setup("선택한 학생", student, null);
+        _studentInfoPopup.Setup("선택한 학생", student, _selectedStudentPortrait);
         _studentInfoPopup.transform.SetAsLastSibling();
-        _studentInfoPopup.Open();
+
+        // 학생 관리: 학생을 선택하면 위로 슬라이드 (꺼져있을 때만)
+        if (!_studentInfoPopup.gameObject.activeSelf)
+            _studentInfoPopup.Open();
     }
 
     // 슬롯 클릭 이벤트 바인딩
@@ -156,6 +159,7 @@ public class StudentManagementPopup : UIBase
         }
     }
 
+    // 슬롯 클릭 처리
     // 슬롯 클릭 처리
     private void HandleSlotClicked(StudentSlot slot)
     {
@@ -180,9 +184,13 @@ public class StudentManagementPopup : UIBase
                 StudentManager.Instance.ClearSlot(existingIndex);
         }
 
+        // 배치 저장
         slot.AssignStudent(_selectedStudent, _selectedStudentPortrait);
         if (StudentManager.Instance != null)
             StudentManager.Instance.AssignSlot(_fieldSlots.IndexOf(slot), _selectedStudent);
+
+        // 배치가 완료되면 선택한 학생 팝업창 닫기
+        CloseStudentInfoPopup();
 
         ClearSelection();
         RefreshCardStates();
@@ -194,25 +202,47 @@ public class StudentManagementPopup : UIBase
         if (UIManager.Instance == null)
             return;
 
-        Student assigned = slot.AssignedStudent;
-        string name = assigned != null ? assigned.studentName : "학생";
-
         UIManager.Instance.ShowPopup(new PopupData(
-            title: "학생 빼기",
-            content: $"{name}을(를) 이 슬롯에서 빼시겠습니까?",
+            title: "배치 변경 안내",
+            content: $"이미 배치된 학생이 있습니다. \n선택한 학생으로 교체하시겠습니까?",
             buttons: new List<PopupButtonInfo>
             {
-                new PopupButtonInfo("취소", null),
-                new PopupButtonInfo("확인", () =>
+            new PopupButtonInfo("취소", null),
+            new PopupButtonInfo("확인", () =>
+            {
+                int slotIndex = _fieldSlots.IndexOf(slot);
+
+                // 1) 기존 슬롯 비우기
+                slot.ClearSlot();
+                if (StudentManager.Instance != null)
+                    StudentManager.Instance.ClearSlot(slotIndex);
+
+                // 2) 선택 학생이 있으면 '교체'까지 수행
+                if (_selectedStudent != null)
                 {
-                    int slotIndex = _fieldSlots.IndexOf(slot);
-                    slot.ClearSlot();
+                    // 선택 학생이 다른 슬롯에 이미 배치돼 있으면 그 슬롯 해제
+                    StudentSlot existing = FindSlotByStudent(_selectedStudent);
+                    if (existing != null && existing != slot)
+                    {
+                        int existingIndex = _fieldSlots.IndexOf(existing);
+                        existing.ClearSlot();
+                        if (StudentManager.Instance != null)
+                            StudentManager.Instance.ClearSlot(existingIndex);
+                    }
+
+                    // 현재 슬롯에 선택 학생 배치
+                    slot.AssignStudent(_selectedStudent, _selectedStudentPortrait);
                     if (StudentManager.Instance != null)
-                        StudentManager.Instance.ClearSlot(slotIndex);
-                    ClearSelection();
-                    RefreshCardStates();
-                    RefreshRecommendHighlights();
-                })
+                        StudentManager.Instance.AssignSlot(slotIndex, _selectedStudent);
+
+                    // 교체 완료 시 선택 학생 팝업 닫기
+                    CloseStudentInfoPopup();
+                }
+
+                ClearSelection();
+                RefreshCardStates();
+                RefreshRecommendHighlights();
+            })
             }
         ));
     }
@@ -311,5 +341,14 @@ public class StudentManagementPopup : UIBase
 
         _spawnedCards.Clear();
         _cardMap.Clear();
+    }
+
+    // 선택한 학생 상세 팝업 닫기
+    private void CloseStudentInfoPopup()
+    {
+        if (_studentInfoPopup == null)
+            return;
+
+        _studentInfoPopup.Close();
     }
 }

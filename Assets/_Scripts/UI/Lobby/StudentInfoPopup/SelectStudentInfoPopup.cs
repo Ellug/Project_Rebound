@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -25,8 +26,24 @@ public class SelectStudentInfoPopup : UIBase
     [SerializeField] private Transform _statListRoot;                 // 스탯 리스트 부모
     [SerializeField] private SelectStudentStatRow _statRowPrefab;     // 스탯 행 프리팹
 
+    [Header("Slide Animation")]
+    [SerializeField] private RectTransform _panelRoot;                // 실제로 움직일 루트(패널)
+    [SerializeField] private float _slideDuration = 0.2f;
+    [SerializeField] private float _hiddenOffsetY = -600f;            // 아래로 숨길 거리(픽셀)
+    [SerializeField] private bool _disableRaycastWhileTween = true;   // 애니메이션 중 입력 차단(선택)
+
+    //위아래로 슬라이드 되는 애니메이션 설정
+    [SerializeField] private float _slideInDuration = 0.2f;
+    [SerializeField] private float _slideOutDuration = 0.28f;
+
     private readonly List<SelectStudentStatRow> _spawnedRows = new(); // 생성된 스탯 행
     private bool _isInited;
+
+    private Vector2 _shownPos;
+    private Vector2 _hiddenPos;
+
+    private Coroutine _slideRoutine;
+    private CanvasGroup _canvasGroup;
 
     private void Awake()
     {
@@ -44,6 +61,22 @@ public class SelectStudentInfoPopup : UIBase
         _isInited = true;
 
         base.Init();
+
+        // 움직일 루트 기본값 보정
+        if (_panelRoot == null)
+            _panelRoot = transform as RectTransform;
+
+        // “표시 위치”는 에디터에서 잡힌 현재 위치
+        _shownPos = _panelRoot.anchoredPosition;
+        _hiddenPos = _shownPos + new Vector2(0f, _hiddenOffsetY);
+
+        // 입력 차단용(선택)
+        if (_disableRaycastWhileTween)
+        {
+            _canvasGroup = GetComponent<CanvasGroup>();
+            if (_canvasGroup == null)
+                _canvasGroup = gameObject.AddComponent<CanvasGroup>();
+        }
 
         // 닫기 버튼 바인딩
         if (_btnClose != null)
@@ -65,11 +98,33 @@ public class SelectStudentInfoPopup : UIBase
 
     public override void Open()
     {
-        base.Open();
-
         // Init 누락 방지
         if (!_isInited)
             Init();
+
+        // 활성화 + 최상단
+        gameObject.SetActive(true);
+        transform.SetAsLastSibling();
+
+        // 시작은 아래(숨김)에서
+        if (_panelRoot != null)
+            _panelRoot.anchoredPosition = _hiddenPos;
+
+        // 슬라이드 인
+        StartSlide(_hiddenPos, _shownPos, _slideInDuration, null);
+    }
+
+    public override void Close()
+    {
+        if (!gameObject.activeSelf)
+            return;
+
+        // 슬라이드 아웃 -> 끝나면 비활성
+        Vector2 from = _panelRoot != null ? _panelRoot.anchoredPosition : _shownPos;
+        StartSlide(from, _hiddenPos, _slideOutDuration, () =>
+        {
+            gameObject.SetActive(false);
+        });
     }
 
     // 외부에서 데이터 세팅
@@ -88,7 +143,51 @@ public class SelectStudentInfoPopup : UIBase
     private void CloseSelf()
     {
         ClearStatRows();
-        Close(); // 비활성화
+        Close(); // 내려가며 닫힘
+    }
+
+    private void StartSlide(Vector2 from, Vector2 to, float duration, System.Action onComplete)
+    {
+        if (_slideRoutine != null)
+            StopCoroutine(_slideRoutine);
+
+        _slideRoutine = StartCoroutine(CoSlide(from, to, duration, onComplete));
+    }
+
+    private IEnumerator CoSlide(Vector2 from, Vector2 to, float duration, System.Action onComplete)
+    {
+        if (_canvasGroup != null)
+        {
+            _canvasGroup.blocksRaycasts = false;
+            _canvasGroup.interactable = false;
+        }
+
+        float t = 0f;
+        while (t < duration)
+        {
+            t += Time.unscaledDeltaTime;
+            float p = duration <= 0f ? 1f : Mathf.Clamp01(t / duration);
+
+            // ease-out cubic
+            float eased = 1f - Mathf.Pow(1f - p, 3f);
+
+            if (_panelRoot != null)
+                _panelRoot.anchoredPosition = Vector2.LerpUnclamped(from, to, eased);
+
+            yield return null;
+        }
+
+        if (_panelRoot != null)
+            _panelRoot.anchoredPosition = to;
+
+        if (_canvasGroup != null)
+        {
+            _canvasGroup.blocksRaycasts = true;
+            _canvasGroup.interactable = true;
+        }
+
+        _slideRoutine = null;
+        onComplete?.Invoke();
     }
 
     // 초상화 적용

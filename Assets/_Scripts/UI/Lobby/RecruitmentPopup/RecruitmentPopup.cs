@@ -166,10 +166,17 @@ public class RecruitmentPopup : UIPopup
             return;
         }
 
+        Sprite portrait = null;
+        if (_cardMap.TryGetValue(student, out StudentCard card) && card != null)
+            portrait = card.GetPortraitSprite();
+
         _studentInfoPopup.Init();
-        _studentInfoPopup.Setup("선택한 학생", student, null);
-        _studentInfoPopup.transform.SetAsLastSibling(); // 다른 팝업 위로
-        _studentInfoPopup.Open();
+        _studentInfoPopup.Setup("선택한 학생", student, portrait);
+        _studentInfoPopup.transform.SetAsLastSibling();
+
+        // 학생 영입: 처음 선택만 위로 슬라이드
+        if (!_studentInfoPopup.gameObject.activeSelf)
+            _studentInfoPopup.Open();
     }
 
     // 학생 선택 처리 (카드 상태 변경 + UI 갱신)
