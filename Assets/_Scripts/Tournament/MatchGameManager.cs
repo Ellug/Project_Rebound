@@ -14,7 +14,7 @@ public class MatchGameManager : MonoBehaviour
 
     [Header("References")]
     [SerializeField] private MatchGameUI _matchGameUi;
-
+    [SerializeField] private TournamentHalfTimeSelectionUI _halfTimeSelectionUi;
 
     [Header("Quarter Pod Config")]
     [FormerlySerializedAs("_maxPossessionsPerQuarter")]
@@ -31,6 +31,8 @@ public class MatchGameManager : MonoBehaviour
     private QuarterPodSession _activeQuarterSession;     // null이면 현재 쿼터 공방 진행 없음
     private int _activeQuarterNumber;
     private bool _isMatchRunning;
+    private bool _isWaitingHalfTime;                     // 하프타임 선택 대기 중
+    private int _halfTimeNextStage;                      // 하프타임 완료 후 이동할 스테이지
     private int _progressStageIndex;                     // MatchGameStages.Default 배열 인덱스
 
     // MatchGameStages.Default의 래퍼: 스테이지 배열을 읽기 전용으로 노출
@@ -40,6 +42,14 @@ public class MatchGameManager : MonoBehaviour
     void Awake()
     {
         _quarterSimulator = CreateDefaultQuarterSimulator();
+        if (_halfTimeSelectionUi != null)
+            _halfTimeSelectionUi.OnSelectionMade += HandleHalfTimeSelection;
+    }
+
+    void OnDestroy()
+    {
+        if (_halfTimeSelectionUi != null)
+            _halfTimeSelectionUi.OnSelectionMade -= HandleHalfTimeSelection;
     }
 
     public void StartMatch(string upTeam, string downTeam, string mySchoolName)
@@ -86,6 +96,9 @@ public class MatchGameManager : MonoBehaviour
             return;
         }
 
+        // 하프타임 선택 대기 중이면 진행 차단
+        if (_isWaitingHalfTime) return;
+
         // 공방 세션이 활성화 중이면 쿼터 내부 스텝만 진행
         if (_activeQuarterSession != null)
         {
@@ -99,22 +112,19 @@ public class MatchGameManager : MonoBehaviour
                 BeginQuarter(1);
                 break;
             case 1:
-                RunHalfTime(afterQuarter: 1);
-                MoveToStage(2);
+                RunHalfTime(afterQuarter: 1, nextStage: 2);
                 break;
             case 2:
                 BeginQuarter(2);
                 break;
             case 3:
-                RunHalfTime(afterQuarter: 2);
-                MoveToStage(4);
+                RunHalfTime(afterQuarter: 2, nextStage: 4);
                 break;
             case 4:
                 BeginQuarter(3);
                 break;
             case 5:
-                RunHalfTime(afterQuarter: 3);
-                MoveToStage(6);
+                RunHalfTime(afterQuarter: 3, nextStage: 6);
                 break;
             case 6:
                 BeginQuarter(4);
@@ -197,11 +207,24 @@ public class MatchGameManager : MonoBehaviour
         MoveToStage(MatchGameStages.GetHalfTimeStageIndex(quarter));
     }
 
-    private void RunHalfTime(int afterQuarter)
+    private void RunHalfTime(int afterQuarter, int nextStage)
     {
+        _isWaitingHalfTime = true;
+        _halfTimeNextStage = nextStage;
         WriteLog(Divider);
         WriteLog($"{afterQuarter}쿼터 종료 후 작전타임");
         WriteLog(Divider);
+        if (_halfTimeSelectionUi != null)
+            _halfTimeSelectionUi.Open();
+    }
+
+    // 하프타임 선택에 대한 이벤트
+    // 여기서 하프타임 데이터 테이블 id 받으면 브릿지 연결해야할듯
+    private void HandleHalfTimeSelection(string selectionText)
+    {
+        WriteLog(selectionText);
+        _isWaitingHalfTime = false;
+        MoveToStage(_halfTimeNextStage);
     }
 
     private void MoveToStage(int stageIndex)
