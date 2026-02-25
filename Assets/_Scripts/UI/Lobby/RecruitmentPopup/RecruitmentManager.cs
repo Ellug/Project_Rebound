@@ -104,6 +104,10 @@ public class RecruitmentManager : MonoBehaviour
             return;
         }
 
+        int capacity = 8;
+        int ownedCount = StudentManager.Instance != null ? StudentManager.Instance.GetStudentCount() : 0;
+        bool isFull = ownedCount >= capacity;
+
         bool canSkip = context != RecruitmentContext.GameStart;
 
         ConfirmPopupRequest request = new ConfirmPopupRequest(
@@ -117,6 +121,15 @@ public class RecruitmentManager : MonoBehaviour
         );
 
         request.IsModal = true;
+
+        // 정원 꽉 차면 "확인" 비활성화
+        request.SetPrimaryInteractable(!isFull);
+
+        // (권장) 메시지도 같이 보강
+        if (isFull)
+        {
+            request.SetSubMessage("현재 보유 학생이 정원으로 영입을 진행할 수 없습니다.");
+        }
 
         UIManager.Instance.ShowConfirm(request);
     }

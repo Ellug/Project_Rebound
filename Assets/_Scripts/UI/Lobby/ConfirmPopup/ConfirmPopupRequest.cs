@@ -28,6 +28,8 @@ public sealed class ConfirmPopupRequest
     public int MaxSelectCount = 0;                      // 최대 선택 인원
     public Action<List<Student>> OnStudentsSelected;    // 학생 선택 완료 콜백
 
+    public bool PrimaryInteractable = true; // 확인 버튼 활성/비활성
+
     // 기본 생성자 (필수 값 중심)
     public ConfirmPopupRequest(
         string title,
@@ -91,6 +93,12 @@ public sealed class ConfirmPopupRequest
         RequiresStudentSelection = requiresStudentSelection;
         MaxSelectCount = Mathf.Max(0, maxSelectCount);
         OnStudentsSelected = onStudentsSelected;
+        return this;
+    }
+
+    public ConfirmPopupRequest SetPrimaryInteractable(bool interactable)
+    {
+        PrimaryInteractable = interactable;
         return this;
     }
 }
