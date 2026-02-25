@@ -104,17 +104,20 @@ public class RecruitmentManager : MonoBehaviour
             return;
         }
 
+        bool canSkip = context != RecruitmentContext.GameStart;
+
         ConfirmPopupRequest request = new ConfirmPopupRequest(
             title: "학생 영입",
             message: BuildEventMessage(context),
             primaryLabel: "확인",
             primaryAction: OpenRecruitmentPopup,
-            secondaryLabel: "포기",
-            secondaryAction: HandleRecruitmentSkipped,
+            secondaryLabel: canSkip ? "포기" : null,
+            secondaryAction: canSkip ? HandleRecruitmentSkipped : null,
             previewSprite: null
         );
 
         request.IsModal = true;
+
         UIManager.Instance.ShowConfirm(request);
     }
 
