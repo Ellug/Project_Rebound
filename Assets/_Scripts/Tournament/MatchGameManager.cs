@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
+using GameData = CachedSOData;
 
 // 경기 전체 흐름을 조율하는 컨트롤러 : 쿼터 > 공방 > 하프타임 > 경기 종료 순서를 관리
 public class MatchGameManager : MonoBehaviour
@@ -13,6 +14,7 @@ public class MatchGameManager : MonoBehaviour
 
     [Header("References")]
     [SerializeField] private MatchGameUI _matchGameUi;
+
 
     [Header("Quarter Pod Config")]
     [FormerlySerializedAs("_maxPossessionsPerQuarter")]
@@ -54,7 +56,11 @@ public class MatchGameManager : MonoBehaviour
             return;
         }
 
-        _context = new MatchContext(upTeam, downTeam, mySchoolName);
+        List<Student> field = BuildFieldPlayers();
+        List<Student> bench = BuildBenchPlayers(field);
+        int currentDay = GameManager.Instance != null ? GameManager.Instance.DayIndex : 1;
+        EnemyStatRow enemyStat = GameData.EnemyStatTable.GetOrNull(currentDay) ?? new EnemyStatRow();
+        _context = new MatchContext(upTeam, downTeam, mySchoolName, field, bench, enemyStat);
         _isMatchRunning = true;
         _progressStageIndex = 0;
         _activeQuarterSession = null;
@@ -67,7 +73,6 @@ public class MatchGameManager : MonoBehaviour
         RefreshLiveScoreUi();
 
         WriteLog(Divider);
-        WriteLog("경기 시작");
         WriteLog($"{upTeam} VS {downTeam}");
         WriteLog(Divider);
     }
@@ -149,7 +154,6 @@ public class MatchGameManager : MonoBehaviour
         _activeQuarterSession = beginResult.session;
         _activeQuarterNumber = quarter;
         WriteQuarterLogs(beginResult.logs);
-        WriteSystemLog("진행 버튼으로 공방 루프를 계속 진행하세요.");
     }
 
     private void ApplyQuarterResult(int quarter, QuarterSimulationResult quarterResult)
@@ -183,7 +187,6 @@ public class MatchGameManager : MonoBehaviour
     {
         _activeQuarterSession = null;
         _activeQuarterNumber = 0;
-        WriteLog(Divider);
 
         if (quarter >= 4)
         {
@@ -196,9 +199,8 @@ public class MatchGameManager : MonoBehaviour
 
     private void RunHalfTime(int afterQuarter)
     {
-        WriteLog("하프타임 시작");
-        WriteSystemLog($"{afterQuarter}쿼터 종료 후 작전타임(Stub)");
-        WriteLog("하프타임 종료");
+        WriteLog(Divider);
+        WriteLog($"{afterQuarter}쿼터 종료 후 작전타임");
         WriteLog(Divider);
     }
 
@@ -221,8 +223,9 @@ public class MatchGameManager : MonoBehaviour
         _isMatchRunning = false;
 
         string winnerTeamName = ResolveWinnerTeamName();
+        WriteLog(Divider);
         WriteLog("경기 종료");
-        WriteLog($"최종 스코어: 우리 {_context.MySchoolScore} - 상대 {_context.OpponentScore}");
+        WriteLog($"최종 스코어: {_context.MySchoolName} {_context.MySchoolScore} - {_context.OpponentScore} {_context.OpponentTeamName}");
         WriteLog($"승자: {winnerTeamName}");
         WriteLog(Divider);
 
@@ -276,6 +279,34 @@ public class MatchGameManager : MonoBehaviour
         _logs.Add(formatted);
         Debug.Log(formatted);
         _matchGameUi.AppendMatchLog(formatted);
+    }
+
+    // 슬롯에 배치된 학생을 출전 선수로 반환
+    private static List<Student> BuildFieldPlayers()
+    {
+        var result = new List<Student>();
+        if (StudentManager.Instance == null) return result;
+
+        foreach (var pair in StudentManager.Instance.SlotAssignments)
+        {
+            if (pair.Value != null)
+                result.Add(pair.Value);
+        }
+        return result;
+    }
+
+    // 전체 학생 중 출전 선수를 제외한 나머지를 벤치로 반환
+    private static List<Student> BuildBenchPlayers(List<Student> fieldPlayers)
+    {
+        var result = new List<Student>();
+        if (StudentManager.Instance == null) return result;
+
+        foreach (Student s in StudentManager.Instance.Students)
+        {
+            if (!fieldPlayers.Contains(s))
+                result.Add(s);
+        }
+        return result;
     }
 
     private QuarterPodSimulator CreateDefaultQuarterSimulator()
