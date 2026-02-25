@@ -48,6 +48,7 @@ public class StudentManagementPopup : UIBase
             Init();
 
         SpawnStudentCards();
+        RestoreSlotAssignments();
         RefreshCardStates();
         RefreshRecommendHighlights();
     }
@@ -169,13 +170,19 @@ public class StudentManagementPopup : UIBase
         if (_selectedStudent == null)
             return;
 
+        // 이미 다른 슬롯에 배치돼 있으면 그 슬롯 해제
         StudentSlot existing = FindSlotByStudent(_selectedStudent);
         if (existing != null && existing != slot)
         {
+            int existingIndex = _fieldSlots.IndexOf(existing);
             existing.ClearSlot();
+            if (StudentManager.Instance != null)
+                StudentManager.Instance.ClearSlot(existingIndex);
         }
 
         slot.AssignStudent(_selectedStudent, _selectedStudentPortrait);
+        if (StudentManager.Instance != null)
+            StudentManager.Instance.AssignSlot(_fieldSlots.IndexOf(slot), _selectedStudent);
 
         ClearSelection();
         RefreshCardStates();
@@ -198,13 +205,43 @@ public class StudentManagementPopup : UIBase
                 new PopupButtonInfo("취소", null),
                 new PopupButtonInfo("확인", () =>
                 {
+                    int slotIndex = _fieldSlots.IndexOf(slot);
                     slot.ClearSlot();
+                    if (StudentManager.Instance != null)
+                        StudentManager.Instance.ClearSlot(slotIndex);
                     ClearSelection();
                     RefreshCardStates();
                     RefreshRecommendHighlights();
                 })
             }
         ));
+    }
+
+    // StudentManager에 저장된 배치 정보로 슬롯 상태 복원
+    private void RestoreSlotAssignments()
+    {
+        if (StudentManager.Instance == null)
+            return;
+
+        for (int i = 0; i < _fieldSlots.Count; i++)
+        {
+            StudentSlot slot = _fieldSlots[i];
+            if (slot == null) continue;
+
+            Student student = StudentManager.Instance.GetAssignedStudent(i);
+            if (student == null)
+            {
+                slot.ClearSlot();
+                continue;
+            }
+
+            // 카드 맵에서 초상화 스프라이트 가져오기
+            Sprite portrait = null;
+            if (_cardMap.TryGetValue(student, out StudentCard card) && card != null)
+                portrait = card.GetPortraitSprite();
+
+            slot.AssignStudent(student, portrait);
+        }
     }
 
     private StudentSlot FindSlotByStudent(Student student)
