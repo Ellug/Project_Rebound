@@ -18,6 +18,9 @@ public class LobbyUI : UIBase
     [SerializeField] private Button _btnLog;     // 로그 (기록)
     [SerializeField] private Button _btnSetting; // 설정
 
+    [Header("Panels")]
+    [SerializeField] private SettingsPanel _settingsPanelPrefab;
+
     [Header("Popups")]
     [SerializeField] private TrainingSelectPopup _trainingSelectPopup; // 씬에 배치된 훈련 선택 팝업 (직접 참조)
     [SerializeField] private StudentManagementPopup _studentManagementPopup; // 씬에 배치된 학생 관리 팝업(비활성화 상태)
@@ -84,13 +87,13 @@ public class LobbyUI : UIBase
             });
         }
         if (_btnSetting != null)
+        {
             _btnSetting.onClick.AddListener(() =>
             {
-                UIManager.Instance.ShowPopup(new PopupData(
-                    title: "설정",
-                    content: "환경설정 기능은 준비 중입니다."
-                ));
+                Debug.Log("[LobbyUI] Setting button clicked");
+                UIManager.Instance.ShowUI(_settingsPanelPrefab);
             });
+        }
 
         // 2. 하단 네비게이션
         if (_btnTraining != null)

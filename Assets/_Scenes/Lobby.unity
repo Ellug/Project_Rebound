@@ -202,6 +202,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::StudentManager
   _dontDestroyOnLoad: 1
   _students: []
+  _slotAssignments:
+    _serializedList: []
 --- !u!4 &66605661
 Transform:
   m_ObjectHideFlags: 0
@@ -6834,6 +6836,7 @@ MonoBehaviour:
   _txtFame: {fileID: 1793366692}
   _btnLog: {fileID: 571121498}
   _btnSetting: {fileID: 572142185}
+  _settingsPanelPrefab: {fileID: 5066029214980474217, guid: 25b11f13f14146a47a365edff7eef984, type: 3}
   _trainingSelectPopup: {fileID: 1345795867}
   _studentManagementPopup: {fileID: 810482937}
   _txtMessage: {fileID: 428056466}

@@ -590,6 +590,7 @@ GameObject:
   - component: {fileID: 1786754884552908159}
   - component: {fileID: 2983799874633799763}
   - component: {fileID: 2182667307372335433}
+  - component: {fileID: 5066029214980474217}
   m_Layer: 5
   m_Name: OptinonPanel
   m_TagString: Untagged
@@ -613,7 +614,7 @@ RectTransform:
   - {fileID: 7223207525830541049}
   - {fileID: 6116727571666309358}
   - {fileID: 2440746021423813266}
-  - {fileID: 659051640501847966}
+  - {fileID: 2656753157111032365}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -671,10 +672,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8c30a49a61182b4193648419f04961f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::OptionUI
-  _bgmScrollbar: {fileID: 204201962065592729}
-  _effectScrollbar: {fileID: 8561200042879950465}
+  _optinonPanel: {fileID: 4753218689491637132}
+  _bgmSlider: {fileID: 204201962065592729}
+  _effectSlider: {fileID: 8561200042879950465}
   _bgmMuteToggle: {fileID: 3906628927908804615}
   _effectMuteToggle: {fileID: 164265468796181227}
+--- !u!114 &5066029214980474217
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4753218689491637132}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f7f03ed12fc465e498adc642ece409cf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SettingsPanel
+  _isModal: 1
+  _btnClose: {fileID: 3049447832428048356}
 --- !u!1 &4905763422472349165
 GameObject:
   m_ObjectHideFlags: 0
@@ -1503,7 +1519,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!1001 &6266670104040527049
+--- !u!1001 &8866578674634537338
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -1513,7 +1529,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4209901669952194490, guid: 91b23fa264a2a004c8be9a2cf1ce0b82, type: 3}
       propertyPath: m_Name
-      value: ExitButton
+      value: Button
       objectReference: {fileID: 0}
     - target: {fileID: 6904797474526139223, guid: 91b23fa264a2a004c8be9a2cf1ce0b82, type: 3}
       propertyPath: m_Pivot.x
@@ -1577,11 +1593,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6904797474526139223, guid: 91b23fa264a2a004c8be9a2cf1ce0b82, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 293
+      value: 285
       objectReference: {fileID: 0}
     - target: {fileID: 6904797474526139223, guid: 91b23fa264a2a004c8be9a2cf1ce0b82, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 91
+      value: 95
       objectReference: {fileID: 0}
     - target: {fileID: 6904797474526139223, guid: 91b23fa264a2a004c8be9a2cf1ce0b82, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -1604,8 +1620,19 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 91b23fa264a2a004c8be9a2cf1ce0b82, type: 3}
---- !u!224 &659051640501847966 stripped
+--- !u!224 &2656753157111032365 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 6904797474526139223, guid: 91b23fa264a2a004c8be9a2cf1ce0b82, type: 3}
-  m_PrefabInstance: {fileID: 6266670104040527049}
+  m_PrefabInstance: {fileID: 8866578674634537338}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &3049447832428048356 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5863047856944862878, guid: 91b23fa264a2a004c8be9a2cf1ce0b82, type: 3}
+  m_PrefabInstance: {fileID: 8866578674634537338}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
