@@ -39,6 +39,9 @@ public class RecruitmentPopup : UIPopup
     public event Action<List<Student>> OnRecruitmentConfirmed; // 최종 확정 콜백 (선택 학생 스냅샷 전달)
     public event Action OnCancelled;                            // 영입 취소(닫기) 콜백
 
+    private int _capacity = 8;
+    private int _ownedCount = 0;
+
     // 후보 리스트 주입 (StudentManager와 분리: 후보는 Popup에서만 사용)
     public void SetCandidates(IReadOnlyList<Student> candidates)
     {
@@ -136,14 +139,20 @@ public class RecruitmentPopup : UIPopup
             return;
         }
 
-        // 최대 인원 초과 방지
+        // 정원 꽉 차면 추가 선택 불가
+        if (!CanSelectMore())
+        {
+            ShowMaxReachedPopup();
+            return;
+        }
+
+        // 팝업 내 최대 모집 인원 제한(설정값)도 같이 체크
         if (IsMaxReached())
         {
             ShowMaxReachedPopup();
             return;
         }
 
-        // 선택 처리 + 상세 정보 오버레이
         SelectStudent(student, card);
         ShowSelectStudentPopup(student);
     }
@@ -304,15 +313,32 @@ public class RecruitmentPopup : UIPopup
     private void RefreshCompleteButton()
     {
         bool hasSelection = _selectedStudents.Count > 0;
+        bool canConfirm = hasSelection; // 기본
+        bool rosterFull = GetRemainingCapacity() <= 0;
 
         if (_btnComplete != null)
+        {
+            // 선택이 없으면 기존처럼 숨김 유지
             _btnComplete.gameObject.SetActive(hasSelection);
+
+            // 정원 꽉 차있으면 선택 완료 버튼 비활성화
+            _btnComplete.interactable = canConfirm && !rosterFull;
+        }
 
         if (_txtComplete != null && hasSelection)
         {
-            _txtComplete.text = _maxRecruitCount > 0
-                ? $"선택 완료 ({_selectedStudents.Count}/{_maxRecruitCount})"
-                : $"선택 완료 ({_selectedStudents.Count}명)";
+            if (rosterFull)
+            {
+                _txtComplete.text = "정원이 가득 찼습니다";
+            }
+            else if (_maxRecruitCount > 0)
+            {
+                _txtComplete.text = $"선택 완료 ({_selectedStudents.Count}/{_maxRecruitCount})";
+            }
+            else
+            {
+                _txtComplete.text = $"선택 완료 ({_selectedStudents.Count}명)";
+            }
         }
     }
 
@@ -368,5 +394,22 @@ public class RecruitmentPopup : UIPopup
         _scrollRect.StopMovement();
         _scrollRect.verticalNormalizedPosition = 1f;
         _scrollRect.velocity = Vector2.zero;
+    }
+
+    public void SetRosterCapacity(int capacity, int ownedCount)
+    {
+        _capacity = Mathf.Max(0, capacity);
+        _ownedCount = Mathf.Max(0, ownedCount);
+    }
+
+    private int GetRemainingCapacity()
+    {
+        return Mathf.Max(0, _capacity - _ownedCount);
+    }
+
+    private bool CanSelectMore()
+    {
+        // 보유 + 선택 < 정원 이어야 추가 선택 가능
+        return (_ownedCount + _selectedStudents.Count) < _capacity;
     }
 }

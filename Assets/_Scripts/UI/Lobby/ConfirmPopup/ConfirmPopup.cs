@@ -99,6 +99,9 @@ public class ConfirmPopup : UIPopup
                 ? "확인"
                 : request.PrimaryLabel;
 
+        if (_btnPrimary != null)
+            _btnPrimary.interactable = request.PrimaryInteractable;
+
         bool hasSecondary = !string.IsNullOrEmpty(request.SecondaryLabel);
 
         if (_btnSecondary != null)

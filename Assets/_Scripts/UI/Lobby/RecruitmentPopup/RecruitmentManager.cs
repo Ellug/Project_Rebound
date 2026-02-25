@@ -104,6 +104,10 @@ public class RecruitmentManager : MonoBehaviour
             return;
         }
 
+        int capacity = 8;
+        int ownedCount = StudentManager.Instance != null ? StudentManager.Instance.GetStudentCount() : 0;
+        bool isFull = ownedCount >= capacity;
+
         bool canSkip = context != RecruitmentContext.GameStart;
 
         ConfirmPopupRequest request = new ConfirmPopupRequest(
@@ -117,6 +121,15 @@ public class RecruitmentManager : MonoBehaviour
         );
 
         request.IsModal = true;
+
+        // 정원 꽉 차면 "확인" 비활성화
+        request.SetPrimaryInteractable(!isFull);
+
+        // (권장) 메시지도 같이 보강
+        if (isFull)
+        {
+            request.SetSubMessage("현재 보유 학생이 정원으로 영입을 진행할 수 없습니다.");
+        }
 
         UIManager.Instance.ShowConfirm(request);
     }
@@ -137,11 +150,19 @@ public class RecruitmentManager : MonoBehaviour
             return;
         }
 
+        int ownedCount = StudentManager.Instance != null ? StudentManager.Instance.GetStudentCount() : 0;
+        int capacity = 8;
+        int remaining = Mathf.Max(0, capacity - ownedCount);
+
         RecruitmentPopup popup = Instantiate(_recruitmentPopupPrefab, canvasRoot);
         popup.transform.SetAsLastSibling();
-        popup.SetMaxRecruitCount(_maxRecruitCount);
 
-        // StudentManager가 아닌 "후보 리스트"를 팝업에 주입
+        // 팝업 자체 제한 = min(설정 최대치, 남은 정원)
+        popup.SetMaxRecruitCount(Mathf.Min(_maxRecruitCount, remaining));
+
+        // 정원 정보도 넘겨서 버튼/선택을 더 명확히 제어
+        popup.SetRosterCapacity(capacity, ownedCount);
+
         popup.SetCandidates(_candidateStudents);
 
         popup.Init();
