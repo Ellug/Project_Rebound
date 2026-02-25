@@ -54,7 +54,15 @@ public sealed class MatchContext
     // 우리 학교가 상단(홈) 팀인지 여부
     public bool IsMySchoolUpTeam { get; }
 
-    public MatchContext(string upTeam, string downTeam, string mySchoolName)
+    // 우리 팀 출전 선수(최대 5인) / 벤치 선수
+    public List<Student> FieldPlayers { get; }
+    public List<Student> BenchPlayers { get; }
+
+    // 상대 팀 스탯
+    public EnemyStatRow OpponentStat { get; }
+
+    public MatchContext(string upTeam, string downTeam, string mySchoolName,
+        List<Student> fieldPlayers, List<Student> benchPlayers, EnemyStatRow opponentStat)
     {
         UpTeam = upTeam;
         DownTeam = downTeam;
@@ -63,6 +71,9 @@ public sealed class MatchContext
         OpponentTeamName = IsMySchoolUpTeam ? downTeam : upTeam;
         MySchoolScore = 0;
         OpponentScore = 0;
+        FieldPlayers = fieldPlayers ?? new List<Student>();
+        BenchPlayers = benchPlayers ?? new List<Student>();
+        OpponentStat = opponentStat;
     }
 
     // 쿼터 결과 누적 스코어에 합산
