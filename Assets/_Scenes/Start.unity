@@ -1133,6 +1133,12 @@ MonoBehaviour:
     m_SubObjectType: 
     m_SubObjectGUID: 
     m_EditorAssetChanged: 0
+  _tutorialGuideTableRef:
+    m_AssetGUID: fdb2f49c21fefdd4da86f43ec7f916de
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
 --- !u!4 &1903666999
 Transform:
   m_ObjectHideFlags: 0

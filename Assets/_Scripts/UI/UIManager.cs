@@ -249,4 +249,26 @@ public class UIManager : Singleton<UIManager>
 
         _uiStack.Push(popupInstance);
     }
+
+    
+    public T ShowUI<T>(T uiPrefab) where T : UIBase
+    {
+        if (uiPrefab == null)
+        {
+            Debug.LogError("[UIManager] ShowUI 실패: prefab이 null입니다.");
+            return null;
+        }
+
+        if (!EnsureCanvasRoot())
+            return null;
+
+        T instance = Instantiate(uiPrefab, _canvasRoot, false);
+        instance.transform.SetAsLastSibling();
+
+        instance.Init();
+        instance.Open();
+
+        _uiStack.Push(instance);
+        return instance;
+    }
 }

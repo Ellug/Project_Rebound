@@ -26,6 +26,10 @@ public class RecruitmentManager : MonoBehaviour
 
     public event Action<List<Student>> OnRecruitmentCompleted; // 영입 완료 콜백
 
+    // 후보 학생을 StudentManager(보유 학생)와 분리해서 관리
+    // 후보는 RecruitmentPopup에만 주입해서 UI/선택에만 사용
+    private readonly List<Student> _candidateStudents = new();
+
     void Start()
     {
         _turnManager = FindFirstObjectByType<TurnManager>();
@@ -41,6 +45,13 @@ public class RecruitmentManager : MonoBehaviour
     // 게임 시작 시 최초 영입 트리거
     public void TriggerInitialRecruitment()
     {
+        // 새 게임 시작 시점에만 보유 학생 전체 초기화
+        // 입학 영입(신입생 추가)에서는 기존 보유 학생이 유지되어야 함
+        if (StudentManager.Instance != null)
+        {
+            StudentManager.Instance.ClearAllStudents(); // 새 게임 시작 시에만 전체 초기화
+        }
+
         GenerateCandidateStudents();
         ShowRecruitmentEventConfirm(RecruitmentContext.GameStart);
     }
@@ -54,6 +65,8 @@ public class RecruitmentManager : MonoBehaviour
     // 새 학기 신입생 영입 트리거
     public void TriggerEnrollmentRecruitment()
     {
+        // 입학 영입에서는 StudentManager(보유 학생) 초기화 금지
+        // 후보는 _candidateStudents로만 생성/관리
         GenerateCandidateStudents();
         ShowRecruitmentEventConfirm(RecruitmentContext.NewSemester);
     }
@@ -77,6 +90,7 @@ public class RecruitmentManager : MonoBehaviour
     // 입학 이벤트 발생 시 자동 영입 흐름 시작
     private void HandleEnrollmentTriggered()
     {
+        // 자동 입학 영입도 동일하게 "후보만 생성" (보유 학생 삭제 금지)
         GenerateCandidateStudents();
         ShowRecruitmentEventConfirm(RecruitmentContext.NewSemester);
     }
@@ -90,17 +104,33 @@ public class RecruitmentManager : MonoBehaviour
             return;
         }
 
+        int capacity = 8;
+        int ownedCount = StudentManager.Instance != null ? StudentManager.Instance.GetStudentCount() : 0;
+        bool isFull = ownedCount >= capacity;
+
+        bool canSkip = context != RecruitmentContext.GameStart;
+
         ConfirmPopupRequest request = new ConfirmPopupRequest(
             title: "학생 영입",
             message: BuildEventMessage(context),
             primaryLabel: "확인",
             primaryAction: OpenRecruitmentPopup,
-            secondaryLabel: "포기",
-            secondaryAction: HandleRecruitmentSkipped,
+            secondaryLabel: canSkip ? "포기" : null,
+            secondaryAction: canSkip ? HandleRecruitmentSkipped : null,
             previewSprite: null
         );
 
         request.IsModal = true;
+
+        // 정원 꽉 차면 "확인" 비활성화
+        request.SetPrimaryInteractable(!isFull);
+
+        // (권장) 메시지도 같이 보강
+        if (isFull)
+        {
+            request.SetSubMessage("현재 보유 학생이 정원으로 영입을 진행할 수 없습니다.");
+        }
+
         UIManager.Instance.ShowConfirm(request);
     }
 
@@ -120,9 +150,21 @@ public class RecruitmentManager : MonoBehaviour
             return;
         }
 
+        int ownedCount = StudentManager.Instance != null ? StudentManager.Instance.GetStudentCount() : 0;
+        int capacity = 8;
+        int remaining = Mathf.Max(0, capacity - ownedCount);
+
         RecruitmentPopup popup = Instantiate(_recruitmentPopupPrefab, canvasRoot);
-        popup.transform.SetAsLastSibling(); // 최상단 표시
-        popup.SetMaxRecruitCount(_maxRecruitCount);
+        popup.transform.SetAsLastSibling();
+
+        // 팝업 자체 제한 = min(설정 최대치, 남은 정원)
+        popup.SetMaxRecruitCount(Mathf.Min(_maxRecruitCount, remaining));
+
+        // 정원 정보도 넘겨서 버튼/선택을 더 명확히 제어
+        popup.SetRosterCapacity(capacity, ownedCount);
+
+        popup.SetCandidates(_candidateStudents);
+
         popup.Init();
         popup.Open();
 
@@ -141,38 +183,44 @@ public class RecruitmentManager : MonoBehaviour
 
         if (StudentManager.Instance != null)
         {
-            StudentManager.Instance.ClearAllStudents();
-
+            // 영입 확정 시 "추가(Add)"만 수행 (입학 때 기존 학생 유지)
+            // 기존 로직의 ClearAllStudents() 제거 (새게임 시작에서만 초기화)
             foreach (Student student in recruits)
+            {
                 StudentManager.Instance.AddStudent(student);
+            }
         }
 
         Debug.Log($"[RecruitmentManager] 영입 완료: {recruits.Count}명");
         OnRecruitmentCompleted?.Invoke(recruits);
+
+        // 후보는 한 번 쓰고 버리는 성격이므로 정리
+        _candidateStudents.Clear();
     }
 
     // 영입 포기 → 후보 초기화
     private void HandleRecruitmentSkipped()
     {
-        StudentManager.Instance?.ClearAllStudents();
+        // 포기 시에도 StudentManager(보유 학생) 건드리지 않음
+        // 후보만 폐기
+        _candidateStudents.Clear();
         Debug.Log("[RecruitmentManager] 영입 포기");
     }
 
     // 후보 생성
     private void GenerateCandidateStudents()
     {
-        if (StudentManager.Instance == null) return;
-
-        StudentFactory.ResetUsedNames();     // 이름 중복 초기화
-        StudentManager.Instance.ClearAllStudents();
+        _candidateStudents.Clear();
 
         for (int i = 0; i < _recruitCandidateCount; i++)
-            StudentManager.Instance.AddStudent(StudentFactory.CreateStudent(grade: 1));
+        {
+            // grade를 넘기지 않으면 StudentFactory 내부에서 1~3 랜덤 처리
+            _candidateStudents.Add(StudentFactory.CreateStudent());
+        }
 
         Debug.Log($"[RecruitmentManager] 영입 후보 {_recruitCandidateCount}명 생성 완료");
     }
 
-    
     // 메시지 빌드
     private static string BuildEventMessage(RecruitmentContext context)
     {
