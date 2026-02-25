@@ -189,12 +189,12 @@ public class RecruitmentManager : MonoBehaviour
     // 후보 생성
     private void GenerateCandidateStudents()
     {
-        // 후보는 StudentManager가 아니라 _candidateStudents로만 생성
         _candidateStudents.Clear();
 
         for (int i = 0; i < _recruitCandidateCount; i++)
         {
-            _candidateStudents.Add(StudentFactory.CreateStudent(grade: 1));
+            // grade를 넘기지 않으면 StudentFactory 내부에서 1~3 랜덤 처리
+            _candidateStudents.Add(StudentFactory.CreateStudent());
         }
 
         Debug.Log($"[RecruitmentManager] 영입 후보 {_recruitCandidateCount}명 생성 완료");
