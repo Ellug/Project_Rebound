@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -34,6 +34,9 @@ public class StartManager : MonoBehaviour
     [SerializeField] private AssetReference _studentPlusExpTableRef;
     [SerializeField] private AssetReference _studentPositionTableRef;
 
+    [Header("UI Data Tables")]
+    [SerializeField] private AssetReference _tutorialGuideTableRef;
+
     // 로드된 테이블들 (임시 저장용)
     private GrowthCommandTableSO _growthCommandTable;
     private AlwaysEffectTableSO _alwaysEffectTable;
@@ -53,6 +56,7 @@ public class StartManager : MonoBehaviour
     private StudentStatExpTableSO _studentStatExpTable;
     private StudentPlusExpTableSO _studentPlusExpTable;
     private StudentPositionTableSO _studentPositionTable;
+    private TutorialGuideTableSO _tutorialGuideTable;
 
     private readonly WaitForSeconds _waitOneSecond = new(1f);
 
@@ -88,7 +92,8 @@ public class StartManager : MonoBehaviour
             _studentStatusProbTableRef,
             _studentStatExpTableRef,
             _studentPlusExpTableRef,
-            _studentPositionTableRef
+            _studentPositionTableRef,
+            _tutorialGuideTableRef
         };
 
         // 1. Checking for updates (0% ~ 30%)
@@ -184,7 +189,7 @@ public class StartManager : MonoBehaviour
         // 5. Loading game data (80% ~ 90%)
         _statusText.text = "Loading game data...";
 
-        int tableCount = 18;
+        int tableCount = 19;
         float tableStep = 0.1f / tableCount;
         float baseProgress = 0.8f;
 
@@ -259,6 +264,10 @@ public class StartManager : MonoBehaviour
         yield return LoadTable<StudentPositionTableSO>(_studentPositionTableRef, t => _studentPositionTable = t);
         _loadingSlider.value = 0.9f;
 
+        yield return LoadTable<TutorialGuideTableSO>(_tutorialGuideTableRef, t => _tutorialGuideTable = t);
+        baseProgress = Mathf.Max(baseProgress + tableStep, 0.9f);
+        _loadingSlider.value = baseProgress;
+
         // 6. Initializing DataManager (90% ~ 95%)
         _statusText.text = "Initializing...";
 
@@ -281,7 +290,8 @@ public class StartManager : MonoBehaviour
             _studentStatExpTable,
             _studentPlusExpTable,
             _studentPositionTable,
-            _enemyStatTable
+            _enemyStatTable,
+            _tutorialGuideTable
         );
 
         progress = 0.95f;
