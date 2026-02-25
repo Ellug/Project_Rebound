@@ -358,11 +358,19 @@ public class GameManager : Singleton<GameManager>
 
         if (_turnManager != null)
         {
-            // 토너먼트가 끝난 날은 별도 액션 없이 하루 경과 처리
+            // 저장해둔 term_end 날짜로 복원 후 한 턴 진행 -> AdvanceDay로 term_end + 1일에 이벤트 정상 발동
+            DateTime leagueTermEnd = _flowData.LeagueTermEnd;
+            if (leagueTermEnd != default)
+            {
+                int dayDelta = (int)(leagueTermEnd - _turnManager.DateManager.CurrentDate.Date).TotalDays;
+                int targetDayIndex = _turnManager.DateManager.DayIndex + dayDelta;
+                _turnManager.RestoreRuntimeState(leagueTermEnd, _turnManager.TurnIndex, targetDayIndex, _turnManager.DateManager.CurrentYear, GamePhase.DailyTraining);
+            }
             _turnManager.SetPhase(GamePhase.DailyTraining);
             _turnManager.ExecuteTurn(TurnActionType.Rest);
             _turnManager.SetPhase(GamePhase.DailyTraining);
         }
+        _flowData.LeagueTermEnd = default;
 
         // 다음 리그 정상 처리를 위해 플래그 초기화
         _flowData.IsLeagueOpened = false;
@@ -404,7 +412,12 @@ public class GameManager : Singleton<GameManager>
     private void HandleAlwaysEventActivated(AlwaysEventRow row)
     {
         if (AlwaysEventManager.IsLeagueBreakEvent(row))
+        {
+            if (AlwaysEventDateUtil.TryParseTableDate(row.termEnd, out DateTime termEnd))
+                _flowData.LeagueTermEnd = termEnd.Date;
+                
             OpenLeague();
+        }
     }
 
     // AlwaysEventManager가 이벤트 만료를 알릴 때 호출
