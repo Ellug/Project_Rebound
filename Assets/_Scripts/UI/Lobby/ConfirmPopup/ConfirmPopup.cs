@@ -22,6 +22,7 @@ public class ConfirmPopup : UIPopup
     [SerializeField] private StudentSelectPopup _studentSelectPrefab; // 학생 선택 팝업 프리팹
 
     private ConfirmPopupRequest _request; // 외부에서 전달받는 설정 데이터
+    private StudentSelectPopup _activeStudentSelectPopup; // 참조 보관용 필드 추가
 
     public override void Init()
     {
@@ -49,6 +50,17 @@ public class ConfirmPopup : UIPopup
         ApplyTexts(request);
         ApplyPreview(request);
         ApplyButtons(request);
+    }
+
+    // ConfirmPopup이 외부 요인으로 먼저 파괴될 때 구독 해제
+    private void OnDestroy()
+    {
+        if (_activeStudentSelectPopup != null)
+        {
+            _activeStudentSelectPopup.OnSelectionConfirmed -= HandleStudentsSelected;
+            _activeStudentSelectPopup.OnCancelled -= HandleStudentSelectCancelled;
+            _activeStudentSelectPopup = null;
+        }
     }
 
     // 텍스트 영역 표시/숨김 처리
@@ -170,6 +182,7 @@ public class ConfirmPopup : UIPopup
         Close();
 
         StudentSelectPopup popup = Instantiate(_studentSelectPrefab, transform.parent);
+        _activeStudentSelectPopup = popup; // 참조 저장
         popup.SetMaxSelectCount(_request.MaxSelectCount);
         popup.Init();
         popup.Open();
@@ -181,6 +194,7 @@ public class ConfirmPopup : UIPopup
     // 학생 선택 완료 콜백
     private void HandleStudentsSelected(List<Student> students)
     {
+        _activeStudentSelectPopup = null;
         _request.OnStudentsSelected?.Invoke(students);
 
         if (_request.AutoCloseOnPrimary)
@@ -190,6 +204,8 @@ public class ConfirmPopup : UIPopup
     // 학생 선택 취소 시 다시 열기
     private void HandleStudentSelectCancelled()
     {
+        // ConfirmPopup이 이미 파괴됐으면 무시
+        if (this == null || gameObject == null) return;
         Open();
     }
 
