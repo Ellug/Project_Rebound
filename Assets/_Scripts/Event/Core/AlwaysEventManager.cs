@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -155,7 +155,11 @@ public class AlwaysEventManager : MonoBehaviour
     }
 
     private static string GetRowId(AlwaysEventRow row)
-        => string.IsNullOrWhiteSpace(row.id) ? "(no-id)" : row.id.Trim();
+    {
+        string id = string.IsNullOrWhiteSpace(row.id) ? "(no-id)" : row.id.Trim();
+        string start = string.IsNullOrWhiteSpace(row.termStart) ? "" : row.termStart.Trim();
+        return $"{id}_{start}"; // 예: roster_recruit_260302, roster_recruit_260810
+    }
 
     private bool TryGetAlwaysEventTable(out AlwaysEventTableSO table)
     {
