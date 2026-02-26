@@ -121,8 +121,7 @@ public class LobbyUI : UIBase
         {
             _btnSetting.onClick.AddListener(() =>
             {
-                Debug.Log("[LobbyUI] Setting button clicked");
-                UIManager.Instance.ShowUI(_settingsPanelPrefab);
+                UIManager.Instance.ShowUIUnique(_settingsPanelPrefab);
             });
         }
 
