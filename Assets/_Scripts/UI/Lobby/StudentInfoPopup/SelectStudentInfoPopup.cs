@@ -130,7 +130,7 @@ public class SelectStudentInfoPopup : UIBase
     public void Setup(string title, Student student, Sprite portrait)
     {
         if (_txtTitle != null)
-            _txtTitle.text = string.IsNullOrEmpty(title) ? "선택한 학생" : title;
+            _txtTitle.text = string.IsNullOrEmpty(title) ? "학생 정보" : title;
 
         ApplyPortrait(portrait);
         ApplySummary(student);

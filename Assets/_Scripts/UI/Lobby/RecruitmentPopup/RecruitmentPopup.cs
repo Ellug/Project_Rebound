@@ -171,12 +171,12 @@ public class RecruitmentPopup : UIPopup
             portrait = card.GetPortraitSprite();
 
         _studentInfoPopup.Init();
-        _studentInfoPopup.Setup("선택한 학생", student, portrait);
+        _studentInfoPopup.Setup("학생 정보", student, portrait);
         _studentInfoPopup.transform.SetAsLastSibling();
 
-        // 학생 영입: 처음 선택만 위로 슬라이드
-        if (!_studentInfoPopup.gameObject.activeSelf)
-            _studentInfoPopup.Open();
+       // // 학생 영입: 처음 선택만 위로 슬라이드
+       // if (!_studentInfoPopup.gameObject.activeSelf)
+        _studentInfoPopup.Open();
     }
 
     // 학생 선택 처리 (카드 상태 변경 + UI 갱신)
@@ -203,7 +203,12 @@ public class RecruitmentPopup : UIPopup
             buttons: new List<PopupButtonInfo>
             {
                 new PopupButtonInfo("취소", null),
-                new PopupButtonInfo("확인", () => UnselectStudent(student, card))
+                // 확인 시 선택 취소 후 정보 팝업도 슬라이드 아웃으로 닫기
+                new PopupButtonInfo("확인", () =>
+                {
+                    UnselectStudent(student, card);
+                    CloseStudentInfoPopup();
+                })
             }
         ));
     }
@@ -219,6 +224,13 @@ public class RecruitmentPopup : UIPopup
 
         RefreshHeader();
         RefreshCompleteButton();
+    }
+
+    // 학생 정보 팝업 슬라이드 아웃으로 닫기
+    private void CloseStudentInfoPopup()
+    {
+        if (_studentInfoPopup != null && _studentInfoPopup.gameObject.activeSelf)
+            _studentInfoPopup.Close();
     }
 
     // 최대 모집 인원 도달 여부
@@ -251,15 +263,8 @@ public class RecruitmentPopup : UIPopup
         // 콜백 전달용 스냅샷 (리스트 변경 방지)
         List<Student> snapshot = new(_selectedStudents);
 
-        UIManager.Instance.ShowPopup(new PopupData(
-            title: "학생 영입",
-            content: $"선택한 학생 {snapshot.Count}명을 영입하시겠습니까?",
-            buttons: new List<PopupButtonInfo>
-            {
-                new PopupButtonInfo("포기", null),
-                new PopupButtonInfo("확인", () => ShowJoinCompletePopup(snapshot))
-            }
-        ));
+        // 영입 완료 팝업
+        ShowJoinCompletePopup(snapshot);
     }
 
     // 최종 영입 완료 팝업
@@ -320,25 +325,23 @@ public class RecruitmentPopup : UIPopup
     private void RefreshCompleteButton()
     {
         bool hasSelection = _selectedStudents.Count > 0;
-        bool canConfirm = hasSelection; // 기본
+        // 5명 이상이어야 영입 확정 가능
+        bool meetsMinimum = _selectedStudents.Count >= 5;
         bool rosterFull = GetRemainingCapacity() <= 0;
+        // 최대 선택 가능 인원을 모두 채운 경우 (남은 정원 = 선택 인원) → 5명 미만이어도 버튼 표시
+        bool filledMaxAvailable = _maxRecruitCount > 0 && _selectedStudents.Count >= _maxRecruitCount;
+
+        // 버튼 표시 조건: (5명 이상 OR 선택 가능 최대치를 채움) AND 정원 초과 아님
+        bool showButton = hasSelection && (meetsMinimum || filledMaxAvailable) && !rosterFull;
 
         if (_btnComplete != null)
         {
-            // 선택이 없으면 기존처럼 숨김 유지
-            _btnComplete.gameObject.SetActive(hasSelection);
-
-            // 정원 꽉 차있으면 선택 완료 버튼 비활성화
-            _btnComplete.interactable = canConfirm && !rosterFull;
+            _btnComplete.gameObject.SetActive(showButton);
         }
 
-        if (_txtComplete != null && hasSelection)
+        if (_txtComplete != null && showButton)
         {
-            if (rosterFull)
-            {
-                _txtComplete.text = "정원이 가득 찼습니다";
-            }
-            else if (_maxRecruitCount > 0)
+            if (_maxRecruitCount > 0)
             {
                 _txtComplete.text = $"선택 완료 ({_selectedStudents.Count}/{_maxRecruitCount})";
             }
