@@ -49,6 +49,14 @@ public class LobbyTutorialGuideEntry : MonoBehaviour
         if (_root != null) _root.SetActive(shouldShow);
     }
 
+    // 설정창에서 접근용
+    public void RestartAndOpen()
+    {
+        TutorialGuidePrefs.ResetDismissed();
+        RefreshVisible();
+        OpenGuidePopup();
+    }
+
     // 가이드 팝업 열기
     private void OpenGuidePopup()
     {
