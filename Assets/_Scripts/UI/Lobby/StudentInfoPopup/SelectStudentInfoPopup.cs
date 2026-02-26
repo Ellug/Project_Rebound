@@ -28,7 +28,6 @@ public class SelectStudentInfoPopup : UIBase
 
     [Header("Slide Animation")]
     [SerializeField] private RectTransform _panelRoot;                // 실제로 움직일 루트(패널)
-    [SerializeField] private float _slideDuration = 0.2f;
     [SerializeField] private float _hiddenOffsetY = -600f;            // 아래로 숨길 거리(픽셀)
     [SerializeField] private bool _disableRaycastWhileTween = true;   // 애니메이션 중 입력 차단(선택)
 

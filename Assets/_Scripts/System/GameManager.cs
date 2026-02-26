@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -219,7 +219,7 @@ public class GameManager : Singleton<GameManager>
         return (nextLeagueDate.Date - _turnManager.DateManager.CurrentDate.Date).Days;
     }
 
-    // Lobby 씬 로드 시 턴 흐름 초기화/복원 (10단계)
+    // Lobby 씬 로드 시 턴 흐름 초기화/복원 (11단계)
     // _lobbyInitialized 플래그로 Start/OnSceneLoaded 이중 호출 방지
     private void TryInitializeLobbyFlow(Scene scene)
     {
@@ -237,14 +237,15 @@ public class GameManager : Singleton<GameManager>
 
         CacheSceneReferences();         // 1. 씬 오브젝트 참조 캐싱
         SubscribeTurnManager();         // 2. TurnManager 이벤트 구독
-        RestoreTurnManagerState();      // 3. TurnManager 상태 복원 (씬 복귀 시)
-        InitializeGameState();          // 4. GameState 생성 및 동기화
-        InitializeEventManager();       // 5. EventManager 초기화
-        SetInitialPhase();              // 6. 초기 페이즈 설정
-        HandleTournamentResult();       // 7. 토너먼트 결과 처리
-        SyncFlowStateFromLobby();       // 8. GameFlowData 동기화 (이후 HasFlowState = true)
-        RefreshLobbyTopInfo();          // 9. 로비 UI 갱신
-        TryTriggerInitialRecruitment(); // 10. 게임 시작 시 최초 영입 트리거
+        RegisterTurnModules();          // 3. TurnModule 등록 (AlwaysEffectTickModule 등)
+        RestoreTurnManagerState();      // 4. TurnManager 상태 복원 (씬 복귀 시)
+        InitializeGameState();          // 5. GameState 생성 및 동기화
+        InitializeEventManager();       // 6. EventManager 초기화
+        SetInitialPhase();              // 7. 초기 페이즈 설정
+        HandleTournamentResult();       // 8. 토너먼트 결과 처리
+        SyncFlowStateFromLobby();       // 9. GameFlowData 동기화 (이후 HasFlowState = true)
+        RefreshLobbyTopInfo();          // 10. 로비 UI 갱신
+        TryTriggerInitialRecruitment(); // 11. 게임 시작 시 최초 영입 트리거
     }
 
     // 새 게임 상태 초기화
@@ -288,13 +289,24 @@ public class GameManager : Singleton<GameManager>
             _turnManager.OnTurnCompleted -= HandleTurnCompleted;
     }
 
+    // ITurnModule 구현체 등록 — SubscribeTurnManager() 직후 호출
+    // AlwaysEffectTickModule: 매 턴 종료 시 상시 이벤트 condition 틱 처리
+    private void RegisterTurnModules()
+    {
+        if (_turnManager == null) return;
+
+        AlwaysEffectTickModule tickModule = FindFirstObjectByType<AlwaysEffectTickModule>();
+        if (tickModule != null)
+            _turnManager.RegisterModule(tickModule);
+    }
+
     // AlwaysEventManager 이벤트 구독 해제 및 Unbind
     private void UnbindAlwaysEventManager()
     {
         if (_alwaysEventManager == null) return;
 
         _alwaysEventManager.OnEventActivated -= HandleAlwaysEventActivated;
-        _alwaysEventManager.OnEventExpired   -= HandleAlwaysEventExpired;
+        _alwaysEventManager.OnEventExpired -= HandleAlwaysEventExpired;
         _alwaysEventManager.Unbind();
     }
 
@@ -337,7 +349,7 @@ public class GameManager : Singleton<GameManager>
 
         // AlwaysEventManager가 발행하는 이벤트를 GM이 구독 — AEM → GM 직접참조 제거
         _alwaysEventManager.OnEventActivated += HandleAlwaysEventActivated;
-        _alwaysEventManager.OnEventExpired   += HandleAlwaysEventExpired;
+        _alwaysEventManager.OnEventExpired += HandleAlwaysEventExpired;
     }
 
     // 초기 게임 페이즈 설정 (Init이면 DailyTraining으로 전환)
@@ -471,7 +483,7 @@ public class GameManager : Singleton<GameManager>
         {
             if (AlwaysEventDateUtil.TryParseTableDate(row.termEnd, out DateTime termEnd))
                 _flowData.LeagueTermEnd = termEnd.Date;
-                
+
             OpenLeague();
         }
     }
