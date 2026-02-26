@@ -1239,7 +1239,7 @@ MonoBehaviour:
   _buttonPrefab: {fileID: 0}
   _closeButton: {fileID: 0}
   _txtName: {fileID: 4697294983345126648}
-  _txtSub: {fileID: 0}
+  _txtSub: {fileID: 4387824663842073557}
   _txtMessage: {fileID: 972888752505486911}
   _imgPreview: {fileID: 2131610214326238014}
   _btnSecondary: {fileID: 6303972239010338143}
