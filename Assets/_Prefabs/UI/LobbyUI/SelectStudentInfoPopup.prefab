@@ -1122,7 +1122,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uC120\uD0DD\uD55C \uD559\uC0DD"
+  m_text: "\uD559\uC0DD \uC815\uBCF4"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 9291a7438c2005e48b00352476c10c41, type: 2}
   m_sharedMaterial: {fileID: -6666201437410415903, guid: 9291a7438c2005e48b00352476c10c41, type: 2}
@@ -1388,3 +1388,8 @@ MonoBehaviour:
   _conditionMaxValue: 130
   _statListRoot: {fileID: 8676286738180894967}
   _statRowPrefab: {fileID: 6221017286530398922, guid: 66ceca9f093850146b3879ce2727e94d, type: 3}
+  _panelRoot: {fileID: 0}
+  _hiddenOffsetY: -600
+  _disableRaycastWhileTween: 1
+  _slideInDuration: 0.2
+  _slideOutDuration: 0.28
