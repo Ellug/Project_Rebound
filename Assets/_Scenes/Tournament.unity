@@ -3043,19 +3043,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1044661736}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1230140054}
-        m_TargetAssemblyTypeName: TournamentHalfTimeSelectionUI, Assembly-CSharp
-        m_MethodName: OnClickedButton1
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &1044661736
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3660,6 +3648,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TournamentHalfTimeSelectionUI
   _selectionPanel: {fileID: 592590607}
+  _button1: {fileID: 1044661735}
+  _button2: {fileID: 1918227702}
+  _button3: {fileID: 1446281554}
 --- !u!114 &1230140055
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4422,19 +4413,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1446281555}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1230140054}
-        m_TargetAssemblyTypeName: TournamentHalfTimeSelectionUI, Assembly-CSharp
-        m_MethodName: OnClickedButton3
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &1446281555
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5539,19 +5518,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1918227703}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1230140054}
-        m_TargetAssemblyTypeName: TournamentHalfTimeSelectionUI, Assembly-CSharp
-        m_MethodName: OnClickedButton2
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &1918227703
 MonoBehaviour:
   m_ObjectHideFlags: 0

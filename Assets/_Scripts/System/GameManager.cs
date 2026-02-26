@@ -342,9 +342,6 @@ public class GameManager : Singleton<GameManager>
         if (!_flowData.HasFlowState)
             _flowData.ActiveEventIds.Clear();   // 새 게임: 활성 이벤트 초기화
 
-        // if (_eventManager != null)
-        //     _eventManager.Initialize(_gameState, resetRuntimeState: !_flowData.HasFlowState);
-
         _alwaysEventManager.Bind(_turnManager, _gameState, _flowData.ActiveEventIds);
 
         // AlwaysEventManager가 발행하는 이벤트를 GM이 구독 — AEM → GM 직접참조 제거
