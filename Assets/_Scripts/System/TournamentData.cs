@@ -14,7 +14,7 @@ public struct TournamentData
         PendingMySchoolReachedRoundTeamCount = 0
     };
 
-    public bool HasPendingResult => !string.IsNullOrWhiteSpace(PendingChampion);
+    public bool HasPendingResult => PendingMySchoolReachedRoundTeamCount > 0;
 
     // 데이터 초기화
     public void Clear()
