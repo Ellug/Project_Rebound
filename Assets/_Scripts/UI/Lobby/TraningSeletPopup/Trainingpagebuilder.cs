@@ -161,7 +161,7 @@ public static class TrainingPageBuilder
 
             shootDelta = 0f,
             speedDelta = 0f,
-            defenseDelta = 0f,
+            jumpDelta = 0f,
             staminaDelta = 0f,
             mentalDelta = 0
         };
@@ -174,7 +174,7 @@ public static class TrainingPageBuilder
             trainingName = row.name,
             trainingDesc = BuildDesc(row),
             statModifierText = BuildStatText(row),
-            conditionDelta = row.hpCost,
+            conditionDelta = row.conditionCost,
             navigateToPageIndex = -1,
             trainingKey = $"cmd_{row.index}",
             previewSprite = null,
@@ -183,7 +183,7 @@ public static class TrainingPageBuilder
 
             shootDelta = row.shoot,
             speedDelta = row.speed,
-            defenseDelta = row.defense,
+            jumpDelta = row.jump,
             staminaDelta = row.stamina,
             mentalDelta = row.mental
         };
@@ -195,7 +195,7 @@ public static class TrainingPageBuilder
 
         if (row.shoot != 0f) parts.Add(FormatStat("슈팅", row.shoot));
         if (row.speed != 0f) parts.Add(FormatStat("속도", row.speed));
-        if (row.defense != 0f) parts.Add(FormatStat("수비", row.defense));
+        if (row.jump != 0f) parts.Add(FormatStat("점프", row.jump));
         if (row.stamina != 0f) parts.Add(FormatStat("스태미나", row.stamina));
         if (row.mental != 0) parts.Add(FormatStatInt("멘탈", row.mental));
 

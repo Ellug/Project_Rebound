@@ -31,7 +31,7 @@ MonoBehaviour:
     triggerStatus2: 0
     triggerCondition2: 0
     triggerThreshold2: -1
-    effect1: event_effect_1_condition_p5
+    effect1: event_effect_1_condition_m5
     effect2: 
     effect3: 
     isProbable: 1

@@ -18,7 +18,7 @@ public class TrainingButtonData
     // CSV 기반 실제 적용 수치
     public float shootDelta;
     public float speedDelta;
-    public float defenseDelta;
+    public float jumpDelta;
     public float staminaDelta;
     public int mentalDelta;
 }

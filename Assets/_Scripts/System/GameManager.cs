@@ -115,7 +115,6 @@ public class GameManager : Singleton<GameManager>
         UnbindAlwaysEventManager();
 
         _turnManager = null;
-        // _eventManager = null;
         _alwaysEventManager = null;
         _lobbyUI = null;
         _tournamentResultUI = null;
@@ -400,12 +399,69 @@ public class GameManager : Singleton<GameManager>
 
         _gameState?.SyncState(_turnManager.DateManager.CurrentDate, _turnManager.TurnIndex);
 
-        // if (_eventManager != null)
-        //     _eventManager.CheckEvents();
-
         SyncFlowStateFromLobby();
         RefreshLobbyTopInfo();
         TryEnterTournament();
+
+        // 금요일 종료 시 주말 분기 처리
+        if (context.IsFriday)
+            HandleFridayEnd();
+    }
+
+    // 금요일 턴 종료 후 친선경기 or 주말 훈련 팝업 분기
+    private void HandleFridayEnd()
+    {
+        if (UIManager.Instance == null)
+            return;
+
+        if (_flowData.HasPendingFriendlyMatch)
+        {
+            // 친선경기 예약 있음 : 전용 팝업
+            UIManager.Instance.ShowConfirm(new ConfirmPopupRequest(
+                title: "친선경기",
+                message: "이번 주말 친선경기가 예정되어 있습니다.\n친선경기에 진입하시겠습니까? (미구현)",
+                primaryLabel: "확인",
+                primaryAction: EnterFriendlyMatch
+            ));
+        }
+        else
+        {
+            // 친선경기 없음 : 주말 훈련 확인/취소 팝업
+            UIManager.Instance.ShowConfirm(new ConfirmPopupRequest(
+                title: "주말 훈련 제안",
+                message: "금요일 일정이 끝났습니다.\n주말 훈련을 진행하시겠습니까?",
+                subMessage: "확인: 전원 스탯 소량 상승, 주말 휴식 효율 50%\n취소: 주말 푹 쉬기 (체력 대폭 회복)",
+                primaryLabel: "확인",
+                primaryAction: OnWeekendTrainingConfirmed,
+                secondaryLabel: "취소",
+                secondaryAction: OnWeekendTrainingCancelled
+            ));
+        }
+    }
+
+    // 주말 훈련 확인 (훈련 진행)
+    private void OnWeekendTrainingConfirmed()
+    {
+        Debug.Log("[GameManager] 주말 훈련 확인");
+    }
+
+    // 주말 훈련 취소 (주말 스킵 → 월요일로)
+    private void OnWeekendTrainingCancelled()
+    {
+        if (_turnManager == null) return;
+
+        // 금요일 기준 토·일 2일 스킵 → 월요일
+        _turnManager.SkipDays(2);
+        SyncFlowStateFromLobby();
+        RefreshLobbyTopInfo();
+    }
+
+    // 친선경기 진입 처리 (추후 구현)
+    private void EnterFriendlyMatch()
+    {
+        _flowData.HasPendingFriendlyMatch = false;
+        // TODO: 친선경기 씬/흐름 연결
+        Debug.Log("[GameManager] 친선경기 진입 (미구현)");
     }
 
     // AlwaysEventManager가 이벤트 활성화를 알릴 때 호출 — row.type / row.id 기반으로 분기
