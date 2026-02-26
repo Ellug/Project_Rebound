@@ -27,6 +27,9 @@ public class LobbyUI : UIBase
 
     [Header("Center Message")]
     [SerializeField] private TMP_Text _txtMessage;
+    [Header("Messenger")]
+    [SerializeField] private Button _btnCenterMessage;                   
+    [SerializeField] private MessengerInboxPopup _messengerInboxPopup;
 
     [Header("Bottom Navigation Buttons")]
     [SerializeField] private Button _btnTraining; // 훈련 (구 일과)
@@ -57,6 +60,37 @@ public class LobbyUI : UIBase
         base.Init();
         BindEvents();
         UpdateUI(); // 초기 데이터 표시
+
+        // 중앙 메시지 창 클릭 시 메신저함 열기
+        if (_btnCenterMessage != null)
+        {
+            _btnCenterMessage.onClick.RemoveAllListeners();
+            _btnCenterMessage.onClick.AddListener(OpenMessengerInbox);
+        }
+
+        // 메신저 매니저 구독 (새 메시지가 오면 중앙 텍스트 미리보기 갱신)
+        if (MessengerManager.Instance != null)
+        {
+            MessengerManager.Instance.OnLatestMessageReceived -= UpdateMessagePreview;
+            MessengerManager.Instance.OnLatestMessageReceived += UpdateMessagePreview;
+        }
+    }
+
+    private void UpdateMessagePreview(ChatMessage latestMessage)
+    {
+        if (_txtMessage != null && latestMessage != null)
+        {
+            _txtMessage.text = $"[{latestMessage.SenderType}] {latestMessage.Content}";
+        }
+    }
+
+    private void OpenMessengerInbox()
+    {
+        if (_messengerInboxPopup == null) return;
+
+        _messengerInboxPopup.Init();
+        _messengerInboxPopup.transform.SetAsLastSibling(); // 최상단 노출
+        _messengerInboxPopup.Open(); // 내부에서 SetActive(true) 동작
     }
 
     private void BindEvents()
@@ -81,9 +115,6 @@ public class LobbyUI : UIBase
                     image: _testSprite,                     // 테스트 이미지
                     buttons: buttons
                 ));
-
-                 if (_recruitmentManager != null)
-            _recruitmentManager.TryStartRecruitment();
             });
         }
         if (_btnSetting != null)

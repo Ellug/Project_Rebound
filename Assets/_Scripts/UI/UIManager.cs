@@ -271,4 +271,36 @@ public class UIManager : Singleton<UIManager>
         _uiStack.Push(instance);
         return instance;
     }
+
+
+    private System.Collections.Generic.Stack<UIBase> _messengerStack = new System.Collections.Generic.Stack<UIBase>();
+
+    // 창이 열릴 때 스택에 넣기
+    public void PushMessenger(UIBase ui)
+    {
+        _messengerStack.Push(ui);
+    }
+
+    // 창이 닫힐 때 스택에서 빼기
+    public void PopMessenger(UIBase ui)
+    {
+        if (_messengerStack.Count > 0 && _messengerStack.Peek() == ui)
+        {
+            _messengerStack.Pop();
+        }
+    }
+
+    // 뒤로가기 키 입력 감지 
+    private void Update()
+    {
+        if (Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame)
+        {
+            // 열려있는 메신저 창이 있다면, 가장 위에 있는 창 닫기
+            if (_messengerStack.Count > 0)
+            {
+                _messengerStack.Peek().Close();
+                return;
+            }
+        }
+    }
 }
