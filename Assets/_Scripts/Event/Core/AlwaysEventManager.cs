@@ -123,9 +123,18 @@ public class AlwaysEventManager : MonoBehaviour
     {
         if (row.type == "roster") return;
 
-        if (UIManager.Instance == null)
+        // description이 없으면 팝업 없이 효과만 적용
+        if (string.IsNullOrEmpty(row.description))
         {
             AlwaysEffectApplier.ApplyEffect(row);
+            return;
+        }
+
+        AlwaysEventRow capturedRow = row;
+
+        if (UIManager.Instance == null)
+        {
+            AlwaysEffectApplier.ApplyEffect(capturedRow);
             return;
         }
 
@@ -138,15 +147,11 @@ public class AlwaysEventManager : MonoBehaviour
             _ => "이벤트 발생"
         };
 
-        string message = string.IsNullOrEmpty(row.description)
-            ? $"{row.name} 이벤트가 발생했습니다."
-            : row.description;
-
         UIManager.Instance.ShowConfirm(new ConfirmPopupRequest(
             title: title,
-            message: message,
+            message: row.description,
             primaryLabel: "확인",
-            primaryAction: () => AlwaysEffectApplier.ApplyEffect(row)
+            primaryAction: () => AlwaysEffectApplier.ApplyEffect(capturedRow)
         ));
     }
 
