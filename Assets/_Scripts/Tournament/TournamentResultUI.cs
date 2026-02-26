@@ -106,9 +106,26 @@ public class TournamentResultUI : MonoBehaviour
     // 확인 버튼 : 인스펙터에 직접 연결
     public void OnClickConfirm()
     {
-        // TODO 닫기 로직 외에 더 있나?
-        // 패배했을 때는 게임오버라던가 추가 로직 있을듯?
+        if (_isCurrentResultAchieved)
+            OnConfirmAchieved();
+        else
+            OnConfirmFailed();
+    }
+
+    // 승리(입상) 확인
+    private void OnConfirmAchieved()
+    {
+        // TODO: 승리 보상 지급, 다음 시즌 진입 등 후처리
         Hide();
+    }
+
+    // 패배(탈락) 확인 -> 타이틀로 이동
+    // GameManager.OnSceneLoaded에서 TitleScene 감지 시 CleanupManagers() -> ClearFlowRuntimeState() 자동 호출해서 초기화
+    private void OnConfirmFailed()
+    {
+        // TODO: 패배 연출?? 보존 재화 계산?
+        Hide();
+        UnityEngine.SceneManagement.SceneManager.LoadScene("Title");
     }
 
     private static bool IsAchievedResult(int reachedRoundTeamCount)
