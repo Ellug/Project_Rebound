@@ -172,7 +172,7 @@ public class TurnManager : MonoBehaviour
         _currentPhase = phase;
     }
 
-    #if UNITY_EDITOR
+#if UNITY_EDITOR
     [ContextMenu("Debug - Execute Rest Turn")]
     private void DebugExecuteRestTurn()
     {
@@ -190,7 +190,7 @@ public class TurnManager : MonoBehaviour
     }
 #endif
 
-    // 테스트 단계에서 쓸 날짜 지나게 하기
+    // 테스트 단계에서 쓸 날짜 지나게 하기 -> 실제 사용 사례 추가함 (GM)
     public void SkipDays(int days)
     {
         for (int i = 0; i < days; i++)

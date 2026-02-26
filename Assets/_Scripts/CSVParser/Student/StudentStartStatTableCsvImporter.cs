@@ -57,7 +57,7 @@ public static class StudentStartStatTableCsvImporter
 
             var cells = CsvImportUtil.SplitCsvLine(line);
 
-            var statId = CsvImportUtil.ReadInt(cells, col, "stat_id", 0);
+            var statId = CsvImportUtil.ReadPrefixedId(cells, col, "stat_id", 0);
             if (statId == 0) continue;
 
             var r = new StudentStartStatRow

@@ -16,39 +16,40 @@ MonoBehaviour:
   - id: ID_Text_SuddenEvent_000001
     target: 1
     speaker: '[SYSTEM]'
-    description: "$\"{target1.name}\uC774 \uB2A6\uC7A0\uC744 \uC7A4\uB2E4.\\n<color=grey>{target1.name}
-      \uCEE8\uB514\uC158 \uAC10\uC18C -5<\\color>\""
+    description: "\uCEE8\uB514\uC158 5 \uAC10\uC18C"
   - id: ID_Text_SuddenEvent_000001
     target: 2
     speaker: '[SYSTEM]'
-    description: "$\"{target1.name}, {target2.name}\uC774 \uB2A6\uC7A0\uC744 \uC7A4\uB2E4.\\n<color=grey>{target1.name},
-      {target2.name} \uCEE8\uB514\uC158 \uAC10\uC18C -5<\\color>\""
+    description: "\uCEE8\uB514\uC158 5 \uAC10\uC18C"
   - id: ID_Text_SuddenEvent_000001
     target: 3
     speaker: '[SYSTEM]'
-    description: "$\"{target1.name}, {target2.name}, {target3.name}\uC774 \uB2A6\uC7A0\uC744
-      \uC7A4\uB2E4.\\n<color=grey>{target1.name}, {target2.name}, {target3.name}
-      \uCEE8\uB514\uC158 \uAC10\uC18C -5<\\color>\""
+    description: "\uCEE8\uB514\uC158 5 \uAC10\uC18C"
   - id: ID_Text_SuddenEvent_000002
     target: 1
     speaker: '[SYSTEM]'
-    description: 
+    description: "$\"{target1.name}\uC774(\uAC00) \uBD80\uB2F4\uAC10\uC744 \uB290\uB080\uB2E4...\\n<color=grey>{target1.name}
+      {event_effect.target_name} {event_event_effect.amount}<\\color>\""
   - id: ID_Text_SuddenEvent_000002
     target: 2
     speaker: '[SYSTEM]'
-    description: 
+    description: "$\"\uD559\uC0DD\uB4E4\uC774(\uAC00) \uBD80\uB2F4\uAC10\uC744 \uB290\uB080\uB2E4...\\n<color=grey>{target1.name},
+      {target2.name} {event_effect.target_name} {event_event_effect.amount}<\\color>\""
   - id: ID_Text_SuddenEvent_000002
     target: 3
     speaker: '[SYSTEM]'
-    description: 
+    description: "$\"\uD559\uC0DD\uB4E4\uC774(\uAC00) \uBD80\uB2F4\uAC10\uC744 \uB290\uB080\uB2E4...\\n<color=grey>{target1.name},
+      {target2.name}, {target3.name} {event_effect.target_name} {event_effect.amount}<\\color>\""
   - id: ID_Text_SuddenEvent_000002
     target: 4
     speaker: '[SYSTEM]'
-    description: 
+    description: "$\"\uD559\uC0DD\uB4E4\uC774(\uAC00) \uBD80\uB2F4\uAC10\uC744 \uB290\uB080\uB2E4...\\n<color=grey>{target1.name},
+      {target2.name}, {target3.name}, {target4.name} {event_effect.target_name} {event_effect.amount}<\\color>\""
   - id: ID_Text_SuddenEvent_000002
     target: 5
     speaker: '[SYSTEM]'
-    description: 
+    description: "$\"\uD559\uC0DD\uB4E4\uC774(\uAC00) \uBD80\uB2F4\uAC10\uC744 \uB290\uB080\uB2E4...\\n<color=grey>
+      \uBAA8\uB4E0 \uD559\uC0DD {event_effect.target_name}  {event_effect.amount}<\\color>\""
   - id: ID_Text_SuddenEvent_000003
     target: 1
     speaker: '[SYSTEM]'

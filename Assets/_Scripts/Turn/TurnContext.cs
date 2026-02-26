@@ -12,6 +12,13 @@ public class TurnContext
     public TurnActionType SelectedAction { get; set; } = TurnActionType.Rest;
     public bool IsMatchDay { get; set; }
 
+    //요일 관련 편의 프로퍼티
+    public DayOfWeek DayOfWeek => CurrentDate.DayOfWeek;
+    public bool IsFriday  => CurrentDate.DayOfWeek == DayOfWeek.Friday;
+    public bool IsSaturday => CurrentDate.DayOfWeek == DayOfWeek.Saturday;
+    public bool IsSunday  => CurrentDate.DayOfWeek == DayOfWeek.Sunday;
+    public bool IsWeekend => IsSaturday || IsSunday;
+
     //모듈 간 임시 데이터 공유용
     public Dictionary<string, object> ExtraData { get; set; } = new Dictionary<string, object>();
 }
