@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -91,6 +91,7 @@ public class AlwaysEventManager : MonoBehaviour
             {
                 _activeEventIds.Remove(id);
                 OnEventExpired?.Invoke(row);
+                AlwaysEffectApplier.RevertEffect(row); // 효과 해제
                 Debug.Log($"[AlwaysEvent] Ended: {id} ({today:yyyy-MM-dd})");
             }
         }
@@ -111,8 +112,42 @@ public class AlwaysEventManager : MonoBehaviour
 
             // 신규 활성화 — 구독자가 타입/ID 기반으로 처리
             OnEventActivated?.Invoke(row);
+            ShowAlwaysEventPopup(row); // 팝업 표시 (roster 타입은 내부에서 스킵)
             Debug.Log($"[AlwaysEvent] Activated: {id} ({today:yyyy-MM-dd}) | type={row.type} | effect={row.effectId}");
         }
+    }
+
+    // roster 타입은 RecruitmentManager가 처리하므로 스킵
+    // 확인 버튼만 표시 — 확인 시 AlwaysEffectApplier.ApplyEffect() 호출
+    private void ShowAlwaysEventPopup(AlwaysEventRow row)
+    {
+        if (row.type == "roster") return;
+
+        if (UIManager.Instance == null)
+        {
+            AlwaysEffectApplier.ApplyEffect(row);
+            return;
+        }
+
+        string title = row.type switch
+        {
+            "exam" => "시험 기간",
+            "festival" => "학교 행사",
+            "vacation" => "방학",
+            "holiday" => "공휴일",
+            _ => "이벤트 발생"
+        };
+
+        string message = string.IsNullOrEmpty(row.description)
+            ? $"{row.name} 이벤트가 발생했습니다."
+            : row.description;
+
+        UIManager.Instance.ShowConfirm(new ConfirmPopupRequest(
+            title: title,
+            message: message,
+            primaryLabel: "확인",
+            primaryAction: () => AlwaysEffectApplier.ApplyEffect(row)
+        ));
     }
 
     // 다음 리그(vacation 타입) 시작 날짜 조회 — GameManager가 D-Day 계산에 사용
@@ -155,7 +190,11 @@ public class AlwaysEventManager : MonoBehaviour
     }
 
     private static string GetRowId(AlwaysEventRow row)
-        => string.IsNullOrWhiteSpace(row.id) ? "(no-id)" : row.id.Trim();
+    {
+        string id = string.IsNullOrWhiteSpace(row.id) ? "(no-id)" : row.id.Trim();
+        string start = string.IsNullOrWhiteSpace(row.termStart) ? "" : row.termStart.Trim();
+        return $"{id}_{start}"; // 예: roster_recruit_260302, roster_recruit_260810
+    }
 
     private bool TryGetAlwaysEventTable(out AlwaysEventTableSO table)
     {

@@ -242,10 +242,8 @@ public class TrainingSelectPopup : UIPopup
 
             student.shoot += Mathf.RoundToInt(data.shootDelta);
             student.speed += Mathf.RoundToInt(data.speedDelta);
+            student.jump += Mathf.RoundToInt(data.jumpDelta);
             student.stamina += Mathf.RoundToInt(data.staminaDelta);
-
-            // jump는 GrowthCommandRow에 없어서 미적용
-            // student.jump += Mathf.RoundToInt(data.jumpDelta);
 
             student.mental += data.mentalDelta;
 

@@ -34,7 +34,6 @@ public class StudentManager : Singleton<StudentManager>
 
         _slotAssignments[slotIndex] = student;
         OnSlotAssignmentsChanged?.Invoke(_slotAssignments);
-        Debug.Log($"[StudentManager] 슬롯 {slotIndex}에 {student.studentName} 배치 저장.");
     }
 
     // 슬롯 배치 해제
@@ -116,6 +115,21 @@ public class StudentManager : Singleton<StudentManager>
         Debug.Log($"[StudentManager] Removed student: {student.studentName} (ID: {student.id})");
         return true;
     }
+
+    public void GraduateSeniors()
+    {
+        var seniors = _students.Where(s => s.grade == 3).ToList();
+
+        foreach (var student in seniors)
+        {
+            _students.Remove(student);
+            OnStudentRemoved?.Invoke(student);
+        }
+
+        OnStudentsChanged?.Invoke(_students);
+        Debug.Log($"[StudentManager] 졸업 처리 완료: {seniors.Count}명 제거");
+    }
+
 
     // 모든 학생 삭제
     public void ClearAllStudents()

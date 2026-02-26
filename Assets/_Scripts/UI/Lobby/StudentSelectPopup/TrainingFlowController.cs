@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 // 훈련 전체 흐름 관리
 // 게이지 연출 → 스탯 적용 → 결과 팝업 표시
@@ -11,9 +10,6 @@ public class TrainingFlowController : MonoBehaviour
     [Header("UI References")]
     [SerializeField] private TrainingProgressUI _progressUI;     // 진행 게이지 UI
     [SerializeField] private TrainingResultPopup _resultPopup;   // 결과 팝업
-
-    [Header("Canvas")]
-    [SerializeField] private Transform _popupParent;             // 팝업 부모
 
     [Header("Progress Settings")]
     [SerializeField] private float _fillDuration = 2.0f;         // 게이지 채우는 시간

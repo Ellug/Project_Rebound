@@ -1,15 +1,15 @@
-ID,target,speaker,description
-Strinig,int,String,String
-ID_Text_SuddenEvent_000001,1,[SYSTEM],"$""{target1.name}이 늦잠을 잤다.\n<color=grey>{target1.name} 컨디션 감소 -5<\color>"""
-ID_Text_SuddenEvent_000001,2,[SYSTEM],"$""{target1.name}, {target2.name}이 늦잠을 잤다.\n<color=grey>{target1.name}, {target2.name} 컨디션 감소 -5<\color>"""
-ID_Text_SuddenEvent_000001,3,[SYSTEM],"$""{target1.name}, {target2.name}, {target3.name}이 늦잠을 잤다.\n<color=grey>{target1.name}, {target2.name}, {target3.name} 컨디션 감소 -5<\color>"""
-ID_Text_SuddenEvent_000002,1,[SYSTEM],
-ID_Text_SuddenEvent_000002,2,[SYSTEM],
-ID_Text_SuddenEvent_000002,3,[SYSTEM],
-ID_Text_SuddenEvent_000002,4,[SYSTEM],
-ID_Text_SuddenEvent_000002,5,[SYSTEM],
-ID_Text_SuddenEvent_000003,1,[SYSTEM],
-ID_Text_SuddenEvent_000003,2,[SYSTEM],
-ID_Text_SuddenEvent_000003,3,[SYSTEM],
-ID_Text_SuddenEvent_000003,4,[SYSTEM],
-ID_Text_SuddenEvent_000003,5,[SYSTEM],
+ID,condition,target,speaker,description
+Strinig,enum,int,String,String
+ID_Text_SuddenEvent_000001,Daily,1,[SYSTEM],컨디션 5 감소
+ID_Text_SuddenEvent_000001,Daily,2,[SYSTEM],컨디션 5 감소
+ID_Text_SuddenEvent_000001,Daily,3,[SYSTEM],컨디션 5 감소
+ID_Text_SuddenEvent_000002,Match,1,[SYSTEM],"$""{target1.name}이(가) 부담감을 느낀다...\n<color=grey>{target1.name} {event_effect.target_name} {event_event_effect.amount}<\color>"""
+ID_Text_SuddenEvent_000002,Match,2,[SYSTEM],"$""학생들이(가) 부담감을 느낀다...\n<color=grey>{target1.name}, {target2.name} {event_effect.target_name} {event_event_effect.amount}<\color>"""
+ID_Text_SuddenEvent_000002,Match,3,[SYSTEM],"$""학생들이(가) 부담감을 느낀다...\n<color=grey>{target1.name}, {target2.name}, {target3.name} {event_effect.target_name} {event_effect.amount}<\color>"""
+ID_Text_SuddenEvent_000002,Match,4,[SYSTEM],"$""학생들이(가) 부담감을 느낀다...\n<color=grey>{target1.name}, {target2.name}, {target3.name}, {target4.name} {event_effect.target_name} {event_effect.amount}<\color>"""
+ID_Text_SuddenEvent_000002,Match,5,[SYSTEM],"$""학생들이(가) 부담감을 느낀다...\n<color=grey> 모든 학생 {event_effect.target_name}  {event_effect.amount}<\color>"""
+ID_Text_SuddenEvent_000003,Match,1,[SYSTEM],
+ID_Text_SuddenEvent_000003,Match,2,[SYSTEM],
+ID_Text_SuddenEvent_000003,Match,3,[SYSTEM],
+ID_Text_SuddenEvent_000003,Match,4,[SYSTEM],
+ID_Text_SuddenEvent_000003,Match,5,[SYSTEM],

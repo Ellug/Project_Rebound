@@ -21,11 +21,11 @@ MonoBehaviour:
     facilityReq: 2
     facilityLv: 1
     target: 0
-    hpCost: 0
+    conditionCost: 0
     mental: 0
     shoot: 0
     speed: 0
-    defense: 0
+    jump: 0
     stamina: 0
     linkedEventId: 0
   - index: 1002
@@ -36,11 +36,11 @@ MonoBehaviour:
     facilityReq: 2
     facilityLv: 1
     target: 0
-    hpCost: 0
+    conditionCost: 0
     mental: 0
     shoot: 0
     speed: 0
-    defense: 0
+    jump: 0
     stamina: 0
     linkedEventId: 0
   - index: 1003
@@ -51,11 +51,11 @@ MonoBehaviour:
     facilityReq: 4
     facilityLv: 1
     target: 2
-    hpCost: -10
-    mental: 10
+    conditionCost: -15
+    mental: 15
     shoot: 0
     speed: 0
-    defense: 0
+    jump: 0
     stamina: 0
     linkedEventId: 0
   - index: 1004
@@ -66,11 +66,11 @@ MonoBehaviour:
     facilityReq: 3
     facilityLv: 1
     target: 1
-    hpCost: -25
+    conditionCost: -10
     mental: 5
     shoot: 0
     speed: 0
-    defense: 0
+    jump: 0
     stamina: 0
     linkedEventId: 0
   - index: 1101
@@ -81,11 +81,11 @@ MonoBehaviour:
     facilityReq: 2
     facilityLv: 1
     target: 1
-    hpCost: 15
+    conditionCost: 3
     mental: 0
     shoot: 0
     speed: 0
-    defense: 2
+    jump: 2
     stamina: 1
     linkedEventId: 0
   - index: 1102
@@ -96,12 +96,12 @@ MonoBehaviour:
     facilityReq: 2
     facilityLv: 1
     target: 1
-    hpCost: 30
+    conditionCost: 6
     mental: -5
     shoot: 0
     speed: 2
-    defense: 0
-    stamina: 3
+    jump: 0
+    stamina: 5
     linkedEventId: 0
   - index: 1103
     name: "\uC804\uC220\uD6C8\uB828"
@@ -111,11 +111,11 @@ MonoBehaviour:
     facilityReq: 2
     facilityLv: 1
     target: 1
-    hpCost: 10
+    conditionCost: 2
     mental: 0
-    shoot: 0
+    shoot: 1
     speed: 0
-    defense: 1
+    jump: 1
     stamina: 0
     linkedEventId: 0
   - index: 1201
@@ -126,11 +126,11 @@ MonoBehaviour:
     facilityReq: 2
     facilityLv: 1
     target: 2
-    hpCost: 25
+    conditionCost: 5
     mental: 0
-    shoot: 2
+    shoot: 4
     speed: 0
-    defense: 0
+    jump: 0
     stamina: 0
     linkedEventId: 0
   - index: 1202
@@ -141,11 +141,11 @@ MonoBehaviour:
     facilityReq: 2
     facilityLv: 1
     target: 2
-    hpCost: 25
+    conditionCost: 5
     mental: 0
-    shoot: 1
+    shoot: 2
     speed: 0
-    defense: 1
+    jump: 2
     stamina: 0
     linkedEventId: 0
   - index: 1203
@@ -156,11 +156,11 @@ MonoBehaviour:
     facilityReq: 2
     facilityLv: 1
     target: 2
-    hpCost: 25
+    conditionCost: 5
     mental: 0
     shoot: 0
     speed: 0
-    defense: 2
+    jump: 4
     stamina: 0
     linkedEventId: 0
   - index: 1204
@@ -171,10 +171,10 @@ MonoBehaviour:
     facilityReq: 2
     facilityLv: 1
     target: 2
-    hpCost: 25
+    conditionCost: 5
     mental: 0
     shoot: 0
-    speed: 1
-    defense: 1
+    speed: 2
+    jump: 2
     stamina: 0
     linkedEventId: 0

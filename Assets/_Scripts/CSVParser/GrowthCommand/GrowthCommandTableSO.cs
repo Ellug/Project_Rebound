@@ -41,12 +41,12 @@ public sealed class GrowthCommandRow
 
     public GrowthCommandTarget target;
 
-    public int hpCost;
+    public int conditionCost;
     public int mental;
 
     public float shoot;
     public float speed;
-    public float defense;
+    public float jump;
     public float stamina;
 
     // 문서상 enum 이지만 전부 -로 돼있어서... 일단 "-" 또는 빈값이면 0.

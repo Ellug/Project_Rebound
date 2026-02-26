@@ -14,6 +14,7 @@ public struct GameFlowData
     public bool IsLeagueOpened;                // 리그 오픈 여부
     public bool IsLeagueHandled;               // 토너먼트 씬 진입 완료 여부
     public DateTime LeagueTermEnd;             // 토너먼트 진입 시점의 리그 term_end 날짜
+    public bool HasPendingFriendlyMatch;       // 주말 친선경기 예약 여부
     public HashSet<string> ActiveEventIds;     // 현재 term 범위 내 활성 이벤트 id 집합
 
     // 초기값
@@ -41,6 +42,7 @@ public struct GameFlowData
         IsLeagueOpened = false;
         IsLeagueHandled = false;
         LeagueTermEnd = default;
+        HasPendingFriendlyMatch = false;
         ActiveEventIds?.Clear();
     }
 

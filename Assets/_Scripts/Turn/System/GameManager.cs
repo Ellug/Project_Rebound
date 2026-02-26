@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -115,7 +115,6 @@ public class GameManager : Singleton<GameManager>
         UnbindAlwaysEventManager();
 
         _turnManager = null;
-        // _eventManager = null;
         _alwaysEventManager = null;
         _lobbyUI = null;
         _tournamentResultUI = null;
@@ -220,7 +219,7 @@ public class GameManager : Singleton<GameManager>
         return (nextLeagueDate.Date - _turnManager.DateManager.CurrentDate.Date).Days;
     }
 
-    // Lobby 씬 로드 시 턴 흐름 초기화/복원 (10단계)
+    // Lobby 씬 로드 시 턴 흐름 초기화/복원 (11단계)
     // _lobbyInitialized 플래그로 Start/OnSceneLoaded 이중 호출 방지
     private void TryInitializeLobbyFlow(Scene scene)
     {
@@ -238,14 +237,15 @@ public class GameManager : Singleton<GameManager>
 
         CacheSceneReferences();         // 1. 씬 오브젝트 참조 캐싱
         SubscribeTurnManager();         // 2. TurnManager 이벤트 구독
-        RestoreTurnManagerState();      // 3. TurnManager 상태 복원 (씬 복귀 시)
-        InitializeGameState();          // 4. GameState 생성 및 동기화
-        InitializeEventManager();       // 5. EventManager 초기화
-        SetInitialPhase();              // 6. 초기 페이즈 설정
-        HandleTournamentResult();       // 7. 토너먼트 결과 처리
-        SyncFlowStateFromLobby();       // 8. GameFlowData 동기화 (이후 HasFlowState = true)
-        RefreshLobbyTopInfo();          // 9. 로비 UI 갱신
-        TryTriggerInitialRecruitment(); // 10. 게임 시작 시 최초 영입 트리거
+        RegisterTurnModules();          // 3. TurnModule 등록 (AlwaysEffectTickModule 등)
+        RestoreTurnManagerState();      // 4. TurnManager 상태 복원 (씬 복귀 시)
+        InitializeGameState();          // 5. GameState 생성 및 동기화
+        InitializeEventManager();       // 6. EventManager 초기화
+        SetInitialPhase();              // 7. 초기 페이즈 설정
+        HandleTournamentResult();       // 8. 토너먼트 결과 처리
+        SyncFlowStateFromLobby();       // 9. GameFlowData 동기화 (이후 HasFlowState = true)
+        RefreshLobbyTopInfo();          // 10. 로비 UI 갱신
+        TryTriggerInitialRecruitment(); // 11. 게임 시작 시 최초 영입 트리거
     }
 
     // 새 게임 상태 초기화
@@ -289,13 +289,24 @@ public class GameManager : Singleton<GameManager>
             _turnManager.OnTurnCompleted -= HandleTurnCompleted;
     }
 
+    // ITurnModule 구현체 등록 — SubscribeTurnManager() 직후 호출
+    // AlwaysEffectTickModule: 매 턴 종료 시 상시 이벤트 condition 틱 처리
+    private void RegisterTurnModules()
+    {
+        if (_turnManager == null) return;
+
+        AlwaysEffectTickModule tickModule = FindFirstObjectByType<AlwaysEffectTickModule>();
+        if (tickModule != null)
+            _turnManager.RegisterModule(tickModule);
+    }
+
     // AlwaysEventManager 이벤트 구독 해제 및 Unbind
     private void UnbindAlwaysEventManager()
     {
         if (_alwaysEventManager == null) return;
 
         _alwaysEventManager.OnEventActivated -= HandleAlwaysEventActivated;
-        _alwaysEventManager.OnEventExpired   -= HandleAlwaysEventExpired;
+        _alwaysEventManager.OnEventExpired -= HandleAlwaysEventExpired;
         _alwaysEventManager.Unbind();
     }
 
@@ -338,7 +349,7 @@ public class GameManager : Singleton<GameManager>
 
         // AlwaysEventManager가 발행하는 이벤트를 GM이 구독 — AEM → GM 직접참조 제거
         _alwaysEventManager.OnEventActivated += HandleAlwaysEventActivated;
-        _alwaysEventManager.OnEventExpired   += HandleAlwaysEventExpired;
+        _alwaysEventManager.OnEventExpired += HandleAlwaysEventExpired;
     }
 
     // 초기 게임 페이즈 설정 (Init이면 DailyTraining으로 전환)
@@ -400,12 +411,69 @@ public class GameManager : Singleton<GameManager>
 
         _gameState?.SyncState(_turnManager.DateManager.CurrentDate, _turnManager.TurnIndex);
 
-        // if (_eventManager != null)
-        //     _eventManager.CheckEvents();
-
         SyncFlowStateFromLobby();
         RefreshLobbyTopInfo();
         TryEnterTournament();
+
+        // 금요일 종료 시 주말 분기 처리
+        if (context.IsFriday)
+            HandleFridayEnd();
+    }
+
+    // 금요일 턴 종료 후 친선경기 or 주말 훈련 팝업 분기
+    private void HandleFridayEnd()
+    {
+        if (UIManager.Instance == null)
+            return;
+
+        if (_flowData.HasPendingFriendlyMatch)
+        {
+            // 친선경기 예약 있음 : 전용 팝업
+            UIManager.Instance.ShowConfirm(new ConfirmPopupRequest(
+                title: "친선경기",
+                message: "이번 주말 친선경기가 예정되어 있습니다.\n친선경기에 진입하시겠습니까? (미구현)",
+                primaryLabel: "확인",
+                primaryAction: EnterFriendlyMatch
+            ));
+        }
+        else
+        {
+            // 친선경기 없음 : 주말 훈련 확인/취소 팝업
+            UIManager.Instance.ShowConfirm(new ConfirmPopupRequest(
+                title: "주말 훈련 제안",
+                message: "금요일 일정이 끝났습니다.\n주말 훈련을 진행하시겠습니까?",
+                subMessage: "확인: 전원 스탯 소량 상승, 주말 휴식 효율 50%\n취소: 주말 푹 쉬기 (체력 대폭 회복)",
+                primaryLabel: "확인",
+                primaryAction: OnWeekendTrainingConfirmed,
+                secondaryLabel: "취소",
+                secondaryAction: OnWeekendTrainingCancelled
+            ));
+        }
+    }
+
+    // 주말 훈련 확인 (훈련 진행)
+    private void OnWeekendTrainingConfirmed()
+    {
+        Debug.Log("[GameManager] 주말 훈련 확인");
+    }
+
+    // 주말 훈련 취소 (주말 스킵 → 월요일로)
+    private void OnWeekendTrainingCancelled()
+    {
+        if (_turnManager == null) return;
+
+        // 금요일 기준 토·일 2일 스킵 → 월요일
+        _turnManager.SkipDays(2);
+        SyncFlowStateFromLobby();
+        RefreshLobbyTopInfo();
+    }
+
+    // 친선경기 진입 처리 (추후 구현)
+    private void EnterFriendlyMatch()
+    {
+        _flowData.HasPendingFriendlyMatch = false;
+        // TODO: 친선경기 씬/흐름 연결
+        Debug.Log("[GameManager] 친선경기 진입 (미구현)");
     }
 
     // AlwaysEventManager가 이벤트 활성화를 알릴 때 호출 — row.type / row.id 기반으로 분기
@@ -415,7 +483,7 @@ public class GameManager : Singleton<GameManager>
         {
             if (AlwaysEventDateUtil.TryParseTableDate(row.termEnd, out DateTime termEnd))
                 _flowData.LeagueTermEnd = termEnd.Date;
-                
+
             OpenLeague();
         }
     }

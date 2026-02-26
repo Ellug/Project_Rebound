@@ -26,21 +26,15 @@ public class StudentSelectPopup : UIPopup
     [Header("View Settings")]
     [SerializeField] private bool _showStatsOnOpen = false;
 
-
-    //위아래로 슬라이드 되는 애니메이션 설정
-    [SerializeField] private float _slideInDuration = 0.2f;
-    [SerializeField] private float _slideOutDuration = 0.28f;
+    // 최대 선택 가능 인원 (0이면 무제한)
+    private int _maxSelectCount = 0;
 
     private readonly List<GameObject> _spawnedCards = new List<GameObject>();
     private readonly List<Student> _selectedStudents = new List<Student>();
     private readonly Dictionary<Student, StudentCard> _cardMap = new Dictionary<Student, StudentCard>();
 
-    private int _maxSelectCount = 0;
-
     public event Action<List<Student>> OnSelectionConfirmed;
     public event Action OnCancelled;
-
-
 
     public void SetMaxSelectCount(int max)
     {
@@ -57,14 +51,17 @@ public class StudentSelectPopup : UIPopup
     {
         base.Init();
 
+        // 버튼 이벤트 중복 등록 방지
         BindButtons();
 
+        // 팝업 재사용 가능성을 고려해 상태 초기화
         _selectedStudents.Clear();
         _cardMap.Clear();
 
         SpawnCards();
         RefreshCompleteButton();
 
+        // 생성 직후 레이아웃 반영 전이라 코루틴으로 2프레임 보정
         StartCoroutine(ForceScrollTopRoutine());
     }
 
@@ -75,6 +72,7 @@ public class StudentSelectPopup : UIPopup
             _btnClose.onClick.RemoveAllListeners();
             _btnClose.onClick.AddListener(() =>
             {
+                // 닫기 = 취소 처리
                 OnCancelled?.Invoke();
                 CloseAndDestroy();
             });
@@ -121,20 +119,30 @@ public class StudentSelectPopup : UIPopup
     // 카드 생성
     private void CreateCard(Student student)
     {
+        if (_cardRoot == null)
+        {
+            Debug.LogError("[StudentSelectPopup] Card Root가 설정되지 않았습니다.");
+            return;
+        }
+
         GameObject cardObj = Instantiate(_cardPrefab, _cardRoot);
         StudentCard studentCard = cardObj.GetComponent<StudentCard>();
 
         if (studentCard == null)
         {
             Debug.LogError("[StudentSelectPopup] StudentCard 컴포넌트가 없습니다.");
+            Destroy(cardObj);
             return;
         }
 
         studentCard.SetStudentData(student);
+
+        // 오픈 시 기본 뷰 상태 결정
         studentCard.SetViewState(_showStatsOnOpen
             ? StudentCard.CardViewState.ShowStats
             : StudentCard.CardViewState.Normal);
 
+        // 람다 캡처 안전 처리
         Student captured = student;
         studentCard.OnCardClicked += card =>
         {
@@ -155,6 +163,7 @@ public class StudentSelectPopup : UIPopup
         }
         else
         {
+            // 최대 선택 제한 체크
             if (_maxSelectCount > 0 && _selectedStudents.Count >= _maxSelectCount)
             {
                 Debug.Log($"[StudentSelectPopup] 최대 {_maxSelectCount}명까지 선택 가능");
@@ -188,6 +197,8 @@ public class StudentSelectPopup : UIPopup
     private void HandleComplete()
     {
         if (_selectedStudents.Count == 0) return;
+
+        // 외부에서 리스트를 수정해도 내부 상태가 오염되지 않도록 복사본 전달
         OnSelectionConfirmed?.Invoke(new List<Student>(_selectedStudents));
         CloseAndDestroy();
     }
@@ -201,11 +212,14 @@ public class StudentSelectPopup : UIPopup
 
     private void CloseAndDestroy()
     {
+        // 이벤트 핸들러 참조 해제(메모리/중복 호출 방지)
         OnSelectionConfirmed = null;
         OnCancelled = null;
+
         _selectedStudents.Clear();
         _cardMap.Clear();
         ClearCards();
+
         Close();
         Destroy(gameObject);
     }
