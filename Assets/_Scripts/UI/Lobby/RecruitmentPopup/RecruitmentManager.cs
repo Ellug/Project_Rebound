@@ -14,7 +14,6 @@ public class RecruitmentManager : MonoBehaviour
     [SerializeField] private int _maxRecruitCount = 7;        // 최대 영입 가능 인원
     [SerializeField] private int _recruitCandidateCount = 10; // 영입 후보 학생 생성 수
 
-    private TurnManager _turnManager;
     private AlwaysEventManager _alwaysEventManager;
 
     // UIManager 기준 Canvas 루트 참조
@@ -61,11 +60,7 @@ public class RecruitmentManager : MonoBehaviour
         TriggerInitialRecruitment();
     }
 
-    // =========================
     // AlwaysEvent 구독 처리
-    // =========================
-
-    // Date/AlwaysEvent 이벤트 구독
     private void SubscribeDateEvents()
     {
         if (_alwaysEventManager == null) return;

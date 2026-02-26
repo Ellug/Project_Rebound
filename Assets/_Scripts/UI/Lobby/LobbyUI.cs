@@ -81,9 +81,6 @@ public class LobbyUI : UIBase
                     image: _testSprite,                     // 테스트 이미지
                     buttons: buttons
                 ));
-
-                 if (_recruitmentManager != null)
-            _recruitmentManager.TryStartRecruitment();
             });
         }
         if (_btnSetting != null)
