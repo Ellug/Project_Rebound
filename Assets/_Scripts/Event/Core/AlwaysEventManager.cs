@@ -45,8 +45,7 @@ public class AlwaysEventManager : MonoBehaviour
 
     private void SubscribeTurnManager()
     {
-        if (_turnManager == null)
-            return;
+        if (_turnManager == null) return;
 
         _turnManager.OnTurnCompleted -= HandleTurnCompleted;
         _turnManager.OnTurnCompleted += HandleTurnCompleted;
@@ -61,8 +60,7 @@ public class AlwaysEventManager : MonoBehaviour
     // 턴 완료 후 현재 날짜 기준으로 상시 이벤트 실행
     private void HandleTurnCompleted(TurnContext context)
     {
-        if (_turnManager == null)
-            return;
+        if (_turnManager == null) return;
 
         DateTime today = _turnManager.DateManager.CurrentDate.Date;
         _gameState?.SyncState(_turnManager.DateManager.CurrentDate, _turnManager.TurnIndex);
@@ -124,17 +122,28 @@ public class AlwaysEventManager : MonoBehaviour
         if (row.type == "roster") return;
 
         // description이 없으면 팝업 없이 효과만 적용
-        if (string.IsNullOrEmpty(row.description))
-        {
-            AlwaysEffectApplier.ApplyEffect(row);
-            return;
-        }
+        // if (string.IsNullOrEmpty(row.description))
+        // {
+        //     AlwaysEffectApplier.ApplyEffect(row);
+        //     return;
+        // }
 
         AlwaysEventRow capturedRow = row;
+        Action onConfirm = () =>
+        {
+            AlwaysEffectApplier.ApplyEffect(capturedRow);
+
+            // 방학 이벤트 확인 시 토너먼트 씬 진입을 기존 GameManager 로직으로 처리
+            if (!IsLeagueBreakEvent(capturedRow))
+                return;
+
+            if (!GameManager.Instance.TryEnterTournament())
+                Debug.Log("[AlwaysEvent] 토너먼트 진입 조건이 충족되지 않아 진입을 건너뜁니다.");
+        };
 
         if (UIManager.Instance == null)
         {
-            AlwaysEffectApplier.ApplyEffect(capturedRow);
+            onConfirm.Invoke();
             return;
         }
 
@@ -151,7 +160,7 @@ public class AlwaysEventManager : MonoBehaviour
             title: title,
             message: row.description,
             primaryLabel: "확인",
-            primaryAction: () => AlwaysEffectApplier.ApplyEffect(capturedRow)
+            primaryAction: onConfirm
         ));
     }
 

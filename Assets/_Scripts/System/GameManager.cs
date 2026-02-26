@@ -146,47 +146,28 @@ public class GameManager : Singleton<GameManager>
         return _tournamentData.TryConsumeResult(out tournamentResultData);
     }
 
-    // 토너먼트 씬 진입 조건 확인 및 씬 전환
-    private void TryEnterTournament()
+    // AlwaysEventManager 에서 호출하는 토너먼트 진입 API
+    public bool TryEnterTournament()
     {
-        if (_isLoadingTournament || _flowData.IsLeagueHandled || _turnManager == null)
-            return;
+        if (!CanEnterTournament())
+            return false;
 
-        bool shouldEnterTournament = _flowData.IsLeagueOpened || IsTournamentDateReached();
-        if (!shouldEnterTournament)
-            return;
-
-        ShowTournamentEntryPopup();
+        EnterTournament();
+        return true;
     }
 
-    // 토너먼트 진입 확인 팝업 표시
-    private void ShowTournamentEntryPopup()
+    // 토너먼트 씬 진입 가능 여부 확인
+    private bool CanEnterTournament()
     {
-        if (UIManager.Instance == null)
-        {
-            Debug.LogWarning("[GameManager] UIManager가 없어 토너먼트 확인 팝업 없이 바로 진입합니다.");
-            EnterTournament();
-            return;
-        }
+        if (_isLoadingTournament || _flowData.IsLeagueHandled)
+            return false;
 
-        var buttons = new List<PopupButtonInfo>
-        {
-            new("확인", () => { EnterTournament(); })
-        };
-
-        UIManager.Instance.ShowPopup(new PopupData(
-            title: "토너먼트",
-            content: "토너먼트에 진입하시겠습니까?",
-            buttons: buttons
-        ));
+        return _flowData.IsLeagueOpened || IsTournamentDateReached();
     }
 
     // 토너먼트 씬 진입 처리
     private void EnterTournament()
     {
-        if (_isLoadingTournament || _flowData.IsLeagueHandled || _turnManager == null)
-            return;
-
         _flowData.IsLeagueHandled = true;
         _turnManager.SetPhase(GamePhase.MatchInProgress);
         SyncFlowStateFromLobby();
@@ -198,9 +179,6 @@ public class GameManager : Singleton<GameManager>
     // 토너먼트 시작 날짜 도달 여부 확인 — CachedSOData를 직접 읽어 AEM 의존 없음
     private bool IsTournamentDateReached()
     {
-        if (_turnManager == null)
-            return false;
-
         if (!AlwaysEventDateUtil.TryGetNextLeagueDate(_turnManager.DateManager.CurrentDate, out DateTime nextLeagueDate))
             return false;
 
@@ -265,7 +243,6 @@ public class GameManager : Singleton<GameManager>
     private void CacheSceneReferences()
     {
         _turnManager = FindFirstObjectByType<TurnManager>();
-        // _eventManager = FindFirstObjectByType<EventManager>();
         _alwaysEventManager = FindFirstObjectByType<AlwaysEventManager>();
         _lobbyUI = FindFirstObjectByType<LobbyUI>();
         _tournamentResultUI = FindFirstObjectByType<TournamentResultUI>(FindObjectsInactive.Include);
@@ -410,7 +387,6 @@ public class GameManager : Singleton<GameManager>
 
         SyncFlowStateFromLobby();
         RefreshLobbyTopInfo();
-        TryEnterTournament();
 
         // 금요일 종료 시 주말 분기 처리
         if (context.IsFriday)
