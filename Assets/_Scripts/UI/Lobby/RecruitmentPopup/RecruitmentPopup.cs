@@ -127,15 +127,15 @@ public class RecruitmentPopup : UIPopup
         _spawnedCards.Add(cardObj);
     }
 
-    // 카드 클릭 처리: 선택/선택취소/최대 인원 체크
+    // 카드 클릭 처리: 정보 팝업 오픈 (선택은 정보 팝업 내 버튼에서 처리)
     private void HandleCardClicked(Student student, StudentCard card)
     {
         if (student == null || card == null) return;
 
-        // 이미 선택된 경우 → 선택 취소 확인
+        // 이미 선택된 경우 → 정보 팝업 열고 취소 확인 버튼 연결
         if (_selectedStudents.Contains(student))
         {
-            ShowUnselectConfirmPopup(student, card);
+            ShowStudentInfoPopup(student, isSelected: true);
             return;
         }
 
@@ -153,12 +153,13 @@ public class RecruitmentPopup : UIPopup
             return;
         }
 
-        SelectStudent(student, card);
-        ShowSelectStudentPopup(student);
+        // 선택하지 않고 정보 팝업만 열고, 선택 버튼 연결
+        ShowStudentInfoPopup(student, isSelected: false);
     }
 
-    // 학생 상세 오버레이 표시
-    private void ShowSelectStudentPopup(Student student)
+    // 학생 정보 팝업 표시
+    // isSelected: true → "영입 취소" 버튼 / false → "학생 선택" 버튼
+    private void ShowStudentInfoPopup(Student student, bool isSelected)
     {
         if (_studentInfoPopup == null)
         {
@@ -174,9 +175,24 @@ public class RecruitmentPopup : UIPopup
         _studentInfoPopup.Setup("학생 정보", student, portrait);
         _studentInfoPopup.transform.SetAsLastSibling();
 
-       // // 학생 영입: 처음 선택만 위로 슬라이드
-       // if (!_studentInfoPopup.gameObject.activeSelf)
-        _studentInfoPopup.Open();
+        if (isSelected)
+        {
+            // 이미 선택된 학생 → 선택 버튼을 "영입 취소" 흐름으로 연결
+            _studentInfoPopup.SetSelectAction(() => ShowUnselectConfirmPopup(student, card));
+        }
+        else
+        {
+            // 미선택 학생 → 선택 버튼 클릭 시 선택 처리 + 팝업 닫기
+            _studentInfoPopup.SetSelectAction(() =>
+            {
+                SelectStudent(student, card);
+                CloseStudentInfoPopup();
+            });
+        }
+
+        // 이미 열려있으면 슬라이드 없이 데이터만 갱신, 닫혀있으면 슬라이드 인
+        if (!_studentInfoPopup.gameObject.activeSelf)
+            _studentInfoPopup.Open();
     }
 
     // 학생 선택 처리 (카드 상태 변경 + UI 갱신)
