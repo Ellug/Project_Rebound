@@ -271,6 +271,20 @@ public class UIManager : Singleton<UIManager>
         _uiStack.Push(instance);
         return instance;
     }
+    // 중복 생성 감지용
+    public T ShowUIUnique<T>(T uiPrefab) where T : UIBase
+    {
+        foreach (var item in _uiStack)
+        {
+            if (item is T existing && existing != null)
+            {
+                existing.transform.SetAsLastSibling();
+                return existing;
+            }
+        }
+
+        return ShowUI(uiPrefab);
+    }
 
 
     private System.Collections.Generic.Stack<UIBase> _messengerStack = new System.Collections.Generic.Stack<UIBase>();

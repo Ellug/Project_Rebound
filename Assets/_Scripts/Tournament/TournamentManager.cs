@@ -298,6 +298,14 @@ public class TournamentManager : MonoBehaviour
         _isWaitingForResultNext = false;
         _matchGameUi.HideMatchResultPanel();
 
+        // 우리 학교가 패배한 경우: 순위는 이미 기록됐으므로 바로 종료
+        if (_mySchoolReachedRoundTeamCount > 1)
+        {
+            GameManager.Instance.SetPendingTournamentResult(string.Empty, _mySchoolReachedRoundTeamCount);
+            SceneManager.LoadScene(LobbyScene);
+            return;
+        }
+
         if (IsCurrentRoundComplete())
             AdvanceToNextRound();
     }
