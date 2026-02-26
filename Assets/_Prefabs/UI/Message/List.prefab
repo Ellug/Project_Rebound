@@ -149,6 +149,7 @@ GameObject:
   - component: {fileID: 6116216545574449433}
   - component: {fileID: 6100737785659882743}
   - component: {fileID: 8950065473715557647}
+  - component: {fileID: 224799000666801895}
   m_Layer: 5
   m_Name: List
   m_TagString: Untagged
@@ -284,3 +285,20 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &224799000666801895
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9066794945020150892}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 747efdbff3335754b9b7f3b55dbc682d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ChatRoomSlot
+  _txtPreview: {fileID: 6675694322879006324}
+  _btnBackgroundImage: {fileID: 6116216545574449433}
+  _btnOpenRoom: {fileID: 6100737785659882743}
+  _unreadBgColor: {r: 0.4, g: 0.4, b: 0.4, a: 1}
+  _readBgColor: {r: 0.15, g: 0.15, b: 0.15, a: 1}
