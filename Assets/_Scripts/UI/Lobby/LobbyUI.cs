@@ -7,6 +7,16 @@ using UnityEngine.UI;
 // 메인 로비 UI 관리
 public class LobbyUI : UIBase
 {
+    [Serializable]
+    private sealed class BottomTabActiveSpriteSet
+    {
+        public Sprite training;
+        public Sprite student;
+        public Sprite facility;
+        public Sprite coach;
+        public Sprite shop;
+    }
+
     [Header("Top Info")]
     [SerializeField] private TMP_Text _txtSchoolName;
     [SerializeField] private TMP_Text _txtDate;
@@ -37,6 +47,7 @@ public class LobbyUI : UIBase
     [SerializeField] private Button _btnFacility; // 시설 (MVP 개발 X)
     [SerializeField] private Button _btnCoach;    // 감독 노드 (MVP 개발 X)
     [SerializeField] private Button _btnShop;     // 상점 (MVP 개발 X)
+    [SerializeField] private BottomTabActiveSpriteSet _activeTabSprites; // 탭 활성 시 교체할 스프라이트
 
     [Header("Test")]
     [SerializeField] private Sprite _testSprite;
@@ -45,11 +56,32 @@ public class LobbyUI : UIBase
 
     private bool _inited;
     private bool _isLobbyInited;
+    private Sprite _trainingDefaultSprite;
+    private Sprite _studentDefaultSprite;
+    private Sprite _facilityDefaultSprite;
+    private Sprite _coachDefaultSprite;
+    private Sprite _shopDefaultSprite;
+    private bool _lastTrainingPopupActive;
+    private bool _lastStudentPopupActive;
 
     // 씬에 미리 배치된 경우 Start에서 초기화
     void Start()
     {
         Init();
+    }
+
+    // 팝업 활성 상태가 외부에서 바뀌었을 때도 탭 이미지를 동기화
+    void LateUpdate()
+    {
+        if (!_isLobbyInited)
+            return;
+
+        bool trainingActive = IsPopupActive(_trainingSelectPopup);
+        bool studentActive = IsPopupActive(_studentManagementPopup);
+        if (trainingActive == _lastTrainingPopupActive && studentActive == _lastStudentPopupActive)
+            return;
+
+        RefreshBottomNavTabSprites();
     }
 
     public override void Init()
@@ -59,6 +91,7 @@ public class LobbyUI : UIBase
 
         base.Init();
         BindEvents();
+        CacheBottomNavDefaultSprites();
         UpdateUI(); // 초기 데이터 표시
 
         // 중앙 메시지 창 클릭 시 메신저함 열기
@@ -74,6 +107,8 @@ public class LobbyUI : UIBase
             MessengerManager.Instance.OnLatestMessageReceived -= UpdateMessagePreview;
             MessengerManager.Instance.OnLatestMessageReceived += UpdateMessagePreview;
         }
+
+        RefreshBottomNavTabSprites();
     }
 
     private void UpdateMessagePreview(ChatMessage latestMessage)
@@ -153,7 +188,10 @@ public class LobbyUI : UIBase
 
         // 이미 열려있던 경우 → 토글로 닫기만 하고 종료
         if (wasActive)
+        {
+            RefreshBottomNavTabSprites();
             return;
+        }
 
         if (!_inited)
         {
@@ -167,6 +205,7 @@ public class LobbyUI : UIBase
         _trainingSelectPopup.transform.SetAsLastSibling();
         _trainingSelectPopup.Open();
         _trainingSelectPopup.ShowPage(0, false);
+        RefreshBottomNavTabSprites();
     }
 
     // 훈련 최종 선택 시 호출
@@ -193,11 +232,15 @@ public class LobbyUI : UIBase
 
         // 이미 열려있던 경우 → 토글로 닫기만 하고 종료
         if (wasActive)
+        {
+            RefreshBottomNavTabSprites();
             return;
+        }
 
         _studentManagementPopup.Init();
         _studentManagementPopup.transform.SetAsLastSibling();
         _studentManagementPopup.Open();
+        RefreshBottomNavTabSprites();
     }
 
     // 데이터 매니저 등에서 정보를 받아와 UI 갱신
@@ -278,6 +321,7 @@ public class LobbyUI : UIBase
         _studentManagementPopup.Init();
         _studentManagementPopup.transform.SetAsLastSibling();
         _studentManagementPopup.Open();
+        RefreshBottomNavTabSprites();
     }
 
     // 토너먼트 진입 흐름용 — 학생 관리 팝업을 열고 토너먼트 시작 콜백 주입
@@ -291,6 +335,7 @@ public class LobbyUI : UIBase
         _studentManagementPopup.SetTournamentStartCallback(onTournamentStart);
         _studentManagementPopup.transform.SetAsLastSibling();
         _studentManagementPopup.Open();
+        RefreshBottomNavTabSprites();
     }
 
     private static TurnActionType MapTrainingKeyToAction(string trainingKey)
@@ -318,5 +363,62 @@ public class LobbyUI : UIBase
         {
             _studentManagementPopup.Close();
         }
+
+        RefreshBottomNavTabSprites();
+    }
+
+    // 버튼 기본 스프라이트를 캐시해 비활성 상태 복원에 사용
+    private void CacheBottomNavDefaultSprites()
+    {
+        _trainingDefaultSprite = GetButtonSprite(_btnTraining);
+        _studentDefaultSprite = GetButtonSprite(_btnStudent);
+        _facilityDefaultSprite = GetButtonSprite(_btnFacility);
+        _coachDefaultSprite = GetButtonSprite(_btnCoach);
+        _shopDefaultSprite = GetButtonSprite(_btnShop);
+    }
+
+    // 현재 팝업 상태에 맞춰 하단 탭 버튼 이미지를 갱신
+    private void RefreshBottomNavTabSprites()
+    {
+        bool trainingActive = IsPopupActive(_trainingSelectPopup);
+        bool studentActive = IsPopupActive(_studentManagementPopup);
+
+        ApplyTabSprite(_btnTraining, _trainingDefaultSprite, _activeTabSprites != null ? _activeTabSprites.training : null, trainingActive);
+        ApplyTabSprite(_btnStudent, _studentDefaultSprite, _activeTabSprites != null ? _activeTabSprites.student : null, studentActive);
+        ApplyTabSprite(_btnFacility, _facilityDefaultSprite, _activeTabSprites != null ? _activeTabSprites.facility : null, false);
+        ApplyTabSprite(_btnCoach, _coachDefaultSprite, _activeTabSprites != null ? _activeTabSprites.coach : null, false);
+        ApplyTabSprite(_btnShop, _shopDefaultSprite, _activeTabSprites != null ? _activeTabSprites.shop : null, false);
+
+        _lastTrainingPopupActive = trainingActive;
+        _lastStudentPopupActive = studentActive;
+    }
+
+    // 탭 활성 여부에 따라 버튼 타겟 이미지 스프라이트를 변경
+    private static void ApplyTabSprite(Button button, Sprite defaultSprite, Sprite activeSprite, bool isActive)
+    {
+        if (button == null) return;
+
+        Image targetImage = button.targetGraphic as Image;
+        if (targetImage == null)
+            return;
+
+        Sprite nextSprite = isActive ? (activeSprite != null ? activeSprite : defaultSprite) : defaultSprite;
+        if (nextSprite != null)
+            targetImage.sprite = nextSprite;
+    }
+
+    // 버튼 타겟 이미지에서 현재 스프라이트를 읽는다
+    private static Sprite GetButtonSprite(Button button)
+    {
+        if (button == null) return null;
+
+        Image targetImage = button.targetGraphic as Image;
+        return targetImage != null ? targetImage.sprite : null;
+    }
+
+    // UIBase 계열 팝업의 활성 상태를 안전하게 조회
+    private static bool IsPopupActive(UIBase popup)
+    {
+        return popup != null && popup.gameObject.activeSelf;
     }
 }
