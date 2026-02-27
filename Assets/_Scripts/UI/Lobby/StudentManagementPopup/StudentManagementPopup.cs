@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -19,13 +20,29 @@ public class StudentManagementPopup : UIBase
     [SerializeField] private Button _btnPositionGuide;                  // "포지션 정보" 버튼
     [SerializeField] private PositionGuidePopup _positionGuidePopup;    // 씬에 미리 배치된 팝업
 
+    [Header("토너먼트 시작")]
+    [SerializeField] private Button _btnPlacementComplete;              // 배치 완료 버튼
+
     private readonly List<GameObject> _spawnedCards = new();            // 생성된 카드
     private readonly Dictionary<Student, StudentCard> _cardMap = new(); // 학생-카드 매핑
 
     private Student _selectedStudent;                                   // 현재 선택된 학생
     private Sprite _selectedStudentPortrait;                            // 선택 학생 초상화
 
+    private Action _onTournamentStart;                                  // 토너먼트 시작 콜백
+    private bool _isTournamentMode;                                     // 토너먼트 진입 모드 여부
+
     private bool _isInited;
+
+    // GameManager 슬롯 자동 배치 및 LobbyUI 경유 접근용
+    public List<StudentSlot> GetFieldSlots() => _fieldSlots;
+
+    // 토너먼트 시작 콜백 주입
+    public void SetTournamentStartCallback(Action onTournamentStart)
+    {
+        _onTournamentStart = onTournamentStart;
+        _isTournamentMode = onTournamentStart != null;
+    }
 
     public override void Init()
     {
@@ -34,6 +51,7 @@ public class StudentManagementPopup : UIBase
 
         base.Init();
         BindPositionGuideButton();
+        BindTournamentStartButton();
         SpawnStudentCards();
         BindSlotEvents();
         RefreshCardStates();
@@ -51,6 +69,19 @@ public class StudentManagementPopup : UIBase
         RestoreSlotAssignments();
         RefreshCardStates();
         RefreshRecommendHighlights();
+
+        // 토너먼트 모드일 때만 배치 완료 버튼 표시
+        RefreshTournamentStartButton();
+    }
+
+    public override void Close()
+    {
+        base.Close();
+
+        // 닫힐 때 토너먼트 모드 초기화 (일반 열기 시 버튼 잔존 방지)
+        _onTournamentStart = null;
+        _isTournamentMode = false;
+        RefreshTournamentStartButton();
     }
 
     // 포지션 정보 버튼 이벤트 연결
@@ -61,6 +92,57 @@ public class StudentManagementPopup : UIBase
 
         _btnPositionGuide.onClick.RemoveAllListeners();
         _btnPositionGuide.onClick.AddListener(OpenPositionGuidePopup);
+    }
+
+    // 토너먼트 시작 버튼 이벤트 연결
+    private void BindTournamentStartButton()
+    {
+        if (_btnPlacementComplete == null)
+            return;
+
+        _btnPlacementComplete.onClick.RemoveAllListeners();
+        _btnPlacementComplete.onClick.AddListener(HandleTournamentStartClicked);
+
+        // 기본 숨김
+        _btnPlacementComplete.gameObject.SetActive(false);
+    }
+
+    // 토너먼트 시작 버튼 클릭 처리
+    private void HandleTournamentStartClicked()
+    {
+        if (_onTournamentStart == null) return;
+
+        Action callback = _onTournamentStart;
+
+        // 콜백 실행 전 팝업 닫기 및 상태 초기화
+        Close();
+
+        callback.Invoke();
+    }
+
+    // 배치 완료 버튼 표시 여부 갱신
+    // 모든 슬롯이 채워진 경우에만 표시
+    private void RefreshTournamentStartButton()
+    {
+        if (_btnPlacementComplete == null) return;
+
+        bool allSlotsFilled = _isTournamentMode && AreAllSlotsFilled();
+        _btnPlacementComplete.gameObject.SetActive(allSlotsFilled);
+    }
+
+    // 모든 필드 슬롯이 채워져 있는지 확인
+    private bool AreAllSlotsFilled()
+    {
+        if (_fieldSlots == null || _fieldSlots.Count == 0)
+            return false;
+
+        foreach (StudentSlot slot in _fieldSlots)
+        {
+            if (slot == null || slot.IsEmpty)
+                return false;
+        }
+
+        return true;
     }
 
     // 씬에 미리 배치된 PositionGuidePopup을 활성화하여 표시
@@ -160,7 +242,6 @@ public class StudentManagementPopup : UIBase
     }
 
     // 슬롯 클릭 처리
-    // 슬롯 클릭 처리
     private void HandleSlotClicked(StudentSlot slot)
     {
         if (slot == null) return;
@@ -195,6 +276,7 @@ public class StudentManagementPopup : UIBase
         ClearSelection();
         RefreshCardStates();
         RefreshRecommendHighlights();
+        RefreshTournamentStartButton();
     }
 
     private void ShowRemoveConfirmPopup(StudentSlot slot)
@@ -207,47 +289,49 @@ public class StudentManagementPopup : UIBase
             content: $"이미 배치된 학생이 있습니다. \n선택한 학생으로 교체하시겠습니까?",
             buttons: new List<PopupButtonInfo>
             {
-            new PopupButtonInfo("취소", null),
-            new PopupButtonInfo("확인", () =>
-            {
-                int slotIndex = _fieldSlots.IndexOf(slot);
-
-                // 1) 기존 슬롯 비우기
-                slot.ClearSlot();
-                if (StudentManager.Instance != null)
-                    StudentManager.Instance.ClearSlot(slotIndex);
-
-                // 2) 선택 학생이 있으면 '교체'까지 수행
-                if (_selectedStudent != null)
+                new PopupButtonInfo("취소", null),
+                new PopupButtonInfo("확인", () =>
                 {
-                    // 선택 학생이 다른 슬롯에 이미 배치돼 있으면 그 슬롯 해제
-                    StudentSlot existing = FindSlotByStudent(_selectedStudent);
-                    if (existing != null && existing != slot)
+                    int slotIndex = _fieldSlots.IndexOf(slot);
+
+                    // 1) 기존 슬롯 비우기
+                    slot.ClearSlot();
+                    if (StudentManager.Instance != null)
+                        StudentManager.Instance.ClearSlot(slotIndex);
+
+                    // 2) 선택 학생이 있으면 '교체'까지 수행
+                    if (_selectedStudent != null)
                     {
-                        int existingIndex = _fieldSlots.IndexOf(existing);
-                        existing.ClearSlot();
+                        // 선택 학생이 다른 슬롯에 이미 배치돼 있으면 그 슬롯 해제
+                        StudentSlot existing = FindSlotByStudent(_selectedStudent);
+                        if (existing != null && existing != slot)
+                        {
+                            int existingIndex = _fieldSlots.IndexOf(existing);
+                            existing.ClearSlot();
+                            if (StudentManager.Instance != null)
+                                StudentManager.Instance.ClearSlot(existingIndex);
+                        }
+
+                        // 현재 슬롯에 선택 학생 배치
+                        slot.AssignStudent(_selectedStudent, _selectedStudentPortrait);
                         if (StudentManager.Instance != null)
-                            StudentManager.Instance.ClearSlot(existingIndex);
+                            StudentManager.Instance.AssignSlot(slotIndex, _selectedStudent);
+
+                        // 교체 완료 시 선택 학생 팝업 닫기
+                        CloseStudentInfoPopup();
                     }
 
-                    // 현재 슬롯에 선택 학생 배치
-                    slot.AssignStudent(_selectedStudent, _selectedStudentPortrait);
-                    if (StudentManager.Instance != null)
-                        StudentManager.Instance.AssignSlot(slotIndex, _selectedStudent);
-
-                    // 교체 완료 시 선택 학생 팝업 닫기
-                    CloseStudentInfoPopup();
-                }
-
-                ClearSelection();
-                RefreshCardStates();
-                RefreshRecommendHighlights();
-            })
+                    ClearSelection();
+                    RefreshCardStates();
+                    RefreshRecommendHighlights();
+                    RefreshTournamentStartButton();
+                })
             }
         ));
     }
 
     // StudentManager에 저장된 배치 정보로 슬롯 상태 복원
+    // 자동 배치 시 null로 저장된 초상화도 여기서 카드 맵 기반으로 복원됨
     private void RestoreSlotAssignments()
     {
         if (StudentManager.Instance == null)
@@ -271,6 +355,7 @@ public class StudentManagementPopup : UIBase
                 portrait = card.GetPortraitSprite();
 
             slot.AssignStudent(student, portrait);
+            RefreshTournamentStartButton();
         }
     }
 
