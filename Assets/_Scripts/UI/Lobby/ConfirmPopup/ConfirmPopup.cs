@@ -12,7 +12,6 @@ public class ConfirmPopup : UIPopup
     [SerializeField] private TMP_Text _txtMessage;    // 본문 메시지
     [SerializeField] private Image _imgPreview;       // 미리보기 이미지
 
-
     [Header("Manual Pull-Up Settings")]
     [SerializeField] private RectTransform _backPanelRect;    // 실질적인 팝업창
     [SerializeField] private RectTransform _textGroupRect;    // 텍스트들을 묶어둔 오브젝트
@@ -31,6 +30,10 @@ public class ConfirmPopup : UIPopup
     private StudentSelectPopup _activeStudentSelectPopup; // 참조 보관용 필드 추가
     private bool _hasInvokedConfirmAction;
     private bool _skipConfirmOnCloseInvocation;
+
+    [Header("Preview")]
+    [SerializeField] private Sprite _defaultPreviewSprite; // 이미지가 없을 때 표시할 기본 이미지
+
 
     public override void Init()
     {
@@ -61,7 +64,9 @@ public class ConfirmPopup : UIPopup
         ApplyTexts(request);
         ApplyPreview(request);
         ApplyButtons(request);
-        bool hasImage = request.PreviewSprite != null;
+
+        // 실제 표시될 이미지 기준으로 판정 (요청 스프라이트 없으면 기본 이미지 확인)
+        bool hasImage = request.PreviewSprite != null || _defaultPreviewSprite != null;
 
         // 이미지가 없으면 수동으로 팝업 크기를 줄이고 텍스트를 올림
         if (!hasImage && _backPanelRect != null && _textGroupRect != null)
@@ -111,16 +116,21 @@ public class ConfirmPopup : UIPopup
     }
 
     // 미리보기 이미지 설정
+    // 전달된 스프라이트가 없으면 기본 이미지로 대체
     private void ApplyPreview(ConfirmPopupRequest request)
     {
         if (_imgPreview == null) return;
 
-        bool hasSprite = request.PreviewSprite != null;
+        Sprite sprite = request.PreviewSprite != null
+            ? request.PreviewSprite
+            : _defaultPreviewSprite;
+
+        bool hasSprite = sprite != null;
         _imgPreview.gameObject.SetActive(hasSprite);
 
         if (hasSprite)
         {
-            _imgPreview.sprite = request.PreviewSprite;
+            _imgPreview.sprite = sprite;
             _imgPreview.preserveAspect = true;
         }
     }

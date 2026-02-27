@@ -1286,3 +1286,4 @@ MonoBehaviour:
   _btnPrimary: {fileID: 5612330384217949691}
   _txtPrimary: {fileID: 2503474150881966671}
   _studentSelectPrefab: {fileID: 5655431246991369327, guid: 2eefce8b8a34e304b82db8b2d577031f, type: 3}
+  _defaultPreviewSprite: {fileID: 8037539321571114111, guid: 7515a6442954d74499bd13e864a3efb3, type: 3}
