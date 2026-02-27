@@ -1,46 +1,52 @@
 fileFormatVersion: 2
-guid: 4d7e683cb858a664690bb912a6e3d445
+guid: 26ec6a90ec4e68d4f8f922a33174a505
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -6088234622100849092
-    second: logo_kyungil_0
+      213: 6785310029387324540
+    second: logo_kyungil 1_0
   - first:
-      213: -6406749255304636324
-    second: logo_kyungil_1
+      213: 150492660771918356
+    second: logo_kyungil 1_1
   - first:
-      213: -3565380042762012421
-    second: logo_kyungil_2
+      213: 7201264191579617996
+    second: logo_kyungil 1_2
   - first:
-      213: 1481929913466999037
-    second: logo_kyungil_3
+      213: 8918182715345547067
+    second: logo_kyungil 1_3
   - first:
-      213: 1906418573382197584
-    second: logo_kyungil_4
+      213: 4197407569088516948
+    second: logo_kyungil 1_4
   - first:
-      213: -1284257781980298029
-    second: logo_kyungil_5
+      213: -8511656453154396292
+    second: logo_kyungil 1_5
   - first:
-      213: -8114875434567450118
-    second: logo_kyungil_6
+      213: 2404663619327708047
+    second: logo_kyungil 1_6
   - first:
-      213: 611946862446093053
-    second: logo_kyungil_7
+      213: -5564411088321680668
+    second: logo_kyungil 1_7
   - first:
-      213: 2664679121782905681
-    second: logo_kyungil_8
+      213: 4581103760344985109
+    second: logo_kyungil 1_8
   - first:
-      213: -8203073593722005299
-    second: logo_kyungil_9
+      213: -7260045016897587733
+    second: logo_kyungil 1_9
   - first:
-      213: 3908094635024412716
-    second: logo_kyungil_10
+      213: -2777299006441899536
+    second: logo_kyungil 1_10
   - first:
-      213: 1627894780839986386
-    second: logo_kyungil_11
+      213: -411305622682337136
+    second: logo_kyungil 1_11
   - first:
-      213: -7695553110581628495
-    second: logo_kyungil_12
+      213: 478898131068209254
+    second: logo_kyungil 1_12
+  - first:
+      213: -7297191624412581824
+    second: logo_kyungil 1_13
+  - first:
+      213: -9173754555113954592
+    second: logo_kyungil 1_14
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -149,7 +155,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: logo_kyungil_0
+      name: logo_kyungil 1_0
       rect:
         serializedVersion: 2
         x: 0
@@ -164,17 +170,17 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: c3eb1783ede328ba0800000000000000
-      internalID: -6088234622100849092
+      spriteID: c7cd68885834a2e50800000000000000
+      internalID: 6785310029387324540
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: logo_kyungil_1
+      name: logo_kyungil 1_1
       rect:
         serializedVersion: 2
-        x: 81
+        x: 80
         y: 20
         width: 25
         height: 31
@@ -186,127 +192,17 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: c5891982f77a617a0800000000000000
-      internalID: -6406749255304636324
+      spriteID: 4121d921748a61200800000000000000
+      internalID: 150492660771918356
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: logo_kyungil_2
+      name: logo_kyungil 1_2
       rect:
         serializedVersion: 2
-        x: 106
-        y: 20
-        width: 25
-        height: 31
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: bf837e5cdb9358ec0800000000000000
-      internalID: -3565380042762012421
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: logo_kyungil_3
-      rect:
-        serializedVersion: 2
-        x: 130
-        y: 20
-        width: 27
-        height: 31
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: df0d93a976fd09410800000000000000
-      internalID: 1481929913466999037
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: logo_kyungil_4
-      rect:
-        serializedVersion: 2
-        x: 156
-        y: 20
-        width: 25
-        height: 31
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 05127a38795f47a10800000000000000
-      internalID: 1906418573382197584
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: logo_kyungil_5
-      rect:
-        serializedVersion: 2
-        x: 182
-        y: 23
-        width: 7
-        height: 26
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 3d488010a566d2ee0800000000000000
-      internalID: -1284257781980298029
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: logo_kyungil_6
-      rect:
-        serializedVersion: 2
-        x: 188
-        y: 23
-        width: 36
-        height: 27
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: af1401669cb226f80800000000000000
-      internalID: -8114875434567450118
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: logo_kyungil_7
-      rect:
-        serializedVersion: 2
-        x: 223
+        x: 105
         y: 20
         width: 26
         height: 31
@@ -318,19 +214,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: df2a38ddd621e7800800000000000000
-      internalID: 611946862446093053
+      spriteID: ccaf7d8d0a700f360800000000000000
+      internalID: 7201264191579617996
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: logo_kyungil_8
+      name: logo_kyungil 1_3
       rect:
         serializedVersion: 2
-        x: 248
+        x: 129
         y: 20
-        width: 35
+        width: 27
         height: 31
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -340,19 +236,173 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 15b154e0b87daf420800000000000000
-      internalID: 2664679121782905681
+      spriteID: b3f2336ddefb3cb70800000000000000
+      internalID: 8918182715345547067
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: logo_kyungil_9
+      name: logo_kyungil 1_4
       rect:
         serializedVersion: 2
-        x: 282
-        y: 26
+        x: 155
+        y: 33
         width: 18
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4539e0df1ff204a30800000000000000
+      internalID: 4197407569088516948
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: logo_kyungil 1_5
+      rect:
+        serializedVersion: 2
+        x: 158
+        y: 20
+        width: 22
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c7722937d8580e980800000000000000
+      internalID: -8511656453154396292
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: logo_kyungil 1_6
+      rect:
+        serializedVersion: 2
+        x: 181
+        y: 23
+        width: 7
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f8b455242d41f5120800000000000000
+      internalID: 2404663619327708047
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: logo_kyungil 1_7
+      rect:
+        serializedVersion: 2
+        x: 187
+        y: 23
+        width: 36
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4ea6750c89d37c2b0800000000000000
+      internalID: -5564411088321680668
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: logo_kyungil 1_8
+      rect:
+        serializedVersion: 2
+        x: 222
+        y: 20
+        width: 25
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 51ea19a2999539f30800000000000000
+      internalID: 4581103760344985109
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: logo_kyungil 1_9
+      rect:
+        serializedVersion: 2
+        x: 247
+        y: 20
+        width: 10
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: be57972c5832f3b90800000000000000
+      internalID: -7260045016897587733
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: logo_kyungil 1_10
+      rect:
+        serializedVersion: 2
+        x: 255
+        y: 20
+        width: 26
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0f93cf5b44d0579d0800000000000000
+      internalID: -2777299006441899536
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: logo_kyungil 1_11
+      rect:
+        serializedVersion: 2
+        x: 281
+        y: 26
+        width: 17
         height: 23
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -362,17 +412,17 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: dc810db3704d82e80800000000000000
-      internalID: -8203073593722005299
+      spriteID: 09006e127bfba4af0800000000000000
+      internalID: -411305622682337136
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: logo_kyungil_10
+      name: logo_kyungil 1_12
       rect:
         serializedVersion: 2
-        x: 299
+        x: 297
         y: 20
         width: 8
         height: 31
@@ -384,17 +434,17 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: c207d355d575c3630800000000000000
-      internalID: 3908094635024412716
+      spriteID: 6684be9105365a600800000000000000
+      internalID: 478898131068209254
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: logo_kyungil_11
+      name: logo_kyungil 1_13
       rect:
         serializedVersion: 2
-        x: 114
+        x: 113
         y: 0
         width: 92
         height: 13
@@ -406,17 +456,17 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 2d40eaf9da1779610800000000000000
-      internalID: 1627894780839986386
+      spriteID: 040bee831ea2bba90800000000000000
+      internalID: -7297191624412581824
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: logo_kyungil_12
+      name: logo_kyungil 1_14
       rect:
         serializedVersion: 2
-        x: 208
+        x: 207
         y: 0
         width: 65
         height: 13
@@ -428,8 +478,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 1b131adf737e33590800000000000000
-      internalID: -7695553110581628495
+      spriteID: 0e2afc536d640b080800000000000000
+      internalID: -9173754555113954592
       vertices: []
       indices: 
       edges: []
@@ -448,19 +498,21 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      logo_kyungil_0: -6088234622100849092
-      logo_kyungil_1: -6406749255304636324
-      logo_kyungil_10: 3908094635024412716
-      logo_kyungil_11: 1627894780839986386
-      logo_kyungil_12: -7695553110581628495
-      logo_kyungil_2: -3565380042762012421
-      logo_kyungil_3: 1481929913466999037
-      logo_kyungil_4: 1906418573382197584
-      logo_kyungil_5: -1284257781980298029
-      logo_kyungil_6: -8114875434567450118
-      logo_kyungil_7: 611946862446093053
-      logo_kyungil_8: 2664679121782905681
-      logo_kyungil_9: -8203073593722005299
+      logo_kyungil 1_0: 6785310029387324540
+      logo_kyungil 1_1: 150492660771918356
+      logo_kyungil 1_10: -2777299006441899536
+      logo_kyungil 1_11: -411305622682337136
+      logo_kyungil 1_12: 478898131068209254
+      logo_kyungil 1_13: -7297191624412581824
+      logo_kyungil 1_14: -9173754555113954592
+      logo_kyungil 1_2: 7201264191579617996
+      logo_kyungil 1_3: 8918182715345547067
+      logo_kyungil 1_4: 4197407569088516948
+      logo_kyungil 1_5: -8511656453154396292
+      logo_kyungil 1_6: 2404663619327708047
+      logo_kyungil 1_7: -5564411088321680668
+      logo_kyungil 1_8: 4581103760344985109
+      logo_kyungil 1_9: -7260045016897587733
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
