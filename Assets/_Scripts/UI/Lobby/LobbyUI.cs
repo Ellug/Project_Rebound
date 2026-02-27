@@ -27,6 +27,7 @@ public class LobbyUI : UIBase
 
     [Header("Center Message")]
     [SerializeField] private TMP_Text _txtMessage;
+    [SerializeField] private LobbyMessageController _messageController;
     [Header("Messenger")]
     [SerializeField] private Button _btnCenterMessage;                   
     [SerializeField] private MessengerInboxPopup _messengerInboxPopup;
@@ -42,6 +43,8 @@ public class LobbyUI : UIBase
     [SerializeField] private Sprite _testSprite;
 
     [SerializeField] private RecruitmentManager _recruitmentManager;
+
+    
 
     private bool _inited;
     private bool _isLobbyInited;
@@ -216,7 +219,10 @@ public class LobbyUI : UIBase
         if (_txtSchoolName) _txtSchoolName.text = "한울고등학교";
         if (_txtMoney) _txtMoney.text = "5000 G";
         if (_txtFame) _txtFame.text = "150";
-        if (_txtMessage) _txtMessage.text = "감독님, 신입생들이 입학했습니다. 훈련 일정을 잡아주세요.";
+        if (_messageController != null)
+            _messageController.Show("감독님, 신입생들이 입학했습니다. 훈련 일정을 잡아주세요.", animate: true);
+        else if (_txtMessage)
+            _txtMessage.text = "감독님, 신입생들이 입학했습니다. 훈련 일정을 잡아주세요.";  //테스트용
     }
 
     // 턴 시스템이 계산한 현재 날짜/D-Day를 로비 상단에 반영
@@ -232,7 +238,9 @@ public class LobbyUI : UIBase
     // 이벤트/토너먼트 결과 메시지를 중앙 문구로 갱신
     public void SetStatusMessage(string message)
     {
-        if (_txtMessage)
+        if (_messageController != null)
+            _messageController.Show(message, animate: true);
+        else if (_txtMessage)
             _txtMessage.text = message;
     }
 

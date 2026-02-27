@@ -2,84 +2,86 @@ using TMPro;
 using UnityEngine;
 using System.Collections;
 
+
+
 public class TextTyperTMP : MonoBehaviour
 {
+    [Header("Reference")]
     [SerializeField] private TMP_Text tmpText;
-    [SerializeField] private float charactersPerSecond = 30f;
 
-    [Header("Auto type when tmpText.text changes")]
-    [SerializeField] private bool autoTypeOnTextChange = true;
+    [Header("Typing Settings")]
+    [SerializeField] private float charactersPerSecond = 30f;
+    [SerializeField] private bool useUnscaledTime = true; // 타임스케일 영향 여부
 
     private Coroutine typingCoroutine;
     private bool isTyping;
+    private bool isCompleted;
 
-    private string _lastText = "";
+    public bool IsTyping => isTyping;
+    public bool IsCompleted => isCompleted;
 
     private void Awake()
     {
         if (tmpText == null)
             tmpText = GetComponent<TMP_Text>();
-
-        if (tmpText != null)
-            _lastText = tmpText.text;
     }
 
-    private void OnEnable()
-    {
-        // 켜질 때도 한번 동기화
-        if (tmpText != null)
-            _lastText = tmpText.text;
-    }
-
-    private void Update()
-    {
-        if (!autoTypeOnTextChange || tmpText == null)
-            return;
-
-        // LobbyUI가 text를 바꾸면 여기서 감지
-        if (tmpText.text != _lastText)
-        {
-            _lastText = tmpText.text;
-            Play(_lastText);
-        }
-    }
-
+    /// <summary>
+    /// 텍스트 타이핑 시작
+    /// </summary>
     public void Play(string message)
     {
+        if (tmpText == null || string.IsNullOrEmpty(message))
+            return;
+
+        // 이전 코루틴 정리
         if (typingCoroutine != null)
             StopCoroutine(typingCoroutine);
 
-        // message로 고정 (중간에 덮어써져도 최소 한번은 타이핑 시작)
         tmpText.text = message;
         tmpText.maxVisibleCharacters = 0;
 
         tmpText.ForceMeshUpdate(true, true);
+
+        isTyping = true;
+        isCompleted = false;
 
         typingCoroutine = StartCoroutine(TypeRoutine());
     }
 
     private IEnumerator TypeRoutine()
     {
-        isTyping = true;
-
         tmpText.ForceMeshUpdate(true, true);
         int totalChars = tmpText.textInfo.characterCount;
 
-        float delay = 1f / Mathf.Max(1f, charactersPerSecond);
+        float visibleCount = 0f;
+        float cps = Mathf.Max(1f, charactersPerSecond);
 
-        for (int i = 0; i <= totalChars; i++)
+        while (visibleCount < totalChars)
         {
-            tmpText.maxVisibleCharacters = i;
-            yield return new WaitForSeconds(delay);
+            float delta = useUnscaledTime ? Time.unscaledDeltaTime : Time.deltaTime;
+            visibleCount += cps * delta;
+
+            tmpText.maxVisibleCharacters = Mathf.FloorToInt(visibleCount);
+
+            yield return null;
         }
 
+        // 완전 표시
+        tmpText.maxVisibleCharacters = totalChars;
+
         isTyping = false;
+        isCompleted = true;
         typingCoroutine = null;
     }
 
+    /// <summary>
+    /// 타이핑 중이면 즉시 완료
+    /// </summary>
     public void Skip()
     {
-        if (!isTyping || tmpText == null) return;
+        if (!isTyping || tmpText == null)
+            return;
 
         if (typingCoroutine != null)
             StopCoroutine(typingCoroutine);
@@ -88,6 +90,26 @@ public class TextTyperTMP : MonoBehaviour
         tmpText.maxVisibleCharacters = tmpText.textInfo.characterCount;
 
         isTyping = false;
+        isCompleted = true;
         typingCoroutine = null;
+    }
+
+    /// <summary>
+    /// 현재 텍스트 즉시 교체 (애니메이션 없음)
+    /// </summary>
+    public void SetImmediate(string message)
+    {
+        if (tmpText == null)
+            return;
+
+        if (typingCoroutine != null)
+            StopCoroutine(typingCoroutine);
+
+        tmpText.text = message;
+        tmpText.ForceMeshUpdate(true, true);
+        tmpText.maxVisibleCharacters = tmpText.textInfo.characterCount;
+
+        isTyping = false;
+        isCompleted = true;
     }
 }
