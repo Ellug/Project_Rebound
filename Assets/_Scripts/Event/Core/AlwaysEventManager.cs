@@ -156,12 +156,17 @@ public class AlwaysEventManager : MonoBehaviour
             _ => "이벤트 발생"
         };
 
-        UIManager.Instance.ShowConfirm(new ConfirmPopupRequest(
+        ConfirmPopupRequest request = new(
             title: title,
             message: row.description,
             primaryLabel: "확인",
             primaryAction: onConfirm
-        ));
+        );
+
+        if (IsLeagueBreakEvent(row))
+            request.SetModal(false).SetInvokeConfirmOnClose(true);
+
+        UIManager.Instance.ShowConfirm(request);
     }
 
     // 다음 리그(vacation 타입) 시작 날짜 조회 — GameManager가 D-Day 계산에 사용
