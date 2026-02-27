@@ -10,6 +10,13 @@ public class TextTyperTMP : MonoBehaviour
     private Coroutine typingCoroutine;
     private bool isTyping;
 
+
+
+    private void Start()
+    {
+        Play(tmpText.text);
+    }
+
     public void Play(string message)
     {
         if (typingCoroutine != null)
