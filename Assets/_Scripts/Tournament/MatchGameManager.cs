@@ -7,7 +7,7 @@ using GameData = CachedSOData;
 // 경기 전체 흐름을 조율하는 컨트롤러 : 쿼터 > 공방 > 하프타임 > 경기 종료 순서를 관리
 public class MatchGameManager : MonoBehaviour
 {
-    private const string Divider = "----------------------------------------";
+    private const string Divider = "---------------------------------------------";
 
     // 경기 종료 시 MatchResult를 전달. TournamentManager가 구독해 승패 처리
     public event Action<MatchResult> OnMatchFinished;
@@ -78,7 +78,7 @@ public class MatchGameManager : MonoBehaviour
         _quarterScores.Clear();
         _logs.Clear();
 
-        _matchGameUi.PrepareMatchGameUi(upTeam, downTeam, ProgressStages);
+        _matchGameUi.PrepareMatchGameUi(FormatTeamNameForDisplay(upTeam), FormatTeamNameForDisplay(downTeam), ProgressStages);
         UpdateProgressUi();
         RefreshLiveScoreUi();
 
@@ -335,5 +335,19 @@ public class MatchGameManager : MonoBehaviour
     private QuarterPodSimulator CreateDefaultQuarterSimulator()
     {
         return new QuarterPodSimulator(_maxPlayTurnsPerQuarter, _scorePerPlayTurnWin, _benchRecoverCondition);
+    }
+
+    // UI 표시 전용으로 "고등학교" 앞에 공백을 보정
+    private static string FormatTeamNameForDisplay(string teamName)
+    {
+        if (string.IsNullOrEmpty(teamName))
+            return teamName;
+
+        const string suffix = "고등학교";
+        int idx = teamName.IndexOf(suffix, StringComparison.Ordinal);
+        if (idx > 0 && teamName[idx - 1] != ' ')
+            return teamName[..idx] + " " + teamName[idx..];
+
+        return teamName;
     }
 }

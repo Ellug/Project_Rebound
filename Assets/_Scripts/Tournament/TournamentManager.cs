@@ -176,7 +176,7 @@ public class TournamentManager : MonoBehaviour
             matchViewData.Add(new TournamentMatchViewData(FormatSchoolName(matchup.UpTeam), FormatSchoolName(matchup.DownTeam), matchup.IncludeMySchool));
         }
 
-        _tournamentUi.RenderRound(matchViewData, _mySchoolName);
+        _tournamentUi.RenderRound(matchViewData, FormatSchoolName(_mySchoolName));
     }
 
     // CachedSOData 에서 참조해 학교 리스트 출력
@@ -246,7 +246,7 @@ public class TournamentManager : MonoBehaviour
 
         // 내 학교 매치가 있으면 매치 시뮬레이션 시작
         if (TryGetPendingMySchoolMatch(out Matchup mySchoolMatchup))
-            _matchGameManager.StartMatch(FormatSchoolName(mySchoolMatchup.UpTeam), FormatSchoolName(mySchoolMatchup.DownTeam), _mySchoolName);
+            _matchGameManager.StartMatch(mySchoolMatchup.UpTeam, mySchoolMatchup.DownTeam, _mySchoolName);
         else
             Debug.Log("[TournamentManager] 내 학교 매치가 없어서 자동 진행");
     }

@@ -4,7 +4,7 @@ using UnityEngine;
 // 쿼터 1개 책임: 쿼터 시작, 공방 루프 진행, 쿼터 종료 결과 조합
 public sealed class QuarterPodSimulator
 {
-    private const string Divider = "----------------------------------------";
+    private const string Divider = "---------------------------------------------";
     private readonly int _maxPlayTurns;
     private readonly int _scorePerPlayTurnWin;
     private readonly int _benchRecoverAmount;
