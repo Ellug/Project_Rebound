@@ -28,7 +28,7 @@ public class LobbyUI : UIBase
     [Header("Center Message")]
     [SerializeField] private TMP_Text _txtMessage;
     [Header("Messenger")]
-    [SerializeField] private Button _btnCenterMessage;                   
+    [SerializeField] private Button _btnCenterMessage;
     [SerializeField] private MessengerInboxPopup _messengerInboxPopup;
 
     [Header("Bottom Navigation Buttons")]
@@ -234,6 +234,32 @@ public class LobbyUI : UIBase
     {
         if (_txtMessage)
             _txtMessage.text = message;
+    }
+
+    // GameManager 슬롯 자동 배치 시 필드 슬롯 목록 제공
+    public List<StudentSlot> GetFieldSlots()
+    {
+        return _studentManagementPopup != null
+            ? _studentManagementPopup.GetFieldSlots()
+            : null;
+    }
+
+    // 토너먼트 배치 경고 팝업에서 확인 시 학생 관리 팝업 오픈
+    public void OpenStudentManagementPopup()
+    {
+        if (_studentManagementPopup == null) return;
+
+        bool wasActive = _studentManagementPopup.gameObject.activeSelf;
+
+        CloseAllLobbyPopups();
+
+        // 이미 열려있던 경우 → 토글로 닫기만 하고 종료
+        if (wasActive)
+            return;
+
+        _studentManagementPopup.Init();
+        _studentManagementPopup.transform.SetAsLastSibling();
+        _studentManagementPopup.Open();
     }
 
     private static TurnActionType MapTrainingKeyToAction(string trainingKey)

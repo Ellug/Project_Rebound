@@ -9,6 +9,8 @@ public class GameManager : Singleton<GameManager>
     private const string TournamentScene = "Tournament";
     private const string TitleScene = "Title";
 
+    private const int RequiredSlotCount = 5; // 토너먼트 진입 최소 출전 인원
+
     private TurnManager _turnManager;               // Lobby 씬의 TurnManager (씬별 런타임 참조)
     // private EventManager _eventManager;             // Lobby 씬의 EventManager
     private AlwaysEventManager _alwaysEventManager; // Lobby 씬의 AlwaysEventManager
@@ -114,6 +116,10 @@ public class GameManager : Singleton<GameManager>
         UnsubscribeTurnManager();
         UnbindAlwaysEventManager();
 
+        // 영입 완료 이벤트 구독 해제
+        if (_recruitmentManager != null)
+            _recruitmentManager.OnRecruitmentCompleted -= HandleRecruitmentCompleted;
+
         _turnManager = null;
         _alwaysEventManager = null;
         _lobbyUI = null;
@@ -180,7 +186,41 @@ public class GameManager : Singleton<GameManager>
     }
 
     // 토너먼트 씬 진입 처리
+    // 배치 인원 검증 → 부족 시 경고 팝업, 충족 시 씬 전환
     private void EnterTournament()
+    {
+        int assignedCount = StudentManager.Instance?.SlotAssignments.Count ?? 0;
+
+        if (assignedCount < RequiredSlotCount)
+        {
+            ShowSlotWarningAndOpenManagement(assignedCount);
+            return; // 씬 전환 보류
+        }
+
+        ProceedToTournament();
+    }
+
+    // 배치 부족 시 경고 팝업 표시 → 확인 시 학생 관리 팝업 오픈
+    private void ShowSlotWarningAndOpenManagement(int assignedCount)
+    {
+        if (UIManager.Instance == null) return;
+
+        UIManager.Instance.ShowPopup(new PopupData(
+            title: "출전 학생 배치 확인",
+            content: $"출전 슬롯에 배치된 학생이 {assignedCount}명입니다.\n" +
+                     $"토너먼트 진입을 위해 최소 {RequiredSlotCount}명을 배치해 주세요.",
+            buttons: new List<PopupButtonInfo>
+            {
+                new PopupButtonInfo("확인", () =>
+                {
+                    _lobbyUI?.OpenStudentManagementPopup();
+                })
+            }
+        ));
+    }
+
+    // 실제 토너먼트 씬 전환 처리
+    private void ProceedToTournament()
     {
         _flowData.IsLeagueHandled = true;
         _turnManager.SetPhase(GamePhase.MatchInProgress);
@@ -253,6 +293,13 @@ public class GameManager : Singleton<GameManager>
         _tournamentResultUI = FindFirstObjectByType<TournamentResultUI>(FindObjectsInactive.Include);
         _recruitmentManager = FindFirstObjectByType<RecruitmentManager>(); // 영입 매니저 참조
         _isLoadingTournament = false;
+
+        // 영입 완료 이벤트 구독
+        if (_recruitmentManager != null)
+        {
+            _recruitmentManager.OnRecruitmentCompleted -= HandleRecruitmentCompleted;
+            _recruitmentManager.OnRecruitmentCompleted += HandleRecruitmentCompleted;
+        }
     }
 
     // TurnManager 이벤트 구독
@@ -376,6 +423,40 @@ public class GameManager : Singleton<GameManager>
 
         _initialRecruitmentTriggered = true;
         _recruitmentManager.TriggerInitialRecruitment();
+    }
+
+    // 영입 완료 시 호출 — 새 게임 최초 영입인 경우에만 슬롯 자동 배치
+    private void HandleRecruitmentCompleted(List<Student> recruits)
+    {
+        if (!_isNewGame) return;
+
+        AutoAssignStudentsToSlots(recruits);
+    }
+
+    // 영입된 학생을 필드 슬롯에 순서대로 자동 배치
+    // 초상화(Sprite)는 카드 미생성 시점이므로 null — 팝업 열 때 RestoreSlotAssignments()에서 자동 복원
+    private void AutoAssignStudentsToSlots(List<Student> students)
+    {
+        if (StudentManager.Instance == null) return;
+        if (_lobbyUI == null) return;
+
+        List<StudentSlot> fieldSlots = _lobbyUI.GetFieldSlots();
+        if (fieldSlots == null || fieldSlots.Count == 0) return;
+
+        int count = Mathf.Min(students.Count, fieldSlots.Count);
+
+        for (int i = 0; i < count; i++)
+        {
+            StudentSlot slot = fieldSlots[i];
+            Student student = students[i];
+
+            if (slot == null || student == null) continue;
+
+            slot.AssignStudent(student, null);
+            StudentManager.Instance.AssignSlot(i, student);
+        }
+
+        Debug.Log($"[GameManager] 슬롯 자동 배치 완료: {count}명");
     }
 
     // 턴 완료 시 호출되는 이벤트 핸들러
@@ -503,6 +584,7 @@ public class GameManager : Singleton<GameManager>
         _lobbyUI.UpdateDateAndDday(_turnManager.DateManager.CurrentDate, dDay);
     }
 
+    // 리그 윈도우 상태 전체 초기화 (만료 / 토너먼트 복귀 후 공통 사용)
     private void ResetLeagueWindowState()
     {
         _flowData.LeagueTermEnd = default;

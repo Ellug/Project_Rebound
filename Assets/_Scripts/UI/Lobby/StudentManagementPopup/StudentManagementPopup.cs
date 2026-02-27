@@ -27,6 +27,9 @@ public class StudentManagementPopup : UIBase
 
     private bool _isInited;
 
+    // GameManager 슬롯 자동 배치 및 LobbyUI 경유 접근용
+    public List<StudentSlot> GetFieldSlots() => _fieldSlots;
+
     public override void Init()
     {
         if (_isInited) return;
@@ -160,7 +163,6 @@ public class StudentManagementPopup : UIBase
     }
 
     // 슬롯 클릭 처리
-    // 슬롯 클릭 처리
     private void HandleSlotClicked(StudentSlot slot)
     {
         if (slot == null) return;
@@ -207,47 +209,48 @@ public class StudentManagementPopup : UIBase
             content: $"이미 배치된 학생이 있습니다. \n선택한 학생으로 교체하시겠습니까?",
             buttons: new List<PopupButtonInfo>
             {
-            new PopupButtonInfo("취소", null),
-            new PopupButtonInfo("확인", () =>
-            {
-                int slotIndex = _fieldSlots.IndexOf(slot);
-
-                // 1) 기존 슬롯 비우기
-                slot.ClearSlot();
-                if (StudentManager.Instance != null)
-                    StudentManager.Instance.ClearSlot(slotIndex);
-
-                // 2) 선택 학생이 있으면 '교체'까지 수행
-                if (_selectedStudent != null)
+                new PopupButtonInfo("취소", null),
+                new PopupButtonInfo("확인", () =>
                 {
-                    // 선택 학생이 다른 슬롯에 이미 배치돼 있으면 그 슬롯 해제
-                    StudentSlot existing = FindSlotByStudent(_selectedStudent);
-                    if (existing != null && existing != slot)
+                    int slotIndex = _fieldSlots.IndexOf(slot);
+
+                    // 1) 기존 슬롯 비우기
+                    slot.ClearSlot();
+                    if (StudentManager.Instance != null)
+                        StudentManager.Instance.ClearSlot(slotIndex);
+
+                    // 2) 선택 학생이 있으면 '교체'까지 수행
+                    if (_selectedStudent != null)
                     {
-                        int existingIndex = _fieldSlots.IndexOf(existing);
-                        existing.ClearSlot();
+                        // 선택 학생이 다른 슬롯에 이미 배치돼 있으면 그 슬롯 해제
+                        StudentSlot existing = FindSlotByStudent(_selectedStudent);
+                        if (existing != null && existing != slot)
+                        {
+                            int existingIndex = _fieldSlots.IndexOf(existing);
+                            existing.ClearSlot();
+                            if (StudentManager.Instance != null)
+                                StudentManager.Instance.ClearSlot(existingIndex);
+                        }
+
+                        // 현재 슬롯에 선택 학생 배치
+                        slot.AssignStudent(_selectedStudent, _selectedStudentPortrait);
                         if (StudentManager.Instance != null)
-                            StudentManager.Instance.ClearSlot(existingIndex);
+                            StudentManager.Instance.AssignSlot(slotIndex, _selectedStudent);
+
+                        // 교체 완료 시 선택 학생 팝업 닫기
+                        CloseStudentInfoPopup();
                     }
 
-                    // 현재 슬롯에 선택 학생 배치
-                    slot.AssignStudent(_selectedStudent, _selectedStudentPortrait);
-                    if (StudentManager.Instance != null)
-                        StudentManager.Instance.AssignSlot(slotIndex, _selectedStudent);
-
-                    // 교체 완료 시 선택 학생 팝업 닫기
-                    CloseStudentInfoPopup();
-                }
-
-                ClearSelection();
-                RefreshCardStates();
-                RefreshRecommendHighlights();
-            })
+                    ClearSelection();
+                    RefreshCardStates();
+                    RefreshRecommendHighlights();
+                })
             }
         ));
     }
 
     // StudentManager에 저장된 배치 정보로 슬롯 상태 복원
+    // 자동 배치 시 null로 저장된 초상화도 여기서 카드 맵 기반으로 복원됨
     private void RestoreSlotAssignments()
     {
         if (StudentManager.Instance == null)
