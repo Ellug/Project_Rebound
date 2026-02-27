@@ -213,10 +213,28 @@ public class LobbyUI : UIBase
     public void UpdateUI()
     {
         // 예시 데이터 바인딩
-        if (_txtSchoolName) _txtSchoolName.text = "한울고등학교";
+        if (_txtSchoolName) _txtSchoolName.text = FormatSchoolNameWithHighlightedPrefix("한울고등학교");
         if (_txtMoney) _txtMoney.text = "5000 G";
         if (_txtFame) _txtFame.text = "150";
         if (_txtMessage) _txtMessage.text = "감독님, 신입생들이 입학했습니다. 훈련 일정을 잡아주세요.";
+    }
+
+    // 학교명 접두부(고등학교 앞)를 강조 색상으로 감싼 TMP RichText 문자열 생성
+    private static string FormatSchoolNameWithHighlightedPrefix(string schoolName)
+    {
+        if (string.IsNullOrWhiteSpace(schoolName))
+            return string.Empty;
+
+        const string suffix = "고등학교";
+        const string highlightColorHex = "FF4500";
+
+        int suffixStartIndex = schoolName.IndexOf(suffix, StringComparison.Ordinal);
+        if (suffixStartIndex <= 0)
+            return schoolName;
+
+        string prefix = schoolName[..suffixStartIndex];
+        string suffixText = schoolName[suffixStartIndex..];
+        return $"<color=#{highlightColorHex}>{prefix}</color>{suffixText}";
     }
 
     // 턴 시스템이 계산한 현재 날짜/D-Day를 로비 상단에 반영

@@ -7,14 +7,16 @@ using UnityEngine.UI;
 public class TournamentUI : MonoBehaviour
 {
     [Header("Tournament Panel")]
-    [SerializeField] private TMP_Text _roundTitleText;
     [SerializeField] private GameObject _roundListPanel;
     [SerializeField] private GameObject _focusedMatchPanel;
     [SerializeField] private TMP_Text _focusedMySchoolText;
     [SerializeField] private TMP_Text _focusedOpponentSchoolText;
-    [SerializeField] private string _roundTitleFormat = "{ROUND} 토너먼트 표";
-    [SerializeField] private string _finalRoundTitle = "결승";
     [SerializeField] private string _unknownTeamText = "-";
+
+    [Header("Round Title Images")]
+    [SerializeField] private Image _roundTitleImage;
+    [Tooltip("팀 수 기준 내림차순으로 배치: [0]=32강, [1]=16강, [2]=8강, [3]=4강, [4]=결승")]
+    [SerializeField] private Sprite[] _roundTitleSprites = new Sprite[0];
 
     [Header("Round List")]
     [SerializeField] private ScrollRect _scrollRect;
@@ -60,21 +62,26 @@ public class TournamentUI : MonoBehaviour
         _scrollRect.verticalNormalizedPosition = 1f;
     }
 
+    // 팀 수(32→16→8→4→2)를 스프라이트 인덱스(0→1→2→3→4)로 변환해 이미지 교체
     private void UpdateRoundTitle(int roundTeamCount)
     {
-        if (roundTeamCount <= 0)
+        if (roundTeamCount <= 0 || _roundTitleSprites.Length == 0 || _roundTitleImage == null)
             return;
 
-        string roundText = IsFinalRound(roundTeamCount)
-            ? _finalRoundTitle
-            : $"{roundTeamCount}강";
+        // 지원 팀 수: 32, 16, 8, 4, 2 (인덱스 0~4)
+        int[] teamCounts = { 32, 16, 8, 4, 2 };
+        int targetIndex = -1;
+        for (int i = 0; i < teamCounts.Length; i++)
+        {
+            if (teamCounts[i] == roundTeamCount)
+            {
+                targetIndex = i;
+                break;
+            }
+        }
 
-        if (string.IsNullOrEmpty(_roundTitleFormat))
-            _roundTitleText.text = roundText;
-        else if (_roundTitleFormat.Contains("{ROUND}"))
-            _roundTitleText.text = _roundTitleFormat.Replace("{ROUND}", roundText);
-        else
-            _roundTitleText.text = roundText;
+        if (targetIndex >= 0 && targetIndex < _roundTitleSprites.Length)
+            _roundTitleImage.sprite = _roundTitleSprites[targetIndex];
     }
 
     private static int GetRoundTeamCount(IReadOnlyList<TournamentMatchViewData> matchups)

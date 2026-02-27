@@ -173,7 +173,7 @@ public class TournamentManager : MonoBehaviour
         for (int i = 0; i < currentRound.Count; i++)
         {
             Matchup matchup = currentRound[i];
-            matchViewData.Add(new TournamentMatchViewData(matchup.UpTeam, matchup.DownTeam, matchup.IncludeMySchool));
+            matchViewData.Add(new TournamentMatchViewData(FormatSchoolName(matchup.UpTeam), FormatSchoolName(matchup.DownTeam), matchup.IncludeMySchool));
         }
 
         _tournamentUi.RenderRound(matchViewData, _mySchoolName);
@@ -206,6 +206,20 @@ public class TournamentManager : MonoBehaviour
         return schools;
     }
 
+    // "한울고등학교" → "한울 고등학교" 형태로 변환 (비교용 원본은 건드리지 않음)
+    public static string FormatSchoolName(string name)
+    {
+        if (string.IsNullOrEmpty(name))
+            return name;
+
+        const string suffix = "고등학교";
+        int idx = name.IndexOf(suffix, StringComparison.Ordinal);
+        if (idx > 0 && name[idx - 1] != ' ')
+            return name[..idx] + " " + name[idx..];
+
+        return name;
+    }
+
     private static void Shuffle(List<string> list)
     {
         for (int i = list.Count - 1; i > 0; i--)
@@ -232,7 +246,7 @@ public class TournamentManager : MonoBehaviour
 
         // 내 학교 매치가 있으면 매치 시뮬레이션 시작
         if (TryGetPendingMySchoolMatch(out Matchup mySchoolMatchup))
-            _matchGameManager.StartMatch(mySchoolMatchup.UpTeam, mySchoolMatchup.DownTeam, _mySchoolName);
+            _matchGameManager.StartMatch(FormatSchoolName(mySchoolMatchup.UpTeam), FormatSchoolName(mySchoolMatchup.DownTeam), _mySchoolName);
         else
             Debug.Log("[TournamentManager] 내 학교 매치가 없어서 자동 진행");
     }
@@ -326,7 +340,7 @@ public class TournamentManager : MonoBehaviour
         _mySchoolDefeatedThisMatch = !didWin;
 
         _matchGameUi.HideMatchGamePanel();
-        _matchGameUi.ShowMatchResultPanel(didWin ? "승리!" : "패배...");
+        _matchGameUi.ShowMatchResultPanel(didWin);
 
         _isWaitingForResultNext = true;
         Debug.Log(didWin ? "[TournamentManager] 우리 학교 승리!" : "[TournamentManager] 우리 학교 패배...");
