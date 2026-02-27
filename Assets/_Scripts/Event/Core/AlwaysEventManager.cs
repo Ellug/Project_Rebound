@@ -158,9 +158,11 @@ public class AlwaysEventManager : MonoBehaviour
 
         ConfirmPopupRequest request = new(
             title: title,
-            message: row.description,
+            //message: row.description,
+            message: GetEventDescription(row),
             primaryLabel: "확인",
-            primaryAction: onConfirm
+            primaryAction: onConfirm,
+            subMessage: GetEventSubMessage(row)     // TxtSub에 효과 텍스트 출력
         );
 
         if (IsLeagueBreakEvent(row))
@@ -230,4 +232,93 @@ public class AlwaysEventManager : MonoBehaviour
 
     private static bool TryParseTableDate(string value, out DateTime date)
         => AlwaysEventDateUtil.TryParseTableDate(value, out date);
+
+
+    // ID 기반 이벤트 설명 반환
+    // description이 없는 경우 ID에 따른 기본 설명
+    private static string GetEventDescription(AlwaysEventRow row)
+    {
+        // 시험 기간
+        // 효과: 컨디션 매 턴 -4 회복량, 훈련 효율 -1.5배
+        switch (row.id)
+        {
+            case "1st_midexam":
+                return "1학기 중간고사 기간입니다.\n학생들의 컨디션 회복이 더뎌지고, 훈련 효율이 저하됩니다.";
+
+            case "1st_finalexam":
+                return "1학기 기말고사 기간입니다.\n학생들의 컨디션 회복이 더뎌지고, 훈련 효율이 저하됩니다.";
+
+            case "2nd_midexam":
+                return "2학기 중간고사 기간입니다.\n학생들의 컨디션 회복이 더뎌지고, 훈련 효율이 저하됩니다.";
+
+            case "2nd_finalexam":
+                return "2학기 기말고사 기간입니다.\n학생들의 컨디션 회복이 더뎌지고, 훈련 효율이 저하됩니다.";
+
+            // 학교 행사
+            // 효과: 훈련 불가, 컨디션 회복량 +10
+            case "sports_day":
+                return "체육대회가 열렸습니다!\n오늘은 훈련 대신 행사에 참여합니다.";
+
+            case "school_event":
+                return "학교 축제가 열렸습니다!\n오늘은 훈련 대신 행사에 참여합니다.";
+
+            // 방학 (여름·겨울)
+            // 효과: 훈련 불가 (토너먼트 기간)
+            case "summer_break":
+                return "여름 방학이 시작됩니다!\n전국 리그가 열리는 기간입니다.\n학생들을 배치하고 토너먼트에 참가하세요.";
+
+            case "winter_break":
+                return "겨울 방학이 시작됩니다!\n전국 리그가 열리는 기간입니다.\n학생들을 배치하고 토너먼트에 참가하세요.";
+
+            // 공휴일
+            // 효과: 컨디션 매 턴 +0, 회복량 +5, 훈련 효율 +1.5배
+            case "children_day":
+                return "어린이날입니다! 모처럼의 휴일에 학생들이 들뜬 분위기입니다.";
+
+            case "buddha_day":
+                return "부처님 오신 날입니다. 차분한 분위기 속에서 하루를 보냅니다.";
+
+            case "korean_memorial_day":
+                return "현충일입니다. 잠시 마음을 다잡고 의미 있는 하루를 보냅니다.";
+
+            case "constitution_day":
+                return "제헌절입니다. 공휴일의 여유로운 분위기 속에서 훈련을 이어갑니다.";
+
+            case "liberation_day":
+                return "광복절입니다! 활기 넘치는 분위기 속에서 학생들의 사기가 높아집니다.";
+
+            case "chuseok_break":
+                return "추석 연휴입니다! 명절 분위기로 거리가 활기차게 물들었습니다.";
+
+            case "foundation_day":
+                return "개천절입니다. 공휴일의 여유 속에서 한층 편안하게 훈련합니다.";
+
+            case "hangul_day":
+                return "한글날입니다. 공휴일로 차분한 하루를 보냅니다.";
+
+            case "christmas":
+                return "성탄절입니다! 설레는 분위기 속에서 학생들의 의욕이 높아집니다.";
+
+            case "independence":
+                return "삼일절입니다. 공휴일로 학생들이 의욕으로 가득 찼습니다.";
+
+            // 폴백: 알 수 없는 ID
+            default:
+                // description이 있으면 그대로 사용, 없으면 빈 문자열
+                return string.IsNullOrEmpty(row.description) ? string.Empty : row.description;
+        }
+    }
+
+    // type 기반으로 TxtSub에 표시할 효과 요약 문자열을 반환    
+    private static string GetEventSubMessage(AlwaysEventRow row)
+    {
+        return row.type switch
+        {
+            "exam" => "컨디션 회복량 -4  /  훈련 효율 ×0.67",
+            "festival" => "훈련 불가  /  컨디션 회복량 +10",
+            "vacation" => "토너먼트 진입 가능",
+            "holiday" => "컨디션 회복량 +5  /  훈련 효율 ×1.5",
+            _ => string.Empty
+        };
+    }
 }
