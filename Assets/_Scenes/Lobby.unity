@@ -1585,12 +1585,31 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3332942217190135795, guid: 39d947343ebf33e488aa08dbd106c785, type: 3}
   m_PrefabInstance: {fileID: 7083114024483597527}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 463170942}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
+--- !u!1 &463170942 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2603713889964978707, guid: 39d947343ebf33e488aa08dbd106c785, type: 3}
+  m_PrefabInstance: {fileID: 7083114024483597527}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &463170945
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 463170942}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6a201bac18e21843a78cac0216eaad9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TextTyperTMP
+  tmpText: {fileID: 428056466}
+  charactersPerSecond: 30
 --- !u!224 &470577544 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3350628463632272292, guid: a52764fe4888dca4aa346f27019804c8, type: 3}
@@ -10009,13 +10028,29 @@ PrefabInstance:
       value: Popup_txt
       objectReference: {fileID: 0}
     - target: {fileID: 3332942217190135795, guid: 39d947343ebf33e488aa08dbd106c785, type: 3}
+      propertyPath: m_fontSize
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 3332942217190135795, guid: 39d947343ebf33e488aa08dbd106c785, type: 3}
       propertyPath: m_fontAsset
       value: 
       objectReference: {fileID: 11400000, guid: 9291a7438c2005e48b00352476c10c41, type: 2}
     - target: {fileID: 3332942217190135795, guid: 39d947343ebf33e488aa08dbd106c785, type: 3}
+      propertyPath: m_fontSizeMax
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 3332942217190135795, guid: 39d947343ebf33e488aa08dbd106c785, type: 3}
+      propertyPath: m_fontSizeMin
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 3332942217190135795, guid: 39d947343ebf33e488aa08dbd106c785, type: 3}
       propertyPath: m_sharedMaterial
       value: 
       objectReference: {fileID: -6666201437410415903, guid: 9291a7438c2005e48b00352476c10c41, type: 2}
+    - target: {fileID: 3332942217190135795, guid: 39d947343ebf33e488aa08dbd106c785, type: 3}
+      propertyPath: m_enableAutoSizing
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5378121372708596083, guid: 39d947343ebf33e488aa08dbd106c785, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -10099,7 +10134,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2603713889964978707, guid: 39d947343ebf33e488aa08dbd106c785, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 463170945}
   m_SourcePrefab: {fileID: 100100000, guid: 39d947343ebf33e488aa08dbd106c785, type: 3}
 --- !u!114 &7083114024483597528 stripped
 MonoBehaviour:
