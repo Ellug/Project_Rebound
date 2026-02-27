@@ -10,7 +10,7 @@ public class TMPExternalStroke : MonoBehaviour
 {    
     [SerializeField] private Color _strokeColor = Color.white;          // 외곽선 색상
     [SerializeField, Min(0f)] private float _strokeSize = 6f;           // 외곽선 반경(픽셀 단위)
-    [SerializeField, Range(4, 32)] private int _sampleCount = 8;        // 원형 샘플 개수(많을수록 둥근 외곽)
+    [SerializeField, Range(4, 32)] private int _sampleCount = 12;       // 원형 샘플 개수(많을수록 둥근 외곽)
     [SerializeField] private bool _autoSync = true;                     // 매 프레임 원본 텍스트 변경 동기화
     [SerializeField] private bool _hideGeneratedInHierarchy = true;     // 생성 레이어를 하이어라키에서 숨김
     [SerializeField] private string _layerKey = string.Empty;           // 동일 부모에서 레이어 이름 충돌 방지 키
@@ -19,37 +19,40 @@ public class TMPExternalStroke : MonoBehaviour
 
     private TextMeshProUGUI _source;
     private readonly List<TextMeshProUGUI> _layers = new();
+    private bool _pendingRenderOrder;
 
     private string Prefix => $"{LayerPrefix}{_layerKey}_";
 
     // 컴포넌트 추가 시 초기 세팅
     private void Reset()
     {
-        EnsureSetup(forceRebuild: true);
+        EnsureSetup(forceRebuild: true, applyRenderOrderNow: false);
     }
 
     void Awake()
     {
-        EnsureSetup(forceRebuild: true);
+        EnsureSetup(forceRebuild: true, applyRenderOrderNow: false);
     }
 
     // 재활성화 시 레이어 보정
     void OnEnable()
     {
-        EnsureSetup(forceRebuild: true);
+        EnsureSetup(forceRebuild: true, applyRenderOrderNow: false);
     }
 
     // 인스펙터 변경 시 레이어를 재생성하지 않고 값만 동기화
     private void OnValidate()
     {
-        EnsureSetup(forceRebuild: false);
+        EnsureSetup(forceRebuild: false, applyRenderOrderNow: false);
     }
 
     // 자동 동기화가 켜져 있으면 매 프레임 반영
     void LateUpdate()
     {
         if (_autoSync)
-            EnsureSetup(forceRebuild: false);
+            EnsureSetup(forceRebuild: false, applyRenderOrderNow: true);
+        else
+            ApplyPendingRenderOrder();
     }
 
     void OnDestroy()
@@ -58,12 +61,12 @@ public class TMPExternalStroke : MonoBehaviour
     }
 
     // 전체 상태를 점검하고 필요 시 레이어를 재구성/동기화
-    private void EnsureSetup(bool forceRebuild)
+    private void EnsureSetup(bool forceRebuild, bool applyRenderOrderNow)
     {
         if (!TryGetSource()) return;
 
         if (string.IsNullOrEmpty(_layerKey))
-            _layerKey = Guid.NewGuid().ToString("N")[..8]; // ..8이 뭐지?
+            _layerKey = Guid.NewGuid().ToString("N")[..8];
 
         Transform parent = _source.transform.parent;
         if (parent == null) return;
@@ -84,7 +87,9 @@ public class TMPExternalStroke : MonoBehaviour
             SyncLayer(layer, offsets[i], i + 1);
         }
 
-        ApplyRenderOrder();
+        _pendingRenderOrder = true;
+        if (applyRenderOrderNow)
+            ApplyPendingRenderOrder();
     }
 
     // 원본 TMP 텍스트 참조 캐시
@@ -187,6 +192,16 @@ public class TMPExternalStroke : MonoBehaviour
 
         if (!layer.gameObject.activeSelf)
             layer.gameObject.SetActive(true);
+    }
+
+    // 예약된 렌더 순서 갱신을 안전한 프레임에서만 실행
+    private void ApplyPendingRenderOrder()
+    {
+        if (!_pendingRenderOrder || _source == null)
+            return;
+
+        ApplyRenderOrder();
+        _pendingRenderOrder = false;
     }
 
     // 외곽 레이어를 아래쪽에, 원본 텍스트를 가장 위에 고정
