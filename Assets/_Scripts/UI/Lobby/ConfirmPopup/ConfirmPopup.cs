@@ -12,6 +12,12 @@ public class ConfirmPopup : UIPopup
     [SerializeField] private TMP_Text _txtMessage;    // 본문 메시지
     [SerializeField] private Image _imgPreview;       // 미리보기 이미지
 
+
+    [Header("Manual Pull-Up Settings")]
+    [SerializeField] private RectTransform _backPanelRect;    // 실질적인 팝업창
+    [SerializeField] private RectTransform _textGroupRect;    // 텍스트들을 묶어둔 오브젝트
+    [SerializeField] private float _pullUpDistance = 50f;    // 이미지가 없을 때 위로 당길 픽셀 수
+
     [Header("Buttons")]
     [SerializeField] private Button _btnSecondary;    // 취소 버튼
     [SerializeField] private TMP_Text _txtSecondary;
@@ -55,6 +61,17 @@ public class ConfirmPopup : UIPopup
         ApplyTexts(request);
         ApplyPreview(request);
         ApplyButtons(request);
+        bool hasImage = request.PreviewSprite != null;
+
+        // 이미지가 없으면 수동으로 팝업 크기를 줄이고 텍스트를 올림
+        if (!hasImage && _backPanelRect != null && _textGroupRect != null)
+        {
+            // 1. back penal 전체 세로 길이 줄이기
+            _backPanelRect.sizeDelta = new Vector2(_backPanelRect.sizeDelta.x, _backPanelRect.sizeDelta.y - _pullUpDistance);
+
+            // 2. 텍스트, 버튼 묶음을 절반만큼 위로 당기기
+            _textGroupRect.anchoredPosition = new Vector2(_textGroupRect.anchoredPosition.x, _textGroupRect.anchoredPosition.y + _pullUpDistance / 2);
+        }
     }
 
     // ConfirmPopup이 외부 요인으로 먼저 파괴될 때 구독 해제

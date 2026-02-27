@@ -26,17 +26,17 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1594099204844563303}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.125, y: 0.10309278, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1897916042676736185}
-  m_Father: {fileID: 5025116400176146855}
+  m_Father: {fileID: 4438779672270194001}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 256.1, y: -403.5554}
+  m_AnchoredPosition: {x: 32.01248, y: -41.603607}
   m_SizeDelta: {x: 195.766, y: 82.835}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5491626655162761898
@@ -146,12 +146,12 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2154581999225386255}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 0.85, z: 1}
+  m_LocalScale: {x: 1, y: 0.84999996, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 602631049893812035}
+  m_Father: {fileID: 4438779672270194001}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -283,17 +283,17 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2764898588729159904}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.125, y: 0.10309278, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3649675835273028531}
-  m_Father: {fileID: 5025116400176146855}
+  m_Father: {fileID: 4438779672270194001}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -284.5, y: -403.5554}
+  m_AnchoredPosition: {x: -35.562515, y: -41.603607}
   m_SizeDelta: {x: 130.3765, y: 82.835}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3483922427775090470
@@ -408,14 +408,12 @@ RectTransform:
   m_LocalScale: {x: 8, y: 9.7, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 4915118248950096956}
-  - {fileID: 642021862477394914}
-  - {fileID: 3945383346488417230}
+  - {fileID: 4438779672270194001}
   m_Father: {fileID: 5025116400176146855}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0.000055181, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6541311336178997910
@@ -456,6 +454,46 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!1 &6856696161308498842
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4438779672270194001}
+  m_Layer: 5
+  m_Name: TextGroup
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &4438779672270194001
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6856696161308498842}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 4915118248950096956}
+  - {fileID: 642021862477394914}
+  - {fileID: 3945383346488417230}
+  - {fileID: 969264437623132745}
+  - {fileID: 1493015958615390447}
+  m_Father: {fileID: 602631049893812035}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &6874886264912841267
 GameObject:
   m_ObjectHideFlags: 0
@@ -481,12 +519,12 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6874886264912841267}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 0.85, z: 1}
+  m_LocalScale: {x: 1, y: 0.84999996, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 602631049893812035}
+  m_Father: {fileID: 4438779672270194001}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -1023,12 +1061,12 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7893256505850327438}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 0.85, z: 1}
+  m_LocalScale: {x: 1, y: 0.84999996, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 602631049893812035}
+  m_Father: {fileID: 4438779672270194001}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -1167,8 +1205,6 @@ RectTransform:
   m_Children:
   - {fileID: 602631049893812035}
   - {fileID: 474868210238614260}
-  - {fileID: 969264437623132745}
-  - {fileID: 1493015958615390447}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -1242,6 +1278,9 @@ MonoBehaviour:
   _txtSub: {fileID: 4387824663842073557}
   _txtMessage: {fileID: 972888752505486911}
   _imgPreview: {fileID: 2131610214326238014}
+  _backPanelRect: {fileID: 602631049893812035}
+  _textGroupRect: {fileID: 4438779672270194001}
+  _pullUpDistance: 50
   _btnSecondary: {fileID: 6303972239010338143}
   _txtSecondary: {fileID: 4937959074579074949}
   _btnPrimary: {fileID: 5612330384217949691}
