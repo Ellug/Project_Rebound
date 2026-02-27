@@ -26,7 +26,8 @@ public class MatchGameUI : MonoBehaviour
 
     [Header("Match Result Panel")]
     [SerializeField] private GameObject _matchResultPanel;
-    [SerializeField] private TMP_Text _matchResultText;
+    [SerializeField] private GameObject _matchResultWinImage;
+    [SerializeField] private GameObject _matchResultLoseImage;
 
     private readonly List<string> _matchLogLines = new();
 
@@ -121,10 +122,11 @@ public class MatchGameUI : MonoBehaviour
 
     public void HideMatchGamePanel() => _matchGamePanel.SetActive(false);
 
-    // 결과 텍스트를 설정하고 결과 패널을 표시
-    public void ShowMatchResultPanel(string resultText)
+    // 승패 이미지를 설정하고 결과 패널을 표시
+    public void ShowMatchResultPanel(bool didWin)
     {
-        _matchResultText.text = resultText;
+        _matchResultWinImage.SetActive(didWin);
+        _matchResultLoseImage.SetActive(!didWin);
         _matchResultPanel.SetActive(true);
     }
 
