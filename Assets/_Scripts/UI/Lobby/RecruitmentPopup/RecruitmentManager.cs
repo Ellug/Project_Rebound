@@ -3,11 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // 학생 영입 흐름 전체 관리
-// 영입 발생 시점 2가지:
-//   1. 게임 시작 시 (TriggerInitialRecruitment 외부 호출) → 최초 선수 모집
-//   2. 입학 이벤트 시 (HandleEnrollmentTriggered / TriggerEnrollment) → 새 학기 신입생 모집
-// 흐름: ConfirmPopup(완전 범용) → 확인 시 RecruitmentPopup 열기
-//       이후 확인/취소/최대인원/합류 팝업 → ConfirmPopup
+// AlwaysEvent 기반으로 영입/졸업 이벤트를 수신하고
+// ConfirmPopup → RecruitmentPopup 흐름을 제어
 public class RecruitmentManager : MonoBehaviour
 {
     [Header("Popup Prefabs")]
@@ -17,7 +14,7 @@ public class RecruitmentManager : MonoBehaviour
     [SerializeField] private int _maxRecruitCount = 7;        // 최대 영입 가능 인원
     [SerializeField] private int _recruitCandidateCount = 10; // 영입 후보 학생 생성 수
 
-    private TurnManager _turnManager;
+    private AlwaysEventManager _alwaysEventManager;
 
     // UIManager 기준 Canvas 루트 참조
     private Transform CanvasRoot => UIManager.Instance != null
@@ -26,10 +23,15 @@ public class RecruitmentManager : MonoBehaviour
 
     public event Action<List<Student>> OnRecruitmentCompleted; // 영입 완료 콜백
 
+    // 후보 학생을 StudentManager(보유 학생)와 분리해서 관리
+    // 후보는 RecruitmentPopup에만 주입해서 UI/선택에만 사용
+    private readonly List<Student> _candidateStudents = new();
+
     void Start()
     {
-        _turnManager = FindFirstObjectByType<TurnManager>();
-        SubscribeDateEvents(); // 날짜 이벤트 연결
+        // AlwaysEventManager 탐색 후 이벤트 구독
+        _alwaysEventManager = FindFirstObjectByType<AlwaysEventManager>();
+        SubscribeDateEvents();
     }
 
     void OnDestroy()
@@ -41,7 +43,14 @@ public class RecruitmentManager : MonoBehaviour
     // 게임 시작 시 최초 영입 트리거
     public void TriggerInitialRecruitment()
     {
-        GenerateCandidateStudents();
+        // 새 게임 시작 시점에만 보유 학생 전체 초기화
+        // 입학 영입(신입생 추가)에서는 기존 보유 학생이 유지되어야 함
+        if (StudentManager.Instance != null)
+        {
+            StudentManager.Instance.ClearAllStudents(); // 새 게임 시작 시에만 전체 초기화
+        }
+
+        GenerateCandidateStudents(); // 후보 생성
         ShowRecruitmentEventConfirm(RecruitmentContext.GameStart);
     }
 
@@ -51,34 +60,53 @@ public class RecruitmentManager : MonoBehaviour
         TriggerInitialRecruitment();
     }
 
-    // 새 학기 신입생 영입 트리거
-    public void TriggerEnrollmentRecruitment()
-    {
-        GenerateCandidateStudents();
-        ShowRecruitmentEventConfirm(RecruitmentContext.NewSemester);
-    }
-
-    // DateManager 이벤트 구독
+    // AlwaysEvent 구독 처리
     private void SubscribeDateEvents()
     {
-        if (_turnManager == null) return;
+        if (_alwaysEventManager == null) return;
 
-        _turnManager.DateManager.OnEnrollmentTriggered -= HandleEnrollmentTriggered;
-        _turnManager.DateManager.OnEnrollmentTriggered += HandleEnrollmentTriggered;
+        _alwaysEventManager.OnEventActivated -= HandleAlwaysEventActivated;
+        _alwaysEventManager.OnEventActivated += HandleAlwaysEventActivated;
     }
 
+    // 이벤트 해제
     private void UnsubscribeDateEvents()
     {
-        if (_turnManager == null) return;
+        if (_alwaysEventManager == null) return;
 
-        _turnManager.DateManager.OnEnrollmentTriggered -= HandleEnrollmentTriggered;
+        _alwaysEventManager.OnEventActivated -= HandleAlwaysEventActivated;
     }
 
-    // 입학 이벤트 발생 시 자동 영입 흐름 시작
-    private void HandleEnrollmentTriggered()
+    // AlwaysEvent 활성화 시 호출
+    // roster_recruit / roster_graduate 분기 처리
+    private void HandleAlwaysEventActivated(AlwaysEventRow row)
     {
-        GenerateCandidateStudents();
-        ShowRecruitmentEventConfirm(RecruitmentContext.NewSemester);
+        if (row == null) return;
+
+        switch (row.id)
+        {
+            case "roster_recruit":
+                // 입학(신입생 영입) — 기존 보유 학생 유지
+                GenerateCandidateStudents();
+                ShowRecruitmentEventConfirm(RecruitmentContext.NewSemester);
+                break;
+
+            case "roster_graduate":
+                // 졸업 이벤트 처리
+                HandleGraduation();
+                break;
+        }
+    }
+
+    // 졸업 처리 (3학년 제거 등)
+    private void HandleGraduation()
+    {
+        if (StudentManager.Instance != null)
+        {
+            StudentManager.Instance.GraduateSeniors(); // StudentManager에 위임
+        }
+
+        Debug.Log("[RecruitmentManager] 졸업 처리 완료");
     }
 
     // 1단계: 이벤트 안내 ConfirmPopup
@@ -90,17 +118,32 @@ public class RecruitmentManager : MonoBehaviour
             return;
         }
 
+        int capacity = 8; // 팀 정원
+        int ownedCount = StudentManager.Instance != null ? StudentManager.Instance.GetStudentCount() : 0;
+        bool isFull = ownedCount >= capacity;
+
+        bool canSkip = context != RecruitmentContext.GameStart;
+
         ConfirmPopupRequest request = new ConfirmPopupRequest(
             title: "학생 영입",
             message: BuildEventMessage(context),
             primaryLabel: "확인",
             primaryAction: OpenRecruitmentPopup,
-            secondaryLabel: "포기",
-            secondaryAction: HandleRecruitmentSkipped,
+            secondaryLabel: canSkip ? "포기" : null,
+            secondaryAction: canSkip ? HandleRecruitmentSkipped : null,
             previewSprite: null
         );
 
         request.IsModal = true;
+
+        // 정원 꽉 차면 "확인" 비활성화
+        request.SetPrimaryInteractable(!isFull);
+
+        if (isFull)
+        {
+            request.SetSubMessage("현재 보유 학생이 정원으로 영입을 진행할 수 없습니다.");
+        }
+
         UIManager.Instance.ShowConfirm(request);
     }
 
@@ -120,12 +163,25 @@ public class RecruitmentManager : MonoBehaviour
             return;
         }
 
+        int ownedCount = StudentManager.Instance != null ? StudentManager.Instance.GetStudentCount() : 0;
+        int capacity = 8;
+        int remaining = Mathf.Max(0, capacity - ownedCount);
+
         RecruitmentPopup popup = Instantiate(_recruitmentPopupPrefab, canvasRoot);
-        popup.transform.SetAsLastSibling(); // 최상단 표시
-        popup.SetMaxRecruitCount(_maxRecruitCount);
+        popup.transform.SetAsLastSibling(); // 최상단 정렬
+
+        // 팝업 자체 제한 = min(설정 최대치, 남은 정원)
+        popup.SetMaxRecruitCount(Mathf.Min(_maxRecruitCount, remaining));
+
+        // 정원 정보도 넘겨서 버튼/선택을 더 명확히 제어
+        popup.SetRosterCapacity(capacity, ownedCount);
+
+        popup.SetCandidates(_candidateStudents);
+
         popup.Init();
         popup.Open();
 
+        // 이벤트 중복 방지
         popup.OnRecruitmentConfirmed -= HandleRecruitmentConfirmed;
         popup.OnRecruitmentConfirmed += HandleRecruitmentConfirmed;
 
@@ -141,38 +197,44 @@ public class RecruitmentManager : MonoBehaviour
 
         if (StudentManager.Instance != null)
         {
-            StudentManager.Instance.ClearAllStudents();
-
+            // 영입 확정 시 "추가(Add)"만 수행 (입학 때 기존 학생 유지)
+            // 기존 로직의 ClearAllStudents() 제거 (새게임 시작에서만 초기화)
             foreach (Student student in recruits)
+            {
                 StudentManager.Instance.AddStudent(student);
+            }
         }
 
         Debug.Log($"[RecruitmentManager] 영입 완료: {recruits.Count}명");
         OnRecruitmentCompleted?.Invoke(recruits);
+
+        // 후보는 한 번 쓰고 버리는 성격이므로 정리
+        _candidateStudents.Clear();
     }
 
     // 영입 포기 → 후보 초기화
     private void HandleRecruitmentSkipped()
     {
-        StudentManager.Instance?.ClearAllStudents();
+        // 포기 시에도 StudentManager(보유 학생) 건드리지 않음
+        // 후보만 폐기
+        _candidateStudents.Clear();
         Debug.Log("[RecruitmentManager] 영입 포기");
     }
 
     // 후보 생성
     private void GenerateCandidateStudents()
     {
-        if (StudentManager.Instance == null) return;
-
-        StudentFactory.ResetUsedNames();     // 이름 중복 초기화
-        StudentManager.Instance.ClearAllStudents();
+        _candidateStudents.Clear();
 
         for (int i = 0; i < _recruitCandidateCount; i++)
-            StudentManager.Instance.AddStudent(StudentFactory.CreateStudent(grade: 1));
+        {
+            // grade를 넘기지 않으면 StudentFactory 내부에서 1~3 랜덤 처리
+            _candidateStudents.Add(StudentFactory.CreateStudent());
+        }
 
         Debug.Log($"[RecruitmentManager] 영입 후보 {_recruitCandidateCount}명 생성 완료");
     }
 
-    
     // 메시지 빌드
     private static string BuildEventMessage(RecruitmentContext context)
     {
@@ -189,20 +251,9 @@ public class RecruitmentManager : MonoBehaviour
             _ => "학생 영입을 진행합니다."
         };
     }
-
-#if UNITY_EDITOR
-    // 디버그용 컨텍스트 메뉴
-    [ContextMenu("Debug - Trigger Initial Recruitment")]
-    private void DebugTriggerInitial() => TriggerInitialRecruitment();
-
-    [ContextMenu("Debug - Trigger Enrollment Recruitment")]
-    private void DebugTriggerEnrollment() => TriggerEnrollmentRecruitment();
-#endif
-}
-
-// 영입 발생 상황 구분
-public enum RecruitmentContext
-{
-    GameStart,   // 게임 시작 시 최초 영입
-    NewSemester  // 새 학기 시작 시 신입생 영입
+    public enum RecruitmentContext
+    {
+        GameStart,   // 게임 시작 시 최초 영입
+        NewSemester  // 새 학기 시작 시 신입생 영입
+    }
 }

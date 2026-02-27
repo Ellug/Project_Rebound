@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -115,7 +115,6 @@ public class GameManager : Singleton<GameManager>
         UnbindAlwaysEventManager();
 
         _turnManager = null;
-        // _eventManager = null;
         _alwaysEventManager = null;
         _lobbyUI = null;
         _tournamentResultUI = null;
@@ -132,6 +131,7 @@ public class GameManager : Singleton<GameManager>
     public void OpenLeague()
     {
         _flowData.IsLeagueOpened = true;
+        _flowData.IsLeagueHandled = false;
         Debug.Log("[GameManager] 리그가 오픈되었습니다.");
     }
 
@@ -147,65 +147,47 @@ public class GameManager : Singleton<GameManager>
         return _tournamentData.TryConsumeResult(out tournamentResultData);
     }
 
-    // 토너먼트 씬 진입 조건 확인 및 씬 전환
-    private void TryEnterTournament()
+    // AlwaysEventManager 에서 호출하는 토너먼트 진입 API
+    public bool TryEnterTournament()
     {
-        if (_isLoadingTournament || _flowData.IsLeagueHandled || _turnManager == null)
-            return;
+        if (!CanEnterTournament())
+            return false;
 
-        bool shouldEnterTournament = _flowData.IsLeagueOpened || IsTournamentDateReached();
-        if (!shouldEnterTournament)
-            return;
-
-        ShowTournamentEntryPopup();
+        EnterTournament();
+        return true;
     }
 
-    // 토너먼트 진입 확인 팝업 표시
-    private void ShowTournamentEntryPopup()
+    // 토너먼트 씬 진입 가능 여부 확인
+    private bool CanEnterTournament()
     {
-        if (UIManager.Instance == null)
+        if (_turnManager == null || _isLoadingTournament || _flowData.IsLeagueHandled)
+            return false;
+
+        if (!_flowData.IsLeagueOpened)
+            return false;
+
+        if (_flowData.LeagueTermEnd == default)
+            return false;
+
+        DateTime today = _turnManager.DateManager.CurrentDate.Date;
+        if (today > _flowData.LeagueTermEnd.Date)
         {
-            Debug.LogWarning("[GameManager] UIManager가 없어 토너먼트 확인 팝업 없이 바로 진입합니다.");
-            EnterTournament();
-            return;
+            ResetLeagueWindowState();
+            return false;
         }
 
-        var buttons = new List<PopupButtonInfo>
-        {
-            new("확인", () => { EnterTournament(); })
-        };
-
-        UIManager.Instance.ShowPopup(new PopupData(
-            title: "토너먼트",
-            content: "토너먼트에 진입하시겠습니까?",
-            buttons: buttons
-        ));
+        return true;
     }
 
     // 토너먼트 씬 진입 처리
     private void EnterTournament()
     {
-        if (_isLoadingTournament || _flowData.IsLeagueHandled || _turnManager == null)
-            return;
-
         _flowData.IsLeagueHandled = true;
         _turnManager.SetPhase(GamePhase.MatchInProgress);
         SyncFlowStateFromLobby();
 
         _isLoadingTournament = true;
         SceneManager.LoadScene(TournamentScene);
-    }
-
-    // 토너먼트 시작 날짜 도달 여부 확인 — CachedSOData를 직접 읽어 AEM 의존 없음
-    private bool IsTournamentDateReached()
-    {
-        if (_turnManager == null)
-            return false;
-
-        if (!AlwaysEventDateUtil.TryGetNextLeagueDate(_turnManager.DateManager.CurrentDate, out DateTime nextLeagueDate))
-            return false;
-
-        return _turnManager.DateManager.CurrentDate.Date >= nextLeagueDate.Date;
     }
 
     // 다음 토너먼트까지 남은 일수 계산 — CachedSOData를 직접 읽어 AEM 의존 없음
@@ -220,7 +202,7 @@ public class GameManager : Singleton<GameManager>
         return (nextLeagueDate.Date - _turnManager.DateManager.CurrentDate.Date).Days;
     }
 
-    // Lobby 씬 로드 시 턴 흐름 초기화/복원 (10단계)
+    // Lobby 씬 로드 시 턴 흐름 초기화/복원 (11단계)
     // _lobbyInitialized 플래그로 Start/OnSceneLoaded 이중 호출 방지
     private void TryInitializeLobbyFlow(Scene scene)
     {
@@ -238,14 +220,15 @@ public class GameManager : Singleton<GameManager>
 
         CacheSceneReferences();         // 1. 씬 오브젝트 참조 캐싱
         SubscribeTurnManager();         // 2. TurnManager 이벤트 구독
-        RestoreTurnManagerState();      // 3. TurnManager 상태 복원 (씬 복귀 시)
-        InitializeGameState();          // 4. GameState 생성 및 동기화
-        InitializeEventManager();       // 5. EventManager 초기화
-        SetInitialPhase();              // 6. 초기 페이즈 설정
-        HandleTournamentResult();       // 7. 토너먼트 결과 처리
-        SyncFlowStateFromLobby();       // 8. GameFlowData 동기화 (이후 HasFlowState = true)
-        RefreshLobbyTopInfo();          // 9. 로비 UI 갱신
-        TryTriggerInitialRecruitment(); // 10. 게임 시작 시 최초 영입 트리거
+        RegisterTurnModules();          // 3. TurnModule 등록 (AlwaysEffectTickModule 등)
+        RestoreTurnManagerState();      // 4. TurnManager 상태 복원 (씬 복귀 시)
+        InitializeGameState();          // 5. GameState 생성 및 동기화
+        InitializeEventManager();       // 6. EventManager 초기화
+        SetInitialPhase();              // 7. 초기 페이즈 설정
+        HandleTournamentResult();       // 8. 토너먼트 결과 처리
+        SyncFlowStateFromLobby();       // 9. GameFlowData 동기화 (이후 HasFlowState = true)
+        RefreshLobbyTopInfo();          // 10. 로비 UI 갱신
+        TryTriggerInitialRecruitment(); // 11. 게임 시작 시 최초 영입 트리거
     }
 
     // 새 게임 상태 초기화
@@ -265,7 +248,6 @@ public class GameManager : Singleton<GameManager>
     private void CacheSceneReferences()
     {
         _turnManager = FindFirstObjectByType<TurnManager>();
-        // _eventManager = FindFirstObjectByType<EventManager>();
         _alwaysEventManager = FindFirstObjectByType<AlwaysEventManager>();
         _lobbyUI = FindFirstObjectByType<LobbyUI>();
         _tournamentResultUI = FindFirstObjectByType<TournamentResultUI>(FindObjectsInactive.Include);
@@ -289,13 +271,24 @@ public class GameManager : Singleton<GameManager>
             _turnManager.OnTurnCompleted -= HandleTurnCompleted;
     }
 
+    // ITurnModule 구현체 등록 — SubscribeTurnManager() 직후 호출
+    // AlwaysEffectTickModule: 매 턴 종료 시 상시 이벤트 condition 틱 처리
+    private void RegisterTurnModules()
+    {
+        if (_turnManager == null) return;
+
+        AlwaysEffectTickModule tickModule = FindFirstObjectByType<AlwaysEffectTickModule>();
+        if (tickModule != null)
+            _turnManager.RegisterModule(tickModule);
+    }
+
     // AlwaysEventManager 이벤트 구독 해제 및 Unbind
     private void UnbindAlwaysEventManager()
     {
         if (_alwaysEventManager == null) return;
 
         _alwaysEventManager.OnEventActivated -= HandleAlwaysEventActivated;
-        _alwaysEventManager.OnEventExpired   -= HandleAlwaysEventExpired;
+        _alwaysEventManager.OnEventExpired -= HandleAlwaysEventExpired;
         _alwaysEventManager.Unbind();
     }
 
@@ -331,14 +324,11 @@ public class GameManager : Singleton<GameManager>
         if (!_flowData.HasFlowState)
             _flowData.ActiveEventIds.Clear();   // 새 게임: 활성 이벤트 초기화
 
-        // if (_eventManager != null)
-        //     _eventManager.Initialize(_gameState, resetRuntimeState: !_flowData.HasFlowState);
-
         _alwaysEventManager.Bind(_turnManager, _gameState, _flowData.ActiveEventIds);
 
         // AlwaysEventManager가 발행하는 이벤트를 GM이 구독 — AEM → GM 직접참조 제거
         _alwaysEventManager.OnEventActivated += HandleAlwaysEventActivated;
-        _alwaysEventManager.OnEventExpired   += HandleAlwaysEventExpired;
+        _alwaysEventManager.OnEventExpired += HandleAlwaysEventExpired;
     }
 
     // 초기 게임 페이즈 설정 (Init이면 DailyTraining으로 전환)
@@ -358,15 +348,19 @@ public class GameManager : Singleton<GameManager>
 
         if (_turnManager != null)
         {
-            // 토너먼트가 끝난 날은 별도 액션 없이 하루 경과 처리
+            // 저장해둔 term_end 날짜로 복원 후 한 턴 진행 -> AdvanceDay로 term_end + 1일에 이벤트 정상 발동
+            DateTime leagueTermEnd = _flowData.LeagueTermEnd;
+            if (leagueTermEnd != default)
+            {
+                int dayDelta = (int)(leagueTermEnd - _turnManager.DateManager.CurrentDate.Date).TotalDays;
+                int targetDayIndex = _turnManager.DateManager.DayIndex + dayDelta;
+                _turnManager.RestoreRuntimeState(leagueTermEnd, _turnManager.TurnIndex, targetDayIndex, _turnManager.DateManager.CurrentYear, GamePhase.DailyTraining);
+            }
             _turnManager.SetPhase(GamePhase.DailyTraining);
             _turnManager.ExecuteTurn(TurnActionType.Rest);
             _turnManager.SetPhase(GamePhase.DailyTraining);
         }
-
-        // 다음 리그 정상 처리를 위해 플래그 초기화
-        _flowData.IsLeagueOpened = false;
-        _flowData.IsLeagueHandled = false;
+        ResetLeagueWindowState();
 
         if (_tournamentResultUI != null)
             _tournamentResultUI.ShowResult(tournamentResultData);
@@ -392,25 +386,94 @@ public class GameManager : Singleton<GameManager>
 
         _gameState?.SyncState(_turnManager.DateManager.CurrentDate, _turnManager.TurnIndex);
 
-        // if (_eventManager != null)
-        //     _eventManager.CheckEvents();
-
         SyncFlowStateFromLobby();
         RefreshLobbyTopInfo();
-        TryEnterTournament();
+
+        // 금요일 종료 시 주말 분기 처리
+        if (context.IsFriday)
+            HandleFridayEnd();
+    }
+
+    // 금요일 턴 종료 후 친선경기 or 주말 훈련 팝업 분기
+    private void HandleFridayEnd()
+    {
+        if (UIManager.Instance == null)
+            return;
+
+        if (_flowData.HasPendingFriendlyMatch)
+        {
+            // 친선경기 예약 있음 : 전용 팝업
+            UIManager.Instance.ShowConfirm(new ConfirmPopupRequest(
+                title: "친선경기",
+                message: "이번 주말 친선경기가 예정되어 있습니다.\n친선경기에 진입하시겠습니까? (미구현)",
+                primaryLabel: "확인",
+                primaryAction: EnterFriendlyMatch
+            ));
+        }
+        else
+        {
+            // 친선경기 없음 : 주말 훈련 확인/취소 팝업
+            UIManager.Instance.ShowConfirm(new ConfirmPopupRequest(
+                title: "주말 훈련 제안",
+                message: "금요일 일정이 끝났습니다.\n주말 훈련을 진행하시겠습니까?",
+                subMessage: "확인: 전원 스탯 소량 상승, 주말 휴식 효율 50%\n취소: 주말 푹 쉬기 (체력 대폭 회복)",
+                primaryLabel: "확인",
+                primaryAction: OnWeekendTrainingConfirmed,
+                secondaryLabel: "취소",
+                secondaryAction: OnWeekendTrainingCancelled
+            ));
+        }
+    }
+
+    // 주말 훈련 확인 (훈련 진행)
+    private void OnWeekendTrainingConfirmed()
+    {
+        Debug.Log("[GameManager] 주말 훈련 확인");
+    }
+
+    // 주말 훈련 취소 (주말 스킵 → 월요일로)
+    private void OnWeekendTrainingCancelled()
+    {
+        if (_turnManager == null) return;
+
+        // 금요일 기준 토·일 2일 스킵 → 월요일
+        _turnManager.SkipDays(2);
+        SyncFlowStateFromLobby();
+        RefreshLobbyTopInfo();
+    }
+
+    // 친선경기 진입 처리 (추후 구현)
+    private void EnterFriendlyMatch()
+    {
+        _flowData.HasPendingFriendlyMatch = false;
+        // TODO: 친선경기 씬/흐름 연결
+        Debug.Log("[GameManager] 친선경기 진입 (미구현)");
     }
 
     // AlwaysEventManager가 이벤트 활성화를 알릴 때 호출 — row.type / row.id 기반으로 분기
     private void HandleAlwaysEventActivated(AlwaysEventRow row)
     {
         if (AlwaysEventManager.IsLeagueBreakEvent(row))
-            OpenLeague();
+        {
+            if (AlwaysEventDateUtil.TryParseTableDate(row.termEnd, out DateTime termEnd))
+            {
+                _flowData.LeagueTermEnd = termEnd.Date;
+                OpenLeague();
+            }
+            else
+            {
+                Debug.LogWarning($"[GameManager] 리그 term_end 파싱 실패로 리그 오픈을 건너뜁니다. id={row.id}, term_end={row.termEnd}");
+            }
+        }
     }
 
     // AlwaysEventManager가 이벤트 만료를 알릴 때 호출
     private void HandleAlwaysEventExpired(AlwaysEventRow row)
     {
-        // 현재는 만료 시 GM 측에서 별도 처리 없음 — 필요 시 여기서 분기
+        if (!AlwaysEventManager.IsLeagueBreakEvent(row))
+            return;
+
+        ResetLeagueWindowState();
     }
 
     // Lobby 씬의 TurnManager 상태를 GameFlowData에 동기화
@@ -438,5 +501,12 @@ public class GameManager : Singleton<GameManager>
 
         int dDay = GetTournamentDday();
         _lobbyUI.UpdateDateAndDday(_turnManager.DateManager.CurrentDate, dDay);
+    }
+
+    private void ResetLeagueWindowState()
+    {
+        _flowData.LeagueTermEnd = default;
+        _flowData.IsLeagueOpened = false;
+        _flowData.IsLeagueHandled = false;
     }
 }

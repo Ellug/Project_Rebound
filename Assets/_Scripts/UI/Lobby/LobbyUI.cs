@@ -18,12 +18,18 @@ public class LobbyUI : UIBase
     [SerializeField] private Button _btnLog;     // 로그 (기록)
     [SerializeField] private Button _btnSetting; // 설정
 
+    [Header("Panels")]
+    [SerializeField] private SettingsPanel _settingsPanelPrefab;
+
     [Header("Popups")]
     [SerializeField] private TrainingSelectPopup _trainingSelectPopup; // 씬에 배치된 훈련 선택 팝업 (직접 참조)
     [SerializeField] private StudentManagementPopup _studentManagementPopup; // 씬에 배치된 학생 관리 팝업(비활성화 상태)
 
     [Header("Center Message")]
     [SerializeField] private TMP_Text _txtMessage;
+    [Header("Messenger")]
+    [SerializeField] private Button _btnCenterMessage;                   
+    [SerializeField] private MessengerInboxPopup _messengerInboxPopup;
 
     [Header("Bottom Navigation Buttons")]
     [SerializeField] private Button _btnTraining; // 훈련 (구 일과)
@@ -54,6 +60,37 @@ public class LobbyUI : UIBase
         base.Init();
         BindEvents();
         UpdateUI(); // 초기 데이터 표시
+
+        // 중앙 메시지 창 클릭 시 메신저함 열기
+        if (_btnCenterMessage != null)
+        {
+            _btnCenterMessage.onClick.RemoveAllListeners();
+            _btnCenterMessage.onClick.AddListener(OpenMessengerInbox);
+        }
+
+        // 메신저 매니저 구독 (새 메시지가 오면 중앙 텍스트 미리보기 갱신)
+        if (MessengerManager.Instance != null)
+        {
+            MessengerManager.Instance.OnLatestMessageReceived -= UpdateMessagePreview;
+            MessengerManager.Instance.OnLatestMessageReceived += UpdateMessagePreview;
+        }
+    }
+
+    private void UpdateMessagePreview(ChatMessage latestMessage)
+    {
+        if (_txtMessage != null && latestMessage != null)
+        {
+            _txtMessage.text = $"[{latestMessage.SenderType}] {latestMessage.Content}";
+        }
+    }
+
+    private void OpenMessengerInbox()
+    {
+        if (_messengerInboxPopup == null) return;
+
+        _messengerInboxPopup.Init();
+        _messengerInboxPopup.transform.SetAsLastSibling(); // 최상단 노출
+        _messengerInboxPopup.Open(); // 내부에서 SetActive(true) 동작
     }
 
     private void BindEvents()
@@ -78,19 +115,15 @@ public class LobbyUI : UIBase
                     image: _testSprite,                     // 테스트 이미지
                     buttons: buttons
                 ));
-
-                 if (_recruitmentManager != null)
-            _recruitmentManager.TryStartRecruitment();
             });
         }
         if (_btnSetting != null)
+        {
             _btnSetting.onClick.AddListener(() =>
             {
-                UIManager.Instance.ShowPopup(new PopupData(
-                    title: "설정",
-                    content: "환경설정 기능은 준비 중입니다."
-                ));
+                UIManager.Instance.ShowUIUnique(_settingsPanelPrefab);
             });
+        }
 
         // 2. 하단 네비게이션
         if (_btnTraining != null)
@@ -112,10 +145,15 @@ public class LobbyUI : UIBase
     private void OnClickTraining()
     {
         if (_trainingSelectPopup == null)
-        {
-            Debug.LogError("[LobbyUI] _trainingSelectPopup이 null입니다!");
             return;
-        }
+
+        bool wasActive = _trainingSelectPopup.gameObject.activeSelf;
+
+        CloseAllLobbyPopups();
+
+        // 이미 열려있던 경우 → 토글로 닫기만 하고 종료
+        if (wasActive)
+            return;
 
         if (!_inited)
         {
@@ -126,8 +164,9 @@ public class LobbyUI : UIBase
         _trainingSelectPopup.OnTrainingSelected -= HandleTrainingSelected;
         _trainingSelectPopup.OnTrainingSelected += HandleTrainingSelected;
 
-        _trainingSelectPopup.Open();           // Open() 내부에서 CachedSOData 기반 페이지 빌드
-        _trainingSelectPopup.ShowPage(0, pushHistory: false);
+        _trainingSelectPopup.transform.SetAsLastSibling();
+        _trainingSelectPopup.Open();
+        _trainingSelectPopup.ShowPage(0, false);
     }
 
     // 훈련 최종 선택 시 호출
@@ -148,14 +187,14 @@ public class LobbyUI : UIBase
             return;
         }
 
-        // 이미 열려 있으면 닫기
-        if (_studentManagementPopup.gameObject.activeSelf)
-        {
-            _studentManagementPopup.Close();
-            return;
-        }
+        bool wasActive = _studentManagementPopup.gameObject.activeSelf;
 
-        // 닫혀 있으면 열기
+        CloseAllLobbyPopups();
+
+        // 이미 열려있던 경우 → 토글로 닫기만 하고 종료
+        if (wasActive)
+            return;
+
         _studentManagementPopup.Init();
         _studentManagementPopup.transform.SetAsLastSibling();
         _studentManagementPopup.Open();
@@ -208,5 +247,19 @@ public class LobbyUI : UIBase
         if (loweredKey.Contains("rest")) return TurnActionType.Rest;
 
         return TurnActionType.Training;
+    }
+
+    // 팝업창 정리 - 팝업이 동시에 열리는 것을 방지
+    private void CloseAllLobbyPopups()
+    {
+        if (_trainingSelectPopup != null && _trainingSelectPopup.gameObject.activeSelf)
+        {
+            _trainingSelectPopup.Close();
+        }
+
+        if (_studentManagementPopup != null && _studentManagementPopup.gameObject.activeSelf)
+        {
+            _studentManagementPopup.Close();
+        }
     }
 }

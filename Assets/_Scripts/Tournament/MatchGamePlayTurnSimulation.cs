@@ -1,12 +1,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-// 공방 1개 책임: 참여자 선택, 선공/공수 판정, 점수 반영, 컨디션 리스크 처리
+// 공방 1개 책임: 참여자 선택, 선공/공수 판정, 점수 반영, 컨디션 처리
 public readonly struct PlayTurnSimulationResult
 {
     public readonly IReadOnlyList<QuarterLogEntry> logs;
 
-    // 공방 1회의 로그 묶음을 결과로 저장
     public PlayTurnSimulationResult(IReadOnlyList<QuarterLogEntry> logs)
     {
         this.logs = logs;
@@ -19,94 +18,103 @@ public sealed class RandomPlayTurnSimulator
     public PlayTurnSimulationResult SimulatePlayTurn(MatchContext context, QuarterPodSession session)
     {
         List<QuarterLogEntry> logs = new(10);
-        int playTurn = session.PlayTurnCount + 1;
 
-        logs.Add(CreateNormalLog($"공방 {playTurn}: 참여자 선정 (Stub) - 학생 데이터 연동 TODO"));
+        Student myPlayer = PickRandom(context.FieldPlayers);
 
-        PrePlayTurnEvents(session, logs);
+        if (myPlayer == null)
+        {
+            logs.Add(Normal($"[{context.MySchoolName}] 출전 선수가 없어 공방을 진행할 수 없었다."));
+            return new PlayTurnSimulationResult(logs);
+        }
 
-        bool myOffense = ResolveOffenseFirst(context, logs);
+        // 3-3 나레이션: 선수 출전
+        logs.Add(Normal($"[{context.MySchoolName}] {myPlayer.studentName}이(가) 코트에 나섰다."));
 
-        // TODO(PlayTurn): 공방(공격/수비) 단위 판정은 여기에서 호출 (Step 3에서 IPlayTurnResolver로 대체)
-        bool myWin = ResolvePlayTurnWinner(myOffense, logs);
-        if (myWin)
-            session.AddMyScore(session.ScorePerPlayTurnWin);
-        else
-            session.AddOpponentScore(session.ScorePerPlayTurnWin);
+        PrePlayTurnEvents();
 
-        logs.Add(CreateNormalLog(
-            myWin
-                ? $"공방 {playTurn} 결과: 우리 팀 우세, +{session.ScorePerPlayTurnWin}점"
-                : $"공방 {playTurn} 결과: 상대 팀 우세, +{session.ScorePerPlayTurnWin}점"));
+        // 선공 판정
+        bool myOffense = ResolveOffenseFirst(myPlayer, context.OpponentStat, context.MySchoolName, context.OpponentTeamName, logs);
 
-        PostPlayTurnEvents(session, logs);
-        ApplyConditionRiskStub(context, session, logs);
+        // 공방 판정 및 득점 처리
+        ResolvePlayTurn(myPlayer, context.OpponentStat, myOffense, session, logs, context.MySchoolName, context.OpponentTeamName);
+
+        PostPlayTurnEvents();
+
+        // 3-1 스탯 가감: [SYSTEM] 소속 이름 스탯 가감치
+        int conditionLoss = Random.Range(1, 6);
+        myPlayer.condition = Mathf.Max(0, myPlayer.condition - conditionLoss);
+        logs.Add(System($"[{context.MySchoolName}] {myPlayer.studentName} 컨디션 -{conditionLoss}"));
 
         return new PlayTurnSimulationResult(logs);
     }
 
-    // 공방 시작 전에 적용할 이벤트 훅 처리
-    private static void PrePlayTurnEvents(QuarterPodSession session, List<QuarterLogEntry> logs)
+    private static void PrePlayTurnEvents()
     {
-        // TODO(Event): 동일 이벤트 효과는 중첩하지 않고 가장 높은 조건의 이벤트 1개만 적용
-        logs.Add(CreateNormalLog($"공방 전 이벤트 판정: {session.Quarter}쿼터 이벤트 훅 처리 (Stub)"));
+        // TODO(Event): 이벤트 효과 적용
     }
 
-    // 공방 종료 직후 적용할 이벤트 훅 처리
-    private static void PostPlayTurnEvents(QuarterPodSession session, List<QuarterLogEntry> logs)
+    private static void PostPlayTurnEvents()
     {
-        // TODO(Event): 동일 이벤트 효과는 중첩하지 않고 가장 높은 조건의 이벤트 1개만 적용
-        logs.Add(CreateNormalLog($"공방 후 이벤트 판정: {session.Quarter}쿼터 후처리 스텁 적용"));
+        // TODO(Event): 이벤트 후처리 적용
     }
 
-    // 속도 차이 기반으로 선공 팀 판정
-    private static bool ResolveOffenseFirst(MatchContext context, List<QuarterLogEntry> logs)
+    // 3-3 나레이션으로 선공 판정 출력
+    private static bool ResolveOffenseFirst(Student myPlayer, EnemyStatRow enemy,
+        string myTeam, string opponentTeam, List<QuarterLogEntry> logs)
     {
-        // TODO(StudentData): 학생 speed 기반 선공 판정으로 교체
-        bool myOffense = Random.value < 0.5f;
-
-        logs.Add(CreateNormalLog(
-            myOffense
-                ? $"선공 판정: 우리 {context.MySchoolName} 선공 (Stub 랜덤)"
-                : $"선공 판정: 상대 {context.OpponentTeamName} 선공 (Stub 랜덤)"));
+        bool myOffense = myPlayer.speed >= enemy.speed;
+        logs.Add(Normal(myOffense
+            ? $"[{myTeam}] {myPlayer.studentName}이(가) 빠르게 치고 나갔다."
+            : $"[{opponentTeam}] 상대가 먼저 움직임을 잡았다."));
         return myOffense;
     }
 
-    // 공격/수비 스택 기반 공방 흐름 판정
-    private static bool ResolvePlayTurnWinner(bool myOffense, List<QuarterLogEntry> logs)
+    // 공격/수비/리바운드 판정 후 득점 반영
+    private static void ResolvePlayTurn(Student myPlayer, EnemyStatRow enemy, bool myOffense,
+        QuarterPodSession session, List<QuarterLogEntry> logs,
+        string myTeam, string opponentTeam)
     {
-        // TODO(StudentData): 학생 shooting/jump/mental/condition 기반 공방 판정으로 교체
-        bool offenseSuccess = Random.value < 0.5f;
-        bool myWin = myOffense ? offenseSuccess : !offenseSuccess;
+        int attackStat  = myOffense ? myPlayer.shoot : enemy.shoot;
+        int defenseStat = myOffense ? enemy.jump     : myPlayer.jump;
+        string attackerTag  = myOffense ? $"[{myTeam}]" : $"[{opponentTeam}]";
+        string attackerName = myOffense ? myPlayer.studentName : "상대";
 
-        logs.Add(CreateNormalLog(
-            offenseSuccess
-                ? "공방 판정: 공격 성공, 득점 발생 (Stub 랜덤)"
-                : "공방 판정: 수비 성공, 득점 저지 (Stub 랜덤)"));
-        logs.Add(CreateNormalLog(
-            myWin
-                ? "공방 나레이션: 우리 팀이 흐름을 가져왔습니다."
-                : "공방 나레이션: 상대 팀이 흐름을 가져왔습니다."));
+        // 3-3 나레이션: 슛 시도
+        bool attackSuccess = (attackStat - defenseStat) > Random.Range(1, 101);
+        logs.Add(Normal(attackSuccess
+            ? $"{attackerTag} {attackerName}의 슛이 터졌다."
+            : $"{attackerTag} {attackerName}의 슛이 막혔다."));
 
-        return myWin;
+        bool myWin = myOffense;
+        if (attackSuccess)
+        {
+            logs.Add(Normal(myWin ? $"[{myTeam}] 득점에 성공했다." : $"[{opponentTeam}] 상대가 득점했다."));
+        }
+        else
+        {
+            // 리바운드 판정
+            int reboundStat = myOffense ? myPlayer.condition : enemy.condition;
+            bool reboundSuccess = reboundStat > Random.Range(1, 101);
+            logs.Add(Normal(reboundSuccess
+                ? $"{attackerTag} {attackerName}이(가) 리바운드를 잡아냈다."
+                : $"{attackerTag} {attackerName}이(가) 리바운드를 놓쳤다."));
+
+            myWin = myOffense == reboundSuccess;
+            logs.Add(Normal(myWin ? $"[{myTeam}] 득점에 성공했다." : $"[{opponentTeam}] 상대가 득점했다."));
+        }
+
+        if (myWin)
+            session.AddMyScore(session.ScorePerPlayTurnWin);
+        else
+            session.AddOpponentScore(session.ScorePerPlayTurnWin);
     }
 
-    // 공방 참여자의 컨디션 리스크를 반영하고 필요 시 교체
-    private static void ApplyConditionRiskStub(MatchContext context, QuarterPodSession session, List<QuarterLogEntry> logs)
+    private static Student PickRandom(List<Student> players)
     {
-        // TODO(StudentData): 컨디션 감소/0 교체 처리 구현 필요
-        logs.Add(CreateSystemLog($"{context.MySchoolName} / {context.OpponentTeamName} 컨디션 리스크 판정 (Stub)"));
+        if (players == null || players.Count == 0) return null;
+        return players[Random.Range(0, players.Count)];
     }
 
-    // 일반 로그 엔트리를 생성
-    private static QuarterLogEntry CreateNormalLog(string message)
-    {
-        return new QuarterLogEntry(message, isSystem: false);
-    }
-
-    // 시스템 로그 엔트리를 생성
-    private static QuarterLogEntry CreateSystemLog(string message)
-    {
-        return new QuarterLogEntry(message, isSystem: true);
-    }
+    private static QuarterLogEntry Normal(string message) => new(message, isSystem: false);
+    private static QuarterLogEntry System(string message) => new(message, isSystem: true);
 }

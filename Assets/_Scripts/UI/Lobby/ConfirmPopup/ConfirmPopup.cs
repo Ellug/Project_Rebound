@@ -22,6 +22,9 @@ public class ConfirmPopup : UIPopup
     [SerializeField] private StudentSelectPopup _studentSelectPrefab; // 학생 선택 팝업 프리팹
 
     private ConfirmPopupRequest _request; // 외부에서 전달받는 설정 데이터
+    private StudentSelectPopup _activeStudentSelectPopup; // 참조 보관용 필드 추가
+    private bool _hasInvokedConfirmAction;
+    private bool _skipConfirmOnCloseInvocation;
 
     public override void Init()
     {
@@ -45,10 +48,24 @@ public class ConfirmPopup : UIPopup
     public void Setup(ConfirmPopupRequest request)
     {
         _request = request;
+        _hasInvokedConfirmAction = false;
+        _skipConfirmOnCloseInvocation = false;
+        IsModal = request.IsModal;
 
         ApplyTexts(request);
         ApplyPreview(request);
         ApplyButtons(request);
+    }
+
+    // ConfirmPopup이 외부 요인으로 먼저 파괴될 때 구독 해제
+    private void OnDestroy()
+    {
+        if (_activeStudentSelectPopup != null)
+        {
+            _activeStudentSelectPopup.OnSelectionConfirmed -= HandleStudentsSelected;
+            _activeStudentSelectPopup.OnCancelled -= HandleStudentSelectCancelled;
+            _activeStudentSelectPopup = null;
+        }
     }
 
     // 텍스트 영역 표시/숨김 처리
@@ -99,6 +116,9 @@ public class ConfirmPopup : UIPopup
                 ? "확인"
                 : request.PrimaryLabel;
 
+        if (_btnPrimary != null)
+            _btnPrimary.interactable = request.PrimaryInteractable;
+
         bool hasSecondary = !string.IsNullOrEmpty(request.SecondaryLabel);
 
         if (_btnSecondary != null)
@@ -124,7 +144,7 @@ public class ConfirmPopup : UIPopup
             return;
         }
 
-        _request.PrimaryAction?.Invoke();
+        InvokeConfirmAction();
 
         if (_request.AutoCloseOnPrimary)
             CloseSelf();
@@ -139,10 +159,17 @@ public class ConfirmPopup : UIPopup
             return;
         }
 
+        _skipConfirmOnCloseInvocation = true;
         _request.SecondaryAction?.Invoke();
 
         if (_request.AutoCloseOnSecondary)
             CloseSelf();
+    }
+
+    public override void Close()
+    {
+        TryInvokeConfirmOnClose();
+        base.Close();
     }
 
     // 학생 선택 팝업 열기
@@ -167,6 +194,7 @@ public class ConfirmPopup : UIPopup
         Close();
 
         StudentSelectPopup popup = Instantiate(_studentSelectPrefab, transform.parent);
+        _activeStudentSelectPopup = popup; // 참조 저장
         popup.SetMaxSelectCount(_request.MaxSelectCount);
         popup.Init();
         popup.Open();
@@ -178,6 +206,7 @@ public class ConfirmPopup : UIPopup
     // 학생 선택 완료 콜백
     private void HandleStudentsSelected(List<Student> students)
     {
+        _activeStudentSelectPopup = null;
         _request.OnStudentsSelected?.Invoke(students);
 
         if (_request.AutoCloseOnPrimary)
@@ -187,6 +216,8 @@ public class ConfirmPopup : UIPopup
     // 학생 선택 취소 시 다시 열기
     private void HandleStudentSelectCancelled()
     {
+        // ConfirmPopup이 이미 파괴됐으면 무시
+        if (this == null || gameObject == null) return;
         Open();
     }
 
@@ -206,5 +237,28 @@ public class ConfirmPopup : UIPopup
 
         Close();
         Destroy(gameObject);
+    }
+
+    private void InvokeConfirmAction()
+    {
+        if (_request == null || _hasInvokedConfirmAction)
+            return;
+
+        _hasInvokedConfirmAction = true;
+        _request.PrimaryAction?.Invoke();
+    }
+
+    private void TryInvokeConfirmOnClose()
+    {
+        if (_request == null) return;
+
+        if (_skipConfirmOnCloseInvocation || !_request.InvokeConfirmOnClose || _hasInvokedConfirmAction)
+            return;
+
+        // 학생 선택이 필요한 요청은 닫힘 시 동일한 입력을 재현할 수 없어 강제 실행하지 않는다.
+        if (_request.RequiresStudentSelection)
+            return;
+
+        InvokeConfirmAction();
     }
 }

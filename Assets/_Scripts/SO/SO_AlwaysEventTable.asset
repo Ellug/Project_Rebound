@@ -13,6 +13,66 @@ MonoBehaviour:
   m_Name: SO_AlwaysEventTable
   m_EditorClassIdentifier: Assembly-CSharp::AlwaysEventTableSO
   _rows:
+  - id: roster_recruit
+    name: first_recruit
+    type: roster
+    termStart: 260302
+    termEnd: 260302
+    term: 1
+    priority: 1
+    range: 0
+    effectId: first_recruit_effect
+    description: 
+  - id: roster_recruit
+    name: second_recruit
+    type: roster
+    termStart: 260810
+    termEnd: 260810
+    term: 1
+    priority: 1
+    range: 0
+    effectId: second_recruit_effect
+    description: 
+  - id: roster_graduate
+    name: roster_graduate
+    type: roster
+    termStart: 261228
+    termEnd: 261228
+    term: 1
+    priority: 4
+    range: 0
+    effectId: graduate_effect
+    description: 
+  - id: roster_recruit
+    name: first_recruit
+    type: roster
+    termStart: 270302
+    termEnd: 270302
+    term: 1
+    priority: 1
+    range: 0
+    effectId: first_recruit_effect
+    description: 
+  - id: roster_recruit
+    name: second_recruit
+    type: roster
+    termStart: 270809
+    termEnd: 270809
+    term: 1
+    priority: 1
+    range: 0
+    effectId: second_recruit_effect
+    description: 
+  - id: roster_graduate
+    name: roster_graduate
+    type: roster
+    termStart: 271228
+    termEnd: 271228
+    term: 1
+    priority: 4
+    range: 0
+    effectId: graduate_effect
+    description: 
   - id: 1st_midexam
     name: first_midterm_exam
     type: exam
@@ -99,17 +159,6 @@ MonoBehaviour:
     range: 0
     effectId: vacation_effect
     description: 
-  - id: independence
-    name: holiday_independence
-    type: holiday
-    termStart: 260301
-    termEnd: 260302
-    term: 1
-    priority: 2
-    range: 0
-    effectId: holiday_effect
-    description: "\uC0BC\uC77C\uC808\uC774\uB2E4! \uACF5\uD734\uC77C\uB85C \uD559\uC0DD\uB4E4\uC774
-      \uC758\uC695\uC73C\uB85C \uAC00\uB4DD \uCC3C\uB2E4"
   - id: children_day
     name: holiday_children_day
     type: holiday
@@ -203,6 +252,191 @@ MonoBehaviour:
     type: holiday
     termStart: 261225
     termEnd: 261225
+    term: 1
+    priority: 2
+    range: 0
+    effectId: holiday_effect
+    description: "\uC131\uD0C4\uC808\uC774\uB2E4! \uC124\uB818 \uAC00\uB4DD\uD55C
+      \uD558\uB8E8\uB97C \uBCF4\uB0B4\uC790!"
+  - id: 1st_midexam
+    name: first_midterm_exam
+    type: exam
+    termStart: 270426
+    termEnd: 270429
+    term: 4
+    priority: 3
+    range: 0
+    effectId: exam_effect
+    description: "1\uD559\uAE30 \uC911\uAC04\uACE0\uC0AC\uB85C \uC778\uD574 \uD559\uC0DD\uB4E4\uC774
+      \uB9CE\uC774 \uC9C0\uCCD0\uD55C\uB2E4!"
+  - id: 1st_finalexam
+    name: first_final_exam
+    type: exam
+    termStart: 270628
+    termEnd: 270701
+    term: 4
+    priority: 3
+    range: 0
+    effectId: exam_effect
+    description: "1\uD559\uAE30 \uAE30\uB9D0\uACE0\uC0AC\uB85C \uC778\uD574 \uD559\uC0DD\uB4E4\uC774
+      \uB9CE\uC774 \uC9C0\uCCD0\uD55C\uB2E4!"
+  - id: 2nd_midexam
+    name: second_midterm_exam
+    type: exam
+    termStart: 270927
+    termEnd: 270930
+    term: 4
+    priority: 3
+    range: 0
+    effectId: exam_effect
+    description: "2\uD559\uAE30 \uC911\uAC04\uACE0\uC0AC\uB85C \uC778\uD574 \uD559\uC0DD\uB4E4\uC774
+      \uB9CE\uC774 \uC9C0\uCCD0\uD55C\uB2E4!"
+  - id: 2nd_finalexam
+    name: second_final_exam
+    type: exam
+    termStart: 271129
+    termEnd: 271202
+    term: 4
+    priority: 3
+    range: 0
+    effectId: exam_effect
+    description: "2\uD559\uAE30 \uAE30\uB9D0\uACE0\uC0AC\uB85C \uC778\uD574 \uD559\uC0DD\uB4E4\uC774
+      \uB9CE\uC774 \uC9C0\uCCD0\uD55C\uB2E4!"
+  - id: sports_day
+    name: festival_sports_day
+    type: festival
+    termStart: 270521
+    termEnd: 270521
+    term: 1
+    priority: 4
+    range: 0
+    effectId: festival_effect
+    description: "\uCCB4\uC721\uB300\uD68C\uAC00 \uC2DC\uC791\uD588\uB2E4! \uADF8\uB3D9\uC548\uC758
+      \uD53C\uB85C\uB97C \uD480 \uC218 \uC788\uB294 \uD558\uB8E8\uB97C \uBCF4\uB0B4\uC790!"
+  - id: school_event
+    name: festival_school
+    type: festival
+    termStart: 271008
+    termEnd: 271008
+    term: 1
+    priority: 4
+    range: 0
+    effectId: festival_effect
+    description: "\uD559\uAD50\uC81C\uAC00 \uC2DC\uC791\uD588\uB2E4! \uADF8\uB3D9\uC548\uC758
+      \uD53C\uB85C\uB97C \uD480 \uC218 \uC788\uB294 \uD558\uB8E8\uB97C \uBCF4\uB0B4\uC790!"
+  - id: summer_break
+    name: vacation_summer
+    type: vacation
+    termStart: 270709
+    termEnd: 270808
+    term: 1
+    priority: 1
+    range: 0
+    effectId: vacation_effect
+    description: 
+  - id: winter_break
+    name: vacation_winter
+    type: vacation
+    termStart: 271228
+    termEnd: 270229
+    term: 1
+    priority: 1
+    range: 0
+    effectId: vacation_effect
+    description: 
+  - id: independence
+    name: holiday_independence
+    type: holiday
+    termStart: 270301
+    termEnd: 270301
+    term: 1
+    priority: 2
+    range: 0
+    effectId: holiday_effect
+    description: "\uC0BC\uC77C\uC808\uC774\uB2E4! \uACF5\uD734\uC77C\uB85C \uD559\uC0DD\uB4E4\uC774
+      \uC758\uC695\uC73C\uB85C \uAC00\uB4DD \uCC3C\uB2E4"
+  - id: children_day
+    name: holiday_children_day
+    type: holiday
+    termStart: 270505
+    termEnd: 270505
+    term: 1
+    priority: 2
+    range: 0
+    effectId: holiday_effect
+    description: "\uC5B4\uB9B0\uC774\uB0A0\uC774\uB2E4! \uBAA8\uCC98\uB7FC\uC758
+      \uD734\uC77C, \uD559\uC0DD\uB4E4\uC774 \uB4E4\uB72C \uBD84\uC704\uAE30\uB2E4!"
+  - id: buddha_day
+    name: holiday_buddha
+    type: holiday
+    termStart: 270524
+    termEnd: 270525
+    term: 1
+    priority: 2
+    range: 0
+    effectId: holiday_effect
+    description: "\uBD80\uCC98\uB2D8 \uC624\uC2E0 \uB0A0\uC774\uB2E4! \uCC28\uBD84\uD55C
+      \uBD84\uC704\uAE30 \uC18D\uC5D0\uC11C \uD558\uB8E8\uB97C \uBCF4\uB0B4\uBCF4\uC790!"
+  - id: korean_memorial_day
+    name: holiday_memorial_day
+    type: holiday
+    termStart: 270606
+    termEnd: 270606
+    term: 1
+    priority: 2
+    range: 0
+    effectId: holiday_effect
+    description: "\uD604\uCDA9\uC77C\uC774\uB2E4! \uC7A0\uC2DC \uB9C8\uC74C\uC744
+      \uB2E4\uC7A1\uACE0 \uD558\uB8E8\uB97C \uBCF4\uB0B4\uC790!"
+  - id: liberation_day
+    name: holiday_liberation_Day
+    type: holiday
+    termStart: 270815
+    termEnd: 270816
+    term: 1
+    priority: 2
+    range: 0
+    effectId: holiday_effect
+    description: "\uAD11\uBCF5\uC808\uC774\uB2E4! \uBAA8\uB450\uAC00 \uB4E4\uB72C
+      \uBD84\uC704\uAE30 \uC18D\uC5D0\uC11C \uD65C\uAE30\uAC00 \uB118\uCE5C\uB2E4!"
+  - id: chuseok_break
+    name: holiday_chuseok
+    type: holiday
+    termStart: 270914
+    termEnd: 270916
+    term: 1
+    priority: 2
+    range: 0
+    effectId: holiday_effect
+    description: "\uCD94\uC11D \uC5F0\uD734\uB2E4! \uAC70\uB9AC\uAC00 \uBA85\uC808
+      \uBD84\uC704\uAE30\uB85C \uAC00\uB4DD \uCC3C\uB2E4!"
+  - id: foundation_day
+    name: holiday_foundation_day
+    type: holiday
+    termStart: 271003
+    termEnd: 271004
+    term: 1
+    priority: 2
+    range: 0
+    effectId: holiday_effect
+    description: "\uAC1C\uCC9C\uC808\uC774\uB2E4! \uACF5\uD734\uC77C\uB85C \uD55C\uCE35
+      \uC5EC\uC720\uB85C\uC6B4 \uBD84\uC704\uAE30\uAC00 \uD750\uB978\uB2E4!"
+  - id: hangul_day
+    name: holiday_hangul_day
+    type: holiday
+    termStart: 271009
+    termEnd: 261011
+    term: 1
+    priority: 2
+    range: 0
+    effectId: holiday_effect
+    description: "\uD55C\uAE00\uB0A0\uC774\uB2E4! \uACF5\uD734\uC77C\uB85C \uCC28\uBD84\uD55C
+      \uD558\uB8E8\uB97C \uBCF4\uB0B4\uC790!"
+  - id: christmas
+    name: holiday_christmas
+    type: holiday
+    termStart: 271225
+    termEnd: 271227
     term: 1
     priority: 2
     range: 0

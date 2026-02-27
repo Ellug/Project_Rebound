@@ -23,10 +23,13 @@ public sealed class ConfirmPopupRequest
     // Auto close flags (ConfirmPopup.cs가 이 이름으로 접근함)
     public bool AutoCloseOnPrimary = true;              // 확인 후 자동 닫기
     public bool AutoCloseOnSecondary = true;            // 취소 후 자동 닫기
+    public bool InvokeConfirmOnClose = false;           // 닫힘(ESC/X/외부 close) 시 확인 액션 실행
 
     public bool RequiresStudentSelection = false;       // 학생 선택 필요 여부
     public int MaxSelectCount = 0;                      // 최대 선택 인원
     public Action<List<Student>> OnStudentsSelected;    // 학생 선택 완료 콜백
+
+    public bool PrimaryInteractable = true; // 확인 버튼 활성/비활성
 
     // 기본 생성자 (필수 값 중심)
     public ConfirmPopupRequest(
@@ -82,6 +85,12 @@ public sealed class ConfirmPopupRequest
         return this;
     }
 
+    public ConfirmPopupRequest SetInvokeConfirmOnClose(bool invokeConfirmOnClose)
+    {
+        InvokeConfirmOnClose = invokeConfirmOnClose;
+        return this;
+    }
+
     // 학생 선택 설정 (Fluent 방식)
     public ConfirmPopupRequest SetStudentSelection(
         bool requiresStudentSelection,
@@ -91,6 +100,12 @@ public sealed class ConfirmPopupRequest
         RequiresStudentSelection = requiresStudentSelection;
         MaxSelectCount = Mathf.Max(0, maxSelectCount);
         OnStudentsSelected = onStudentsSelected;
+        return this;
+    }
+
+    public ConfirmPopupRequest SetPrimaryInteractable(bool interactable)
+    {
+        PrimaryInteractable = interactable;
         return this;
     }
 }

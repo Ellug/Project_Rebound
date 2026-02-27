@@ -5,7 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-// 학생 영입 팝업
+// 학생 영입 팝업 (후보 카드 표시/선택/확정 흐름)
 public class RecruitmentPopup : UIPopup
 {
     [Header("Scroll")]
@@ -13,30 +13,40 @@ public class RecruitmentPopup : UIPopup
 
     [Header("Header")]
     [SerializeField] private TMP_Text _txtName;               // 타이틀 (미사용 가능)
-    [SerializeField] private TMP_Text _txtSelectCount;        // 선택 인원 표시
+    [SerializeField] private TMP_Text _txtSelectCount;        // 선택 인원 표시 (현재/최대)
 
     [Header("Close")]
     [SerializeField] private Button _btnClose;                // 닫기 버튼
 
     [Header("Card")]
-    [SerializeField] private Transform _cardRoot;             // 카드 부모
+    [SerializeField] private Transform _cardRoot;             // 카드 부모 (Grid/VerticalLayout 등)
     [SerializeField] private GameObject _cardPrefab;          // 카드 프리팹
 
     [Header("Complete Button")]
-    [SerializeField] private Button _btnComplete;             // 완료 버튼
-    [SerializeField] private TMP_Text _txtComplete;
+    [SerializeField] private Button _btnComplete;             // 선택 완료 버튼
+    [SerializeField] private TMP_Text _txtComplete;           // 완료 버튼 텍스트
 
     [Header("Overlays")]
-    [SerializeField] private SelectStudentInfoPopup _studentInfoPopup; // 학생 정보 오버레이
+    [SerializeField] private SelectStudentInfoPopup _studentInfoPopup; // 학생 상세 정보 오버레이
 
-    private readonly List<GameObject> _spawnedCards = new();          // 생성된 카드 목록
-    private readonly List<Student> _selectedStudents = new();         // 선택된 학생 목록
-    private readonly Dictionary<Student, StudentCard> _cardMap = new(); // 학생-카드 매핑
+    private readonly List<GameObject> _spawnedCards = new();             // 생성된 카드 인스턴스 목록
+    private readonly List<Student> _selectedStudents = new();            // 현재 선택된 학생 목록
+    private readonly Dictionary<Student, StudentCard> _cardMap = new();  // 학생 -> 카드 매핑 (상태 갱신용)
+    private IReadOnlyList<Student> _candidates;                           // 외부에서 주입받는 영입 후보 목록
 
-    private int _maxRecruitCount = 0; // 최대 모집 가능 인원
+    private int _maxRecruitCount = 0; // 최대 모집 가능 인원 (0이면 제한 없음)
 
-    public event Action<List<Student>> OnRecruitmentConfirmed; // 영입 확정 콜백
-    public event Action OnCancelled;                            // 취소 콜백
+    public event Action<List<Student>> OnRecruitmentConfirmed; // 최종 확정 콜백 (선택 학생 스냅샷 전달)
+    public event Action OnCancelled;                            // 영입 취소(닫기) 콜백
+
+    private int _capacity = 8;
+    private int _ownedCount = 0;
+
+    // 후보 리스트 주입 (StudentManager와 분리: 후보는 Popup에서만 사용)
+    public void SetCandidates(IReadOnlyList<Student> candidates)
+    {
+        _candidates = candidates;
+    }
 
     public void SetMaxRecruitCount(int max)
     {
@@ -47,7 +57,7 @@ public class RecruitmentPopup : UIPopup
     {
         base.Init();
 
-        // 버튼 이벤트 바인딩
+        // 버튼 이벤트 바인딩 (중복 등록 방지)
         if (_btnClose != null)
         {
             _btnClose.onClick.RemoveAllListeners();
@@ -60,9 +70,11 @@ public class RecruitmentPopup : UIPopup
             _btnComplete.onClick.AddListener(HandleCompleteButton);
         }
 
+        // 내부 상태 초기화
         _selectedStudents.Clear();
         _cardMap.Clear();
 
+        // 후보 카드 생성 및 UI 갱신
         SpawnCandidateCards();
         RefreshHeader();
         RefreshCompleteButton();
@@ -71,7 +83,7 @@ public class RecruitmentPopup : UIPopup
     public override void Open()
     {
         base.Open();
-        StartCoroutine(ForceScrollTopRoutineSafe()); // 스크롤 초기화
+        StartCoroutine(ForceScrollTopRoutineSafe()); // 레이아웃 갱신 후 스크롤 최상단 고정
     }
 
     // 후보 학생 카드 생성
@@ -79,26 +91,19 @@ public class RecruitmentPopup : UIPopup
     {
         ClearCards();
 
-        if (StudentManager.Instance == null)
-        {
-            Debug.LogWarning("[RecruitmentPopup] StudentManager가 없습니다.");
-            return;
-        }
-
-        IReadOnlyList<Student> students = StudentManager.Instance.Students;
-        if (students == null || students.Count == 0)
+        if (_candidates == null || _candidates.Count == 0)
         {
             Debug.LogWarning("[RecruitmentPopup] 영입 후보 학생이 없습니다.");
             return;
         }
 
-        foreach (Student student in students)
+        foreach (Student student in _candidates)
         {
             CreateCandidateCard(student);
         }
     }
 
-    // 카드 1개 생성
+    // 카드 1개 생성 및 클릭 이벤트 연결
     private void CreateCandidateCard(Student student)
     {
         if (_cardPrefab == null) return;
@@ -111,6 +116,7 @@ public class RecruitmentPopup : UIPopup
             studentCard.SetStudentData(student);
             studentCard.SetViewState(StudentCard.CardViewState.Normal);
 
+            // 람다 캡처 안전 처리
             Student captured = student;
             studentCard.OnCardClicked += card => HandleCardClicked(captured, card);
 
@@ -121,31 +127,39 @@ public class RecruitmentPopup : UIPopup
         _spawnedCards.Add(cardObj);
     }
 
-    // 카드 클릭 처리
+    // 카드 클릭 처리: 정보 팝업 오픈 (선택은 정보 팝업 내 버튼에서 처리)
     private void HandleCardClicked(Student student, StudentCard card)
     {
         if (student == null || card == null) return;
 
-        // 이미 선택된 경우 → 취소 확인 팝업
+        // 이미 선택된 경우 → 정보 팝업 열고 취소 확인 버튼 연결
         if (_selectedStudents.Contains(student))
         {
-            ShowUnselectConfirmPopup(student, card);
+            ShowStudentInfoPopup(student, isSelected: true);
             return;
         }
 
-        // 최대 인원 초과 방지
+        // 정원 꽉 차면 추가 선택 불가
+        if (!CanSelectMore())
+        {
+            ShowMaxReachedPopup();
+            return;
+        }
+
+        // 팝업 내 최대 모집 인원 제한(설정값)도 같이 체크
         if (IsMaxReached())
         {
             ShowMaxReachedPopup();
             return;
         }
 
-        SelectStudent(student, card);
-        ShowSelectStudentPopup(student); // 정보 오버레이 표시
+        // 선택하지 않고 정보 팝업만 열고, 선택 버튼 연결
+        ShowStudentInfoPopup(student, isSelected: false);
     }
 
     // 학생 정보 팝업 표시
-    private void ShowSelectStudentPopup(Student student)
+    // isSelected: true → "영입 취소" 버튼 / false → "학생 선택" 버튼
+    private void ShowStudentInfoPopup(Student student, bool isSelected)
     {
         if (_studentInfoPopup == null)
         {
@@ -153,13 +167,35 @@ public class RecruitmentPopup : UIPopup
             return;
         }
 
+        Sprite portrait = null;
+        if (_cardMap.TryGetValue(student, out StudentCard card) && card != null)
+            portrait = card.GetPortraitSprite();
+
         _studentInfoPopup.Init();
-        _studentInfoPopup.Setup("선택한 학생", student, null);
+        _studentInfoPopup.Setup("학생 정보", student, portrait);
         _studentInfoPopup.transform.SetAsLastSibling();
-        _studentInfoPopup.Open();
+
+        if (isSelected)
+        {
+            // 이미 선택된 학생 → 선택 버튼을 "영입 취소" 흐름으로 연결
+            _studentInfoPopup.SetSelectAction(() => ShowUnselectConfirmPopup(student, card));
+        }
+        else
+        {
+            // 미선택 학생 → 선택 버튼 클릭 시 선택 처리 + 팝업 닫기
+            _studentInfoPopup.SetSelectAction(() =>
+            {
+                SelectStudent(student, card);
+                CloseStudentInfoPopup();
+            });
+        }
+
+        // 이미 열려있으면 슬라이드 없이 데이터만 갱신, 닫혀있으면 슬라이드 인
+        if (!_studentInfoPopup.gameObject.activeSelf)
+            _studentInfoPopup.Open();
     }
 
-    // 학생 선택 처리
+    // 학생 선택 처리 (카드 상태 변경 + UI 갱신)
     private void SelectStudent(Student student, StudentCard card)
     {
         if (_selectedStudents.Contains(student))
@@ -183,7 +219,12 @@ public class RecruitmentPopup : UIPopup
             buttons: new List<PopupButtonInfo>
             {
                 new PopupButtonInfo("취소", null),
-                new PopupButtonInfo("확인", () => UnselectStudent(student, card))
+                // 확인 시 선택 취소 후 정보 팝업도 슬라이드 아웃으로 닫기
+                new PopupButtonInfo("확인", () =>
+                {
+                    UnselectStudent(student, card);
+                    CloseStudentInfoPopup();
+                })
             }
         ));
     }
@@ -199,6 +240,13 @@ public class RecruitmentPopup : UIPopup
 
         RefreshHeader();
         RefreshCompleteButton();
+    }
+
+    // 학생 정보 팝업 슬라이드 아웃으로 닫기
+    private void CloseStudentInfoPopup()
+    {
+        if (_studentInfoPopup != null && _studentInfoPopup.gameObject.activeSelf)
+            _studentInfoPopup.Close();
     }
 
     // 최대 모집 인원 도달 여부
@@ -222,23 +270,17 @@ public class RecruitmentPopup : UIPopup
         ));
     }
 
-    // 영입 완료 버튼 클릭
+    // 영입 완료 버튼 클릭 → 최종 확정 팝업으로 진행
     private void HandleCompleteButton()
     {
         if (_selectedStudents.Count == 0) return;
         if (UIManager.Instance == null) return;
 
+        // 콜백 전달용 스냅샷 (리스트 변경 방지)
         List<Student> snapshot = new(_selectedStudents);
 
-        UIManager.Instance.ShowPopup(new PopupData(
-            title: "학생 영입",
-            content: $"선택한 학생 {snapshot.Count}명을 영입하시겠습니까?",
-            buttons: new List<PopupButtonInfo>
-            {
-                new PopupButtonInfo("포기", null),
-                new PopupButtonInfo("확인", () => ShowJoinCompletePopup(snapshot))
-            }
-        ));
+        // 영입 완료 팝업
+        ShowJoinCompletePopup(snapshot);
     }
 
     // 최종 영입 완료 팝업
@@ -260,7 +302,7 @@ public class RecruitmentPopup : UIPopup
         ));
     }
 
-    // 닫기 버튼 처리
+    // 닫기 버튼 처리 (영입 종료 확인)
     private void HandleCloseButton()
     {
         if (UIManager.Instance == null) return;
@@ -295,28 +337,45 @@ public class RecruitmentPopup : UIPopup
         }
     }
 
-    // 완료 버튼 표시 상태 갱신
+    // 완료 버튼 표시 상태 갱신 (선택이 있을 때만 노출)
     private void RefreshCompleteButton()
     {
         bool hasSelection = _selectedStudents.Count > 0;
+        // 5명 이상이어야 영입 확정 가능
+        bool meetsMinimum = _selectedStudents.Count >= 5;
+        bool rosterFull = GetRemainingCapacity() <= 0;
+        // 최대 선택 가능 인원을 모두 채운 경우 (남은 정원 = 선택 인원) → 5명 미만이어도 버튼 표시
+        bool filledMaxAvailable = _maxRecruitCount > 0 && _selectedStudents.Count >= _maxRecruitCount;
+
+        // 버튼 표시 조건: (5명 이상 OR 선택 가능 최대치를 채움) AND 정원 초과 아님
+        bool showButton = hasSelection && (meetsMinimum || filledMaxAvailable) && !rosterFull;
 
         if (_btnComplete != null)
-            _btnComplete.gameObject.SetActive(hasSelection);
-
-        if (_txtComplete != null && hasSelection)
         {
-            _txtComplete.text = _maxRecruitCount > 0
-                ? $"선택 완료 ({_selectedStudents.Count}/{_maxRecruitCount})"
-                : $"선택 완료 ({_selectedStudents.Count}명)";
+            _btnComplete.gameObject.SetActive(showButton);
+        }
+
+        if (_txtComplete != null && showButton)
+        {
+            if (_maxRecruitCount > 0)
+            {
+                _txtComplete.text = $"선택 완료 ({_selectedStudents.Count}/{_maxRecruitCount})";
+            }
+            else
+            {
+                _txtComplete.text = $"선택 완료 ({_selectedStudents.Count}명)";
+            }
         }
     }
 
     // 팝업 종료 및 정리
     private void CloseAndDestroy()
     {
+        // 외부 구독 해제 (재사용/중복 호출 방지)
         OnRecruitmentConfirmed = null;
         OnCancelled = null;
 
+        // 내부 상태 초기화
         _selectedStudents.Clear();
         _cardMap.Clear();
 
@@ -335,7 +394,7 @@ public class RecruitmentPopup : UIPopup
         _spawnedCards.Clear();
     }
 
-    // 안전한 스크롤 초기화
+    // 안전한 스크롤 초기화 (레이아웃 갱신 타이밍 문제 대응)
     private IEnumerator ForceScrollTopRoutineSafe()
     {
         yield return null;
@@ -361,5 +420,22 @@ public class RecruitmentPopup : UIPopup
         _scrollRect.StopMovement();
         _scrollRect.verticalNormalizedPosition = 1f;
         _scrollRect.velocity = Vector2.zero;
+    }
+
+    public void SetRosterCapacity(int capacity, int ownedCount)
+    {
+        _capacity = Mathf.Max(0, capacity);
+        _ownedCount = Mathf.Max(0, ownedCount);
+    }
+
+    private int GetRemainingCapacity()
+    {
+        return Mathf.Max(0, _capacity - _ownedCount);
+    }
+
+    private bool CanSelectMore()
+    {
+        // 보유 + 선택 < 정원 이어야 추가 선택 가능
+        return (_ownedCount + _selectedStudents.Count) < _capacity;
     }
 }

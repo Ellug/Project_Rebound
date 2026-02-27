@@ -22,6 +22,7 @@ public class TournamentManager : MonoBehaviour
     private int _currentRoundIndex;
     private bool _isWaitingForResultNext;            // 결과 패널 표시 중 다음 버튼 중복 클릭 방지
     private int _mySchoolReachedRoundTeamCount;      // 토너먼트 종료 시 로비에 전달할 성적 (팀 수 기준)
+    private bool _mySchoolDefeatedThisMatch;       // 직전 우리 학교 경기에서 탈락했는지 여부
 
     // 매치업 데이터
     private class Matchup
@@ -55,6 +56,7 @@ public class TournamentManager : MonoBehaviour
         _currentRoundIndex = 0;
         _isWaitingForResultNext = false;
         _mySchoolReachedRoundTeamCount = _teamCount;
+        _mySchoolDefeatedThisMatch = false;
 
         // 첫 라운드 매치업 생성 (32강)
         List<Matchup> firstRound = new();
@@ -298,6 +300,14 @@ public class TournamentManager : MonoBehaviour
         _isWaitingForResultNext = false;
         _matchGameUi.HideMatchResultPanel();
 
+        // 우리 학교가 직전 경기에서 패배한 경우에만 토너먼트 종료
+        if (_mySchoolDefeatedThisMatch)
+        {
+            GameManager.Instance.SetPendingTournamentResult(string.Empty, _mySchoolReachedRoundTeamCount);
+            SceneManager.LoadScene(LobbyScene);
+            return;
+        }
+
         if (IsCurrentRoundComplete())
             AdvanceToNextRound();
     }
@@ -313,6 +323,7 @@ public class TournamentManager : MonoBehaviour
         _matchGameManager.AbortCurrentMatch();
 
         UpdateMySchoolTournamentProgress(didWin);
+        _mySchoolDefeatedThisMatch = !didWin;
 
         _matchGameUi.HideMatchGamePanel();
         _matchGameUi.ShowMatchResultPanel(didWin ? "승리!" : "패배...");

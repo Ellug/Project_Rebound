@@ -1,19 +1,64 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using AYellowpaper.SerializedCollections;
 using UnityEngine;
 
 public class StudentManager : Singleton<StudentManager>
 {
     [SerializeField] private List<Student> _students = new();
 
+    // 슬롯 배치 정보: 슬롯 인덱스 -> 학생
+    [SerializeField, SerializedDictionary("슬롯 인덱스", "학생")]
+    private SerializedDictionary<int, Student> _slotAssignments = new();
+
     public event Action<List<Student>> OnStudentsChanged;
     public event Action<Student> OnStudentAdded;
     public event Action<Student> OnStudentRemoved;
     public event Action<Student> OnStudentModified;
+    public event Action<SerializedDictionary<int, Student>> OnSlotAssignmentsChanged;
 
     public List<Student> Students => _students; // 얘는 영입 완료해서 보유한 학생.
     public int GetStudentCount() => _students.Count;
+
+    // 슬롯 배치
+
+    // 슬롯에 학생 배치 저장
+    public void AssignSlot(int slotIndex, Student student)
+    {
+        if (student == null)
+        {
+            ClearSlot(slotIndex);
+            return;
+        }
+
+        _slotAssignments[slotIndex] = student;
+        OnSlotAssignmentsChanged?.Invoke(_slotAssignments);
+    }
+
+    // 슬롯 배치 해제
+    public void ClearSlot(int slotIndex)
+    {
+        if (!_slotAssignments.ContainsKey(slotIndex))
+            return;
+
+        _slotAssignments.Remove(slotIndex);
+        OnSlotAssignmentsChanged?.Invoke(_slotAssignments);
+        Debug.Log($"[StudentManager] 슬롯 {slotIndex} 배치 해제.");
+    }
+
+    // 특정 슬롯의 배치된 학생 반환 (없으면 null)
+    public Student GetAssignedStudent(int slotIndex)
+    {
+        _slotAssignments.TryGetValue(slotIndex, out Student student);
+        return student;
+    }
+
+    // 배치된 학생이 있는지 여부
+    public bool IsSlotAssigned(int slotIndex) => _slotAssignments.ContainsKey(slotIndex);
+
+    // 전체 슬롯 배치 정보 반환
+    public IReadOnlyDictionary<int, Student> SlotAssignments => _slotAssignments;
 
 
     protected override void OnSingletonAwake()
@@ -71,6 +116,21 @@ public class StudentManager : Singleton<StudentManager>
         return true;
     }
 
+    public void GraduateSeniors()
+    {
+        var seniors = _students.Where(s => s.grade == 3).ToList();
+
+        foreach (var student in seniors)
+        {
+            _students.Remove(student);
+            OnStudentRemoved?.Invoke(student);
+        }
+
+        OnStudentsChanged?.Invoke(_students);
+        Debug.Log($"[StudentManager] 졸업 처리 완료: {seniors.Count}명 제거");
+    }
+
+
     // 모든 학생 삭제
     public void ClearAllStudents()
     {
@@ -100,9 +160,11 @@ public class StudentManager : Singleton<StudentManager>
         OnStudentAdded = null;
         OnStudentRemoved = null;
         OnStudentModified = null;
+        OnSlotAssignmentsChanged = null;
 
         // 데이터 초기화
         _students.Clear();
+        _slotAssignments.Clear();
 
         // StudentFactory 초기화
         StudentFactory.ResetUsedNames();

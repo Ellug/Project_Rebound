@@ -73,12 +73,12 @@ public static class GrowthCommandTableCsvImporter
                 facilityLv = CsvImportUtil.ReadInt(cells, col, "facility_lv", 1),
                 target = ReadTarget(CsvImportUtil.ReadString(cells, col, "target")),
 
-                hpCost = CsvImportUtil.ReadInt(cells, col, "hp_cost", 0),
+                conditionCost = CsvImportUtil.ReadInt(cells, col, "condition_cost", 0),
                 mental = CsvImportUtil.ReadInt(cells, col, "mental", 0),
 
                 shoot = CsvImportUtil.ReadFloat(cells, col, "shoot", 0f),
                 speed = CsvImportUtil.ReadFloat(cells, col, "speed", 0f),
-                defense = CsvImportUtil.ReadFloat(cells, col, "defense", 0f),
+                jump = CsvImportUtil.ReadFloat(cells, col, "jump", 0f),
                 stamina = CsvImportUtil.ReadFloat(cells, col, "stamina", 0f),
 
                 linkedEventId = CsvImportUtil.ReadInt(cells, col, "linked_event_id", 0),

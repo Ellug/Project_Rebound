@@ -249,4 +249,72 @@ public class UIManager : Singleton<UIManager>
 
         _uiStack.Push(popupInstance);
     }
+
+    
+    public T ShowUI<T>(T uiPrefab) where T : UIBase
+    {
+        if (uiPrefab == null)
+        {
+            Debug.LogError("[UIManager] ShowUI 실패: prefab이 null입니다.");
+            return null;
+        }
+
+        if (!EnsureCanvasRoot())
+            return null;
+
+        T instance = Instantiate(uiPrefab, _canvasRoot, false);
+        instance.transform.SetAsLastSibling();
+
+        instance.Init();
+        instance.Open();
+
+        _uiStack.Push(instance);
+        return instance;
+    }
+    // 중복 생성 감지용
+    public T ShowUIUnique<T>(T uiPrefab) where T : UIBase
+    {
+        foreach (var item in _uiStack)
+        {
+            if (item is T existing && existing != null)
+            {
+                existing.transform.SetAsLastSibling();
+                return existing;
+            }
+        }
+
+        return ShowUI(uiPrefab);
+    }
+
+
+    private System.Collections.Generic.Stack<UIBase> _messengerStack = new System.Collections.Generic.Stack<UIBase>();
+
+    // 창이 열릴 때 스택에 넣기
+    public void PushMessenger(UIBase ui)
+    {
+        _messengerStack.Push(ui);
+    }
+
+    // 창이 닫힐 때 스택에서 빼기
+    public void PopMessenger(UIBase ui)
+    {
+        if (_messengerStack.Count > 0 && _messengerStack.Peek() == ui)
+        {
+            _messengerStack.Pop();
+        }
+    }
+
+    // 뒤로가기 키 입력 감지 
+    private void Update()
+    {
+        if (Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame)
+        {
+            // 열려있는 메신저 창이 있다면, 가장 위에 있는 창 닫기
+            if (_messengerStack.Count > 0)
+            {
+                _messengerStack.Peek().Close();
+                return;
+            }
+        }
+    }
 }
