@@ -4,6 +4,7 @@ using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
 
 // 학생 상세 정보 오버레이 팝업
 public class SelectStudentInfoPopup : UIBase
@@ -33,11 +34,13 @@ public class SelectStudentInfoPopup : UIBase
     [Header("Slide Animation")]
     [SerializeField] private RectTransform _panelRoot;                // 실제로 움직일 루트(패널)
     [SerializeField] private float _hiddenOffsetY = -600f;            // 아래로 숨길 거리(픽셀)
-    [SerializeField] private bool _disableRaycastWhileTween = true;   // 애니메이션 중 입력 차단(선택)
+    [SerializeField] private bool _disableRaycastWhileTween = true;   // 애니메이션 중 입력 차단
 
-    //위아래로 슬라이드 되는 애니메이션 설정
+    // 위아래로 슬라이드 되는 애니메이션 설정
     [SerializeField] private float _slideInDuration = 0.2f;
     [SerializeField] private float _slideOutDuration = 0.28f;
+    [SerializeField] private Ease _slideInEase = Ease.OutCubic;       // 슬라이드 인 이징
+    [SerializeField] private Ease _slideOutEase = Ease.InCubic;       // 슬라이드 아웃 이징
 
     private readonly List<SelectStudentStatRow> _spawnedRows = new(); // 생성된 스탯 행
     private bool _isInited;
@@ -45,7 +48,7 @@ public class SelectStudentInfoPopup : UIBase
     private Vector2 _shownPos;
     private Vector2 _hiddenPos;
 
-    private Coroutine _slideRoutine;
+    private Tweener _slideTween;  // 현재 진행 중인 슬라이드 Tween
     private CanvasGroup _canvasGroup;
 
     private void Awake()
@@ -70,14 +73,13 @@ public class SelectStudentInfoPopup : UIBase
             _panelRoot = GetComponent<RectTransform>();
 
         // "표시 위치"는 에디터에서 잡힌 현재 위치
-        // ImgPanel처럼 자식 오브젝트가 Panel Root인 경우 해당 자식의 anchoredPosition 기준
         _shownPos = _panelRoot.anchoredPosition;
         _hiddenPos = _shownPos + new Vector2(0f, _hiddenOffsetY);
 
         // 초기에는 숨김 위치로 이동 (비활성 상태에서 위치 선설정)
         _panelRoot.anchoredPosition = _hiddenPos;
 
-        // 입력 차단용(선택)
+        // 입력 차단용 (선택)
         if (_disableRaycastWhileTween)
         {
             _canvasGroup = GetComponent<CanvasGroup>();
@@ -102,7 +104,7 @@ public class SelectStudentInfoPopup : UIBase
             Debug.LogWarning("[SelectStudentInfoPopup] _btnClose가 연결되지 않았습니다.");
         }
 
-        // [수정] Init에서 버튼 숨기지 않음 → SetSelectAction에서만 제어
+        // Init에서 버튼 숨기지 않음 → SetSelectAction에서만 제어
         // (Init은 최초 1회만 실행되므로 여기서 끄면 이후 SetSelectAction이 호출돼도
         //  Active 상태가 보장되지 않는 문제 방지)
     }
@@ -138,7 +140,7 @@ public class SelectStudentInfoPopup : UIBase
         _panelRoot.anchoredPosition = _hiddenPos;
 
         // 슬라이드 인
-        StartSlide(_hiddenPos, _shownPos, _slideInDuration, null);
+        PlaySlide(_shownPos, _slideInDuration, _slideInEase, null);
     }
 
     public override void Close()
@@ -146,11 +148,10 @@ public class SelectStudentInfoPopup : UIBase
         if (!gameObject.activeSelf)
             return;
 
-        // 슬라이드 아웃 -> 끝나면 비활성
-        // ImgPanel(_panelRoot)을 _shownPos → _hiddenPos로 슬라이드
-        StartSlide(_shownPos, _hiddenPos, _slideOutDuration, () =>
+        // 슬라이드 아웃 → 끝나면 비활성
+        PlaySlide(_hiddenPos, _slideOutDuration, _slideOutEase, () =>
         {
-            // 다음 Open을 위해 ImgPanel 위치 초기화
+            // 다음 Open을 위해 Panel 위치 초기화
             _panelRoot.anchoredPosition = _hiddenPos;
             gameObject.SetActive(false);
         });
@@ -168,7 +169,7 @@ public class SelectStudentInfoPopup : UIBase
         BuildStatList(student);
     }
 
-    // [추가] 학생 선택 버튼 액션 주입 (영입 팝업에서 호출)
+    // 학생 선택 버튼 액션 주입 (영입 팝업에서 호출)
     // action이 null이면 버튼 숨김, 아니면 버튼 표시 후 클릭 시 action 실행
     public void SetSelectAction(Action action)
     {
@@ -195,48 +196,42 @@ public class SelectStudentInfoPopup : UIBase
         Close(); // 내려가며 닫힘
     }
 
-    private void StartSlide(Vector2 from, Vector2 to, float duration, System.Action onComplete)
+    // DoTween 기반 슬라이드 실행
+    // 진행 중인 Tween이 있으면 즉시 Kill 후 새로 시작
+    private void PlaySlide(Vector2 targetPos, float duration, Ease ease, Action onComplete)
     {
-        if (_slideRoutine != null)
-            StopCoroutine(_slideRoutine);
+        // 기존 Tween 즉시 중단
+        _slideTween?.Kill();
 
-        _slideRoutine = StartCoroutine(CoSlide(from, to, duration, onComplete));
+        // 입력 차단 시작
+        SetRaycastBlock(false);
+
+        _slideTween = _panelRoot
+            .DOAnchorPos(targetPos, duration)
+            .SetEase(ease)
+            .SetUpdate(true) // TimeScale 영향 제외 (unscaledDeltaTime 대응)
+            .OnComplete(() =>
+            {
+                // 입력 차단 해제
+                SetRaycastBlock(true);
+                _slideTween = null;
+                onComplete?.Invoke();
+            });
     }
 
-    private IEnumerator CoSlide(Vector2 from, Vector2 to, float duration, System.Action onComplete)
+    // CanvasGroup 기반 입력 차단 On/Off
+    private void SetRaycastBlock(bool allow)
     {
-        if (_canvasGroup != null)
-        {
-            _canvasGroup.blocksRaycasts = false;
-            _canvasGroup.interactable = false;
-        }
+        if (_canvasGroup == null) return;
 
-        float t = 0f;
-        while (t < duration)
-        {
-            t += Time.unscaledDeltaTime;
-            float p = duration <= 0f ? 1f : Mathf.Clamp01(t / duration);
+        _canvasGroup.blocksRaycasts = allow;
+        _canvasGroup.interactable = allow;
+    }
 
-            // ease-out cubic
-            float eased = 1f - Mathf.Pow(1f - p, 3f);
-
-            if (_panelRoot != null)
-                _panelRoot.anchoredPosition = Vector2.LerpUnclamped(from, to, eased);
-
-            yield return null;
-        }
-
-        if (_panelRoot != null)
-            _panelRoot.anchoredPosition = to;
-
-        if (_canvasGroup != null)
-        {
-            _canvasGroup.blocksRaycasts = true;
-            _canvasGroup.interactable = true;
-        }
-
-        _slideRoutine = null;
-        onComplete?.Invoke();
+    private void OnDestroy()
+    {
+        // 오브젝트 파괴 시 Tween 정리
+        _slideTween?.Kill();
     }
 
     // 초상화 적용

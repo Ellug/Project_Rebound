@@ -28,7 +28,7 @@ public class LobbyUI : UIBase
     [Header("Center Message")]
     [SerializeField] private TMP_Text _txtMessage;
     [Header("Messenger")]
-    [SerializeField] private Button _btnCenterMessage;                   
+    [SerializeField] private Button _btnCenterMessage;
     [SerializeField] private MessengerInboxPopup _messengerInboxPopup;
 
     [Header("Bottom Navigation Buttons")]
@@ -252,6 +252,45 @@ public class LobbyUI : UIBase
     {
         if (_txtMessage)
             _txtMessage.text = message;
+    }
+
+    // GameManager 슬롯 자동 배치 시 필드 슬롯 목록 제공
+    public List<StudentSlot> GetFieldSlots()
+    {
+        return _studentManagementPopup != null
+            ? _studentManagementPopup.GetFieldSlots()
+            : null;
+    }
+
+    // 일반 학생 관리 팝업 오픈 (GameManager 자동 배치 복원 후 호출 등)
+    public void OpenStudentManagementPopup()
+    {
+        if (_studentManagementPopup == null) return;
+
+        bool wasActive = _studentManagementPopup.gameObject.activeSelf;
+
+        CloseAllLobbyPopups();
+
+        // 이미 열려있던 경우 → 토글로 닫기만 하고 종료
+        if (wasActive)
+            return;
+
+        _studentManagementPopup.Init();
+        _studentManagementPopup.transform.SetAsLastSibling();
+        _studentManagementPopup.Open();
+    }
+
+    // 토너먼트 진입 흐름용 — 학생 관리 팝업을 열고 토너먼트 시작 콜백 주입
+    public void OpenStudentManagementPopupForTournament(Action onTournamentStart)
+    {
+        if (_studentManagementPopup == null) return;
+
+        CloseAllLobbyPopups();
+
+        _studentManagementPopup.Init();
+        _studentManagementPopup.SetTournamentStartCallback(onTournamentStart);
+        _studentManagementPopup.transform.SetAsLastSibling();
+        _studentManagementPopup.Open();
     }
 
     private static TurnActionType MapTrainingKeyToAction(string trainingKey)
