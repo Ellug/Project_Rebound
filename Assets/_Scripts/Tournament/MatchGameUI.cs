@@ -96,7 +96,7 @@ public class MatchGameUI : MonoBehaviour
     // 로그 한 줄 추가 후 스크롤을 최하단으로 이동
     public void AppendMatchLog(string logLine)
     {
-        if (string.IsNullOrWhiteSpace(logLine))
+        if (logLine == null)
             return;
 
         _matchLogLines.Add(logLine);
