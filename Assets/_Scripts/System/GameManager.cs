@@ -9,8 +9,6 @@ public class GameManager : Singleton<GameManager>
     private const string TournamentScene = "Tournament";
     private const string TitleScene = "Title";
 
-    private const int RequiredSlotCount = 5; // 토너먼트 진입 최소 출전 인원
-
     private TurnManager _turnManager;               // Lobby 씬의 TurnManager (씬별 런타임 참조)
     // private EventManager _eventManager;             // Lobby 씬의 EventManager
     private AlwaysEventManager _alwaysEventManager; // Lobby 씬의 AlwaysEventManager
@@ -186,38 +184,15 @@ public class GameManager : Singleton<GameManager>
     }
 
     // 토너먼트 씬 진입 처리
-    // 배치 인원 검증 → 부족 시 경고 팝업, 충족 시 씬 전환
+    // 학생 관리 팝업을 열고, 팝업 내 배치 완료 버튼으로 씬 전환
     private void EnterTournament()
     {
-        int assignedCount = StudentManager.Instance?.SlotAssignments.Count ?? 0;
+        if (_lobbyUI == null) return;
 
-        if (assignedCount < RequiredSlotCount)
-        {
-            ShowSlotWarningAndOpenManagement(assignedCount);
-            return; // 씬 전환 보류
-        }
-
-        ProceedToTournament();
+        // 학생 관리 팝업에 토너먼트 진입 콜백 주입 후 오픈
+        _lobbyUI.OpenStudentManagementPopupForTournament(ProceedToTournament);
     }
 
-    // 배치 부족 시 경고 팝업 표시 → 확인 시 학생 관리 팝업 오픈
-    private void ShowSlotWarningAndOpenManagement(int assignedCount)
-    {
-        if (UIManager.Instance == null) return;
-
-        UIManager.Instance.ShowPopup(new PopupData(
-            title: "출전 학생 배치 확인",
-            content: $"출전 슬롯에 배치된 학생이 {assignedCount}명입니다.\n" +
-                     $"토너먼트 진입을 위해 최소 {RequiredSlotCount}명을 배치해 주세요.",
-            buttons: new List<PopupButtonInfo>
-            {
-                new PopupButtonInfo("확인", () =>
-                {
-                    _lobbyUI?.OpenStudentManagementPopup();
-                })
-            }
-        ));
-    }
 
     // 실제 토너먼트 씬 전환 처리
     private void ProceedToTournament()

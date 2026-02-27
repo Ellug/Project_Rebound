@@ -244,7 +244,7 @@ public class LobbyUI : UIBase
             : null;
     }
 
-    // 토너먼트 배치 경고 팝업에서 확인 시 학생 관리 팝업 오픈
+    // 일반 학생 관리 팝업 오픈 (GameManager 자동 배치 복원 후 호출 등)
     public void OpenStudentManagementPopup()
     {
         if (_studentManagementPopup == null) return;
@@ -258,6 +258,19 @@ public class LobbyUI : UIBase
             return;
 
         _studentManagementPopup.Init();
+        _studentManagementPopup.transform.SetAsLastSibling();
+        _studentManagementPopup.Open();
+    }
+
+    // 토너먼트 진입 흐름용 — 학생 관리 팝업을 열고 토너먼트 시작 콜백 주입
+    public void OpenStudentManagementPopupForTournament(Action onTournamentStart)
+    {
+        if (_studentManagementPopup == null) return;
+
+        CloseAllLobbyPopups();
+
+        _studentManagementPopup.Init();
+        _studentManagementPopup.SetTournamentStartCallback(onTournamentStart);
         _studentManagementPopup.transform.SetAsLastSibling();
         _studentManagementPopup.Open();
     }
