@@ -119,6 +119,7 @@ MonoBehaviour:
   _txtStamina: {fileID: 1294917394274426518}
   _potentialBadgeRoot: {fileID: 0}
   _txtPotentialBadge: {fileID: 0}
+  _portraitLibrary: {fileID: 11400000, guid: 1256749a292fd064e833c0675ccac533, type: 2}
   _placingOverlayPanel: {fileID: 7133245197150902142}
   _managingOverlayPanel: {fileID: 7027482810022957266}
 --- !u!1 &801450752604405461

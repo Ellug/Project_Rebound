@@ -11,6 +11,10 @@ public class Student
     public string positionName;
     public int grade; // 학년 (1~3)
 
+    // 이미지 배정
+    public CharacterColor portraitColor;    // 색상
+    public int portraitIndex;   // 이미지 번호
+
     // 신체 정보
     public int height;
     public int weight;
