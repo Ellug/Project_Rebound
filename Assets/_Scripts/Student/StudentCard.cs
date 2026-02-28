@@ -33,6 +33,7 @@ public class StudentCard : MonoBehaviour
     [SerializeField] private TMP_Text _txtStamina;
     [SerializeField] private GameObject _potentialBadgeRoot;
     [SerializeField] private TMP_Text _txtPotentialBadge;
+    [SerializeField] private PortraitLibrary _portraitLibrary;
 
     [Header("Placing 오버레이 (영입 선택 중)")]
     [SerializeField] private GameObject _placingOverlayPanel;
@@ -59,6 +60,7 @@ public class StudentCard : MonoBehaviour
     public void SetStudentData(Student student)
     {
         _studentData = student;
+        ApplyPortrait(student);
         RefreshDisplay();
     }
 
@@ -135,5 +137,15 @@ public class StudentCard : MonoBehaviour
     private static void SafeSetActive(GameObject target, bool active)
     {
         if (target != null) target.SetActive(active);
+    }
+
+    private void ApplyPortrait(Student student)
+    {
+        if (_portraitImage == null || _portraitLibrary == null || student == null)
+        {
+            return;
+        }
+
+        _portraitImage.sprite = _portraitLibrary.Get(student.portraitColor, student.portraitIndex);
     }
 }

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Drawing;
 using UnityEngine;
 
 public static class StudentFactory
@@ -6,6 +7,7 @@ public static class StudentFactory
     private static int _nextStudentId = 1; // 학생 ID 인데 이거 캐싱 따로 시키거나 세이브 로드 대응 전략 도입 후 개선 필요
     private static HashSet<string> _usedNames = new();
     private static System.Random _random = new();
+
 
     // 새로운 학생 생성
     public static Student CreateStudent(int grade = 0)
@@ -18,6 +20,8 @@ public static class StudentFactory
 
         var position = SelectRandomPosition(); // 포지션 결정
         var bodyInfo = GenerateBodyInfo(position.id); // 포지션 기반 신체 정보 생성
+        var color = GetRandomColor();   // 색 결정
+        var portraitIndex = GetRandomPortraitIndex();   // 이미지 결정
 
         // 학생 생성
         Student student = new()
@@ -32,6 +36,8 @@ public static class StudentFactory
             potential_tier = 0,
             condition = 0,
             trust = 0,
+            portraitColor = color,
+            portraitIndex = portraitIndex,
         };
 
         GenerateStats(student, grade); // 학년 기반으로 기본 스탯 생성 및 할당
@@ -178,5 +184,19 @@ public static class StudentFactory
 
         student.potential_tier = 3;
         student.potential = potentialData.tier3Stat;
+    }
+    // 색 램덤 이지만 지금은 빨간색 고정으로 나중에 기존 코드 지우고 주석 풀면 랜덤으로 
+    private static CharacterColor GetRandomColor()
+    {
+        //return _random.Next(0, 2) == 0
+        //    ? CharacterColor.Red
+        //    : CharacterColor.Green;
+        return CharacterColor.Red;
+    }
+
+    // 이미지 랜덤
+    private static int GetRandomPortraitIndex()
+    {
+        return _random.Next(1, 33); // 1~32
     }
 }
