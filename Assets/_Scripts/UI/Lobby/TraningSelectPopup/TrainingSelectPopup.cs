@@ -1,17 +1,31 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 
 // 훈련 선택 팝업 (페이지 전환 방식)
 // ConfirmPopup(UIManager.ShowConfirm) 호출을 여기서 담당
 public class TrainingSelectPopup : UIPopup
 {
+    private enum TrainingPageKind
+    {
+        Default = 0,
+        Team = 1,
+        Individual = 2
+    }
+
     [Header("Page Config")]
     [SerializeField] private TrainingPageData _pageData;
 
     [Header("Training UI")]
-    [SerializeField] private TMP_Text _txtPageTitle;
+    [SerializeField] private Image _imgPageTitle;
+    [Tooltip("0: 훈련선택, 1: 단체훈련, 2: 개인훈련")]
+    [SerializeField] private Sprite[] _pageTitleSprites;
+
+    [Header("Button Sprite Config")]
+    [Tooltip("훈련 선택(루트) 페이지에서 버튼 순서대로 번갈아 사용")]
+    [SerializeField] private Sprite[] _selectPageButtonSprites;
+    [SerializeField] private Sprite _trainingButtonSprite;
+
     [SerializeField] private Transform _buttonContainer;
     [SerializeField] private TrainingButtonItem _buttonPrefab2;
 
@@ -88,33 +102,129 @@ public class TrainingSelectPopup : UIPopup
 
         _currentPageIndex = pageIndex;
         TrainingPageInfo page = _pageData.pages[pageIndex];
+        TrainingPageKind pageKind = ResolvePageKind(page, pageIndex);
 
-        if (_txtPageTitle != null)
-            _txtPageTitle.text = page.pageTitle;
+        UpdatePageTitleImage(pageKind);
 
         ClearButtons();
-        SpawnButtons(page);
+        SpawnButtons(page, pageKind);
         UpdateBackButtonVisibility();
     }
 
-    private void SpawnButtons(TrainingPageInfo page)
+    private void UpdatePageTitleImage(TrainingPageKind pageKind)
     {
-        if (page == null || page.buttons == null) return;
+        Sprite pageTitleSprite = ResolvePageTitleSprite(pageKind);
 
-        foreach (TrainingButtonData btnData in page.buttons)
+        _imgPageTitle.sprite = pageTitleSprite;
+        _imgPageTitle.enabled = pageTitleSprite != null;
+    }
+
+    private Sprite ResolvePageTitleSprite(TrainingPageKind pageKind)
+    {
+        int spriteIndex = (int)pageKind;
+        return _pageTitleSprites[spriteIndex];
+    }
+
+    private TrainingPageKind ResolvePageKind(TrainingPageInfo page, int pageIndex)
+    {
+        string normalizedTitle = NormalizePageTitle(page.pageTitle);
+
+        if (normalizedTitle.Contains("단체훈련"))
+            return TrainingPageKind.Team;
+
+        if (normalizedTitle.Contains("개인훈련"))
+            return TrainingPageKind.Individual;
+
+        TrainingPageKind inferredByButtons = InferPageKindByButtons(page);
+        if (inferredByButtons != TrainingPageKind.Default)
+            return inferredByButtons;
+
+        if (pageIndex == 1)
+            return TrainingPageKind.Team;
+
+        if (pageIndex == 2)
+            return TrainingPageKind.Individual;
+
+        return TrainingPageKind.Default;
+    }
+
+    private static string NormalizePageTitle(string title)
+    {
+        return title.Replace(" ", string.Empty).Replace("\r", string.Empty).Replace("\n", string.Empty);
+    }
+
+    private static TrainingPageKind InferPageKindByButtons(TrainingPageInfo page)
+    {
+        if (page.buttons.Count == 0)
+            return TrainingPageKind.Default;
+
+        bool hasAction = false;
+        bool hasTeamAction = false;
+        bool hasIndividualAction = false;
+
+        foreach (TrainingButtonData button in page.buttons)
         {
+            if (button.navigateToPageIndex >= 0)
+                continue;
+
+            hasAction = true;
+
+            if (button.requiresStudentSelection)
+                hasIndividualAction = true;
+            else
+                hasTeamAction = true;
+        }
+
+        if (!hasAction)
+            return TrainingPageKind.Default;
+
+        if (hasTeamAction && !hasIndividualAction)
+            return TrainingPageKind.Team;
+
+        if (!hasTeamAction && hasIndividualAction)
+            return TrainingPageKind.Individual;
+
+        return TrainingPageKind.Default;
+    }
+
+    private void SpawnButtons(TrainingPageInfo page, TrainingPageKind pageKind)
+    {
+        for (int i = 0; i < page.buttons.Count; i++)
+        {
+            TrainingButtonData btnData = page.buttons[i];
             TrainingButtonItem item = Instantiate(_buttonPrefab2, _buttonContainer);
             item.gameObject.SetActive(true);
 
             TrainingButtonData captured = btnData;
+            Sprite buttonSprite = ResolveButtonSprite(pageKind, i);
+            bool centerName = pageKind == TrainingPageKind.Default;
             item.Setup(
                 captured.trainingName,
                 captured.statModifierText,
-                () => HandleTrainingButton(captured)
+                () => HandleTrainingButton(captured),
+                buttonSprite,
+                centerName
             );
 
             _spawnedButtons.Add(item);
         }
+    }
+
+    private Sprite ResolveButtonSprite(TrainingPageKind pageKind, int buttonIndex)
+    {
+        switch (pageKind)
+        {
+            case TrainingPageKind.Team:
+            case TrainingPageKind.Individual:
+                return _trainingButtonSprite;
+        }
+
+        return ResolveDefaultButtonSprite(buttonIndex);
+    }
+
+    private Sprite ResolveDefaultButtonSprite(int buttonIndex)
+    {
+        return _selectPageButtonSprites[buttonIndex % _selectPageButtonSprites.Length];
     }
 
     private void HandleTrainingButton(TrainingButtonData data)
