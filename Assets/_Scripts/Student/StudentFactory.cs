@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using UnityEngine;
@@ -6,7 +7,11 @@ public static class StudentFactory
 {
     private static int _nextStudentId = 1; // 학생 ID 인데 이거 캐싱 따로 시키거나 세이브 로드 대응 전략 도입 후 개선 필요
     private static HashSet<string> _usedNames = new();
+    private static HashSet<(CharacterColor color, int index)> _usedPortraits = new();
     private static System.Random _random = new();
+
+    private static CharacterColor _fixedColor;
+    private static bool _isColorInitialized = false;    // 나중에 회차 초기화시 색 변경에 필요
 
 
     // 새로운 학생 생성
@@ -20,8 +25,7 @@ public static class StudentFactory
 
         var position = SelectRandomPosition(); // 포지션 결정
         var bodyInfo = GenerateBodyInfo(position.id); // 포지션 기반 신체 정보 생성
-        var color = GetRandomColor();   // 색 결정
-        var portraitIndex = GetRandomPortraitIndex();   // 이미지 결정
+        var (color, portraitIndex) = SelectUniquePortrait();   // 이미지 결정
 
         // 학생 생성
         Student student = new()
@@ -75,6 +79,41 @@ public static class StudentFactory
         _usedNames.Add(selectedName);
 
         return selectedName;
+    }
+
+    // 중복되지 않는 이미지 선택
+    private static (CharacterColor, int) SelectUniquePortrait()
+    {
+        InitializeColorIfNeeded();
+
+        int maxIndex = 32;
+
+        // 사용 가능한 이미지 필터링
+        var available = new List<(CharacterColor, int)>();
+        for (int i = 1; i <= maxIndex; i++)
+        {
+            var key = (_fixedColor, i);
+
+            if (!_usedPortraits.Contains(key))
+                available.Add(key);
+        }
+
+        // 사용 가능한 이미지 없으면 클리어해서 중복 허용시켜
+        if (available.Count == 0)
+        {
+            Debug.LogWarning("[StudentFactory] All portraits used. Resetting used portraits.");
+            _usedPortraits.Clear();
+
+            for (int i = 1; i <= maxIndex; i++)
+            {
+                available.Add((_fixedColor, i));
+            }
+        }
+
+        var selected = available[_random.Next(available.Count)];
+        _usedPortraits.Add(selected);
+
+        return selected;
     }
 
     // 사용된 이름 초기화
@@ -185,18 +224,19 @@ public static class StudentFactory
         student.potential_tier = 3;
         student.potential = potentialData.tier3Stat;
     }
-    // 색 램덤 이지만 지금은 빨간색 고정으로 나중에 기존 코드 지우고 주석 풀면 랜덤으로 
-    private static CharacterColor GetRandomColor()
-    {
-        //return _random.Next(0, 2) == 0
-        //    ? CharacterColor.Red
-        //    : CharacterColor.Green;
-        return CharacterColor.Red;
-    }
 
-    // 이미지 랜덤
-    private static int GetRandomPortraitIndex()
+    // 팀 색 결정 _isColorInitialized = false 로 바꾸면 새로운 회차 시작할 때 색 랜덤
+    private static void InitializeColorIfNeeded()
     {
-        return _random.Next(1, 33); // 1~32
+        if (_isColorInitialized)
+        {
+            return;
+        }
+
+        _fixedColor = _random.Next(0, 2) == 0
+            ? CharacterColor.Red
+            : CharacterColor.Green;
+
+        _isColorInitialized = true;
     }
 }
