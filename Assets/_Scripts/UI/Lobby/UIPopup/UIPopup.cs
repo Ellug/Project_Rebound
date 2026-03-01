@@ -5,14 +5,11 @@ using UnityEngine;
 using UnityEngine.UI;
 
 // 팝업의 용도를 열거형으로 분류
-// - Simple  : 이미지/서브텍스트 없이 설명 텍스트와 버튼만 사용하는 단순 안내 팝업 (기존 UIPopup)
-// - Confirm : 이미지, 서브텍스트, 설명 텍스트를 모두 사용하는 이벤트/훈련 확인 팝업 (기존 ConfirmPopup)
-// - Guide   : Confirm 기반에 페이지 기능이 추가된 가이드용 안내 팝업 (기존 TutorialGuidePopup, PositionGuidePopup)
 public enum PopupType
 {
-    Simple,
-    Confirm,
-    Guide
+    Simple,    //설명 텍스트와 버튼만 사용하는 단순 안내 팝업 (기존 UIPopup)
+    Confirm,   //이벤트/훈련 확인 팝업 (기존 ConfirmPopup)
+    Guide      //Confirm 기반에 페이지 기능이 추가된 가이드용 안내 팝업 (TutorialGuidePopup, PositionGuidePopup)
 }
 
 // Guide 타입 팝업의 페이지 1개에 해당하는 데이터
@@ -125,10 +122,7 @@ public class UIPopup : UIBase
         }
     }
 
-    // ───────────────────────────────────────────────
     // Setup - 외부에서 팝업 설정 적용
-    // ───────────────────────────────────────────────
-
     // Simple / Confirm 타입 설정
     public void Setup(ConfirmPopupRequest request, PopupType popupType = PopupType.Confirm)
     {
@@ -156,10 +150,7 @@ public class UIPopup : UIBase
         RefreshGuidePage();
     }
 
-    // ───────────────────────────────────────────────
     // 레이아웃 적용
-    // ───────────────────────────────────────────────
-
     // PopupType에 따라 이미지/서브텍스트/페이지 UI 활성화 여부 결정
     private void ApplyLayout()
     {
@@ -209,10 +200,7 @@ public class UIPopup : UIBase
         }
     }
 
-    // ───────────────────────────────────────────────
     // 텍스트 영역 표시/숨김 처리
-    // ───────────────────────────────────────────────
-
     private void ApplyTexts(ConfirmPopupRequest request)
     {
         if (_txtTitle != null)
@@ -256,20 +244,6 @@ public class UIPopup : UIBase
     }
 
     // 버튼 표시 여부 설정
-    //
-    // [Simple]  이미지1~5 기준
-    //   - 확인(_btnConfirm)   : 항상 표시
-    //   - 취소(_btnCancel)    : 항상 비활성 (Simple은 확인 버튼 하나만 사용)
-    //
-    // [Confirm] 이미지6~11 기준
-    //   - 취소(_btnCancel)          : SecondaryLabel 있을 때만
-    //                                 (이미지6,9,10 = 확인만 / 이미지7,8,11 = 취소+확인)
-    //   - 훈련시작(_btnTrainingConfirm): request.UseTrainingConfirmButton == true 일 때만
-    //                                 (이미지11 웨이트 트레이닝처럼 훈련 실행 전용 확인에 사용)
-    //   - 확인(_btnConfirm)         : UseTrainingConfirmButton == false 일 때
-    //                                 (이미지6~10: 일반 이벤트 확인 / 이미지8 주말훈련제안 포함)
-    //
-    // [Guide]  ApplyGuideButtonState에서 제어
     private void ApplyButtons(ConfirmPopupRequest request)
     {
         // 취소 버튼: Simple 타입은 항상 비활성, Confirm은 SecondaryLabel 있을 때만 표시
@@ -279,7 +253,6 @@ public class UIPopup : UIBase
             _btnCancel.gameObject.SetActive(hasSecondary);
 
         // 훈련시작 버튼: 호출부에서 명시적으로 UseTrainingConfirmButton = true 를 지정한 경우에만 표시
-        // SubMessage 유무로 판단하지 않음 (이미지8 주말훈련제안은 서브텍스트 있어도 일반 확인 버튼 사용)
         bool showTrainingConfirm = _popupType == PopupType.Confirm
             && request.UseTrainingConfirmButton;
         if (_btnTrainingConfirm != null)
@@ -293,10 +266,7 @@ public class UIPopup : UIBase
         }
     }
 
-    // ───────────────────────────────────────────────
     // 확인 버튼 클릭
-    // ───────────────────────────────────────────────
-
     private void HandleConfirmClicked()
     {
         if (_request == null)
@@ -363,10 +333,7 @@ public class UIPopup : UIBase
         }
     }
 
-    // ───────────────────────────────────────────────
     // 현재 페이지 기준 UI 전체 갱신 (Guide 전용)
-    // ───────────────────────────────────────────────
-
     private void RefreshGuidePage()
     {
         if (_guidePages == null || _guidePages.Count == 0)
@@ -435,10 +402,7 @@ public class UIPopup : UIBase
         _btnNext.gameObject.SetActive(true);
     }
 
-    // ───────────────────────────────────────────────
     // 페이지 수에 맞게 점 개수 조정 (Guide 전용)
-    // ───────────────────────────────────────────────
-
     private void EnsureDots()
     {
         if (_dotRoot == null || _dotPrefab == null) return;
@@ -479,10 +443,7 @@ public class UIPopup : UIBase
         }
     }
 
-    // ───────────────────────────────────────────────
     // 학생 선택 팝업 열기 (Confirm 타입 전용)
-    // ───────────────────────────────────────────────
-
     private void OpenStudentSelect()
     {
         if (_studentSelectPrefab == null)

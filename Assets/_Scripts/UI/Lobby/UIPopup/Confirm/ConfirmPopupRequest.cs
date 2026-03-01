@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // 확인 팝업 요청 데이터
-// UIManager.ShowConfirm(request) 또는 UIPopup.Setup(request, PopupType.Confirm) 에 전달
+// UIManager.ShowConfirm(request) 또는 UIPopup.Setup(request, PopupType.Confirm)에 전달
 public class ConfirmPopupRequest
 {
     public string Title { get; }
@@ -28,11 +28,11 @@ public class ConfirmPopupRequest
     public Action<List<Student>> OnStudentsSelected { get; set; }
 
     // 훈련 시작 버튼(_btnTrainingConfirm) 사용 여부
-    // true  : 이미지11(웨이트 트레이닝)처럼 훈련 실행 확인 → "훈련 시작" 버튼 표시
-    // false : 이미지6~10처럼 일반 이벤트/영입 확인         → "확인" 버튼 표시 (기본값)
+    // true  : 훈련 실행 확인 → "훈련 시작" 버튼 표시
+    // false : 일반 이벤트/영입 확인 → "확인" 버튼 표시 (기본값)
     // SubMessage 유무로 판단하지 않음
-    //   → 이미지8 주말훈련제안은 SubMessage 있어도 "확인" 버튼 사용
-    //   → TrainingSelectPopup.OpenConfirmPopup에서만 true로 지정
+    // 주말훈련제안은 SubMessage 있어도 확인 버튼 사용
+    // TrainingSelectPopup.OpenConfirmPopup에서만 true로 지정
     public bool UseTrainingConfirmButton { get; set; } = false;
 
     public ConfirmPopupRequest(
@@ -55,12 +55,9 @@ public class ConfirmPopupRequest
         PreviewSprite = previewSprite;
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
     // 메서드 체이닝용 설정 메서드
-    // 사용 예:
-    //   request.SetModal(false).SetInvokeConfirmOnClose(true)
-    //   request.SetSubMessage("현재 정원으로 영입 불가").SetPrimaryInteractable(false)
-    // ─────────────────────────────────────────────────────────────────────────
+    // request.SetModal(false).SetInvokeConfirmOnClose(true)
+    // request.SetSubMessage("현재 정원으로 영입 불가").SetPrimaryInteractable(false)
 
     public ConfirmPopupRequest SetModal(bool isModal)
     {
