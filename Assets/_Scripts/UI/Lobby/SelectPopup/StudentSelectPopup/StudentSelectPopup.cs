@@ -12,7 +12,7 @@ public class StudentSelectPopup : UIPopup
     [SerializeField] private ScrollRect _scrollRect;
 
     [Header("Close")]
-    [SerializeField] private Button _btnClose;
+    [SerializeField] private Button _buttonClose;
 
     [Header("Card")]
     [SerializeField] private Transform _cardRoot;
@@ -67,10 +67,10 @@ public class StudentSelectPopup : UIPopup
 
     private void BindButtons()
     {
-        if (_btnClose != null)
+        if (_buttonClose != null)
         {
-            _btnClose.onClick.RemoveAllListeners();
-            _btnClose.onClick.AddListener(() =>
+            _buttonClose.onClick.RemoveAllListeners();
+            _buttonClose.onClick.AddListener(() =>
             {
                 // 닫기 = 취소 처리
                 OnCancelled?.Invoke();
