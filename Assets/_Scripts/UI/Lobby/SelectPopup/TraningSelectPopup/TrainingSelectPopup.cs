@@ -3,7 +3,6 @@ using UnityEngine;
 using UnityEngine.UI;
 
 // 훈련 선택 팝업 (페이지 전환 방식)
-// ConfirmPopup(UIManager.ShowConfirm) 호출을 여기서 담당
 public class TrainingSelectPopup : UIPopup
 {
     private enum TrainingPageKind
@@ -61,7 +60,6 @@ public class TrainingSelectPopup : UIPopup
     public override void Open()
     {
         if (!TryBuildPageDataFromCache()) return;
-
         base.Open();
     }
 
@@ -74,7 +72,6 @@ public class TrainingSelectPopup : UIPopup
         }
 
         GrowthCommandTableSO table = CachedSOData.GrowthCommandTable;
-
         if (!TrainingPageBuilder.Build(_pageData, table))
             return false;
 
@@ -101,6 +98,7 @@ public class TrainingSelectPopup : UIPopup
             _pageHistory.Push(_currentPageIndex);
 
         _currentPageIndex = pageIndex;
+
         TrainingPageInfo page = _pageData.pages[pageIndex];
         TrainingPageKind pageKind = ResolvePageKind(page, pageIndex);
 
@@ -114,7 +112,6 @@ public class TrainingSelectPopup : UIPopup
     private void UpdatePageTitleImage(TrainingPageKind pageKind)
     {
         Sprite pageTitleSprite = ResolvePageTitleSprite(pageKind);
-
         _imgPageTitle.sprite = pageTitleSprite;
         _imgPageTitle.enabled = pageTitleSprite != null;
     }
@@ -198,6 +195,7 @@ public class TrainingSelectPopup : UIPopup
             TrainingButtonData captured = btnData;
             Sprite buttonSprite = ResolveButtonSprite(pageKind, i);
             bool centerName = pageKind == TrainingPageKind.Default;
+
             item.Setup(
                 captured.trainingName,
                 captured.statModifierText,
@@ -240,7 +238,6 @@ public class TrainingSelectPopup : UIPopup
         OpenConfirmPopup(data);
     }
 
-    // 핵심: 학생선택 없는 케이스는 PrimaryAction에서 StartFlow를 직접 호출해야 함
     private void OpenConfirmPopup(TrainingButtonData data)
     {
         if (UIManager.Instance == null)
@@ -249,23 +246,24 @@ public class TrainingSelectPopup : UIPopup
             return;
         }
 
-        ConfirmPopupRequest request = new ConfirmPopupRequest(
-            title: data.trainingName,
-            message: data.trainingDesc,
-            primaryLabel: "훈련 시작",
-            primaryAction: null,
-            secondaryLabel: "취소",
-            secondaryAction: null,
-            previewSprite: data.previewSprite,
-            subMessage: data.statModifierText
-        );
+        UIPopupRequest request = new UIPopupRequest
+        {
+            Type = UIPopupRequest.PanelType.Default,
+            Title = data.trainingName,
+            Message = data.trainingDesc,
+            SubMessage = data.statModifierText,
+            PreviewSprite = data.previewSprite,
 
-        request.IsModal = true;
-        request.AutoCloseOnPrimary = true;
-        request.AutoCloseOnSecondary = true;
+            ShowCancel = true,
+            AutoCloseOnPrimary = true,
+            AutoCloseOnCancel = true,
 
-        request.RequiresStudentSelection = data.requiresStudentSelection;
-        request.MaxSelectCount = data.maxSelectCount;
+            PrimaryKind = UIPopupRequest.PrimaryButtonKind.StartTraining,
+            PrimaryInteractable = true,
+
+            RequiresStudentSelection = data.requiresStudentSelection,
+            MaxSelectCount = data.maxSelectCount
+        };
 
         if (request.RequiresStudentSelection)
         {
@@ -273,17 +271,21 @@ public class TrainingSelectPopup : UIPopup
             {
                 StartTrainingFlowFromConfirm(data, students);
             };
+
+            request.OnPrimary = null;
         }
         else
         {
-            request.PrimaryAction = () =>
+            request.OnPrimary = () =>
             {
                 List<Student> students = GetDefaultStudentsForNoSelect();
                 StartTrainingFlowFromConfirm(data, students);
             };
         }
 
-        UIManager.Instance.ShowConfirm(request);
+        request.OnCancel = () => { };
+
+        UIManager.Instance.ShowPopup(request);
     }
 
     private void StartTrainingFlowFromConfirm(TrainingButtonData data, List<Student> students)
@@ -347,14 +349,12 @@ public class TrainingSelectPopup : UIPopup
             if (student == null) continue;
 
             student.condition -= data.conditionDelta;
-
             student.condition = Mathf.Max(0, student.condition);
 
             student.shoot += Mathf.RoundToInt(data.shootDelta);
             student.speed += Mathf.RoundToInt(data.speedDelta);
             student.jump += Mathf.RoundToInt(data.jumpDelta);
             student.stamina += Mathf.RoundToInt(data.staminaDelta);
-
             student.mental += data.mentalDelta;
 
             if (StudentManager.Instance != null)

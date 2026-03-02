@@ -193,7 +193,6 @@ public class GameManager : Singleton<GameManager>
         _lobbyUI.OpenStudentManagementPopupForTournament(ProceedToTournament);
     }
 
-
     // 실제 토너먼트 씬 전환 처리
     private void ProceedToTournament()
     {
@@ -458,27 +457,36 @@ public class GameManager : Singleton<GameManager>
 
         if (_flowData.HasPendingFriendlyMatch)
         {
-            // 친선경기 예약 있음 : 전용 팝업
-            UIManager.Instance.ShowConfirm(new ConfirmPopupRequest(
-                title: "친선경기",
-                message: "이번 주말 친선경기가 예정되어 있습니다.\n친선경기에 진입하시겠습니까? (미구현)",
-                primaryLabel: "확인",
-                primaryAction: EnterFriendlyMatch
-            ));
+            UIPopupRequest request = new UIPopupRequest
+            {
+                Type = UIPopupRequest.PanelType.Default,
+                Title = "친선경기",
+                Message = "이번 주말 친선경기가 예정되어 있습니다.\n친선경기에 진입하시겠습니까? (미구현)",
+                ShowCancel = true,
+                OnPrimary = EnterFriendlyMatch,
+                OnCancel = null,
+                AutoCloseOnPrimary = true,
+                AutoCloseOnCancel = true
+            };
+
+            UIManager.Instance.ShowPopup(request);
+            return;
         }
-        else
+
+        UIPopupRequest weekendRequest = new UIPopupRequest
         {
-            // 친선경기 없음 : 주말 훈련 확인/취소 팝업
-            UIManager.Instance.ShowConfirm(new ConfirmPopupRequest(
-                title: "주말 훈련 제안",
-                message: "금요일 일정이 끝났습니다.\n주말 훈련을 진행하시겠습니까?",
-                subMessage: "확인: 전원 스탯 소량 상승, 주말 휴식 효율 50%\n취소: 주말 푹 쉬기 (체력 대폭 회복)",
-                primaryLabel: "확인",
-                primaryAction: OnWeekendTrainingConfirmed,
-                secondaryLabel: "취소",
-                secondaryAction: OnWeekendTrainingCancelled
-            ));
-        }
+            Type = UIPopupRequest.PanelType.Default,
+            Title = "주말 훈련 제안",
+            Message = "금요일 일정이 끝났습니다.\n주말 훈련을 진행하시겠습니까?",
+            SubMessage = "확인: 전원 스탯 소량 상승, 주말 휴식 효율 50%\n취소: 주말 푹 쉬기 (체력 대폭 회복)",
+            ShowCancel = true,
+            OnPrimary = OnWeekendTrainingConfirmed,
+            OnCancel = OnWeekendTrainingCancelled,
+            AutoCloseOnPrimary = true,
+            AutoCloseOnCancel = true
+        };
+
+        UIManager.Instance.ShowPopup(weekendRequest);
     }
 
     // 주말 훈련 확인 (훈련 진행)

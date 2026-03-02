@@ -16,7 +16,7 @@ public static class TutorialGuidePrefs
     public static void SetDismissed(bool dismissed)
     {
         PlayerPrefs.SetInt(KEY_DISMISSED, dismissed ? 1 : 0);
-        PlayerPrefs.Save(); // 즉시 디스크에 반영
+        PlayerPrefs.Save();
     }
 
     // 튜토리얼 닫힘 상태 초기화 (다시 보이도록 설정)

@@ -218,9 +218,8 @@ public class RecruitmentPopup : UIPopup
             content: "해당 학생 선택을 취소하시겠습니까?",
             buttons: new List<PopupButtonInfo>
             {
-                new PopupButtonInfo("취소", null),
-                // 확인 시 선택 취소 후 정보 팝업도 슬라이드 아웃으로 닫기
-                new PopupButtonInfo("확인", () =>
+                new PopupButtonInfo(() => { }),
+                new PopupButtonInfo(() =>
                 {
                     UnselectStudent(student, card);
                     CloseStudentInfoPopup();
@@ -265,7 +264,7 @@ public class RecruitmentPopup : UIPopup
             content: "더 이상 모집이 불가능합니다.",
             buttons: new List<PopupButtonInfo>
             {
-                new PopupButtonInfo("확인", null)
+                new PopupButtonInfo(() => { })
             }
         ));
     }
@@ -293,7 +292,7 @@ public class RecruitmentPopup : UIPopup
             content: "새로운 학생이 팀에 합류했습니다.\n여기 팀 운영에 큰 변화를 불러올 것입니다.",
             buttons: new List<PopupButtonInfo>
             {
-                new PopupButtonInfo("확인", () =>
+                new PopupButtonInfo(() =>
                 {
                     OnRecruitmentConfirmed?.Invoke(recruits);
                     CloseAndDestroy();
@@ -307,19 +306,22 @@ public class RecruitmentPopup : UIPopup
     {
         if (UIManager.Instance == null) return;
 
-        UIManager.Instance.ShowPopup(new PopupData(
+        UIPopupRequest request = UIPopupRequest.Default(
             title: "영입 취소",
-            content: "영입을 종료하고 로비로 돌아가시겠습니까?",
-            buttons: new List<PopupButtonInfo>
+            message: "영입을 종료하고 로비로 돌아가시겠습니까?",
+            onPrimary: () =>
             {
-                new PopupButtonInfo("취소", null),
-                new PopupButtonInfo("확인", () =>
-                {
-                    OnCancelled?.Invoke();
-                    CloseAndDestroy();
-                })
-            }
-        ));
+                OnCancelled?.Invoke();
+                CloseAndDestroy();
+            },
+            onCancel: null
+        );
+
+        request.ShowCancel = true;
+        request.AutoCloseOnPrimary = true;
+        request.AutoCloseOnCancel = true;
+
+        UIManager.Instance.ShowPopup(request);
     }
 
     protected override void OnCloseButtonClicked()

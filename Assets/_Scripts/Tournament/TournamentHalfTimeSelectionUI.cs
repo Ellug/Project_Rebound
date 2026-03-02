@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -94,14 +94,22 @@ public class TournamentHalfTimeSelectionUI : MonoBehaviour
 
         if (UIManager.Instance == null) return; // 싱글톤이라 없으면 안됨. 없으면 뭔가 잘못된 거임 혼남.
 
-        UIManager.Instance.ShowConfirm(new ConfirmPopupRequest(
-            title:           selected.Name,
-            message:         selected.Description,
-            primaryLabel:    "확인",
-            primaryAction:   () => ConfirmSelection(selected),
-            secondaryLabel:  "취소",
-            previewSprite: null
-        ));
+        UIPopupRequest request = UIPopupRequest.Default(
+            title: selected.Name,
+            message: selected.Description,
+            subMessage: null,
+            previewSprite: null,
+            onPrimary: () => ConfirmSelection(selected),
+            onCancel: null
+        );
+
+        request.ShowCancel = true;
+        request.AutoCloseOnPrimary = true;
+        request.AutoCloseOnCancel = true;
+        request.PrimaryInteractable = true;
+        request.PrimaryKind = UIPopupRequest.PrimaryButtonKind.Confirm;
+
+        UIManager.Instance.ShowPopup(request);
     }
 
     private void ConfirmSelection(HalfTimeOption option)

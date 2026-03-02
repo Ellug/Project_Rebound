@@ -109,7 +109,7 @@ public class RecruitmentManager : MonoBehaviour
         Debug.Log("[RecruitmentManager] 졸업 처리 완료");
     }
 
-    // 1단계: 이벤트 안내 ConfirmPopup
+    // 1단계: 이벤트 안내 팝업
     private void ShowRecruitmentEventConfirm(RecruitmentContext context)
     {
         if (UIManager.Instance == null)
@@ -124,27 +124,23 @@ public class RecruitmentManager : MonoBehaviour
 
         bool canSkip = context != RecruitmentContext.GameStart;
 
-        ConfirmPopupRequest request = new ConfirmPopupRequest(
+        Action primary = isFull ? null : OpenRecruitmentPopup;
+
+        UIPopupRequest request = UIPopupRequest.Default(
             title: "학생 영입",
             message: BuildEventMessage(context),
-            primaryLabel: "확인",
-            primaryAction: OpenRecruitmentPopup,
-            secondaryLabel: canSkip ? "포기" : null,
-            secondaryAction: canSkip ? HandleRecruitmentSkipped : null,
-            previewSprite: null
+            subMessage: isFull ? "현재 보유 학생이 정원으로 영입을 진행할 수 없습니다." : null,
+            previewSprite: null,
+            onPrimary: primary,
+            onCancel: canSkip ? HandleRecruitmentSkipped : null
         );
 
-        request.IsModal = true;
+        request.ShowCancel = canSkip;
+        request.PrimaryInteractable = !isFull;
+        request.AutoCloseOnPrimary = true;
+        request.AutoCloseOnCancel = true;
 
-        // 정원 꽉 차면 "확인" 비활성화
-        request.SetPrimaryInteractable(!isFull);
-
-        if (isFull)
-        {
-            request.SetSubMessage("현재 보유 학생이 정원으로 영입을 진행할 수 없습니다.");
-        }
-
-        UIManager.Instance.ShowConfirm(request);
+        UIManager.Instance.ShowPopup(request);
     }
 
     // 2단계: 카드 선택 팝업
@@ -251,6 +247,7 @@ public class RecruitmentManager : MonoBehaviour
             _ => "학생 영입을 진행합니다."
         };
     }
+
     public enum RecruitmentContext
     {
         GameStart,   // 게임 시작 시 최초 영입

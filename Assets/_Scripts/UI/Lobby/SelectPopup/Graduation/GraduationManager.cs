@@ -53,25 +53,25 @@ public class GraduationManager : MonoBehaviour
         if (UIManager.Instance == null)
             return;
 
-        ConfirmPopupRequest request = new ConfirmPopupRequest(
-            title: "졸업",
-            message:
+        UIPopupRequest request = new UIPopupRequest
+        {
+            Type = UIPopupRequest.PanelType.Default,
+            Title = "졸업",
+            Message =
                 "3학년의 마지막 날입니다.\n" +
                 "3학년 학생들이 졸업합니다.\n\n" +
                 "졸업생 목록을 확인하시겠습니까?",
-            primaryLabel: "확인",
-            primaryAction: OpenGraduationStudentsPopup,
-            secondaryLabel: "취소",
-            secondaryAction: null,
-            previewSprite: null,
-            subMessage: null
-        );
+            ShowCancel = true,
+            OnPrimary = OpenGraduationStudentsPopup,
+            OnCancel = null,
+            AutoCloseOnPrimary = true,
+            AutoCloseOnCancel = true
+        };
 
-        request.IsModal = true;
-        UIManager.Instance.ShowConfirm(request);
+        UIManager.Instance.ShowPopup(request);
     }
 
-    
+
     // 졸업생 목록 팝업 오픈
     private void OpenGraduationStudentsPopup()
     {
@@ -103,7 +103,7 @@ public class GraduationManager : MonoBehaviour
         return result;
     }
 
-   
+
     // 완료 팝업 표시
     private void ShowCompletionPopup()
     {
@@ -115,12 +115,13 @@ public class GraduationManager : MonoBehaviour
             content: "졸업 처리가 완료되었습니다.",
             buttons: new List<PopupButtonInfo>
             {
-                new PopupButtonInfo("확인", FinalizeGraduation)
+                // 수정: 버튼 텍스트 제거, 액션 기반으로만 구성
+                new PopupButtonInfo(FinalizeGraduation)
             }
         ));
     }
 
-    
+
     //실제 졸업 처리
     //기록 저장
     //학생 제거
@@ -159,7 +160,7 @@ public class GraduationManager : MonoBehaviour
         Debug.Log("[GraduationManager] Graduation finalized.");
     }
 
-    
+
     // 졸업 기록 로그 출력
     // (추후 SaveData 연동 지점)
     private void SaveGraduationRecord(List<Student> graduates)

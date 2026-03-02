@@ -1,32 +1,38 @@
-using System;
+ï»¿using System;
 using System.Collections.Generic;
-using UnityEngine; 
+using UnityEngine;
 
-// ÆË¾÷ ¹öÆ° ÇÏ³ª¿¡ ´ëÇÑ Á¤º¸
+// íŒì—… ë²„íŠ¼ í•˜ë‚˜ì— ëŒ€í•œ ì •ë³´
 public class PopupButtonInfo
 {
-    public string Text;
     public Action OnClick;
     public bool AutoClose;
 
+    // ì•¡ì…˜ ê¸°ë°˜
+    public PopupButtonInfo(Action onClick = null, bool autoClose = true)
+    {
+        OnClick = onClick;
+        AutoClose = autoClose;
+    }
+
+    // ê¸°ì¡´ í˜¸í™˜ìš©
     public PopupButtonInfo(string text, Action onClick = null, bool autoClose = true)
     {
-        this.Text = text;
-        this.OnClick = onClick;
-        this.AutoClose = autoClose;
+        OnClick = onClick;
+        AutoClose = autoClose;
     }
 }
 
-// ÆË¾÷ µ¥ÀÌÅÍ (ÀÌ¹ÌÁö, ¼­ºêÅØ½ºÆ® Ãß°¡)
+// íŒì—… ë°ì´í„° (ì´ë¯¸ì§€, ì„œë¸Œí…ìŠ¤íŠ¸ ì¶”ê°€)
 public class PopupData
 {
-    public string Title;           // Á¦¸ñ
-    public string Content;         // º»¹®
-    public string SubContent;      // ºÎ°¡ ¼³¸í
-    public Sprite Image;           // »ó´Ü ÀÌ¹ÌÁö
+    public string Title;           // ì œëª©
+    public string Content;         // ë³¸ë¬¸
+    public string SubContent;      // ë¶€ê°€ ì„¤ëª…
+    public Sprite Image;           // ìƒë‹¨ ì´ë¯¸ì§€
     public List<PopupButtonInfo> Buttons;
 
-    // ÇÊ¿äÇÑ °Í¸¸ ³ÖÀ» ¼ö ÀÖµµ·Ï ±âº»°ª ¼³Á¤
+    // í•„ìš”í•œ ê²ƒë§Œ ë„£ì„ ìˆ˜ ìˆë„ë¡ ê¸°ë³¸ê°’ ì„¤ì •
     public PopupData(string title, string content, string subContent = null, Sprite image = null, List<PopupButtonInfo> buttons = null)
     {
         this.Title = title;

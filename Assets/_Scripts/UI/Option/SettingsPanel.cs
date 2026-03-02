@@ -1,44 +1,46 @@
-using System.Collections.Generic;
+ï»¿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class SettingsPanel : UIBase
 {
-    [SerializeField] private Button _btnClose;  // ¼³Á¤Ã¢ ´İ±â ¹öÆ°
-    [SerializeField] private Button _btnRestartTutorial;    // Æ©Åä¸®¾ó ´Ù½Ã ½ÃÀÛÇÏ±â ¹öÆ°
+    [SerializeField] private Button _btnClose;            // ì„¤ì •ì°½ ë‹«ê¸° ë²„íŠ¼
+    [SerializeField] private Button _btnRestartTutorial;  // íŠœí† ë¦¬ì–¼ ë‹¤ì‹œ ì‹œì‘í•˜ê¸° ë²„íŠ¼
 
     public override void Init()
     {
         base.Init();
 
-        // ´İ±â ¹öÆ°
+        // ë‹«ê¸° ë²„íŠ¼
         if (_btnClose != null)
         {
+            _btnClose.onClick.RemoveAllListeners(); // ì¤‘ë³µ ë°©ì§€
             _btnClose.onClick.AddListener(() =>
             {
                 UIManager.Instance.Close(this);
             });
         }
 
-        // Æ©Åä¸®¾ó Àç½ÃÀÛ ¹öÆ°
+        // íŠœí† ë¦¬ì–¼ ì¬ì‹œì‘ ë²„íŠ¼
         if (_btnRestartTutorial != null)
         {
+            _btnRestartTutorial.onClick.RemoveAllListeners(); // ì¤‘ë³µ ë°©ì§€
             _btnRestartTutorial.onClick.AddListener(OnClickRestartTutorial);
         }
     }
 
-    // È®ÀÎ ÆË¾÷
+    // í™•ì¸ íŒì—…
     private void OnClickRestartTutorial()
     {
         var buttons = new List<PopupButtonInfo>
-    {
-        new PopupButtonInfo("Ãë¼Ò"),
-        new PopupButtonInfo("Àç½ÃÀÛ", RestartTutorialConfirmed)
-    };
+        {
+            new PopupButtonInfo(() => { }),
+            new PopupButtonInfo(RestartTutorialConfirmed)
+        };
 
         UIManager.Instance.ShowPopup(new PopupData(
-            title: "Æ©Åä¸®¾ó Àç½ÃÀÛ",
-            content: "Æ©Åä¸®¾ó °¡ÀÌµå¸¦ ´Ù½Ã Ç¥½ÃÇÏ½Ã°Ú½À´Ï±î?",
+            title: "íŠœí† ë¦¬ì–¼ ì¬ì‹œì‘",
+            content: "íŠœí† ë¦¬ì–¼ ê°€ì´ë“œë¥¼ ë‹¤ì‹œ í‘œì‹œí•˜ì‹œê² ìŠµë‹ˆê¹Œ?",
             buttons: buttons
         ));
     }
@@ -47,7 +49,13 @@ public class SettingsPanel : UIBase
     {
         TutorialGuidePrefs.ResetDismissed();
 
-        var entry = FindFirstObjectByType<LobbyTutorialGuideEntry>(FindObjectsInactive.Include);
-        entry?.RestartAndOpen();
+        UIManager.Instance.ShowPopup(new PopupData(
+            title: "ì•ˆë‚´",
+            content: "íŠœí† ë¦¬ì–¼ì€ ë¡œë¹„ì—ì„œ ë‹¤ì‹œ í‘œì‹œë©ë‹ˆë‹¤.",
+            buttons: new List<PopupButtonInfo>
+            {
+                new PopupButtonInfo(() => { })
+            }
+        ));
     }
 }

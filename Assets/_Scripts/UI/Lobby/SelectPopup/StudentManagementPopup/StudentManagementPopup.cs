@@ -18,7 +18,7 @@ public class StudentManagementPopup : UIBase
 
     [Header("포지션 안내")]
     [SerializeField] private Button _btnPositionGuide;                  // "포지션 정보" 버튼
-    [SerializeField] private PositionGuidePopup _positionGuidePopup;    // 씬에 미리 배치된 팝업
+    [SerializeField] private GameObject _positionGuidePopup;            // 씬에 미리 배치된 팝업
 
     [Header("토너먼트 시작")]
     [SerializeField] private Button _btnPlacementComplete;              // 배치 완료 버튼
@@ -155,15 +155,18 @@ public class StudentManagementPopup : UIBase
         }
 
         // 비활성 상태라면 먼저 활성화
-        if (!_positionGuidePopup.gameObject.activeSelf)
-            _positionGuidePopup.gameObject.SetActive(true);
+        if (!_positionGuidePopup.activeSelf)
+            _positionGuidePopup.SetActive(true);
 
         // 최상단으로 올려서 다른 UI 위에 표시
         _positionGuidePopup.transform.SetAsLastSibling();
 
-        // Init 누락 방지
-        _positionGuidePopup.Init();
-        _positionGuidePopup.Open();
+        UIBase ui = _positionGuidePopup.GetComponent<UIBase>();
+        if (ui != null)
+        {
+            ui.Init();
+            ui.Open();
+        }
     }
 
     // 학생 카드 생성
@@ -289,8 +292,9 @@ public class StudentManagementPopup : UIBase
             content: $"이미 배치된 학생이 있습니다. \n선택한 학생으로 교체하시겠습니까?",
             buttons: new List<PopupButtonInfo>
             {
-                new PopupButtonInfo("취소", null),
-                new PopupButtonInfo("확인", () =>
+                // 버튼 텍스트 제거, 액션 기반으로만 구성
+                new PopupButtonInfo(() => { }),
+                new PopupButtonInfo(() =>
                 {
                     int slotIndex = _fieldSlots.IndexOf(slot);
 
