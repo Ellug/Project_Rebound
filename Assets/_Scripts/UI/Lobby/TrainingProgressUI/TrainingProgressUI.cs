@@ -17,20 +17,6 @@ public class TrainingProgressUI : UIBase
     {
         gameObject.SetActive(true);
 
-        // 배경 설정
-        if (_imgBackground != null)
-        {
-            if (backgroundSprite != null)
-            {
-                _imgBackground.sprite = backgroundSprite;
-                _imgBackground.enabled = true;
-            }
-            else
-            {
-                _imgBackground.enabled = false;
-            }
-        }
-
         SetProgress01(0f);
         SetStatus("진행중..");
     }
