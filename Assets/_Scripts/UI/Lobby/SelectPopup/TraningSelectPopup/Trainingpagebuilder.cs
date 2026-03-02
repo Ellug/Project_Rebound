@@ -196,7 +196,7 @@ public static class TrainingPageBuilder
         if (row.shoot != 0f) parts.Add(FormatStat("슈팅", row.shoot));
         if (row.speed != 0f) parts.Add(FormatStat("속도", row.speed));
         if (row.jump != 0f) parts.Add(FormatStat("점프", row.jump));
-        if (row.stamina != 0f) parts.Add(FormatStat("스태미나", row.stamina));
+        if (row.stamina != 0f) parts.Add(FormatStat("지구력", row.stamina));
         if (row.mental != 0) parts.Add(FormatStatInt("멘탈", row.mental));
 
         return parts.Count > 0 ? string.Join(" / ", parts) : "";
