@@ -51,16 +51,6 @@ public class SelectStudentInfoPopup : UIBase
     private Tweener _slideTween;  // 현재 진행 중인 슬라이드 Tween
     private CanvasGroup _canvasGroup;
 
-    private void Awake()
-    {
-        // Raycast 차단 요소 제거 (버튼 클릭 방해 방지)
-        if (_imgPortrait != null) _imgPortrait.raycastTarget = false;
-        if (_txtTitle != null) _txtTitle.raycastTarget = false;
-        if (_txtName != null) _txtName.raycastTarget = false;
-        if (_txtGrade != null) _txtGrade.raycastTarget = false;
-        if (_imgConditionFill != null) _imgConditionFill.raycastTarget = false;
-    }
-
     public override void Init()
     {
         if (_isInited) return;

@@ -12,7 +12,6 @@ public class RecruitmentPopup : UIPopup
     [SerializeField] private ScrollRect _scrollRect;          // 스크롤 영역
 
     [Header("Header")]
-    [SerializeField] private TMP_Text _txtName;               // 타이틀 (미사용 가능)
     [SerializeField] private TMP_Text _txtSelectCount;        // 선택 인원 표시 (현재/최대)
 
     [Header("Close")]
@@ -333,7 +332,8 @@ public class RecruitmentPopup : UIPopup
         if (_txtSelectCount != null)
         {
             string maxDisplay = _maxRecruitCount > 0 ? _maxRecruitCount.ToString() : "7";
-            _txtSelectCount.text = $"{_selectedStudents.Count}/{maxDisplay}";
+            // _txtSelectCount.text = $"{_selectedStudents.Count}/{maxDisplay}";
+            _txtSelectCount.text = $"{_selectedStudents.Count}";
         }
     }
 

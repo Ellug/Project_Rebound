@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 [ExecuteAlways]
 [DisallowMultipleComponent]
@@ -40,6 +41,11 @@ public class TMPExternalStroke : MonoBehaviour
         EnsureSetup(forceRebuild: true, applyRenderOrderNow: false);
     }
 
+    void OnDisable()
+    {
+        CleanupGeneratedLayers();
+    }
+
     // 인스펙터 변경 시 레이어를 재생성하지 않고 값만 동기화
     private void OnValidate()
     {
@@ -71,6 +77,7 @@ public class TMPExternalStroke : MonoBehaviour
         Transform parent = _source.transform.parent;
         if (parent == null) return;
 
+        CleanupOrphanedLayers(parent);
         CollectLayers(parent);
 
         int targetCount = Mathf.Clamp(_sampleCount, 4, 32);
@@ -137,12 +144,14 @@ public class TMPExternalStroke : MonoBehaviour
             go.SetActive(false);
             go.transform.SetParent(parent, false);
             go.layer = gameObject.layer;
-            go.hideFlags = _hideGeneratedInHierarchy ? HideFlags.HideInHierarchy : HideFlags.None;
+            go.hideFlags = BuildGeneratedHideFlags();
 
             RectTransform rect = go.AddComponent<RectTransform>();
             rect.localScale = Vector3.one;
 
             go.AddComponent<CanvasRenderer>();
+            LayoutElement layoutElement = go.AddComponent<LayoutElement>();
+            layoutElement.ignoreLayout = true;
             TextMeshProUGUI layer = go.AddComponent<TextMeshProUGUI>();
             layer.raycastTarget = false;
 
@@ -165,7 +174,7 @@ public class TMPExternalStroke : MonoBehaviour
         dstRect.localScale = srcRect.localScale;
 
         layer.name = $"{Prefix}{order:00}";
-        layer.gameObject.hideFlags = _hideGeneratedInHierarchy ? HideFlags.HideInHierarchy : HideFlags.None;
+        layer.gameObject.hideFlags = BuildGeneratedHideFlags();
         layer.text = _source.text;
         layer.isRightToLeftText = _source.isRightToLeftText;
         layer.font = _source.font;
@@ -189,6 +198,11 @@ public class TMPExternalStroke : MonoBehaviour
         layer.maskable = _source.maskable;
         layer.raycastTarget = false;
         layer.color = new Color(_strokeColor.r, _strokeColor.g, _strokeColor.b, _source.color.a);
+
+        LayoutElement layoutElement = layer.GetComponent<LayoutElement>();
+        if (layoutElement == null)
+            layoutElement = layer.gameObject.AddComponent<LayoutElement>();
+        layoutElement.ignoreLayout = true;
 
         if (!layer.gameObject.activeSelf)
             layer.gameObject.SetActive(true);
@@ -241,9 +255,13 @@ public class TMPExternalStroke : MonoBehaviour
     // 이 컴포넌트가 만든 외곽 레이어를 모두 삭제
     private void CleanupGeneratedLayers()
     {
-        if (!TryGetSource()) return;
+        if (string.IsNullOrEmpty(_layerKey))
+            return;
 
-        Transform parent = _source.transform.parent;
+        Transform parent = transform.parent;
+        if (_source != null && _source.transform.parent != null)
+            parent = _source.transform.parent;
+
         if (parent == null)
             return;
 
@@ -257,6 +275,37 @@ public class TMPExternalStroke : MonoBehaviour
 
         for (int i = 0; i < toDelete.Count; i++)
             SafeDestroy(toDelete[i]);
+    }
+
+    private void CleanupOrphanedLayers(Transform currentParent)
+    {
+        if (string.IsNullOrEmpty(_layerKey))
+            return;
+
+        Transform searchRoot = currentParent.root;
+        TextMeshProUGUI[] allTexts = searchRoot.GetComponentsInChildren<TextMeshProUGUI>(true);
+
+        for (int i = 0; i < allTexts.Length; i++)
+        {
+            TextMeshProUGUI layer = allTexts[i];
+            if (layer == null || layer == _source)
+                continue;
+
+            if (!layer.name.StartsWith(Prefix, StringComparison.Ordinal))
+                continue;
+
+            if (layer.transform.parent != currentParent)
+                SafeDestroy(layer.gameObject);
+        }
+    }
+
+    private HideFlags BuildGeneratedHideFlags()
+    {
+        HideFlags flags = HideFlags.DontSaveInEditor | HideFlags.DontSaveInBuild;
+        if (_hideGeneratedInHierarchy)
+            flags |= HideFlags.HideInHierarchy;
+
+        return flags;
     }
 
     // 원형 분포의 오프셋 좌표를 생성
@@ -276,13 +325,21 @@ public class TMPExternalStroke : MonoBehaviour
     // 에디터/플레이모드 환경에 맞춰 안전하게 삭제
     private static void SafeDestroy(UnityEngine.Object target)
     {
+        if (target == null)
+            return;
+
 #if UNITY_EDITOR
         if (!Application.isPlaying)
-            DestroyImmediate(target);
-        else
-            Destroy(target);
-#else
-        Destroy(target);
+        {
+            UnityEditor.EditorApplication.delayCall += () =>
+            {
+                if (target != null)
+                    DestroyImmediate(target);
+            };
+            return;
+        }
 #endif
+
+        Destroy(target);
     }
 }
