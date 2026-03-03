@@ -168,15 +168,32 @@ public class TournamentManager : MonoBehaviour
 
     private void RefreshUI()
     {
-        List<Matchup> currentRound = _allRounds[_currentRoundIndex];
-        List<TournamentMatchViewData> matchViewData = new(currentRound.Count);
-        for (int i = 0; i < currentRound.Count; i++)
+        int maxRoundIndex = Mathf.Clamp(_currentRoundIndex, 0, Mathf.Max(0, _allRounds.Count - 1));
+        List<List<TournamentMatchViewData>> allRoundViewData = new(maxRoundIndex + 1);
+
+        for (int roundIndex = 0; roundIndex <= maxRoundIndex; roundIndex++)
         {
-            Matchup matchup = currentRound[i];
-            matchViewData.Add(new TournamentMatchViewData(FormatSchoolName(matchup.UpTeam), FormatSchoolName(matchup.DownTeam), matchup.IncludeMySchool));
+            List<Matchup> round = _allRounds[roundIndex];
+            List<TournamentMatchViewData> roundViewData = new(round.Count);
+
+            for (int matchupIndex = 0; matchupIndex < round.Count; matchupIndex++)
+            {
+                Matchup matchup = round[matchupIndex];
+                bool isResolved = !string.IsNullOrEmpty(matchup.Winner);
+                bool isUpTeamWinner = isResolved && string.Equals(matchup.Winner, matchup.UpTeam, StringComparison.Ordinal);
+
+                roundViewData.Add(new TournamentMatchViewData(
+                    FormatSchoolName(matchup.UpTeam),
+                    FormatSchoolName(matchup.DownTeam),
+                    matchup.IncludeMySchool,
+                    isResolved,
+                    isUpTeamWinner));
+            }
+
+            allRoundViewData.Add(roundViewData);
         }
 
-        _tournamentUi.RenderRound(matchViewData, FormatSchoolName(_mySchoolName));
+        _tournamentUi.RenderRounds(allRoundViewData, maxRoundIndex, FormatSchoolName(_mySchoolName));
     }
 
     // CachedSOData 에서 참조해 학교 리스트 출력
