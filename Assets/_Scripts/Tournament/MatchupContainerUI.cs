@@ -11,13 +11,19 @@ public class MatchupContainerUI : MonoBehaviour
     [SerializeField] private Image _backgroundImage;
 
     [Header("Style")]
-    [SerializeField] private Color _myMatchupColor = Color.white;
-    [SerializeField] private Color _otherMatchupColor = new(0.8f, 0.8f, 0.8f, 1f);
+    [SerializeField] private Sprite _myMatchupSprite;
+    [SerializeField] private Sprite _otherMatchupSprite;
 
     public void SetData(string upTeamName, string downTeamName, bool isHighlighted)
     {
         _upTeamText.text = upTeamName;
         _downTeamText.text = downTeamName;
-        _backgroundImage.color = isHighlighted ? _myMatchupColor : _otherMatchupColor;
+
+        _backgroundImage.sprite = isHighlighted ? _myMatchupSprite : _otherMatchupSprite;
+        _backgroundImage.color = Color.white;
+
+        Color fontColor = isHighlighted ? Color.black : Color.white;
+        _upTeamText.color = fontColor;
+        _downTeamText.color = fontColor;
     }
 }
