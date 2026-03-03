@@ -305,7 +305,7 @@ public class RecruitmentPopup : UIPopup
     {
         if (UIManager.Instance == null) return;
 
-        UIPopupRequest request = UIPopupRequest.Default(
+        var req = UIPopupRequest.Default(
             title: "영입 취소",
             message: "영입을 종료하고 로비로 돌아가시겠습니까?",
             onPrimary: () =>
@@ -313,14 +313,17 @@ public class RecruitmentPopup : UIPopup
                 OnCancelled?.Invoke();
                 CloseAndDestroy();
             },
-            onCancel: null
+            onCancel: () => { },
+            subMessage: null,
+            previewSprite: null,
+            showCancel: true,
+            primaryKind: UIPopupRequest.PrimaryButtonKind.Confirm
         );
 
-        request.ShowCancel = true;
-        request.AutoCloseOnPrimary = true;
-        request.AutoCloseOnCancel = true;
+        req.AutoCloseOnPrimary = true;
+        req.AutoCloseOnCancel = true;
 
-        UIManager.Instance.ShowPopup(request);
+        UIManager.Instance.ShowPopup(req);
     }
 
     protected override void OnCloseButtonClicked()

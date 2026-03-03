@@ -246,46 +246,41 @@ public class TrainingSelectPopup : UIPopup
             return;
         }
 
-        UIPopupRequest request = new UIPopupRequest
+        var req = UIPopupRequest.Default(
+            title: data.trainingName,
+            message: data.trainingDesc,
+            onPrimary: null,
+            onCancel: () => { },
+            subMessage: data.statModifierText,
+            previewSprite: data.previewSprite,
+            showCancel: true,
+            primaryKind: UIPopupRequest.PrimaryButtonKind.StartTraining
+        );
+
+        req.AutoCloseOnPrimary = true;
+        req.AutoCloseOnCancel = true;
+
+        req.RequiresStudentSelection = data.requiresStudentSelection;
+        req.MaxSelectCount = data.maxSelectCount;
+
+        if (req.RequiresStudentSelection)
         {
-            Type = UIPopupRequest.PanelType.Default,
-            Title = data.trainingName,
-            Message = data.trainingDesc,
-            SubMessage = data.statModifierText,
-            PreviewSprite = data.previewSprite,
-
-            ShowCancel = true,
-            AutoCloseOnPrimary = true,
-            AutoCloseOnCancel = true,
-
-            PrimaryKind = UIPopupRequest.PrimaryButtonKind.StartTraining,
-            PrimaryInteractable = true,
-
-            RequiresStudentSelection = data.requiresStudentSelection,
-            MaxSelectCount = data.maxSelectCount
-        };
-
-        if (request.RequiresStudentSelection)
-        {
-            request.OnStudentsSelected = (students) =>
+            req.OnStudentsSelected = (students) =>
             {
                 StartTrainingFlowFromConfirm(data, students);
             };
-
-            request.OnPrimary = null;
+            req.OnPrimary = () => { };
         }
         else
         {
-            request.OnPrimary = () =>
+            req.OnPrimary = () =>
             {
                 List<Student> students = GetDefaultStudentsForNoSelect();
                 StartTrainingFlowFromConfirm(data, students);
             };
         }
 
-        request.OnCancel = () => { };
-
-        UIManager.Instance.ShowPopup(request);
+        UIManager.Instance.ShowPopup(req);
     }
 
     private void StartTrainingFlowFromConfirm(TrainingButtonData data, List<Student> students)

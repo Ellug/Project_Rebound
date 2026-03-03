@@ -1,35 +1,23 @@
-﻿public static class PopupRequestAdapter
+﻿using System;
+using System.Collections.Generic;
+
+public static class PopupRequestAdapter
 {
     public static UIPopupRequest FromPopupData(PopupData data)
     {
-        if (data == null) return null;
+        if (data == null)
+            return null;
 
-        bool showCancel = false;
-        System.Action onCancel = null;
-        System.Action onPrimary = null;
+        ResolveButtons(
+            data.Buttons,
+            out bool showCancel,
+            out Action onCancel,
+            out Action onPrimary
+        );
 
-        int btnCount = data.Buttons != null ? data.Buttons.Count : 0;
+        bool useDefaultPanel = data.Image != null || !string.IsNullOrEmpty(data.SubContent);
 
-        if (btnCount <= 0)
-        {
-            showCancel = false;
-            onPrimary = null;
-        }
-        else if (btnCount == 1)
-        {
-            showCancel = false;
-            onPrimary = data.Buttons[0].OnClick;
-        }
-        else
-        {
-            showCancel = true;
-            onCancel = data.Buttons[0].OnClick;
-            onPrimary = data.Buttons[1].OnClick;
-        }
-
-        bool hasDefaultExtras = data.Image != null || !string.IsNullOrEmpty(data.SubContent);
-
-        if (hasDefaultExtras)
+        if (useDefaultPanel)
         {
             return UIPopupRequest.Default(
                 title: data.Title,
@@ -38,7 +26,8 @@
                 onCancel: onCancel,
                 subMessage: data.SubContent,
                 previewSprite: data.Image,
-                showCancel: showCancel
+                showCancel: showCancel,
+                primaryKind: UIPopupRequest.PrimaryButtonKind.Confirm
             );
         }
 
@@ -49,5 +38,32 @@
             onCancel: onCancel,
             showCancel: showCancel
         );
+    }
+
+    private static void ResolveButtons(
+        List<PopupButtonInfo> buttons,
+        out bool showCancel,
+        out Action onCancel,
+        out Action onPrimary
+    )
+    {
+        showCancel = false;
+        onCancel = null;
+        onPrimary = null;
+
+        int count = buttons != null ? buttons.Count : 0;
+
+        if (count <= 0)
+            return;
+
+        if (count == 1)
+        {
+            onPrimary = buttons[0] != null ? buttons[0].OnClick : null;
+            return;
+        }
+
+        showCancel = true;
+        onCancel = buttons[0] != null ? buttons[0].OnClick : null;
+        onPrimary = buttons[1] != null ? buttons[1].OnClick : null;
     }
 }

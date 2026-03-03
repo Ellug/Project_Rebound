@@ -54,15 +54,15 @@ public sealed class UIPopupRequest
 
     public List<GuidePage> Pages = new List<GuidePage>();
 
-    // Simple: 기존 팝업처럼 "확인"만 쓰거나, 필요 시 취소도 노출
     public static UIPopupRequest Simple(
-        string title,
-        string message,
-        Action onPrimary = null,
-        Action onCancel = null,
-        bool showCancel = false,
-        bool autoCloseOnPrimary = true,
-        bool autoCloseOnCancel = true)
+     string title,
+     string message,
+     Action onPrimary,
+     Action onCancel,
+     bool showCancel = true,
+     bool autoCloseOnPrimary = true,
+     bool autoCloseOnCancel = true,
+     bool primaryInteractable = true)
     {
         return new UIPopupRequest
         {
@@ -70,14 +70,16 @@ public sealed class UIPopupRequest
             Title = title,
             Message = message,
             ShowCancel = showCancel,
+
             OnPrimary = onPrimary,
             OnCancel = onCancel,
+
             AutoCloseOnPrimary = autoCloseOnPrimary,
-            AutoCloseOnCancel = autoCloseOnCancel
+            AutoCloseOnCancel = autoCloseOnCancel,
+            PrimaryInteractable = primaryInteractable,
         };
     }
 
-    // Default: 서브/이미지 포함 가능 + 취소/PrimaryKind 제어
     public static UIPopupRequest Default(
         string title,
         string message,
@@ -86,9 +88,8 @@ public sealed class UIPopupRequest
         string subMessage = null,
         Sprite previewSprite = null,
         bool showCancel = true,
-        PrimaryButtonKind primaryKind = PrimaryButtonKind.Confirm,
-        bool autoCloseOnPrimary = true,
-        bool autoCloseOnCancel = true)
+        PrimaryButtonKind primaryKind = PrimaryButtonKind.Confirm
+    )
     {
         return new UIPopupRequest
         {
@@ -100,9 +101,7 @@ public sealed class UIPopupRequest
             ShowCancel = showCancel,
             PrimaryKind = primaryKind,
             OnPrimary = onPrimary,
-            OnCancel = onCancel,
-            AutoCloseOnPrimary = autoCloseOnPrimary,
-            AutoCloseOnCancel = autoCloseOnCancel
+            OnCancel = onCancel
         };
     }
 
@@ -111,9 +110,8 @@ public sealed class UIPopupRequest
         List<GuidePage> pages,
         Action onClose = null,
         Action onCancel = null,
-        bool showCancel = true,
-        bool autoCloseOnPrimary = true,
-        bool autoCloseOnCancel = true)
+        bool showCancel = false
+    )
     {
         return new UIPopupRequest
         {
@@ -122,9 +120,7 @@ public sealed class UIPopupRequest
             Pages = pages ?? new List<GuidePage>(),
             ShowCancel = showCancel,
             OnPrimary = onClose,
-            OnCancel = onCancel,
-            AutoCloseOnPrimary = autoCloseOnPrimary,
-            AutoCloseOnCancel = autoCloseOnCancel
+            OnCancel = onCancel
         };
     }
 }

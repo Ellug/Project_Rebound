@@ -4,8 +4,10 @@ using UnityEngine;
 using UnityEngine.UI;
 
 
-// 범용 팝업 베이스 클래스
-// PopupType에 따라 이미지/서브텍스트/페이지 기능을 선택적으로 활성화
+// UIPopup (Host)
+// Simple / Default / Guide 3패널 고정 레이아웃
+// 버튼/텍스트는 "위치 고정" 전제. 코드에서는 SetActive 토글만 수행한다.
+// RequiresStudentSelection=true 인 경우: Primary 클릭 시 StudentSelectPopup을 열고 선택 완료 콜백을 실행
 public class UIPopup : UIPopupBase
 {
     [Header("Panels")]
@@ -27,20 +29,17 @@ public class UIPopup : UIPopupBase
 
     [SerializeField] private Button _btnDefaultCancel;
 
-    [SerializeField] private GameObject _defaultPrimaryConfirmRoot;
-    [SerializeField] private Button _btnDefaultConfirm;
-
-    [SerializeField] private GameObject _defaultPrimaryStartTrainingRoot;
-    [SerializeField] private Button _btnDefaultStartTraining;
+    // Default Primary 버튼들 (같은 위치 고정, 필요한 것만 켜기)
+    [SerializeField] private Button _btnDefaultConfirm;         // 확인
+    [SerializeField] private Button _btnDefaultStartTraining;   // 훈련 시작/훈련 확인
 
     [Header("Guide UI")]
     [SerializeField] private TMP_Text _txtGuideTitle;
     [SerializeField] private TMP_Text _txtGuideSub;
     [SerializeField] private TMP_Text _txtGuideMessage;
     [SerializeField] private Image _imgGuidePreview;
-
+    [SerializeField] private Button _btnGuidePrev;
     [SerializeField] private Button _btnGuideCancel;
-
     [SerializeField] private Button _btnGuideNext;
     [SerializeField] private Button _btnGuideClose;
 
@@ -63,6 +62,7 @@ public class UIPopup : UIPopupBase
         SetAllPanels(false);
     }
 
+    // UIManager가 UIPopupRequest를 주입
     public void Setup(UIPopupRequest request)
     {
         _request = request;
@@ -92,6 +92,7 @@ public class UIPopup : UIPopupBase
         base.Close();
     }
 
+    // 팝업이 닫힐 때 PrimaryAction을 실행해야 하는 케이스 지원 (예: 리그 진입)
     private void TryInvokePrimaryOnClose()
     {
         if (_request == null)
@@ -103,9 +104,13 @@ public class UIPopup : UIPopupBase
         if (_request.RequiresStudentSelection)
             return;
 
+        if (!_request.PrimaryInteractable)
+            return;
+
         _request.OnPrimary?.Invoke();
     }
 
+    // Simple
     private void SetupSimple(UIPopupRequest request)
     {
         ActivatePanel(_panelSimple);
@@ -117,12 +122,7 @@ public class UIPopup : UIPopupBase
         {
             _btnSimpleCancel.gameObject.SetActive(request.ShowCancel);
             _btnSimpleCancel.onClick.RemoveAllListeners();
-            _btnSimpleCancel.onClick.AddListener(() =>
-            {
-                request.OnCancel?.Invoke();
-                if (request.AutoCloseOnCancel)
-                    CloseSelfByManager();
-            });
+            _btnSimpleCancel.onClick.AddListener(() => InvokeCancel(request));
         }
 
         if (_btnSimpleConfirm != null)
@@ -134,6 +134,7 @@ public class UIPopup : UIPopupBase
         }
     }
 
+    // Default
     private void SetupDefault(UIPopupRequest request)
     {
         ActivatePanel(_panelDefault);
@@ -163,27 +164,23 @@ public class UIPopup : UIPopupBase
         {
             _btnDefaultCancel.gameObject.SetActive(request.ShowCancel);
             _btnDefaultCancel.onClick.RemoveAllListeners();
-            _btnDefaultCancel.onClick.AddListener(() =>
-            {
-                request.OnCancel?.Invoke();
-                if (request.AutoCloseOnCancel)
-                    CloseSelfByManager();
-            });
+            _btnDefaultCancel.onClick.AddListener(() => InvokeCancel(request));
         }
 
-        ApplyDefaultPrimaryKind(request);
+        ApplyDefaultPrimary(request);
     }
 
-    private void ApplyDefaultPrimaryKind(UIPopupRequest request)
+    // Default Primary 버튼 토글 (Confirm vs StartTraining)
+    // - 버튼 위치는 프리팹에서 고정
+    // - 여기서는 "나오고/안나오고"만 제어
+    private void ApplyDefaultPrimary(UIPopupRequest request)
     {
-        if (_defaultPrimaryConfirmRoot != null)
-            _defaultPrimaryConfirmRoot.SetActive(request.PrimaryKind == UIPopupRequest.PrimaryButtonKind.Confirm);
-
-        if (_defaultPrimaryStartTrainingRoot != null)
-            _defaultPrimaryStartTrainingRoot.SetActive(request.PrimaryKind == UIPopupRequest.PrimaryButtonKind.StartTraining);
+        bool useConfirm = request.PrimaryKind == UIPopupRequest.PrimaryButtonKind.Confirm;
+        bool useTraining = request.PrimaryKind == UIPopupRequest.PrimaryButtonKind.StartTraining;
 
         if (_btnDefaultConfirm != null)
         {
+            _btnDefaultConfirm.gameObject.SetActive(useConfirm);
             _btnDefaultConfirm.interactable = request.PrimaryInteractable;
             _btnDefaultConfirm.onClick.RemoveAllListeners();
             _btnDefaultConfirm.onClick.AddListener(() => InvokePrimary(request));
@@ -191,12 +188,14 @@ public class UIPopup : UIPopupBase
 
         if (_btnDefaultStartTraining != null)
         {
+            _btnDefaultStartTraining.gameObject.SetActive(useTraining);
             _btnDefaultStartTraining.interactable = request.PrimaryInteractable;
             _btnDefaultStartTraining.onClick.RemoveAllListeners();
             _btnDefaultStartTraining.onClick.AddListener(() => InvokePrimary(request));
         }
     }
 
+    // Guide
     private void SetupGuide(UIPopupRequest request)
     {
         ActivatePanel(_panelGuide);
@@ -207,12 +206,7 @@ public class UIPopup : UIPopupBase
         {
             _btnGuideCancel.gameObject.SetActive(request.ShowCancel);
             _btnGuideCancel.onClick.RemoveAllListeners();
-            _btnGuideCancel.onClick.AddListener(() =>
-            {
-                request.OnCancel?.Invoke();
-                if (request.AutoCloseOnCancel)
-                    CloseSelfByManager();
-            });
+            _btnGuideCancel.onClick.AddListener(() => InvokeCancel(request));
         }
 
         EnsureDots();
@@ -265,8 +259,28 @@ public class UIPopup : UIPopupBase
         RefreshDots();
     }
 
+    private void PrevGuidePage()
+    {
+        if (_request == null || _request.Pages == null || _request.Pages.Count == 0)
+            return;
+
+        _pageIndex = Mathf.Max(0, _pageIndex - 1);
+        RefreshGuidePage();
+    }
+
     private void ApplyGuideButtonState(bool isLast)
     {
+        // Prev: 0페이지면 숨김, 그 외 표시
+        if (_btnGuidePrev != null)
+        {
+            bool canPrev = _pageIndex > 0;
+            _btnGuidePrev.gameObject.SetActive(canPrev);
+            _btnGuidePrev.onClick.RemoveAllListeners();
+            if (canPrev)
+                _btnGuidePrev.onClick.AddListener(PrevGuidePage);
+        }
+
+        // Next: 마지막 페이지면 숨김
         if (_btnGuideNext != null)
         {
             _btnGuideNext.gameObject.SetActive(!isLast);
@@ -274,6 +288,7 @@ public class UIPopup : UIPopupBase
             _btnGuideNext.onClick.AddListener(NextGuidePage);
         }
 
+        // Close: 마지막 페이지에서만 표시
         if (_btnGuideClose != null)
         {
             _btnGuideClose.gameObject.SetActive(isLast);
@@ -332,6 +347,7 @@ public class UIPopup : UIPopupBase
         }
     }
 
+    // Shared
     private void ActivatePanel(GameObject panel)
     {
         SetAllPanels(false);
@@ -353,6 +369,7 @@ public class UIPopup : UIPopupBase
         if (!request.PrimaryInteractable)
             return;
 
+        // 학생 선택 필요 → StudentSelectPopup으로 위임
         if (request.RequiresStudentSelection)
         {
             if (UIManager.Instance == null)
@@ -365,10 +382,7 @@ public class UIPopup : UIPopupBase
 
             UIManager.Instance.OpenStudentSelect(
                 maxSelectCount: max,
-                onSelected: (students) =>
-                {
-                    request.OnStudentsSelected?.Invoke(students);
-                },
+                onSelected: (students) => request.OnStudentsSelected?.Invoke(students),
                 onCancelled: () => { }
             );
 
@@ -381,6 +395,18 @@ public class UIPopup : UIPopupBase
         request.OnPrimary?.Invoke();
 
         if (request.AutoCloseOnPrimary)
+            CloseSelfByManager();
+    }
+
+    // Cancel 동작: Cancel 액션 호출 + 옵션에 따라 닫기
+    private void InvokeCancel(UIPopupRequest request)
+    {
+        if (request == null)
+            return;
+
+        request.OnCancel?.Invoke();
+
+        if (request.AutoCloseOnCancel)
             CloseSelfByManager();
     }
 }

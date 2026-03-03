@@ -124,23 +124,25 @@ public class RecruitmentManager : MonoBehaviour
 
         bool canSkip = context != RecruitmentContext.GameStart;
 
-        Action primary = isFull ? null : OpenRecruitmentPopup;
+        Action onPrimary = OpenRecruitmentPopup;
+        Action onCancel = canSkip ? HandleRecruitmentSkipped : null;
 
-        UIPopupRequest request = UIPopupRequest.Default(
+        var req = UIPopupRequest.Default(
             title: "학생 영입",
             message: BuildEventMessage(context),
+            onPrimary: onPrimary,
+            onCancel: onCancel,
             subMessage: isFull ? "현재 보유 학생이 정원으로 영입을 진행할 수 없습니다." : null,
             previewSprite: null,
-            onPrimary: primary,
-            onCancel: canSkip ? HandleRecruitmentSkipped : null
+            showCancel: canSkip,
+            primaryKind: UIPopupRequest.PrimaryButtonKind.Confirm
         );
 
-        request.ShowCancel = canSkip;
-        request.PrimaryInteractable = !isFull;
-        request.AutoCloseOnPrimary = true;
-        request.AutoCloseOnCancel = true;
+        req.PrimaryInteractable = !isFull;
+        req.AutoCloseOnPrimary = true;
+        req.AutoCloseOnCancel = true;
 
-        UIManager.Instance.ShowPopup(request);
+        UIManager.Instance.ShowPopup(req);
     }
 
     // 2단계: 카드 선택 팝업

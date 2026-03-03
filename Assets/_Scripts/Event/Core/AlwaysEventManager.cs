@@ -149,21 +149,23 @@ public class AlwaysEventManager : MonoBehaviour
             _ => "이벤트 발생"
         };
 
-        UIPopupRequest request = new UIPopupRequest
-        {
-            Type = UIPopupRequest.PanelType.Default,
-            Title = title,
-            Message = GetEventDescription(row),
-            SubMessage = GetEventSubMessage(row),
-            PreviewSprite = null,
-            ShowCancel = false,
-            OnPrimary = onConfirm,
-            AutoCloseOnPrimary = true,
-            InvokePrimaryOnClose = IsLeagueBreakEvent(row),
-            PrimaryInteractable = true
-        };
+        var req = UIPopupRequest.Default(
+            title: title,
+            message: GetEventDescription(row),
+            onPrimary: onConfirm,
+            onCancel: null,
+            subMessage: GetEventSubMessage(row),
+            previewSprite: null,
+            showCancel: false,
+            primaryKind: UIPopupRequest.PrimaryButtonKind.Confirm
+        );
 
-        UIManager.Instance.ShowPopup(request);
+        if (IsLeagueBreakEvent(row))
+        {
+            req.InvokePrimaryOnClose = true;
+        }
+
+        UIManager.Instance.ShowPopup(req);
     }
 
     // 다음 리그(vacation 타입) 시작 날짜 조회 — GameManager가 D-Day 계산에 사용

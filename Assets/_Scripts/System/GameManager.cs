@@ -457,36 +457,29 @@ public class GameManager : Singleton<GameManager>
 
         if (_flowData.HasPendingFriendlyMatch)
         {
-            UIPopupRequest request = new UIPopupRequest
-            {
-                Type = UIPopupRequest.PanelType.Default,
-                Title = "친선경기",
-                Message = "이번 주말 친선경기가 예정되어 있습니다.\n친선경기에 진입하시겠습니까? (미구현)",
-                ShowCancel = true,
-                OnPrimary = EnterFriendlyMatch,
-                OnCancel = null,
-                AutoCloseOnPrimary = true,
-                AutoCloseOnCancel = true
-            };
+            var req = UIPopupRequest.Default(
+                title: "친선경기",
+                message: "이번 주말 친선경기가 예정되어 있습니다.\n친선경기에 진입하시겠습니까? (미구현)",
+                onPrimary: EnterFriendlyMatch,
+                onCancel: () => { },
+                showCancel: true
+            );
 
-            UIManager.Instance.ShowPopup(request);
-            return;
+            UIManager.Instance.ShowPopup(req);
         }
-
-        UIPopupRequest weekendRequest = new UIPopupRequest
+        else
         {
-            Type = UIPopupRequest.PanelType.Default,
-            Title = "주말 훈련 제안",
-            Message = "금요일 일정이 끝났습니다.\n주말 훈련을 진행하시겠습니까?",
-            SubMessage = "확인: 전원 스탯 소량 상승, 주말 휴식 효율 50%\n취소: 주말 푹 쉬기 (체력 대폭 회복)",
-            ShowCancel = true,
-            OnPrimary = OnWeekendTrainingConfirmed,
-            OnCancel = OnWeekendTrainingCancelled,
-            AutoCloseOnPrimary = true,
-            AutoCloseOnCancel = true
-        };
+            var req = UIPopupRequest.Default(
+                title: "주말 훈련 제안",
+                message: "금요일 일정이 끝났습니다.\n주말 훈련을 진행하시겠습니까?",
+                onPrimary: OnWeekendTrainingConfirmed,
+                onCancel: OnWeekendTrainingCancelled,
+                subMessage: "확인: 전원 스탯 소량 상승, 주말 휴식 효율 50%\n취소: 주말 푹 쉬기 (체력 대폭 회복)",
+                showCancel: true
+            );
 
-        UIManager.Instance.ShowPopup(weekendRequest);
+            UIManager.Instance.ShowPopup(req);
+        }
     }
 
     // 주말 훈련 확인 (훈련 진행)

@@ -94,22 +94,18 @@ public class TournamentHalfTimeSelectionUI : MonoBehaviour
 
         if (UIManager.Instance == null) return; // 싱글톤이라 없으면 안됨. 없으면 뭔가 잘못된 거임 혼남.
 
-        UIPopupRequest request = UIPopupRequest.Default(
+        var req = UIPopupRequest.Default(
             title: selected.Name,
             message: selected.Description,
+            onPrimary: () => ConfirmSelection(selected),
+            onCancel: () => { },
             subMessage: null,
             previewSprite: null,
-            onPrimary: () => ConfirmSelection(selected),
-            onCancel: null
+            showCancel: true,
+            primaryKind: UIPopupRequest.PrimaryButtonKind.Confirm
         );
 
-        request.ShowCancel = true;
-        request.AutoCloseOnPrimary = true;
-        request.AutoCloseOnCancel = true;
-        request.PrimaryInteractable = true;
-        request.PrimaryKind = UIPopupRequest.PrimaryButtonKind.Confirm;
-
-        UIManager.Instance.ShowPopup(request);
+        UIManager.Instance.ShowPopup(req);
     }
 
     private void ConfirmSelection(HalfTimeOption option)

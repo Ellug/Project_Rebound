@@ -47,14 +47,30 @@ public class SettingsPanel : UIBase
 
     private void RestartTutorialConfirmed()
     {
+        // 1) 다시 보지 않기 해제
         TutorialGuidePrefs.ResetDismissed();
 
+        // 2) 안내 팝업에서 "확인"을 누르는 순간 Entry를 다시 켠다
         UIManager.Instance.ShowPopup(new PopupData(
             title: "안내",
             content: "튜토리얼은 로비에서 다시 표시됩니다.",
             buttons: new List<PopupButtonInfo>
             {
-                new PopupButtonInfo(() => { })
+            new PopupButtonInfo(() =>
+            {
+                // 비활성 포함 검색
+                var entry = FindFirstObjectByType<LobbyTutorialGuideEntry>(FindObjectsInactive.Include);
+                if (entry != null)
+                {
+                    
+                    // entry.ShowEntry(true);          // 엔트리+검정패널만 다시 띄움
+                    entry.RestartAndShowEntry();       // Prefs 리셋 포함 버전이면 이걸 권장
+                }
+                else
+                {
+                    Debug.LogWarning("[SettingsPanel] LobbyTutorialGuideEntry를 찾지 못했습니다.");
+                }
+            })
             }
         ));
     }
