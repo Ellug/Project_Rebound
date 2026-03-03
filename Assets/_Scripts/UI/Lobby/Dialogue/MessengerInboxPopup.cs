@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -46,15 +46,14 @@ public class MessengerInboxPopup : UIBase
     public override void Close()
     {
         gameObject.SetActive(false);
-
+        
         if (UIManager.Instance != null)
         {
             UIManager.Instance.PopMessenger(this);
         }
 
-        base.Close(); 
+        base.Close();
 
-        
         if (UIManager.Instance != null) UIManager.Instance.PopMessenger(this);
     }
 

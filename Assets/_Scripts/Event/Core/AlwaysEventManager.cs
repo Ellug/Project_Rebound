@@ -121,13 +121,6 @@ public class AlwaysEventManager : MonoBehaviour
     {
         if (row.type == "roster") return;
 
-        // description이 없으면 팝업 없이 효과만 적용
-        // if (string.IsNullOrEmpty(row.description))
-        // {
-        //     AlwaysEffectApplier.ApplyEffect(row);
-        //     return;
-        // }
-
         AlwaysEventRow capturedRow = row;
         Action onConfirm = () =>
         {
@@ -156,19 +149,23 @@ public class AlwaysEventManager : MonoBehaviour
             _ => "이벤트 발생"
         };
 
-        ConfirmPopupRequest request = new(
+        var req = UIPopupRequest.Default(
             title: title,
-            //message: row.description,
             message: GetEventDescription(row),
-            primaryLabel: "확인",
-            primaryAction: onConfirm,
-            subMessage: GetEventSubMessage(row)     // TxtSub에 효과 텍스트 출력
+            onPrimary: onConfirm,
+            onCancel: null,
+            subMessage: GetEventSubMessage(row),
+            previewSprite: null,
+            showCancel: false,
+            primaryKind: UIPopupRequest.PrimaryButtonKind.Confirm
         );
 
         if (IsLeagueBreakEvent(row))
-            request.SetModal(false).SetInvokeConfirmOnClose(true);
+        {
+            req.InvokePrimaryOnClose = true;
+        }
 
-        UIManager.Instance.ShowConfirm(request);
+        UIManager.Instance.ShowPopup(req);
     }
 
     // 다음 리그(vacation 타입) 시작 날짜 조회 — GameManager가 D-Day 계산에 사용

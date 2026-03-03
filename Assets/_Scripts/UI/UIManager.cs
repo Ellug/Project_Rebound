@@ -1,6 +1,7 @@
-﻿using UnityEngine;
+﻿using System;
 using System.Collections.Generic;
-using UnityEngine.InputSystem; // New Input System
+using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
 public class UIManager : Singleton<UIManager>
@@ -9,11 +10,14 @@ public class UIManager : Singleton<UIManager>
     private Stack<UIBase> _uiStack = new Stack<UIBase>();
 
     [Header("Settings")]
-    [SerializeField] private Transform _canvasRoot;      // 팝업이 생성될 캔버스
-    [SerializeField] private UIPopup _masterPopupPrefab; // 기본 팝업 프리팹
-    [SerializeField] private ConfirmPopup _confirmPopupPrefab;
+    [SerializeField] private Transform _canvasRoot;           // 팝업이 생성될 캔버스
 
-    // Input Action Asset으로 생성된 C# 클래스
+    [Header("Popup Prefabs")]
+    [SerializeField] private UIPopup _uiPopupPrefab;
+
+    [Header("Student Select Prefab")]
+    [SerializeField] private StudentSelectPopup _studentSelectPopupPrefab;
+
     private InputSystem_Actions _input;
 
     protected override void OnSingletonAwake()
@@ -30,18 +34,18 @@ public class UIManager : Singleton<UIManager>
     }
 
     // 매니저가 활성화될 때 인풋도 켜기
-    void OnEnable()
+    private void OnEnable()
     {
         _input?.Enable();
     }
 
     // 매니저가 비활성화될 때 인풋도 끄기
-    void OnDisable()
+    private void OnDisable()
     {
         _input?.Disable();
     }
 
-    void OnDestroy()
+    private void OnDestroy()
     {
         SceneManager.sceneLoaded -= HandleSceneLoaded;
     }
@@ -55,68 +59,152 @@ public class UIManager : Singleton<UIManager>
         {
             // 스택 최상단 팝업의 뒤로가기 로직 수행
             _uiStack.Peek().OnBackKey();
+            return;
         }
-        else
+
+        ShowPopup(new UIPopupRequest
         {
-            // 스택에 팝업이 없으면 종료 팝업 띄우기
-            ShowExitPopup();
-        }
+            Type = UIPopupRequest.PanelType.Default,
+            Title = "게임 종료",
+            Message = "게임을 종료하시겠습니까?",
+            ShowCancel = true,
+            OnPrimary = () => Application.Quit(),
+            OnCancel = null,
+            AutoCloseOnPrimary = true,
+            AutoCloseOnCancel = true
+        });
     }
 
-    // 팝업 호출 메서드
-    public void ShowPopup(PopupData data)
+    // UIPopupRequest 경로
+    public void ShowPopup(UIPopupRequest request)
     {
-        ShowPopupWithPrefab(data, _masterPopupPrefab);
-    }
+        if (request == null) return;
 
-    // 특정 프리팹으로 팝업 호출 (null이면 기본 프리팹)
-    public void ShowPopup(PopupData data, UIPopup popupPrefab)
-    {
-        ShowPopupWithPrefab(data, popupPrefab != null ? popupPrefab : _masterPopupPrefab);
-    }
-
-    private void ShowPopupWithPrefab(PopupData data, UIPopup popupPrefab)
-    {
-        if (popupPrefab == null)
+        if (_uiPopupPrefab == null)
         {
             Debug.LogError("[UIManager] Popup Prefab이 연결되지 않았습니다.");
             return;
         }
 
-        if (!EnsureCanvasRoot())
-            return;
+        if (!EnsureCanvasRoot()) return;
 
         // 1. 프리팹 생성
-        UIPopup popupInstance = Instantiate(popupPrefab, _canvasRoot, false);
+        UIPopup popupInstance = Instantiate(_uiPopupPrefab, _canvasRoot, false);
         popupInstance.transform.SetAsLastSibling(); // 항상 최상단에 표시
 
         // 2. 초기화 및 데이터 주입
         popupInstance.Init();
-        popupInstance.SetData(data); // 데이터 밀어넣기
+        popupInstance.Setup(request);
         popupInstance.Open();
 
         // 3. 스택에 추가
         _uiStack.Push(popupInstance);
     }
 
-    // 편의용 오버로딩
-    public void ShowPopup(string title, string content, string confirmText = "확인", System.Action onConfirm = null)
+    // PopupData 경로 (기존 호출 유지용 어댑터)
+    public void ShowPopup(PopupData data)
     {
-        var buttons = new List<PopupButtonInfo>
-        {
-            new PopupButtonInfo(confirmText, onConfirm)
-        };
-        ShowPopup(new PopupData(title, content, buttons: buttons));
+        ShowPopup(PopupRequestAdapter.FromPopupData(data));
     }
 
+
+    public void OpenStudentSelect(int maxSelectCount, Action<List<Student>> onSelected, Action onCancelled)
+    {
+        if (_studentSelectPopupPrefab == null)
+        {
+            Debug.LogWarning("[UIManager] _studentSelectPopupPrefab이 null입니다.");
+            onCancelled?.Invoke();
+            return;
+        }
+
+        if (!EnsureCanvasRoot())
+        {
+            onCancelled?.Invoke();
+            return;
+        }
+
+        StudentSelectPopup popup = Instantiate(_studentSelectPopupPrefab, _canvasRoot, false);
+        popup.transform.SetAsLastSibling();
+
+        popup.SetMaxSelectCount(maxSelectCount);
+        popup.Init();
+        popup.Open();
+
+        popup.OnSelectionConfirmed -= HandleSelected;
+        popup.OnSelectionConfirmed += HandleSelected;
+
+        popup.OnCancelled -= HandleCancelled;
+        popup.OnCancelled += HandleCancelled;
+
+        void HandleSelected(List<Student> students)
+        {
+            popup.OnSelectionConfirmed -= HandleSelected;
+            popup.OnCancelled -= HandleCancelled;
+
+            onSelected?.Invoke(students);
+
+            popup.Close();
+            Destroy(popup.gameObject);
+        }
+
+        void HandleCancelled()
+        {
+            popup.OnSelectionConfirmed -= HandleSelected;
+            popup.OnCancelled -= HandleCancelled;
+
+            onCancelled?.Invoke();
+
+            popup.Close();
+            Destroy(popup.gameObject);
+        }
+    }
+
+    // 범용 UI 표시
+    public T ShowUI<T>(T uiPrefab) where T : UIBase
+    {
+        if (uiPrefab == null)
+        {
+            Debug.LogError("[UIManager] ShowUI 실패: prefab이 null입니다.");
+            return null;
+        }
+
+        if (!EnsureCanvasRoot())
+            return null;
+
+        T instance = Instantiate(uiPrefab, _canvasRoot, false);
+        instance.transform.SetAsLastSibling();
+
+        instance.Init();
+        instance.Open();
+
+        _uiStack.Push(instance);
+        return instance;
+    }
+
+    // 중복 생성 감지용
+    public T ShowUIUnique<T>(T uiPrefab) where T : UIBase
+    {
+        foreach (var item in _uiStack)
+        {
+            if (item is T existing && existing != null)
+            {
+                existing.transform.SetAsLastSibling();
+                return existing;
+            }
+        }
+
+        return ShowUI(uiPrefab);
+    }
+
+    // 닫기
     // 스택 최상단 UI 닫기
     public void CloseTop()
     {
         if (_uiStack.Count == 0) return;
 
-        UIBase topUI = _uiStack.Pop();
-        topUI.Close();
-        Destroy(topUI.gameObject);
+        UIBase top = _uiStack.Pop();
+        top.Close();
+        Destroy(top.gameObject);
     }
 
     // 특정 인스턴스를 닫기 (Top이 바뀌는 케이스 방지)
@@ -125,7 +213,13 @@ public class UIManager : Singleton<UIManager>
         if (target == null) return;
         if (_uiStack.Count == 0) return;
 
-        // 일반 케이스: target이 Top
+        if (_uiStack.Count == 0)
+        {
+            target.Close();
+            Destroy(target.gameObject);
+            return;
+        }
+
         if (_uiStack.Peek() == target)
         {
             CloseTop();
@@ -161,16 +255,39 @@ public class UIManager : Singleton<UIManager>
         }
     }
 
-    private void ShowExitPopup()
+    // 메신저 스택
+    private Stack<UIBase> _messengerStack = new Stack<UIBase>();
+
+    // 창이 열릴 때 스택에 넣기
+    public void PushMessenger(UIBase ui)
     {
-        var buttons = new List<PopupButtonInfo>
-        {
-            new PopupButtonInfo("취소", null),
-            new PopupButtonInfo("종료", () => Application.Quit())
-        };
-        ShowPopup(new PopupData("게임 종료", "게임을 종료하시겠습니까?", buttons: buttons));
+        _messengerStack.Push(ui);
     }
 
+    // 창이 닫힐 때 스택에서 빼기
+    public void PopMessenger(UIBase ui)
+    {
+        if (_messengerStack.Count > 0 && _messengerStack.Peek() == ui)
+        {
+            _messengerStack.Pop();
+        }
+    }
+
+    // 뒤로가기 키 입력 감지 
+    private void Update()
+    {
+        if (Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame)
+        {
+            // 열려있는 메신저 창이 있다면, 가장 위에 있는 창 닫기
+            if (_messengerStack.Count > 0)
+            {
+                _messengerStack.Peek().Close();
+                return;
+            }
+        }
+    }
+
+    // 캔버스 루트 관리
     private void HandleSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         RebindCanvasRoot();
@@ -215,106 +332,5 @@ public class UIManager : Singleton<UIManager>
 
         if (canvases.Length > 0 && canvases[0] != null)
             _canvasRoot = canvases[0].transform;
-    }
-
-    public void ShowConfirm(ConfirmPopupRequest request)
-    {
-        ShowConfirmWithPrefab(request, _confirmPopupPrefab);
-    }
-
-
-    public void ShowConfirm(ConfirmPopupRequest request, ConfirmPopup popupPrefab)
-    {
-        ShowConfirmWithPrefab(request, popupPrefab != null ? popupPrefab : _confirmPopupPrefab);
-    }
-
-
-    private void ShowConfirmWithPrefab(ConfirmPopupRequest request, ConfirmPopup popupPrefab)
-    {
-        if (popupPrefab == null)
-        {
-            Debug.LogError("[UIManager] ConfirmPopup Prefab이 연결되지 않았습니다.");
-            return;
-        }
-
-        if (!EnsureCanvasRoot())
-            return;
-
-        ConfirmPopup popupInstance = Instantiate(popupPrefab, _canvasRoot, false);
-        popupInstance.transform.SetAsLastSibling();
-
-        popupInstance.Init();
-        popupInstance.Setup(request);
-        popupInstance.Open();
-
-        _uiStack.Push(popupInstance);
-    }
-
-    
-    public T ShowUI<T>(T uiPrefab) where T : UIBase
-    {
-        if (uiPrefab == null)
-        {
-            Debug.LogError("[UIManager] ShowUI 실패: prefab이 null입니다.");
-            return null;
-        }
-
-        if (!EnsureCanvasRoot())
-            return null;
-
-        T instance = Instantiate(uiPrefab, _canvasRoot, false);
-        instance.transform.SetAsLastSibling();
-
-        instance.Init();
-        instance.Open();
-
-        _uiStack.Push(instance);
-        return instance;
-    }
-    // 중복 생성 감지용
-    public T ShowUIUnique<T>(T uiPrefab) where T : UIBase
-    {
-        foreach (var item in _uiStack)
-        {
-            if (item is T existing && existing != null)
-            {
-                existing.transform.SetAsLastSibling();
-                return existing;
-            }
-        }
-
-        return ShowUI(uiPrefab);
-    }
-
-
-    private System.Collections.Generic.Stack<UIBase> _messengerStack = new System.Collections.Generic.Stack<UIBase>();
-
-    // 창이 열릴 때 스택에 넣기
-    public void PushMessenger(UIBase ui)
-    {
-        _messengerStack.Push(ui);
-    }
-
-    // 창이 닫힐 때 스택에서 빼기
-    public void PopMessenger(UIBase ui)
-    {
-        if (_messengerStack.Count > 0 && _messengerStack.Peek() == ui)
-        {
-            _messengerStack.Pop();
-        }
-    }
-
-    // 뒤로가기 키 입력 감지 
-    private void Update()
-    {
-        if (Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame)
-        {
-            // 열려있는 메신저 창이 있다면, 가장 위에 있는 창 닫기
-            if (_messengerStack.Count > 0)
-            {
-                _messengerStack.Peek().Close();
-                return;
-            }
-        }
     }
 }
