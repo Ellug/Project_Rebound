@@ -134,7 +134,7 @@ MonoBehaviour:
     stamina: 0
     linkedEventId: 0
   - index: 1202
-    name: "\uD3EC\uC2A4\uD2B8\uC5C5 & \uB9AC\uBC14\uC6B4\uB4DC"
+    name: "\uD3EC\uC2A4\uD2B8\uC5C5/\uB9AC\uBC14\uC6B4\uB4DC"
     icon: 
     parentIndex: 1002
     btnType: 1
@@ -164,7 +164,7 @@ MonoBehaviour:
     stamina: 0
     linkedEventId: 0
   - index: 1204
-    name: "\uD578\uB4E4\uB9C1 & \uAC1C\uC778\uAE30"
+    name: "\uD578\uB4E4\uB9C1/\uAC1C\uC778\uAE30"
     icon: 
     parentIndex: 1002
     btnType: 1
