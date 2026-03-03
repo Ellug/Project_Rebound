@@ -229,8 +229,8 @@ MonoBehaviour:
   _upTeamText: {fileID: 3844929972397843195}
   _downTeamText: {fileID: 1051394998120443012}
   _backgroundImage: {fileID: 1089624660230562948}
-  _myMatchupColor: {r: 1, g: 1, b: 1, a: 1}
-  _otherMatchupColor: {r: 0.8, g: 0.8, b: 0.8, a: 1}
+  _myMatchupSprite: {fileID: -5634378785935390685, guid: 48f5598a87d3b074284f7b8374b9e6c6, type: 3}
+  _otherMatchupSprite: {fileID: 4169160427589878525, guid: a2f606e6d0ad08d429399ae064ca982b, type: 3}
 --- !u!1 &5963156546660708791
 GameObject:
   m_ObjectHideFlags: 0
