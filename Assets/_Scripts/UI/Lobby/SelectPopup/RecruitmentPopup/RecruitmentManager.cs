@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.Rendering.DebugUI;
 
 // 학생 영입 흐름 전체 관리
 // AlwaysEvent 기반으로 영입/졸업 이벤트를 수신하고
@@ -104,6 +105,9 @@ public class RecruitmentManager : MonoBehaviour
         if (StudentManager.Instance != null)
         {
             StudentManager.Instance.GraduateSeniors(); // StudentManager에 위임
+
+            StudentManager.Instance.PromoteStudents();
+
         }
 
         Debug.Log("[RecruitmentManager] 졸업 처리 완료");
@@ -123,6 +127,8 @@ public class RecruitmentManager : MonoBehaviour
         bool isFull = ownedCount >= capacity;
 
         bool canSkip = context != RecruitmentContext.GameStart;
+        string messageBody = BuildEventMessage(context);
+
 
         Action onPrimary = OpenRecruitmentPopup;
         Action onCancel = canSkip ? HandleRecruitmentSkipped : null;
@@ -143,6 +149,15 @@ public class RecruitmentManager : MonoBehaviour
         req.AutoCloseOnCancel = true;
 
         UIManager.Instance.ShowPopup(req);
+
+        // 메신저 시스템에 기록
+        // 버튼을 넣지 않고 NormalText 타입으로 보내서 순수하게 읽기 전용 톡방 생성
+        if (MessengerManager.Instance != null)
+        {
+            ChatMessage logMsg = new ChatMessage(MessageSenderType.Them, messageBody, MessageEventType.NormalText);
+            MessengerManager.Instance.ReceiveMessage("sys_scout", "공지", logMsg);
+        }
+
     }
 
     // 2단계: 카드 선택 팝업
