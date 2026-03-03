@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 5339324584360401416}
   - component: {fileID: 2084570811122997613}
   - component: {fileID: 8886561355746586601}
+  - component: {fileID: 3404507962239540188}
+  - component: {fileID: 6868552872263269260}
   m_Layer: 5
   m_Name: FileNum
   m_TagString: Untagged
@@ -35,7 +37,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -293.17206, y: 25}
-  m_SizeDelta: {x: 121.6559, y: 50}
+  m_SizeDelta: {x: 0, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2084570811122997613
 CanvasRenderer:
@@ -65,10 +67,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: File
+  m_text: "File 01: 2000\uB144 00\uC6D4 00\uC77C"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 9291a7438c2005e48b00352476c10c41, type: 2}
-  m_sharedMaterial: {fileID: -6666201437410415903, guid: 9291a7438c2005e48b00352476c10c41, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8a795152ff8a75940bbbfaee53912654, type: 2}
+  m_sharedMaterial: {fileID: 4146398157102861648, guid: 8a795152ff8a75940bbbfaee53912654, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -98,9 +100,9 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 1
   m_HorizontalAlignment: 1
-  m_VerticalAlignment: 256
+  m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
@@ -136,3 +138,35 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &3404507962239540188
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3866539750606304527}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a5cf9c46efca41db905e274ab2ed6618, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TMPExternalStroke
+  _strokeColor: {r: 1, g: 1, b: 1, a: 1}
+  _strokeSize: 6
+  _sampleCount: 12
+  _autoSync: 1
+  _hideGeneratedInHierarchy: 1
+  _layerKey: f83b663a
+--- !u!114 &6868552872263269260
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3866539750606304527}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.ContentSizeFitter
+  m_HorizontalFit: 2
+  m_VerticalFit: 0
