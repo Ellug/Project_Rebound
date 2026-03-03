@@ -136,20 +136,22 @@ public class LobbyUI : UIBase
             _btnLog.onClick.RemoveAllListeners(); // 혹시 모를 중복 방지
             _btnLog.onClick.AddListener(() =>
             {
-                // [2] 이미지 + 서브텍스트가 포함된 팝업 데이터 생성
-                var buttons = new List<PopupButtonInfo>
+                //팝업 데이터 생성
+                UIPopupRequest request = new UIPopupRequest
                 {
-                    new PopupButtonInfo("취소", null),
-                    new PopupButtonInfo("확인", () => Debug.Log("이미지 팝업 확인됨"))
+                    Type = UIPopupRequest.PanelType.Default,
+                    Title = "특수 훈련",
+                    Message = "이 훈련은 부상 위험이 높지만\n성장 속도가 매우 빠릅니다.",
+                    SubMessage = "체력 소모 -30 / 부상 확률 10%",
+                    PreviewSprite = _testSprite,
+                    ShowCancel = true,
+                    OnPrimary = () => Debug.Log("이미지 팝업 확인됨"),
+                    OnCancel = null,
+                    AutoCloseOnPrimary = true,
+                    AutoCloseOnCancel = true
                 };
 
-                UIManager.Instance.ShowPopup(new PopupData(
-                    title: "특수 훈련",
-                    content: "이 훈련은 부상 위험이 높지만\n성장 속도가 매우 빠릅니다.",
-                    subContent: "체력 소모 -30 / 부상 확률 10%", // 서브 텍스트
-                    image: _testSprite,                     // 테스트 이미지
-                    buttons: buttons
-                ));
+                UIManager.Instance.ShowPopup(request);
             });
         }
         if (_btnSetting != null)
@@ -173,8 +175,6 @@ public class LobbyUI : UIBase
             _btnCoach.onClick.AddListener(() => ShowNotImplemented("감독 노드"));
         if (_btnShop != null)
             _btnShop.onClick.AddListener(() => ShowNotImplemented("상점"));
-
-
     }
 
     private void OnClickTraining()
@@ -247,9 +247,13 @@ public class LobbyUI : UIBase
     private void ShowNotImplemented(string featureName)
     {
         UIManager.Instance.ShowPopup(new PopupData(
-             title: "알림",
-             content: $"{featureName} 기능은 아직 개발되지 않았습니다."
-         ));
+            title: "알림",
+            content: $"{featureName} 기능은 아직 개발되지 않았습니다.",
+            buttons: new List<PopupButtonInfo>
+            {
+            new PopupButtonInfo(() => { }) // 확인 버튼 표시용
+            }
+        ));
     }
 
     // 데이터 매니저에서 정보를 받아와 UI 갱신
