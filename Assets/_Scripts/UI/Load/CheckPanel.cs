@@ -5,7 +5,6 @@ using TMPro;
 public class CheckPanel : MonoBehaviour
 {
     [SerializeField] private TMP_Text _fileNumText;
-    [SerializeField] private TMP_Text _playTimeText;
     [SerializeField] private Button _checkButton;
     [SerializeField] private Button _cancelButton;
 
@@ -25,12 +24,7 @@ public class CheckPanel : MonoBehaviour
 
         if (_fileNumText != null)
         {
-            _fileNumText.text = $"FILE {slotIndex}";
-        }
-
-        if (_playTimeText != null)
-        {
-            _playTimeText.text = playTime;
+            _fileNumText.text = $"FILE {slotIndex}: {playTime}";
         }
 
         gameObject.SetActive(true);

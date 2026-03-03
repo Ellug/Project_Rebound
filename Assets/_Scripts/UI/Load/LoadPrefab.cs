@@ -8,7 +8,6 @@ public class LoadPrefab : MonoBehaviour
     [SerializeField] private Button _selectButton;
     [SerializeField] private Button _deleteButton;
     [SerializeField] private TMP_Text _fileNumText;
-    [SerializeField] private TMP_Text _playTimeText;
     [SerializeField] private TMP_Text _schoolText;
     [SerializeField] private TMP_Text _saveTimeText;
 
@@ -21,8 +20,7 @@ public class LoadPrefab : MonoBehaviour
         _slotIndex = data.slotIndex;
         _parent = parent;
 
-        _fileNumText.text = $"FILE {data.slotIndex}";
-        _playTimeText.text = data.playTime;
+        _fileNumText.text = $"FILE {data.slotIndex}: {data.playTime}";
         _schoolText.text = data.school;
         _saveTimeText.text = data.saveTime;
 

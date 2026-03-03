@@ -8,9 +8,9 @@ public class TestSaveCreator : MonoBehaviour
         PlayData data = new PlayData
         {
             slotIndex = slot,
-            school = "유니티고",
-            playTime = "01:23:45",
-            saveTime = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm"),
+            school = "한울 고등학교",
+            playTime = "2000년00월00일",
+            saveTime = System.DateTime.Now.ToString("2000.00.00"),
             gold = MoneyManager.Instance.Gold,
             reputation = MoneyManager.Instance.Reputation
         };
