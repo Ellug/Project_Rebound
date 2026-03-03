@@ -1,4 +1,3 @@
-#if UNITY_EDITOR
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Tools/Characters")]
@@ -28,4 +27,3 @@ public class PortraitLibrary : ScriptableObject
         return null;
     }
 }
-#endif
