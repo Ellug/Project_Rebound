@@ -31,7 +31,7 @@ public class MessengerRoomPopup : UIBase
         if (_btnClose != null)
         {
             _btnClose.onClick.RemoveAllListeners();
-            _btnClose.onClick.AddListener(() => UIManager.Instance.CloseTop());
+            _btnClose.onClick.AddListener(Close);
         }
 
         if (MessengerManager.Instance != null)
