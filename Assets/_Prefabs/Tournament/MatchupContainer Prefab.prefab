@@ -171,11 +171,11 @@ RectTransform:
   - {fileID: 2093013087914854512}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -221, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 367, y: 216}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_Pivot: {x: 0, y: 1}
 --- !u!222 &6647490722273113502
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -231,6 +231,10 @@ MonoBehaviour:
   _backgroundImage: {fileID: 1089624660230562948}
   _myMatchupSprite: {fileID: -5634378785935390685, guid: 48f5598a87d3b074284f7b8374b9e6c6, type: 3}
   _otherMatchupSprite: {fileID: 4169160427589878525, guid: a2f606e6d0ad08d429399ae064ca982b, type: 3}
+  _myFontColor: {r: 0, g: 0, b: 0, a: 1}
+  _otherFontColor: {r: 1, g: 1, b: 1, a: 1}
+  _winnerFontColor: {r: 0.11764706, g: 0.5647059, b: 1, a: 1}
+  _loserFontColor: {r: 1, g: 0.27058825, b: 0, a: 1}
 --- !u!1 &5963156546660708791
 GameObject:
   m_ObjectHideFlags: 0
