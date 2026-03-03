@@ -22,23 +22,32 @@ public class TMPExternalStroke : MonoBehaviour
     private readonly List<TextMeshProUGUI> _layers = new();
     private bool _pendingRenderOrder;
 
-    private string Prefix => $"{LayerPrefix}{_layerKey}_";
+#if UNITY_EDITOR
+    private bool _editorSetupQueued;
+    private bool _editorForceRebuild;
+#endif
+    private bool _runtimeSetupQueued;
+    private bool _runtimeForceRebuild;
+
+    // 프리팹 복제 인스턴스끼리 _layerKey가 같아도 충돌하지 않도록 인스턴스 식별자를 접두어에 포함
+    private string Prefix => $"{LayerPrefix}{_layerKey}_{GetInstanceID():X8}_";
+    private string LegacyPrefix => $"{LayerPrefix}{_layerKey}_";
 
     // 컴포넌트 추가 시 초기 세팅
     private void Reset()
     {
-        EnsureSetup(forceRebuild: true, applyRenderOrderNow: false);
+        RequestSetup(forceRebuild: true, applyRenderOrderNow: false);
     }
 
     void Awake()
     {
-        EnsureSetup(forceRebuild: true, applyRenderOrderNow: false);
+        RequestSetup(forceRebuild: true, applyRenderOrderNow: false);
     }
 
     // 재활성화 시 레이어 보정
     void OnEnable()
     {
-        EnsureSetup(forceRebuild: true, applyRenderOrderNow: false);
+        RequestSetup(forceRebuild: true, applyRenderOrderNow: false);
     }
 
     void OnDisable()
@@ -49,12 +58,16 @@ public class TMPExternalStroke : MonoBehaviour
     // 인스펙터 변경 시 레이어를 재생성하지 않고 값만 동기화
     private void OnValidate()
     {
-        EnsureSetup(forceRebuild: false, applyRenderOrderNow: false);
+#if UNITY_EDITOR
+        QueueEditorSetup(forceRebuild: false);
+#endif
     }
 
     // 자동 동기화가 켜져 있으면 매 프레임 반영
     void LateUpdate()
     {
+        ApplyQueuedRuntimeSetup();
+
         if (_autoSync)
             EnsureSetup(forceRebuild: false, applyRenderOrderNow: true);
         else
@@ -77,6 +90,17 @@ public class TMPExternalStroke : MonoBehaviour
         Transform parent = _source.transform.parent;
         if (parent == null) return;
 
+        // 프리팹 "에셋" 컨텍스트에서는 Transform.SetParent로 자식 생성/정렬을 건드릴 수 없다.
+        // (Prefab Stage가 아닌 순수 자산 검증 시 OnValidate가 호출되면 해당 에러가 발생)
+        if (IsPersistentObject(_source) || IsPersistentObject(_source.gameObject) ||
+            IsPersistentObject(parent) || IsPersistentObject(parent.gameObject))
+        {
+            _layers.Clear();
+            _pendingRenderOrder = false;
+            return;
+        }
+
+        CleanupLegacyLayers(parent);
         CleanupOrphanedLayers(parent);
         CollectLayers(parent);
 
@@ -97,6 +121,57 @@ public class TMPExternalStroke : MonoBehaviour
         _pendingRenderOrder = true;
         if (applyRenderOrderNow)
             ApplyPendingRenderOrder();
+    }
+
+    // Awake/OnEnable/OnValidate처럼 제한된 타이밍에서는 에디터 딜레이로 넘겨 안전하게 재구성한다.
+    private void RequestSetup(bool forceRebuild, bool applyRenderOrderNow)
+    {
+#if UNITY_EDITOR
+        if (!Application.isPlaying)
+        {
+            QueueEditorSetup(forceRebuild);
+            return;
+        }
+#endif
+        // Awake/OnEnable 직후에는 AddComponent/생성 타이밍 워닝이 발생할 수 있어 한 프레임 뒤로 미룬다.
+        _runtimeForceRebuild |= forceRebuild;
+        _runtimeSetupQueued = true;
+
+        if (applyRenderOrderNow)
+            _pendingRenderOrder = true;
+    }
+
+#if UNITY_EDITOR
+    private void QueueEditorSetup(bool forceRebuild)
+    {
+        _editorForceRebuild |= forceRebuild;
+        if (_editorSetupQueued)
+            return;
+
+        _editorSetupQueued = true;
+        UnityEditor.EditorApplication.delayCall += () =>
+        {
+            _editorSetupQueued = false;
+
+            if (this == null || !isActiveAndEnabled)
+                return;
+
+            bool pendingForceRebuild = _editorForceRebuild;
+            _editorForceRebuild = false;
+            EnsureSetup(pendingForceRebuild, applyRenderOrderNow: false);
+        };
+    }
+#endif
+
+    private void ApplyQueuedRuntimeSetup()
+    {
+        if (!_runtimeSetupQueued)
+            return;
+
+        bool pendingForceRebuild = _runtimeForceRebuild;
+        _runtimeForceRebuild = false;
+        _runtimeSetupQueued = false;
+        EnsureSetup(pendingForceRebuild, applyRenderOrderNow: false);
     }
 
     // 원본 TMP 텍스트 참조 캐시
@@ -299,6 +374,29 @@ public class TMPExternalStroke : MonoBehaviour
         }
     }
 
+    // 구버전 prefix("__TMPStroke_{key}_")로 남아있는 레이어를 현재 부모에서 정리
+    private void CleanupLegacyLayers(Transform currentParent)
+    {
+        if (string.IsNullOrEmpty(_layerKey))
+            return;
+
+        List<GameObject> toDelete = new();
+        for (int i = 0; i < currentParent.childCount; i++)
+        {
+            Transform child = currentParent.GetChild(i);
+            if (!child.name.StartsWith(LegacyPrefix, StringComparison.Ordinal))
+                continue;
+
+            if (child.name.StartsWith(Prefix, StringComparison.Ordinal))
+                continue;
+
+            toDelete.Add(child.gameObject);
+        }
+
+        for (int i = 0; i < toDelete.Count; i++)
+            SafeDestroy(toDelete[i]);
+    }
+
     private HideFlags BuildGeneratedHideFlags()
     {
         HideFlags flags = HideFlags.DontSaveInEditor | HideFlags.DontSaveInBuild;
@@ -334,12 +432,25 @@ public class TMPExternalStroke : MonoBehaviour
             UnityEditor.EditorApplication.delayCall += () =>
             {
                 if (target != null)
-                    DestroyImmediate(target);
+                {
+                    // 프리팹 자산 컨텍스트에서 생성된 오브젝트는 allowDestroyingAssets=true가 필요
+                    bool isPersistentAsset = UnityEditor.EditorUtility.IsPersistent(target);
+                    DestroyImmediate(target, isPersistentAsset);
+                }
             };
             return;
         }
 #endif
 
         Destroy(target);
+    }
+
+    private static bool IsPersistentObject(UnityEngine.Object target)
+    {
+#if UNITY_EDITOR
+        return target != null && UnityEditor.EditorUtility.IsPersistent(target);
+#else
+        return false;
+#endif
     }
 }

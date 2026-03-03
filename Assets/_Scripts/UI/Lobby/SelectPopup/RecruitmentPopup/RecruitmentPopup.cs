@@ -336,7 +336,7 @@ public class RecruitmentPopup : UIPopup
     {
         if (_txtSelectCount != null)
         {
-            string maxDisplay = _maxRecruitCount > 0 ? _maxRecruitCount.ToString() : "7";
+            // string maxDisplay = _maxRecruitCount > 0 ? _maxRecruitCount.ToString() : "7";
             // _txtSelectCount.text = $"{_selectedStudents.Count}/{maxDisplay}";
             _txtSelectCount.text = $"{_selectedStudents.Count}";
         }
