@@ -123,6 +123,7 @@ public class RecruitmentManager : MonoBehaviour
         bool isFull = ownedCount >= capacity;
 
         bool canSkip = context != RecruitmentContext.GameStart;
+        string messageBody = BuildEventMessage(context);
 
         ConfirmPopupRequest request = new ConfirmPopupRequest(
             title: "학생 영입",
@@ -142,9 +143,18 @@ public class RecruitmentManager : MonoBehaviour
         if (isFull)
         {
             request.SetSubMessage("현재 보유 학생이 정원으로 영입을 진행할 수 없습니다.");
+            messageBody += "\n\n<color=#ff0000>현재 보유 학생이 정원으로 영입을 진행할 수 없습니다.</color>";
         }
 
         UIManager.Instance.ShowConfirm(request);
+
+        // 메신저 시스템에 기록
+        // 버튼을 넣지 않고 NormalText 타입으로 보내서 순수하게 읽기 전용 톡방을 만듭니다.
+        if (MessengerManager.Instance != null)
+        {
+            ChatMessage logMsg = new ChatMessage(MessageSenderType.Them, messageBody, MessageEventType.NormalText);
+            MessengerManager.Instance.ReceiveMessage("sys_scout", "구단 스카우터", logMsg);
+        }
     }
 
     // 2단계: 카드 선택 팝업
