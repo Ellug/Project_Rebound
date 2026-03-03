@@ -1609,7 +1609,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TextTyperTMP
   tmpText: {fileID: 428056466}
-  charactersPerSecond: 30
+  charactersPerSecond: 10
+  useUnscaledTime: 1
+--- !u!114 &463170948
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 463170942}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ac1d4a55cf8dc64aa07d4f73688e7a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LobbyMessageController
+  tmpText: {fileID: 428056466}
+  typer: {fileID: 463170945}
 --- !u!224 &470577544 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3350628463632272292, guid: a52764fe4888dca4aa346f27019804c8, type: 3}
@@ -7258,6 +7273,7 @@ MonoBehaviour:
   _trainingSelectPopup: {fileID: 1345795867}
   _studentManagementPopup: {fileID: 810482937}
   _txtMessage: {fileID: 428056466}
+  _messageController: {fileID: 463170948}
   _btnCenterMessage: {fileID: 7083114024483597528}
   _messengerInboxPopup: {fileID: 1331669889}
   _btnTraining: {fileID: 230197822}
@@ -10032,6 +10048,14 @@ PrefabInstance:
       value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 3332942217190135795, guid: 39d947343ebf33e488aa08dbd106c785, type: 3}
+      propertyPath: m_margin.x
+      value: -8.1415415
+      objectReference: {fileID: 0}
+    - target: {fileID: 3332942217190135795, guid: 39d947343ebf33e488aa08dbd106c785, type: 3}
+      propertyPath: m_margin.z
+      value: 2.0352173
+      objectReference: {fileID: 0}
+    - target: {fileID: 3332942217190135795, guid: 39d947343ebf33e488aa08dbd106c785, type: 3}
       propertyPath: m_fontAsset
       value: 
       objectReference: {fileID: 11400000, guid: 9291a7438c2005e48b00352476c10c41, type: 2}
@@ -10138,6 +10162,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 2603713889964978707, guid: 39d947343ebf33e488aa08dbd106c785, type: 3}
       insertIndex: -1
       addedObject: {fileID: 463170945}
+    - targetCorrespondingSourceObject: {fileID: 2603713889964978707, guid: 39d947343ebf33e488aa08dbd106c785, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 463170948}
   m_SourcePrefab: {fileID: 100100000, guid: 39d947343ebf33e488aa08dbd106c785, type: 3}
 --- !u!114 &7083114024483597528 stripped
 MonoBehaviour:
