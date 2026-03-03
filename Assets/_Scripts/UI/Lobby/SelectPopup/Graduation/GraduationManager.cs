@@ -140,6 +140,14 @@ public class GraduationManager : MonoBehaviour
                 StudentManager.Instance.RemoveStudent(s);
         }
 
+        // 3학년 졸업 처리 후 학생 매니저의 진급 로직 실행
+        if (StudentManager.Instance != null)
+        {
+            StudentManager.Instance.PromoteStudents();
+        }
+
+
+
         // 페이즈 전환
         if (_turnManager != null)
             _turnManager.SetPhase(GamePhase.Graduation);
