@@ -12,6 +12,8 @@ public class MessengerInboxPopup : UIBase
     [SerializeField] private Button _btnInboxClose;
     [SerializeField] private MessengerRoomPopup _roomPopupPrefab;
 
+
+    private MessengerRoomPopup _currentRoomPopup;
     private List<GameObject> _spawnedItems = new List<GameObject>();
     private bool _isInited;
 
@@ -40,7 +42,10 @@ public class MessengerInboxPopup : UIBase
         RefreshList();
         base.Open();
 
-        if (UIManager.Instance != null) UIManager.Instance.PushMessenger(this);
+        if (UIManager.Instance != null)
+        {
+            UIManager.Instance.PushMessenger(this);
+        }
     }
 
     public override void Close()
@@ -104,8 +109,12 @@ public class MessengerInboxPopup : UIBase
         ChatRoom room = MessengerManager.Instance.GetRoom(roomId);
         if (room == null) return;
 
-        MessengerRoomPopup popup = Instantiate(_roomPopupPrefab, transform.parent);
-        popup.Init();
-        popup.OpenRoom(room);
+        if (_currentRoomPopup == null)
+        {
+            _currentRoomPopup = Instantiate(_roomPopupPrefab, transform.parent);
+            _currentRoomPopup.Init();
+        }
+
+        _currentRoomPopup.OpenRoom(room);
     }
 }
