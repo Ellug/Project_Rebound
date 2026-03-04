@@ -30,6 +30,7 @@ public class SelectStudentInfoPopup : UIBase
 
     [Header("Select Button")]
     [SerializeField] private Button _btnSelect;                       // 학생 선택 버튼 (영입 팝업 전용)
+    [SerializeField] private TMP_Text _txtSelectButton;               // 선택 버튼 텍스트 (선택/해제 라벨)
 
     [Header("Slide Animation")]
     [SerializeField] private RectTransform _panelRoot;                // 실제로 움직일 루트(패널)
@@ -159,9 +160,9 @@ public class SelectStudentInfoPopup : UIBase
         BuildStatList(student);
     }
 
-    // 학생 선택 버튼 액션 주입 (영입 팝업에서 호출)
+    // 학생 선택 버튼 액션/라벨 주입 (영입 팝업에서 호출)
     // action이 null이면 버튼 숨김, 아니면 버튼 표시 후 클릭 시 action 실행
-    public void SetSelectAction(Action action)
+    public void SetSelectAction(Action action, string buttonText = null)
     {
         if (_btnSelect == null) return;
 
@@ -174,6 +175,9 @@ public class SelectStudentInfoPopup : UIBase
         }
 
         _btnSelect.gameObject.SetActive(true);
+        if (!string.IsNullOrEmpty(buttonText) && _txtSelectButton != null)
+            _txtSelectButton.text = buttonText;
+
         _btnSelect.onClick.AddListener(() => action.Invoke());
     }
 

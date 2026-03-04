@@ -1568,6 +1568,7 @@ MonoBehaviour:
   _statListRoot: {fileID: 101071532007901605}
   _statRowPrefab: {fileID: 6221017286530398922, guid: 66ceca9f093850146b3879ce2727e94d, type: 3}
   _btnSelect: {fileID: 7507922325611362939}
+  _txtSelectButton: {fileID: 1419128958090077788}
   _panelRoot: {fileID: 9088389593430848923}
   _hiddenOffsetY: -600
   _disableRaycastWhileTween: 1

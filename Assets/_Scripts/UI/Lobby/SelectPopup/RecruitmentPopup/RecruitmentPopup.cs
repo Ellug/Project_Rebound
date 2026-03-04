@@ -157,7 +157,7 @@ public class RecruitmentPopup : UIPopup
     }
 
     // 학생 정보 팝업 표시
-    // isSelected: true → "영입 취소" 버튼 / false → "학생 선택" 버튼
+    // isSelected: true -> 선택 해제 / false -> 학생 선택
     private void ShowStudentInfoPopup(Student student, bool isSelected)
     {
         if (_studentInfoPopup == null)
@@ -176,17 +176,22 @@ public class RecruitmentPopup : UIPopup
 
         if (isSelected)
         {
-            // 이미 선택된 학생 → 선택 버튼을 "영입 취소" 흐름으로 연결
-            _studentInfoPopup.SetSelectAction(() => ShowUnselectConfirmPopup(student, card));
+            // 이미 선택된 학생 → 선택 버튼을 "선택 해제" 흐름으로 연결
+            _studentInfoPopup.SetSelectAction(() =>
+                ShowUnselectConfirmPopup(student, card),
+                buttonText: "선택 해제"
+            );
         }
         else
         {
             // 미선택 학생 → 선택 버튼 클릭 시 선택 처리 + 팝업 닫기
             _studentInfoPopup.SetSelectAction(() =>
-            {
-                SelectStudent(student, card);
-                CloseStudentInfoPopup();
-            });
+                {
+                    SelectStudent(student, card);
+                    CloseStudentInfoPopup();
+                },
+                buttonText: "학생 선택"
+            );
         }
 
         // 이미 열려있으면 슬라이드 없이 데이터만 갱신, 닫혀있으면 슬라이드 인
@@ -334,26 +339,20 @@ public class RecruitmentPopup : UIPopup
     // 상단 선택 인원 표시 갱신
     private void RefreshHeader()
     {
-        if (_txtSelectCount != null)
-        {
-            // string maxDisplay = _maxRecruitCount > 0 ? _maxRecruitCount.ToString() : "7";
-            // _txtSelectCount.text = $"{_selectedStudents.Count}/{maxDisplay}";
-            _txtSelectCount.text = $"{_selectedStudents.Count}";
-        }
+        _txtSelectCount.text = $"{_ownedCount + _selectedStudents.Count}";
     }
 
     // 완료 버튼 표시 상태 갱신 (선택이 있을 때만 노출)
     private void RefreshCompleteButton()
     {
         bool hasSelection = _selectedStudents.Count > 0;
-        // 5명 이상이어야 영입 확정 가능
-        bool meetsMinimum = _selectedStudents.Count >= 5;
+        // 보유 + 선택 인원이 5명 이상이어야 영입 확정 가능
+        int totalCount = _ownedCount + _selectedStudents.Count;
+        bool meetsMinimum = totalCount >= 5;
         bool rosterFull = GetRemainingCapacity() <= 0;
-        // 최대 선택 가능 인원을 모두 채운 경우 (남은 정원 = 선택 인원) → 5명 미만이어도 버튼 표시
-        bool filledMaxAvailable = _maxRecruitCount > 0 && _selectedStudents.Count >= _maxRecruitCount;
 
-        // 버튼 표시 조건: (5명 이상 OR 선택 가능 최대치를 채움) AND 정원 초과 아님
-        bool showButton = hasSelection && (meetsMinimum || filledMaxAvailable) && !rosterFull;
+        // 버튼 표시 조건: (선택 있음) && (보유+선택 5명 이상) && 정원 초과 아님
+        bool showButton = hasSelection && meetsMinimum && !rosterFull;
 
         if (_btnComplete != null)
         {
