@@ -238,7 +238,7 @@ public class LobbyUI : UIBase
         }
 
         _studentManagementPopup.Init();
-        _studentManagementPopup.transform.SetAsLastSibling();
+        //_studentManagementPopup.transform.SetAsLastSibling();
         _studentManagementPopup.Open();
         RefreshBottomNavTabSprites();
     }
@@ -323,7 +323,7 @@ public class LobbyUI : UIBase
             return;
 
         _studentManagementPopup.Init();
-        _studentManagementPopup.transform.SetAsLastSibling();
+        //_studentManagementPopup.transform.SetAsLastSibling();
         _studentManagementPopup.Open();
         RefreshBottomNavTabSprites();
     }
@@ -424,5 +424,11 @@ public class LobbyUI : UIBase
     private static bool IsPopupActive(UIBase popup)
     {
         return popup != null && popup.gameObject.activeSelf;
+    }
+
+    // StudentManagementPopup 닫기 버튼에서 호출
+    public void OnClickStudentClose()
+    {
+        RefreshBottomNavTabSprites();
     }
 }
