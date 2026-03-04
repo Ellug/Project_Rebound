@@ -13,7 +13,7 @@ public sealed class GuidePanelController : MonoBehaviour
 
     [SerializeField] private Button _btnCancel;
     [SerializeField] private Button _btnNext;
-    [SerializeField] private Button _btnClose;
+    [SerializeField] private Button _btnGuideClose;
 
     [Header("Dots")]
     [SerializeField] private Transform _dotRoot;
@@ -106,11 +106,11 @@ public sealed class GuidePanelController : MonoBehaviour
             _btnNext.onClick.AddListener(NextPage);
         }
 
-        if (_btnClose != null)
+        if (_btnGuideClose != null)
         {
-            _btnClose.gameObject.SetActive(isLast);
-            _btnClose.onClick.RemoveAllListeners();
-            _btnClose.onClick.AddListener(() =>
+            _btnGuideClose.gameObject.SetActive(isLast);
+            _btnGuideClose.onClick.RemoveAllListeners();
+            _btnGuideClose.onClick.AddListener(() =>
             {
                 _request?.OnPrimary?.Invoke();
                 if (_request == null || _request.AutoCloseOnPrimary)
