@@ -311,10 +311,10 @@ public class AlwaysEventManager : MonoBehaviour
     {
         return row.type switch
         {
-            "exam" => "컨디션 회복량 -4  /  훈련 효율 ×0.67",
+            "exam" => "컨디션 회복량 -4  /  훈련 효율 x0.67",
             "festival" => "훈련 불가  /  컨디션 회복량 +10",
             "vacation" => "토너먼트 진입 가능",
-            "holiday" => "컨디션 회복량 +5  /  훈련 효율 ×1.5",
+            "holiday" => "컨디션 회복량 +5  /  훈련 효율 x1.5",
             _ => string.Empty
         };
     }
