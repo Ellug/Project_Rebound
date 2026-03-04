@@ -4,8 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 
 // 학생 관리(배치) 팝업
-// - "포지션 정보" 버튼 클릭 시: 인스펙터에 세팅한 페이지를 UIPopupRequest.Guide로 표시
-// - 기존 PositionGuidePopup(씬 배치) 제거/통합된 구조에 맞춘 구현
+// "포지션 정보" 버튼 클릭 시: 인스펙터에 세팅한 페이지를 UIPopupRequest.Guide로 표시
+// 기존 PositionGuidePopup(씬 배치) 제거/통합된 구조에 맞춘 구현
 public class StudentManagementPopup : UIBase
 {
     [Header("학생 카드 영역")]
@@ -21,8 +21,11 @@ public class StudentManagementPopup : UIBase
     [Header("포지션 안내")]
     [SerializeField] private Button _btnPositionGuide;                  // "포지션 정보" 버튼
 
-    // ✅ 포지션 안내는 원래 "인스펙터 페이지" 기반이었음 → 그대로 유지
-    // ✅ PositionGuidePopup 삭제(통합) 이후: UIPopupRequest.Guide로 띄우는 데이터 소스로 흡수
+    [Header("닫기")]
+    [SerializeField] private Button _btnClose;
+
+    // 포지션 안내는 원래 "인스펙터 페이지" 기반이었음 → 그대로 유지
+    // PositionGuidePopup 삭제(통합) 이후: UIPopupRequest.Guide로 띄우는 데이터 소스로 흡수
     [Header("포지션 안내 (Guide Pages - Inspector)")]
     [SerializeField] private string _positionGuideTitle = "포지션 안내";
     [SerializeField] private List<PositionGuidePage> _positionGuidePages = new();
@@ -73,6 +76,7 @@ public class StudentManagementPopup : UIBase
         base.Init();
 
         BindPositionGuideButton();
+        BindCloseButton();
         BindTournamentStartButton();
 
         SpawnStudentCards();
@@ -478,5 +482,23 @@ public class StudentManagementPopup : UIBase
             return;
 
         _studentInfoPopup.Close();
+    }
+
+    //팝업 닫기 버튼 바인딩
+    private void BindCloseButton()
+    {
+        if (_btnClose == null)
+            return;
+
+        _btnClose.onClick.RemoveAllListeners();
+        _btnClose.onClick.AddListener(() =>
+        {
+            Close();
+
+            // LobbyUI 탭 스프라이트도 갱신
+            LobbyUI lobbyUI = GetComponentInParent<LobbyUI>();
+            if (lobbyUI != null)
+                lobbyUI.OnClickStudentClose();
+        });
     }
 }
