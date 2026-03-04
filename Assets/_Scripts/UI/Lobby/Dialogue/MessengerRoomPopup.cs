@@ -53,13 +53,19 @@ public class MessengerRoomPopup : UIBase
         MessengerManager.Instance.MarkAsRead(CurrentRoomId);
         base.Open();
 
-        if (UIManager.Instance != null) UIManager.Instance.PushMessenger(this);
+        if (UIManager.Instance != null)
+        {
+            UIManager.Instance.PushMessenger(this);
+        }
     }
     public override void Close()
     {
         base.Close();
 
-        if (UIManager.Instance != null) UIManager.Instance.PopMessenger(this);
+        if (UIManager.Instance != null)
+        {
+            UIManager.Instance.PopMessenger(this);
+        }
     }
 
     private void HandleNewMessage(ChatRoom room)

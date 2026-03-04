@@ -18,7 +18,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &7168610225871263920
 RectTransform:
   m_ObjectHideFlags: 0
@@ -385,7 +385,7 @@ RectTransform:
   m_Father: {fileID: 2527321516441977696}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -496,7 +496,7 @@ RectTransform:
   m_Father: {fileID: 6353136227163004928}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -556,7 +556,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &7624300966148180310
 RectTransform:
   m_ObjectHideFlags: 0
@@ -970,7 +970,7 @@ MonoBehaviour:
   _isModal: 1
   _txtRoomName: {fileID: 1629493684637176876}
   _chatContentRoot: {fileID: 1262525891088959848}
-  _btnClose: {fileID: 3410288218415448597}
+  _btnRoomClose: {fileID: 3410288218415448597}
   _dateDividerPrefab: {fileID: 6776416075413206623, guid: 56c116a10b488cc4087b07b8559df9bc, type: 3}
   _bubbleLeftPrefab: {fileID: 2060850960887225480, guid: 5a46cb138a2937241ba237ffc0eab96e, type: 3}
   _bubbleRightPrefab: {fileID: 3897371903441367529, guid: 11096b21ab9653b44bbdb1827709daef, type: 3}
