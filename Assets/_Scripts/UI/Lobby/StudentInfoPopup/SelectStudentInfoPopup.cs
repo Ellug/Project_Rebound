@@ -22,7 +22,7 @@ public class SelectStudentInfoPopup : UIBase
 
     [Header("Right - Condition Gauge")]
     [SerializeField] private Image _imgConditionFill;                 // 컨디션 게이지 Fill
-    [SerializeField] private int _conditionMaxValue = 130;            // 컨디션 최대값
+    [SerializeField] private int _conditionMaxValue = Student.ConditionMax; // 컨디션 최대값
 
     [Header("Right - Stat List")]
     [SerializeField] private Transform _statListRoot;                 // 스탯 리스트 부모
@@ -252,8 +252,8 @@ public class SelectStudentInfoPopup : UIBase
     {
         if (student == null) return;
 
-        int max = Mathf.Max(1, _conditionMaxValue);
-        int clamped = Mathf.Clamp(student.condition, 0, max);
+        int max = Mathf.Clamp(_conditionMaxValue, 1, Student.ConditionMax);
+        int clamped = Student.ClampCondition(student.condition);
 
         if (_imgConditionFill != null)
         {

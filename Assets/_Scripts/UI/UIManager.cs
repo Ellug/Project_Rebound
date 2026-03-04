@@ -55,8 +55,16 @@ public class UIManager : Singleton<UIManager>
 
     private void HandleBackKey()
     {
+        if (_messengerStack.Count > 0)
+        {
+            _messengerStack.Peek().Close();
+            return;
+        }
+
         if (_uiStack.Count > 0)
         {
+            if (_uiStack.Peek().DisableBackKey) 
+                return;
             // 스택 최상단 팝업의 뒤로가기 로직 수행
             _uiStack.Peek().OnBackKey();
             return;
@@ -76,17 +84,17 @@ public class UIManager : Singleton<UIManager>
     }
 
     // UIPopupRequest 경로
-    public void ShowPopup(UIPopupRequest request)
+    public UIPopup ShowPopup(UIPopupRequest request)
     {
-        if (request == null) return;
+        if (request == null) return null;
 
         if (_uiPopupPrefab == null)
         {
             Debug.LogError("[UIManager] Popup Prefab이 연결되지 않았습니다.");
-            return;
+            return null;
         }
 
-        if (!EnsureCanvasRoot()) return;
+        if (!EnsureCanvasRoot()) return null;
 
         // 1. 프리팹 생성
         UIPopup popupInstance = Instantiate(_uiPopupPrefab, _canvasRoot, false);
@@ -99,6 +107,8 @@ public class UIManager : Singleton<UIManager>
 
         // 3. 스택에 추가
         _uiStack.Push(popupInstance);
+
+        return popupInstance;
     }
 
     // PopupData 경로 (기존 호출 유지용 어댑터)
@@ -108,7 +118,7 @@ public class UIManager : Singleton<UIManager>
     }
 
 
-    public void OpenStudentSelect(int maxSelectCount, Action<List<Student>> onSelected, Action onCancelled)
+    public void OpenStudentSelect(int maxSelectCount, Action<List<Student>> onSelected, Action onCancelled, StudentCardPreviewDelta previewDelta = default)
     {
         if (_studentSelectPopupPrefab == null)
         {
@@ -127,6 +137,7 @@ public class UIManager : Singleton<UIManager>
         popup.transform.SetAsLastSibling();
 
         popup.SetMaxSelectCount(maxSelectCount);
+        popup.SetPreviewDelta(previewDelta);
         popup.Init();
         popup.Open();
 
@@ -273,20 +284,6 @@ public class UIManager : Singleton<UIManager>
         }
     }
 
-    // 뒤로가기 키 입력 감지 
-    private void Update()
-    {
-        if (Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame)
-        {
-            // 열려있는 메신저 창이 있다면, 가장 위에 있는 창 닫기
-            if (_messengerStack.Count > 0)
-            {
-                _messengerStack.Peek().Close();
-                return;
-            }
-        }
-    }
-
     // 캔버스 루트 관리
     private void HandleSceneLoaded(Scene scene, LoadSceneMode mode)
     {
@@ -332,5 +329,13 @@ public class UIManager : Singleton<UIManager>
 
         if (canvases.Length > 0 && canvases[0] != null)
             _canvasRoot = canvases[0].transform;
+    }
+
+    public void PushUI(UIBase ui)
+    {
+        if (ui != null && !_uiStack.Contains(ui))
+        {
+            _uiStack.Push(ui);
+        }
     }
 }

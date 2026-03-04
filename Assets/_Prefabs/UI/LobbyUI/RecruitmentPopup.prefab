@@ -58,15 +58,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0.8018868, g: 0.8018868, b: 0.8018868, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
+  m_Sprite: {fileID: 6181553819705652008, guid: b10ab534880d8484db79cd3ad1689b66, type: 3}
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -478,20 +478,38 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RecruitmentPopup
   _isModal: 1
-  _windowRect: {fileID: 0}
-  _windowLayoutGroup: {fileID: 0}
-  _paddingTopWithImage: 100
-  _paddingTopNoImage: 40
-  _contentImage: {fileID: 0}
-  _txtTitle: {fileID: 0}
-  _txtSubContent: {fileID: 0}
-  _txtContent: {fileID: 0}
-  _buttonGridRoot: {fileID: 0}
-  _buttonPrefab: {fileID: 0}
-  _closeButton: {fileID: 0}
+  _btnClose: {fileID: 0}
+  _panelSimple: {fileID: 0}
+  _panelDefault: {fileID: 0}
+  _panelGuide: {fileID: 0}
+  _txtSimpleTitle: {fileID: 0}
+  _txtSimpleMessage: {fileID: 0}
+  _btnSimpleCancel: {fileID: 0}
+  _btnSimpleConfirm: {fileID: 0}
+  _txtDefaultTitle: {fileID: 0}
+  _txtDefaultSub: {fileID: 0}
+  _txtDefaultMessage: {fileID: 0}
+  _imgDefaultPreview: {fileID: 0}
+  _btnDefaultCancel: {fileID: 0}
+  _btnDefaultConfirm: {fileID: 0}
+  _btnDefaultStartTraining: {fileID: 0}
+  _txtGuideTitle: {fileID: 0}
+  _txtGuideSub: {fileID: 0}
+  _txtGuideMessage: {fileID: 0}
+  _imgGuidePreview: {fileID: 0}
+  _btnGuidePrev: {fileID: 0}
+  _btnGuideCancel: {fileID: 0}
+  _btnGuideNext: {fileID: 0}
+  _btnGuideClose: {fileID: 0}
+  _dotRoot: {fileID: 0}
+  _dotPrefab: {fileID: 0}
+  _dotNormalScale: 1
+  _dotActiveScale: 1.4
+  _dotNormalColor: {r: 0.75, g: 0.75, b: 0.75, a: 1}
+  _dotActiveColor: {r: 1, g: 1, b: 1, a: 1}
   _scrollRect: {fileID: 430354150601350267}
   _txtSelectCount: {fileID: 921101949342847173}
-  _btnClose: {fileID: 0}
+  _btnRecuitmentClose: {fileID: 0}
   _cardRoot: {fileID: 5514716723435341451}
   _cardPrefab: {fileID: 27691284790498517, guid: 47493739c6c80c543856a14b66e45b4b, type: 3}
   _btnComplete: {fileID: 3906567063632620358}
@@ -955,15 +973,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0.4245283, g: 0.4245283, b: 0.4245283, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
+  m_Sprite: {fileID: -7703967651052034143, guid: 44f21a859b1967142a7fcdfdc592cf84, type: 3}
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4

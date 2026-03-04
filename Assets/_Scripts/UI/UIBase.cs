@@ -5,6 +5,8 @@ public abstract class UIBase : MonoBehaviour
 {
     // 이 UI가 열려있을 때 뒤로가기 키로 닫을 수 있는지 여부
     [SerializeField] private bool _isModal = true;
+
+    public bool DisableBackKey { get; set; } = false;
     public bool IsModal { get => _isModal; set => _isModal = value; }
 
     // UI 초기화 (최초 1회만 호출 필요 시 사용)
@@ -30,6 +32,7 @@ public abstract class UIBase : MonoBehaviour
     // 안드로이드 뒤로가기(ESC) 키 입력 시 호출되는 메서드
     public virtual void OnBackKey()
     {
+        if (DisableBackKey) return;
         // 모달이면 매니저를 통해 자신을 닫음
         if (_isModal)
             UIManager.Instance.CloseTop();

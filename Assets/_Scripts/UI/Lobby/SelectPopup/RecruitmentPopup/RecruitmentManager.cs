@@ -126,11 +126,12 @@ public class RecruitmentManager : MonoBehaviour
         int ownedCount = StudentManager.Instance != null ? StudentManager.Instance.GetStudentCount() : 0;
         bool isFull = ownedCount >= capacity;
 
+        bool isForced = context == RecruitmentContext.GameStart;
         bool canSkip = context != RecruitmentContext.GameStart;
         string messageBody = BuildEventMessage(context);
 
 
-        Action onPrimary = OpenRecruitmentPopup;
+        Action onPrimary = () => OpenRecruitmentPopup(isForced);
         Action onCancel = canSkip ? HandleRecruitmentSkipped : null;
 
         var req = UIPopupRequest.Default(
@@ -148,10 +149,13 @@ public class RecruitmentManager : MonoBehaviour
         req.AutoCloseOnPrimary = true;
         req.AutoCloseOnCancel = true;
 
-        UIManager.Instance.ShowPopup(req);
+        UIPopup confirmPopup = UIManager.Instance.ShowPopup(req);
 
-        // 메신저 시스템에 기록
-        // 버튼을 넣지 않고 NormalText 타입으로 보내서 순수하게 읽기 전용 톡방 생성
+        if (isForced && confirmPopup != null)
+        {
+            confirmPopup.DisableBackKey = true;
+        }
+
         if (MessengerManager.Instance != null)
         {
             ChatMessage logMsg = new ChatMessage(MessageSenderType.Them, messageBody, MessageEventType.NormalText);
@@ -161,7 +165,7 @@ public class RecruitmentManager : MonoBehaviour
     }
 
     // 2단계: 카드 선택 팝업
-    private void OpenRecruitmentPopup()
+    private void OpenRecruitmentPopup(bool isForced)
     {
         if (_recruitmentPopupPrefab == null)
         {
@@ -183,6 +187,11 @@ public class RecruitmentManager : MonoBehaviour
         RecruitmentPopup popup = Instantiate(_recruitmentPopupPrefab, canvasRoot);
         popup.transform.SetAsLastSibling(); // 최상단 정렬
 
+        if (isForced)
+        {
+            popup.SetForceRecruitMode();
+        }
+
         // 팝업 자체 제한 = min(설정 최대치, 남은 정원)
         popup.SetMaxRecruitCount(Mathf.Min(_maxRecruitCount, remaining));
 
@@ -193,6 +202,11 @@ public class RecruitmentManager : MonoBehaviour
 
         popup.Init();
         popup.Open();
+
+        if (UIManager.Instance != null)
+        {
+            UIManager.Instance.PushUI(popup);
+        }
 
         // 이벤트 중복 방지
         popup.OnRecruitmentConfirmed -= HandleRecruitmentConfirmed;

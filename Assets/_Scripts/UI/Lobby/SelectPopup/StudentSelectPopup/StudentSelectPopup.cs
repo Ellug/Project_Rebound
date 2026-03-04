@@ -28,6 +28,7 @@ public class StudentSelectPopup : UIPopup
 
     // 최대 선택 가능 인원 (0이면 무제한)
     private int _maxSelectCount = 0;
+    private StudentCardPreviewDelta _previewDelta;
 
     private readonly List<GameObject> _spawnedCards = new List<GameObject>();
     private readonly List<Student> _selectedStudents = new List<Student>();
@@ -45,6 +46,11 @@ public class StudentSelectPopup : UIPopup
     public void SetMaxSelectableCount(int count)
     {
         SetMaxSelectCount(count);
+    }
+
+    public void SetPreviewDelta(StudentCardPreviewDelta previewDelta)
+    {
+        _previewDelta = previewDelta;
     }
 
     public override void Init()
@@ -136,6 +142,7 @@ public class StudentSelectPopup : UIPopup
         }
 
         studentCard.SetStudentData(student);
+        studentCard.SetPreviewDelta(_previewDelta);
 
         // 오픈 시 기본 뷰 상태 결정
         studentCard.SetViewState(_showStatsOnOpen

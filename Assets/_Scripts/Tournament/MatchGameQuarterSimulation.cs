@@ -111,7 +111,7 @@ public sealed class QuarterPodSimulator
         foreach (Student s in context.BenchPlayers)
         {
             int recover = Random.Range(1, 7);
-            s.condition = Mathf.Min(100, s.condition + recover);
+            s.condition = Student.ClampCondition(s.condition + recover);
             logs.Add(CreateSystemLog($"[{context.MySchoolName}] {s.studentName} 컨디션 +{recover}"));
         }
 
