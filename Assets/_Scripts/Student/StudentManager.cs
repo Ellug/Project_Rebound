@@ -47,6 +47,19 @@ public class StudentManager : Singleton<StudentManager>
         Debug.Log($"[StudentManager] 슬롯 {slotIndex} 배치 해제.");
     }
 
+    private void RemoveStudentFromSlots(Student student)
+    {
+        if (student == null) return;
+
+        // 이 학생이 배치된 슬롯 인덱스들을 찾음
+        var keysToRemove = _slotAssignments.Where(pair => pair.Value == student).Select(pair => pair.Key).ToList();
+
+        foreach (int key in keysToRemove)
+        {
+            ClearSlot(key); // 찾은 슬롯 비우기
+        }
+    }
+
     // 특정 슬롯의 배치된 학생 반환 (없으면 null)
     public Student GetAssignedStudent(int slotIndex)
     {
@@ -94,6 +107,7 @@ public class StudentManager : Singleton<StudentManager>
             return false;
         }
 
+
         _students.Remove(student);
         OnStudentRemoved?.Invoke(student);
         OnStudentsChanged?.Invoke(_students);
@@ -122,6 +136,8 @@ public class StudentManager : Singleton<StudentManager>
 
         foreach (var student in seniors)
         {
+            RemoveStudentFromSlots(student);
+
             _students.Remove(student);
             OnStudentRemoved?.Invoke(student);
         }
@@ -135,6 +151,8 @@ public class StudentManager : Singleton<StudentManager>
     public void ClearAllStudents()
     {
         _students.Clear();
+
+        _slotAssignments.Clear();
         OnStudentsChanged?.Invoke(_students);
         Debug.Log("[StudentManager] Cleared all students");
     }
