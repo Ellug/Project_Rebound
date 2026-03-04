@@ -55,6 +55,7 @@ public class RecruitmentPopup : UIPopup
     public override void Init()
     {
         base.Init();
+        DisableBackKey = true; // Esc/Back으로 영입창 닫힘 방지
 
         // 버튼 이벤트 바인딩 (중복 등록 방지)
         if (_btnRecuitmentClose != null)

@@ -78,9 +78,6 @@ public class GraduationStudentsPopup : UIBase
     {
         base.Close();
 
-        if (_btnConfirm != null)
-            _btnConfirm.interactable = true;
-
         ClearCards();
         _graduates.Clear();
         _onConfirmed = null;
@@ -89,9 +86,6 @@ public class GraduationStudentsPopup : UIBase
     // 확인 버튼 클릭
     private void HandleConfirm()
     {
-        if (_btnConfirm != null)
-            _btnConfirm.interactable = false; // 중복 클릭 방지
-
         _onConfirmed?.Invoke();
     }
 
