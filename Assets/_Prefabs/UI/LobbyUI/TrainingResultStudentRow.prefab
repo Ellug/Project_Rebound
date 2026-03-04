@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 748793221231667960}
   - component: {fileID: 5061093540711781165}
   - component: {fileID: 8756752249372970606}
+  - component: {fileID: 1702123583248188536}
   m_Layer: 5
   m_Name: ConditionBar
   m_TagString: Untagged
@@ -98,6 +99,21 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!114 &1702123583248188536
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 87220958845985019}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Outline
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 1}
+  m_EffectDistance: {x: 3, y: 3}
+  m_UseGraphicAlpha: 1
 --- !u!1 &437515989480413289
 GameObject:
   m_ObjectHideFlags: 0
@@ -644,7 +660,7 @@ RectTransform:
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: -423.37, y: -123.11}
-  m_SizeDelta: {x: 780.98, y: 1.6199951}
+  m_SizeDelta: {x: 780.98, y: 3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1500943337600723551
 CanvasRenderer:
@@ -1055,6 +1071,7 @@ PrefabInstance:
     - {fileID: 421515784488736624, guid: cf56c5f53b00a2b40bb9675c2d987975, type: 3}
     - {fileID: 1296272284107563671, guid: cf56c5f53b00a2b40bb9675c2d987975, type: 3}
     - {fileID: 1744175180500783112, guid: cf56c5f53b00a2b40bb9675c2d987975, type: 3}
+    - {fileID: 3189805567272301242, guid: cf56c5f53b00a2b40bb9675c2d987975, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cf56c5f53b00a2b40bb9675c2d987975, type: 3}
@@ -1178,6 +1195,7 @@ PrefabInstance:
     - {fileID: 421515784488736624, guid: cf56c5f53b00a2b40bb9675c2d987975, type: 3}
     - {fileID: 1296272284107563671, guid: cf56c5f53b00a2b40bb9675c2d987975, type: 3}
     - {fileID: 1744175180500783112, guid: cf56c5f53b00a2b40bb9675c2d987975, type: 3}
+    - {fileID: 3189805567272301242, guid: cf56c5f53b00a2b40bb9675c2d987975, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cf56c5f53b00a2b40bb9675c2d987975, type: 3}

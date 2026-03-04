@@ -7,7 +7,6 @@ public class TurnContext
     public int TurnIndex { get; set; }
     public DateTime CurrentDate { get; set; }
     public int DayNumber => TurnIndex + 1;      //표시용 (1-based)
-    public int CurrentSemester { get; set; }    //0=방학, 1=1학기, 2=2학기
     public GamePhase CurrentPhase { get; set; } = GamePhase.DailyTraining;
     public TurnActionType SelectedAction { get; set; } = TurnActionType.Rest;
     public bool IsMatchDay { get; set; }
