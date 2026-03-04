@@ -111,8 +111,8 @@ public class GraduationManager : MonoBehaviour
             return;
 
         UIManager.Instance.ShowPopup(new PopupData(
-            title: "졸업을 축하합니다!",
-            content: "졸업 처리가 완료되었습니다.",
+            title: "졸업식",
+            content: "졸업을 축하합니다!\n졸업 처리가 완료되었습니다.",
             buttons: new List<PopupButtonInfo>
             {
                 // 수정: 버튼 텍스트 제거, 액션 기반으로만 구성
