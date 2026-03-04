@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,7 +8,7 @@ public class MessengerRoomPopup : UIBase
 {
     [SerializeField] private TMP_Text _txtRoomName;
     [SerializeField] private Transform _chatContentRoot;
-    [SerializeField] private Button _btnClose;
+    [SerializeField] private Button _btnRoomClose;
 
     [SerializeField] private GameObject _dateDividerPrefab;
     [SerializeField] private ChatBubble _bubbleLeftPrefab;
@@ -28,10 +28,10 @@ public class MessengerRoomPopup : UIBase
         _isInited = true;
         base.Init();
 
-        if (_btnClose != null)
+        if (_btnRoomClose != null)
         {
-            _btnClose.onClick.RemoveAllListeners();
-            _btnClose.onClick.AddListener(Close);
+            _btnRoomClose.onClick.RemoveAllListeners();
+            _btnRoomClose.onClick.AddListener(Close);
         }
 
         if (MessengerManager.Instance != null)
