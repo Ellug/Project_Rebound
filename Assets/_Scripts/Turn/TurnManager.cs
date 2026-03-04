@@ -39,12 +39,6 @@ public class TurnManager : MonoBehaviour
         _turnIndex = 0;
     }
 
-    void Start()
-    {
-        //시작일 기준 학기/입학 이벤트 발행 (구독자 등록 이후 호출되도록 Start에서 실행)
-        _dateManager.InitStartDayEvents();
-    }
-
     //ITurnModule 구현체 등록 (Priority 낮을수록 먼저 실행)
     public void RegisterModule(ITurnModule module)
     {
@@ -135,7 +129,6 @@ public class TurnManager : MonoBehaviour
         {
             TurnIndex = _turnIndex,
             CurrentDate = _dateManager.CurrentDate,
-            CurrentSemester = _dateManager.CurrentSemester,
             CurrentPhase = _currentPhase,
             SelectedAction = action,
             IsMatchDay = (_currentPhase == GamePhase.MatchDay)
@@ -184,8 +177,7 @@ public class TurnManager : MonoBehaviour
     {
         Debug.Log(
             $"[TurnManager] 턴: {_turnIndex} | {_dateManager.FormattedDate} | " +
-            $"학기={_dateManager.CurrentSemester} | 페이즈={_currentPhase} | " +
-            $"모듈={_modules.Count}개 | State={_turnState}"
+            $"페이즈={_currentPhase} | " + $"모듈={_modules.Count}개 | State={_turnState}"
         );
     }
 #endif

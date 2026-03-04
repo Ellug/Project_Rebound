@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEngine.Rendering.DebugUI;
 
 // 학생 영입 흐름 전체 관리
-// AlwaysEvent 기반으로 영입/졸업 이벤트를 수신하고
+// AlwaysEvent 기반으로 영입 이벤트를 수신하고
 // ConfirmPopup → RecruitmentPopup 흐름을 제어
 public class RecruitmentManager : MonoBehaviour
 {
@@ -51,14 +50,8 @@ public class RecruitmentManager : MonoBehaviour
             StudentManager.Instance.ClearAllStudents(); // 새 게임 시작 시에만 전체 초기화
         }
 
-        GenerateCandidateStudents(); // 후보 생성
+        GenerateCandidateStudents(RecruitmentContext.GameStart); // 후보 생성 (랜덤 학년)
         ShowRecruitmentEventConfirm(RecruitmentContext.GameStart);
-    }
-
-    // 기존 LobbyUI 호출 유지용 래퍼
-    public void TryStartRecruitment()
-    {
-        TriggerInitialRecruitment();
     }
 
     // AlwaysEvent 구독 처리
@@ -79,7 +72,7 @@ public class RecruitmentManager : MonoBehaviour
     }
 
     // AlwaysEvent 활성화 시 호출
-    // roster_recruit / roster_graduate 분기 처리
+    // roster_recruit 분기 처리
     private void HandleAlwaysEventActivated(AlwaysEventRow row)
     {
         if (row == null) return;
@@ -88,29 +81,10 @@ public class RecruitmentManager : MonoBehaviour
         {
             case "roster_recruit":
                 // 입학(신입생 영입) — 기존 보유 학생 유지
-                GenerateCandidateStudents();
+                GenerateCandidateStudents(RecruitmentContext.NewSemester); // 1학년만 생성
                 ShowRecruitmentEventConfirm(RecruitmentContext.NewSemester);
                 break;
-
-            case "roster_graduate":
-                // 졸업 이벤트 처리
-                HandleGraduation();
-                break;
         }
-    }
-
-    // 졸업 처리 (3학년 제거 등)
-    private void HandleGraduation()
-    {
-        if (StudentManager.Instance != null)
-        {
-            StudentManager.Instance.GraduateSeniors(); // StudentManager에 위임
-
-            StudentManager.Instance.PromoteStudents();
-
-        }
-
-        Debug.Log("[RecruitmentManager] 졸업 처리 완료");
     }
 
     // 1단계: 이벤트 안내 팝업
@@ -249,17 +223,15 @@ public class RecruitmentManager : MonoBehaviour
     }
 
     // 후보 생성
-    private void GenerateCandidateStudents()
+    private void GenerateCandidateStudents(RecruitmentContext context)
     {
         _candidateStudents.Clear();
 
-        for (int i = 0; i < _recruitCandidateCount; i++)
-        {
-            // grade를 넘기지 않으면 StudentFactory 내부에서 1~3 랜덤 처리
-            _candidateStudents.Add(StudentFactory.CreateStudent());
-        }
+        bool recruitFreshmanOnly = context == RecruitmentContext.NewSemester;
+        int gradeParam = recruitFreshmanOnly ? 1 : 0; // 0 전달 시 StudentFactory 내부 랜덤(1~3)
 
-        Debug.Log($"[RecruitmentManager] 영입 후보 {_recruitCandidateCount}명 생성 완료");
+        for (int i = 0; i < _recruitCandidateCount; i++)
+            _candidateStudents.Add(StudentFactory.CreateStudent(gradeParam));
     }
 
     // 메시지 빌드

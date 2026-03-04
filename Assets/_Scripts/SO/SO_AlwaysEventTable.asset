@@ -36,8 +36,8 @@ MonoBehaviour:
   - id: roster_graduate
     name: roster_graduate
     type: roster
-    termStart: 270228
-    termEnd: 270228
+    termStart: 270226
+    termEnd: 270226
     term: 1
     priority: 4
     range: 0
@@ -153,7 +153,7 @@ MonoBehaviour:
     name: vacation_winter
     type: vacation
     termStart: 261228
-    termEnd: 270226
+    termEnd: 270224
     term: 1
     priority: 1
     range: 0
@@ -338,7 +338,7 @@ MonoBehaviour:
     name: vacation_winter
     type: vacation
     termStart: 271228
-    termEnd: 270226
+    termEnd: 280225
     term: 1
     priority: 1
     range: 0
