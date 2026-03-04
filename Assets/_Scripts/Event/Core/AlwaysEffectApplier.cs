@@ -45,6 +45,7 @@ public static class AlwaysEffectApplier
                 student.condition -= effect.conditionDecline;
             }
 
+            student.condition = Student.ClampCondition(student.condition);
             StudentManager.Instance.NotifyStudentModified(student);
         }
     }

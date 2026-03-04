@@ -743,7 +743,7 @@ MonoBehaviour:
   _slotContentRoot: {fileID: 3347603023910651391}
   _slotPrefab: {fileID: 224799000666801895, guid: ca5515a7b092a754db05b9f7e428b15c, type: 3}
   _dateDividerPrefab: {fileID: 6776416075413206623, guid: 56c116a10b488cc4087b07b8559df9bc, type: 3}
-  _btnClose: {fileID: 5421448025996229135}
+  _btnInboxClose: {fileID: 5421448025996229135}
   _roomPopupPrefab: {fileID: 4209417971778694554, guid: a52764fe4888dca4aa346f27019804c8, type: 3}
 --- !u!1 &3739478548529191649
 GameObject:

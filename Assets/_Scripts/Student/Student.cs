@@ -5,6 +5,9 @@ using System.Collections.Generic;
 [Serializable]
 public class Student
 {
+    public const int ConditionMin = 0;
+    public const int ConditionMax = 120;
+
     // 기본 정보
     public int id;
     public string studentName;
@@ -39,4 +42,11 @@ public class Student
     public int conditionRecoveryBonus;
     public float trainingEfficiencyBonus;
     public bool isTrainingBlocked;
+
+    public static int ClampCondition(int value)
+    {
+        if (value < ConditionMin) return ConditionMin;
+        if (value > ConditionMax) return ConditionMax;
+        return value;
+    }
 }
