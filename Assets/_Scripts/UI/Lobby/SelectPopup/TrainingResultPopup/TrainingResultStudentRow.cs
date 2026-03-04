@@ -13,6 +13,7 @@ public class TrainingResultStudentRow : MonoBehaviour
     [SerializeField] private Image _conditionGaugeFill; // 검은색(기존치)
     [SerializeField] private Image _deltaFill;          // 증감치(빨강/파랑)
     [SerializeField] private TMP_Text _txtConditionDelta;
+    [SerializeField] private Transform _bottomSpacer;   // 생성 기준
 
     [Header("스탯 변화 행")]
     [SerializeField] private Transform _statRowContainer;      // 스탯 변화 행 부모
@@ -123,6 +124,10 @@ public class TrainingResultStudentRow : MonoBehaviour
         foreach (var (statName, original, changed) in changes)
         {
             StatChangeRow row = Instantiate(_statRowPrefab, _statRowContainer);
+
+            int bottomIndex = _bottomSpacer.GetSiblingIndex();
+            row.transform.SetSiblingIndex(bottomIndex);
+
             row.Setup(statName, original, changed);
             row.gameObject.SetActive(true);
             _spawnedRows.Add(row);
