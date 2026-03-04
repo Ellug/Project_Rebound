@@ -152,6 +152,33 @@ public class StudentManager : Singleton<StudentManager>
         OnStudentsChanged?.Invoke(_students);
     }
 
+    // 남은 재학생 학년 진급 처리
+    public void PromoteStudents()
+    {
+        bool isPromoted = false;
+        foreach (var student in _students)
+        {
+            if (student.grade < 3)
+            {
+                student.grade++;
+                // 학년이 변경되었으므로 UI 갱신 이벤트 발생
+                NotifyStudentModified(student);
+
+                OnStudentModified?.Invoke(student);
+                isPromoted = true;
+            }
+        }
+
+        if (isPromoted)
+        {
+            OnStudentsChanged?.Invoke(_students);
+        }
+
+        Debug.Log("[StudentManager] 재학생 진급 처리 완료");
+    }
+
+
+
     // Title로 돌아갈 때 명시적 해제
     public void Cleanup()
     {
