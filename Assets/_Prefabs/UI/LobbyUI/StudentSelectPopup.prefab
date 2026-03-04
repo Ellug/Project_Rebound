@@ -490,7 +490,7 @@ MonoBehaviour:
     m_Left: 0
     m_Right: 0
     m_Top: 0
-    m_Bottom: 0
+    m_Bottom: 250
   m_ChildAlignment: 0
   m_StartCorner: 0
   m_StartAxis: 0
@@ -562,19 +562,37 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StudentSelectPopup
   _isModal: 1
-  _windowRect: {fileID: 0}
-  _windowLayoutGroup: {fileID: 0}
-  _paddingTopWithImage: 100
-  _paddingTopNoImage: 40
-  _contentImage: {fileID: 0}
-  _txtTitle: {fileID: 0}
-  _txtSubContent: {fileID: 0}
-  _txtContent: {fileID: 0}
-  _buttonGridRoot: {fileID: 6488850486929087961}
-  _buttonPrefab: {fileID: 5152952609169315783, guid: 9412ea4ed9645824c878473fb79701e6, type: 3}
-  _closeButton: {fileID: 6595630166075277478}
-  _scrollRect: {fileID: 4858785308997978918}
   _btnClose: {fileID: 6595630166075277478}
+  _panelSimple: {fileID: 0}
+  _panelDefault: {fileID: 0}
+  _panelGuide: {fileID: 0}
+  _txtSimpleTitle: {fileID: 0}
+  _txtSimpleMessage: {fileID: 0}
+  _btnSimpleCancel: {fileID: 0}
+  _btnSimpleConfirm: {fileID: 0}
+  _txtDefaultTitle: {fileID: 0}
+  _txtDefaultSub: {fileID: 0}
+  _txtDefaultMessage: {fileID: 0}
+  _imgDefaultPreview: {fileID: 0}
+  _btnDefaultCancel: {fileID: 0}
+  _btnDefaultConfirm: {fileID: 0}
+  _btnDefaultStartTraining: {fileID: 0}
+  _txtGuideTitle: {fileID: 0}
+  _txtGuideSub: {fileID: 0}
+  _txtGuideMessage: {fileID: 0}
+  _imgGuidePreview: {fileID: 0}
+  _btnGuidePrev: {fileID: 0}
+  _btnGuideCancel: {fileID: 0}
+  _btnGuideNext: {fileID: 0}
+  _btnGuideClose: {fileID: 0}
+  _dotRoot: {fileID: 0}
+  _dotPrefab: {fileID: 0}
+  _dotNormalScale: 1
+  _dotActiveScale: 1.4
+  _dotNormalColor: {r: 0.75, g: 0.75, b: 0.75, a: 1}
+  _dotActiveColor: {r: 1, g: 1, b: 1, a: 1}
+  _scrollRect: {fileID: 4858785308997978918}
+  _buttonClose: {fileID: 0}
   _cardRoot: {fileID: 6488850486929087961}
   _cardPrefab: {fileID: 27691284790498517, guid: 47493739c6c80c543856a14b66e45b4b, type: 3}
   _btnComplete: {fileID: 3023424442386322666}
@@ -1131,7 +1149,7 @@ RectTransform:
   m_Father: {fileID: 9204854670914813946}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}

@@ -383,7 +383,8 @@ public class UIPopup : UIPopupBase
             UIManager.Instance.OpenStudentSelect(
                 maxSelectCount: max,
                 onSelected: (students) => request.OnStudentsSelected?.Invoke(students),
-                onCancelled: () => { }
+                onCancelled: () => { },
+                previewDelta: request.StudentCardPreviewDelta
             );
 
             if (request.AutoCloseOnPrimary)

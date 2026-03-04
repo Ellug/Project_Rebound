@@ -47,6 +47,7 @@ public sealed class UIPopupRequest
 
     public bool RequiresStudentSelection = false;
     public int MaxSelectCount = 0;
+    public StudentCardPreviewDelta StudentCardPreviewDelta;
     public Action<List<Student>> OnStudentsSelected;
 
     public Action OnPrimary;

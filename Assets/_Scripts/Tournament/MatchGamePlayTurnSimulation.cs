@@ -42,7 +42,7 @@ public sealed class RandomPlayTurnSimulator
 
         // 3-1 스탯 가감: [SYSTEM] 소속 이름 스탯 가감치
         int conditionLoss = Random.Range(1, 6);
-        myPlayer.condition = Mathf.Max(0, myPlayer.condition - conditionLoss);
+        myPlayer.condition = Student.ClampCondition(myPlayer.condition - conditionLoss);
         logs.Add(System($"[{context.MySchoolName}] {myPlayer.studentName} 컨디션 -{conditionLoss}"));
         logs.Add(Normal(string.Empty));
 

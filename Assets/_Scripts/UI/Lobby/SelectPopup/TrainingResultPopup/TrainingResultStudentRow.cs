@@ -43,10 +43,9 @@ public class TrainingResultStudentRow : MonoBehaviour
         if (_conditionGaugeFill == null || _deltaFill == null)
             return;
 
-        int beforeValue = Mathf.Max(0, before.condition);
-        int afterValue = Mathf.Max(0, after.condition);
-
-        int condMax = GetConditionMax(beforeValue, afterValue);
+        int beforeValue = Student.ClampCondition(before.condition);
+        int afterValue = Student.ClampCondition(after.condition);
+        int condMax = Student.ConditionMax;
 
         float before01 = Mathf.Clamp01((float)beforeValue / condMax);
         float after01 = Mathf.Clamp01((float)afterValue / condMax);
@@ -108,14 +107,6 @@ public class TrainingResultStudentRow : MonoBehaviour
         _txtConditionDelta.color = delta < 0
             ? new Color(0.90f, 0.25f, 0.25f)   // 빨강
             : new Color(0.25f, 0.55f, 1.00f);  // 파랑
-    }
-
-    // 컨디션 게이지 최대값 계산 (10단위 올림)
-    private static int GetConditionMax(int beforeValue, int afterValue)
-    {
-        int v = Mathf.Max(beforeValue, afterValue, 100);
-        int rounded = ((v + 9) / 10) * 10;   // 10단위 올림
-        return Mathf.Max(rounded, 1);
     }
 
     // 스탯 변화 행 구성

@@ -47,7 +47,7 @@ public static class StudentFactory
         GenerateStats(student, grade); // 학년 기반으로 기본 스탯 생성 및 할당
         GeneratePotential(student, position.id); // 포지션 기반 잠재력 생성
 
-        student.condition = student.mental + 20;
+        student.condition = Student.ClampCondition(student.mental + 20);
 
         return student;
     }

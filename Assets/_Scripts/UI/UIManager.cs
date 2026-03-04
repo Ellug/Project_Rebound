@@ -118,7 +118,7 @@ public class UIManager : Singleton<UIManager>
     }
 
 
-    public void OpenStudentSelect(int maxSelectCount, Action<List<Student>> onSelected, Action onCancelled)
+    public void OpenStudentSelect(int maxSelectCount, Action<List<Student>> onSelected, Action onCancelled, StudentCardPreviewDelta previewDelta = default)
     {
         if (_studentSelectPopupPrefab == null)
         {
@@ -137,6 +137,7 @@ public class UIManager : Singleton<UIManager>
         popup.transform.SetAsLastSibling();
 
         popup.SetMaxSelectCount(maxSelectCount);
+        popup.SetPreviewDelta(previewDelta);
         popup.Init();
         popup.Open();
 
