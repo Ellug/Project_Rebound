@@ -15,7 +15,7 @@ public class RecruitmentPopup : UIPopup
     [SerializeField] private TMP_Text _txtSelectCount;        // 선택 인원 표시 (현재/최대)
 
     [Header("Close")]
-    [SerializeField] private Button _btnClose;                // 닫기 버튼
+    [SerializeField] private Button _btnRecuitmentClose;                // 닫기 버튼
 
     [Header("Card")]
     [SerializeField] private Transform _cardRoot;             // 카드 부모 (Grid/VerticalLayout 등)
@@ -57,10 +57,10 @@ public class RecruitmentPopup : UIPopup
         base.Init();
 
         // 버튼 이벤트 바인딩 (중복 등록 방지)
-        if (_btnClose != null)
+        if (_btnRecuitmentClose != null)
         {
-            _btnClose.onClick.RemoveAllListeners();
-            _btnClose.onClick.AddListener(HandleCloseButton);
+            _btnRecuitmentClose.onClick.RemoveAllListeners();
+            _btnRecuitmentClose.onClick.AddListener(HandleCloseButton);
         }
 
         if (_btnComplete != null)

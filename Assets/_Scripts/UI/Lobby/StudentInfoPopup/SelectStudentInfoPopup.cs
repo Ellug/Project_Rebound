@@ -11,7 +11,7 @@ public class SelectStudentInfoPopup : UIBase
 {
     [Header("Header")]
     [SerializeField] private TMP_Text _txtTitle;                      // 상단 타이틀
-    [SerializeField] private Button _btnClose;                        // 닫기 버튼
+    [SerializeField] private Button _btnInfoClose;                    // 닫기 버튼
 
     [Header("Left - Portrait")]
     [SerializeField] private Image _imgPortrait;                      // 초상화
@@ -78,16 +78,16 @@ public class SelectStudentInfoPopup : UIBase
         }
 
         // 닫기 버튼 바인딩
-        if (_btnClose != null)
+        if (_btnInfoClose != null)
         {
-            _btnClose.onClick.RemoveAllListeners();
-            _btnClose.onClick.AddListener(CloseSelf);
+            _btnInfoClose.onClick.RemoveAllListeners();
+            _btnInfoClose.onClick.AddListener(CloseSelf);
 
-            _btnClose.interactable = true;
-            _btnClose.enabled = true;
+            _btnInfoClose.interactable = true;
+            _btnInfoClose.enabled = true;
 
-            if (_btnClose.targetGraphic != null)
-                _btnClose.targetGraphic.raycastTarget = true;
+            if (_btnInfoClose.targetGraphic != null)
+                _btnInfoClose.targetGraphic.raycastTarget = true;
         }
         else
         {

@@ -9,7 +9,7 @@ public class MessengerInboxPopup : UIBase
     [SerializeField] private Transform _slotContentRoot;
     [SerializeField] private ChatRoomSlot _slotPrefab;
     [SerializeField] private GameObject _dateDividerPrefab;
-    [SerializeField] private Button _btnClose;
+    [SerializeField] private Button _btnInboxClose;
     [SerializeField] private MessengerRoomPopup _roomPopupPrefab;
 
     private List<GameObject> _spawnedItems = new List<GameObject>();
@@ -21,10 +21,10 @@ public class MessengerInboxPopup : UIBase
         _isInited = true;
         base.Init();
 
-        if (_btnClose != null)
+        if (_btnInboxClose != null)
         {
-            _btnClose.onClick.RemoveAllListeners();
-            _btnClose.onClick.AddListener(Close);
+            _btnInboxClose.onClick.RemoveAllListeners();
+            _btnInboxClose.onClick.AddListener(Close);
         }
 
         if (MessengerManager.Instance != null)
