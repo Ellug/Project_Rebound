@@ -262,6 +262,15 @@ public class TrainingSelectPopup : UIPopup
 
         req.RequiresStudentSelection = data.requiresStudentSelection;
         req.MaxSelectCount = data.maxSelectCount;
+        req.StudentCardPreviewDelta = new StudentCardPreviewDelta
+        {
+            condition = -data.conditionDelta,
+            mental = data.mentalDelta,
+            shoot = Mathf.RoundToInt(data.shootDelta),
+            speed = Mathf.RoundToInt(data.speedDelta),
+            jump = Mathf.RoundToInt(data.jumpDelta),
+            stamina = Mathf.RoundToInt(data.staminaDelta)
+        };
 
         if (req.RequiresStudentSelection)
         {
@@ -344,7 +353,7 @@ public class TrainingSelectPopup : UIPopup
             if (student == null) continue;
 
             student.condition -= data.conditionDelta;
-            student.condition = Mathf.Max(0, student.condition);
+            student.condition = Student.ClampCondition(student.condition);
 
             student.shoot += Mathf.RoundToInt(data.shootDelta);
             student.speed += Mathf.RoundToInt(data.speedDelta);

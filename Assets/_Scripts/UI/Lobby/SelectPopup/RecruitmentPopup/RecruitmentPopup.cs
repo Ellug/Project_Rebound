@@ -385,8 +385,16 @@ public class RecruitmentPopup : UIPopup
         _cardMap.Clear();
 
         ClearCards();
-        Close();
-        Destroy(gameObject);
+
+        if (UIManager.Instance != null)
+        {
+            UIManager.Instance.Close(this);
+        }
+        else
+        {
+            Close();
+            Destroy(gameObject);
+        }
     }
 
     // 생성된 카드 제거
@@ -442,5 +450,12 @@ public class RecruitmentPopup : UIPopup
     {
         // 보유 + 선택 < 정원 이어야 추가 선택 가능
         return (_ownedCount + _selectedStudents.Count) < _capacity;
+    }
+
+
+    // 강제 영입 모드 설정
+    public void SetForceRecruitMode()
+    {
+        DisableBackKey = true; 
     }
 }
