@@ -10,7 +10,6 @@ public class GameManager : Singleton<GameManager>
     private const string TitleScene = "Title";
 
     private TurnManager _turnManager;               // Lobby 씬의 TurnManager (씬별 런타임 참조)
-    // private EventManager _eventManager;             // Lobby 씬의 EventManager
     private AlwaysEventManager _alwaysEventManager; // Lobby 씬의 AlwaysEventManager
     private LobbyUI _lobbyUI;                       // Lobby 씬의 LobbyUI
     private TournamentResultUI _tournamentResultUI; // Lobby 씬의 TournamentResultUI

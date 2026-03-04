@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 
 // 졸업 이벤트 전체 흐름을 관리
-// DateManager의 OnGraduationTriggered 구독
+// AlwaysEventManager의 roster_graduate 활성화를 구독
 // Confirm → 목록 → 완료 → 실제 졸업 처리
 // 테스트용 F12 트리거
 public class GraduationManager : MonoBehaviour
@@ -13,6 +12,8 @@ public class GraduationManager : MonoBehaviour
     [Header("Scene References")]
     [SerializeField] private GraduationStudentsPopup _graduationPopup;
     [SerializeField] private TurnManager _turnManager;
+
+    private AlwaysEventManager _alwaysEventManager;
 
 #if UNITY_EDITOR || 테스트용
     [Header("Dev Test (F12)")]
@@ -24,26 +25,43 @@ public class GraduationManager : MonoBehaviour
     // 이번 졸업 처리 대상(완료 버튼 누르기 전까지 유지)
     private List<Student> _pendingGraduates = new();
 
-    private void Start()
+    void Start()
     {
         if (_turnManager == null)
             _turnManager = FindFirstObjectByType<TurnManager>();
 
-        // 졸업 이벤트 구독
-        if (_turnManager != null && _turnManager.DateManager != null)
-        {
-            _turnManager.DateManager.OnGraduationTriggered -= HandleGraduationTriggered;
-            _turnManager.DateManager.OnGraduationTriggered += HandleGraduationTriggered;
-        }
+        if (_alwaysEventManager == null)
+            _alwaysEventManager = FindFirstObjectByType<AlwaysEventManager>();
+
+        SubscribeAlwaysEvents();
     }
 
-    private void OnDestroy()
+    void OnDestroy()
     {
-        // 이벤트 해제
-        if (_turnManager != null && _turnManager.DateManager != null)
-        {
-            _turnManager.DateManager.OnGraduationTriggered -= HandleGraduationTriggered;
-        }
+        UnsubscribeAlwaysEvents();
+    }
+
+    private void SubscribeAlwaysEvents()
+    {
+        if (_alwaysEventManager == null) return;
+
+        _alwaysEventManager.OnEventActivated -= HandleAlwaysEventActivated;
+        _alwaysEventManager.OnEventActivated += HandleAlwaysEventActivated;
+    }
+
+    private void UnsubscribeAlwaysEvents()
+    {
+        if (_alwaysEventManager == null) return;
+
+        _alwaysEventManager.OnEventActivated -= HandleAlwaysEventActivated;
+    }
+
+    private void HandleAlwaysEventActivated(AlwaysEventRow row)
+    {
+        if (row == null) return;
+        if (row.id != "roster_graduate") return;
+
+        HandleGraduationTriggered();
     }
 
 
@@ -187,7 +205,7 @@ public class GraduationManager : MonoBehaviour
 
     // -----테스트용-----
 
-    private void Update()
+    void Update()
     {
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
         if (!_enableF12Test)

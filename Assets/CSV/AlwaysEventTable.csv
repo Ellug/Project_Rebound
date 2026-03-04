@@ -2,7 +2,7 @@ ID,name,type,term_start,term_end,term,priority,range,effect_id,description
 string,string,string,string,string,int,int,enum,string,string
 roster_recruit,first_recruit,roster,260302,260302,1,1,0,first_recruit_effect,
 roster_recruit,second_recruit,roster,260810,260810,1,1,0,second_recruit_effect,
-roster_graduate,roster_graduate,roster,270228,270228,1,4,0,graduate_effect,
+roster_graduate,roster_graduate,roster,270226,270226,1,4,0,graduate_effect,
 roster_recruit,first_recruit,roster,270302,270302,1,1,0,first_recruit_effect,
 roster_recruit,second_recruit,roster,270809,270809,1,1,0,second_recruit_effect,
 roster_graduate,roster_graduate,roster,280228,280228,1,4,0,graduate_effect,
@@ -13,7 +13,7 @@ roster_graduate,roster_graduate,roster,280228,280228,1,4,0,graduate_effect,
 sports_day,festival_sports_day,festival,260515,260515,1,4,0,festival_effect,체육대회가 시작했다! 그동안의 피로를 풀 수 있는 하루를 보내자!
 school_event,festival_school,festival,261008,261008,1,4,0,festival_effect,학교제가 시작했다! 그동안의 피로를 풀 수 있는 하루를 보내자!
 summer_break,vacation_summer,vacation,260710,260809,1,1,0,vacation_effect,
-winter_break,vacation_winter,vacation,261228,270226,1,1,0,vacation_effect,
+winter_break,vacation_winter,vacation,261228,270224,1,1,0,vacation_effect,
 children_day,holiday_children_day,holiday,260505,260505,1,2,0,holiday_effect,"어린이날이다! 모처럼의 휴일, 학생들이 들뜬 분위기다!"
 buddha_day,holiday_buddha,holiday,260524,260525,1,2,0,holiday_effect,부처님 오신 날이다! 차분한 분위기 속에서 하루를 보내보자!
 korean_memorial_day,holiday_memorial_day,holiday,260606,260606,1,2,0,holiday_effect,현충일이다! 잠시 마음을 다잡고 하루를 보내자!
@@ -30,7 +30,7 @@ christmas,holiday_christmas,holiday,261225,261225,1,2,0,holiday_effect,성탄절
 sports_day,festival_sports_day,festival,270521,270521,1,4,0,festival_effect,체육대회가 시작했다! 그동안의 피로를 풀 수 있는 하루를 보내자!
 school_event,festival_school,festival,271008,271008,1,4,0,festival_effect,학교제가 시작했다! 그동안의 피로를 풀 수 있는 하루를 보내자!
 summer_break,vacation_summer,vacation,270709,270808,1,1,0,vacation_effect,
-winter_break,vacation_winter,vacation,271228,270226,1,1,0,vacation_effect,
+winter_break,vacation_winter,vacation,271228,280225,1,1,0,vacation_effect,
 independence,holiday_independence,holiday,270301,270301,1,2,0,holiday_effect,삼일절이다! 공휴일로 학생들이 의욕으로 가득 찼다
 children_day,holiday_children_day,holiday,270505,270505,1,2,0,holiday_effect,"어린이날이다! 모처럼의 휴일, 학생들이 들뜬 분위기다!"
 buddha_day,holiday_buddha,holiday,270524,270525,1,2,0,holiday_effect,부처님 오신 날이다! 차분한 분위기 속에서 하루를 보내보자!
