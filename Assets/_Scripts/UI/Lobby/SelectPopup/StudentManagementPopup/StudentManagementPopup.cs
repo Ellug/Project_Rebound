@@ -99,6 +99,7 @@ public class StudentManagementPopup : UIBase
 
         // 토너먼트 모드일 때만 배치 완료 버튼 표시
         RefreshTournamentStartButton();
+        RefreshCloseButton();
     }
 
     public override void Close()
@@ -109,6 +110,7 @@ public class StudentManagementPopup : UIBase
         _onTournamentStart = null;
         _isTournamentMode = false;
         RefreshTournamentStartButton();
+        RefreshCloseButton();
     }
 
     // ───────────────────────────────────────────────────────────────
@@ -500,5 +502,12 @@ public class StudentManagementPopup : UIBase
             if (lobbyUI != null)
                 lobbyUI.OnClickStudentClose();
         });
+    }
+
+    private void RefreshCloseButton()
+    {
+        if (_btnClose == null) return;
+
+        _btnClose.gameObject.SetActive(!_isTournamentMode);
     }
 }
