@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -17,6 +18,9 @@ public class TrainingResult
 // 프리팹이 없으면 콘솔에 결과 출력 후 확인 버튼만 표시
 public class TrainingResultPopup : UIPopup
 {
+    [Header("Scroll")]
+    [SerializeField] private ScrollRect _scrollRect;
+
     [Header("Content")]
     [SerializeField] private TMP_Text _txtTrainingName;                 // 훈련 이름 표시
     [SerializeField] private Transform _rowContainer;                   // 학생 행 부모 (Vertical Layout Group)
@@ -33,12 +37,21 @@ public class TrainingResultPopup : UIPopup
     {
         base.Init();
 
+        if (_scrollRect == null)
+            _scrollRect = GetComponentInChildren<ScrollRect>(includeInactive: true);
+
         // 확인 버튼 이벤트 바인딩
         if (_btnConfirm != null)
         {
             _btnConfirm.onClick.RemoveAllListeners();
             _btnConfirm.onClick.AddListener(HandleConfirm);
         }
+    }
+
+    public override void Open()
+    {
+        base.Open();
+        StartCoroutine(ForceScrollTopRoutine());
     }
 
     // 외부에서 결과 데이터 세팅
@@ -115,5 +128,26 @@ public class TrainingResultPopup : UIPopup
         }
 
         _spawnedRows.Clear();
+    }
+
+    // 팝업 표시 시 스크롤을 항상 최상단으로 고정
+    private IEnumerator ForceScrollTopRoutine()
+    {
+        yield return null;
+        Canvas.ForceUpdateCanvases();
+        ForceScrollTop();
+
+        yield return null;
+        Canvas.ForceUpdateCanvases();
+        ForceScrollTop();
+    }
+
+    private void ForceScrollTop()
+    {
+        if (_scrollRect == null) return;
+
+        _scrollRect.StopMovement();
+        _scrollRect.verticalNormalizedPosition = 1f;
+        _scrollRect.velocity = Vector2.zero;
     }
 }

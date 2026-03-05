@@ -174,8 +174,26 @@ public static class StudentFactory
         {
             var startStatData = startStatTable.GetOrNull(statId, grade);
 
-            // stat_min ~ stat_max 범위에서 랜덤 선택
-            int statValue = _random.Next(startStatData.statMin, startStatData.statMax + 1);
+            // 초기 스탯은 base_min/base_max에서 뽑고,
+            // stat_min/stat_max는 해당 스탯의 절대 허용 범위로 사용한다.
+            int statMin = Mathf.Min(startStatData.statMin, startStatData.statMax);
+            int statMax = Mathf.Max(startStatData.statMin, startStatData.statMax);
+            int baseMin = Mathf.Min(startStatData.baseMin, startStatData.baseMax);
+            int baseMax = Mathf.Max(startStatData.baseMin, startStatData.baseMax);
+
+            int initialMin = Mathf.Clamp(baseMin, statMin, statMax);
+            int initialMax = Mathf.Clamp(baseMax, statMin, statMax);
+
+            if (initialMin > initialMax)
+            {
+                Debug.LogWarning(
+                    $"[StudentFactory] Invalid initial range after clamp: stat_id={statId}, grade={grade}, " +
+                    $"stat=[{statMin},{statMax}], base=[{baseMin},{baseMax}]");
+                initialMin = statMin;
+                initialMax = statMax;
+            }
+
+            int statValue = _random.Next(initialMin, initialMax + 1);
 
             switch (statId)
             {
