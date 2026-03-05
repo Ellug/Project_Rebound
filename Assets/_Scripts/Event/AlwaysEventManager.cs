@@ -164,45 +164,6 @@ public class AlwaysEventManager : MonoBehaviour
         UIManager.Instance.ShowPopup(req);
     }
 
-    // 다음 리그(vacation 타입) 시작 날짜 조회 — GameManager가 D-Day 계산에 사용
-    public bool TryGetNextLeagueDate(DateTime currentDate, out DateTime nextLeagueDate)
-    {
-        nextLeagueDate = default;
-
-        if (!TryGetAlwaysEventTable(out var table))
-            return false;
-
-        DateTime baseDate = currentDate.Date;
-        bool found = false;
-        DateTime bestDate = default;
-
-        var rows = table.Rows;
-        for (int i = 0; i < rows.Count; i++)
-        {
-            var row = rows[i];
-            if (row == null) continue;
-            if (!IsLeagueBreakEvent(row)) continue;
-
-            if (!TryParseTableDate(row.termStart, out DateTime termStartDate))
-                continue;
-
-            DateTime candidate = termStartDate.Date;
-            if (candidate < baseDate)               // 이미 지난 날짜는 제외
-                continue;
-
-            if (!found || candidate < bestDate)     // 가장 가까운 날짜로 갱신
-            {
-                bestDate = candidate;
-                found = true;
-            }
-        }
-
-        if (!found) return false;
-
-        nextLeagueDate = bestDate;
-        return true;
-    }
-
     private static string GetRowId(AlwaysEventRow row)
     {
         string id = string.IsNullOrWhiteSpace(row.id) ? "(no-id)" : row.id.Trim();
