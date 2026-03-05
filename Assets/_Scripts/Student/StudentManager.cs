@@ -179,9 +179,6 @@ public class StudentManager : Singleton<StudentManager>
             if (student.grade < 3)
             {
                 student.grade++;
-                // 학년이 변경되었으므로 UI 갱신 이벤트 발생
-                NotifyStudentModified(student);
-
                 OnStudentModified?.Invoke(student);
                 isPromoted = true;
             }

@@ -14,7 +14,6 @@ public class GameManager : Singleton<GameManager>
     private LobbyUI _lobbyUI;                       // Lobby 씬의 LobbyUI
     private TournamentResultUI _tournamentResultUI; // Lobby 씬의 TournamentResultUI
     private RecruitmentManager _recruitmentManager; // Lobby 씬의 RecruitmentManager
-    private GameState _gameState;                   // 이벤트 시스템용 게임 상태
     private bool _isLoadingTournament;              // 토너먼트 씬 로딩 중 플래그
     private bool _initialRecruitmentTriggered;      // 게임 시작 시 최초 영입 트리거 여부 (중복 방지)
     private bool _lobbyInitialized;                 // 로비 씬 초기화 완료 여부 (이중 호출 방지)
@@ -122,7 +121,6 @@ public class GameManager : Singleton<GameManager>
         _lobbyUI = null;
         _tournamentResultUI = null;
         _recruitmentManager = null;
-        _gameState = null;
         _isLoadingTournament = false;
         _lobbyInitialized = false; // 로비 초기화 플래그 리셋
         _isNewGame = false;
@@ -215,7 +213,7 @@ public class GameManager : Singleton<GameManager>
         return (nextLeagueDate.Date - _turnManager.DateManager.CurrentDate.Date).Days;
     }
 
-    // Lobby 씬 로드 시 턴 흐름 초기화/복원 (11단계)
+    // Lobby 씬 로드 시 턴 흐름 초기화/복원 (10단계)
     // _lobbyInitialized 플래그로 Start/OnSceneLoaded 이중 호출 방지
     private void TryInitializeLobbyFlow(Scene scene)
     {
@@ -235,13 +233,12 @@ public class GameManager : Singleton<GameManager>
         SubscribeTurnManager();         // 2. TurnManager 이벤트 구독
         RegisterTurnModules();          // 3. TurnModule 등록 (AlwaysEffectTickModule 등)
         RestoreTurnManagerState();      // 4. TurnManager 상태 복원 (씬 복귀 시)
-        InitializeGameState();          // 5. GameState 생성 및 동기화
-        InitializeEventManager();       // 6. EventManager 초기화
-        SetInitialPhase();              // 7. 초기 페이즈 설정
-        HandleTournamentResult();       // 8. 토너먼트 결과 처리
-        SyncFlowStateFromLobby();       // 9. GameFlowData 동기화 (이후 HasFlowState = true)
-        RefreshLobbyTopInfo();          // 10. 로비 UI 갱신
-        TryTriggerInitialRecruitment(); // 11. 게임 시작 시 최초 영입 트리거
+        InitializeEventManager();       // 5. EventManager 초기화
+        SetInitialPhase();              // 6. 초기 페이즈 설정
+        HandleTournamentResult();       // 7. 토너먼트 결과 처리
+        SyncFlowStateFromLobby();       // 8. GameFlowData 동기화 (이후 HasFlowState = true)
+        RefreshLobbyTopInfo();          // 9. 로비 UI 갱신
+        TryTriggerInitialRecruitment(); // 10. 게임 시작 시 최초 영입 트리거
     }
 
     // 새 게임 상태 초기화
@@ -327,15 +324,6 @@ public class GameManager : Singleton<GameManager>
         );
     }
 
-    // GameState 초기화 / 현재 상태 동기화
-    private void InitializeGameState()
-    {
-        if (_turnManager == null) return;
-
-        _gameState = new GameState(_turnManager.DateManager.CurrentDate);
-        _gameState.SyncState(_turnManager.DateManager.CurrentDate, _turnManager.TurnIndex);
-    }
-
     // EventManager 초기화 (ActiveEventIds를 GameFlowData에서 직접 전달 — 씬 전환과 무관하게 유지됨)
     private void InitializeEventManager()
     {
@@ -344,7 +332,7 @@ public class GameManager : Singleton<GameManager>
         if (!_flowData.HasFlowState)
             _flowData.ActiveEventIds.Clear();   // 새 게임: 활성 이벤트 초기화
 
-        _alwaysEventManager.Bind(_turnManager, _gameState, _flowData.ActiveEventIds);
+        _alwaysEventManager.Bind(_turnManager, _flowData.ActiveEventIds);
 
         // AlwaysEventManager가 발행하는 이벤트를 GM이 구독 — AEM → GM 직접참조 제거
         _alwaysEventManager.OnEventActivated += HandleAlwaysEventActivated;
@@ -435,8 +423,6 @@ public class GameManager : Singleton<GameManager>
     {
         if (_turnManager == null)
             return;
-
-        _gameState?.SyncState(_turnManager.DateManager.CurrentDate, _turnManager.TurnIndex);
 
         SyncFlowStateFromLobby();
         RefreshLobbyTopInfo();

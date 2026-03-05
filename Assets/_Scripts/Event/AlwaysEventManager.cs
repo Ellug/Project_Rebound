@@ -10,16 +10,14 @@ public class AlwaysEventManager : MonoBehaviour
     public event Action<AlwaysEventRow> OnEventExpired;
 
     private TurnManager _turnManager;
-    private GameState _gameState;
     private HashSet<string> _activeEventIds; // GameFlowData.ActiveEventIds 참조
 
     // TurnManager와 연동
-    public void Bind(TurnManager turnManager, GameState gameState, HashSet<string> activeEventIds)
+    public void Bind(TurnManager turnManager, HashSet<string> activeEventIds)
     {
         UnsubscribeTurnManager();
 
         _turnManager = turnManager;
-        _gameState = gameState;
         _activeEventIds = activeEventIds;
 
         SubscribeTurnManager();
@@ -31,7 +29,6 @@ public class AlwaysEventManager : MonoBehaviour
         UnsubscribeTurnManager();
 
         _turnManager = null;
-        _gameState = null;
         _activeEventIds = null;
 
         OnEventActivated = null;
@@ -63,7 +60,6 @@ public class AlwaysEventManager : MonoBehaviour
         if (_turnManager == null) return;
 
         DateTime today = _turnManager.DateManager.CurrentDate.Date;
-        _gameState?.SyncState(_turnManager.DateManager.CurrentDate, _turnManager.TurnIndex);
         CheckEvents(today);
     }
 

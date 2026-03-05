@@ -97,6 +97,5 @@ public class LoadUI : MonoBehaviour
     {
         Debug.Log($"삭제 요청: {slotIndex}");
         SaveSystem.Instance.Delete(slotIndex);
-        LoadList();
     }
 }
