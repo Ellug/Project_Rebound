@@ -96,7 +96,7 @@ public class RecruitmentManager : MonoBehaviour
             return;
         }
 
-        int capacity = 8; // 팀 정원
+        int capacity = _maxRecruitCount; // 팀 정원
         int ownedCount = StudentManager.Instance != null ? StudentManager.Instance.GetStudentCount() : 0;
         bool isFull = ownedCount >= capacity;
 
@@ -155,7 +155,7 @@ public class RecruitmentManager : MonoBehaviour
         }
 
         int ownedCount = StudentManager.Instance != null ? StudentManager.Instance.GetStudentCount() : 0;
-        int capacity = 8;
+        int capacity = _maxRecruitCount;
         int remaining = Mathf.Max(0, capacity - ownedCount);
 
         RecruitmentPopup popup = Instantiate(_recruitmentPopupPrefab, canvasRoot);
