@@ -3,11 +3,13 @@ using System.Collections.Generic;
 
 public static class PopupRequestAdapter
 {
+    // 기존 PopupData를 새로운 UIPopupRequest로 변환
     public static UIPopupRequest FromPopupData(PopupData data)
     {
         if (data == null)
             return null;
 
+        // 버튼 리스트를 Cancel/Primary로 매핑
         ResolveButtons(
             data.Buttons,
             out bool showCancel,
@@ -15,6 +17,7 @@ public static class PopupRequestAdapter
             out Action onPrimary
         );
 
+        // 이미지 or 서브텍스트가 있으면 Default 패널 사용, 없으면 Simple 사용
         bool useDefaultPanel = data.Image != null || !string.IsNullOrEmpty(data.SubContent);
 
         if (useDefaultPanel)
@@ -40,6 +43,9 @@ public static class PopupRequestAdapter
         );
     }
 
+    // PopupButtonInfo 리스트를 (Cancel, Primary) 형태로 정규화
+    // 1개면 Primary만 사용
+    // 2개 이상이면 [0]=Cancel, [1]=Primary로 사용
     private static void ResolveButtons(
         List<PopupButtonInfo> buttons,
         out bool showCancel,

@@ -11,55 +11,56 @@ using UnityEngine.UI;
 public class UIPopup : UIPopupBase
 {
     [Header("Panels")]
-    [SerializeField] private GameObject _panelSimple;
-    [SerializeField] private GameObject _panelDefault;
-    [SerializeField] private GameObject _panelGuide;
-
-    [Header("Simple UI")]
-    [SerializeField] private TMP_Text _txtSimpleTitle;
-    [SerializeField] private TMP_Text _txtSimpleMessage;
-    [SerializeField] private Button _btnSimpleCancel;
-    [SerializeField] private Button _btnSimpleConfirm;
-
-    [Header("Default UI")]
-    [SerializeField] private TMP_Text _txtDefaultTitle;
-    [SerializeField] private TMP_Text _txtDefaultSub;
-    [SerializeField] private TMP_Text _txtDefaultMessage;
-    [SerializeField] private Image _imgDefaultPreview;
-
-    [SerializeField] private Button _btnDefaultCancel;
+    [SerializeField] private GameObject _panelSimple;           // Simple 패널 루트
+    [SerializeField] private GameObject _panelDefault;          // Default 패널 루트
+    [SerializeField] private GameObject _panelGuide;            // Guide 패널 루트
+                                                                
+    [Header("Simple UI")]                                       
+    [SerializeField] private TMP_Text _txtSimpleTitle;          // Simple 제목
+    [SerializeField] private TMP_Text _txtSimpleMessage;        // Simple 본문
+    [SerializeField] private Button _btnSimpleCancel;           // Simple 취소 버튼
+    [SerializeField] private Button _btnSimpleConfirm;          // Simple 확인 버튼
+                                                                
+    [Header("Default UI")]                                      
+    [SerializeField] private TMP_Text _txtDefaultTitle;         // Default 제목
+    [SerializeField] private TMP_Text _txtDefaultSub;           // Default 서브
+    [SerializeField] private TMP_Text _txtDefaultMessage;       // Default 본문
+    [SerializeField] private Image _imgDefaultPreview;          // Default 이미지
+    [SerializeField] private Button _btnDefaultCancel;          // Default 취소 버튼
 
     // Default Primary 버튼들 (같은 위치 고정, 필요한 것만 켜기)
-    [SerializeField] private Button _btnDefaultConfirm;         // 확인
+    [SerializeField] private Button _btnDefaultConfirm;         // 확인 버튼 (PrimaryKind=Confirm)
     [SerializeField] private Button _btnDefaultStartTraining;   // 훈련 시작/훈련 확인
 
     [Header("Guide UI")]
-    [SerializeField] private TMP_Text _txtGuideTitle;
-    [SerializeField] private TMP_Text _txtGuideSub;
-    [SerializeField] private TMP_Text _txtGuideMessage;
-    [SerializeField] private Image _imgGuidePreview;
-    [SerializeField] private Button _btnGuidePrev;
-    [SerializeField] private Button _btnGuideCancel;
-    [SerializeField] private Button _btnGuideNext;
-    [SerializeField] private Button _btnGuideClose;
+    [SerializeField] private TMP_Text _txtGuideTitle;           // Guide 제목(페이지 타이틀)
+    [SerializeField] private TMP_Text _txtGuideSub;             // Guide 서브
+    [SerializeField] private TMP_Text _txtGuideMessage;         // Guide 본문(페이지 메시지)
+    [SerializeField] private Image _imgGuidePreview;            // Guide 이미지
+    [SerializeField] private Button _btnGuidePrev;              // 이전 페이지 버튼
+    [SerializeField] private Button _btnGuideCancel;            // 가이드 취소 버튼
+    [SerializeField] private Button _btnGuideNext;              // 다음 페이지 버튼
+    [SerializeField] private Button _btnGuideClose;             // 마지막 페이지 닫기 버튼 (Primary 액션)
+                                                                
+    [Header("Guide Dots")]                                      
+    [SerializeField] private Transform _dotRoot;                // 페이지 도트 부모
+    [SerializeField] private Image _dotPrefab;                  // 페이지 도트 프리팹
+                                                                
+    [SerializeField] private float _dotNormalScale = 1.0f;      // 비활성 스케일
+    [SerializeField] private float _dotActiveScale = 1.4f;      // 활성 스케일
 
-    [Header("Guide Dots")]
-    [SerializeField] private Transform _dotRoot;
-    [SerializeField] private Image _dotPrefab;
-    [SerializeField] private float _dotNormalScale = 1.0f;
-    [SerializeField] private float _dotActiveScale = 1.4f;
-    [SerializeField] private Color _dotNormalColor = new Color(0.75f, 0.75f, 0.75f, 1f);
-    [SerializeField] private Color _dotActiveColor = Color.white;
+    [SerializeField] private Color _dotNormalColor = new Color(0.75f, 0.75f, 0.75f, 1f);  // 비활성 색상
+    [SerializeField] private Color _dotActiveColor = Color.white;                         // 활성화 색상
 
-    private readonly List<Image> _spawnedDots = new();
+    private readonly List<Image> _spawnedDots = new();          // 생성된 페이지 도트 캐시
 
-    private UIPopupRequest _request;
-    private int _pageIndex;
+    private UIPopupRequest _request;                            // 현재 팝업 요청 데이터
+    private int _pageIndex;                                     // 가이드 현재 페이지 인덱스
 
     public override void Init()
     {
         base.Init();
-        SetAllPanels(false);
+        SetAllPanels(false); // 초기에는 모든 패널 비활성
     }
 
     // UIManager가 UIPopupRequest를 주입
@@ -88,7 +89,7 @@ public class UIPopup : UIPopupBase
 
     public override void Close()
     {
-        TryInvokePrimaryOnClose();
+        TryInvokePrimaryOnClose(); // 닫힘 시 Primary 호출 옵션 처리
         base.Close();
     }
 
@@ -200,7 +201,7 @@ public class UIPopup : UIPopupBase
     {
         ActivatePanel(_panelGuide);
 
-        _pageIndex = 0;
+        _pageIndex = 0; // 가이드 시작은 0페이지
 
         if (_btnGuideCancel != null)
         {
@@ -209,14 +210,16 @@ public class UIPopup : UIPopupBase
             _btnGuideCancel.onClick.AddListener(() => InvokeCancel(request));
         }
 
-        EnsureDots();
-        RefreshGuidePage();
+        EnsureDots();        // 페이지 수에 맞게 도트 생성/정리
+        RefreshGuidePage();  // 첫 페이지 표시
     }
 
+    // 현재 페이지 데이터를 UI에 반영
     private void RefreshGuidePage()
     {
         List<UIPopupRequest.GuidePage> pages = _request != null ? _request.Pages : null;
 
+        // 페이지가 없으면 단일 메시지(Title/Message)로 폴백
         if (pages == null || pages.Count == 0)
         {
             if (_txtGuideTitle != null) _txtGuideTitle.text = _request != null ? (_request.Title ?? "") : "";
@@ -255,8 +258,8 @@ public class UIPopup : UIPopupBase
 
         bool isLast = _pageIndex == pages.Count - 1;
         ApplyGuideButtonState(isLast);
-        EnsureDots();
-        RefreshDots();
+        EnsureDots();  // 페이지 수 변경 대응(동적 주입 가능)
+        RefreshDots(); // 현재 페이지 강조
     }
 
     private void PrevGuidePage()
@@ -316,6 +319,7 @@ public class UIPopup : UIPopupBase
 
         int targetCount = (_request != null && _request.Pages != null) ? _request.Pages.Count : 0;
 
+        // 부족하면 생성
         while (_spawnedDots.Count < targetCount)
         {
             Image dot = Instantiate(_dotPrefab, _dotRoot);
@@ -323,6 +327,7 @@ public class UIPopup : UIPopupBase
             _spawnedDots.Add(dot);
         }
 
+        // 많으면 제거
         while (_spawnedDots.Count > targetCount)
         {
             int last = _spawnedDots.Count - 1;
@@ -387,6 +392,7 @@ public class UIPopup : UIPopupBase
                 previewDelta: request.StudentCardPreviewDelta
             );
 
+            // 학생 선택 UI를 띄운 뒤, 요청 옵션에 따라 Host 팝업을 닫음
             if (request.AutoCloseOnPrimary)
                 CloseSelfByManager();
 
