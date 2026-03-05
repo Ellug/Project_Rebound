@@ -9,17 +9,20 @@ public class UIPopupBase : UIBase
     [Header("Base Close (Optional)")]
     [SerializeField] private Button _btnClose; // X 버튼이 있는 UI만 연결
 
+    // 초기 바인딩(프리팹/씬 배치 모두 대응)
     protected virtual void Awake()
     {
         BindCloseButton();
     }
 
+    // UIBase.Init 경로로 초기화되는 케이스 대응
     public override void Init()
     {
         base.Init();
         BindCloseButton();
     }
 
+    // X 버튼 클릭 리스너 1회만 유지
     private void BindCloseButton()
     {
         if (_btnClose == null)
@@ -36,12 +39,14 @@ public class UIPopupBase : UIBase
         CloseSelfByManager();
     }
 
+    // BackKey 처리(UIManager 스택에서 호출)
     public override void OnBackKey()
     {
         // 기본: X 버튼과 동일 취급
         OnCloseButtonClicked();
     }
 
+    // UIManager가 있으면 스택 기준으로 닫고, 없으면 자체 파괴
     protected void CloseSelfByManager()
     {
         if (UIManager.Instance != null)
