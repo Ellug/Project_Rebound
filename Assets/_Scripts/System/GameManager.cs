@@ -368,7 +368,7 @@ public class GameManager : Singleton<GameManager>
 
         if (_turnManager != null)
         {
-            // 저장해둔 term_end 날짜로 복원 후 한 턴 진행 -> AdvanceDay로 term_end + 1일에 이벤트 정상 발동
+            // 저장해둔 term_end 날짜로 복원
             DateTime leagueTermEnd = _flowData.LeagueTermEnd;
             if (leagueTermEnd != default)
             {
@@ -376,8 +376,6 @@ public class GameManager : Singleton<GameManager>
                 int targetDayIndex = _turnManager.DateManager.DayIndex + dayDelta;
                 _turnManager.RestoreRuntimeState(leagueTermEnd, _turnManager.TurnIndex, targetDayIndex, _turnManager.DateManager.CurrentYear, GamePhase.DailyTraining);
             }
-            _turnManager.SetPhase(GamePhase.DailyTraining);
-            _turnManager.ExecuteTurn(TurnActionType.Rest);
             _turnManager.SetPhase(GamePhase.DailyTraining);
         }
         ResetLeagueWindowState();

@@ -76,15 +76,30 @@ public class RecruitmentManager : MonoBehaviour
     private void HandleAlwaysEventActivated(AlwaysEventRow row)
     {
         if (row == null) return;
+        if (row.id != "roster_recruit") return;
 
-        switch (row.id)
-        {
-            case "roster_recruit":
-                // 입학(신입생 영입) — 기존 보유 학생 유지
-                GenerateCandidateStudents(RecruitmentContext.NewSemester); // 1학년만 생성
-                ShowRecruitmentEventConfirm(RecruitmentContext.NewSemester);
-                break;
-        }
+        // 3/2(1학기)와 8/10(2학기) 이벤트를 분리해서 문구 적용
+        RecruitmentContext context = ResolveSemesterRecruitmentContext(row);
+
+        // 입학(신입생 영입) — 기존 보유 학생 유지
+        GenerateCandidateStudents(context); // 1학년만 생성
+        ShowRecruitmentEventConfirm(context);
+    }
+
+    private static RecruitmentContext ResolveSemesterRecruitmentContext(AlwaysEventRow row)
+    {
+        string recruitName = (row.name ?? string.Empty).Trim();
+        if (string.Equals(recruitName, "second_recruit", StringComparison.OrdinalIgnoreCase))
+            return RecruitmentContext.SecondSemester;
+
+        if (string.Equals(recruitName, "first_recruit", StringComparison.OrdinalIgnoreCase))
+            return RecruitmentContext.FirstSemester;
+
+        // name 값이 비어있는 예외 데이터 대비: 날짜 기준으로 폴백
+        if (AlwaysEventDateUtil.TryParseTableDate(row.termStart, out DateTime startDate))
+            return startDate.Month >= 8 ? RecruitmentContext.SecondSemester : RecruitmentContext.FirstSemester;
+
+        return RecruitmentContext.FirstSemester;
     }
 
     // 1단계: 이벤트 안내 팝업
@@ -105,7 +120,8 @@ public class RecruitmentManager : MonoBehaviour
         string messageBody = BuildEventMessage(context);
 
 
-        Action onPrimary = () => OpenRecruitmentPopup(isForced);
+        // 정원 가득 찼을 때는 확인 버튼이 팝업 닫기만 수행하도록 처리
+        Action onPrimary = isFull ? () => { } : () => OpenRecruitmentPopup(isForced);
         Action onCancel = canSkip ? HandleRecruitmentSkipped : null;
 
         var req = UIPopupRequest.Default(
@@ -113,13 +129,12 @@ public class RecruitmentManager : MonoBehaviour
             message: BuildEventMessage(context),
             onPrimary: onPrimary,
             onCancel: onCancel,
-            subMessage: isFull ? "현재 보유 학생이 정원으로 영입을 진행할 수 없습니다." : null,
+            subMessage: isFull ? "현재 보유 학생이 정원에 도달해 영입을 진행할 수 없습니다." : null,
             previewSprite: null,
             showCancel: canSkip,
             primaryKind: UIPopupRequest.PrimaryButtonKind.Confirm
         );
 
-        req.PrimaryInteractable = !isFull;
         req.AutoCloseOnPrimary = true;
         req.AutoCloseOnCancel = true;
 
@@ -227,7 +242,7 @@ public class RecruitmentManager : MonoBehaviour
     {
         _candidateStudents.Clear();
 
-        bool recruitFreshmanOnly = context == RecruitmentContext.NewSemester;
+        bool recruitFreshmanOnly = context == RecruitmentContext.FirstSemester || context == RecruitmentContext.SecondSemester;
         int gradeParam = recruitFreshmanOnly ? 1 : 0; // 0 전달 시 StudentFactory 내부 랜덤(1~3)
 
         for (int i = 0; i < _recruitCandidateCount; i++)
@@ -240,12 +255,16 @@ public class RecruitmentManager : MonoBehaviour
         return context switch
         {
             RecruitmentContext.GameStart =>
-                "학기가 시작되었습니다.\n합격된 신입 학생을 영입할 수 있습니다.\n" +
-                "영입은 한 번에 단 한 번만 진행되며,\n선택 후 변경할 수 없습니다.",
+                "학기가 시작되었습니다.\n함께할 학생들을 영입할 수 있습니다.\n\n" +
+                "영입은 학기에 단 한 번만 진행되며,\n선택 후에는 변경할 수 없습니다.",
 
-            RecruitmentContext.NewSemester =>
-                "새 학기가 시작되었습니다.\n3학년 선배들이 졸업하고 신입생이 입학했습니다.\n" +
-                "영입은 한 번에 단 한 번만 진행되며,\n선택 후 변경할 수 없습니다.",
+            RecruitmentContext.FirstSemester =>
+                "1학기가 시작되었습니다.\n함께할 신입 학생을 영입할 수 있습니다.\n\n" +
+                "영입은 학기에 단 한 번만 진행되며,\n선택 후에는 변경할 수 없습니다.",
+
+            RecruitmentContext.SecondSemester =>
+                "2학기가 시작되었습니다.\n함께할 신입 학생을 영입할 수 있습니다.\n\n" +
+                "영입은 학기에 단 한 번만 진행되며,\n선택 후에는 변경할 수 없습니다.",
 
             _ => "학생 영입을 진행합니다."
         };
@@ -253,7 +272,8 @@ public class RecruitmentManager : MonoBehaviour
 
     public enum RecruitmentContext
     {
-        GameStart,   // 게임 시작 시 최초 영입
-        NewSemester  // 새 학기 시작 시 신입생 영입
+        GameStart,      // 게임 시작 시 최초 영입
+        FirstSemester,  // 1학기 시작 영입 (3월)
+        SecondSemester  // 2학기 시작 영입 (8월)
     }
 }

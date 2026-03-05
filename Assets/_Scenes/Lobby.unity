@@ -1634,8 +1634,8 @@ MonoBehaviour:
   _goldValueText: {fileID: 910001063}
   _fameIconImage: {fileID: 237104993}
   _fameValueText: {fileID: 910001073}
-  _achievedImage: {fileID: 685755447189932767, guid: 1d548e5037d38e0438988ad80a6b78ef, type: 3}
-  _failedImage: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
+  _achievedImage: {fileID: 26626975867926279, guid: 8c817fa4736b2264f8057c36f5a37c49, type: 3}
+  _failedImage: {fileID: 26626975867926279, guid: 8c817fa4736b2264f8057c36f5a37c49, type: 3}
   _goldIcon: {fileID: 6734850202343107688, guid: 1be428b245f26504aa860258100704f5, type: 3}
   _fameIcon: {fileID: -805237271934909618, guid: 9e32ebe18d864c9488a3c9b717758c1a, type: 3}
   _achievedTitleFormat: "{PLACEMENT} \uB2EC\uC131!"
@@ -7790,6 +7790,7 @@ MonoBehaviour:
   _dontDestroyOnLoad: 1
   _canvasRoot: {fileID: 1542067910}
   _uiPopupPrefab: {fileID: 2709569829720818253, guid: 12b32fafa91fc074fbb429aa6509eab7, type: 3}
+  _defaultPopupPreviewSprite: {fileID: -6551554479474966430, guid: 0d5f6a2c5aacb8e45a269aebb112f878, type: 3}
   _studentSelectPopupPrefab: {fileID: 5655431246991369327, guid: 2eefce8b8a34e304b82db8b2d577031f, type: 3}
 --- !u!4 &1317058962
 Transform:
