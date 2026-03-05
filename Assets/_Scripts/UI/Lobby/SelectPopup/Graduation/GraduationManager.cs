@@ -151,17 +151,10 @@ public class GraduationManager : MonoBehaviour
 
         SaveGraduationRecord(_pendingGraduates);
 
-        // 3학년 제거
-        foreach (var s in _pendingGraduates)
-        {
-            if (s != null)
-                StudentManager.Instance.RemoveStudent(s);
-        }
-
-        // 3학년 졸업 처리 후 학생 매니저의 진급 로직 실행
         if (StudentManager.Instance != null)
         {
-            StudentManager.Instance.PromoteStudents();
+            StudentManager.Instance.GraduateSeniors(); // 3학년 삭제 + 슬롯 자동 비우기
+            StudentManager.Instance.PromoteStudents(); // 남은 재학생 진급
         }
 
 
