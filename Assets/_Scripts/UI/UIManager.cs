@@ -15,6 +15,9 @@ public class UIManager : Singleton<UIManager>
     [Header("Popup Prefabs")]
     [SerializeField] private UIPopup _uiPopupPrefab;
 
+    [Header("Popup Defaults")]
+    [SerializeField] private Sprite _defaultPopupPreviewSprite;
+
     [Header("Student Select Prefab")]
     [SerializeField] private StudentSelectPopup _studentSelectPopupPrefab;
 
@@ -96,6 +99,8 @@ public class UIManager : Singleton<UIManager>
 
         if (!EnsureCanvasRoot()) return null;
 
+        ApplyPopupDefaults(request);
+
         // 1. 프리팹 생성
         UIPopup popupInstance = Instantiate(_uiPopupPrefab, _canvasRoot, false);
         popupInstance.transform.SetAsLastSibling(); // 항상 최상단에 표시
@@ -109,6 +114,16 @@ public class UIManager : Singleton<UIManager>
         _uiStack.Push(popupInstance);
 
         return popupInstance;
+    }
+
+    // 전역 기본 팝업 값 적용
+    private void ApplyPopupDefaults(UIPopupRequest request)
+    {
+        if (request == null) return;
+        if (request.Type != UIPopupRequest.PanelType.Default) return;
+        if (request.PreviewSprite != null) return;
+
+        request.PreviewSprite = _defaultPopupPreviewSprite;
     }
 
     // PopupData 경로 (기존 호출 유지용 어댑터)

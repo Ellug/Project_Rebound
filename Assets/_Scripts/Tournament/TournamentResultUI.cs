@@ -192,3 +192,4 @@ public class TournamentResultUI : MonoBehaviour
             .Replace("{CHAMPION}", champion); // 우승 고등학교도 일단은 전달함
     }
 }
+
