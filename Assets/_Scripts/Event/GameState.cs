@@ -15,12 +15,6 @@ public class GameState
         CurrentTurn = 0;
     }
 
-    public void AdvanceTurn()
-    {
-        CurrentTurn++;
-        CurrentDate = CurrentDate.AddDays(1);
-    }
-
     // TurnManager 기준 상태를 Event 시스템에 동기화
     public void SyncState(DateTime currentDate, int currentTurn)
     {

@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Game/Event/Executor/MessengerExecutor")]
-public class MessengerEventExecutor : EventExecutor
+public class MessengerEventExecutor : ScriptableObject
 {
     [SerializeField] private string _roomId = "event_01";
     [SerializeField] private string _roomName = "시스템 알림";
@@ -10,7 +10,7 @@ public class MessengerEventExecutor : EventExecutor
     [SerializeField] private string _messageContent = "메시지 내용";
     [SerializeField] private MessageEventType _eventType = MessageEventType.NormalText;
 
-    public override void Execute(GameState gameState)
+    public void Execute(GameState gameState)
     {
         ChatMessage newMsg = new ChatMessage(_senderType, _messageContent, _eventType);
 
