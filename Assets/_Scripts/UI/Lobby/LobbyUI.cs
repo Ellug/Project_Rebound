@@ -34,6 +34,7 @@ public class LobbyUI : UIBase
     [Header("Popups")]
     [SerializeField] private TrainingSelectPopup _trainingSelectPopup; // 씬에 배치된 훈련 선택 팝업 (직접 참조)
     [SerializeField] private StudentManagementPopup _studentManagementPopup; // 씬에 배치된 학생 관리 팝업(비활성화 상태)
+    [SerializeField] private HeadCoachPopup _headCoachPopup; // 씬에 배치된 감독 노드 팝업 (비활성화 상태)
 
     [Header("Center Message")]
     [SerializeField] private TMP_Text _txtMessage;
@@ -168,11 +169,13 @@ public class LobbyUI : UIBase
         if (_btnStudent != null)
             _btnStudent.onClick.AddListener(OnClickStudent);
 
+        // 감독 노드 버튼
+        if (_btnCoach != null)
+            _btnCoach.onClick.AddListener(OnClickCoach);
+
         // MVP 미구현 기능들은 '준비중' 알림
         if (_btnFacility != null)
             _btnFacility.onClick.AddListener(() => ShowNotImplemented("시설"));
-        if (_btnCoach != null)
-            _btnCoach.onClick.AddListener(() => ShowNotImplemented("감독 노드"));
         if (_btnShop != null)
             _btnShop.onClick.AddListener(() => ShowNotImplemented("상점"));
     }
@@ -240,6 +243,28 @@ public class LobbyUI : UIBase
         _studentManagementPopup.Init();
         //_studentManagementPopup.transform.SetAsLastSibling();
         _studentManagementPopup.Open();
+        RefreshBottomNavTabSprites();
+    }
+
+    private void OnClickCoach()
+    {
+        if (_headCoachPopup == null)
+            return;
+
+        bool wasActive = _headCoachPopup.gameObject.activeSelf;
+
+        CloseAllLobbyPopups();
+
+        // 이미 열려있던 경우 → 토글로 닫기만 하고 종료
+        if (wasActive)
+        {
+            RefreshBottomNavTabSprites();
+            return;
+        }
+
+        _headCoachPopup.Init();
+        //_headCoachPopup.transform.SetAsLastSibling();
+        _headCoachPopup.Open();
         RefreshBottomNavTabSprites();
     }
 
@@ -368,6 +393,10 @@ public class LobbyUI : UIBase
             _studentManagementPopup.Close();
         }
 
+        if (_headCoachPopup != null && _headCoachPopup.gameObject.activeSelf)
+        {
+            _headCoachPopup.Close();
+        }
         RefreshBottomNavTabSprites();
     }
 
@@ -386,11 +415,12 @@ public class LobbyUI : UIBase
     {
         bool trainingActive = IsPopupActive(_trainingSelectPopup);
         bool studentActive = IsPopupActive(_studentManagementPopup);
+        bool coachActive = IsPopupActive(_headCoachPopup);
 
         ApplyTabSprite(_btnTraining, _trainingDefaultSprite, _activeTabSprites != null ? _activeTabSprites.training : null, trainingActive);
         ApplyTabSprite(_btnStudent, _studentDefaultSprite, _activeTabSprites != null ? _activeTabSprites.student : null, studentActive);
         ApplyTabSprite(_btnFacility, _facilityDefaultSprite, _activeTabSprites != null ? _activeTabSprites.facility : null, false);
-        ApplyTabSprite(_btnCoach, _coachDefaultSprite, _activeTabSprites != null ? _activeTabSprites.coach : null, false);
+        ApplyTabSprite(_btnCoach, _coachDefaultSprite, _activeTabSprites != null ? _activeTabSprites.coach : null, coachActive);
         ApplyTabSprite(_btnShop, _shopDefaultSprite, _activeTabSprites != null ? _activeTabSprites.shop : null, false);
 
         _lastTrainingPopupActive = trainingActive;
