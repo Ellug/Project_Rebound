@@ -399,6 +399,7 @@ public class UIPopup : UIPopupBase
             return;
         }
 
+        request.InvokePrimaryOnClose = false;
         request.OnPrimary?.Invoke();
 
         if (request.AutoCloseOnPrimary)

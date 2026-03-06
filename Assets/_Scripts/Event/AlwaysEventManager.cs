@@ -157,9 +157,7 @@ public class AlwaysEventManager : MonoBehaviour
         );
 
         if (IsLeagueBreakEvent(row))
-        {
             req.InvokePrimaryOnClose = true;
-        }
 
         UIManager.Instance.ShowPopup(req);
     }
