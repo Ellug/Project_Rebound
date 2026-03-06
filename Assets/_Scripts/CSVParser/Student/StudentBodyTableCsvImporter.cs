@@ -42,13 +42,7 @@ public static class StudentBodyTableCsvImporter
         var header = CsvImportUtil.SplitCsvLine(lines[0]);
         var col = CsvImportUtil.BuildColumnMap(header);
 
-        int startRow = 1;
-        if (lines.Count > 1)
-        {
-            var secondRow = CsvImportUtil.SplitCsvLine(lines[1]);
-            if (CsvImportUtil.IsTypeDefinitionRow(secondRow))
-                startRow = 2;
-        }
+        int startRow = CsvImportUtil.GetDataStartRow(lines);
 
         for (int i = startRow; i < lines.Count; i++)
         {
@@ -57,19 +51,9 @@ public static class StudentBodyTableCsvImporter
 
             var cells = CsvImportUtil.SplitCsvLine(line);
 
-            // "id" 컬럼 우선, 없으면 구버전 "position_id" 컬럼 폴백
-            // "position_01" 형식의 string id를 int로 파싱
-            int positionId;
-            if (col.ContainsKey("id"))
-                positionId = CsvImportUtil.ReadPrefixedId(cells, col, "id");
-            else
-                positionId = CsvImportUtil.ReadPrefixedId(cells, col, "position_id");
-
-            if (positionId == 0) continue;
-
             var r = new StudentBodyRow
             {
-                positionId = positionId,
+                id = CsvImportUtil.ReadString(cells, col, "id"),
                 positionName = CsvImportUtil.ReadString(cells, col, "position_name"),
                 minHeight = CsvImportUtil.ReadInt(cells, col, "min_height", 0),
                 maxHeight = CsvImportUtil.ReadInt(cells, col, "max_height", 0),

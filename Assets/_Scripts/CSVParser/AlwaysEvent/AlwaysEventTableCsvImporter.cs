@@ -42,13 +42,7 @@ public static class AlwaysEventTableCsvImporter
         var header = CsvImportUtil.SplitCsvLine(lines[0]);
         var col = CsvImportUtil.BuildColumnMap(header);
 
-        int startRow = 1;
-        if (lines.Count > 1)
-        {
-            var secondRow = CsvImportUtil.SplitCsvLine(lines[1]);
-            if (CsvImportUtil.IsTypeDefinitionRow(secondRow))
-                startRow = 2;
-        }
+        int startRow = CsvImportUtil.GetDataStartRow(lines);
 
         for (int i = startRow; i < lines.Count; i++)
         {
@@ -57,12 +51,9 @@ public static class AlwaysEventTableCsvImporter
 
             var cells = CsvImportUtil.SplitCsvLine(line);
 
-            var id = CsvImportUtil.ReadString(cells, col, "ID");
-            if (string.IsNullOrEmpty(id)) continue;
-
             var r = new AlwaysEventRow
             {
-                id = id,
+                id = CsvImportUtil.ReadString(cells, col, "ID"),
                 name = CsvImportUtil.ReadString(cells, col, "name"),
                 type = CsvImportUtil.ReadString(cells, col, "type"),
                 termStart = CsvImportUtil.ReadString(cells, col, "term_start"),
@@ -75,14 +66,6 @@ public static class AlwaysEventTableCsvImporter
             };
 
             result.Add(r);
-        }
-
-        // ID 중복 경고
-        var dup = new HashSet<string>();
-        foreach (var row in result)
-        {
-            if (!dup.Add(row.id))
-                Debug.LogWarning($"[AlwaysEventTable] Duplicate ID detected: {row.id}");
         }
 
         return result;

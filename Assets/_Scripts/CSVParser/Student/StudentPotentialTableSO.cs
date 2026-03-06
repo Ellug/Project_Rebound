@@ -6,7 +6,7 @@ using UnityEngine;
 [Serializable]
 public sealed class StudentPotentialRow
 {
-    public int positionId;
+    public string id;
     public string positionName;
     public string tier1Stat;
     public int tier1Prob;
@@ -22,7 +22,7 @@ public sealed class StudentPotentialTableSO : ScriptableObject
 {
     [SerializeField] private List<StudentPotentialRow> _rows = new();
 
-    private Dictionary<int, StudentPotentialRow> _byPositionId;
+    private Dictionary<string, StudentPotentialRow> _byPositionId;
 
     public IReadOnlyList<StudentPotentialRow> Rows => _rows;
 
@@ -33,20 +33,20 @@ public sealed class StudentPotentialTableSO : ScriptableObject
 
     public void BuildCache()
     {
-        _byPositionId = new Dictionary<int, StudentPotentialRow>(_rows.Count);
+        _byPositionId = new Dictionary<string, StudentPotentialRow>(_rows.Count);
 
         foreach (var r in _rows)
         {
             if (r == null) continue;
-            _byPositionId[r.positionId] = r;
+            _byPositionId[r.id] = r;
         }
     }
 
-    public bool TryGet(int positionId, out StudentPotentialRow row)
-        => _byPositionId.TryGetValue(positionId, out row);
+    public bool TryGet(string id, out StudentPotentialRow row)
+        => _byPositionId.TryGetValue(id, out row);
 
-    public StudentPotentialRow GetOrNull(int positionId)
-        => _byPositionId.TryGetValue(positionId, out var r) ? r : null;
+    public StudentPotentialRow GetOrNull(string id)
+        => _byPositionId.TryGetValue(id, out var r) ? r : null;
 
 #if UNITY_EDITOR
     public void ReplaceAll(List<StudentPotentialRow> newRows)

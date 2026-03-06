@@ -42,13 +42,7 @@ public static class AlwaysEffectTableCsvImporter
         var header = CsvImportUtil.SplitCsvLine(lines[0]);
         var col = CsvImportUtil.BuildColumnMap(header);
 
-        int startRow = 1;
-        if (lines.Count > 1)
-        {
-            var secondRow = CsvImportUtil.SplitCsvLine(lines[1]);
-            if (CsvImportUtil.IsTypeDefinitionRow(secondRow))
-                startRow = 2;
-        }
+        int startRow = CsvImportUtil.GetDataStartRow(lines);
 
         for (int i = startRow; i < lines.Count; i++)
         {
@@ -57,13 +51,10 @@ public static class AlwaysEffectTableCsvImporter
 
             var cells = CsvImportUtil.SplitCsvLine(line);
 
-            var id = CsvImportUtil.ReadString(cells, col, "ID");
-            if (string.IsNullOrEmpty(id)) continue;
-
             var r = new AlwaysEffectRow
             {
-                id = id,
-                trainingState = ReadBool(CsvImportUtil.ReadString(cells, col, "training_state")),
+                id = CsvImportUtil.ReadString(cells, col, "ID"),
+                trainingState = string.Equals(CsvImportUtil.ReadString(cells, col, "training_state"), "TRUE", System.StringComparison.OrdinalIgnoreCase),
                 conditionIncrease = CsvImportUtil.ReadInt(cells, col, "condition_increase", 0),
                 conditionDecline = CsvImportUtil.ReadInt(cells, col, "condition_decline", 0),
                 conditionRecoveryUp = CsvImportUtil.ReadInt(cells, col, "condition_recovery_up", 0),
@@ -75,21 +66,7 @@ public static class AlwaysEffectTableCsvImporter
             result.Add(r);
         }
 
-        // ID 중복 경고
-        var dup = new HashSet<string>();
-        foreach (var row in result)
-        {
-            if (!dup.Add(row.id))
-                Debug.LogWarning($"[AlwaysEffectTable] Duplicate ID detected: {row.id}");
-        }
-
         return result;
-    }
-
-    private static bool ReadBool(string s)
-    {
-        s = (s ?? "").Trim().ToLowerInvariant();
-        return s == "true" || s == "1" || s == "yes";
     }
 }
 #endif

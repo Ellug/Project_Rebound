@@ -13,19 +13,19 @@ MonoBehaviour:
   m_Name: SO_StudentBodyTable
   m_EditorClassIdentifier: Assembly-CSharp::StudentBodyTableSO
   _rows:
-  - positionId: 1
+  - id: position_001
     positionName: "\uAC00\uB4DC(G)"
     minHeight: 178
     maxHeight: 188
     minWeight: 72
     maxWeight: 82
-  - positionId: 2
+  - id: position_002
     positionName: "\uD3EC\uC6CC\uB4DC(F)"
     minHeight: 184
     maxHeight: 190
     minWeight: 80
     maxWeight: 92
-  - positionId: 3
+  - id: position_003
     positionName: "\uC13C\uD130(C)"
     minHeight: 188
     maxHeight: 192

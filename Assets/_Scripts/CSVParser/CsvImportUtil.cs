@@ -85,6 +85,18 @@ public static class CsvImportUtil
         return map;
     }
 
+    // 데이터 시작 행 인덱스 반환 (2번째 행이 자료형 정의면 2, 아니면 1)
+    public static int GetDataStartRow(List<string> lines)
+    {
+        if (lines.Count > 1)
+        {
+            var secondRow = SplitCsvLine(lines[1]);
+            if (IsTypeDefinitionRow(secondRow))
+                return 2;
+        }
+        return 1;
+    }
+
     // 해당 행이 자료형 정의 행인지 확인
     public static bool IsTypeDefinitionRow(List<string> cells)
     {
@@ -104,12 +116,7 @@ public static class CsvImportUtil
             if (s == "string" || s == "int" || s == "float" || s == "double" ||
                 s == "bool" || s == "boolean" || s == "long" || s == "short" ||
                 s == "byte" || s == "decimal" || s == "enum" || s == "flag" ||
-                s == "text" || s == "number" || s == "bool")
-            {
-                typeKeywordCount++;
-            }
-            // string 오타 및 단축어 허용
-            else if (s.Contains("str") && s.Length <= 7)
+                s == "text" || s == "number")
             {
                 typeKeywordCount++;
             }

@@ -45,14 +45,7 @@ public static class SuddenEventTableCsvImporter
         var header = CsvImportUtil.SplitCsvLine(lines[0]);
         var col = CsvImportUtil.BuildColumnMap(header);
 
-        // 각 행을 SuddenEventRow로 변환 (2번째 행이 자료형 정의면 스킵)
-        int startRow = 1;
-        if (lines.Count > 1)
-        {
-            var secondRow = CsvImportUtil.SplitCsvLine(lines[1]);
-            if (CsvImportUtil.IsTypeDefinitionRow(secondRow))
-                startRow = 2;
-        }
+        int startRow = CsvImportUtil.GetDataStartRow(lines);
 
         for (int i = startRow; i < lines.Count; i++)
         {
@@ -61,130 +54,44 @@ public static class SuddenEventTableCsvImporter
 
             var cells = CsvImportUtil.SplitCsvLine(line);
 
-            var id = CsvImportUtil.ReadString(cells, col, "ID");
-            if (string.IsNullOrEmpty(id)) continue;
-
-            var eventName = CsvImportUtil.ReadString(cells, col, "name");
-            if (string.IsNullOrEmpty(eventName))
-                eventName = CsvImportUtil.ReadString(cells, col, "eventName");
-
-            var description = CsvImportUtil.ReadString(cells, col, "description");
-            if (string.IsNullOrEmpty(description))
-                description = CsvImportUtil.ReadString(cells, col, "message");
-
-            // trigger_treshold2는 CSV 오타 (h 누락) — 두 컬럼명 모두 시도
-            int threshold2 = -1;
-            if (col.ContainsKey("trigger_threshold2"))
-                threshold2 = CsvImportUtil.ReadInt(cells, col, "trigger_threshold2", -1);
-            else if (col.ContainsKey("trigger_treshold2"))
-                threshold2 = CsvImportUtil.ReadInt(cells, col, "trigger_treshold2", -1);
-
             var r = new SuddenEventRow
             {
-                id = id,
-                name = eventName,
+                id = CsvImportUtil.ReadString(cells, col, "ID"),
+                name = CsvImportUtil.ReadString(cells, col, "name"),
 
                 context = CsvImportUtil.ReadFlags<SuddenEventContextFlags>(cells, col, "context"),
                 condition = CsvImportUtil.ReadFlags<SuddenEventConditionFlags>(cells, col, "condition"),
                 category = CsvImportUtil.ReadFlags<SuddenEventCategoryFlags>(cells, col, "category"),
 
                 scope = CsvImportUtil.ReadEnumSingle(cells, col, "scope", SuddenEventScope.Member),
+                targetMin = CsvImportUtil.ReadInt(cells, col, "target_min", 0),
+                targetMax = CsvImportUtil.ReadInt(cells, col, "target_max", 0),
 
                 termMin = CsvImportUtil.ReadInt(cells, col, "term_min", 1),
                 termMax = CsvImportUtil.ReadInt(cells, col, "term_max", 1),
                 termScale = CsvImportUtil.ReadEnumSingle(cells, col, "term_scale", SuddenEventTermScale.Day),
 
-                isTrigger = ReadBool(cells, col, "is_trigger"),
-                triggerStatus1 = ReadTriggerStatus(cells, col, "trigger_status1"),
-                triggerCondition1 = ReadTriggerCondition(cells, col, "trigger_condition1"),
+                isTrigger = string.Equals(CsvImportUtil.ReadString(cells, col, "is_trigger"), "TRUE", System.StringComparison.OrdinalIgnoreCase),
+                triggerStatus1 = CsvImportUtil.ReadEnumSingle(cells, col, "trigger_status1", SuddenEventTriggerStatus.None),
+                triggerCondition1 = CsvImportUtil.ReadEnumSingle(cells, col, "trigger_condition1", SuddenEventTriggerCondition.None),
                 triggerThreshold1 = CsvImportUtil.ReadInt(cells, col, "trigger_threshold1", -1),
-                triggerStatus2 = ReadTriggerStatus(cells, col, "trigger_status2"),
-                triggerCondition2 = ReadTriggerCondition(cells, col, "trigger_condition2"),
-                triggerThreshold2 = threshold2,
+                triggerStatus2 = CsvImportUtil.ReadEnumSingle(cells, col, "trigger_status2", SuddenEventTriggerStatus.None),
+                triggerCondition2 = CsvImportUtil.ReadEnumSingle(cells, col, "trigger_condition2", SuddenEventTriggerCondition.None),
+                triggerThreshold2 = CsvImportUtil.ReadInt(cells, col, "trigger_threshold2", -1),
 
                 effect1 = CsvImportUtil.ReadString(cells, col, "effect1"),
                 effect2 = CsvImportUtil.ReadString(cells, col, "effect2"),
                 effect3 = CsvImportUtil.ReadString(cells, col, "effect3"),
 
-                isProbable = ReadBool(cells, col, "is_probable"),
+                isProbable = string.Equals(CsvImportUtil.ReadString(cells, col, "is_probable"), "TRUE", System.StringComparison.OrdinalIgnoreCase),
                 probability = CsvImportUtil.ReadFloat(cells, col, "probability", 0f),
-                description = description
+                description = CsvImportUtil.ReadString(cells, col, "description")
             };
-
-            // 최신 CSV는 target_min/target_max를 사용. 구버전 range_* 컬럼은 하위호환으로 유지.
-            if (col.ContainsKey("target_min") || col.ContainsKey("target_max"))
-            {
-                r.targetMin = CsvImportUtil.ReadInt(cells, col, "target_min", 0);
-                r.targetMax = CsvImportUtil.ReadInt(cells, col, "target_max", r.targetMin);
-            }
-            else if (col.ContainsKey("range_min") || col.ContainsKey("range_max"))
-            {
-                r.targetMin = CsvImportUtil.ReadInt(cells, col, "range_min", 0);
-                r.targetMax = CsvImportUtil.ReadInt(cells, col, "range_max", r.targetMin);
-            }
-            else if (col.ContainsKey("range"))
-            {
-                var v = CsvImportUtil.ReadInt(cells, col, "range", 0);
-                r.targetMin = v;
-                r.targetMax = v;
-            }
-            else
-            {
-                r.targetMin = 0;
-                r.targetMax = 0;
-            }
-
-            // min/max 보정 (csv 기입 에러시 시스템상 에러 방지 용도)
-            if (r.targetMax < r.targetMin) r.targetMax = r.targetMin;
-            if (r.termMax < r.termMin) r.termMax = r.termMin;
 
             result.Add(r);
         }
 
-        // ID 중복 경고
-        var dup = new HashSet<string>();
-        var dupList = new List<string>();
-        foreach (var row in result)
-        {
-            if (!dup.Add(row.id))
-                dupList.Add(row.id);
-        }
-
-        if (dupList.Count > 0)
-        {
-            var uniqueDups = new HashSet<string>(dupList);
-            Debug.LogWarning($"[SuddenEventTable] Found {dupList.Count} duplicate IDs ({uniqueDups.Count} unique): " +
-                             string.Join(", ", uniqueDups));
-        }
-
         return result;
-    }
-
-    private static bool ReadBool(List<string> cells, System.Collections.Generic.Dictionary<string, int> col, string key)
-    {
-        var s = CsvImportUtil.ReadString(cells, col, key).Trim().ToUpperInvariant();
-        return s == "TRUE" || s == "1" || s == "YES";
-    }
-
-    private static SuddenEventTriggerStatus ReadTriggerStatus(List<string> cells, System.Collections.Generic.Dictionary<string, int> col, string key)
-    {
-        var s = CsvImportUtil.ReadString(cells, col, key).Trim().ToLowerInvariant();
-        return s switch
-        {
-            "condition" => SuddenEventTriggerStatus.Condition,
-            _ => SuddenEventTriggerStatus.None
-        };
-    }
-
-    private static SuddenEventTriggerCondition ReadTriggerCondition(List<string> cells, System.Collections.Generic.Dictionary<string, int> col, string key)
-    {
-        var s = CsvImportUtil.ReadString(cells, col, key).Trim().ToLowerInvariant();
-        return s switch
-        {
-            "less" => SuddenEventTriggerCondition.Less,
-            "or_more" => SuddenEventTriggerCondition.Or_More,
-            _ => SuddenEventTriggerCondition.None
-        };
     }
 }
 #endif

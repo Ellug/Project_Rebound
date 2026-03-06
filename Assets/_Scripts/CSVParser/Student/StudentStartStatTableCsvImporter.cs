@@ -42,13 +42,7 @@ public static class StudentStartStatTableCsvImporter
         var header = CsvImportUtil.SplitCsvLine(lines[0]);
         var col = CsvImportUtil.BuildColumnMap(header);
 
-        int startRow = 1;
-        if (lines.Count > 1)
-        {
-            var secondRow = CsvImportUtil.SplitCsvLine(lines[1]);
-            if (CsvImportUtil.IsTypeDefinitionRow(secondRow))
-                startRow = 2;
-        }
+        int startRow = CsvImportUtil.GetDataStartRow(lines);
 
         for (int i = startRow; i < lines.Count; i++)
         {
@@ -57,12 +51,9 @@ public static class StudentStartStatTableCsvImporter
 
             var cells = CsvImportUtil.SplitCsvLine(line);
 
-            var statId = CsvImportUtil.ReadPrefixedId(cells, col, "stat_id", 0);
-            if (statId == 0) continue;
-
             var r = new StudentStartStatRow
             {
-                statId = statId,
+                statId = CsvImportUtil.ReadPrefixedId(cells, col, "stat_id", 0),
                 statName = CsvImportUtil.ReadString(cells, col, "stat_name"),
                 grade = CsvImportUtil.ReadInt(cells, col, "grade", 0),
                 statMin = CsvImportUtil.ReadInt(cells, col, "stat_min", 0),

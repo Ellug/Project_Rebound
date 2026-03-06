@@ -42,13 +42,7 @@ public static class EnemyStatTableCsvImporter
         var header = CsvImportUtil.SplitCsvLine(lines[0]);
         var col = CsvImportUtil.BuildColumnMap(header);
 
-        int startRow = 1;
-        if (lines.Count > 1)
-        {
-            var secondRow = CsvImportUtil.SplitCsvLine(lines[1]);
-            if (CsvImportUtil.IsTypeDefinitionRow(secondRow))
-                startRow = 2;
-        }
+        int startRow = CsvImportUtil.GetDataStartRow(lines);
 
         for (int i = startRow; i < lines.Count; i++)
         {
@@ -57,12 +51,9 @@ public static class EnemyStatTableCsvImporter
 
             var cells = CsvImportUtil.SplitCsvLine(line);
 
-            var day = CsvImportUtil.ReadInt(cells, col, "day", 0);
-            if (day == 0) continue;
-
             var r = new EnemyStatRow
             {
-                day = day,
+                day = CsvImportUtil.ReadInt(cells, col, "day", 0),
                 mental = CsvImportUtil.ReadInt(cells, col, "mental", 0),
                 shoot = CsvImportUtil.ReadInt(cells, col, "shoot", 0),
                 speed = CsvImportUtil.ReadInt(cells, col, "speed", 0),

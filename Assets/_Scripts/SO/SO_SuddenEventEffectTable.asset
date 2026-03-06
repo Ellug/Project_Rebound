@@ -912,84 +912,84 @@ MonoBehaviour:
   - id: event_effect_1_randomPlayerStat_p2
     type: 1
     targetName: text_status_random
-    targetMin: 1
+    targetMin: 2
     targetMax: 6
     amountMin: 2
     amountMax: 2
   - id: event_effect_1_randomPlayerStat_p3
     type: 1
     targetName: text_status_random
-    targetMin: 1
+    targetMin: 2
     targetMax: 6
     amountMin: 3
     amountMax: 3
   - id: event_effect_1_randomPlayerStat_p5
     type: 1
     targetName: text_status_random
-    targetMin: 1
+    targetMin: 2
     targetMax: 6
     amountMin: 5
     amountMax: 5
   - id: event_effect_1_randomPlayerStat_p10
     type: 1
     targetName: text_status_random
-    targetMin: 1
+    targetMin: 2
     targetMax: 6
     amountMin: 10
     amountMax: 10
   - id: event_effect_1_randomPlayerStat_p15
     type: 1
     targetName: text_status_random
-    targetMin: 1
+    targetMin: 2
     targetMax: 6
     amountMin: 15
     amountMax: 15
   - id: event_effect_1_randomPlayerStat_p20
     type: 1
     targetName: text_status_random
-    targetMin: 1
+    targetMin: 2
     targetMax: 6
     amountMin: 20
     amountMax: 20
   - id: event_effect_1_randomPlayerStat_m2
     type: 1
     targetName: text_status_random
-    targetMin: 1
+    targetMin: 2
     targetMax: 6
     amountMin: -2
     amountMax: -2
   - id: event_effect_1_randomPlayerStat_m3
     type: 1
     targetName: text_status_random
-    targetMin: 1
+    targetMin: 2
     targetMax: 6
     amountMin: -3
     amountMax: -3
   - id: event_effect_1_randomPlayerStat_m5
     type: 1
     targetName: text_status_random
-    targetMin: 1
+    targetMin: 2
     targetMax: 6
     amountMin: -5
     amountMax: -5
   - id: event_effect_1_randomPlayerStat_m10
     type: 1
     targetName: text_status_random
-    targetMin: 1
+    targetMin: 2
     targetMax: 6
     amountMin: -10
     amountMax: -10
   - id: event_effect_1_randomPlayerStat_m15
     type: 1
     targetName: text_status_random
-    targetMin: 1
+    targetMin: 2
     targetMax: 6
     amountMin: -15
     amountMax: -15
   - id: event_effect_1_randomPlayerStat_m20
     type: 1
     targetName: text_status_random
-    targetMin: 1
+    targetMin: 2
     targetMax: 6
     amountMin: -20
     amountMax: -20

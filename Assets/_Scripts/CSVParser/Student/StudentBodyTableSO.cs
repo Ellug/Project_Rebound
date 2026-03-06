@@ -6,7 +6,7 @@ using UnityEngine;
 [Serializable]
 public sealed class StudentBodyRow
 {
-    public int positionId;
+    public string id;
     public string positionName;
     public int minHeight;
     public int maxHeight;
@@ -20,7 +20,7 @@ public sealed class StudentBodyTableSO : ScriptableObject
 {
     [SerializeField] private List<StudentBodyRow> _rows = new();
 
-    private Dictionary<int, StudentBodyRow> _byPositionId;
+    private Dictionary<string, StudentBodyRow> _byId;
 
     public IReadOnlyList<StudentBodyRow> Rows => _rows;
 
@@ -31,20 +31,20 @@ public sealed class StudentBodyTableSO : ScriptableObject
 
     public void BuildCache()
     {
-        _byPositionId = new Dictionary<int, StudentBodyRow>(_rows.Count);
+        _byId = new Dictionary<string, StudentBodyRow>(_rows.Count);
 
         foreach (var r in _rows)
         {
             if (r == null) continue;
-            _byPositionId[r.positionId] = r;
+            _byId[r.id] = r;
         }
     }
 
-    public bool TryGet(int positionId, out StudentBodyRow row)
-        => _byPositionId.TryGetValue(positionId, out row);
+    public bool TryGet(string id, out StudentBodyRow row)
+        => _byId.TryGetValue(id, out row);
 
-    public StudentBodyRow GetOrNull(int positionId)
-        => _byPositionId.TryGetValue(positionId, out var r) ? r : null;
+    public StudentBodyRow GetOrNull(string id)
+        => _byId.TryGetValue(id, out var r) ? r : null;
 
 #if UNITY_EDITOR
     public void ReplaceAll(List<StudentBodyRow> newRows)

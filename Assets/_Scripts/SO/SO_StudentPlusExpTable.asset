@@ -13,48 +13,48 @@ MonoBehaviour:
   m_Name: SO_StudentPlusExpTable
   m_EditorClassIdentifier: Assembly-CSharp::StudentPlusExpTableSO
   _rows:
-  - positionId: 1
-    positionName: "\uAC00\uB4DC(G)"
+  - id: position_001
+    positionName: G
     tier: 1
     minValue: 100
     maxValue: 400
-  - positionId: 1
-    positionName: "\uAC00\uB4DC(G)"
+  - id: position_001
+    positionName: G
     tier: 2
     minValue: 0
     maxValue: 400
-  - positionId: 1
-    positionName: "\uAC00\uB4DC(G)"
+  - id: position_001
+    positionName: G
     tier: 3
     minValue: 0
     maxValue: 400
-  - positionId: 2
-    positionName: "\uD3EC\uC6CC\uB4DC(F)"
+  - id: position_002
+    positionName: F
     tier: 1
     minValue: 100
     maxValue: 500
-  - positionId: 2
-    positionName: "\uD3EC\uC6CC\uB4DC(F)"
+  - id: position_002
+    positionName: F
     tier: 2
     minValue: 0
     maxValue: 400
-  - positionId: 2
-    positionName: "\uD3EC\uC6CC\uB4DC(F)"
+  - id: position_002
+    positionName: F
     tier: 3
     minValue: 0
     maxValue: 300
-  - positionId: 3
-    positionName: "\uC13C\uD130(C)"
+  - id: position_003
+    positionName: C
     tier: 1
     minValue: 100
     maxValue: 500
-  - positionId: 3
-    positionName: "\uC13C\uD130(C)"
+  - id: position_003
+    positionName: C
     tier: 2
     minValue: 0
     maxValue: 300
-  - positionId: 3
-    positionName: "\uC13C\uD130(C)"
+  - id: position_003
+    positionName: C
     tier: 3
     minValue: 0
     maxValue: 400

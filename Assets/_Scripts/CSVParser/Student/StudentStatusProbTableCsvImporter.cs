@@ -42,13 +42,7 @@ public static class StudentStatusProbTableCsvImporter
         var header = CsvImportUtil.SplitCsvLine(lines[0]);
         var col = CsvImportUtil.BuildColumnMap(header);
 
-        int startRow = 1;
-        if (lines.Count > 1)
-        {
-            var secondRow = CsvImportUtil.SplitCsvLine(lines[1]);
-            if (CsvImportUtil.IsTypeDefinitionRow(secondRow))
-                startRow = 2;
-        }
+        int startRow = CsvImportUtil.GetDataStartRow(lines);
 
         for (int i = startRow; i < lines.Count; i++)
         {
@@ -59,7 +53,7 @@ public static class StudentStatusProbTableCsvImporter
 
             var r = new StudentStatusProbRow
             {
-                isInsane = ReadBool(CsvImportUtil.ReadString(cells, col, "is_insane")),
+                isInsane = string.Equals(CsvImportUtil.ReadString(cells, col, "is_insane"), "TRUE", System.StringComparison.OrdinalIgnoreCase),
                 conditionMax = CsvImportUtil.ReadInt(cells, col, "condition_max", 0),
                 probInsanity = CsvImportUtil.ReadInt(cells, col, "prob_insanity", 0),
                 probInjury = CsvImportUtil.ReadInt(cells, col, "prob_injury", 0),
@@ -67,20 +61,10 @@ public static class StudentStatusProbTableCsvImporter
                 totalRisk = CsvImportUtil.ReadInt(cells, col, "total_risk", 0)
             };
 
-            // total_risk가 비어있으면 개별 확률 합으로 자동 계산
-            if (r.totalRisk <= 0)
-                r.totalRisk = r.probInsanity + r.probInjury + r.probDisease;
-
             result.Add(r);
         }
 
         return result;
-    }
-
-    private static bool ReadBool(string s)
-    {
-        s = (s ?? "").Trim().ToLowerInvariant();
-        return s == "true" || s == "1" || s == "yes";
     }
 }
 #endif

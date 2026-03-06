@@ -152,10 +152,10 @@ public static class StudentFactory
     }
 
     // 포지션 기반 신체 정보 생성
-    private static (int height, int weight) GenerateBodyInfo(int positionId)
+    private static (int height, int weight) GenerateBodyInfo(string id)
     {
         var bodyTable = CachedSOData.StudentBodyTable;
-        var bodyData = bodyTable.GetOrNull(positionId);
+        var bodyData = bodyTable.GetOrNull(id);
 
         int height = _random.Next(bodyData.minHeight, bodyData.maxHeight + 1);
         int weight = _random.Next(bodyData.minWeight, bodyData.maxWeight + 1);
@@ -210,10 +210,10 @@ public static class StudentFactory
     }
 
     // 포지션 기반으로 잠재능력 할당 : 가중치 기반 랜덤 선택
-    private static void GeneratePotential(Student student, int positionId)
+    private static void GeneratePotential(Student student, string id)
     {
         var potentialTable = CachedSOData.StudentPotentialTable;
-        var potentialData = potentialTable.GetOrNull(positionId);
+        var potentialData = potentialTable.GetOrNull(id);
 
         // 총 확률 계산
         int totalWeight = potentialData.tier1Prob + potentialData.tier2Prob + potentialData.tier3Prob;

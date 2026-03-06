@@ -17,6 +17,8 @@ public static class GoogleSheetSyncConfig
     private const string GID_STATUS_TEXT           = "236823575"; // 돌발 이벤트 스탯 텍스트
     private const string GID_SCHOOL_NAME           = "1242330876"; // 학교 이름
     private const string GID_ENEMY_STAT            = "505381689"; // 적 스탯
+    private const string GID_TUTORIAL_TEXT         = "1755714998"; // 튜토리얼 텍스트
+    // 로스터 효과 -> 이거 쓸 일이 있나??? 안 넣음 불확실해서
     private const string GID_STUDENT_NAME          = "573141999"; // 학생 이름 목록
     private const string GID_STUDENT_BODY          = "537352849"; // 신장 및 체중
     private const string GID_STUDENT_STAT          = "230632196"; // 스탯 설명
@@ -29,7 +31,7 @@ public static class GoogleSheetSyncConfig
 
     private static string Url(string gid) => $"https://docs.google.com/spreadsheets/d/{SHEET_ID}/export?format=csv&gid={gid}";
 
-    public static readonly IReadOnlyList<SheetTableEntry> Tables = new List<SheetTableEntry>(18)
+    public static readonly IReadOnlyList<SheetTableEntry> Tables = new List<SheetTableEntry>
     {
         new("GrowthCommandTable.csv",     "Growth Command",        Url(GID_GROWTH_COMMAND)),
         new("AlwaysEffectTable.csv",      "Always Effect",         Url(GID_ALWAYS_EFFECT)),
@@ -37,10 +39,10 @@ public static class GoogleSheetSyncConfig
         new("SuddenEventTable.csv",       "Sudden Event",          Url(GID_SUDDEN_EVENT)),
         new("SuddenEventEffectTable.csv", "Sudden Event Effect",   Url(GID_SUDDEN_EVENT_EFFECT)),
         new("SuddenEventTextTable.csv",   "Sudden Event Text",     Url(GID_SUDDEN_EVENT_TEXT)),
-        // 돌발 이벤트 스탯??
-        new("StatusTextTable.csv",        "Status Text",           Url(GID_STATUS_TEXT)),
+        new("StatusTextTable.csv",        "Status Text",           Url(GID_STATUS_TEXT)), // 돌발 이벤트 스탯 텍스트
         new("SchoolNameTable.csv",        "School Name",           Url(GID_SCHOOL_NAME)),
         new("EnemyStatTable.csv",         "Enemy Stat",            Url(GID_ENEMY_STAT)),
+        new("TutorialTextTable.csv",      "Tutorial Text",         Url(GID_TUTORIAL_TEXT)),
         new("StudentNameTable.csv",       "Student Name",          Url(GID_STUDENT_NAME)),
         new("StudentBodyTable.csv",       "Student Body",          Url(GID_STUDENT_BODY)),
         new("StudentStatTable.csv",       "Student Stat",          Url(GID_STUDENT_STAT)),

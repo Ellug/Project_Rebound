@@ -42,13 +42,7 @@ public static class StudentStatTableCsvImporter
         var header = CsvImportUtil.SplitCsvLine(lines[0]);
         var col = CsvImportUtil.BuildColumnMap(header);
 
-        int startRow = 1;
-        if (lines.Count > 1)
-        {
-            var secondRow = CsvImportUtil.SplitCsvLine(lines[1]);
-            if (CsvImportUtil.IsTypeDefinitionRow(secondRow))
-                startRow = 2;
-        }
+        int startRow = CsvImportUtil.GetDataStartRow(lines);
 
         for (int i = startRow; i < lines.Count; i++)
         {
@@ -57,13 +51,9 @@ public static class StudentStatTableCsvImporter
 
             var cells = CsvImportUtil.SplitCsvLine(line);
 
-            // stat_id는 "stat_001" 형식의 string 또는 순수 int 모두 지원
-            var statId = CsvImportUtil.ReadPrefixedId(cells, col, "stat_id");
-            if (statId == 0) continue;
-
             var r = new StudentStatRow
             {
-                statId = statId,
+                statId = CsvImportUtil.ReadPrefixedId(cells, col, "stat_id"),
                 statName = CsvImportUtil.ReadString(cells, col, "stat_name"),
                 roleDesc = CsvImportUtil.ReadString(cells, col, "role_desc"),
                 logicEffect = CsvImportUtil.ReadString(cells, col, "logic_effect")

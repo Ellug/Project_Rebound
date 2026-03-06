@@ -42,14 +42,7 @@ public static class GrowthCommandTableCsvImporter
         var header = CsvImportUtil.SplitCsvLine(lines[0]);
         var col = CsvImportUtil.BuildColumnMap(header);
 
-        // 2번째 행이 자료형 정의면 스킵
-        int startRow = 1;
-        if (lines.Count > 1)
-        {
-            var secondRow = CsvImportUtil.SplitCsvLine(lines[1]);
-            if (CsvImportUtil.IsTypeDefinitionRow(secondRow))
-                startRow = 2;
-        }
+        int startRow = CsvImportUtil.GetDataStartRow(lines);
 
         for (int i = startRow; i < lines.Count; i++)
         {
@@ -58,20 +51,17 @@ public static class GrowthCommandTableCsvImporter
 
             var cells = CsvImportUtil.SplitCsvLine(line);
 
-            var index = CsvImportUtil.ReadInt(cells, col, "index", 0);
-            if (index == 0) continue;
-
             var r = new GrowthCommandRow
             {
-                index = index,
+                index = CsvImportUtil.ReadInt(cells, col, "index", 0),
                 name = CsvImportUtil.ReadString(cells, col, "name"),
                 icon = CsvImportUtil.ReadString(cells, col, "icon"),
                 parentIndex = CsvImportUtil.ReadInt(cells, col, "parent_index", 0),
 
-                btnType = ReadBtnType(CsvImportUtil.ReadString(cells, col, "btn_type")),
-                facilityReq = ReadFacilityReq(CsvImportUtil.ReadString(cells, col, "facility_req")),
+                btnType = CsvImportUtil.ReadEnumSingle(cells, col, "btn_type", GrowthCommandBtnType.Action),
+                facilityReq = CsvImportUtil.ReadEnumSingle(cells, col, "facility_req", GrowthFacilityReq.None),
                 facilityLv = CsvImportUtil.ReadInt(cells, col, "facility_lv", 1),
-                target = ReadTarget(CsvImportUtil.ReadString(cells, col, "target")),
+                target = CsvImportUtil.ReadEnumSingle(cells, col, "target", GrowthCommandTarget.Etc),
 
                 conditionCost = CsvImportUtil.ReadInt(cells, col, "condition_cost", 0),
                 mental = CsvImportUtil.ReadInt(cells, col, "mental", 0),
@@ -87,62 +77,7 @@ public static class GrowthCommandTableCsvImporter
             result.Add(r);
         }
 
-        // 중복 index 경고
-        var dupCheck = new HashSet<int>();
-        var dupList = new List<int>();
-        foreach (var r in result)
-        {
-            if (!dupCheck.Add(r.index))
-                dupList.Add(r.index);
-        }
-
-        if (dupList.Count > 0)
-        {
-            var uniqueDups = new HashSet<int>(dupList);
-            Debug.LogWarning($"[GrowthCommandTable] Found {dupList.Count} duplicate indices ({uniqueDups.Count} unique): " +
-                             string.Join(", ", uniqueDups));
-        }
-
         return result;
-    }
-
-    // ---- Domain parsing only ----
-    private static GrowthCommandBtnType ReadBtnType(string s)
-    {
-        s = (s ?? "").Trim().ToLowerInvariant();
-        return s switch
-        {
-            "category" => GrowthCommandBtnType.Category,
-            "action" => GrowthCommandBtnType.Action,
-            _ => GrowthCommandBtnType.Action
-        };
-    }
-
-    private static GrowthFacilityReq ReadFacilityReq(string s)
-    {
-        s = (s ?? "").Trim().ToLowerInvariant();
-        return s switch
-        {
-            "school" => GrowthFacilityReq.School,
-            "gym" => GrowthFacilityReq.Gym,
-            "cafeteria" => GrowthFacilityReq.Cafeteria,
-            "counselingcenter" => GrowthFacilityReq.CounselingCenter,
-            "" => GrowthFacilityReq.None,
-            _ => GrowthFacilityReq.None
-        };
-    }
-
-    private static GrowthCommandTarget ReadTarget(string s)
-    {
-        s = (s ?? "").Trim().ToLowerInvariant();
-        return s switch
-        {
-            "team" => GrowthCommandTarget.Team,
-            "individual" => GrowthCommandTarget.Individual,
-            "etc" => GrowthCommandTarget.Etc,
-            "" => GrowthCommandTarget.Etc,
-            _ => GrowthCommandTarget.Etc
-        };
     }
 }
 #endif

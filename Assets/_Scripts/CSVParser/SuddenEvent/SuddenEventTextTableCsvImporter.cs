@@ -43,14 +43,7 @@ public static class SuddenEventTextTableCsvImporter
         var header = CsvImportUtil.SplitCsvLine(lines[0]);
         var col = CsvImportUtil.BuildColumnMap(header);
 
-        // 2번째 행이 자료형 정의면 스킵
-        int startRow = 1;
-        if (lines.Count > 1)
-        {
-            var secondRow = CsvImportUtil.SplitCsvLine(lines[1]);
-            if (CsvImportUtil.IsTypeDefinitionRow(secondRow))
-                startRow = 2;
-        }
+        int startRow = CsvImportUtil.GetDataStartRow(lines);
 
         for (int i = startRow; i < lines.Count; i++)
         {
@@ -59,50 +52,18 @@ public static class SuddenEventTextTableCsvImporter
 
             var cells = CsvImportUtil.SplitCsvLine(line);
 
-            var id = CsvImportUtil.ReadString(cells, col, "ID");
-            if (string.IsNullOrEmpty(id)) continue;
-
-            var description = CsvImportUtil.ReadString(cells, col, "description");
-            if (string.IsNullOrEmpty(description))
-                description = CsvImportUtil.ReadString(cells, col, "text");
-
             var r = new SuddenEventTextRow
             {
-                id = id,
-                target = ReadTarget(cells, col),
+                id = CsvImportUtil.ReadString(cells, col, "ID"),
+                target = CsvImportUtil.ReadInt(cells, col, "target", 0),
                 speaker = CsvImportUtil.ReadString(cells, col, "speaker"),
-                description = description,
+                description = CsvImportUtil.ReadString(cells, col, "description"),
             };
 
             result.Add(r);
         }
 
-        // (id, target) 중복 경고
-        var dup = new HashSet<string>();
-        var dupList = new List<string>();
-        foreach (var row in result)
-        {
-            var key = $"{row.id}:{row.target}";
-            if (!dup.Add(key))
-                dupList.Add(key);
-        }
-
-        if (dupList.Count > 0)
-        {
-            var uniqueDups = new HashSet<string>(dupList);
-            Debug.LogWarning($"[SuddenEventTextTable] Found {dupList.Count} duplicate keys ({uniqueDups.Count} unique): " +
-                             string.Join(", ", uniqueDups));
-        }
-
         return result;
-    }
-
-    private static int ReadTarget(List<string> cells, Dictionary<string, int> col)
-    {
-        if (col.ContainsKey("target"))
-            return CsvImportUtil.ReadInt(cells, col, "target", 0);
-
-        return CsvImportUtil.ReadInt(cells, col, "range", 0);
     }
 }
 #endif

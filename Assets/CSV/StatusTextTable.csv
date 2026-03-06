@@ -1,18 +1,18 @@
-ID,Index,Text,description
-String,int,String,String
-text_status_01,1,멘탈,"컨디션 방어 및 상태이상 회복 능력, 컨디션 MAX 수치 결정"
-text_status_02,2,슈팅,슛 성공률 보정 (공격 성능)
-text_status_03,3,속도,속공 우선권 및 팀 선공 결정(팀원 속도 총합 비교)
-text_status_04,4,점프력,블록 및 리바운드 성공률 보정
-text_status_05,5,지구력,캐릭터에 가해지는 해로운 효과 감쇠
-text_status_06,6,컨디션,캐릭터의 상태이상 발동에 영향
-text_status_10,10,돈,플레이어의 소비 재화1
-text_status_11,11,명성치,플레이어의 소비 재화2
-text_status_random,1,멘탈,"컨디션 방어 및 상태이상 회복 능력, 컨디션 MAX 수치 결정"
-text_status_random,2,슈팅,슛 성공률 보정 (공격 성능)
-text_status_random,3,속도,속공 우선권 및 팀 선공 결정(팀원 속도 총합 비교)
-text_status_random,4,점프력,블록 및 리바운드 성공률 보정
-text_status_random,5,지구력,캐릭터에 가해지는 해로운 효과 감쇠
-text_status_random,6,컨디션,캐릭터의 상태이상 발동에 영향
-text_status_random,10,돈,플레이어의 소비 재화1
-text_status_random,11,명성치,플레이어의 소비 재화2
+ID,Index,Text
+String,int,String
+text_status_01,1,멘탈
+text_status_02,2,슈팅
+text_status_03,3,속도
+text_status_04,4,점프력
+text_status_05,5,컨디션
+text_status_06,6,지구력
+text_status_10,10,돈
+text_status_11,11,명성치
+text_status_random,1,멘탈
+text_status_random,2,슈팅
+text_status_random,3,속도
+text_status_random,4,점프력
+text_status_random,5,컨디션
+text_status_random,6,지구력
+text_status_random,10,돈
+text_status_random,11,명성치

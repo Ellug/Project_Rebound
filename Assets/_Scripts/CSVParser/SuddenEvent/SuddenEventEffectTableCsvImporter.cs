@@ -42,14 +42,7 @@ public static class SuddenEventEffectTableCsvImporter
         var header = CsvImportUtil.SplitCsvLine(lines[0]);
         var col = CsvImportUtil.BuildColumnMap(header);
 
-        // 2번째 행이 자료형 정의면 스킵
-        int startRow = 1;
-        if (lines.Count > 1)
-        {
-            var secondRow = CsvImportUtil.SplitCsvLine(lines[1]);
-            if (CsvImportUtil.IsTypeDefinitionRow(secondRow))
-                startRow = 2;
-        }
+        int startRow = CsvImportUtil.GetDataStartRow(lines);
 
         for (int i = startRow; i < lines.Count; i++)
         {
@@ -58,111 +51,21 @@ public static class SuddenEventEffectTableCsvImporter
 
             var cells = CsvImportUtil.SplitCsvLine(line);
 
-            var id = CsvImportUtil.ReadString(cells, col, "ID");
-            if (string.IsNullOrEmpty(id)) continue;
-
-            var targetName = CsvImportUtil.ReadString(cells, col, "target_name");
-            if (string.IsNullOrEmpty(targetName))
-                targetName = CsvImportUtil.ReadString(cells, col, "targetName");
-
-            PlayerStat targetMin;
-            PlayerStat targetMax;
-
-            if (col.ContainsKey("target_min") || col.ContainsKey("target_max"))
-            {
-                targetMin = ReadPlayerStat(CsvImportUtil.ReadString(cells, col, "target_min"));
-                targetMax = ReadPlayerStat(CsvImportUtil.ReadString(cells, col, "target_max"));
-            }
-            else
-            {
-                targetMin = ReadPlayerStat(CsvImportUtil.ReadString(cells, col, "targetStat_min"));
-                targetMax = ReadPlayerStat(CsvImportUtil.ReadString(cells, col, "targetStat_max"));
-            }
-
             var r = new SuddenEventEffectRow
             {
-                id = id,
-                type = ReadEffectType(CsvImportUtil.ReadString(cells, col, "type")),
-                targetName = targetName,
-                targetMin = targetMin,
-                targetMax = targetMax,
+                id = CsvImportUtil.ReadString(cells, col, "ID"),
+                type = CsvImportUtil.ReadEnumSingle(cells, col, "type", SuddenEventEffectType.None),
+                targetName = CsvImportUtil.ReadString(cells, col, "target_name"),
+                targetMin = CsvImportUtil.ReadEnumSingle(cells, col, "target_min", PlayerStat.None),
+                targetMax = CsvImportUtil.ReadEnumSingle(cells, col, "target_max", PlayerStat.None),
                 amountMin = CsvImportUtil.ReadInt(cells, col, "amount_min", 0),
                 amountMax = CsvImportUtil.ReadInt(cells, col, "amount_max", 0),
             };
 
-            // max가 비어있으면 min으로 보정
-            if (r.targetMax == PlayerStat.None)
-                r.targetMax = r.targetMin;
-
-            // min/max 보정 (csv 기입 에러시 시스템상 에러 방지 용도)
-            if (r.amountMax < r.amountMin)
-                r.amountMax = r.amountMin;
-
             result.Add(r);
         }
 
-        // ID 중복 경고
-        var dup = new HashSet<string>();
-        foreach (var row in result)
-        {
-            if (!dup.Add(row.id))
-                Debug.LogWarning($"[SuddenEventEffectTable] Duplicate ID detected: {row.id}");
-        }
-
         return result;
-    }
-
-    // ---- Domain parsing only ----
-    private static SuddenEventEffectType ReadEffectType(string s)
-    {
-        s = (s ?? "").Trim();
-        if (string.IsNullOrEmpty(s) || s == "-")
-            return SuddenEventEffectType.None;
-
-        var lower = s.ToLowerInvariant();
-
-        // 문자열 입력도 허용
-        if (lower == "none") return SuddenEventEffectType.None;
-        if (lower == "fixed") return SuddenEventEffectType.Fixed;
-        if (lower == "percent" || lower == "per_cent" || lower == "percenter" || lower == "percentage")
-            return SuddenEventEffectType.Percent;
-
-        // 숫자 입력
-        if (int.TryParse(lower, out var iv))
-        {
-            return iv switch
-            {
-                0 => SuddenEventEffectType.None,
-                1 => SuddenEventEffectType.Fixed,
-                2 => SuddenEventEffectType.Percent,
-                _ => SuddenEventEffectType.None
-            };
-        }
-
-        return SuddenEventEffectType.None;
-    }
-
-    private static PlayerStat ReadPlayerStat(string s)
-    {
-        s = (s ?? "").Trim();
-        if (string.IsNullOrEmpty(s) || s == "-") return PlayerStat.None;
-
-        if (int.TryParse(s, out var iv))
-            return (PlayerStat)iv;
-
-        var lower = s.ToLowerInvariant();
-        return lower switch
-        {
-            "mental" => PlayerStat.Mental,
-            "shoot" => PlayerStat.Shoot,
-            "speed" => PlayerStat.Speed,
-            "jump" => PlayerStat.Jump,
-            "vital" => PlayerStat.Vital,
-            "condition" => PlayerStat.Condition,
-            "money" => PlayerStat.Money,
-            "fame" => PlayerStat.Fame,
-            _ => PlayerStat.None
-        };
     }
 }
 #endif

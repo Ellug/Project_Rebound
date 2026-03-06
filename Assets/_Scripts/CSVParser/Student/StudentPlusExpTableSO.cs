@@ -6,7 +6,7 @@ using UnityEngine;
 [Serializable]
 public sealed class StudentPlusExpRow
 {
-    public int positionId;
+    public string id;
     public string positionName;
     public int tier;
     public int minValue;
@@ -19,8 +19,8 @@ public sealed class StudentPlusExpTableSO : ScriptableObject
 {
     [SerializeField] private List<StudentPlusExpRow> _rows = new();
 
-    private Dictionary<(int positionId, int tier), StudentPlusExpRow> _byPositionIdAndTier;
-    private Dictionary<int, List<StudentPlusExpRow>> _byPositionId;
+    private Dictionary<(string id, int tier), StudentPlusExpRow> _byPositionIdAndTier;
+    private Dictionary<string, List<StudentPlusExpRow>> _byPositionId;
 
     public IReadOnlyList<StudentPlusExpRow> Rows => _rows;
 
@@ -31,32 +31,32 @@ public sealed class StudentPlusExpTableSO : ScriptableObject
 
     public void BuildCache()
     {
-        _byPositionIdAndTier = new Dictionary<(int, int), StudentPlusExpRow>();
-        _byPositionId = new Dictionary<int, List<StudentPlusExpRow>>();
+        _byPositionIdAndTier = new Dictionary<(string, int), StudentPlusExpRow>();
+        _byPositionId = new Dictionary<string, List<StudentPlusExpRow>>();
 
         foreach (var r in _rows)
         {
             if (r == null) continue;
 
-            _byPositionIdAndTier[(r.positionId, r.tier)] = r;
+            _byPositionIdAndTier[(r.id, r.tier)] = r;
 
-            if (!_byPositionId.TryGetValue(r.positionId, out var list))
+            if (!_byPositionId.TryGetValue(r.id, out var list))
             {
                 list = new List<StudentPlusExpRow>();
-                _byPositionId[r.positionId] = list;
+                _byPositionId[r.id] = list;
             }
             list.Add(r);
         }
     }
 
-    public bool TryGet(int positionId, int tier, out StudentPlusExpRow row)
-        => _byPositionIdAndTier.TryGetValue((positionId, tier), out row);
+    public bool TryGet(string id, int tier, out StudentPlusExpRow row)
+        => _byPositionIdAndTier.TryGetValue((id, tier), out row);
 
-    public StudentPlusExpRow GetOrNull(int positionId, int tier)
-        => _byPositionIdAndTier.TryGetValue((positionId, tier), out var r) ? r : null;
+    public StudentPlusExpRow GetOrNull(string id, int tier)
+        => _byPositionIdAndTier.TryGetValue((id, tier), out var r) ? r : null;
 
-    public IReadOnlyList<StudentPlusExpRow> GetByPositionId(int positionId)
-        => _byPositionId.TryGetValue(positionId, out var list) ? list : Array.Empty<StudentPlusExpRow>();
+    public IReadOnlyList<StudentPlusExpRow> GetByPositionId(string id)
+        => _byPositionId.TryGetValue(id, out var list) ? list : Array.Empty<StudentPlusExpRow>();
 
 #if UNITY_EDITOR
     public void ReplaceAll(List<StudentPlusExpRow> newRows)

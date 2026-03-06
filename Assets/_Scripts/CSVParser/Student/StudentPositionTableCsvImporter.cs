@@ -42,13 +42,7 @@ public static class StudentPositionTableCsvImporter
         var header = CsvImportUtil.SplitCsvLine(lines[0]);
         var col = CsvImportUtil.BuildColumnMap(header);
 
-        int startRow = 1;
-        if (lines.Count > 1)
-        {
-            var secondRow = CsvImportUtil.SplitCsvLine(lines[1]);
-            if (CsvImportUtil.IsTypeDefinitionRow(secondRow))
-                startRow = 2;
-        }
+        int startRow = CsvImportUtil.GetDataStartRow(lines);
 
         for (int i = startRow; i < lines.Count; i++)
         {
@@ -57,13 +51,9 @@ public static class StudentPositionTableCsvImporter
 
             var cells = CsvImportUtil.SplitCsvLine(line);
 
-            // id는 "position_001" 형식의 string 또는 순수 int 모두 지원
-            var id = CsvImportUtil.ReadPrefixedId(cells, col, "id");
-            if (id == 0) continue;
-
             var r = new StudentPositionRow
             {
-                id = id,
+                id = CsvImportUtil.ReadString(cells, col, "id"),
                 positionName = CsvImportUtil.ReadString(cells, col, "position_name"),
                 spawnRate = CsvImportUtil.ReadInt(cells, col, "spawn_rate", 0),
                 mainStats = CsvImportUtil.ReadString(cells, col, "main_stats"),
