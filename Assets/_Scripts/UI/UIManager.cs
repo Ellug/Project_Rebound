@@ -237,8 +237,8 @@ public class UIManager : Singleton<UIManager>
     public void Close(UIBase target)
     {
         if (target == null) return;
-        if (_uiStack.Count == 0) return;
 
+        //null이거나 스택에 없으면 그냥 파괴만 수행
         if (_uiStack.Count == 0)
         {
             target.Close();
