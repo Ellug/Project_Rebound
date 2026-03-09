@@ -7,8 +7,7 @@ using UnityEngine;
 public static class CsvBatchImporter
 {
     // CSV 폴더 전체를 순회하며 임포트
-    public static void ImportAllTables()
-        => ImportAllTables(showDialog: true);
+    public static void ImportAllTables() => ImportAllTables(showDialog: true);
 
     // 자동 파이프라인에서 호출할 수 있는 전체 임포트 엔트리
     public static bool ImportAllTables(bool showDialog)
@@ -49,8 +48,10 @@ public static class CsvBatchImporter
         AssetDatabase.Refresh();
         // 임포트된 SO 기준으로 테이블 로드 설정을 즉시 갱신
         TableLoadConfigAutoSync.Sync(showDialog: false);
+
         if (showDialog)
             EditorUtility.DisplayDialog("Import Complete", $"Success: {successCount}\nFailed: {failCount}", "OK");
+            
         return true;
     }
 }

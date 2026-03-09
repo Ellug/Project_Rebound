@@ -26,7 +26,7 @@ public class StartManager : MonoBehaviour
         StartCoroutine(LoadingProcess());
     }
 
-    // 업데이트 확인→다운로드→테이블 로드→캐시 등록까지 초기 로딩 전체를 수행
+    // 업데이트 확인 -> 다운로드 -> 테이블 로드 -> 캐시 등록까지 초기 로딩 전체 수행
     private IEnumerator LoadingProcess()
     {
         var allTableRefs = CollectTableReferences();

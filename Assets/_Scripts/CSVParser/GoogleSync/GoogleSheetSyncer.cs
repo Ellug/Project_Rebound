@@ -41,10 +41,7 @@ public static class GoogleSheetSyncer
                 string tableName = Path.GetFileNameWithoutExtension(entry.CsvFileName);
                 float progress = (float)i / total;
 
-                EditorUtility.DisplayProgressBar(
-                    "Syncing from Google Sheets",
-                    $"Checking {tableName}... ({i + 1}/{total})",
-                    progress);
+                EditorUtility.DisplayProgressBar("Syncing from Google Sheets", $"Checking {tableName}... ({i + 1}/{total})", progress);
 
                 string csvContent = DownloadCsvSync(entry.SheetUrl);
                 if (csvContent == null)
@@ -86,7 +83,7 @@ public static class GoogleSheetSyncer
         EditorUtility.DisplayDialog("Data Pipeline", summary, "OK");
     }
 
-    // 에디터에서 동기처럼 돌리는 CSV 다운로드.
+    // 에디터에서 동기처럼 돌리는 CSV 다운로드
     private static string DownloadCsvSync(string url)
     {
         using var request = UnityWebRequest.Get(url);
@@ -115,7 +112,7 @@ public static class GoogleSheetSyncer
         return content;
     }
 
-    // 로컬 CSV와 다운로드 내용을 그대로 비교한다.
+    // 로컬 CSV와 다운로드 내용을 그대로 비교
     private static bool IsContentSameAsLocal(string csvPath, string downloadedContent)
     {
         if (!File.Exists(csvPath))

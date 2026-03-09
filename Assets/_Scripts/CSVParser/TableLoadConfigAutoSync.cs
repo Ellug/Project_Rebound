@@ -71,10 +71,9 @@ public static class TableLoadConfigAutoSync
 
         if (!showDialog) return;
 
-        string message =
-            $"Tables: {refs.Count}\n" +
-            $"Addressable Added: {addressableAdded}\n" +
-            $"Missing SO: {missingSoAssets.Count}";
+        string message = $"Tables: {refs.Count}\n" +
+                        $"Addressable Added: {addressableAdded}\n" +
+                        $"Missing SO: {missingSoAssets.Count}";
 
         if (missingSoAssets.Count > 0)
             message += $"\n\n{string.Join("\n", missingSoAssets)}";

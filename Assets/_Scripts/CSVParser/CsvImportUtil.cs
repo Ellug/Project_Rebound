@@ -49,8 +49,10 @@ public static class CsvImportUtil
         for (int i = 0; i < raw.Length; i++)
         {
             var line = raw[i];
+
             if (i == 0 && line.Length > 0 && line[0] == '\uFEFF')
                 line = line.Substring(1);
+                
             lines.Add(line);
         }
 
