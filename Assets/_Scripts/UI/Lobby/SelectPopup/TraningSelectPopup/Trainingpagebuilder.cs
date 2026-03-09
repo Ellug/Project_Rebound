@@ -214,6 +214,9 @@ public static class TrainingPageBuilder
 
     private static string BuildDesc(GrowthCommandRow row)
     {
+        // if (!string.IsNullOrWhiteSpace(row.desc))
+        //     return row.desc;
+
         if (row.facilityReq == GrowthFacilityReq.None)
             return "";
 

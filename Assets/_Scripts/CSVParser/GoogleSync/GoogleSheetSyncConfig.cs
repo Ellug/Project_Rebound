@@ -17,7 +17,7 @@ public static class GoogleSheetSyncConfig
     private const string GID_STATUS_TEXT           = "236823575"; // 돌발 이벤트 스탯 텍스트
     private const string GID_SCHOOL_NAME           = "1242330876"; // 학교 이름
     private const string GID_ENEMY_STAT            = "505381689"; // 적 스탯
-    private const string GID_TUTORIAL_TEXT         = "1755714998"; // 튜토리얼 텍스트
+    private const string GID_TUTORIAL_GUIDE        = "1755714998"; // 튜토리얼 가이드
     // 로스터 효과 -> 이거 쓸 일이 있나??? 안 넣음 불확실해서
     private const string GID_STUDENT_NAME          = "573141999"; // 학생 이름 목록
     private const string GID_STUDENT_BODY          = "537352849"; // 신장 및 체중
@@ -42,7 +42,7 @@ public static class GoogleSheetSyncConfig
         new("StatusTextTable.csv",        "Status Text",           Url(GID_STATUS_TEXT)), // 돌발 이벤트 스탯 텍스트
         new("SchoolNameTable.csv",        "School Name",           Url(GID_SCHOOL_NAME)),
         new("EnemyStatTable.csv",         "Enemy Stat",            Url(GID_ENEMY_STAT)),
-        new("TutorialTextTable.csv",      "Tutorial Text",         Url(GID_TUTORIAL_TEXT)),
+        new("TutorialGuideTable.csv",     "Tutorial Guide",        Url(GID_TUTORIAL_GUIDE)),
         new("StudentNameTable.csv",       "Student Name",          Url(GID_STUDENT_NAME)),
         new("StudentBodyTable.csv",       "Student Body",          Url(GID_STUDENT_BODY)),
         new("StudentStatTable.csv",       "Student Stat",          Url(GID_STUDENT_STAT)),

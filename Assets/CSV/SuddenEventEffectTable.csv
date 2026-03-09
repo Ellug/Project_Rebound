@@ -1,5 +1,5 @@
-ID,type,target_name,target_min,target_max,amount_min,amount_max
-Strinig,enum,String,enum,enum,int,int
+id,type,target_name,target_min,target_max,amount_min,amount_max
+string,enum,string,enum,enum,int,int
 event_effect_1_mental_p5,1,text_status_01,mental,mental,5,5
 event_effect_1_mental_p10,1,text_status_01,mental,mental,10,10
 event_effect_1_mental_p15,1,text_status_01,mental,mental,15,15

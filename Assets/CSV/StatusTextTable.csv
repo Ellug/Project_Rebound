@@ -1,5 +1,5 @@
-ID,Index,Text
-String,int,String
+id,Index,Text
+string,int,string
 text_status_01,1,멘탈
 text_status_02,2,슈팅
 text_status_03,3,속도

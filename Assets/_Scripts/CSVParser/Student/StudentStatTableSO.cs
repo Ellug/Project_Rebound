@@ -6,7 +6,7 @@ using UnityEngine;
 [Serializable]
 public sealed class StudentStatRow
 {
-    public int statId;
+    public string statId;
     public string statName;
     public string roleDesc;
     public string logicEffect;
@@ -34,7 +34,8 @@ public sealed class StudentStatTableSO : ScriptableObject
         foreach (var r in _rows)
         {
             if (r == null) continue;
-            _byStatId[r.statId] = r;
+            if (!TryParseStatId(r.statId, out var statId)) continue;
+            _byStatId[statId] = r;
         }
     }
 
@@ -43,6 +44,22 @@ public sealed class StudentStatTableSO : ScriptableObject
 
     public StudentStatRow GetOrNull(int statId)
         => _byStatId.TryGetValue(statId, out var r) ? r : null;
+
+    public bool TryGet(string statId, out StudentStatRow row)
+    {
+        row = null;
+        return TryParseStatId(statId, out var parsed) && _byStatId.TryGetValue(parsed, out row);
+    }
+
+    static bool TryParseStatId(string value, out int parsed)
+    {
+        parsed = 0;
+        if (string.IsNullOrEmpty(value)) return false;
+        int splitIndex = value.LastIndexOf('_');
+        if (splitIndex >= 0 && splitIndex < value.Length - 1)
+            value = value.Substring(splitIndex + 1);
+        return int.TryParse(value, out parsed);
+    }
 
 #if UNITY_EDITOR
     public void ReplaceAll(List<StudentStatRow> newRows)

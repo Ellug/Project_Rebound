@@ -14,66 +14,82 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::StatusTextTableSO
   _rows:
   - id: text_status_01
+    range: 0
     index: 1
     text: "\uBA58\uD0C8"
     description: 
   - id: text_status_02
+    range: 0
     index: 2
     text: "\uC288\uD305"
     description: 
   - id: text_status_03
+    range: 0
     index: 3
     text: "\uC18D\uB3C4"
     description: 
   - id: text_status_04
+    range: 0
     index: 4
     text: "\uC810\uD504\uB825"
     description: 
   - id: text_status_05
+    range: 0
     index: 5
     text: "\uCEE8\uB514\uC158"
     description: 
   - id: text_status_06
+    range: 0
     index: 6
     text: "\uC9C0\uAD6C\uB825"
     description: 
   - id: text_status_10
+    range: 0
     index: 10
     text: "\uB3C8"
     description: 
   - id: text_status_11
+    range: 0
     index: 11
     text: "\uBA85\uC131\uCE58"
     description: 
   - id: text_status_random
+    range: 0
     index: 1
     text: "\uBA58\uD0C8"
     description: 
   - id: text_status_random
+    range: 0
     index: 2
     text: "\uC288\uD305"
     description: 
   - id: text_status_random
+    range: 0
     index: 3
     text: "\uC18D\uB3C4"
     description: 
   - id: text_status_random
+    range: 0
     index: 4
     text: "\uC810\uD504\uB825"
     description: 
   - id: text_status_random
+    range: 0
     index: 5
     text: "\uCEE8\uB514\uC158"
     description: 
   - id: text_status_random
+    range: 0
     index: 6
     text: "\uC9C0\uAD6C\uB825"
     description: 
   - id: text_status_random
+    range: 0
     index: 10
     text: "\uB3C8"
     description: 
   - id: text_status_random
+    range: 0
     index: 11
     text: "\uBA85\uC131\uCE58"
     description: 

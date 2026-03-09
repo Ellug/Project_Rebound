@@ -16,8 +16,8 @@ public enum PlayerStat
     Shoot = 2,
     Speed = 3,
     Jump = 4,
-    Vital = 5,
-    Condition = 6,
+    Condition = 5,
+    Stamina = 6,
     Money = 10,
     Fame = 11
 }

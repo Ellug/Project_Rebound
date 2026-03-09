@@ -1,89 +1,80 @@
 #if UNITY_EDITOR
-using System.Collections.Generic;
+using System;
 using System.IO;
 using UnityEditor;
 using UnityEngine;
 
 public static class CsvBatchImporter
 {
-    private const string CSV_FOLDER = "Assets/CSV";
+    // 파일 선택으로 단일 CSV를 임포트
+    [MenuItem("Tools/Data/Import CSV Table")]
+    public static void Import()
+    {
+        var csvPath = EditorUtility.OpenFilePanel("Select CSV", Path.GetFullPath(CsvImportUtil.CsvFolder), "csv");
+        if (string.IsNullOrEmpty(csvPath)) return;
+        ImportAndSave(csvPath);
+    }
 
-    // 모든 CSV 테이블을 한 번에 임포트
+    // CSV 폴더 전체를 순회하며 임포트
     [MenuItem("Tools/Data/Import All CSV Tables")]
     public static void ImportAllTables()
     {
-        if (!EditorUtility.DisplayDialog("Import All CSV Tables",
-            "Import all CSV files from the CSV folder?\n\nThis will overwrite existing ScriptableObjects.",
-            "Import", "Cancel"))
-        {
-            return;
-        }
-
-        // 임포트할 CSV 파일 목록 (각 임포터의 ImportFromPath 메서드 사용)
-        var importTasks = new List<(string csvFileName, System.Action<string> importAction, string tableName)>
-        {
-            ("GrowthCommandTable.csv", GrowthCommandTableCsvImporter.ImportFromPath, "Growth Command"),
-            ("AlwaysEffectTable.csv", AlwaysEffectTableCsvImporter.ImportFromPath, "Always Effect"),
-            ("AlwaysEventTable.csv", AlwaysEventTableCsvImporter.ImportFromPath, "Always Event"),
-            ("SuddenEventTable.csv", SuddenEventTableCsvImporter.ImportFromPath, "Sudden Event"),
-            ("SuddenEventEffectTable.csv", SuddenEventEffectTableCsvImporter.ImportFromPath, "Sudden Event Effect"),
-            ("SuddenEventTextTable.csv", SuddenEventTextTableCsvImporter.ImportFromPath, "Sudden Event Text"),
-            ("StatusTextTable.csv", StatusTextTableCsvImporter.ImportFromPath, "Status Text"),
-            ("SchoolNameTable.csv", SchoolNameTableCsvImporter.ImportFromPath, "School Name"),
-            ("EnemyStatTable.csv", EnemyStatTableCsvImporter.ImportFromPath, "Enemy Stat"),
-            ("StudentNameTable.csv", StudentNameTableCsvImporter.ImportFromPath, "Student Name"),
-            ("StudentBodyTable.csv", StudentBodyTableCsvImporter.ImportFromPath, "Student Body"),
-            ("StudentStatTable.csv", StudentStatTableCsvImporter.ImportFromPath, "Student Stat"),
-            ("StudentStartStatTable.csv", StudentStartStatTableCsvImporter.ImportFromPath, "Student Start State"),
-            ("StudentPotentialTable.csv", StudentPotentialTableCsvImporter.ImportFromPath, "Student Potential"),
-            ("StudentStatusProbTable.csv", StudentStatusProbTableCsvImporter.ImportFromPath, "Student Status Prob"),
-            ("StudentStatExpTable.csv", StudentStatExpTableCsvImporter.ImportFromPath, "Student Stat Exp"),
-            ("StudentPlusExpTable.csv", StudentPlusExpTableCsvImporter.ImportFromPath, "Student Plus Exp"),
-            ("StudentPositionTable.csv", StudentPositionTableCsvImporter.ImportFromPath, "Student Position")
-        };
-
-        int totalCount = importTasks.Count;
+        var csvPaths = CsvImportUtil.FindCsvPaths();
         int successCount = 0;
         int failCount = 0;
 
-        // 각 테이블 순회하며 임포트
-        for (int i = 0; i < importTasks.Count; i++)
+        try
         {
-            var (csvFileName, importAction, tableName) = importTasks[i];
-            float progress = (float)i / totalCount;
-
-            EditorUtility.DisplayProgressBar("Importing CSV Tables",
-                $"Importing {tableName}... ({i + 1}/{totalCount})", progress);
-
-            string csvPath = Path.Combine(CSV_FOLDER, csvFileName);
-
-            if (!File.Exists(csvPath))
+            for (int i = 0; i < csvPaths.Length; i++)
             {
-                Debug.LogWarning($"[CsvBatchImporter] CSV file not found: {csvPath}");
-                failCount++;
-                continue;
-            }
+                var csvPath = csvPaths[i];
+                EditorUtility.DisplayProgressBar("Importing CSV Tables", Path.GetFileName(csvPath), (float)i / csvPaths.Length);
 
-            try
-            {
-                importAction(csvPath);
-                successCount++;
-                Debug.Log($"[CsvBatchImporter] Successfully imported: {tableName}");
-            }
-            catch (System.Exception e)
-            {
-                Debug.LogError($"[CsvBatchImporter] Failed to import {tableName}: {e.Message}");
-                failCount++;
+                try
+                {
+                    CsvImportUtil.Import(csvPath);
+                    successCount++;
+                }
+                catch (Exception e)
+                {
+                    Debug.LogError($"[CsvBatchImporter] {Path.GetFileName(csvPath)}\n{e.Message}");
+                    failCount++;
+                }
             }
         }
+        finally
+        {
+            EditorUtility.ClearProgressBar();
+        }
 
-        EditorUtility.ClearProgressBar();
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
+        EditorUtility.DisplayDialog("Import Complete", $"Success: {successCount}\nFailed: {failCount}", "OK");
+    }
 
-        // 결과 요약 다이얼로그 표시
-        string message = $"Import Complete!\n\nSuccess: {successCount}\nFailed: {failCount}";
-        EditorUtility.DisplayDialog("Import Complete", message, "OK");
+    // 선택된 에셋이 CSV 폴더의 csv 파일인지 검사
+    [MenuItem("Assets/Data/Import Selected CSV", true)]
+    static bool ValidateImportSelected()
+    {
+        var assetPath = AssetDatabase.GetAssetPath(Selection.activeObject);
+        return assetPath.StartsWith($"{CsvImportUtil.CsvFolder}/", StringComparison.OrdinalIgnoreCase) &&
+               string.Equals(Path.GetExtension(assetPath), ".csv", StringComparison.OrdinalIgnoreCase);
+    }
+
+    // 프로젝트 창에서 선택한 CSV를 임포트
+    [MenuItem("Assets/Data/Import Selected CSV")]
+    static void ImportSelected()
+    {
+        ImportAndSave(AssetDatabase.GetAssetPath(Selection.activeObject));
+    }
+
+    // 임포트 후 에셋 DB를 저장하고 갱신
+    static void ImportAndSave(string csvPath)
+    {
+        var assetPath = CsvImportUtil.Import(csvPath);
+        AssetDatabase.SaveAssets();
+        AssetDatabase.Refresh();
+        Debug.Log($"[CsvBatchImporter] {Path.GetFileName(csvPath)} -> {assetPath}");
     }
 }
 #endif

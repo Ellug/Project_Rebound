@@ -6,7 +6,7 @@ using UnityEngine;
 [Serializable]
 public sealed class StudentNameRow
 {
-    public int id;
+    public string id;
     public string name;
 }
 
@@ -16,7 +16,7 @@ public sealed class StudentNameTableSO : ScriptableObject
 {
     [SerializeField] private List<StudentNameRow> _rows = new();
 
-    private Dictionary<int, StudentNameRow> _byId;
+    private Dictionary<string, StudentNameRow> _byId;
 
     public IReadOnlyList<StudentNameRow> Rows => _rows;
 
@@ -27,19 +27,20 @@ public sealed class StudentNameTableSO : ScriptableObject
 
     public void BuildCache()
     {
-        _byId = new Dictionary<int, StudentNameRow>(_rows.Count);
+        _byId = new Dictionary<string, StudentNameRow>(_rows.Count, StringComparer.Ordinal);
 
         foreach (var r in _rows)
         {
             if (r == null) continue;
+            if (string.IsNullOrEmpty(r.id)) continue;
             _byId[r.id] = r;
         }
     }
 
-    public bool TryGet(int id, out StudentNameRow row)
+    public bool TryGet(string id, out StudentNameRow row)
         => _byId.TryGetValue(id, out row);
 
-    public StudentNameRow GetOrNull(int id)
+    public StudentNameRow GetOrNull(string id)
         => _byId.TryGetValue(id, out var r) ? r : null;
 
 #if UNITY_EDITOR

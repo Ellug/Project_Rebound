@@ -6,6 +6,7 @@ using UnityEngine;
 public sealed class SuddenEventTextRow
 {
     public string id;     // 예: ID_Text_SuddenEvent_000001
+    public SuddenEventConditionFlags condition;
     public int target;
     public string speaker;
     public string description;

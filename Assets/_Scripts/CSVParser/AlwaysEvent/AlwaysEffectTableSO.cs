@@ -17,6 +17,12 @@ public sealed class AlwaysEffectRow
 
     public float trainingIncrease;
     public float trainingDecline;
+
+    public int mentalIncrease;
+    public int mentalDecline;
+
+    public int trustIncrease;
+    public int trustDecline;
 }
 
 // 상시 효과 데이터테이블 SO

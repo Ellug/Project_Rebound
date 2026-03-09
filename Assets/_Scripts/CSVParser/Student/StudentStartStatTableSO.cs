@@ -6,7 +6,7 @@ using UnityEngine;
 [Serializable]
 public sealed class StudentStartStatRow
 {
-    public int statId;
+    public string statId;
     public string statName;
     public int grade;
     public int statMin;
@@ -39,15 +39,16 @@ public sealed class StudentStartStatTableSO : ScriptableObject
         foreach (var r in _rows)
         {
             if (r == null) continue;
+            if (!TryParseStatId(r.statId, out var statId)) continue;
 
-            if (!_byStatId.TryGetValue(r.statId, out var list))
+            if (!_byStatId.TryGetValue(statId, out var list))
             {
                 list = new List<StudentStartStatRow>();
-                _byStatId[r.statId] = list;
+                _byStatId[statId] = list;
             }
             list.Add(r);
 
-            _byStatIdAndGrade[(r.statId, r.grade)] = r;
+            _byStatIdAndGrade[(statId, r.grade)] = r;
         }
     }
 
@@ -59,6 +60,22 @@ public sealed class StudentStartStatTableSO : ScriptableObject
 
     public StudentStartStatRow GetOrNull(int statId, int grade)
         => _byStatIdAndGrade.TryGetValue((statId, grade), out var r) ? r : null;
+
+    public bool TryGet(string statId, int grade, out StudentStartStatRow row)
+    {
+        row = null;
+        return TryParseStatId(statId, out var parsed) && _byStatIdAndGrade.TryGetValue((parsed, grade), out row);
+    }
+
+    static bool TryParseStatId(string value, out int parsed)
+    {
+        parsed = 0;
+        if (string.IsNullOrEmpty(value)) return false;
+        int splitIndex = value.LastIndexOf('_');
+        if (splitIndex >= 0 && splitIndex < value.Length - 1)
+            value = value.Substring(splitIndex + 1);
+        return int.TryParse(value, out parsed);
+    }
 
 #if UNITY_EDITOR
     public void ReplaceAll(List<StudentStartStatRow> newRows)

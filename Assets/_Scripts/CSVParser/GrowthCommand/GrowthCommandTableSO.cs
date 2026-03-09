@@ -34,7 +34,7 @@ public sealed class GrowthCommandRow
     public string icon;
 
     public int parentIndex;
-    public GrowthCommandBtnType btnType;
+    public GrowthCommandBtnType btnType = GrowthCommandBtnType.Action;
 
     public GrowthFacilityReq facilityReq;
     public int facilityLv = 1;
@@ -49,8 +49,8 @@ public sealed class GrowthCommandRow
     public float jump;
     public float stamina;
 
-    // 문서상 enum 이지만 전부 -로 돼있어서... 일단 "-" 또는 빈값이면 0.
-    public int linkedEventId;
+    public string linkedEventId;
+    public string desc;
 }
 
 // 육성 커맨드 데이터테이블 SO

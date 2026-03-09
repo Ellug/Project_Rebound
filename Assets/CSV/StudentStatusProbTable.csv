@@ -1,5 +1,5 @@
 is_insane,condition_max,prob_insanity,prob_injury,prob_disease,total_risk
-boolean,int,int,int,int,int
+bool,int,int,int,int,int
 FALSE,70,4,1,0,5
 FALSE,50,10,4,1,15
 FALSE,40,20,15,5,40
