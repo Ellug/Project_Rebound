@@ -13,13 +13,6 @@ public static class TableLoadConfigAutoSync
     private static readonly string ConfigFolder = $"{CsvImportUtil.SoFolder}/Config";
     private static readonly string ConfigAssetPath = $"{CsvImportUtil.SoFolder}/Config/TableLoadConfig.asset";
 
-    // 메뉴에서 테이블 로드 설정 동기화를 수동 실행
-    [MenuItem("Tools/Data/Sync Table Load Config")]
-    public static void SyncMenu()
-    {
-        Sync(showDialog: true);
-    }
-
     // CSV와 SO를 기준으로 TableLoadConfig와 Addressables 엔트리를 동기화
     public static void Sync(bool showDialog)
     {

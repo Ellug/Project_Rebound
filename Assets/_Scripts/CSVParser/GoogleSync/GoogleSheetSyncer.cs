@@ -7,43 +7,31 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.Networking;
 
-// 구글 시트 CSV를 내려받아 변경분만 다시 임포트한다.
+// 구글 시트 동기화부터 전체 임포트/등록까지 데이터 파이프라인을 실행한다.
 public static class GoogleSheetSyncer
 {
     private const string CSV_FOLDER = "Assets/CSV";
     private const int TIMEOUT_SECONDS = 30;
 
-    // 변경된 CSV만 동기화한다.
+    // 구글 시트 동기화부터 전체 임포트/등록까지 데이터 파이프라인을 실행한다.
     [MenuItem("Tools/Data/Sync from Google Sheets")]
     public static void SyncAll()
     {
         if (!EditorUtility.DisplayDialog("Sync from Google Sheets",
-            "Download and sync changed CSV tables from Google Sheets?\n\nOnly changed tables will be re-imported.",
-            "Sync", "Cancel"))
+            "Run pipeline?\n\n1) Download changed CSV from Google Sheets\n2) Import all CSV tables\n3) Sync TableLoadConfig and Addressables",
+            "Run", "Cancel"))
             return;
 
-        SyncTables(GoogleSheetSyncConfig.Tables, forceAll: false);
-    }
-
-    // 모든 CSV를 강제로 다시 동기화한다.
-    [MenuItem("Tools/Data/Sync from Google Sheets (Force All)")]
-    public static void SyncAllForce()
-    {
-        if (!EditorUtility.DisplayDialog("Force Sync from Google Sheets",
-            "Force download ALL CSV tables and re-import regardless of changes?",
-            "Force Sync", "Cancel"))
-            return;
-
-        SyncTables(GoogleSheetSyncConfig.Tables, forceAll: true);
+        SyncTables(GoogleSheetSyncConfig.Tables);
     }
 
     // 시트 목록을 순회하며 다운로드, 비교, 임포트를 처리한다.
-    public static void SyncTables(IReadOnlyList<SheetTableEntry> tables, bool forceAll = false)
+    private static void SyncTables(IReadOnlyList<SheetTableEntry> tables)
     {
         int total = tables.Count;
-        int imported = 0, skipped = 0, failed = 0;
-        var pendingImports = new List<(string tableName, string csvPath)>();
-        var importedTables = new List<string>();
+        int downloaded = 0, skipped = 0, failed = 0;
+        bool importedNow = true;
+        var changedTables = new List<string>();
 
         try
         {
@@ -68,7 +56,7 @@ public static class GoogleSheetSyncer
 
                 string csvPath = Path.Combine(CSV_FOLDER, entry.CsvFileName);
 
-                if (!forceAll && IsContentSameAsLocal(csvPath, csvContent))
+                if (IsContentSameAsLocal(csvPath, csvContent))
                 {
                     Debug.Log($"[GoogleSheetSyncer] No change: {tableName}");
                     skipped++;
@@ -76,7 +64,8 @@ public static class GoogleSheetSyncer
                 }
 
                 File.WriteAllText(csvPath, csvContent, new UTF8Encoding(encoderShouldEmitUTF8Identifier: false));
-                pendingImports.Add((tableName, csvPath));
+                downloaded++;
+                changedTables.Add(tableName);
             }
         }
         finally
@@ -84,56 +73,17 @@ public static class GoogleSheetSyncer
             EditorUtility.ClearProgressBar();
         }
 
-        if (pendingImports.Count > 0)
-        {
-            // 새 테이블이 있으면 SO 스크립트 생성 후 컴파일 완료 시 ImportAll 자동 재개
-            if (!CsvImportCompileBridge.EnsureSoScriptsReadyAndMaybeDefer("Google Sheets Sync"))
-                return;
+        AssetDatabase.Refresh();
+        // 시트 동기화 후에는 전체 임포트 + 등록 동기화를 단일 경로로 실행
+        importedNow = CsvBatchImporter.ImportAllTables(showDialog: false);
 
-            try
-            {
-                for (int i = 0; i < pendingImports.Count; i++)
-                {
-                    var item = pendingImports[i];
-                    float progress = (float)i / pendingImports.Count;
+        string summary = $"Pipeline Complete!\n\nDownloaded: {downloaded}\nSkipped (no change): {skipped}\nFailed: {failed}";
+        if (changedTables.Count > 0)
+            summary += $"\n\nChanged tables:\n- {string.Join("\n- ", changedTables)}";
+        if (!importedNow)
+            summary += "\n\nSO script was generated. Import will resume automatically after compile.";
 
-                    EditorUtility.DisplayProgressBar(
-                        "Syncing from Google Sheets",
-                        $"Importing {item.tableName}... ({i + 1}/{pendingImports.Count})",
-                        progress);
-
-                    try
-                    {
-                        CsvImportUtil.Import(item.csvPath);
-                        imported++;
-                        importedTables.Add(item.tableName);
-                    }
-                    catch (Exception e)
-                    {
-                        Debug.LogError($"[GoogleSheetSyncer] Import failed for {item.tableName}: {e.Message}");
-                        failed++;
-                    }
-                }
-            }
-            finally
-            {
-                EditorUtility.ClearProgressBar();
-            }
-        }
-
-        if (imported > 0)
-        {
-            AssetDatabase.SaveAssets();
-            AssetDatabase.Refresh();
-            // 동기화로 변경된 SO 목록을 TableLoadConfig에 반영
-            TableLoadConfigAutoSync.Sync(showDialog: false);
-        }
-
-        string summary = $"Sync Complete!\n\nDownloaded & Imported: {imported}\nSkipped (no change): {skipped}\nFailed: {failed}";
-        if (importedTables.Count > 0)
-            summary += $"\n\nChanged tables:\n- {string.Join("\n- ", importedTables)}";
-
-        EditorUtility.DisplayDialog("Google Sheets Sync", summary, "OK");
+        EditorUtility.DisplayDialog("Data Pipeline", summary, "OK");
     }
 
     // 에디터에서 동기처럼 돌리는 CSV 다운로드.
