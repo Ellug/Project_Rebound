@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class OptionUI : MonoBehaviour
 {
@@ -11,6 +12,9 @@ public class OptionUI : MonoBehaviour
     [SerializeField] private Toggle _bgmMuteToggle;
     [SerializeField] private Toggle _effectMuteToggle;
 
+    [SerializeField] private TMP_Text _bgmValueText;
+    [SerializeField] private TMP_Text _effectValueText;
+
     void Start()
     {
         InitUI();
@@ -19,6 +23,7 @@ public class OptionUI : MonoBehaviour
 
     public void OptinonPanelOpen()
     {
+        InitUI();
         _optinonPanel.SetActive(true);
     }
 
@@ -43,6 +48,9 @@ public class OptionUI : MonoBehaviour
         // mute 상태면 슬라이더 비활성화
         _bgmSlider.interactable = !bgmMute;
         _effectSlider.interactable = !effectMute;
+
+        UpdateVolumeText();
+
     }
 
     private void BindEvents()
@@ -57,22 +65,54 @@ public class OptionUI : MonoBehaviour
     private void OnBgmVolumeChanged(float value)
     {
         SoundManager.Instance.SetVolume(SoundType.BGM, value);
+        UpdateVolumeText();
     }
 
     private void OnEffectVolumeChanged(float value)
     {
         SoundManager.Instance.SetVolume(SoundType.EFFECT, value);
+        UpdateVolumeText();
     }
 
     private void OnBgmMuteChanged(bool isMute)
     {
         _bgmSlider.interactable = !isMute;
         SoundManager.Instance.SetBGMMute(isMute);
+
+        if (isMute)
+        {
+            _bgmValueText.text = "0";
+        }
+
+        else
+        {
+            UpdateVolumeText();
+        }
     }
 
     private void OnEffectMuteChanged(bool isMute)
     {
         _effectSlider.interactable = !isMute;
         SoundManager.Instance.SetEffectMute(isMute);
+
+        if (isMute)
+        {
+            _effectValueText.text = "0";
+        }
+
+        else
+        {
+            UpdateVolumeText();
+        }
+    }
+
+    // 볼륨 텍스트 업데이트
+    private void UpdateVolumeText()
+    {
+        int bgm = Mathf.RoundToInt(_bgmSlider.value * 100f);
+        int effect = Mathf.RoundToInt(_effectSlider.value * 100f);
+
+        _bgmValueText.text = bgm.ToString();
+        _effectValueText.text = effect.ToString();
     }
 }

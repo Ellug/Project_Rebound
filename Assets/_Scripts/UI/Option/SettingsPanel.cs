@@ -1,11 +1,13 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class SettingsPanel : UIBase
 {
     [SerializeField] private Button _btnClose;            // 설정창 닫기 버튼
     [SerializeField] private Button _btnRestartTutorial;  // 튜토리얼 다시 시작하기 버튼
+    [SerializeField] private Button _btnGoTitle;          // 타이틀 가는 버튼
 
     public override void Init()
     {
@@ -26,6 +28,13 @@ public class SettingsPanel : UIBase
         {
             _btnRestartTutorial.onClick.RemoveAllListeners(); // 중복 방지
             _btnRestartTutorial.onClick.AddListener(OnClickRestartTutorial);
+        }
+
+        // 타이틀 이동 버튼
+        if (_btnGoTitle != null)
+        {
+            _btnGoTitle.onClick.RemoveAllListeners();
+            _btnGoTitle.onClick.AddListener(OnClickGoTitle);
         }
     }
 
@@ -73,5 +82,10 @@ public class SettingsPanel : UIBase
             })
             }
         ));
+    }
+
+    private void OnClickGoTitle()
+    {
+        SceneManager.LoadScene("Title");
     }
 }
