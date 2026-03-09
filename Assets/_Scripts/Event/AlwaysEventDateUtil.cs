@@ -10,7 +10,7 @@ public static class AlwaysEventDateUtil
     {
         nextLeagueDate = default;
 
-        var table = CachedSOData.AlwaysEventTable;
+        var table = CachedSOData.Get<AlwaysEventTableSO>();
         if (table == null || table.Rows == null || table.Rows.Count == 0)
             return false;
 

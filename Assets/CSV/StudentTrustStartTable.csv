@@ -1,0 +1,5 @@
+grade,min_trust,max_trust
+int,int,int
+1,10,19
+2,15,35
+3,15,30

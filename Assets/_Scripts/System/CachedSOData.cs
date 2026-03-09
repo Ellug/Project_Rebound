@@ -1,111 +1,52 @@
-﻿public static class CachedSOData
+using System;
+using System.Collections.Generic;
+using UnityEngine;
+
+public static class CachedSOData
 {
-    // Loaded Tables
-    private static GrowthCommandTableSO _growthCommandTable;
-    private static AlwaysEffectTableSO _alwaysEffectTable;
-    private static AlwaysEventTableSO _alwaysEventTable;
-    private static SuddenEventTableSO _suddenEventTable;
-    private static SuddenEventEffectTableSO _suddenEventEffectTable;
-    private static SuddenEventTextTableSO _suddenEventTextTable;
-    private static StatusTextTableSO _statusTextTable;
-    private static SchoolNameTableSO _schoolNameTable;
-    private static StudentNameTableSO _studentNameTable;
-    private static StudentBodyTableSO _studentBodyTable;
-    private static StudentStatTableSO _studentStatTable;
-    private static StudentStartStatTableSO _studentStartStatTable;
-    private static StudentPotentialTableSO _studentPotentialTable;
-    private static StudentStatusProbTableSO _studentStatusProbTable;
-    private static StudentStatExpTableSO _studentStatExpTable;
-    private static StudentPlusExpTableSO _studentPlusExpTable;
-    private static StudentPositionTableSO _studentPositionTable;
-    private static EnemyStatTableSO _enemyStatTable;
-    private static TutorialGuideTableSO _tutorialGuideTable;
+    // 로드된 테이블을 타입 키로 보관
+    private static readonly Dictionary<Type, ScriptableObject> _tables = new();
 
-    // Properties
-    public static GrowthCommandTableSO GrowthCommandTable => _growthCommandTable;
-    public static AlwaysEffectTableSO AlwaysEffectTable => _alwaysEffectTable;
-    public static AlwaysEventTableSO AlwaysEventTable => _alwaysEventTable;
-    public static SuddenEventTableSO SuddenEventTable => _suddenEventTable;
-    public static SuddenEventEffectTableSO SuddenEventEffectTable => _suddenEventEffectTable;
-    public static SuddenEventTextTableSO SuddenEventTextTable => _suddenEventTextTable;
-    public static StatusTextTableSO StatusTextTable => _statusTextTable;
-    public static SchoolNameTableSO SchoolNameTable => _schoolNameTable;
-    public static StudentNameTableSO StudentNameTable => _studentNameTable;
-    public static StudentBodyTableSO StudentBodyTable => _studentBodyTable;
-    public static StudentStatTableSO StudentStatTable => _studentStatTable;
-    public static StudentStartStatTableSO StudentStartStatTable => _studentStartStatTable;
-    public static StudentPotentialTableSO StudentPotentialTable => _studentPotentialTable;
-    public static StudentStatusProbTableSO StudentStatusProbTable => _studentStatusProbTable;
-    public static StudentStatExpTableSO StudentStatExpTable => _studentStatExpTable;
-    public static StudentPlusExpTableSO StudentPlusExpTable => _studentPlusExpTable;
-    public static StudentPositionTableSO StudentPositionTable => _studentPositionTable;
-    public static EnemyStatTableSO EnemyStatTable => _enemyStatTable;
-    public static TutorialGuideTableSO TutorialGuideTable => _tutorialGuideTable;
+    // 타입으로 캐시된 테이블을 조회
+    public static T Get<T>() where T : ScriptableObject
+        => _tables.TryGetValue(typeof(T), out var table) ? table as T : null;
 
-    // StartManager에서 로드된 테이블을 등록
-    public static void RegisterTables(
-        GrowthCommandTableSO growthCommand,
-        AlwaysEffectTableSO alwaysEffect,
-        AlwaysEventTableSO alwaysEvent,
-        SuddenEventTableSO suddenEvent,
-        SuddenEventEffectTableSO suddenEventEffect,
-        SuddenEventTextTableSO suddenEventText,
-        StatusTextTableSO statusText,
-        SchoolNameTableSO schoolName,
-        StudentNameTableSO studentName,
-        StudentBodyTableSO studentBody,
-        StudentStatTableSO studentStat,
-        StudentStartStatTableSO studentStartStat,
-        StudentPotentialTableSO studentPotential,
-        StudentStatusProbTableSO studentStatusProb,
-        StudentStatExpTableSO studentStatExp,
-        StudentPlusExpTableSO studentPlusExp,
-        StudentPositionTableSO studentPosition,
-        EnemyStatTableSO enemyStat,
-        TutorialGuideTableSO tutorialGuide)
+    // 타입 조회 결과를 bool과 out으로 반환
+    public static bool TryGet<T>(out T table) where T : ScriptableObject
     {
-        _growthCommandTable = growthCommand;
-        _alwaysEffectTable = alwaysEffect;
-        _alwaysEventTable = alwaysEvent;
-        _suddenEventTable = suddenEvent;
-        _suddenEventEffectTable = suddenEventEffect;
-        _suddenEventTextTable = suddenEventText;
-        _statusTextTable = statusText;
-        _schoolNameTable = schoolName;
-        _studentNameTable = studentName;
-        _studentBodyTable = studentBody;
-        _studentStatTable = studentStat;
-        _studentStartStatTable = studentStartStat;
-        _studentPotentialTable = studentPotential;
-        _studentStatusProbTable = studentStatusProb;
-        _studentStatExpTable = studentStatExp;
-        _studentPlusExpTable = studentPlusExp;
-        _studentPositionTable = studentPosition;
-        _enemyStatTable = enemyStat;
-        _tutorialGuideTable = tutorialGuide;
+        if (_tables.TryGetValue(typeof(T), out var value) && value is T typed)
+        {
+            table = typed;
+            return true;
+        }
+
+        table = null;
+        return false;
     }
 
-    // 모든 테이블 해제
+    // 단일 테이블을 타입 키로 등록/갱신
+    public static void RegisterTable(ScriptableObject table)
+    {
+        if (table == null) return;
+        _tables[table.GetType()] = table;
+    }
+
+    // 여러 테이블을 순회 등록
+    public static void RegisterTables(IEnumerable<ScriptableObject> tables)
+    {
+        if (tables == null) return;
+
+        foreach (var table in tables)
+            RegisterTable(table);
+    }
+
+    // 가변 인자 등록 오버로드
+    public static void RegisterTables(params ScriptableObject[] tables)
+        => RegisterTables((IEnumerable<ScriptableObject>)tables);
+
+    // 캐시된 테이블 전체를 비움
     public static void Clear()
     {
-        _growthCommandTable = null;
-        _alwaysEffectTable = null;
-        _alwaysEventTable = null;
-        _suddenEventTable = null;
-        _suddenEventEffectTable = null;
-        _suddenEventTextTable = null;
-        _statusTextTable = null;
-        _schoolNameTable = null;
-        _studentNameTable = null;
-        _studentBodyTable = null;
-        _studentStatTable = null;
-        _studentStartStatTable = null;
-        _studentPotentialTable = null;
-        _studentStatusProbTable = null;
-        _studentStatExpTable = null;
-        _studentPlusExpTable = null;
-        _studentPositionTable = null;
-        _enemyStatTable = null;
-        _tutorialGuideTable = null;
+        _tables.Clear();
     }
 }

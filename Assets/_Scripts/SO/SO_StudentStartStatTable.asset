@@ -13,105 +13,105 @@ MonoBehaviour:
   m_Name: SO_StudentStartStatTable
   m_EditorClassIdentifier: Assembly-CSharp::StudentStartStatTableSO
   _rows:
-  - statId: 1
+  - statId: stat_001
     statName: mental
     grade: 1
     statMin: 30
     statMax: 100
     baseMin: 30
     baseMax: 50
-  - statId: 1
+  - statId: stat_001
     statName: mental
     grade: 2
     statMin: 30
     statMax: 100
     baseMin: 30
     baseMax: 70
-  - statId: 1
+  - statId: stat_001
     statName: mental
     grade: 3
     statMin: 30
     statMax: 100
     baseMin: 30
     baseMax: 50
-  - statId: 2
+  - statId: stat_002
     statName: shoot
     grade: 1
     statMin: 1
     statMax: 100
     baseMin: 10
     baseMax: 30
-  - statId: 2
+  - statId: stat_002
     statName: shoot
     grade: 2
     statMin: 1
     statMax: 100
     baseMin: 15
     baseMax: 40
-  - statId: 2
+  - statId: stat_002
     statName: shoot
     grade: 3
     statMin: 1
     statMax: 100
     baseMin: 25
     baseMax: 50
-  - statId: 3
+  - statId: stat_003
     statName: speed
     grade: 1
     statMin: 1
     statMax: 100
     baseMin: 10
     baseMax: 30
-  - statId: 3
+  - statId: stat_003
     statName: speed
     grade: 2
     statMin: 1
     statMax: 100
     baseMin: 15
     baseMax: 40
-  - statId: 3
+  - statId: stat_003
     statName: speed
     grade: 3
     statMin: 1
     statMax: 100
     baseMin: 25
     baseMax: 50
-  - statId: 4
+  - statId: stat_004
     statName: jump
     grade: 1
     statMin: 1
     statMax: 100
     baseMin: 10
     baseMax: 30
-  - statId: 4
+  - statId: stat_004
     statName: jump
     grade: 2
     statMin: 1
     statMax: 100
     baseMin: 15
     baseMax: 40
-  - statId: 4
+  - statId: stat_004
     statName: jump
     grade: 3
     statMin: 1
     statMax: 100
     baseMin: 25
     baseMax: 50
-  - statId: 5
+  - statId: stat_005
     statName: stamina
     grade: 1
     statMin: 1
     statMax: 100
     baseMin: 10
     baseMax: 30
-  - statId: 5
+  - statId: stat_005
     statName: stamina
     grade: 2
     statMin: 1
     statMax: 100
     baseMin: 15
     baseMax: 40
-  - statId: 5
+  - statId: stat_005
     statName: stamina
     grade: 3
     statMin: 1

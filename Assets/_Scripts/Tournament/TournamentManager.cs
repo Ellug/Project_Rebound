@@ -199,7 +199,7 @@ public class TournamentManager : MonoBehaviour
     // CachedSOData 에서 참조해 학교 리스트 출력
     private List<string> BuildSchoolList()
     {
-        var schoolTable = CachedSOData.SchoolNameTable;
+        var schoolTable = CachedSOData.Get<SchoolNameTableSO>();
         List<string> schools = new(_teamCount);
         var usedNames = new HashSet<string>(System.StringComparer.Ordinal);
 

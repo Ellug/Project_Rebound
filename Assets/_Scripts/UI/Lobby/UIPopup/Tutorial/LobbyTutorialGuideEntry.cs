@@ -93,7 +93,7 @@ private void OnClickCloseX()
             return;
         }
 
-        TutorialGuideTableSO table = CachedSOData.TutorialGuideTable;
+        TutorialGuideTableSO table = CachedSOData.Get<TutorialGuideTableSO>();
         if (table == null)
         {
             Debug.LogWarning("[LobbyTutorialGuideEntry] CachedSOData.TutorialGuideTable이 null입니다.");

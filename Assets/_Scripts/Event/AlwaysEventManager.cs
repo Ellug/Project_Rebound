@@ -171,7 +171,7 @@ public class AlwaysEventManager : MonoBehaviour
 
     private bool TryGetAlwaysEventTable(out AlwaysEventTableSO table)
     {
-        table = CachedSOData.AlwaysEventTable;
+        table = CachedSOData.Get<AlwaysEventTableSO>();
         if (table != null && table.Rows != null && table.Rows.Count > 0)
             return true;
 

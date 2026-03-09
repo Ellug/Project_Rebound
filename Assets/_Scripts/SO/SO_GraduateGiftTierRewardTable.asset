@@ -1,0 +1,67 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7151d825cc841cd4ca65be2c85c519a5, type: 3}
+  m_Name: SO_GraduateGiftTierRewardTable
+  m_EditorClassIdentifier: Assembly-CSharp::GraduateGiftTierRewardTableSO
+  _rows:
+  - id: itemeffect_01
+    rewardType: "\uC9C0\uC6D0\uAE08 \uC5C5\uADF8\uB808\uC774\uB4DC"
+    grade1: 20
+    grade2: 30
+    grade3: 5
+    grade4: 0
+    description: "\uC9C0\uC6D0\uAE08 \uC601\uAD6C + 10%"
+  - id: itemeffect_02
+    rewardType: "\uC2DC\uC124 \uC5C5\uADF8\uB808\uC774\uB4DC"
+    grade1: 20
+    grade2: 0
+    grade3: 0
+    grade4: 0
+    description: "\uB79C\uB364\uC73C\uB85C \uC2DC\uC124 \uD558\uB098 \uC5C5\uADF8\uB808\uC774\uB4DC"
+  - id: itemeffect_03
+    rewardType: "\uC7A5\uBE44 \uC5C5\uADF8\uB808\uC774\uB4DC"
+    grade1: 15
+    grade2: 25
+    grade3: 0
+    grade4: 0
+    description: "\uB79C\uB364\uC73C\uB85C \uC7A5\uBE44 \uC5C5\uADF8\uB808\uC774\uB4DC"
+  - id: itemeffect_04
+    rewardType: "\uC989\uC2DC \uD6C4\uC6D0\uAE08 \uC9C0\uAE09"
+    grade1: 0
+    grade2: 0
+    grade3: 40
+    grade4: 100
+    description: "\uC9C0\uC6D0\uAE08\uC758 20%\uB97C \uD6C4\uC6D0\uAE08\uC73C\uB85C
+      \uC989\uC2DC \uC9C0\uAE09"
+  - id: itemeffect_05
+    rewardType: "\uC804\uCCB4 \uCEE8\uB514\uC158 \uD68C\uBCF5"
+    grade1: 20
+    grade2: 15
+    grade3: 0
+    grade4: 0
+    description: "\uBAA8\uB4E0 \uD559\uC0DD\uC758 \uCEE8\uB514\uC158\uC744 40 \uD68C\uBCF5"
+  - id: itemeffect_06
+    rewardType: "\uC77C\uC2DC\uC801 \uD6C8\uB828 \uD6A8\uACFC \uC0C1\uC2B9"
+    grade1: 0
+    grade2: 25
+    grade3: 55
+    grade4: 0
+    description: "30\uC77C \uB3D9\uC548 \uB79C\uB364\uD55C \uD558\uB098\uC758 \uC2A4\uD0EF\uC758
+      \uACBD\uD5D8\uCE58 \uC0C1\uC2B9\uB7C9 1.3\uBC30 \uC99D\uAC00"
+  - id: itemeffect_07
+    rewardType: "\uD6C8\uB828 \uD6A8\uC728 \uC601\uC6B1 \uC0C1\uC2B9"
+    grade1: 25
+    grade2: 5
+    grade3: 0
+    grade4: 0
+    description: "\uC601\uAD6C\uC801\uC73C\uB85C \uC804\uCCB4 \uC2A4\uD0EF \uD6C8\uB828
+      \uD6A8\uC728 3% \uC99D\uAC00"

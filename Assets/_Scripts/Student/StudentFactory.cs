@@ -55,7 +55,7 @@ public static class StudentFactory
     // 중복되지 않는 이름 선택
     private static string SelectUniqueName()
     {
-        var nameTable = CachedSOData.StudentNameTable;
+        var nameTable = CachedSOData.Get<StudentNameTableSO>();
 
         // 사용 가능한 이름 필터링
         var availableNames = new List<StudentNameRow>();
@@ -131,7 +131,7 @@ public static class StudentFactory
     // 포지션 선택 : 가중치 기반 랜덤 선택
     private static StudentPositionRow SelectRandomPosition()
     {
-        var positionTable = CachedSOData.StudentPositionTable;
+        var positionTable = CachedSOData.Get<StudentPositionTableSO>();
 
         // 총 확률 계산
         int totalWeight = 0;
@@ -154,7 +154,7 @@ public static class StudentFactory
     // 포지션 기반 신체 정보 생성
     private static (int height, int weight) GenerateBodyInfo(string id)
     {
-        var bodyTable = CachedSOData.StudentBodyTable;
+        var bodyTable = CachedSOData.Get<StudentBodyTableSO>();
         var bodyData = bodyTable.GetOrNull(id);
 
         int height = _random.Next(bodyData.minHeight, bodyData.maxHeight + 1);
@@ -166,7 +166,7 @@ public static class StudentFactory
     // 학년 기반 기본 스탯 생성 및 할당
     private static void GenerateStats(Student student, int grade)
     {
-        var startStatTable = CachedSOData.StudentStartStatTable;
+        var startStatTable = CachedSOData.Get<StudentStartStatTableSO>();
 
         // stat_id 기반 스탯 생성 및 직접 할당
         // stat_id: 1=멘탈, 2=슛, 3=스피드, 4=점프력, 5=스태미너
@@ -212,7 +212,7 @@ public static class StudentFactory
     // 포지션 기반으로 잠재능력 할당 : 가중치 기반 랜덤 선택
     private static void GeneratePotential(Student student, string id)
     {
-        var potentialTable = CachedSOData.StudentPotentialTable;
+        var potentialTable = CachedSOData.Get<StudentPotentialTableSO>();
         var potentialData = potentialTable.GetOrNull(id);
 
         // 총 확률 계산

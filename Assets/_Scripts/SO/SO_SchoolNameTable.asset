@@ -13,285 +13,285 @@ MonoBehaviour:
   m_Name: SO_SchoolNameTable
   m_EditorClassIdentifier: Assembly-CSharp::SchoolNameTableSO
   _rows:
-  - id: 1
+  - id: school_001
     name: "\uAC00\uB78C\uACE0\uB4F1\uD559\uAD50"
-  - id: 2
+  - id: school_002
     name: "\uB9C8\uB8E8\uACE0\uB4F1\uD559\uAD50"
-  - id: 3
+  - id: school_003
     name: "\uC624\uB984\uACE0\uB4F1\uD559\uAD50"
-  - id: 4
+  - id: school_004
     name: "\uBCC4\uBE5B\uACE0\uB4F1\uD559\uAD50"
-  - id: 5
+  - id: school_005
     name: "\uC0B0\uB4E4\uACE0\uB4F1\uD559\uAD50"
-  - id: 6
+  - id: school_006
     name: "\uCCAD\uB78C\uACE0\uB4F1\uD559\uAD50"
-  - id: 7
+  - id: school_007
     name: "\uB298\uBD04\uACE0\uB4F1\uD559\uAD50"
-  - id: 8
+  - id: school_008
     name: "\uD574\uB9BC\uACE0\uB4F1\uD559\uAD50"
-  - id: 9
+  - id: school_009
     name: "\uC608\uC9C0\uACE0\uB4F1\uD559\uAD50"
-  - id: 10
+  - id: school_010
     name: "\uC815\uC9C4\uACE0\uB4F1\uD559\uAD50"
-  - id: 11
+  - id: school_011
     name: "\uC778\uC560\uACE0\uB4F1\uD559\uAD50"
-  - id: 12
+  - id: school_012
     name: "\uB2E4\uC815\uACE0\uB4F1\uD559\uAD50"
-  - id: 13
+  - id: school_013
     name: "\uB4F1\uB300\uACE0\uB4F1\uD559\uAD50"
-  - id: 14
+  - id: school_014
     name: "\uD55C\uACB0\uACE0\uB4F1\uD559\uAD50"
-  - id: 15
+  - id: school_015
     name: "\uC6B8\uB9BC\uACE0\uB4F1\uD559\uAD50"
-  - id: 16
+  - id: school_016
     name: "\uBBF8\uB798\uACE0\uB4F1\uD559\uAD50"
-  - id: 17
+  - id: school_017
     name: "\uACFC\uD559\uACE0\uB4F1\uD559\uAD50"
-  - id: 18
+  - id: school_018
     name: "\uB9AC\uB354\uACE0\uB4F1\uD559\uAD50"
-  - id: 19
+  - id: school_019
     name: "\uC735\uD569\uACE0\uB4F1\uD559\uAD50"
-  - id: 20
+  - id: school_020
     name: "\uC774\uC74C\uACE0\uB4F1\uD559\uAD50"
-  - id: 21
+  - id: school_021
     name: "\uB204\uB9AC\uACE0\uB4F1\uD559\uAD50"
-  - id: 22
+  - id: school_022
     name: "\uD55C\uC591\uACE0\uB4F1\uD559\uAD50"
-  - id: 23
+  - id: school_023
     name: "\uD0D0\uB77C\uACE0\uB4F1\uD559\uAD50"
-  - id: 24
+  - id: school_024
     name: "\uACBD\uC131\uACE0\uB4F1\uD559\uAD50"
-  - id: 25
+  - id: school_025
     name: "\uAD00\uB3D9\uACE0\uB4F1\uD559\uAD50"
-  - id: 26
+  - id: school_026
     name: "\uCCAD\uC0B0\uACE0\uB4F1\uD559\uAD50"
-  - id: 27
+  - id: school_027
     name: "\uAE08\uAC15\uACE0\uB4F1\uD559\uAD50"
-  - id: 28
+  - id: school_028
     name: "\uB099\uB3D9\uACE0\uB4F1\uD559\uAD50"
-  - id: 29
+  - id: school_029
     name: "\uAC00\uC628\uACE0\uB4F1\uD559\uAD50"
-  - id: 30
+  - id: school_030
     name: "\uBC14\uB2E4\uACE0\uB4F1\uD559\uAD50"
-  - id: 31
+  - id: school_031
     name: "\uD558\uB2AC\uACE0\uB4F1\uD559\uAD50"
-  - id: 32
+  - id: school_032
     name: "\uB2EC\uBE5B\uACE0\uB4F1\uD559\uAD50"
-  - id: 33
+  - id: school_033
     name: "\uC5EC\uC6B8\uACE0\uB4F1\uD559\uAD50"
-  - id: 34
+  - id: school_034
     name: "\uBC31\uC6B4\uACE0\uB4F1\uD559\uAD50"
-  - id: 35
+  - id: school_035
     name: "\uBBF8\uB974\uACE0\uB4F1\uD559\uAD50"
-  - id: 36
+  - id: school_036
     name: "\uB098\uBB34\uACE0\uB4F1\uD559\uAD50"
-  - id: 37
+  - id: school_037
     name: "\uBA85\uBB38\uACE0\uB4F1\uD559\uAD50"
-  - id: 38
+  - id: school_038
     name: "\uC131\uC2E4\uACE0\uB4F1\uD559\uAD50"
-  - id: 39
+  - id: school_039
     name: "\uB3C4\uB355\uACE0\uB4F1\uD559\uAD50"
-  - id: 40
+  - id: school_040
     name: "\uC0C1\uC0DD\uACE0\uB4F1\uD559\uAD50"
-  - id: 41
+  - id: school_041
     name: "\uC18C\uB9DD\uACE0\uB4F1\uD559\uAD50"
-  - id: 42
+  - id: school_042
     name: "\uBC14\uB978\uACE0\uB4F1\uD559\uAD50"
-  - id: 43
+  - id: school_043
     name: "\uD070\uB73B\uACE0\uB4F1\uD559\uAD50"
-  - id: 44
+  - id: school_044
     name: "\uBE44\uC804\uACE0\uB4F1\uD559\uAD50"
-  - id: 45
+  - id: school_045
     name: "\uC6B0\uC8FC\uACE0\uB4F1\uD559\uAD50"
-  - id: 46
+  - id: school_046
     name: "\uC720\uB2C8\uACE0\uB4F1\uD559\uAD50"
-  - id: 47
+  - id: school_047
     name: "\uCC3D\uC870\uACE0\uB4F1\uD559\uAD50"
-  - id: 48
+  - id: school_048
     name: "\uC5F0\uACB0\uACE0\uB4F1\uD559\uAD50"
-  - id: 49
+  - id: school_049
     name: "\uC138\uC0C1\uACE0\uB4F1\uD559\uAD50"
-  - id: 50
+  - id: school_050
     name: "\uC11C\uB77C\uACE0\uB4F1\uD559\uAD50"
-  - id: 51
+  - id: school_051
     name: "\uBE44\uB958\uACE0\uB4F1\uD559\uAD50"
-  - id: 52
+  - id: school_052
     name: "\uB300\uB3D9\uACE0\uB4F1\uD559\uAD50"
-  - id: 53
+  - id: school_053
     name: "\uD574\uC11C\uACE0\uB4F1\uD559\uAD50"
-  - id: 54
+  - id: school_054
     name: "\uBC31\uC11D\uACE0\uB4F1\uD559\uAD50"
-  - id: 55
+  - id: school_055
     name: "\uD55C\uB77C\uACE0\uB4F1\uD559\uAD50"
-  - id: 56
+  - id: school_056
     name: "\uC601\uC0B0\uACE0\uB4F1\uD559\uAD50"
-  - id: 57
+  - id: school_057
     name: "\uB098\uB798\uACE0\uB4F1\uD559\uAD50"
-  - id: 58
+  - id: school_058
     name: "\uC0C8\uBCC4\uACE0\uB4F1\uD559\uAD50"
-  - id: 59
+  - id: school_059
     name: "\uD478\uB978\uACE0\uB4F1\uD559\uAD50"
-  - id: 60
+  - id: school_060
     name: "\uD587\uC0B4\uACE0\uB4F1\uD559\uAD50"
-  - id: 61
+  - id: school_061
     name: "\uC0D8\uBB3C\uACE0\uB4F1\uD559\uAD50"
-  - id: 62
+  - id: school_062
     name: "\uCCAD\uC6B4\uACE0\uB4F1\uD559\uAD50"
-  - id: 63
+  - id: school_063
     name: "\uC2AC\uCC2C\uACE0\uB4F1\uD559\uAD50"
-  - id: 64
+  - id: school_064
     name: "\uBC84\uB4DC\uACE0\uB4F1\uD559\uAD50"
-  - id: 65
+  - id: school_065
     name: "\uB355\uC131\uACE0\uB4F1\uD559\uAD50"
-  - id: 66
+  - id: school_066
     name: "\uD654\uD569\uACE0\uB4F1\uD559\uAD50"
-  - id: 67
+  - id: school_067
     name: "\uC608\uC808\uACE0\uB4F1\uD559\uAD50"
-  - id: 68
+  - id: school_068
     name: "\uB098\uB214\uACE0\uB4F1\uD559\uAD50"
-  - id: 69
+  - id: school_069
     name: "\uC9C4\uB9AC\uACE0\uB4F1\uD559\uAD50"
-  - id: 70
+  - id: school_070
     name: "\uACE0\uC740\uACE0\uB4F1\uD559\uAD50"
-  - id: 71
+  - id: school_071
     name: "\uC73C\uB738\uACE0\uB4F1\uD559\uAD50"
-  - id: 72
+  - id: school_072
     name: "\uC138\uC0C1\uACE0\uB4F1\uD559\uAD50"
-  - id: 73
+  - id: school_073
     name: "\uB204\uB9AC\uACE0\uB4F1\uD559\uAD50"
-  - id: 74
+  - id: school_074
     name: "\uD4E8\uCC98\uACE0\uB4F1\uD559\uAD50"
-  - id: 75
+  - id: school_075
     name: "\uD601\uC2E0\uACE0\uB4F1\uD559\uAD50"
-  - id: 76
+  - id: school_076
     name: "\uC815\uBCF4\uACE0\uB4F1\uD559\uAD50"
-  - id: 77
+  - id: school_077
     name: "\uB113\uC740\uACE0\uB4F1\uD559\uAD50"
-  - id: 78
+  - id: school_078
     name: "\uAC00\uC57C\uACE0\uB4F1\uD559\uAD50"
-  - id: 79
+  - id: school_079
     name: "\uC628\uC870\uACE0\uB4F1\uD559\uAD50"
-  - id: 80
+  - id: school_080
     name: "\uC601\uB0A8\uACE0\uB4F1\uD559\uAD50"
-  - id: 81
+  - id: school_081
     name: "\uAD00\uBD81\uACE0\uB4F1\uD559\uAD50"
-  - id: 82
+  - id: school_082
     name: "\uC218\uB824\uACE0\uB4F1\uD559\uAD50"
-  - id: 83
+  - id: school_083
     name: "\uC124\uC545\uACE0\uB4F1\uD559\uAD50"
-  - id: 84
+  - id: school_084
     name: "\uC12C\uC9C4\uACE0\uB4F1\uD559\uAD50"
-  - id: 85
+  - id: school_085
     name: "\uB2E4\uC19C\uACE0\uB4F1\uD559\uAD50"
-  - id: 86
+  - id: school_086
     name: "\uC544\uB77C\uACE0\uB4F1\uD559\uAD50"
-  - id: 87
+  - id: school_087
     name: "\uC232\uC18D\uACE0\uB4F1\uD559\uAD50"
-  - id: 88
+  - id: school_088
     name: "\uAD6C\uB984\uACE0\uB4F1\uD559\uAD50"
-  - id: 89
+  - id: school_089
     name: "\uB4E4\uAF43\uACE0\uB4F1\uD559\uAD50"
-  - id: 90
+  - id: school_090
     name: "\uB179\uC6D0\uACE0\uB4F1\uD559\uAD50"
-  - id: 91
+  - id: school_091
     name: "\uD55C\uBE5B\uACE0\uB4F1\uD559\uAD50"
-  - id: 92
+  - id: school_092
     name: "\uB2E8\uD48D\uACE0\uB4F1\uD559\uAD50"
-  - id: 93
+  - id: school_093
     name: "\uC2E0\uC775\uACE0\uB4F1\uD559\uAD50"
-  - id: 94
+  - id: school_094
     name: "\uCC3D\uC758\uACE0\uB4F1\uD559\uAD50"
-  - id: 95
+  - id: school_095
     name: "\uC2AC\uAE30\uACE0\uB4F1\uD559\uAD50"
-  - id: 96
+  - id: school_096
     name: "\uBC30\uB824\uACE0\uB4F1\uD559\uAD50"
-  - id: 97
+  - id: school_097
     name: "\uC815\uC758\uACE0\uB4F1\uD559\uAD50"
-  - id: 98
+  - id: school_098
     name: "\uB9D1\uC740\uACE0\uB4F1\uD559\uAD50"
-  - id: 99
+  - id: school_099
     name: "\uC120\uC9C4\uACE0\uB4F1\uD559\uAD50"
-  - id: 100
+  - id: school_100
     name: "\uC601\uC7AC\uACE0\uB4F1\uD559\uAD50"
-  - id: 101
+  - id: school_101
     name: "\uC138\uACC4\uACE0\uB4F1\uD559\uAD50"
-  - id: 102
+  - id: school_102
     name: "\uD55C\uC0B0\uACE0\uB4F1\uD559\uAD50"
-  - id: 103
+  - id: school_103
     name: "\uAC1C\uCC99\uACE0\uB4F1\uD559\uAD50"
-  - id: 104
+  - id: school_104
     name: "\uCF54\uC2A4\uACE0\uB4F1\uD559\uAD50"
-  - id: 105
+  - id: school_105
     name: "\uC55E\uB0A0\uACE0\uB4F1\uD559\uAD50"
-  - id: 106
+  - id: school_106
     name: "\uBC31\uC81C\uACE0\uB4F1\uD559\uAD50"
-  - id: 107
+  - id: school_107
     name: "\uC8FC\uBABD\uACE0\uB4F1\uD559\uAD50"
-  - id: 108
+  - id: school_108
     name: "\uD638\uB0A8\uACE0\uB4F1\uD559\uAD50"
-  - id: 109
+  - id: school_109
     name: "\uC1A1\uB3C4\uACE0\uB4F1\uD559\uAD50"
-  - id: 110
+  - id: school_110
     name: "\uBA85\uC0B0\uACE0\uB4F1\uD559\uAD50"
-  - id: 111
+  - id: school_111
     name: "\uC9C0\uB9AC\uACE0\uB4F1\uD559\uAD50"
-  - id: 112
+  - id: school_112
     name: "\uAE08\uAC15\uACE0\uB4F1\uD559\uAD50"
-  - id: 113
+  - id: school_113
     name: "\uB77C\uC628\uACE0\uB4F1\uD559\uAD50"
-  - id: 114
+  - id: school_114
     name: "\uC790\uC62C\uACE0\uB4F1\uD559\uAD50"
-  - id: 115
+  - id: school_115
     name: "\uC740\uD558\uAD50\uB4F1\uD559\uAD50"
-  - id: 116
+  - id: school_116
     name: "\uB178\uC744\uACE0\uB4F1\uD559\uAD50"
-  - id: 117
+  - id: school_117
     name: "\uC774\uC2AC\uACE0\uB4F1\uD559\uAD50"
-  - id: 118
+  - id: school_118
     name: "\uD55C\uC6B8\uACE0\uB4F1\uD559\uAD50"
-  - id: 119
+  - id: school_119
     name: "\uCC2C\uC194\uACE0\uB4F1\uD559\uAD50"
-  - id: 120
+  - id: school_120
     name: "\uB3D9\uBC31\uACE0\uB4F1\uD559\uAD50"
-  - id: 121
+  - id: school_121
     name: "\uC22D\uC2E4\uACE0\uB4F1\uD559\uAD50"
-  - id: 122
+  - id: school_122
     name: "\uC9C0\uC131\uACE0\uB4F1\uD559\uAD50"
-  - id: 123
+  - id: school_123
     name: "\uC9C0\uD61C\uACE0\uB4F1\uD559\uAD50"
-  - id: 124
+  - id: school_124
     name: "\uACF5\uAC10\uACE0\uB4F1\uD559\uAD50"
-  - id: 125
+  - id: school_125
     name: "\uD3C9\uD654\uACE0\uB4F1\uD559\uAD50"
-  - id: 126
+  - id: school_126
     name: "\uAD73\uC13C\uACE0\uB4F1\uD559\uAD50"
-  - id: 127
+  - id: school_127
     name: "\uC77C\uB958\uACE0\uB4F1\uD559\uAD50"
-  - id: 128
+  - id: school_128
     name: "\uD14C\uD06C\uACE0\uB4F1\uD559\uAD50"
-  - id: 129
+  - id: school_129
     name: "\uD504\uB7F0\uACE0\uB4F1\uD559\uAD50"
-  - id: 130
+  - id: school_130
     name: "\uC778\uACF5\uACE0\uB4F1\uD559\uAD50"
-  - id: 131
+  - id: school_131
     name: "\uB3C4\uC57D\uACE0\uB4F1\uD559\uAD50"
-  - id: 132
+  - id: school_132
     name: "\uB9AC\uC628\uACE0\uB4F1\uD559\uAD50"
-  - id: 133
+  - id: school_133
     name: "\uAFC8\uD2C0\uACE0\uB4F1\uD559\uAD50"
-  - id: 134
+  - id: school_134
     name: "\uACE0\uAD6C\uACE0\uB4F1\uD559\uAD50"
-  - id: 135
+  - id: school_135
     name: "\uD601\uAC70\uACE0\uB4F1\uD559\uAD50"
-  - id: 136
+  - id: school_136
     name: "\uAE30\uD638\uACE0\uB4F1\uD559\uAD50"
-  - id: 137
+  - id: school_137
     name: "\uAC15\uB0A8\uACE0\uB4F1\uD559\uAD50"
-  - id: 138
+  - id: school_138
     name: "\uBCF4\uBC30\uACE0\uB4F1\uD559\uAD50"
-  - id: 139
+  - id: school_139
     name: "\uBB34\uB4F1\uACE0\uB4F1\uD559\uAD50"
-  - id: 140
+  - id: school_140
     name: "\uC18C\uC591\uACE0\uB4F1\uD559\uAD50"
-  - id: 141
+  - id: school_141
     name: "\uBB34\uB8E1\uACE0\uB4F1\uD559\uAD50"

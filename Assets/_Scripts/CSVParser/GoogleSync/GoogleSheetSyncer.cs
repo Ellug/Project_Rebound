@@ -41,25 +41,27 @@ public static class GoogleSheetSyncer
     public static void SyncTables(IReadOnlyList<SheetTableEntry> tables, bool forceAll = false)
     {
         int total = tables.Count;
-        int downloaded = 0, skipped = 0, failed = 0;
-        var changedTables = new List<string>();
+        int imported = 0, skipped = 0, failed = 0;
+        var pendingImports = new List<(string tableName, string csvPath)>();
+        var importedTables = new List<string>();
 
         try
         {
             for (int i = 0; i < total; i++)
             {
                 var entry = tables[i];
+                string tableName = Path.GetFileNameWithoutExtension(entry.CsvFileName);
                 float progress = (float)i / total;
 
                 EditorUtility.DisplayProgressBar(
                     "Syncing from Google Sheets",
-                    $"Checking {entry.DisplayName}... ({i + 1}/{total})",
+                    $"Checking {tableName}... ({i + 1}/{total})",
                     progress);
 
                 string csvContent = DownloadCsvSync(entry.SheetUrl);
                 if (csvContent == null)
                 {
-                    Debug.LogError($"[GoogleSheetSyncer] Failed to download: {entry.DisplayName}");
+                    Debug.LogError($"[GoogleSheetSyncer] Failed to download: {tableName}");
                     failed++;
                     continue;
                 }
@@ -68,31 +70,13 @@ public static class GoogleSheetSyncer
 
                 if (!forceAll && IsContentSameAsLocal(csvPath, csvContent))
                 {
-                    Debug.Log($"[GoogleSheetSyncer] No change: {entry.DisplayName}");
+                    Debug.Log($"[GoogleSheetSyncer] No change: {tableName}");
                     skipped++;
                     continue;
                 }
 
                 File.WriteAllText(csvPath, csvContent, new UTF8Encoding(encoderShouldEmitUTF8Identifier: false));
-
-                EditorUtility.DisplayProgressBar(
-                    "Syncing from Google Sheets",
-                    $"Importing {entry.DisplayName}... ({i + 1}/{total})",
-                    progress + 0.5f / total);
-
-                try
-                {
-                    CsvImportUtil.Import(csvPath);
-                }
-                catch (Exception e)
-                {
-                    Debug.LogError($"[GoogleSheetSyncer] Import failed for {entry.DisplayName}: {e.Message}");
-                    failed++;
-                    continue;
-                }
-
-                downloaded++;
-                changedTables.Add(entry.DisplayName);
+                pendingImports.Add((tableName, csvPath));
             }
         }
         finally
@@ -100,15 +84,54 @@ public static class GoogleSheetSyncer
             EditorUtility.ClearProgressBar();
         }
 
-        if (downloaded > 0)
+        if (pendingImports.Count > 0)
+        {
+            // 새 테이블이 있으면 SO 스크립트 생성 후 컴파일 완료 시 ImportAll 자동 재개
+            if (!CsvImportCompileBridge.EnsureSoScriptsReadyAndMaybeDefer("Google Sheets Sync"))
+                return;
+
+            try
+            {
+                for (int i = 0; i < pendingImports.Count; i++)
+                {
+                    var item = pendingImports[i];
+                    float progress = (float)i / pendingImports.Count;
+
+                    EditorUtility.DisplayProgressBar(
+                        "Syncing from Google Sheets",
+                        $"Importing {item.tableName}... ({i + 1}/{pendingImports.Count})",
+                        progress);
+
+                    try
+                    {
+                        CsvImportUtil.Import(item.csvPath);
+                        imported++;
+                        importedTables.Add(item.tableName);
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.LogError($"[GoogleSheetSyncer] Import failed for {item.tableName}: {e.Message}");
+                        failed++;
+                    }
+                }
+            }
+            finally
+            {
+                EditorUtility.ClearProgressBar();
+            }
+        }
+
+        if (imported > 0)
         {
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
+            // 동기화로 변경된 SO 목록을 TableLoadConfig에 반영
+            TableLoadConfigAutoSync.Sync(showDialog: false);
         }
 
-        string summary = $"Sync Complete!\n\nDownloaded & Imported: {downloaded}\nSkipped (no change): {skipped}\nFailed: {failed}";
-        if (changedTables.Count > 0)
-            summary += $"\n\nChanged tables:\n- {string.Join("\n- ", changedTables)}";
+        string summary = $"Sync Complete!\n\nDownloaded & Imported: {imported}\nSkipped (no change): {skipped}\nFailed: {failed}";
+        if (importedTables.Count > 0)
+            summary += $"\n\nChanged tables:\n- {string.Join("\n- ", importedTables)}";
 
         EditorUtility.DisplayDialog("Google Sheets Sync", summary, "OK");
     }

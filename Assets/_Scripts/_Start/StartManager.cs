@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -11,52 +11,8 @@ public class StartManager : MonoBehaviour
 {
     [SerializeField] private Slider _loadingSlider;
     [SerializeField] private TMP_Text _statusText;
-
-    [Header("Game Data Tables")]
-    [SerializeField] private AssetReference _growthCommandTableRef;
-    [SerializeField] private AssetReference _alwaysEffectTableRef;
-    [SerializeField] private AssetReference _alwaysEventTableRef;
-    [SerializeField] private AssetReference _suddenEventTableRef;
-    [SerializeField] private AssetReference _suddenEventEffectTableRef;
-    [SerializeField] private AssetReference _suddenEventTextTableRef;
-    [SerializeField] private AssetReference _statusTextTableRef;
-    [SerializeField] private AssetReference _schoolNameTableRef;
-    [SerializeField] private AssetReference _enemyStatTableRef;
-
-    [Header("Student Data Tables")]
-    [SerializeField] private AssetReference _studentNameTableRef;
-    [SerializeField] private AssetReference _studentBodyTableRef;
-    [SerializeField] private AssetReference _studentStatTableRef;
-    [SerializeField] private AssetReference _studentStartStateTableRef;
-    [SerializeField] private AssetReference _studentPotentialTableRef;
-    [SerializeField] private AssetReference _studentStatusProbTableRef;
-    [SerializeField] private AssetReference _studentStatExpTableRef;
-    [SerializeField] private AssetReference _studentPlusExpTableRef;
-    [SerializeField] private AssetReference _studentPositionTableRef;
-
-    [Header("UI Data Tables")]
-    [SerializeField] private AssetReference _tutorialGuideTableRef;
-
-    // 로드된 테이블들 (임시 저장용)
-    private GrowthCommandTableSO _growthCommandTable;
-    private AlwaysEffectTableSO _alwaysEffectTable;
-    private AlwaysEventTableSO _alwaysEventTable;
-    private SuddenEventTableSO _suddenEventTable;
-    private SuddenEventEffectTableSO _suddenEventEffectTable;
-    private SuddenEventTextTableSO _suddenEventTextTable;
-    private StatusTextTableSO _statusTextTable;
-    private SchoolNameTableSO _schoolNameTable;
-    private EnemyStatTableSO _enemyStatTable;
-    private StudentNameTableSO _studentNameTable;
-    private StudentBodyTableSO _studentBodyTable;
-    private StudentStatTableSO _studentStatTable;
-    private StudentStartStatTableSO _studentStartStateTable;
-    private StudentPotentialTableSO _studentPotentialTable;
-    private StudentStatusProbTableSO _studentStatusProbTable;
-    private StudentStatExpTableSO _studentStatExpTable;
-    private StudentPlusExpTableSO _studentPlusExpTable;
-    private StudentPositionTableSO _studentPositionTable;
-    private TutorialGuideTableSO _tutorialGuideTable;
+    // 자동 동기화된 테이블 참조 목록
+    [SerializeField] private TableLoadConfigSO _tableLoadConfig;
 
     private readonly WaitForSeconds _waitOneSecond = new(1f);
 
@@ -70,33 +26,19 @@ public class StartManager : MonoBehaviour
         StartCoroutine(LoadingProcess());
     }
 
+    // 업데이트 확인→다운로드→테이블 로드→캐시 등록까지 초기 로딩 전체를 수행
     private IEnumerator LoadingProcess()
     {
-        // 테이블 레퍼런스 수집
-        var allTableRefs = new List<AssetReference>
+        var allTableRefs = CollectTableReferences();
+        if (allTableRefs.Count == 0)
         {
-            _growthCommandTableRef,
-            _alwaysEffectTableRef,
-            _alwaysEventTableRef,
-            _suddenEventTableRef,
-            _suddenEventEffectTableRef,
-            _suddenEventTextTableRef,
-            _statusTextTableRef,
-            _schoolNameTableRef,
-            _enemyStatTableRef,
-            _studentNameTableRef,
-            _studentBodyTableRef,
-            _studentStatTableRef,
-            _studentStartStateTableRef,
-            _studentPotentialTableRef,
-            _studentStatusProbTableRef,
-            _studentStatExpTableRef,
-            _studentPlusExpTableRef,
-            _studentPositionTableRef,
-            _tutorialGuideTableRef
-        };
+            _statusText.text = "Missing table config";
+            Debug.LogError("[StartManager] No table references found. Check TableLoadConfig.");
+            yield break;
+        }
 
-        // 1. Checking for updates (0% ~ 30%)
+        CachedSOData.Clear();
+
         _statusText.text = "Checking for updates...";
 
         var checkHandle = Addressables.CheckForCatalogUpdates(false);
@@ -111,8 +53,6 @@ public class StartManager : MonoBehaviour
         if (checkHandle.Status == AsyncOperationStatus.Succeeded)
         {
             var catalogsToUpdate = checkHandle.Result;
-
-            // 2. Applying updates (30% ~ 60%)
             if (catalogsToUpdate.Count > 0)
             {
                 _statusText.text = "Updating game data...";
@@ -129,20 +69,18 @@ public class StartManager : MonoBehaviour
             }
             else
             {
-                progress = 0.6f;
-                _loadingSlider.value = progress;
+                _loadingSlider.value = 0.6f;
             }
         }
 
         Addressables.Release(checkHandle);
 
-        // 3. Calculating download size (60% ~ 70%)
         _statusText.text = "Verifying resources...";
 
         long totalDownloadSize = 0;
-        foreach (var tableRef in allTableRefs)
+        for (int i = 0; i < allTableRefs.Count; i++)
         {
-            var sizeHandle = Addressables.GetDownloadSizeAsync(tableRef);
+            var sizeHandle = Addressables.GetDownloadSizeAsync(allTableRefs[i]);
             yield return sizeHandle;
 
             if (sizeHandle.Status == AsyncOperationStatus.Succeeded)
@@ -151,153 +89,50 @@ public class StartManager : MonoBehaviour
             Addressables.Release(sizeHandle);
         }
 
-        progress = 0.7f;
-        _loadingSlider.value = progress;
+        _loadingSlider.value = 0.7f;
 
-        // 4. Downloading assets (70% ~ 80%)
         if (totalDownloadSize > 0)
         {
             _statusText.text = "Downloading game data...";
 
-            int downloadedCount = 0;
-            foreach (var tableRef in allTableRefs)
+            for (int i = 0; i < allTableRefs.Count; i++)
             {
-                var downloadHandle = Addressables.DownloadDependenciesAsync(tableRef);
+                var downloadHandle = Addressables.DownloadDependenciesAsync(allTableRefs[i]);
                 while (!downloadHandle.IsDone)
                 {
-                    float tableProgress = downloadHandle.PercentComplete / allTableRefs.Count;
-                    progress = 0.7f + ((downloadedCount + tableProgress) / allTableRefs.Count) * 0.1f;
+                    float tableProgress = downloadHandle.PercentComplete / Mathf.Max(1, allTableRefs.Count);
+                    progress = 0.7f + ((i + tableProgress) / Mathf.Max(1, allTableRefs.Count)) * 0.1f;
                     _loadingSlider.value = progress;
-
                     yield return null;
                 }
 
                 Addressables.Release(downloadHandle);
-                downloadedCount++;
             }
         }
         else
         {
-            progress = 0.8f;
-            _loadingSlider.value = progress;
+            _loadingSlider.value = 0.8f;
         }
 
-        // 이 위에까지 다운로드 과정은 웹에서 번들 받아서 로컬의 번들 갱신하는 과정
-
-        // 이 아래는 갱신된 로컬의 번들에서 Load 해오는 과정
-
-        // 5. Loading game data (80% ~ 90%)
         _statusText.text = "Loading game data...";
 
-        int tableCount = 19;
+        int tableCount = Mathf.Max(1, allTableRefs.Count);
         float tableStep = 0.1f / tableCount;
         float baseProgress = 0.8f;
 
-        yield return LoadTable<GrowthCommandTableSO>(_growthCommandTableRef, t => _growthCommandTable = t);
-        baseProgress += tableStep;
-        _loadingSlider.value = baseProgress;
+        for (int i = 0; i < allTableRefs.Count; i++)
+        {
+            yield return LoadTable(allTableRefs[i], CachedSOData.RegisterTable);
+            baseProgress += tableStep;
+            _loadingSlider.value = Mathf.Min(baseProgress, 0.9f);
+        }
 
-        yield return LoadTable<AlwaysEffectTableSO>(_alwaysEffectTableRef, t => _alwaysEffectTable = t);
-        baseProgress += tableStep;
-        _loadingSlider.value = baseProgress;
-
-        yield return LoadTable<AlwaysEventTableSO>(_alwaysEventTableRef, t => _alwaysEventTable = t);
-        baseProgress += tableStep;
-        _loadingSlider.value = baseProgress;
-
-        yield return LoadTable<SuddenEventTableSO>(_suddenEventTableRef, t => _suddenEventTable = t);
-        baseProgress += tableStep;
-        _loadingSlider.value = baseProgress;
-
-        yield return LoadTable<SuddenEventEffectTableSO>(_suddenEventEffectTableRef, t => _suddenEventEffectTable = t);
-        baseProgress += tableStep;
-        _loadingSlider.value = baseProgress;
-
-        yield return LoadTable<SuddenEventTextTableSO>(_suddenEventTextTableRef, t => _suddenEventTextTable = t);
-        baseProgress += tableStep;
-        _loadingSlider.value = baseProgress;
-
-        yield return LoadTable<StatusTextTableSO>(_statusTextTableRef, t => _statusTextTable = t);
-        baseProgress += tableStep;
-        _loadingSlider.value = baseProgress;
-
-        yield return LoadTable<SchoolNameTableSO>(_schoolNameTableRef, t => _schoolNameTable = t);
-        baseProgress += tableStep;
-        _loadingSlider.value = baseProgress;
-
-        yield return LoadTable<EnemyStatTableSO>(_enemyStatTableRef, t => _enemyStatTable = t);
-        baseProgress += tableStep;
-        _loadingSlider.value = baseProgress;
-
-        yield return LoadTable<StudentNameTableSO>(_studentNameTableRef, t => _studentNameTable = t);
-        baseProgress += tableStep;
-        _loadingSlider.value = baseProgress;
-
-        yield return LoadTable<StudentBodyTableSO>(_studentBodyTableRef, t => _studentBodyTable = t);
-        baseProgress += tableStep;
-        _loadingSlider.value = baseProgress;
-
-        yield return LoadTable<StudentStatTableSO>(_studentStatTableRef, t => _studentStatTable = t);
-        baseProgress += tableStep;
-        _loadingSlider.value = baseProgress;
-
-        yield return LoadTable<StudentStartStatTableSO>(_studentStartStateTableRef, t => _studentStartStateTable = t);
-        baseProgress += tableStep;
-        _loadingSlider.value = baseProgress;
-
-        yield return LoadTable<StudentPotentialTableSO>(_studentPotentialTableRef, t => _studentPotentialTable = t);
-        baseProgress += tableStep;
-        _loadingSlider.value = baseProgress;
-
-        yield return LoadTable<StudentStatusProbTableSO>(_studentStatusProbTableRef, t => _studentStatusProbTable = t);
-        baseProgress += tableStep;
-        _loadingSlider.value = baseProgress;
-
-        yield return LoadTable<StudentStatExpTableSO>(_studentStatExpTableRef, t => _studentStatExpTable = t);
-        baseProgress += tableStep;
-        _loadingSlider.value = baseProgress;
-
-        yield return LoadTable<StudentPlusExpTableSO>(_studentPlusExpTableRef, t => _studentPlusExpTable = t);
-        baseProgress += tableStep;
-        _loadingSlider.value = baseProgress;
-
-        yield return LoadTable<StudentPositionTableSO>(_studentPositionTableRef, t => _studentPositionTable = t);
         _loadingSlider.value = 0.9f;
 
-        yield return LoadTable<TutorialGuideTableSO>(_tutorialGuideTableRef, t => _tutorialGuideTable = t);
-        baseProgress = Mathf.Max(baseProgress + tableStep, 0.9f);
-        _loadingSlider.value = baseProgress;
-
-        // 6. Initializing DataManager (90% ~ 95%)
         _statusText.text = "Initializing...";
-
-        // DataManager에 테이블 등록
-        CachedSOData.RegisterTables(
-            _growthCommandTable,
-            _alwaysEffectTable,
-            _alwaysEventTable,
-            _suddenEventTable,
-            _suddenEventEffectTable,
-            _suddenEventTextTable,
-            _statusTextTable,
-            _schoolNameTable,
-            _studentNameTable,
-            _studentBodyTable,
-            _studentStatTable,
-            _studentStartStateTable,
-            _studentPotentialTable,
-            _studentStatusProbTable,
-            _studentStatExpTable,
-            _studentPlusExpTable,
-            _studentPositionTable,
-            _enemyStatTable,
-            _tutorialGuideTable
-        );
+        _loadingSlider.value = 0.95f;
 
         progress = 0.95f;
-        _loadingSlider.value = progress;
-
-        // 7. Finalizing (95% ~ 100%)
         while (progress < 1f)
         {
             progress += Time.deltaTime * 0.5f;
@@ -314,15 +149,52 @@ public class StartManager : MonoBehaviour
         SceneManager.LoadScene("Title");
     }
 
-    // 제네릭 테이블 로드 메서드
-    private IEnumerator LoadTable<T>(AssetReference assetRef, System.Action<T> onLoaded) where T : ScriptableObject
+    // TableLoadConfig에서 유효한 Addressable 참조를 수집
+    private List<AssetReference> CollectTableReferences()
     {
-        var loadHandle = assetRef.LoadAssetAsync<T>();
+        var result = new List<AssetReference>();
+        var seenGuids = new HashSet<string>();
+
+        if (_tableLoadConfig == null)
+            _tableLoadConfig = Resources.Load<TableLoadConfigSO>("TableLoadConfig");
+
+        if (_tableLoadConfig == null)
+        {
+            Debug.LogError("[StartManager] TableLoadConfig not found.");
+            return result;
+        }
+
+        AddTableRefs(result, seenGuids, _tableLoadConfig.TableRefs);
+
+        return result;
+    }
+
+    // 유효한 Addressable 참조만 중복 없이 수집
+    private static void AddTableRefs(List<AssetReference> result, HashSet<string> seenGuids, IEnumerable<AssetReference> source)
+    {
+        foreach (var tableRef in source)
+        {
+            if (tableRef == null) continue;
+            if (string.IsNullOrEmpty(tableRef.AssetGUID)) continue;
+            if (!tableRef.RuntimeKeyIsValid()) continue;
+            if (!seenGuids.Add(tableRef.AssetGUID)) continue;
+            result.Add(tableRef);
+        }
+    }
+
+    // Addressables에서 ScriptableObject를 로드해 콜백으로 전달
+    private IEnumerator LoadTable(AssetReference assetRef, System.Action<ScriptableObject> onLoaded)
+    {
+        var loadHandle = assetRef.LoadAssetAsync<ScriptableObject>();
         yield return loadHandle;
 
         if (loadHandle.Status == AsyncOperationStatus.Succeeded)
+        {
             onLoaded?.Invoke(loadHandle.Result);
+        }
         else
-            Debug.LogError($"[LoadTable] Failed to load {typeof(T).Name}: {loadHandle.Status}");
+        {
+            Debug.LogError($"[LoadTable] Failed to load {assetRef.AssetGUID}: {loadHandle.Status}");
+        }
     }
 }

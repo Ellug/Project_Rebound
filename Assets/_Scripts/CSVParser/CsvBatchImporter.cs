@@ -19,6 +19,10 @@ public static class CsvBatchImporter
     [MenuItem("Tools/Data/Import All CSV Tables")]
     public static void ImportAllTables()
     {
+        // 누락된 SO 스크립트가 있으면 생성 후 컴파일 완료 시 자동 재개
+        if (!CsvImportCompileBridge.EnsureSoScriptsReadyAndMaybeDefer("Import All CSV Tables"))
+            return;
+
         var csvPaths = CsvImportUtil.FindCsvPaths();
         int successCount = 0;
         int failCount = 0;
@@ -49,6 +53,8 @@ public static class CsvBatchImporter
 
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
+        // 임포트된 SO 기준으로 테이블 로드 설정을 즉시 갱신
+        TableLoadConfigAutoSync.Sync(showDialog: false);
         EditorUtility.DisplayDialog("Import Complete", $"Success: {successCount}\nFailed: {failCount}", "OK");
     }
 

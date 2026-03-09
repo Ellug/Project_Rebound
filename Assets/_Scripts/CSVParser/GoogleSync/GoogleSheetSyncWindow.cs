@@ -1,5 +1,6 @@
 #if UNITY_EDITOR
 using System.Collections.Generic;
+using System.IO;
 using UnityEditor;
 using UnityEngine;
 
@@ -47,7 +48,7 @@ public class GoogleSheetSyncWindow : EditorWindow
         // 컬럼 헤더
         EditorGUILayout.BeginHorizontal(EditorStyles.toolbar);
         GUILayout.Space(24);
-        EditorGUILayout.LabelField("Display Name", EditorStyles.miniLabel, GUILayout.Width(160));
+        EditorGUILayout.LabelField("Table",    EditorStyles.miniLabel, GUILayout.Width(180));
         EditorGUILayout.LabelField("CSV File",     EditorStyles.miniLabel, GUILayout.MinWidth(80));
         GUILayout.Space(58);
         EditorGUILayout.EndHorizontal();
@@ -58,10 +59,11 @@ public class GoogleSheetSyncWindow : EditorWindow
         for (int i = 0; i < tables.Count; i++)
         {
             var entry = tables[i];
+            string tableName = Path.GetFileNameWithoutExtension(entry.CsvFileName);
             EditorGUILayout.BeginHorizontal();
 
             _selected[i] = EditorGUILayout.Toggle(_selected[i], GUILayout.Width(20));
-            EditorGUILayout.LabelField(entry.DisplayName, GUILayout.Width(160));
+            EditorGUILayout.LabelField(tableName, GUILayout.Width(180));
             EditorGUILayout.LabelField(entry.CsvFileName, EditorStyles.miniLabel, GUILayout.MinWidth(80));
 
             // 해당 테이블만 즉시 강제 동기화

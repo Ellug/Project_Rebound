@@ -15,98 +15,178 @@ MonoBehaviour:
   m_GroupName: Default Local Group
   m_GUID: c63a1636634c9254b8a68dd081a2d9d7
   m_SerializeEntries:
+  - m_GUID: 02583003e2569e54fb8b0c062276990a
+    m_Address: ContentUnlockFeatureTable
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 165f817500be3c049a6e07b29df86d9b
+    m_Address: CoachNodeMasterTable
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 1b898e76ac68cc84b9e7882d5f6cd035
-    m_Address: Assets/_Scripts/SO/SO_StudentPositionTable.asset
+    m_Address: StudentPositionTable
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 1be4142f5ad0d00488680016784a973c
-    m_Address: Assets/_Scripts/SO/SO_GrowthCommandTable.asset
+    m_Address: GrowthCommandTable
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 253381d5eca44e041ab56d3614c040b0
+    m_Address: CoachNodePrerequisiteTable
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 297009e9d4477b04dbfbe141e4b753cd
-    m_Address: Assets/_Scripts/SO/SO_SuddenEventTable.asset
+    m_Address: SuddenEventTable
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 31dc3a478bf62d346b78bda77784c0b5
-    m_Address: Assets/_Scripts/SO/SO_StudentStartStatTable.asset
+    m_Address: StudentStartStatTable
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 37ec3c6c7315fe64197064036e64fd1a
-    m_Address: Assets/_Scripts/SO/SO_StudentStatTable.asset
+    m_Address: StudentStatTable
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 40c20ebd60e7e6b4d8aab2c6b5bcb2d3
+    m_Address: GraduateGiftTierRewardTable
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 41c1d4c214c73e4469337a604d487db5
-    m_Address: Assets/_Scripts/SO/SO_AlwaysEventTable.asset
+    m_Address: AlwaysEventTable
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 472a8ec205557b240825fc358f344e80
+    m_Address: StudentTrustLevelTable
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 54be606723bb0434a91f4bc7ead1d62f
+    m_Address: StudentTrustBenefitTable
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 631270dd11a216045883df32cf0abce8
-    m_Address: Assets/_Scripts/SO/SO_StudentNameTable.asset
+    m_Address: StudentNameTable
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 670af9d20bdffc745bd6cb06953e1677
-    m_Address: Assets/_Scripts/SO/SO_StudentPlusExpTable.asset
+    m_Address: StudentPlusExpTable
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 6abbea51538ab21478d1457122d25438
-    m_Address: Assets/_Scripts/SO/SO_StudentPotentialTable.asset
+    m_Address: StudentPotentialTable
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 76f29e56e53fdbc46a93f19256bfb300
+    m_Address: StudentTrustUpConditionTable
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 76f9b9a7a5bafe547901a63789d1045b
-    m_Address: Assets/_Scripts/SO/SO_StatusTextTable.asset
+    m_Address: StatusTextTable
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 7a59732e8646a4848860f6ee542a095b
-    m_Address: Assets/_Scripts/SO/SO_StudentBodyTable.asset
+    m_Address: StudentBodyTable
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7b594a029d60ac548b7e0838cdab0631
+    m_Address: FacilityUpgradeTable
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 81ba605268fde034a974bdbd32fffc40
-    m_Address: Assets/_Scripts/SO/SO_SuddenEventTextTable.asset
+    m_Address: SuddenEventTextTable
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 822b261be3079c2469ad4864b5df848d
-    m_Address: Assets/_Scripts/SO/SO_SchoolNameTable.asset
+    m_Address: SchoolNameTable
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 87059a4fc1b7f2e45a4bb8e2b784bcd9
+    m_Address: TierManageOpenConditionTable
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 8fdba17a9453c0247b9cc87d22e05a7b
-    m_Address: Assets/_Scripts/SO/SO_StudentStatExpTable.asset
+    m_Address: StudentStatExpTable
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: a0f3c45ce00981b42b445cd7e7e2e9d4
-    m_Address: Assets/_Scripts/SO/SO_EnemyStatTable.asset
+    m_Address: EnemyStatTable
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a670a18477c21e34eb268fb59284e16e
+    m_Address: StudentTrustDownConditionStatusTable
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: abb2ce44694d09346a9c4a9d3c840ded
+    m_Address: GraduateGiftPopupTable
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b0389c1f9d1729044b4be41a31819b3e
-    m_Address: Assets/_Scripts/SO/SO_StudentStatusProbTable.asset
+    m_Address: StudentStatusProbTable
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b28b376e195049e4aa15bd274d043a6a
-    m_Address: Assets/_Scripts/SO/SO_SuddenEventEffectTable.asset
+    m_Address: SuddenEventEffectTable
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ca6949fe2f637c94ca915f0422cb3fa6
+    m_Address: StudentTrustStartTable
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: d5c7b49864c1b0a43a98661e33b6d09c
-    m_Address: Assets/_Scripts/SO/SO_AlwaysEffectTable.asset
+    m_Address: AlwaysEffectTable
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d62916513a463a24b83931edfd3a775a
+    m_Address: CoachNodeEffectDetailTable
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e157323945af6ab40bfdb8fa3976c7c1
+    m_Address: PositionInfoPopupTable
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e6b7ceacffa940247a191cd549fcd19a
+    m_Address: StudentTrustDownNeglectTable
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f0056fd8a8e10d04baba9f1f86a4e60f
+    m_Address: GraduateGradeTable
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: fdb2f49c21fefdd4da86f43ec7f916de
-    m_Address: Assets/_Scripts/SO/SO_TutorialGuideTable.asset
+    m_Address: TutorialGuideTable
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

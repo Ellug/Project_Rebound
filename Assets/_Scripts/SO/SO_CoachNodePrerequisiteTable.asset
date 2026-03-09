@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11d3e4c06c7c65744adc4d59af35571e, type: 3}
+  m_Name: SO_CoachNodePrerequisiteTable
+  m_EditorClassIdentifier: Assembly-CSharp::CoachNodePrerequisiteTableSO
+  _rows:
+  - col1: 0
+    nodeId: 102
+    targetPrerequisiteId: 101
+    "\uBE44\uACE0": "102\uB97C \uCC0D\uC73C\uB824\uBA74 101\uC774 \uD544\uC694\uD568"
+  - col1: 0
+    nodeId: 103
+    targetPrerequisiteId: 101
+    "\uBE44\uACE0": "103\uB97C \uCC0D\uC73C\uB824\uBA74 101\uC774 \uD544\uC694\uD568"
+  - col1: 0
+    nodeId: 103
+    targetPrerequisiteId: 501
+    "\uBE44\uACE0": "103\uB97C \uCC0D\uC73C\uB824\uBA74 501\uB3C4 \uD544\uC694\uD568"
+  - col1: 0
+    nodeId: 202
+    targetPrerequisiteId: 201
+    "\uBE44\uACE0": "202\uB97C \uCC0D\uC73C\uB824\uBA74 201\uC774 \uD544\uC694\uD568"
+  - col1: 0
+    nodeId: 202
+    targetPrerequisiteId: 501
+    "\uBE44\uACE0": "202\uB97C \uCC0D\uC73C\uB824\uBA74 501\uB3C4 \uD544\uC694\uD568"

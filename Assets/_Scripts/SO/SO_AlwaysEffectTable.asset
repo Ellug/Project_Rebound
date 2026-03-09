@@ -21,6 +21,10 @@ MonoBehaviour:
     conditionRecoveryDown: 4
     trainingIncrease: 0
     trainingDecline: 1.5
+    mentalIncrease: 0
+    mentalDecline: 1
+    trustIncrease: 0
+    trustDecline: 1
   - id: vacation_effect
     trainingState: 0
     conditionIncrease: 0
@@ -29,6 +33,10 @@ MonoBehaviour:
     conditionRecoveryDown: 0
     trainingIncrease: 0
     trainingDecline: 0
+    mentalIncrease: 0
+    mentalDecline: 0
+    trustIncrease: 0
+    trustDecline: 0
   - id: holiday_effect
     trainingState: 1
     conditionIncrease: 0
@@ -37,6 +45,10 @@ MonoBehaviour:
     conditionRecoveryDown: 0
     trainingIncrease: 1.5
     trainingDecline: 0
+    mentalIncrease: 0
+    mentalDecline: 0
+    trustIncrease: 0
+    trustDecline: 0
   - id: samiljeol_effect
     trainingState: 1
     conditionIncrease: 0
@@ -45,6 +57,10 @@ MonoBehaviour:
     conditionRecoveryDown: 0
     trainingIncrease: 1
     trainingDecline: 0
+    mentalIncrease: 0
+    mentalDecline: 0
+    trustIncrease: 0
+    trustDecline: 0
   - id: children_effect
     trainingState: 1
     conditionIncrease: 0
@@ -53,6 +69,10 @@ MonoBehaviour:
     conditionRecoveryDown: 3
     trainingIncrease: 1
     trainingDecline: 0
+    mentalIncrease: 3
+    mentalDecline: 0
+    trustIncrease: 0
+    trustDecline: 0
   - id: buddha_effect
     trainingState: 1
     conditionIncrease: 0
@@ -61,6 +81,10 @@ MonoBehaviour:
     conditionRecoveryDown: 0
     trainingIncrease: 1
     trainingDecline: 0
+    mentalIncrease: 0
+    mentalDecline: 0
+    trustIncrease: 0
+    trustDecline: 0
   - id: memorial_effect
     trainingState: 1
     conditionIncrease: 0
@@ -69,6 +93,10 @@ MonoBehaviour:
     conditionRecoveryDown: 0
     trainingIncrease: 1.5
     trainingDecline: 0
+    mentalIncrease: 0
+    mentalDecline: 0
+    trustIncrease: 0
+    trustDecline: 0
   - id: liberation_effect
     trainingState: 1
     conditionIncrease: 0
@@ -77,6 +105,10 @@ MonoBehaviour:
     conditionRecoveryDown: 0
     trainingIncrease: 1
     trainingDecline: 0
+    mentalIncrease: 3
+    mentalDecline: 0
+    trustIncrease: 2
+    trustDecline: 0
   - id: chuseok_effect
     trainingState: 1
     conditionIncrease: 0
@@ -85,6 +117,10 @@ MonoBehaviour:
     conditionRecoveryDown: 0
     trainingIncrease: 0
     trainingDecline: 0
+    mentalIncrease: 0
+    mentalDecline: 0
+    trustIncrease: 3
+    trustDecline: 0
   - id: national_effect
     trainingState: 1
     conditionIncrease: 0
@@ -93,6 +129,10 @@ MonoBehaviour:
     conditionRecoveryDown: 3
     trainingIncrease: 1.5
     trainingDecline: 0
+    mentalIncrease: 0
+    mentalDecline: 0
+    trustIncrease: 2
+    trustDecline: 0
   - id: hangul_effect
     trainingState: 1
     conditionIncrease: 0
@@ -101,6 +141,10 @@ MonoBehaviour:
     conditionRecoveryDown: 0
     trainingIncrease: 1
     trainingDecline: 0
+    mentalIncrease: 0
+    mentalDecline: 0
+    trustIncrease: 3
+    trustDecline: 0
   - id: christmas_effect
     trainingState: 1
     conditionIncrease: 0
@@ -109,6 +153,10 @@ MonoBehaviour:
     conditionRecoveryDown: 0
     trainingIncrease: 2
     trainingDecline: 0
+    mentalIncrease: 0
+    mentalDecline: 0
+    trustIncrease: 3
+    trustDecline: 0
   - id: festival_effect
     trainingState: 0
     conditionIncrease: 0
@@ -117,3 +165,7 @@ MonoBehaviour:
     conditionRecoveryDown: 0
     trainingIncrease: 0
     trainingDecline: 0
+    mentalIncrease: 2
+    mentalDecline: 0
+    trustIncrease: 4
+    trustDecline: 0

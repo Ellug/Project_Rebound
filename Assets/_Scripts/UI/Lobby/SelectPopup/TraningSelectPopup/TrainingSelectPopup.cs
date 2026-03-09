@@ -71,7 +71,7 @@ public class TrainingSelectPopup : UIPopup
             return false;
         }
 
-        GrowthCommandTableSO table = CachedSOData.GrowthCommandTable;
+        GrowthCommandTableSO table = CachedSOData.Get<GrowthCommandTableSO>();
         if (!TrainingPageBuilder.Build(_pageData, table))
             return false;
 

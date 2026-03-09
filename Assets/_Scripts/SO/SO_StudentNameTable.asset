@@ -13,403 +13,403 @@ MonoBehaviour:
   m_Name: SO_StudentNameTable
   m_EditorClassIdentifier: Assembly-CSharp::StudentNameTableSO
   _rows:
-  - id: 1
+  - id: name_001
     name: "\uAE40\uB3C4\uC724"
-  - id: 2
+  - id: name_002
     name: "\uAE40\uD558\uC900"
-  - id: 3
+  - id: name_003
     name: "\uAE40\uC11C\uC900"
-  - id: 4
+  - id: name_004
     name: "\uAE40\uBBFC\uC900"
-  - id: 5
+  - id: name_005
     name: "\uAE40\uC2DC\uC6B0"
-  - id: 6
+  - id: name_006
     name: "\uAE40\uC9C0\uD638"
-  - id: 7
+  - id: name_007
     name: "\uAE40\uC608\uC900"
-  - id: 8
+  - id: name_008
     name: "\uAE40\uC8FC\uC6D0"
-  - id: 9
+  - id: name_009
     name: "\uAE40\uAC74\uC6B0"
-  - id: 10
+  - id: name_010
     name: "\uAE40\uBBFC\uC7AC"
-  - id: 11
+  - id: name_011
     name: "\uAE40\uD604\uC6B0"
-  - id: 12
+  - id: name_012
     name: "\uAE40\uB3C4\uD604"
-  - id: 13
+  - id: name_013
     name: "\uAE40\uC9C0\uD6C4"
-  - id: 14
+  - id: name_014
     name: "\uAE40\uC6B0\uC9C4"
-  - id: 15
+  - id: name_015
     name: "\uAE40\uC9C0\uC548"
-  - id: 16
+  - id: name_016
     name: "\uAE40\uD0DC\uC724"
-  - id: 17
+  - id: name_017
     name: "\uAE40\uC720\uC900"
-  - id: 18
+  - id: name_018
     name: "\uAE40\uC5F0\uC6B0"
-  - id: 19
+  - id: name_019
     name: "\uAE40\uC900\uC11C"
-  - id: 20
+  - id: name_020
     name: "\uAE40\uC218\uD604"
-  - id: 21
+  - id: name_021
     name: "\uAE40\uB3C4\uC728"
-  - id: 22
+  - id: name_022
     name: "\uAE40\uC2B9\uC6B0"
-  - id: 23
+  - id: name_023
     name: "\uAE40\uC18C\uC900"
-  - id: 24
+  - id: name_024
     name: "\uAE40\uB3D9\uD604"
-  - id: 25
+  - id: name_025
     name: "\uAE40\uBBFC\uADDC"
-  - id: 26
+  - id: name_026
     name: "\uAE40\uD604\uC900"
-  - id: 27
+  - id: name_027
     name: "\uAE40\uC900\uD6C4"
-  - id: 28
+  - id: name_028
     name: "\uAE40\uC9C0\uD55C"
-  - id: 29
+  - id: name_029
     name: "\uAE40\uC6B0\uC8FC"
-  - id: 30
+  - id: name_030
     name: "\uAE40\uC120\uD638"
-  - id: 31
+  - id: name_031
     name: "\uAE40\uC7AC\uC724"
-  - id: 32
+  - id: name_032
     name: "\uAE40\uC2B9\uD604"
-  - id: 33
+  - id: name_033
     name: "\uAE40\uBBFC\uD638"
-  - id: 34
+  - id: name_034
     name: "\uAE40\uC9C0\uD6C8"
-  - id: 35
+  - id: name_035
     name: "\uAE40\uC131\uD6C8"
-  - id: 36
+  - id: name_036
     name: "\uAE40\uBBFC\uC218"
-  - id: 37
+  - id: name_037
     name: "\uAE40\uD0DC\uBBFC"
-  - id: 38
+  - id: name_038
     name: "\uAE40\uB3C4\uACBD"
-  - id: 39
+  - id: name_039
     name: "\uAE40\uC8FC\uD615"
-  - id: 40
+  - id: name_040
     name: "\uAE40\uC9C4\uC6B0"
-  - id: 41
+  - id: name_041
     name: "\uAE40\uD558\uB298"
-  - id: 42
+  - id: name_042
     name: "\uAE40\uC815\uC6B0"
-  - id: 43
+  - id: name_043
     name: "\uAE40\uB3D9\uD558"
-  - id: 44
+  - id: name_044
     name: "\uAE40\uC900\uD601"
-  - id: 45
+  - id: name_045
     name: "\uAE40\uCC2C\uC601"
-  - id: 46
+  - id: name_046
     name: "\uAE40\uC7AC\uD604"
-  - id: 47
+  - id: name_047
     name: "\uAE40\uD0DC\uC6B0"
-  - id: 48
+  - id: name_048
     name: "\uAE40\uB3C4\uC6B4"
-  - id: 49
+  - id: name_049
     name: "\uAE40\uD0DC\uACBD"
-  - id: 50
+  - id: name_050
     name: "\uAE40\uC131\uBBFC"
-  - id: 51
+  - id: name_051
     name: "\uCD5C\uC9C0\uD604"
-  - id: 52
+  - id: name_052
     name: "\uC774\uB3C4\uD604"
-  - id: 53
+  - id: name_053
     name: "\uC774\uC2DC\uC6B0"
-  - id: 54
+  - id: name_054
     name: "\uC774\uC900\uC11C"
-  - id: 55
+  - id: name_055
     name: "\uC774\uC6B0\uC9C4"
-  - id: 56
+  - id: name_056
     name: "\uC774\uC7AC\uC774"
-  - id: 57
+  - id: name_057
     name: "\uC774\uC724\uD6C4"
-  - id: 58
+  - id: name_058
     name: "\uC774\uC815\uC6B0"
-  - id: 59
+  - id: name_059
     name: "\uC774\uC2B9\uBBFC"
-  - id: 60
+  - id: name_060
     name: "\uC774\uD604\uC131"
-  - id: 61
+  - id: name_061
     name: "\uC774\uC900\uD601"
-  - id: 62
+  - id: name_062
     name: "\uC774\uC740\uC6B0"
-  - id: 63
+  - id: name_063
     name: "\uC774\uC120\uC6B0"
-  - id: 64
+  - id: name_064
     name: "\uC774\uB3C4\uC601"
-  - id: 65
+  - id: name_065
     name: "\uC774\uD0DC\uC900"
-  - id: 66
+  - id: name_066
     name: "\uC774\uC900\uD6C4"
-  - id: 67
+  - id: name_067
     name: "\uD53C\uD558\uC2AC"
-  - id: 68
+  - id: name_068
     name: "\uC774\uC2B9\uD604"
-  - id: 69
+  - id: name_069
     name: "\uC774\uC131\uBBFC"
-  - id: 70
+  - id: name_070
     name: "\uC774\uBBFC\uD601"
-  - id: 71
+  - id: name_071
     name: "\uC774\uC9C4\uC6B0"
-  - id: 72
+  - id: name_072
     name: "\uC774\uC601\uC900"
-  - id: 73
+  - id: name_073
     name: "\uC774\uD0DC\uC591"
-  - id: 74
+  - id: name_074
     name: "\uC774\uC740\uC131"
-  - id: 75
+  - id: name_075
     name: "\uC774\uAC15\uC778"
-  - id: 76
+  - id: name_076
     name: "\uC774\uC7AC\uC6B1"
-  - id: 77
+  - id: name_077
     name: "\uC774\uD558\uC900"
-  - id: 78
+  - id: name_078
     name: "\uC774\uC131\uC9C4"
-  - id: 79
+  - id: name_079
     name: "\uC774\uD55C\uBCC4"
-  - id: 80
+  - id: name_080
     name: "\uC774\uD604\uC900"
-  - id: 81
+  - id: name_081
     name: "\uC774\uBBFC\uC131"
-  - id: 82
+  - id: name_082
     name: "\uC774\uADDC\uBE48"
-  - id: 83
+  - id: name_083
     name: "\uC774\uD0DC\uBBFC"
-  - id: 84
+  - id: name_084
     name: "\uC774\uB3C4\uC6D0"
-  - id: 85
+  - id: name_085
     name: "\uC774\uC9C0\uD658"
-  - id: 86
+  - id: name_086
     name: "\uC774\uC218\uD601"
-  - id: 87
+  - id: name_087
     name: "\uC774\uC900\uC601"
-  - id: 88
+  - id: name_088
     name: "\uC774\uC2B9\uC7AC"
-  - id: 89
+  - id: name_089
     name: "\uC774\uC11C\uC900"
-  - id: 90
+  - id: name_090
     name: "\uC774\uCC2C\uC6B0"
-  - id: 91
+  - id: name_091
     name: "\uC774\uAC15\uBBFC"
-  - id: 92
+  - id: name_092
     name: "\uC774\uC900\uAE30"
-  - id: 93
+  - id: name_093
     name: "\uC774\uC6B0\uBE48"
-  - id: 94
+  - id: name_094
     name: "\uC774\uD638\uC900"
-  - id: 95
+  - id: name_095
     name: "\uC774\uC740\uD638"
-  - id: 96
+  - id: name_096
     name: "\uC774\uD55C\uACB0"
-  - id: 97
+  - id: name_097
     name: "\uC774\uBBFC\uAE30"
-  - id: 98
+  - id: name_098
     name: "\uC774\uC11C\uC9C4"
-  - id: 99
+  - id: name_099
     name: "\uC774\uC7AC\uBBFC"
-  - id: 100
+  - id: name_100
     name: "\uC774\uD6A8\uC900"
-  - id: 101
+  - id: name_101
     name: "\uBC15\uC11C\uC900"
-  - id: 102
+  - id: name_102
     name: "\uBC15\uC9C0\uD6C4"
-  - id: 103
+  - id: name_103
     name: "\uBC15\uAC74\uC6B0"
-  - id: 104
+  - id: name_104
     name: "\uBC15\uC608\uC900"
-  - id: 105
+  - id: name_105
     name: "\uBC15\uC2DC\uD604"
-  - id: 106
+  - id: name_106
     name: "\uBC15\uC131\uC900"
-  - id: 107
+  - id: name_107
     name: "\uCD5C\uBBFC\uC11C"
-  - id: 108
+  - id: name_108
     name: "\uCD5C\uC6B0\uC11D"
-  - id: 109
+  - id: name_109
     name: "\uCD5C\uC2B9\uC6B0"
-  - id: 110
+  - id: name_110
     name: "\uCD5C\uAC15\uBBFC"
-  - id: 111
+  - id: name_111
     name: "\uC815\uC9C0\uC6B0"
-  - id: 112
+  - id: name_112
     name: "\uC815\uD604\uC900"
-  - id: 113
+  - id: name_113
     name: "\uC815\uBBFC\uADDC"
-  - id: 114
+  - id: name_114
     name: "\uC815\uC6B0\uC9C4"
-  - id: 115
+  - id: name_115
     name: "\uC815\uC724\uC6B0"
-  - id: 116
+  - id: name_116
     name: "\uBC15\uBBFC\uD601"
-  - id: 117
+  - id: name_117
     name: "\uBC15\uC218\uD638"
-  - id: 118
+  - id: name_118
     name: "\uBC15\uC720\uC900"
-  - id: 119
+  - id: name_119
     name: "\uCD5C\uBBFC\uAE30"
-  - id: 120
+  - id: name_120
     name: "\uCD5C\uC9C0\uD601"
-  - id: 121
+  - id: name_121
     name: "\uC815\uC7AC\uD6C8"
-  - id: 122
+  - id: name_122
     name: "\uC815\uB2E4\uC628"
-  - id: 123
+  - id: name_123
     name: "\uBC15\uB3C4\uC728"
-  - id: 124
+  - id: name_124
     name: "\uBC15\uC9C0\uBBFC"
-  - id: 125
+  - id: name_125
     name: "\uBC15\uC7AC\uC724"
-  - id: 126
+  - id: name_126
     name: "\uCD5C\uB3D9\uD604"
-  - id: 127
+  - id: name_127
     name: "\uCD5C\uC5F0\uC6B0"
-  - id: 128
+  - id: name_128
     name: "\uCD5C\uC7AC\uBBFC"
-  - id: 129
+  - id: name_129
     name: "\uC815\uB2E4\uD6C8"
-  - id: 130
+  - id: name_130
     name: "\uC815\uC2DC\uC6D0"
-  - id: 131
+  - id: name_131
     name: "\uBC15\uC0C1\uC6B0"
-  - id: 132
+  - id: name_132
     name: "\uBC15\uACBD\uC900"
-  - id: 133
+  - id: name_133
     name: "\uBC15\uC900\uC601"
-  - id: 134
+  - id: name_134
     name: "\uCD5C\uD558\uC900"
-  - id: 135
+  - id: name_135
     name: "\uCD5C\uC9C4\uD601"
-  - id: 136
+  - id: name_136
     name: "\uC815\uD0DC\uC591"
-  - id: 137
+  - id: name_137
     name: "\uC815\uBBFC\uD638"
-  - id: 138
+  - id: name_138
     name: "\uBC15\uC885\uD601"
-  - id: 139
+  - id: name_139
     name: "\uBC15\uAC74\uD558"
-  - id: 140
+  - id: name_140
     name: "\uCD5C\uD55C\uACB0"
-  - id: 141
+  - id: name_141
     name: "\uCD5C\uC720\uC131"
-  - id: 142
+  - id: name_142
     name: "\uC815\uD0DC\uC724"
-  - id: 143
+  - id: name_143
     name: "\uC815\uD574\uC778"
-  - id: 144
+  - id: name_144
     name: "\uBC15\uCC2C\uD76C"
-  - id: 145
+  - id: name_145
     name: "\uBC15\uB3C4\uACB8"
-  - id: 146
+  - id: name_146
     name: "\uCD5C\uC6D0\uC6B0"
-  - id: 147
+  - id: name_147
     name: "\uCD5C\uC724\uC131"
-  - id: 148
+  - id: name_148
     name: "\uC815\uD604\uC6B0"
-  - id: 149
+  - id: name_149
     name: "\uC815\uB3D9\uC724"
-  - id: 150
+  - id: name_150
     name: "\uBC15\uD0DC\uC900"
-  - id: 151
+  - id: name_151
     name: "\uAC15\uC6B0\uC9C4"
-  - id: 152
+  - id: name_152
     name: "\uAC15\uBBFC\uC7AC"
-  - id: 153
+  - id: name_153
     name: "\uC870\uD604\uC6B0"
-  - id: 154
+  - id: name_154
     name: "\uC870\uC724\uC131"
-  - id: 155
+  - id: name_155
     name: "\uC724\uC11C\uC9C4"
-  - id: 156
+  - id: name_156
     name: "\uC724\uC900\uC6B0"
-  - id: 157
+  - id: name_157
     name: "\uC7A5\uB3C4\uD6C8"
-  - id: 158
+  - id: name_158
     name: "\uC7A5\uC9C0\uC548"
-  - id: 159
+  - id: name_159
     name: "\uC784\uD604\uC9C4"
-  - id: 160
+  - id: name_160
     name: "\uC784\uC11C\uD558"
-  - id: 161
+  - id: name_161
     name: "\uD55C\uACB0\uC774"
-  - id: 162
+  - id: name_162
     name: "\uD55C\uC9C0\uBBFC"
-  - id: 163
+  - id: name_163
     name: "\uC624\uC2B9\uD604"
-  - id: 164
+  - id: name_164
     name: "\uC624\uC720\uCC2C"
-  - id: 165
+  - id: name_165
     name: "\uC11C\uB3D9\uD558"
-  - id: 166
+  - id: name_166
     name: "\uC11C\uC9C4\uC6B0"
-  - id: 167
+  - id: name_167
     name: "\uC2E0\uC7AC\uC724"
-  - id: 168
+  - id: name_168
     name: "\uC2E0\uD558\uC900"
-  - id: 169
+  - id: name_169
     name: "\uAD8C\uB3C4\uC601"
-  - id: 170
+  - id: name_170
     name: "\uAD8C\uD0DC\uD558"
-  - id: 171
+  - id: name_171
     name: "\uD669\uC8FC\uD638"
-  - id: 172
+  - id: name_172
     name: "\uD669\uC2DC\uD6C4"
-  - id: 173
+  - id: name_173
     name: "\uC1A1\uBBFC\uADDC"
-  - id: 174
+  - id: name_174
     name: "\uC1A1\uC544\uC900"
-  - id: 175
+  - id: name_175
     name: "\uC804\uC6B0\uBE48"
-  - id: 176
+  - id: name_176
     name: "\uC804\uC774\uC900"
-  - id: 177
+  - id: name_177
     name: "\uD64D\uC900\uAE30"
-  - id: 178
+  - id: name_178
     name: "\uCD5C\uC11C\uC724"
-  - id: 179
+  - id: name_179
     name: "\uC720\uD558\uC724"
-  - id: 180
+  - id: name_180
     name: "\uC720\uC2B9\uD638"
-  - id: 181
+  - id: name_181
     name: "\uACE0\uD0DC\uC591"
-  - id: 182
+  - id: name_182
     name: "\uACE0\uC740\uCC2C"
-  - id: 183
+  - id: name_183
     name: "\uBB38\uC9C0\uD6C8"
-  - id: 184
+  - id: name_184
     name: "\uBB38\uAC15\uC6B0"
-  - id: 185
+  - id: name_185
     name: "\uC591\uC6B0\uC8FC"
-  - id: 186
+  - id: name_186
     name: "\uC591\uC900\uBAA8"
-  - id: 187
+  - id: name_187
     name: "\uBC31\uD604\uC6B0"
-  - id: 188
+  - id: name_188
     name: "\uBC31\uC11C\uC9C4"
-  - id: 189
+  - id: name_189
     name: "\uBC30\uC131\uC724"
-  - id: 190
+  - id: name_190
     name: "\uBC15\uC11C\uC601"
-  - id: 191
+  - id: name_191
     name: "\uB0A8\uB3C4\uC724"
-  - id: 192
+  - id: name_192
     name: "\uB0A8\uAD81\uC900"
-  - id: 193
+  - id: name_193
     name: "\uC2EC\uC7AC\uD604"
-  - id: 194
+  - id: name_194
     name: "\uC2EC\uADDC\uBBFC"
-  - id: 195
+  - id: name_195
     name: "\uB178\uC774\uC548"
-  - id: 196
+  - id: name_196
     name: "\uB178\uC2B9\uC6B0"
-  - id: 197
+  - id: name_197
     name: "\uD558\uC900\uC218"
-  - id: 198
+  - id: name_198
     name: "\uD558\uB3C4\uC601"
-  - id: 199
+  - id: name_199
     name: "\uACFD\uBBFC\uC131"
-  - id: 200
+  - id: name_200
     name: "\uC131\uC9C4\uC6B0"

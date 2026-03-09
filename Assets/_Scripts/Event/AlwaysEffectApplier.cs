@@ -30,7 +30,7 @@ public static class AlwaysEffectApplier
     {
         if (StudentManager.Instance == null) return;
 
-        AlwaysEffectTableSO effectTable = CachedSOData.AlwaysEffectTable;
+        AlwaysEffectTableSO effectTable = CachedSOData.Get<AlwaysEffectTableSO>();
         if (effectTable == null) return;
 
         foreach (Student student in StudentManager.Instance.Students)
@@ -59,7 +59,7 @@ public static class AlwaysEffectApplier
         if (string.IsNullOrEmpty(eventRow.effectId)) return false;
         if (eventRow.type == "roster") return false; // 로스터 타입은 RecruitmentManager가 처리
 
-        AlwaysEffectTableSO effectTable = CachedSOData.AlwaysEffectTable;
+        AlwaysEffectTableSO effectTable = CachedSOData.Get<AlwaysEffectTableSO>();
         if (effectTable == null)
         {
             Debug.LogWarning("[AlwaysEffectApplier] AlwaysEffectTable이 없습니다.");

@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ecd8ad4fcd0362546a5c43a074518a67, type: 3}
+  m_Name: SO_GraduateGradeTable
+  m_EditorClassIdentifier: Assembly-CSharp::GraduateGradeTableSO
+  _rows:
+  - id: grade_001
+    grade: "1\uB4F1\uAE09"
+    statAll: 400
+    potentialMin: 85
+    trustLevel: 4
+    semiFinalPlus: 2
+  - id: grade_002
+    grade: "2\uB4F1\uAE09"
+    statAll: 300
+    potentialMin: 80
+    trustLevel: 4
+    semiFinalPlus: 2
+  - id: grade_003
+    grade: "3\uB4F1\uAE09"
+    statAll: 250
+    potentialMin: 75
+    trustLevel: 3
+    semiFinalPlus: 1
+  - id: grade_004
+    grade: "4\uB4F1\uAE09"
+    statAll: 150
+    potentialMin: 70
+    trustLevel: 3
+    semiFinalPlus: 1

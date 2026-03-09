@@ -69,7 +69,8 @@ public class MatchGameManager : MonoBehaviour
         List<Student> field = BuildFieldPlayers();
         List<Student> bench = BuildBenchPlayers(field);
         int currentDay = GameManager.Instance != null ? GameManager.Instance.DayIndex : 1;
-        EnemyStatRow enemyStat = GameData.EnemyStatTable.GetOrNull(currentDay) ?? new EnemyStatRow();
+        EnemyStatTableSO enemyTable = GameData.Get<EnemyStatTableSO>();
+        EnemyStatRow enemyStat = enemyTable.GetOrNull(currentDay) ?? new EnemyStatRow();
         _context = new MatchContext(upTeam, downTeam, mySchoolName, field, bench, enemyStat);
         _isMatchRunning = true;
         _progressStageIndex = 0;
