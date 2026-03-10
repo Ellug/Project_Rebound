@@ -1,4 +1,4 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class SaveManager : Singleton<SaveManager>
@@ -11,7 +11,7 @@ public class SaveManager : Singleton<SaveManager>
 
         if (data == null)
         {
-            Debug.LogWarning("·Îµå ½ÇÆĞ");
+            Debug.LogWarning("ë¡œë“œ ì‹¤íŒ¨");
             return;
         }
 
@@ -21,7 +21,6 @@ public class SaveManager : Singleton<SaveManager>
         {
             MoneyManager.Instance.ApplySaveData(data.gold, data.reputation);
         }
-
         SceneManager.LoadScene(sceneName);
     }
 
@@ -34,13 +33,13 @@ public class SaveManager : Singleton<SaveManager>
     {
         if (CurrentData == null)
         {
-            Debug.LogWarning("ÀúÀåÇÒ µ¥ÀÌÅÍ ¾øÀ½");
+            Debug.LogWarning("ì €ì¥í•  ë°ì´í„° ì—†ìŒ");
             return;
         }
 
         CurrentData.gold = MoneyManager.Instance.Gold;
         CurrentData.reputation = MoneyManager.Instance.Reputation;
-
+        CurrentData.unlockedNodeIds = HeadCoachManager.Instance.GetUnlockedNodeIds();
         SaveSystem.Instance.Save(CurrentData);
     }
 
