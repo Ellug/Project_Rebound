@@ -19,6 +19,38 @@ public sealed class FacilityUpgradeRow
 public sealed class FacilityUpgradeTableSO : ScriptableObject
 {
     [SerializeField] private List<FacilityUpgradeRow> _rows = new();
+    // Á¶È¸¿ë µñ¼Å³Ê¸®
+    private Dictionary<string, List<FacilityUpgradeRow>> _byFacility;
+    void OnEnable()
+    {
+        BuildCache();
+    }
+
+    private void BuildCache()
+    {
+        _byFacility = new Dictionary<string, List<FacilityUpgradeRow>>();
+
+        foreach (var row in _rows)
+        {
+            if (!_byFacility.TryGetValue(row.facilityReq, out var list))
+            {
+                list = new List<FacilityUpgradeRow>();
+                _byFacility[row.facilityReq] = list;
+            }
+
+            list.Add(row);
+        }
+    }
+
+    public FacilityUpgradeRow Get(string facilityReq, int level)
+    {
+        if (_byFacility.TryGetValue(facilityReq, out var list))
+        {
+            return list.Find(x => x.facilityLv == level);
+        }
+
+        return null;
+    }
 
     public IReadOnlyList<FacilityUpgradeRow> Rows => _rows;
 

@@ -32,8 +32,7 @@ public class StartManager : MonoBehaviour
         var allTableRefs = CollectTableReferences();
         if (allTableRefs.Count == 0)
         {
-            _statusText.text = "Missing table config";
-            Debug.LogError("[StartManager] No table references found. Check TableLoadConfig.");
+            FailLoading("Missing table config", "[StartManager] No table references found. Check TableLoadConfig.");
             yield break;
         }
 
@@ -122,7 +121,19 @@ public class StartManager : MonoBehaviour
 
         for (int i = 0; i < allTableRefs.Count; i++)
         {
-            yield return LoadTable(allTableRefs[i], CachedSOData.RegisterTable);
+            bool loadSucceeded = false;
+            yield return LoadTable(allTableRefs[i], table =>
+            {
+                CachedSOData.RegisterTable(table);
+                loadSucceeded = true;
+            });
+
+            if (!loadSucceeded)
+            {
+                FailLoading("Failed to load game data", $"[StartManager] Failed to load required table: {allTableRefs[i].AssetGUID}");
+                yield break;
+            }
+
             baseProgress += tableStep;
             _loadingSlider.value = Mathf.Min(baseProgress, 0.9f);
         }
@@ -156,11 +167,8 @@ public class StartManager : MonoBehaviour
         var seenGuids = new HashSet<string>();
 
         if (_tableLoadConfig == null)
-            _tableLoadConfig = Resources.Load<TableLoadConfigSO>("TableLoadConfig");
-
-        if (_tableLoadConfig == null)
         {
-            Debug.LogError("[StartManager] TableLoadConfig not found.");
+            Debug.LogError("[StartManager] TableLoadConfig is not assigned.");
             return result;
         }
 
@@ -196,5 +204,12 @@ public class StartManager : MonoBehaviour
         {
             Debug.LogError($"[LoadTable] Failed to load {assetRef.AssetGUID}: {loadHandle.Status}");
         }
+    }
+
+    private void FailLoading(string statusMessage, string logMessage)
+    {
+        _statusText.text = statusMessage;
+        _loadingSlider.value = 0f;
+        Debug.LogError(logMessage);
     }
 }

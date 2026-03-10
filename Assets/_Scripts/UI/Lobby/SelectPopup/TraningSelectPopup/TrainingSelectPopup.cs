@@ -348,18 +348,67 @@ public class TrainingSelectPopup : UIPopup
         if (data == null || students == null)
             return;
 
+        // 현재 시설 레벨
+        int schoolLv = FacilitySystem.Instance.GetLevel("school");
+        int gymLv = FacilitySystem.Instance.GetLevel("gym");
+        int cafeteriaLv = FacilitySystem.Instance.GetLevel("cafeteria");
+        int counselingLv = FacilitySystem.Instance.GetLevel("counselingcenter");
+
+        // 필요 시설 레벨
+        int requiredLv = data.requiredFacilityLv;
+
+        // 시설 레벨 차이
+        int schoolDiff = Mathf.Max(0, schoolLv - requiredLv);
+        int gymDiff = Mathf.Max(0, gymLv - requiredLv);
+        int cafeteriaDiff = Mathf.Max(0, cafeteriaLv - requiredLv);
+        int counselingDiff = Mathf.Max(0, counselingLv - requiredLv);
+
+        // 시설 보너스 %라 0.01f 곱함
+        float schoolBonus = FacilitySystem.Instance.GetConditionDecayBonus() * 0.01f;
+        float gymBonus = FacilitySystem.Instance.GetTrainingExpBonus() * 0.01f;
+        float cafeteriaBonus = FacilitySystem.Instance.GetCafeteriaBonus() * 0.01f;
+        float counselingBonus = FacilitySystem.Instance.GetMentalBonus() * 0.01f;
+
+        // 임시 감독노드 나중에 감독노드 들어오면 삭제 예정
+        float directorBonusTest = 0f;
+
+        // 훈련시 보너스들
+        float statBonus = (gymBonus * gymDiff) + directorBonusTest;
+        float conditionBonus = (schoolBonus * schoolDiff) + (cafeteriaBonus * cafeteriaDiff) + directorBonusTest;
+        float mentalBonus = (counselingBonus * counselingDiff) + (cafeteriaBonus * cafeteriaDiff) + directorBonusTest;
+
         foreach (Student student in students)
         {
             if (student == null) continue;
 
-            student.condition -= data.conditionDelta;
+            // 컨디션
+            if (data.conditionDelta >= 0)
+            {
+                student.condition -= data.conditionDelta;
+            }
+            else
+            {
+                int recover = -data.conditionDelta;
+                recover += Mathf.RoundToInt(recover * conditionBonus);
+                student.condition += recover;
+            }
             student.condition = Student.ClampCondition(student.condition);
 
-            student.shoot += Mathf.RoundToInt(data.shootDelta);
-            student.speed += Mathf.RoundToInt(data.speedDelta);
-            student.jump += Mathf.RoundToInt(data.jumpDelta);
-            student.stamina += Mathf.RoundToInt(data.staminaDelta);
-            student.mental += data.mentalDelta;
+            // 스탯
+            student.shoot += Mathf.RoundToInt(data.shootDelta + data.shootDelta * statBonus);
+            student.speed += Mathf.RoundToInt(data.speedDelta + data.speedDelta * statBonus);
+            student.jump += Mathf.RoundToInt(data.jumpDelta + data.jumpDelta * statBonus);
+            student.stamina += Mathf.RoundToInt(data.staminaDelta + data.staminaDelta * statBonus);
+
+            //멘탈
+            if (data.mentalDelta >= 0)
+            {
+                student.mental += Mathf.RoundToInt(data.mentalDelta + data.mentalDelta * mentalBonus);
+            }
+            else
+            {
+                student.mental += data.mentalDelta;
+            }
 
             if (StudentManager.Instance != null)
                 StudentManager.Instance.NotifyStudentModified(student);

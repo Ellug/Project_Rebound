@@ -14,6 +14,7 @@ public class TrainingButtonData
     public Sprite previewSprite;                    // 팝업창에 표시할 이미지
     public bool requiresStudentSelection = true;    // 학생 선택이 필요한 훈련인지 (기본: true)
     public int maxSelectCount = 0;                  // 학생 선택 최대 인원 (0이면 무제한)
+    public int requiredFacilityLv;                  // 필요 시설레벨
 
     // CSV 기반 실제 적용 수치
     public float shootDelta;

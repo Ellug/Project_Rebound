@@ -11,7 +11,7 @@ public class LoadUI : MonoBehaviour
 
     void OnEnable()
     {
-        Debug.Log("LoadUI OnEnable ½ÇÇà");
+        Debug.Log("LoadUI OnEnable ì‹¤í–‰");
         LoadList();
         if (SaveSystem.Instance != null)
         {
@@ -95,13 +95,13 @@ public class LoadUI : MonoBehaviour
 
     public void OnClickLoad(int slotIndex)
     {
-        Debug.Log($"·Îµå ¿äÃ»: {slotIndex}");
+        Debug.Log($"ë¡œë“œ ìš”ì²­: {slotIndex}");
         SaveManager.Instance.LoadSlot(slotIndex, "Lobby");
     }
 
     public void OnClickDelete(int slotIndex)
     {
-        Debug.Log($"»èÁ¦ ¿äÃ»: {slotIndex}");
+        Debug.Log($"ì‚­ì œ ìš”ì²­: {slotIndex}");
         SaveSystem.Instance.Delete(slotIndex);
     }
 }
