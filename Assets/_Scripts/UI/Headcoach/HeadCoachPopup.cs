@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -17,16 +18,18 @@ public class HeadCoachPopup : UIBase
 
     [Header("중단 영역 - 스크롤")]
     // ScrollRect: 3개 레인을 감싸는 스크롤 뷰
-    // 진입 시 스크롤 초점을 최하단(1티어 시작점)에 맞춤 (기획서 4-1. 중단 영역)
+    // 진입 시 스크롤 초점을 최하단(1티어 시작점)에 맞춤
     [SerializeField] private ScrollRect _laneScrollRect;
 
     [Header("중단 영역 - 카테고리별 레인")]
-    [SerializeField] private HeadCoachNodeSlot _nodeSlotPrefab;
     [SerializeField] private Transform _attackLaneRoot;
     [SerializeField] private Transform _defenseLaneRoot;
     [SerializeField] private Transform _supportLaneRoot;
-    [SerializeField] private float _slotHeight = 120f;  // 슬롯 하나의 높이
-    [SerializeField] private float _slotSpacing = 8f;   // 슬롯 간 간격
+
+    [Header("티어별 해금 현황")]
+    // 티어별 해금 수 / 전체 노드 수 표시 (예: 2/5)
+    // 티어 수만큼 Inspector에서 연결
+    [SerializeField] private List<TMP_Text> _txtTierUnlockCounts;
 
     [Header("하단 영역 - 노드 상세")]
     [SerializeField] private HeadCoachNodeInfoPopup _nodeInfoPopup;
@@ -55,7 +58,7 @@ public class HeadCoachPopup : UIBase
         MoneyManager.Instance.OnReputationChanged += RefreshFameArea;
         RefreshAll();
 
-        // 기획서 4-1: 진입 시 스크롤 초점을 최하단(1티어 시작점)에 맞춤
+        // 진입 시 스크롤 초점을 최하단(1티어 시작점)에 맞춤
         StartCoroutine(ScrollToBottomNextFrame());
     }
 
@@ -72,6 +75,7 @@ public class HeadCoachPopup : UIBase
     {
         RefreshFameArea();
         RefreshNodeLanes();
+        RefreshTierUnlockCounts();
     }
 
     // 상단 명성치 및 카테고리별 해금 현황 갱신
@@ -88,6 +92,46 @@ public class HeadCoachPopup : UIBase
         SetText(_txtSupportUnlockCount, $"{supportCount}");
     }
 
+    // 티어별 해금 수 / 전체 노드 수 갱신 (예: 2/5)
+    private void RefreshTierUnlockCounts()
+    {
+        if (_txtTierUnlockCounts == null || _txtTierUnlockCounts.Count == 0) return;
+
+        var tierGroups = new Dictionary<int, (int unlocked, int total)>();
+
+        foreach (HeadCoachNode node in HeadCoachManager.Instance.GetNodesByCategory(NodeCategory.Attack))
+            AddToTierGroup(tierGroups, node);
+        foreach (HeadCoachNode node in HeadCoachManager.Instance.GetNodesByCategory(NodeCategory.Defense))
+            AddToTierGroup(tierGroups, node);
+        foreach (HeadCoachNode node in HeadCoachManager.Instance.GetNodesByCategory(NodeCategory.Support))
+            AddToTierGroup(tierGroups, node);
+
+        // tierId 오름차순으로 정렬 후 텍스트에 반영
+        var sortedTiers = new List<int>(tierGroups.Keys);
+        sortedTiers.Sort();
+
+        for (int i = 0; i < _txtTierUnlockCounts.Count; i++)
+        {
+            if (i >= sortedTiers.Count)
+            {
+                SetText(_txtTierUnlockCounts[i], string.Empty);
+                continue;
+            }
+
+            int tierId = sortedTiers[i];
+            var (unlocked, total) = tierGroups[tierId];
+            SetText(_txtTierUnlockCounts[i], $"{unlocked}/{total}");
+        }
+    }
+
+    private static void AddToTierGroup(Dictionary<int, (int, int)> groups, HeadCoachNode node)
+    {
+        if (!groups.TryGetValue(node.TierId, out var counts))
+            counts = (0, 0);
+
+        groups[node.TierId] = (counts.Item1 + (node.IsUnlocked ? 1 : 0), counts.Item2 + 1);
+    }
+
     // 카테고리별 레인 노드 슬롯 갱신
     private void RefreshNodeLanes()
     {
@@ -100,35 +144,47 @@ public class HeadCoachPopup : UIBase
     {
         if (laneRoot == null) return;
 
-        foreach (Transform child in laneRoot)
-            Destroy(child.gameObject);
-
-        var nodes = new System.Collections.Generic.List<HeadCoachNode>(
+        var nodes = new List<HeadCoachNode>(
             HeadCoachManager.Instance.GetNodesByCategory(category));
 
-        int count = nodes.Count;
-        float step = _slotHeight + _slotSpacing;
-
-        // 1티어가 최하단에 오도록 아래(y=0)에서 위로 쌓음
-        // i=0이 가장 아래, i=count-1이 가장 위
-        for (int i = 0; i < count; i++)
+        // 미리 배치된 슬롯을 순서대로 수집
+        var slots = new List<HeadCoachNodeSlot>();
+        foreach (Transform child in laneRoot)
         {
-            HeadCoachNodeSlot slot = Instantiate(_nodeSlotPrefab, laneRoot);
-            slot.Setup(nodes[i], OnNodeSelected);
-
-            RectTransform rt = slot.GetComponent<RectTransform>();
-            if (rt == null) continue;
-
-            rt.anchorMin = new Vector2(0f, 0f);
-            rt.anchorMax = new Vector2(1f, 0f);
-            rt.pivot = new Vector2(0.5f, 0f);
-            rt.sizeDelta = new Vector2(0f, _slotHeight);
-            rt.anchoredPosition = new Vector2(0f, i * step);
+            HeadCoachNodeSlot slot = child.GetComponent<HeadCoachNodeSlot>();
+            if (slot != null)
+                slots.Add(slot);
         }
 
-        // Lane RectTransform 높이를 슬롯 전체 높이에 맞게 조정
-        if (laneRoot is RectTransform laneRt)
-            laneRt.sizeDelta = new Vector2(laneRt.sizeDelta.x, count > 0 ? count * step - _slotSpacing : 0f);
+        int count = Mathf.Min(nodes.Count, slots.Count);
+        for (int i = 0; i < count; i++)
+        {
+            slots[i].gameObject.SetActive(true);
+            slots[i].Setup(nodes[i], OnNodeSelected);
+        }
+
+        // 슬롯 수보다 노드가 적으면 남는 슬롯 비활성화
+        for (int i = count; i < slots.Count; i++)
+            slots[i].gameObject.SetActive(false);
+
+        RefreshConnectors(laneRoot);
+    }
+
+    // 레인 내 미리 배치된 커넥터 해금 상태에 따라 색상 갱신
+    private static void RefreshConnectors(Transform laneRoot)
+    {
+        foreach (Transform child in laneRoot)
+        {
+            HeadCoachNodeConnector connector = child.GetComponent<HeadCoachNodeConnector>();
+            if (connector == null) continue;
+
+            HeadCoachNode fromNode = HeadCoachManager.Instance.GetNode(connector.fromNodeId);
+            HeadCoachNode toNode = HeadCoachManager.Instance.GetNode(connector.toNodeId);
+
+            if (fromNode == null || toNode == null) continue;
+
+            connector.Refresh(fromNode.IsUnlocked && toNode.IsUnlocked);
+        }
     }
 
     // 노드 선택 → 하단 상세 패널 표시

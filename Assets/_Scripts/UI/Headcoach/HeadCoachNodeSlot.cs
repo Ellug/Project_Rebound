@@ -13,8 +13,8 @@ public class HeadCoachNodeSlot : MonoBehaviour
     [SerializeField] private GameObject _unlockedBadge;
 
     [Header("카테고리 색상")]
-    [SerializeField] private Image _nodeBackground;                             // 색상을 입힐 배경 Image
-    [SerializeField] private Color _attackColor = new(0.85f, 0.25f, 0.25f);  // 빨강
+    [SerializeField] private Image _nodeBackground;                           // 색상을 입힐 배경 Image
+    [SerializeField] private Color _attackColor = new(0.85f, 0.25f, 0.25f);   // 빨강
     [SerializeField] private Color _defenseColor = new(0.25f, 0.50f, 0.85f);  // 파랑
     [SerializeField] private Color _supportColor = new(0.90f, 0.75f, 0.20f);  // 노랑
 
