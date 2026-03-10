@@ -1,71 +1,356 @@
-using UnityEngine;
+ï»¿using System;
 using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
-// ÀüÃ¼ UIÀÇ ½ºÅÃ °ü¸® ¹× µÚ·Î°¡±â ÀÔ·ÂÀ» Á¦¾îÇÏ´Â ¸Å´ÏÀú
 public class UIManager : Singleton<UIManager>
 {
-    // UI °ü¸®¿ë ½ºÅÃ
+    // UI ê´€ë¦¬ìš© ìŠ¤íƒ
     private Stack<UIBase> _uiStack = new Stack<UIBase>();
 
-    // ÆË¾÷µéÀÌ »ı¼ºµÉ ºÎ¸ğ Äµ¹ö½º (ÀÎ½ºÆåÅÍ¿¡¼­ ÇÒ´ç)
-    [SerializeField] private Transform _canvasRoot;
+    [Header("Settings")]
+    [SerializeField] private Transform _canvasRoot;           // íŒì—…ì´ ìƒì„±ë  ìº”ë²„ìŠ¤
 
-    // ½Ì±ÛÅæ ÃÊ±âÈ­ ½Ã È£Ãâ
+    [Header("Popup Prefabs")]
+    [SerializeField] private UIPopup _uiPopupPrefab;
+
+    [Header("Popup Defaults")]
+    [SerializeField] private Sprite _defaultPopupPreviewSprite;
+
+    [Header("Student Select Prefab")]
+    [SerializeField] private StudentSelectPopup _studentSelectPopupPrefab;
+
+    private InputSystem_Actions _input;
+
     protected override void OnSingletonAwake()
     {
-        // ¾À ÀüÈ¯ ½Ã ½ºÅÃ ÃÊ±âÈ­°¡ ÇÊ¿äÇÏ´Ù¸é ÀÌº¥Æ® ¿¬°á µî Ã³¸®
+        // 1. ì¸í’‹ í´ë˜ìŠ¤ ìƒì„±
+        _input = new InputSystem_Actions();
+
+        // 2. ì´ë²¤íŠ¸ ë°”ì¸ë”©
+        // UIë§µì˜ Cancelì•¡ì…˜ì´ ë°œë™ë˜ë©´ HandleBackKey í•¨ìˆ˜ ì‹¤í–‰
+        _input.UI.Cancel.performed += ctx => HandleBackKey();
+
+        SceneManager.sceneLoaded += HandleSceneLoaded;
+        RebindCanvasRoot();
     }
 
-    private void Update()
+    // ë§¤ë‹ˆì €ê°€ í™œì„±í™”ë  ë•Œ ì¸í’‹ë„ ì¼œê¸°
+    private void OnEnable()
     {
-        // ¾Èµå·ÎÀÌµå ¹é¹öÆ° ÀÔ·Â °¨Áö
-        if (Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame)
+        _input?.Enable();
+    }
+
+    // ë§¤ë‹ˆì €ê°€ ë¹„í™œì„±í™”ë  ë•Œ ì¸í’‹ë„ ë„ê¸°
+    private void OnDisable()
+    {
+        _input?.Disable();
+    }
+
+    private void OnDestroy()
+    {
+        SceneManager.sceneLoaded -= HandleSceneLoaded;
+    }
+
+    // ì™¸ë¶€ì—ì„œ ìº”ë²„ìŠ¤ ë£¨íŠ¸ ì°¸ì¡° ì‹œ ì‚¬ìš© (RecruitmentManager ë“±)
+    public Transform GetCanvasRoot() => _canvasRoot;
+
+    private void HandleBackKey()
+    {
+        if (_messengerStack.Count > 0)
         {
-            if (_uiStack.Count > 0)
-            {
-                // ½ºÅÃ ÃÖ»ó´Ü UIÀÇ µÚ·Î°¡±â ·ÎÁ÷ ¼öÇà
-                _uiStack.Peek().OnBackKey();
-            }
-            else
-            {
-                // ½ºÅÃ¿¡ UI°¡ ¾øÀ» ¶§ -> Á¾·á ÆË¾÷ ·ÎÁ÷
-                HandleExitInput();
-            }
+            _messengerStack.Peek().Close();
+            return;
+        }
+
+        if (_uiStack.Count > 0)
+        {
+            if (_uiStack.Peek().DisableBackKey) 
+                return;
+            // ìŠ¤íƒ ìµœìƒë‹¨ íŒì—…ì˜ ë’¤ë¡œê°€ê¸° ë¡œì§ ìˆ˜í–‰
+            _uiStack.Peek().OnBackKey();
+            return;
+        }
+
+        ShowPopup(new UIPopupRequest
+        {
+            Type = UIPopupRequest.PanelType.Default,
+            Title = "ê²Œì„ ì¢…ë£Œ",
+            Message = "ê²Œì„ì„ ì¢…ë£Œí•˜ì‹œê² ìŠµë‹ˆê¹Œ?",
+            ShowCancel = true,
+            OnPrimary = () => Application.Quit(),
+            OnCancel = null,
+            AutoCloseOnPrimary = true,
+            AutoCloseOnCancel = true
+        });
+    }
+
+    // UIPopupRequest ê²½ë¡œ
+    public UIPopup ShowPopup(UIPopupRequest request)
+    {
+        if (request == null) return null;
+
+        if (_uiPopupPrefab == null)
+        {
+            Debug.LogError("[UIManager] Popup Prefabì´ ì—°ê²°ë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤.");
+            return null;
+        }
+
+        if (!EnsureCanvasRoot()) return null;
+
+        ApplyPopupDefaults(request);
+
+        // 1. í”„ë¦¬íŒ¹ ìƒì„±
+        UIPopup popupInstance = Instantiate(_uiPopupPrefab, _canvasRoot, false);
+        popupInstance.transform.SetAsLastSibling(); // í•­ìƒ ìµœìƒë‹¨ì— í‘œì‹œ
+
+        // 2. ì´ˆê¸°í™” ë° ë°ì´í„° ì£¼ì…
+        popupInstance.Init();
+        popupInstance.Setup(request);
+        popupInstance.Open();
+
+        // 3. ìŠ¤íƒì— ì¶”ê°€
+        _uiStack.Push(popupInstance);
+
+        return popupInstance;
+    }
+
+    // ì „ì—­ ê¸°ë³¸ íŒì—… ê°’ ì ìš©
+    private void ApplyPopupDefaults(UIPopupRequest request)
+    {
+        if (request == null) return;
+        if (request.Type != UIPopupRequest.PanelType.Default) return;
+        if (request.PreviewSprite != null) return;
+
+        request.PreviewSprite = _defaultPopupPreviewSprite;
+    }
+
+    // PopupData ê²½ë¡œ (ê¸°ì¡´ í˜¸ì¶œ ìœ ì§€ìš© ì–´ëŒ‘í„°)
+    public void ShowPopup(PopupData data)
+    {
+        ShowPopup(PopupRequestAdapter.FromPopupData(data));
+    }
+
+
+    public void OpenStudentSelect(int maxSelectCount, Action<List<Student>> onSelected, Action onCancelled, StudentCardPreviewDelta previewDelta = default)
+    {
+        if (_studentSelectPopupPrefab == null)
+        {
+            Debug.LogWarning("[UIManager] _studentSelectPopupPrefabì´ nullì…ë‹ˆë‹¤.");
+            onCancelled?.Invoke();
+            return;
+        }
+
+        if (!EnsureCanvasRoot())
+        {
+            onCancelled?.Invoke();
+            return;
+        }
+
+        StudentSelectPopup popup = Instantiate(_studentSelectPopupPrefab, _canvasRoot, false);
+        popup.transform.SetAsLastSibling();
+
+        popup.SetMaxSelectCount(maxSelectCount);
+        popup.SetPreviewDelta(previewDelta);
+        popup.Init();
+        popup.Open();
+
+        popup.OnSelectionConfirmed -= HandleSelected;
+        popup.OnSelectionConfirmed += HandleSelected;
+
+        popup.OnCancelled -= HandleCancelled;
+        popup.OnCancelled += HandleCancelled;
+
+        void HandleSelected(List<Student> students)
+        {
+            popup.OnSelectionConfirmed -= HandleSelected;
+            popup.OnCancelled -= HandleCancelled;
+
+            onSelected?.Invoke(students);
+
+            popup.Close();
+            Destroy(popup.gameObject);
+        }
+
+        void HandleCancelled()
+        {
+            popup.OnSelectionConfirmed -= HandleSelected;
+            popup.OnCancelled -= HandleCancelled;
+
+            onCancelled?.Invoke();
+
+            popup.Close();
+            Destroy(popup.gameObject);
         }
     }
 
-    // UI ÇÁ¸®ÆÕÀ» ¹Ş¾Æ¼­ ¶ç¿ì°í ½ºÅÃ¿¡ Ãß°¡
-    public T Show<T>(T uiPrefab) where T : UIBase
+    // ë²”ìš© UI í‘œì‹œ
+    public T ShowUI<T>(T uiPrefab) where T : UIBase
     {
-        // ÀÎ½ºÅÏ½ºÈ­
-        T uiInstance = Instantiate(uiPrefab, _canvasRoot);
+        if (uiPrefab == null)
+        {
+            Debug.LogError("[UIManager] ShowUI ì‹¤íŒ¨: prefabì´ nullì…ë‹ˆë‹¤.");
+            return null;
+        }
 
-        uiInstance.Init();
-        uiInstance.Open();
+        if (!EnsureCanvasRoot())
+            return null;
 
-        // ½ºÅÃ¿¡ Çª½Ã
-        _uiStack.Push(uiInstance);
+        T instance = Instantiate(uiPrefab, _canvasRoot, false);
+        instance.transform.SetAsLastSibling();
 
-        return uiInstance;
+        instance.Init();
+        instance.Open();
+
+        _uiStack.Push(instance);
+        return instance;
     }
 
-    // ½ºÅÃ ÃÖ»ó´Ü UI ´İ±â
+    // ì¤‘ë³µ ìƒì„± ê°ì§€ìš©
+    public T ShowUIUnique<T>(T uiPrefab) where T : UIBase
+    {
+        foreach (var item in _uiStack)
+        {
+            if (item is T existing && existing != null)
+            {
+                existing.transform.SetAsLastSibling();
+                return existing;
+            }
+        }
+
+        return ShowUI(uiPrefab);
+    }
+
+    // ë‹«ê¸°
+    // ìŠ¤íƒ ìµœìƒë‹¨ UI ë‹«ê¸°
     public void CloseTop()
     {
         if (_uiStack.Count == 0) return;
 
-        // ½ºÅÃ¿¡¼­ Á¦°Å ¹× ´İ±â Ã³¸®
-        UIBase topUI = _uiStack.Pop();
-        topUI.Close();
-
-        // »ı¼ºµÈ °´Ã¼ ÆÄ±«
-        Destroy(topUI.gameObject);
+        UIBase top = _uiStack.Pop();
+        top.Close();
+        Destroy(top.gameObject);
     }
 
-    // ¾Û Á¾·á Ã³¸® ¶Ç´Â Á¾·á È®ÀÎ ÆË¾÷
-    private void HandleExitInput()
+    // íŠ¹ì • ì¸ìŠ¤í„´ìŠ¤ë¥¼ ë‹«ê¸° (Topì´ ë°”ë€ŒëŠ” ì¼€ì´ìŠ¤ ë°©ì§€)
+    public void Close(UIBase target)
     {
-        Debug.Log("Á¾·á ÆË¾÷ È£Ãâ ÇÊ¿ä");
+        if (target == null) return;
+
+        //nullì´ê±°ë‚˜ ìŠ¤íƒì— ì—†ìœ¼ë©´ ê·¸ëƒ¥ íŒŒê´´ë§Œ ìˆ˜í–‰
+        if (_uiStack.Count == 0)
+        {
+            target.Close();
+            Destroy(target.gameObject);
+            return;
+        }
+
+        if (_uiStack.Peek() == target)
+        {
+            CloseTop();
+            return;
+        }
+
+        // ì˜ˆì™¸ ì¼€ì´ìŠ¤: ì¤‘ê°„ì— ë¼ì–´ìˆëŠ” UI ì œê±°
+        Stack<UIBase> buffer = new Stack<UIBase>(_uiStack.Count);
+        bool removed = false;
+
+        while (_uiStack.Count > 0)
+        {
+            UIBase item = _uiStack.Pop();
+            if (item == target)
+            {
+                item.Close();
+                Destroy(item.gameObject);
+                removed = true;
+                break;
+            }
+
+            buffer.Push(item);
+        }
+
+        while (buffer.Count > 0)
+            _uiStack.Push(buffer.Pop());
+
+        if (!removed)
+        {
+            // ìŠ¤íƒì— ì—†ìœ¼ë©´ ê·¸ëƒ¥ íŒŒê´´ë§Œ ìˆ˜í–‰ (ì§ì ‘ Instantiateëœ íŒì—… ë“±)
+            target.Close();
+            Destroy(target.gameObject);
+        }
+    }
+
+    // ë©”ì‹ ì € ìŠ¤íƒ
+    private Stack<UIBase> _messengerStack = new Stack<UIBase>();
+
+    // ì°½ì´ ì—´ë¦´ ë•Œ ìŠ¤íƒì— ë„£ê¸°
+    public void PushMessenger(UIBase ui)
+    {
+        _messengerStack.Push(ui);
+    }
+
+    // ì°½ì´ ë‹«í ë•Œ ìŠ¤íƒì—ì„œ ë¹¼ê¸°
+    public void PopMessenger(UIBase ui)
+    {
+        if (_messengerStack.Count > 0 && _messengerStack.Peek() == ui)
+        {
+            _messengerStack.Pop();
+        }
+    }
+
+    // ìº”ë²„ìŠ¤ ë£¨íŠ¸ ê´€ë¦¬
+    private void HandleSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        RebindCanvasRoot();
+    }
+
+    private bool EnsureCanvasRoot()
+    {
+        if (IsCanvasRootValid())
+            return true;
+
+        RebindCanvasRoot();
+        if (IsCanvasRootValid())
+            return true;
+
+        Debug.LogError("[UIManager] Canvas Rootë¥¼ ì°¾ì§€ ëª»í•´ íŒì—…ì„ í‘œì‹œí•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤.");
+        return false;
+    }
+
+    private bool IsCanvasRootValid()
+    {
+        return _canvasRoot != null
+            && _canvasRoot.gameObject.scene.IsValid()
+            && _canvasRoot.gameObject.scene.isLoaded;
+    }
+
+    private void RebindCanvasRoot()
+    {
+        Scene activeScene = SceneManager.GetActiveScene();
+        Canvas[] canvases = FindObjectsByType<Canvas>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
+
+        for (int i = 0; i < canvases.Length; i++)
+        {
+            if (canvases[i] == null)
+                continue;
+
+            if (canvases[i].gameObject.scene == activeScene)
+            {
+                _canvasRoot = canvases[i].transform;
+                return;
+            }
+        }
+
+        if (canvases.Length > 0 && canvases[0] != null)
+            _canvasRoot = canvases[0].transform;
+    }
+
+    public void PushUI(UIBase ui)
+    {
+        if (ui != null && !_uiStack.Contains(ui))
+        {
+            _uiStack.Push(ui);
+        }
     }
 }

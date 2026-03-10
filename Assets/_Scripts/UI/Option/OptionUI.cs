@@ -1,0 +1,118 @@
+using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
+
+public class OptionUI : MonoBehaviour
+{
+    [SerializeField] private GameObject _optinonPanel;
+
+    [SerializeField] private Slider _bgmSlider;
+    [SerializeField] private Slider _effectSlider;
+
+    [SerializeField] private Toggle _bgmMuteToggle;
+    [SerializeField] private Toggle _effectMuteToggle;
+
+    [SerializeField] private TMP_Text _bgmValueText;
+    [SerializeField] private TMP_Text _effectValueText;
+
+    void Start()
+    {
+        InitUI();
+        BindEvents();
+    }
+
+    public void OptinonPanelOpen()
+    {
+        InitUI();
+        _optinonPanel.SetActive(true);
+    }
+
+    public void OptinonPanelClose()
+    {
+        _optinonPanel.SetActive(false);
+    }
+    private void InitUI()
+    {
+        float bgm = PlayerPrefs.GetFloat("BGM_VOL", 1f);
+        float effect = PlayerPrefs.GetFloat("EFFECT_VOL", 1f);
+
+        bool bgmMute = PlayerPrefs.GetInt("BGM_MUTE", 0) == 1;
+        bool effectMute = PlayerPrefs.GetInt("EFFECT_MUTE", 0) == 1;
+
+        _bgmSlider.value = bgm;
+        _effectSlider.value = effect;
+
+        _bgmMuteToggle.isOn = bgmMute;
+        _effectMuteToggle.isOn = effectMute;
+
+        // mute 상태면 슬라이더 비활성화
+        _bgmSlider.interactable = !bgmMute;
+        _effectSlider.interactable = !effectMute;
+
+        UpdateVolumeText();
+
+    }
+
+    private void BindEvents()
+    {
+        _bgmSlider.onValueChanged.AddListener(OnBgmVolumeChanged);
+        _effectSlider.onValueChanged.AddListener(OnEffectVolumeChanged);
+
+        _bgmMuteToggle.onValueChanged.AddListener(OnBgmMuteChanged);
+        _effectMuteToggle.onValueChanged.AddListener(OnEffectMuteChanged);
+    }
+
+    private void OnBgmVolumeChanged(float value)
+    {
+        SoundManager.Instance.SetVolume(SoundType.BGM, value);
+        UpdateVolumeText();
+    }
+
+    private void OnEffectVolumeChanged(float value)
+    {
+        SoundManager.Instance.SetVolume(SoundType.EFFECT, value);
+        UpdateVolumeText();
+    }
+
+    private void OnBgmMuteChanged(bool isMute)
+    {
+        _bgmSlider.interactable = !isMute;
+        SoundManager.Instance.SetBGMMute(isMute);
+
+        if (isMute)
+        {
+            _bgmValueText.text = "0";
+        }
+
+        else
+        {
+            UpdateVolumeText();
+        }
+    }
+
+    private void OnEffectMuteChanged(bool isMute)
+    {
+        _effectSlider.interactable = !isMute;
+        SoundManager.Instance.SetEffectMute(isMute);
+
+        if (isMute)
+        {
+            _effectValueText.text = "0";
+        }
+
+        else
+        {
+            UpdateVolumeText();
+        }
+    }
+
+    // 볼륨 텍스트 업데이트
+    private void UpdateVolumeText()
+    {
+        int bgm = Mathf.RoundToInt(_bgmSlider.value * 100f);
+        int effect = Mathf.RoundToInt(_effectSlider.value * 100f);
+
+        _bgmValueText.text = bgm.ToString();
+        _effectValueText.text = effect.ToString();
+    }
+}

@@ -16,8 +16,8 @@ public enum PlayerStat
     Shoot = 2,
     Speed = 3,
     Jump = 4,
-    Vital = 5,
-    Condition = 6,
+    Condition = 5,
+    Stamina = 6,
     Money = 10,
     Fame = 11
 }
@@ -30,11 +30,14 @@ public sealed class SuddenEventEffectRow
     // CSV: 0/1 또는 Fixed/PerCent 같은 문자열 혼재 가능
     public SuddenEventEffectType type;
 
-    // CSV 샘플은 StatusTextTable의 ID가 들어옴 (예: ID_Text_StatusName_02, ID_Text_StatusName_random)
-    public string targetNameId;
+    // CSV: target_name
+    public string targetName;
 
-    public PlayerStat targetStatMin;
-    public PlayerStat targetStatMax;
+    public PlayerStat targetMin;
+    public PlayerStat targetMax;
+
+    public int amountMin;
+    public int amountMax;
 }
 
 [CreateAssetMenu(menuName = "Game/Data/SuddenEventEffectTable", fileName = "SO_SuddenEventEffectTable")]

@@ -1,0 +1,5 @@
+id,position_name,tier1_stat,tier1_prob,tier2_stat,tier2_prob,tier3_stat,tier3_prob
+string,string,string,int,string,int,string,int
+position_001,G,shoot,20,speed,40,stamina,40
+position_002,F,shoot,20,jump,40,stamina,40
+position_003,C,jump,20,shoot,40,stamina,40

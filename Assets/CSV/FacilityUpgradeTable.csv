@@ -1,0 +1,30 @@
+id,facility_req,facility_name,facility_lv,upgrade_cost,condition_decay_efficiency,training_exp_efficiency,resource_id
+string,string,string,int,int,int,int,string
+sch_001,school,창고,1,100,0,0,res_sch_001
+sch_002,school,정식 농구부실,2,450,2,0,res_sch_002
+sch_003,school,멀티 클럽하우스,3,1100,3,0,res_sch_003
+sch_004,school,하이테크 베이스캠프,4,0,4,0,res_sch_004
+gym_001,gym,갈라진 우레탄 코트,1,35,0,0,res_gym_001
+gym_002,gym,오래된 나무 마루,2,85,0,5,res_gym_002
+gym_003,gym,전용 메이플 플로어,3,170,0,10,res_gym_003
+gym_004,gym,스마트 조명 코트,4,320,0,15,res_gym_004
+gym_005,gym,애널라이틱스 아레나,5,740,0,25,res_gym_005
+gym_006,gym,건샷 자동 배급소,6,1400,0,40,res_gym_006
+gym_007,gym,글라스 백보드 스퀘어,7,2000,0,60,res_gym_007
+gym_008,gym,무중력 코트,8,0,0,100,res_gym_008
+caf_001,cafeteria,간이 배식대,1,35,0,0,res_caf_001
+caf_002,cafeteria,공용 식당 코너,2,85,0,5,res_caf_002
+caf_003,cafeteria,오픈 치킨,3,170,0,10,res_caf_003
+caf_004,cafeteria,프로틴 셰이크 바,4,320,0,15,res_caf_004
+caf_005,cafeteria,전문 영양 관리실,5,740,0,25,res_caf_005
+caf_006,cafeteria,저온 진공 조리실,6,1400,0,40,res_caf_006
+caf_007,cafeteria,산소 신선 물류창고,7,2000,0,70,res_caf_007
+caf_008,cafeteria,맞춤형 합성소,8,0,0,100,res_caf_008
+cou_001,counselingcenter,낡은 가죽 소파,1,20,0,0,res_cou_001
+cou_002,counselingcenter,가림막 상담 데스크,2,60,0,10,res_cou_002
+cou_003,counselingcenter,테라피 라운지,3,120,0,30,res_cou_003
+cou_004,counselingcenter,VR 힐링 스테이션,4,300,0,50,res_cou_004
+cou_005,counselingcenter,고압 산소 캡슐실,5,680,0,70,res_cou_005
+cou_006,counselingcenter,하이드로 마사지 탕,6,1000,0,90,res_cou_006
+cou_007,counselingcenter,바이오 피드백 룸,7,1250,0,120,res_cou_007
+cou_008,counselingcenter,수면 캡슐 본부,8,0,0,150,res_cou_008

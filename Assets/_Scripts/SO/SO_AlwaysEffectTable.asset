@@ -1,0 +1,171 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53ba67723f654a358276d341f43afa9f, type: 3}
+  m_Name: SO_AlwaysEffectTable
+  m_EditorClassIdentifier: Assembly-CSharp::AlwaysEffectTableSO
+  _rows:
+  - id: exam_effect
+    trainingState: 1
+    conditionIncrease: 3
+    conditionDecline: 0
+    conditionRecoveryUp: 0
+    conditionRecoveryDown: 4
+    trainingIncrease: 0
+    trainingDecline: 1.5
+    mentalIncrease: 0
+    mentalDecline: 1
+    trustIncrease: 0
+    trustDecline: 1
+  - id: vacation_effect
+    trainingState: 0
+    conditionIncrease: 0
+    conditionDecline: 0
+    conditionRecoveryUp: 0
+    conditionRecoveryDown: 0
+    trainingIncrease: 0
+    trainingDecline: 0
+    mentalIncrease: 0
+    mentalDecline: 0
+    trustIncrease: 0
+    trustDecline: 0
+  - id: holiday_effect
+    trainingState: 1
+    conditionIncrease: 0
+    conditionDecline: 4
+    conditionRecoveryUp: 5
+    conditionRecoveryDown: 0
+    trainingIncrease: 1.5
+    trainingDecline: 0
+    mentalIncrease: 0
+    mentalDecline: 0
+    trustIncrease: 0
+    trustDecline: 0
+  - id: samiljeol_effect
+    trainingState: 1
+    conditionIncrease: 0
+    conditionDecline: 0
+    conditionRecoveryUp: 4
+    conditionRecoveryDown: 0
+    trainingIncrease: 1
+    trainingDecline: 0
+    mentalIncrease: 0
+    mentalDecline: 0
+    trustIncrease: 0
+    trustDecline: 0
+  - id: children_effect
+    trainingState: 1
+    conditionIncrease: 0
+    conditionDecline: 0
+    conditionRecoveryUp: 0
+    conditionRecoveryDown: 3
+    trainingIncrease: 1
+    trainingDecline: 0
+    mentalIncrease: 3
+    mentalDecline: 0
+    trustIncrease: 0
+    trustDecline: 0
+  - id: buddha_effect
+    trainingState: 1
+    conditionIncrease: 0
+    conditionDecline: 3
+    conditionRecoveryUp: 3
+    conditionRecoveryDown: 0
+    trainingIncrease: 1
+    trainingDecline: 0
+    mentalIncrease: 0
+    mentalDecline: 0
+    trustIncrease: 0
+    trustDecline: 0
+  - id: memorial_effect
+    trainingState: 1
+    conditionIncrease: 0
+    conditionDecline: 3
+    conditionRecoveryUp: 3
+    conditionRecoveryDown: 0
+    trainingIncrease: 1.5
+    trainingDecline: 0
+    mentalIncrease: 0
+    mentalDecline: 0
+    trustIncrease: 0
+    trustDecline: 0
+  - id: liberation_effect
+    trainingState: 1
+    conditionIncrease: 0
+    conditionDecline: 3
+    conditionRecoveryUp: 3
+    conditionRecoveryDown: 0
+    trainingIncrease: 1
+    trainingDecline: 0
+    mentalIncrease: 3
+    mentalDecline: 0
+    trustIncrease: 2
+    trustDecline: 0
+  - id: chuseok_effect
+    trainingState: 1
+    conditionIncrease: 0
+    conditionDecline: 2
+    conditionRecoveryUp: 4
+    conditionRecoveryDown: 0
+    trainingIncrease: 0
+    trainingDecline: 0
+    mentalIncrease: 0
+    mentalDecline: 0
+    trustIncrease: 3
+    trustDecline: 0
+  - id: national_effect
+    trainingState: 1
+    conditionIncrease: 0
+    conditionDecline: 2
+    conditionRecoveryUp: 0
+    conditionRecoveryDown: 3
+    trainingIncrease: 1.5
+    trainingDecline: 0
+    mentalIncrease: 0
+    mentalDecline: 0
+    trustIncrease: 2
+    trustDecline: 0
+  - id: hangul_effect
+    trainingState: 1
+    conditionIncrease: 0
+    conditionDecline: 3
+    conditionRecoveryUp: 3
+    conditionRecoveryDown: 0
+    trainingIncrease: 1
+    trainingDecline: 0
+    mentalIncrease: 0
+    mentalDecline: 0
+    trustIncrease: 3
+    trustDecline: 0
+  - id: christmas_effect
+    trainingState: 1
+    conditionIncrease: 0
+    conditionDecline: 3
+    conditionRecoveryUp: 4
+    conditionRecoveryDown: 0
+    trainingIncrease: 2
+    trainingDecline: 0
+    mentalIncrease: 0
+    mentalDecline: 0
+    trustIncrease: 3
+    trustDecline: 0
+  - id: festival_effect
+    trainingState: 0
+    conditionIncrease: 0
+    conditionDecline: 0
+    conditionRecoveryUp: 10
+    conditionRecoveryDown: 0
+    trainingIncrease: 0
+    trainingDecline: 0
+    mentalIncrease: 2
+    mentalDecline: 0
+    trustIncrease: 4
+    trustDecline: 0

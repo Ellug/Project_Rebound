@@ -1,0 +1,41 @@
+id,name,type,term_start,term_end,term,priority,range,effect_id,description
+string,string,string,string,string,int,int,enum,string,string
+exam_001,first_midterm_exam,exam,260427,260430,4,3,0,exam_effect,1학기 중간고사로 인해 학생들이 많이 지쳐한다!
+exam_002,first_final_exam,exam,260629,260702,4,3,0,exam_effect,1학기 기말고사로 인해 학생들이 많이 지쳐한다!
+exam_003,second_midterm_exam,exam,260928,261001,4,3,0,exam_effect,2학기 중간고사로 인해 학생들이 많이 지쳐한다!
+exam_004,second_final_exam,exam,261130,261203,4,3,0,exam_effect,2학기 기말고사로 인해 학생들이 많이 지쳐한다!
+festival_001,festival_sports_day,festival,260515,260515,1,4,0,festival_effect,체육대회가 시작했다! 그동안의 피로를 풀 수 있는 하루를 보내자!
+festival_002,festival_school,festival,261008,261008,1,4,0,festival_effect,학교제가 시작했다! 그동안의 피로를 풀 수 있는 하루를 보내자!
+vacation_001,vacation_summer,vacation,260710,260809,1,1,0,vacation_effect,-
+vacation_002,vacation_winter,vacation,261228,270207,1,1,0,vacation_effect,-
+holiday_001,holiday_children_day,holiday,260505,260505,1,2,0,children_effect,"어린이날이다! 모처럼의 휴일, 학생들이 들뜬 분위기다!"
+holiday_002,holiday_buddha,holiday,260524,260525,1,2,0,buddha_effect,부처님 오신 날이다! 차분한 분위기 속에서 하루를 보내보자!
+holiday_003,holiday_memorial_day,holiday,260606,260606,1,2,0,memorial_effect,현충일이다! 잠시 마음을 다잡고 하루를 보내자!
+holiday_004,holiday_liberation_Day,holiday,260815,260817,1,2,0,liberation_effect,광복절이다! 모두가 들뜬 분위기 속에서 활기가 넘친다!
+holiday_005,holiday_chuseok,holiday,260924,260926,1,2,0,chuseok_effect,추석 연휴다! 거리가 명절 분위기로 가득 찼다!
+holiday_006,holiday_foundation_day,holiday,261003,261005,1,2,0,national_effect,개천절이다! 공휴일로 한층 여유로운 분위기가 흐른다!
+holiday_007,holiday_hangul_day,holiday,261009,261009,1,2,0,hangul_effect,한글날이다! 공휴일로 차분한 하루를 보내자!
+holiday_008,holiday_christmas,holiday,261225,261225,1,2,0,christmas_effect,성탄절이다! 설렘 가득한 하루를 보내자!
+exam_005,first_midterm_exam,exam,270426,270429,4,3,0,exam_effect,1학기 중간고사로 인해 학생들이 많이 지쳐한다!
+exam_006,first_final_exam,exam,270628,270701,4,3,0,exam_effect,1학기 기말고사로 인해 학생들이 많이 지쳐한다!
+exam_007,second_midterm_exam,exam,270927,270930,4,3,0,exam_effect,2학기 중간고사로 인해 학생들이 많이 지쳐한다!
+exam_008,second_final_exam,exam,271129,271202,4,3,0,exam_effect,2학기 기말고사로 인해 학생들이 많이 지쳐한다!
+festival_003,festival_sports_day,festival,270521,270521,1,4,0,festival_effect,체육대회가 시작했다! 그동안의 피로를 풀 수 있는 하루를 보내자!
+festival_004,festival_school,festival,271008,271008,1,4,0,festival_effect,학교제가 시작했다! 그동안의 피로를 풀 수 있는 하루를 보내자!
+vacation_003,vacation_summer,vacation,270709,270808,1,1,0,vacation_effect,-
+vacation_004,vacation_winter,vacation,271228,280213,1,1,0,vacation_effect,-
+holiday_009,holiday_independence,holiday,270301,270301,1,2,0,samiljeol_effect,삼일절이다! 공휴일로 학생들이 의욕으로 가득 찼다
+holiday_010,holiday_children_day,holiday,270505,270505,1,2,0,children_effect,"어린이날이다! 모처럼의 휴일, 학생들이 들뜬 분위기다!"
+holiday_011,holiday_buddha,holiday,270524,270525,1,2,0,buddha_effect,부처님 오신 날이다! 차분한 분위기 속에서 하루를 보내보자!
+holiday_012,holiday_memorial_day,holiday,270606,270606,1,2,0,memorial_effect,현충일이다! 잠시 마음을 다잡고 하루를 보내자!
+holiday_013,holiday_liberation_Day,holiday,270815,270816,1,2,0,liberation_effect,광복절이다! 모두가 들뜬 분위기 속에서 활기가 넘친다!
+holiday_014,holiday_chuseok,holiday,270914,270916,1,2,0,chuseok_effect,추석 연휴다! 거리가 명절 분위기로 가득 찼다!
+holiday_015,holiday_foundation_day,holiday,271003,271004,1,2,0,national_effect,개천절이다! 공휴일로 한층 여유로운 분위기가 흐른다!
+holiday_016,holiday_hangul_day,holiday,271009,261011,1,2,0,hangul_effect,한글날이다! 공휴일로 차분한 하루를 보내자!
+holiday_017,holiday_christmas,holiday,271225,271227,1,2,0,christmas_effect,성탄절이다! 설렘 가득한 하루를 보내자!
+recruit_001,first_recruit,roster,260302,260302,1,1,0,first_recruit_effect,-
+recruit_002,second_recruit,roster,260810,260810,1,1,0,second_recruit_effect,-
+graduate_001,roster_graduate,roster,270208,270228,1,4,0,graduate_effect,-
+recruit_003,first_recruit,roster,270302,270302,1,1,0,first_recruit_effect,-
+recruit_004,second_recruit,roster,270809,270809,1,1,0,second_recruit_effect,-
+graduate_002,roster_graduate,roster,280214,280229,1,4,0,graduate_effect,-

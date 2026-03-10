@@ -1,0 +1,15 @@
+ID,training_state,condition_increase,condition_decline,condition_recovery_up,condition_recovery_down,training_increase,training_decline,mental_increase,mental_decline,trust_increase,trust_decline
+string,bool,int,int,int,int,float,float,int,int,int,int
+exam_effect,TRUE,3,0,0,4,0,1.5,0,1,0,1
+vacation_effect,FALSE,0,0,0,0,0,0,0,0,0,0
+holiday_effect,TRUE,0,4,5,0,1.5,0,0,0,0,0
+samiljeol_effect,TRUE,0,0,4,0,1,0,0,0,0,0
+children_effect,TRUE,0,0,0,3,1,0,3,0,0,0
+buddha_effect,TRUE,0,3,3,0,1,0,0,0,0,0
+memorial_effect,TRUE,0,3,3,0,1.5,0,0,0,0,0
+liberation_effect,TRUE,0,3,3,0,1,0,3,0,2,0
+chuseok_effect,TRUE,0,2,4,0,0,0,0,0,3,0
+national_effect,TRUE,0,2,0,3,1.5,0,0,0,2,0
+hangul_effect,TRUE,0,3,3,0,1,0,0,0,3,0
+christmas_effect,TRUE,0,3,4,0,2,0,0,0,3,0
+festival_effect,FALSE,0,0,10,0,0,0,2,0,4,0

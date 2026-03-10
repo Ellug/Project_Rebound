@@ -21,55 +21,100 @@ public enum SuddenEventConditionFlags
     Match = 8
 }
 
+[Flags]
+public enum SuddenEventCategoryFlags
+{
+    None = 0,
+    Positive = 1,
+    Negative = 2,
+    Neutral = 3,
+    Body = 4,
+    Mental = 8,
+}
+
 public enum SuddenEventScope
 {
-    Non_Member = 0,
-    Member = 1,
-    Team_Member = 2,
-    Team_Key_Member = 3,
-    Team_Bench_Member = 4,
+    None = 0,
+    NonMember = 1,
+    Member = 2,
+    TeamMember = 3,
+    TeamKeyMember = 3,
+    BenchMember = 4,
+    TeamBenchMember = 4,
     Graduated_Member = 5,
     Facility = 6,
     Player = 7,
-    Non_School = 8,
+    NonSchool = 8,
     Message = 9
 }
 
 public enum SuddenEventTermScale
 {
+    None = 0,
     Day = 1,
     Quarter = 2
+}
+
+public enum SuddenEventTriggerStatus
+{
+    None = 0,
+    Mental = 1,
+    Shoot = 2,
+    Speed = 3,
+    Jump = 4,
+    Condition = 5,
+    Stamina = 6,
+    Money = 10,
+    Fame = 11
+}
+
+[Flags]
+public enum SuddenEventTriggerCondition
+{
+    None = 0,
+    Not = 1,
+    Equal = 2,
+    NotEqual = Not | Equal,
+    More = 4,
+    OrLess = Not | More,
+    OrMore = More | Equal,
+    Less = Not | More | Equal
 }
 
 [Serializable]
 public sealed class SuddenEventRow
 {
     public string id;
-    public string eventName;
+    public string name;
 
     public SuddenEventContextFlags context;
     public SuddenEventConditionFlags condition;
+    public SuddenEventCategoryFlags category;
 
-    public SuddenEventScope scope;
+    public SuddenEventScope scope = SuddenEventScope.Member;
 
-    public int rangeMin;
-    public int rangeMax;
+    public int targetMin;
+    public int targetMax;
 
-    public int termMin;
-    public int termMax;
-    public SuddenEventTermScale termScale;
+    public int termMin = 1;
+    public int termMax = 1;
+    public SuddenEventTermScale termScale = SuddenEventTermScale.Day;
+
+    public bool isTrigger;
+    public SuddenEventTriggerStatus triggerStatus1;
+    public SuddenEventTriggerCondition triggerCondition1;
+    public int triggerThreshold1 = -1;
+    public SuddenEventTriggerStatus triggerStatus2;
+    public SuddenEventTriggerCondition triggerCondition2;
+    public int triggerThreshold2 = -1;
 
     public string effect1;
-    public int amount1;
-
     public string effect2;
-    public int amount2;
-
     public string effect3;
-    public int amount3;
 
+    public bool isProbable;
     public float probability; // 0~1
-    public string messageId;  // SuddenEventTextTable 참조
+    public string description; // SuddenEventTextTable 참조 ID
 }
 
 [CreateAssetMenu(menuName = "Game/Data/SuddenEventTable", fileName = "SO_SuddenEventTable")]
@@ -82,7 +127,7 @@ public sealed class SuddenEventTableSO : ScriptableObject
     public IReadOnlyList<SuddenEventRow> Rows => _rows;
 
     void OnEnable()
-    {        
+    {
         BuildCache();
     }
 

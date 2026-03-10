@@ -1,0 +1,6 @@
+id,grade,stat_all,potential_min,trust_level,semi_final_plus
+string,string,int,int,int,int
+grade_001,1등급,400,85,4,2
+grade_002,2등급,300,80,4,2
+grade_003,3등급,250,75,3,1
+grade_004,4등급,150,70,3,1

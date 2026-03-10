@@ -1,0 +1,7 @@
+trust_level,training,plus_insanity,plus_injury,plus_allstat
+int,int,int,int,int
+1,60,0,0,0
+2,80,-5,0,0
+3,100,-5,-3,0
+4,110,-5,-3,3
+5,120,-7,-3,4

@@ -1,0 +1,5 @@
+id,position_name,min_height,max_height,min_weight,max_weight
+string,string,int,int,int,int
+position_001,가드(G),178,188,72,82
+position_002,포워드(F),184,190,80,92
+position_003,센터(C),188,192,88,96

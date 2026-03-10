@@ -1,0 +1,17 @@
+stat_id,stat_name,grade,stat_min,stat_max,base_min,base_max
+string,string,int,int,int,int,int
+stat_001,mental,1,30,100,30,50
+stat_001,mental,2,30,100,30,70
+stat_001,mental,3,30,100,30,50
+stat_002,shoot,1,1,100,10,30
+stat_002,shoot,2,1,100,15,40
+stat_002,shoot,3,1,100,25,50
+stat_003,speed,1,1,100,10,30
+stat_003,speed,2,1,100,15,40
+stat_003,speed,3,1,100,25,50
+stat_004,jump,1,1,100,10,30
+stat_004,jump,2,1,100,15,40
+stat_004,jump,3,1,100,25,50
+stat_005,stamina,1,1,100,10,30
+stat_005,stamina,2,1,100,15,40
+stat_005,stamina,3,1,100,25,50

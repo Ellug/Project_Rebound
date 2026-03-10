@@ -1,0 +1,70 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 349fba533999072488267c20a1031e37, type: 3}
+  m_Name: SO_CoachNodeEffectDetailTable
+  m_EditorClassIdentifier: Assembly-CSharp::CoachNodeEffectDetailTableSO
+  _rows:
+  - id: 1001
+    targetStat: Atk_Shoot
+    applyMethod: Add
+    effectValue: 1
+    functionId: 0
+  - id: 1002
+    targetStat: Adv_Atk_Shoot
+    applyMethod: Add
+    effectValue: 2
+    functionId: 0
+  - id: 1003
+    targetStat: Condition_Drain_ShootingDrill
+    applyMethod: Add
+    effectValue: -5
+    functionId: 0
+  - id: 2001
+    targetStat: Def_Jump
+    applyMethod: Add
+    effectValue: 1
+    functionId: 0
+  - id: 2002
+    targetStat: Adv_Def_Jump
+    applyMethod: Add
+    effectValue: 3
+    functionId: 0
+  - id: 3001
+    targetStat: Facility_Upgrade_Cost
+    applyMethod: Add
+    effectValue: -5
+    functionId: 0
+  - id: 3002
+    targetStat: Fame_Gain_Rate
+    applyMethod: Add
+    effectValue: 10
+    functionId: 0
+  - id: 3003
+    targetStat: Management_Cost_Rate
+    applyMethod: Add
+    effectValue: -10
+    functionId: 0
+  - id: 4001
+    targetStat: Content_Unlock
+    applyMethod: Add
+    effectValue: 1
+    functionId: 401
+  - id: 4002
+    targetStat: Content_Unlock
+    applyMethod: Add
+    effectValue: 1
+    functionId: 402
+  - id: 5001
+    targetStat: All_Stat
+    applyMethod: Add
+    effectValue: 1
+    functionId: 0

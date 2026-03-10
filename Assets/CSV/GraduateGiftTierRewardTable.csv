@@ -1,0 +1,9 @@
+id,reward_type,grade1,grade2,grade3,grade4,description
+string,string,int,int,int,int,string
+itemeffect_01,지원금 업그레이드,20,30,5,0,지원금 영구 + 10%
+itemeffect_02,시설 업그레이드,20,0,0,0,랜덤으로 시설 하나 업그레이드
+itemeffect_03,장비 업그레이드,15,25,0,0,랜덤으로 장비 업그레이드
+itemeffect_04,즉시 후원금 지급,0,0,40,100,지원금의 20%를 후원금으로 즉시 지급
+itemeffect_05,전체 컨디션 회복,20,15,0,0,모든 학생의 컨디션을 40 회복
+itemeffect_06,일시적 훈련 효과 상승,0,25,55,0,30일 동안 랜덤한 하나의 스탯의 경험치 상승량 1.3배 증가
+itemeffect_07,훈련 효율 영욱 상승,25,5,0,0,영구적으로 전체 스탯 훈련 효율 3% 증가

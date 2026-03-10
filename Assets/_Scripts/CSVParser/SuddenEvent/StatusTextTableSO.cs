@@ -8,7 +8,6 @@ public sealed class StatusTextRow
     public string id;
     public int index;
     public string text;        // 표시명
-    public string description;
 }
 
 [CreateAssetMenu(menuName = "Game/Data/StatusTextTable", fileName = "SO_StatusTextTable")]

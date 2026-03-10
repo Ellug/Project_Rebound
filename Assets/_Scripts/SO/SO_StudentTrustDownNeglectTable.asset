@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e460fb18db3fea344bef858aa7b9b55c, type: 3}
+  m_Name: SO_StudentTrustDownNeglectTable
+  m_EditorClassIdentifier: Assembly-CSharp::StudentTrustDownNeglectTableSO
+  _rows:
+  - trustLevel: 1
+    idletime: "5\uC77C \uC774\uC0C1"
+    dayTrust: 10
+  - trustLevel: 2
+    idletime: "6\uC77C \uC774\uC0C1"
+    dayTrust: 8
+  - trustLevel: 3
+    idletime: "7\uC77C \uC774\uC0C1"
+    dayTrust: 6
+  - trustLevel: 4
+    idletime: "8\uC77C \uC774\uC0C1"
+    dayTrust: 5
+  - trustLevel: 5
+    idletime: "10\uC77C \uC774\uC0C1"
+    dayTrust: 4

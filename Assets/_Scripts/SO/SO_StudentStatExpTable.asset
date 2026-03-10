@@ -1,0 +1,315 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: adee3229ec30a5a4799d7cc993e50b85, type: 3}
+  m_Name: SO_StudentStatExpTable
+  m_EditorClassIdentifier: Assembly-CSharp::StudentStatExpTableSO
+  _rows:
+  - level: 1
+    expNext: 100
+    expTotal: 100
+  - level: 2
+    expNext: 105
+    expTotal: 205
+  - level: 3
+    expNext: 110
+    expTotal: 310
+  - level: 4
+    expNext: 115
+    expTotal: 420
+  - level: 5
+    expNext: 120
+    expTotal: 535
+  - level: 6
+    expNext: 125
+    expTotal: 655
+  - level: 7
+    expNext: 130
+    expTotal: 780
+  - level: 8
+    expNext: 135
+    expTotal: 910
+  - level: 9
+    expNext: 140
+    expTotal: 1045
+  - level: 10
+    expNext: 145
+    expTotal: 1185
+  - level: 11
+    expNext: 150
+    expTotal: 1330
+  - level: 12
+    expNext: 155
+    expTotal: 1480
+  - level: 13
+    expNext: 160
+    expTotal: 1635
+  - level: 14
+    expNext: 165
+    expTotal: 1795
+  - level: 15
+    expNext: 170
+    expTotal: 1960
+  - level: 16
+    expNext: 175
+    expTotal: 2130
+  - level: 17
+    expNext: 180
+    expTotal: 2305
+  - level: 18
+    expNext: 185
+    expTotal: 2485
+  - level: 19
+    expNext: 190
+    expTotal: 2670
+  - level: 20
+    expNext: 195
+    expTotal: 2860
+  - level: 21
+    expNext: 200
+    expTotal: 3055
+  - level: 22
+    expNext: 205
+    expTotal: 3255
+  - level: 23
+    expNext: 210
+    expTotal: 3460
+  - level: 24
+    expNext: 215
+    expTotal: 3670
+  - level: 25
+    expNext: 220
+    expTotal: 3885
+  - level: 26
+    expNext: 225
+    expTotal: 4105
+  - level: 27
+    expNext: 230
+    expTotal: 4330
+  - level: 28
+    expNext: 235
+    expTotal: 4560
+  - level: 29
+    expNext: 240
+    expTotal: 4795
+  - level: 30
+    expNext: 245
+    expTotal: 5035
+  - level: 31
+    expNext: 250
+    expTotal: 5280
+  - level: 32
+    expNext: 255
+    expTotal: 5530
+  - level: 33
+    expNext: 260
+    expTotal: 5785
+  - level: 34
+    expNext: 265
+    expTotal: 6045
+  - level: 35
+    expNext: 270
+    expTotal: 6310
+  - level: 36
+    expNext: 275
+    expTotal: 6580
+  - level: 37
+    expNext: 280
+    expTotal: 6855
+  - level: 38
+    expNext: 285
+    expTotal: 7135
+  - level: 39
+    expNext: 290
+    expTotal: 7420
+  - level: 40
+    expNext: 295
+    expTotal: 7710
+  - level: 41
+    expNext: 300
+    expTotal: 8005
+  - level: 42
+    expNext: 305
+    expTotal: 8305
+  - level: 43
+    expNext: 310
+    expTotal: 8610
+  - level: 44
+    expNext: 315
+    expTotal: 8920
+  - level: 45
+    expNext: 320
+    expTotal: 9235
+  - level: 46
+    expNext: 325
+    expTotal: 9555
+  - level: 47
+    expNext: 330
+    expTotal: 9880
+  - level: 48
+    expNext: 335
+    expTotal: 10210
+  - level: 49
+    expNext: 340
+    expTotal: 10545
+  - level: 50
+    expNext: 345
+    expTotal: 10885
+  - level: 51
+    expNext: 350
+    expTotal: 11230
+  - level: 52
+    expNext: 355
+    expTotal: 11580
+  - level: 53
+    expNext: 360
+    expTotal: 11935
+  - level: 54
+    expNext: 365
+    expTotal: 12295
+  - level: 55
+    expNext: 370
+    expTotal: 12660
+  - level: 56
+    expNext: 375
+    expTotal: 13030
+  - level: 57
+    expNext: 380
+    expTotal: 13405
+  - level: 58
+    expNext: 385
+    expTotal: 13785
+  - level: 59
+    expNext: 390
+    expTotal: 14170
+  - level: 60
+    expNext: 395
+    expTotal: 14560
+  - level: 61
+    expNext: 400
+    expTotal: 14955
+  - level: 62
+    expNext: 405
+    expTotal: 15355
+  - level: 63
+    expNext: 410
+    expTotal: 15760
+  - level: 64
+    expNext: 415
+    expTotal: 16170
+  - level: 65
+    expNext: 420
+    expTotal: 16585
+  - level: 66
+    expNext: 425
+    expTotal: 17005
+  - level: 67
+    expNext: 430
+    expTotal: 17430
+  - level: 68
+    expNext: 435
+    expTotal: 17860
+  - level: 69
+    expNext: 440
+    expTotal: 18295
+  - level: 70
+    expNext: 445
+    expTotal: 18735
+  - level: 71
+    expNext: 450
+    expTotal: 19180
+  - level: 72
+    expNext: 455
+    expTotal: 19630
+  - level: 73
+    expNext: 460
+    expTotal: 20085
+  - level: 74
+    expNext: 465
+    expTotal: 20545
+  - level: 75
+    expNext: 470
+    expTotal: 21010
+  - level: 76
+    expNext: 475
+    expTotal: 21480
+  - level: 77
+    expNext: 480
+    expTotal: 21955
+  - level: 78
+    expNext: 485
+    expTotal: 22435
+  - level: 79
+    expNext: 490
+    expTotal: 22920
+  - level: 80
+    expNext: 495
+    expTotal: 23410
+  - level: 81
+    expNext: 500
+    expTotal: 23905
+  - level: 82
+    expNext: 505
+    expTotal: 24405
+  - level: 83
+    expNext: 510
+    expTotal: 24910
+  - level: 84
+    expNext: 515
+    expTotal: 25420
+  - level: 85
+    expNext: 520
+    expTotal: 25935
+  - level: 86
+    expNext: 525
+    expTotal: 26455
+  - level: 87
+    expNext: 530
+    expTotal: 26980
+  - level: 88
+    expNext: 535
+    expTotal: 27510
+  - level: 89
+    expNext: 540
+    expTotal: 28045
+  - level: 90
+    expNext: 545
+    expTotal: 28585
+  - level: 91
+    expNext: 550
+    expTotal: 29130
+  - level: 92
+    expNext: 555
+    expTotal: 29680
+  - level: 93
+    expNext: 560
+    expTotal: 30235
+  - level: 94
+    expNext: 565
+    expTotal: 30795
+  - level: 95
+    expNext: 570
+    expTotal: 31360
+  - level: 96
+    expNext: 575
+    expTotal: 31930
+  - level: 97
+    expNext: 580
+    expTotal: 32505
+  - level: 98
+    expNext: 585
+    expTotal: 33085
+  - level: 99
+    expNext: 590
+    expTotal: 33670
+  - level: 100
+    expNext: 595
+    expTotal: 34260

@@ -1,38 +1,40 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
-// ¸ðµç UI ÆË¾÷ ¹× À©µµ¿ìÀÇ ÃÖ»óÀ§ ºÎ¸ð Å¬·¡½º
+// ëª¨ë“  UI íŒì—… ë° ìœˆë„ìš°ì˜ ìµœìƒìœ„ ë¶€ëª¨ í´ëž˜ìŠ¤
 public abstract class UIBase : MonoBehaviour
 {
-    // ÀÌ UI°¡ ¿­·ÁÀÖÀ» ¶§ µÚ·Î°¡±â Å°·Î ´ÝÀ» ¼ö ÀÖ´ÂÁö ¿©ºÎ
+    // ì´ UIê°€ ì—´ë ¤ìžˆì„ ë•Œ ë’¤ë¡œê°€ê¸° í‚¤ë¡œ ë‹«ì„ ìˆ˜ ìžˆëŠ”ì§€ ì—¬ë¶€
     [SerializeField] private bool _isModal = true;
 
-    // UI ÃÊ±âÈ­ (ÃÖÃÊ 1È¸¸¸ È£Ãâ ÇÊ¿ä ½Ã »ç¿ë)
+    public bool DisableBackKey { get; set; } = false;
+    public bool IsModal { get => _isModal; set => _isModal = value; }
+
+    // UI ì´ˆê¸°í™” (ìµœì´ˆ 1íšŒë§Œ í˜¸ì¶œ í•„ìš” ì‹œ ì‚¬ìš©)
     public virtual void Init()
     {
-        // ÇÊ¿ä ½Ã ¿À¹ö¶óÀÌµå
+        // í•„ìš” ì‹œ ì˜¤ë²„ë¼ì´ë“œ
     }
 
-    // UI°¡ ¿­¸± ¶§ È£Ãâ
+    // UIê°€ ì—´ë¦´ ë•Œ í˜¸ì¶œ
     public virtual void Open()
     {
         this.gameObject.SetActive(true);
-        // µîÀå ¾Ö´Ï¸ÞÀÌ¼Ç µîÀ» ¿©±â¼­ Àç»ý °¡´É
+        // ë“±ìž¥ ì• ë‹ˆë©”ì´ì…˜ ë“±ì„ ì—¬ê¸°ì„œ ìž¬ìƒ ê°€ëŠ¥
     }
 
-    // UI°¡ ´ÝÈú ¶§ È£Ãâ
+    // UIê°€ ë‹«íž ë•Œ í˜¸ì¶œ
     public virtual void Close()
     {
         this.gameObject.SetActive(false);
-        // ÅðÀå ¾Ö´Ï¸ÞÀÌ¼Ç Ã³¸® ÈÄ ºñÈ°¼ºÈ­ °¡´É
+        // í‡´ìž¥ ì• ë‹ˆë©”ì´ì…˜ ì²˜ë¦¬ í›„ ë¹„í™œì„±í™” ê°€ëŠ¥
     }
 
-    // ¾Èµå·ÎÀÌµå µÚ·Î°¡±â(ESC) Å° ÀÔ·Â ½Ã È£ÃâµÇ´Â ¸Þ¼­µå
+    // ì•ˆë“œë¡œì´ë“œ ë’¤ë¡œê°€ê¸°(ESC) í‚¤ ìž…ë ¥ ì‹œ í˜¸ì¶œë˜ëŠ” ë©”ì„œë“œ
     public virtual void OnBackKey()
     {
+        if (DisableBackKey) return;
+        // ëª¨ë‹¬ì´ë©´ ë§¤ë‹ˆì €ë¥¼ í†µí•´ ìžì‹ ì„ ë‹«ìŒ
         if (_isModal)
-        {
-            // ¸ð´ÞÀÌ¸é ¸Å´ÏÀú¸¦ ÅëÇØ ÀÚ½ÅÀ» ´ÝÀ½
             UIManager.Instance.CloseTop();
-        }
     }
 }
