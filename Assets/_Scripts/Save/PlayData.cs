@@ -1,13 +1,16 @@
+ï»¿using System.Collections.Generic;
 using UnityEngine;
 
-//ÀúÀåÇÒ µ¥ÀÌÅÍµé ³ªÁß¿¡ Ãß°¡ ¿¹Á¤
+//ì €ì¥í•  ë°ì´í„°ë“¤ ë‚˜ì¤‘ì— ì¶”ê°€ ì˜ˆì •
 [System.Serializable] public class PlayData
 {
-    public int slotIndex;       // ÀúÀå ½½·Ô
-    public string school;       // ÇĞ±³ ÀÌ¸§
-    public string playTime;     // ÀÎ°ÔÀÓ ³¯Â¥
-    public string saveTime;     // ÀúÀå½Ã Çö½Ç ½Ã°£
+    public int slotIndex;       // ì €ì¥ ìŠ¬ë¡¯
+    public string school;       // í•™êµ ì´ë¦„
+    public string playTime;     // ì¸ê²Œì„ ë‚ ì§œ
+    public string saveTime;     // ì €ì¥ì‹œ í˜„ì‹¤ ì‹œê°„
 
-    public int gold;            // ÀçÈ­
-    public int reputation;      // ¸í¼ºÄ¡
+    public int gold;            // ì¬í™”
+    public int reputation;      // ëª…ì„±ì¹˜
+    
+    public List<int> unlockedNodeIds = new(); // ê°ë… ë…¸ë“œ í•´ê¸ˆ ëª©ë¡ (ë†êµ¬ë¶€ íë¶€ í›„ ì¬ì‹œì‘í•´ë„ ìœ ì§€)
 }
