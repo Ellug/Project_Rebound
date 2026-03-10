@@ -78,17 +78,16 @@ public class HeadCoachNodeInfoPopup : MonoBehaviour
 
     public void Show(HeadCoachNode node, Action<int> onUnlockRequested)
     {
+        Init();
+
         _selectedNode = node;
         _onUnlockRequested = onUnlockRequested;
         Refresh();
 
-        gameObject.SetActive(true);
+        gameObject.SetActive(true);         // 먼저 활성화
         transform.SetAsLastSibling();
 
-        // 슬라이드 인은 다음 프레임에 실행
-        // SetActive(true) 직후에는 레이아웃이 미반영된 anchoredPosition을 읽을 수 있으므로
-        // 한 프레임 뒤에 실제 위치를 읽고 슬라이드 시작
-        StartCoroutine(OpenSlideRoutine());
+        StartCoroutine(OpenSlideRoutine()); // 활성화 후 코루틴 시작
     }
 
     private IEnumerator OpenSlideRoutine()

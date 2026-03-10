@@ -16,20 +16,42 @@ MonoBehaviour:
   - col1: 0
     nodeId: 102
     targetPrerequisiteId: 101
-    "\uBE44\uACE0": "102\uB97C \uCC0D\uC73C\uB824\uBA74 101\uC774 \uD544\uC694\uD568"
   - col1: 0
     nodeId: 103
     targetPrerequisiteId: 101
-    "\uBE44\uACE0": "103\uB97C \uCC0D\uC73C\uB824\uBA74 101\uC774 \uD544\uC694\uD568"
   - col1: 0
     nodeId: 103
     targetPrerequisiteId: 501
-    "\uBE44\uACE0": "103\uB97C \uCC0D\uC73C\uB824\uBA74 501\uB3C4 \uD544\uC694\uD568"
   - col1: 0
-    nodeId: 202
+    nodeId: 203
     targetPrerequisiteId: 201
-    "\uBE44\uACE0": "202\uB97C \uCC0D\uC73C\uB824\uBA74 201\uC774 \uD544\uC694\uD568"
   - col1: 0
-    nodeId: 202
+    nodeId: 203
     targetPrerequisiteId: 501
-    "\uBE44\uACE0": "202\uB97C \uCC0D\uC73C\uB824\uBA74 501\uB3C4 \uD544\uC694\uD568"
+  - col1: 0
+    nodeId: 104
+    targetPrerequisiteId: 103
+  - col1: 0
+    nodeId: 104
+    targetPrerequisiteId: 501
+  - col1: 0
+    nodeId: 204
+    targetPrerequisiteId: 203
+  - col1: 0
+    nodeId: 204
+    targetPrerequisiteId: 501
+  - col1: 0
+    nodeId: 303
+    targetPrerequisiteId: 302
+  - col1: 0
+    nodeId: 303
+    targetPrerequisiteId: 501
+  - col1: 0
+    nodeId: 401
+    targetPrerequisiteId: 501
+  - col1: 0
+    nodeId: 402
+    targetPrerequisiteId: 501
+  - col1: 0
+    nodeId: 402
+    targetPrerequisiteId: 401

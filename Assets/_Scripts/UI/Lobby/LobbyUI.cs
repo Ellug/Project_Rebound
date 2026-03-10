@@ -64,6 +64,7 @@ public class LobbyUI : UIBase
     private Sprite _shopDefaultSprite;
     private bool _lastTrainingPopupActive;
     private bool _lastStudentPopupActive;
+    private bool _lastCoachPopupActive;
 
     // 씬에 미리 배치된 경우 Start에서 초기화
     void Start()
@@ -79,7 +80,11 @@ public class LobbyUI : UIBase
 
         bool trainingActive = IsPopupActive(_trainingSelectPopup);
         bool studentActive = IsPopupActive(_studentManagementPopup);
-        if (trainingActive == _lastTrainingPopupActive && studentActive == _lastStudentPopupActive)
+        bool coachActive = IsPopupActive(_headCoachPopup);
+
+        if (trainingActive == _lastTrainingPopupActive
+            && studentActive == _lastStudentPopupActive
+            && coachActive == _lastCoachPopupActive)
             return;
 
         RefreshBottomNavTabSprites();
@@ -425,6 +430,7 @@ public class LobbyUI : UIBase
 
         _lastTrainingPopupActive = trainingActive;
         _lastStudentPopupActive = studentActive;
+        _lastCoachPopupActive = coachActive;
     }
 
     // 탭 활성 여부에 따라 버튼 타겟 이미지 스프라이트를 변경
