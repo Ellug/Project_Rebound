@@ -247,7 +247,7 @@ public static class StudentFactory
     // 팀 색 결정 _isColorInitialized = false 로 바꾸면 새로운 회차 시작할 때 색 랜덤
     private static void InitializeColorIfNeeded()
     {
-        if (_isColorInitialized)
+        if (_isColorInitialized) return;
 
         _fixedColor = _random.Next(0, 2) == 0
             ? CharacterColor.Red
