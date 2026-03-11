@@ -554,6 +554,10 @@ MonoBehaviour:
   _students: []
   _slotAssignments:
     _serializedList: []
+  _lowTrustStreakByStudentId:
+    _serializedList: []
+  _criticalTrustStreakByStudentId:
+    _serializedList: []
 --- !u!4 &66605661
 Transform:
   m_ObjectHideFlags: 0
@@ -5312,8 +5316,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -49.700012, y: 2034.9}
-  m_SizeDelta: {x: 123.3, y: 73.98}
+  m_AnchoredPosition: {x: -90.42, y: 2035.82}
+  m_SizeDelta: {x: 87.68, y: 82.2}
   m_Pivot: {x: 1, y: 0}
 --- !u!114 &495393613
 MonoBehaviour:
@@ -5379,7 +5383,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -1020484045086214868, guid: 27b6c2b1cec715245bdd2acfb710037c, type: 3}
+  m_Sprite: {fileID: -7883045645884335770, guid: b7cfc621d34f7be4a8f7d336d5777e5b, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -14586,7 +14590,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FacilitySystem
   _dontDestroyOnLoad: 1
-  _table: {fileID: 11400000, guid: 7b594a029d60ac548b7e0838cdab0631, type: 2}
 --- !u!4 &1518773552
 Transform:
   m_ObjectHideFlags: 0
@@ -22046,3 +22049,4 @@ SceneRoots:
   - {fileID: 868331573}
   - {fileID: 2105774181}
   - {fileID: 1797105183}
+  - {fileID: 1518773552}
