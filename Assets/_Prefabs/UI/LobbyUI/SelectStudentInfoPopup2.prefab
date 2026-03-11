@@ -97,6 +97,7 @@ MonoBehaviour:
   _statListRoot: {fileID: 5696291818696301108}
   _statRowPrefab: {fileID: 6221017286530398922, guid: 66ceca9f093850146b3879ce2727e94d, type: 3}
   _btnSelect: {fileID: 0}
+  _txtSelectButton: {fileID: 0}
   _panelRoot: {fileID: 0}
   _hiddenOffsetY: -600
   _disableRaycastWhileTween: 1
@@ -1109,7 +1110,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 237.335, y: -37.5}
-  m_SizeDelta: {x: 450.67, y: 75}
+  m_SizeDelta: {x: 0, y: 75}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8733060498230063324
 CanvasRenderer:

@@ -5,8 +5,7 @@ using UnityEngine;
 
 public class MessengerManager : Singleton<MessengerManager>
 {
-    private const int MAX_CHAT_ROOMS = 15;
-
+    //private const int MAX_CHAT_ROOMS = 15;
     [SerializeField] private List<ChatRoom> _activeRooms = new List<ChatRoom>();
 
     public event Action OnRoomListUpdated;
@@ -37,12 +36,6 @@ public class MessengerManager : Singleton<MessengerManager>
 
         room.Messages.Add(newMessage);
         room.LastUpdatedDate = currentDate;
-
-        if (_activeRooms.Count > MAX_CHAT_ROOMS)
-        {
-            var oldestRoom = _activeRooms.OrderBy(r => r.LastUpdatedDate).First();
-            _activeRooms.Remove(oldestRoom);
-        }
 
         OnRoomListUpdated?.Invoke();
         OnMessageAdded?.Invoke(room);
