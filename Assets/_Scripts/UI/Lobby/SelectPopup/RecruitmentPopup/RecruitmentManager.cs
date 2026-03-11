@@ -7,6 +7,9 @@ using UnityEngine;
 // ConfirmPopup → RecruitmentPopup 흐름을 제어
 public class RecruitmentManager : MonoBehaviour
 {
+    // 신뢰도 붕괴 퇴부로 정원이 내려갈 때 보장할 최소 정원
+    private const int MinRecruitCapacity = 5;
+
     [Header("Popup Prefabs")]
     [SerializeField] private RecruitmentPopup _recruitmentPopupPrefab;  // 카드 선택 팝업
 
@@ -26,6 +29,33 @@ public class RecruitmentManager : MonoBehaviour
     // 후보 학생을 StudentManager(보유 학생)와 분리해서 관리
     // 후보는 RecruitmentPopup에만 주입해서 UI/선택에만 사용
     private readonly List<Student> _candidateStudents = new();
+
+    // 현재 팀 최대 보유 인원(모집 정원)
+    public int MaxRecruitCount => _maxRecruitCount;
+
+    // 신뢰도 0 퇴부 시 정원 감소 처리
+    public bool TryDecreaseMaxRecruitCountByTrustExpulsion()
+    {
+        // 최소 정원(5명) 이하로는 내려가지 않도록 보호
+        if (_maxRecruitCount <= MinRecruitCapacity)
+        {
+            // TODO: 정원이 최소치(5명)일 때의 별도 게임 규칙이 확정되면 이 분기에서 처리
+            Debug.LogWarning($"[RecruitmentManager] 최소 정원({MinRecruitCapacity})에 도달해 정원 감소를 막았습니다. current={_maxRecruitCount}");
+            return false;
+        }
+
+        // 일단 감소는 5 아래로는 안 내려가게
+        _maxRecruitCount = Mathf.Max(MinRecruitCapacity, _maxRecruitCount - 1);
+        GameManager.Instance.SetRecruitmentMaxCount(_maxRecruitCount);
+        Debug.Log($"[RecruitmentManager] 신뢰도 붕괴 퇴부로 최대 정원이 감소했습니다. current={_maxRecruitCount}");
+        return true;
+    }
+
+    // 저장된 모집 정원 값을 런타임에 복원
+    public void ApplyPersistentMaxRecruitCount(int maxRecruitCount)
+    {
+        _maxRecruitCount = Mathf.Max(MinRecruitCapacity, maxRecruitCount);
+    }
 
     void Start()
     {
