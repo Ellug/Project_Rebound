@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -35,6 +36,7 @@ public class LobbyUI : UIBase
     [SerializeField] private TrainingSelectPopup _trainingSelectPopup; // 씬에 배치된 훈련 선택 팝업 (직접 참조)
     [SerializeField] private StudentManagementPopup _studentManagementPopup; // 씬에 배치된 학생 관리 팝업(비활성화 상태)
     [SerializeField] private HeadCoachPopup _headCoachPopup; // 씬에 배치된 감독 노드 팝업 (비활성화 상태)
+    [SerializeField] private FacilityPopup _facilityPopup; // 씬에 배치된 감독 노드 팝업 (비활성화 상태)
 
     [Header("Center Message")]
     [SerializeField] private TMP_Text _txtMessage;
@@ -65,6 +67,7 @@ public class LobbyUI : UIBase
     private bool _lastTrainingPopupActive;
     private bool _lastStudentPopupActive;
     private bool _lastCoachPopupActive;
+    private bool _lastFacilityPopupActive;
 
     // 씬에 미리 배치된 경우 Start에서 초기화
     void Start()
@@ -81,10 +84,12 @@ public class LobbyUI : UIBase
         bool trainingActive = IsPopupActive(_trainingSelectPopup);
         bool studentActive = IsPopupActive(_studentManagementPopup);
         bool coachActive = IsPopupActive(_headCoachPopup);
+        bool facilityActive = IsPopupActive(_facilityPopup);
 
         if (trainingActive == _lastTrainingPopupActive
             && studentActive == _lastStudentPopupActive
-            && coachActive == _lastCoachPopupActive)
+            && coachActive == _lastCoachPopupActive
+            && facilityActive == _lastFacilityPopupActive)
             return;
 
         RefreshBottomNavTabSprites();
@@ -178,9 +183,11 @@ public class LobbyUI : UIBase
         if (_btnCoach != null)
             _btnCoach.onClick.AddListener(OnClickCoach);
 
-        // MVP 미구현 기능들은 '준비중' 알림
+        // 시설
         if (_btnFacility != null)
-            _btnFacility.onClick.AddListener(() => ShowNotImplemented("시설"));
+            _btnFacility.onClick.AddListener(OnClickFacility);
+
+        // MVP 미구현 기능들은 '준비중' 알림
         if (_btnShop != null)
             _btnShop.onClick.AddListener(() => ShowNotImplemented("상점"));
     }
@@ -270,6 +277,27 @@ public class LobbyUI : UIBase
         _headCoachPopup.Init();
         //_headCoachPopup.transform.SetAsLastSibling();
         _headCoachPopup.Open();
+        RefreshBottomNavTabSprites();
+    }
+    private void OnClickFacility()
+    {
+        if (_facilityPopup == null)
+            return;
+
+        bool wasActive = _facilityPopup.gameObject.activeSelf;
+
+        CloseAllLobbyPopups();
+
+        // 이미 열려있던 경우 → 토글로 닫기만 하고 종료
+        if (wasActive)
+        {
+            RefreshBottomNavTabSprites();
+            return;
+        }
+
+        _facilityPopup.Init();
+        //_headCoachPopup.transform.SetAsLastSibling();
+        _facilityPopup.Open();
         RefreshBottomNavTabSprites();
     }
 
@@ -402,6 +430,12 @@ public class LobbyUI : UIBase
         {
             _headCoachPopup.Close();
         }
+
+        if (_facilityPopup != null && _facilityPopup.gameObject.activeSelf)
+        {
+            _facilityPopup.Close();
+        }
+
         RefreshBottomNavTabSprites();
     }
 
@@ -421,16 +455,18 @@ public class LobbyUI : UIBase
         bool trainingActive = IsPopupActive(_trainingSelectPopup);
         bool studentActive = IsPopupActive(_studentManagementPopup);
         bool coachActive = IsPopupActive(_headCoachPopup);
+        bool facilityActive = IsPopupActive(_facilityPopup);
 
         ApplyTabSprite(_btnTraining, _trainingDefaultSprite, _activeTabSprites != null ? _activeTabSprites.training : null, trainingActive);
         ApplyTabSprite(_btnStudent, _studentDefaultSprite, _activeTabSprites != null ? _activeTabSprites.student : null, studentActive);
-        ApplyTabSprite(_btnFacility, _facilityDefaultSprite, _activeTabSprites != null ? _activeTabSprites.facility : null, false);
+        ApplyTabSprite(_btnFacility, _facilityDefaultSprite, _activeTabSprites != null ? _activeTabSprites.facility : null, facilityActive);
         ApplyTabSprite(_btnCoach, _coachDefaultSprite, _activeTabSprites != null ? _activeTabSprites.coach : null, coachActive);
         ApplyTabSprite(_btnShop, _shopDefaultSprite, _activeTabSprites != null ? _activeTabSprites.shop : null, false);
 
         _lastTrainingPopupActive = trainingActive;
         _lastStudentPopupActive = studentActive;
         _lastCoachPopupActive = coachActive;
+        _lastFacilityPopupActive = facilityActive;
     }
 
     // 탭 활성 여부에 따라 버튼 타겟 이미지 스프라이트를 변경
