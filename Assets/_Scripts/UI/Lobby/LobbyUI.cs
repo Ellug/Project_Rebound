@@ -319,8 +319,8 @@ public class LobbyUI : UIBase
     {
         // 예시 데이터 바인딩
         if (_txtSchoolName) _txtSchoolName.text = FormatSchoolNameWithHighlightedPrefix("한울고등학교");
-        if (_txtMoney) _txtMoney.text = "5000 G";
-        if (_txtFame) _txtFame.text = "150";
+        if (_txtMoney) _txtMoney.text = MoneyManager.Instance.Gold.ToString();
+        if (_txtFame) _txtFame.text = MoneyManager.Instance.Reputation.ToString();
         if (_txtMessage) _txtMessage.text = "감독님, 신입생들이 입학했습니다. 훈련 일정을 잡아주세요.";
     }
 
