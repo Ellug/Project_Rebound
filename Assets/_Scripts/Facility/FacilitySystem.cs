@@ -3,90 +3,87 @@ using UnityEngine;
 
 public class FacilitySystem : Singleton<FacilitySystem>
 {
-    [Header("Data")]
-    [SerializeField] private FacilityUpgradeTableSO _table;
-
-    // ÇöÀç ½Ã¼³ ·¹º§
+    // ì‹œì„¤ ë ˆë²¨ ì €ì¥
     private Dictionary<string, int> _levels = new();
 
     protected override void OnSingletonAwake()
     {
-        // ÃÊ±â ·¹º§
+        // ì´ˆê¸° ë ˆë²¨
         _levels["school"] = 1;
         _levels["gym"] = 1;
         _levels["cafeteria"] = 1;
         _levels["counselingcenter"] = 1;
     }
 
-    // ÇöÀç ·¹º§
+    // ë ˆë²¨ ë°˜í™˜
     public int GetLevel(string facility)
     {
         return _levels.TryGetValue(facility, out int lv) ? lv : 1;
     }
 
-    // ÇöÀç µ¥ÀÌÅÍ
+    // í˜„ì¬ ë°ì´í„°
     public FacilityUpgradeRow GetCurrentData(string facility)
     {
         int lv = GetLevel(facility);
-        return _table.Get(facility, lv);
+        return CachedSOData.Get<FacilityUpgradeTableSO>().Get(facility, lv);
     }
 
-    // ´ÙÀ½ ·¹º§ µ¥ÀÌÅÍ
+    // ë‹¤ìŒ ë ˆë²¨ ë°ì´í„°
     public FacilityUpgradeRow GetNextData(string facility)
     {
         int lv = GetLevel(facility);
-        return _table.Get(facility, lv + 1);
+        return CachedSOData.Get<FacilityUpgradeTableSO>().Get(facility, lv + 1);
     }
 
-    // ¾÷±×·¹ÀÌµå ½Ãµµ
+    // ì—…ê·¸ë ˆì´ë“œ ì‹œë„
     public bool TryUpgrade(string facility)
     {
         var next = GetNextData(facility);
 
         if (next == null)
         {
-            Debug.Log($"[{facility}] ÀÌ¹Ì ÃÖ´ë ·¹º§");
+            Debug.Log($"[{facility}] ì´ë¯¸ ìµœëŒ€ ë ˆë²¨");
             return false;
         }
 
         if (!MoneyManager.Instance.TrySpendGold(next.upgradeCost))
         {
-            Debug.Log("ÀçÈ­ ºÎÁ·");
+            Debug.Log("ê³¨ë“œ ë¶€ì¡±");
             return false;
         }
 
         _levels[facility] = next.facilityLv;
 
-        Debug.Log($"{facility} ¡æ Lv {next.facilityLv}");
+        Debug.Log($"{facility} ì—…ê·¸ë ˆì´ë“œ Lv {next.facilityLv}");
 
         return true;
     }
 
-    // ½Ã¼³ ¿ä±¸Á¶°Ç Ã¼Å©
+    // ì‹œì„¤ ìš”êµ¬ì¡°ê±´ ì²´í¬
     public bool CheckRequirement(string facility, int requiredLv)
     {
         return GetLevel(facility) >= requiredLv;
     }
 
-    // ÇĞ±³
+    // í•™êµ
     public int GetConditionDecayBonus()
     {
         return GetCurrentData("school").conditionDecayEfficiency;
     }
 
-    // Ã¼À°°ü
+    // ì²´ìœ¡ê´€
     public int GetTrainingExpBonus()
     {
         return GetCurrentData("gym").trainingExpEfficiency;
     }
 
-    // »ó´ã½Ç
+    // ìƒë‹´
     public int GetMentalBonus()
     {
         return GetCurrentData("counselingcenter").trainingExpEfficiency;
     }
 
-    // ½Ä´ç
+    // ì‹ë‹¹
     public int GetCafeteriaBonus()
     {
         return GetCurrentData("cafeteria").trainingExpEfficiency;
