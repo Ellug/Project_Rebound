@@ -46,6 +46,24 @@ public class FacilitySystem : Singleton<FacilitySystem>
             return false;
         }
 
+        if (facility == "school")
+        {
+            int schoolLv = GetLevel("school");
+            int requiredLv = schoolLv * 2;
+
+            int gymLv = GetLevel("gym");
+            int cafeteriaLv = GetLevel("cafeteria");
+            int counselingLv = GetLevel("counselingcenter");
+
+            if (gymLv < requiredLv ||
+                cafeteriaLv < requiredLv ||
+                counselingLv < requiredLv)
+            {
+                Debug.Log("학교 업그레이드 조건 미충족");
+                return false;
+            }
+        }
+
         if (!MoneyManager.Instance.TrySpendGold(next.upgradeCost))
         {
             Debug.Log("골드 부족");
@@ -59,10 +77,19 @@ public class FacilitySystem : Singleton<FacilitySystem>
         return true;
     }
 
-    // 시설 요구조건 체크
-    public bool CheckRequirement(string facility, int requiredLv)
+    // 학교 업그레이드 조건 체크
+    public bool CanUpgradeSchool()
     {
-        return GetLevel(facility) >= requiredLv;
+        int schoolLv = GetLevel("school");
+        int requiredLv = schoolLv * 2;
+
+        int gymLv = GetLevel("gym");
+        int cafeteriaLv = GetLevel("cafeteria");
+        int counselingLv = GetLevel("counselingcenter");
+
+        return gymLv >= requiredLv &&
+               cafeteriaLv >= requiredLv &&
+               counselingLv >= requiredLv;
     }
 
     // 학교
