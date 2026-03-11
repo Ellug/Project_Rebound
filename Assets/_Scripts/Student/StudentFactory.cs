@@ -46,6 +46,7 @@ public static class StudentFactory
 
         GenerateStats(student, grade); // 학년 기반으로 기본 스탯 생성 및 할당
         GeneratePotential(student, position.id); // 포지션 기반 잠재력 생성
+        GenerateTrust(student, grade);
 
         student.condition = Student.ClampCondition(student.mental + 20);
 
@@ -247,14 +248,24 @@ public static class StudentFactory
     private static void InitializeColorIfNeeded()
     {
         if (_isColorInitialized)
-        {
-            return;
-        }
 
         _fixedColor = _random.Next(0, 2) == 0
             ? CharacterColor.Red
             : CharacterColor.Green;
 
         _isColorInitialized = true;
+    }
+
+    private static void GenerateTrust(Student student, int grade)
+    {
+        var table = CachedSOData.Get<StudentTrustStartTableSO>();
+        foreach (var row in table.Rows)
+        {
+            if (row.grade == grade)
+            {
+                student.trust = _random.Next(row.minTrust, row.maxTrust + 1);
+                return;
+            }
+        }
     }
 }

@@ -1283,6 +1283,26 @@ PrefabInstance:
       propertyPath: _recommendHighlightRoot
       value: 
       objectReference: {fileID: 217437594}
+    - target: {fileID: 493442475573925289, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 83.26226
+      objectReference: {fileID: 0}
+    - target: {fileID: 493442475573925289, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 168.15074
+      objectReference: {fileID: 0}
+    - target: {fileID: 493442475573925289, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 493442475573925289, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -35.300026
+      objectReference: {fileID: 0}
+    - target: {fileID: 2972521997601508509, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -2568206229644312777, guid: ad432b4a76bc069408bb9663d50db416, type: 3}
     - target: {fileID: 3986749012317471709, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
       propertyPath: m_Name
       value: StudentSlot_Prefab_4
@@ -1333,11 +1353,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6614058737596260056, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 176.9
+      value: 181.8
       objectReference: {fileID: 0}
     - target: {fileID: 6614058737596260056, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 146.3
+      value: 150.9
       objectReference: {fileID: 0}
     - target: {fileID: 6614058737596260056, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
       propertyPath: m_LocalScale.x
@@ -2374,7 +2394,7 @@ PrefabInstance:
     - target: {fileID: 319084010097847465, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
       propertyPath: _imgAssignedIcon
       value: 
-      objectReference: {fileID: 346484473}
+      objectReference: {fileID: 0}
     - target: {fileID: 319084010097847465, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
       propertyPath: _slotPositionName
       value: SF
@@ -2382,26 +2402,30 @@ PrefabInstance:
     - target: {fileID: 319084010097847465, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
       propertyPath: _recommendHighlightRoot
       value: 
-      objectReference: {fileID: 346484474}
+      objectReference: {fileID: 0}
     - target: {fileID: 3986749012317471709, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
       propertyPath: m_Name
       value: StudentSlot_Prefab_Back5
       objectReference: {fileID: 0}
+    - target: {fileID: 4131305263303063786, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4538577936677061903, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 9178657534415313996, guid: 28c4305ca11f9e7439e3f90700eb215c, type: 3}
+      objectReference: {fileID: 2921321321438280187, guid: 88473a4953227b94296d2acd1644a60e, type: 3}
     - target: {fileID: 4538577936677061903, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
       propertyPath: m_Color.b
-      value: 0.9960785
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4538577936677061903, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
       propertyPath: m_Color.g
-      value: 0.5647059
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4538577936677061903, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
       propertyPath: m_Color.r
-      value: 0.11764707
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4769365412722313040, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
       propertyPath: m_IsActive
@@ -2501,32 +2525,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 319084010097847465, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 4769365412722313040, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
+    - {fileID: 4131305263303063786, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 6614058737596260056, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
-      insertIndex: 0
+      insertIndex: -1
       addedObject: {fileID: 1120599504}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
 --- !u!224 &346484472 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 6614058737596260056, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
-  m_PrefabInstance: {fileID: 346484471}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &346484473 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2972521997601508509, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
-  m_PrefabInstance: {fileID: 346484471}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
---- !u!1 &346484474 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4131305263303063786, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
   m_PrefabInstance: {fileID: 346484471}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &354135417
@@ -2670,7 +2680,7 @@ PrefabInstance:
     - target: {fileID: 319084010097847465, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
       propertyPath: _imgAssignedIcon
       value: 
-      objectReference: {fileID: 363305978}
+      objectReference: {fileID: 0}
     - target: {fileID: 319084010097847465, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
       propertyPath: _slotPositionName
       value: PF
@@ -2678,7 +2688,7 @@ PrefabInstance:
     - target: {fileID: 319084010097847465, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
       propertyPath: _recommendHighlightRoot
       value: 
-      objectReference: {fileID: 363305979}
+      objectReference: {fileID: 0}
     - target: {fileID: 3986749012317471709, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
       propertyPath: m_Name
       value: StudentSlot_Prefab_Back4
@@ -2686,18 +2696,18 @@ PrefabInstance:
     - target: {fileID: 4538577936677061903, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 9178657534415313996, guid: 28c4305ca11f9e7439e3f90700eb215c, type: 3}
+      objectReference: {fileID: 2921321321438280187, guid: 88473a4953227b94296d2acd1644a60e, type: 3}
     - target: {fileID: 4538577936677061903, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
       propertyPath: m_Color.b
-      value: 0.9960785
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4538577936677061903, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
       propertyPath: m_Color.g
-      value: 0.5647059
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4538577936677061903, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
       propertyPath: m_Color.r
-      value: 0.11764707
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4769365412722313040, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
       propertyPath: m_IsActive
@@ -2797,32 +2807,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 319084010097847465, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 4131305263303063786, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
+    - {fileID: 4769365412722313040, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 6614058737596260056, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
-      insertIndex: 0
+      insertIndex: -1
       addedObject: {fileID: 217437592}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
 --- !u!224 &363305977 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 6614058737596260056, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
-  m_PrefabInstance: {fileID: 363305976}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &363305978 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2972521997601508509, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
-  m_PrefabInstance: {fileID: 363305976}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
---- !u!1 &363305979 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4131305263303063786, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
   m_PrefabInstance: {fileID: 363305976}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &380650699
@@ -3876,6 +3872,26 @@ PrefabInstance:
       propertyPath: _recommendHighlightRoot
       value: 
       objectReference: {fileID: 479928051}
+    - target: {fileID: 493442475573925289, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 83.26226
+      objectReference: {fileID: 0}
+    - target: {fileID: 493442475573925289, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 168.15074
+      objectReference: {fileID: 0}
+    - target: {fileID: 493442475573925289, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 493442475573925289, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -35.300026
+      objectReference: {fileID: 0}
+    - target: {fileID: 2972521997601508509, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -2568206229644312777, guid: ad432b4a76bc069408bb9663d50db416, type: 3}
     - target: {fileID: 3986749012317471709, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
       propertyPath: m_Name
       value: StudentSlot_Prefab_3
@@ -3926,11 +3942,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6614058737596260056, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 176.9
+      value: 181.8
       objectReference: {fileID: 0}
     - target: {fileID: 6614058737596260056, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 146.3
+      value: 150.9
       objectReference: {fileID: 0}
     - target: {fileID: 6614058737596260056, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
       propertyPath: m_LocalScale.x
@@ -5202,7 +5218,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &627564502
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6614,6 +6630,26 @@ PrefabInstance:
       propertyPath: _recommendHighlightRoot
       value: 
       objectReference: {fileID: 824236216}
+    - target: {fileID: 493442475573925289, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 83.26226
+      objectReference: {fileID: 0}
+    - target: {fileID: 493442475573925289, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 168.15074
+      objectReference: {fileID: 0}
+    - target: {fileID: 493442475573925289, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 493442475573925289, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -35.300026
+      objectReference: {fileID: 0}
+    - target: {fileID: 2972521997601508509, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -2568206229644312777, guid: ad432b4a76bc069408bb9663d50db416, type: 3}
     - target: {fileID: 3986749012317471709, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
       propertyPath: m_Name
       value: StudentSlot_Prefab_2
@@ -6664,11 +6700,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6614058737596260056, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 176.9
+      value: 181.8
       objectReference: {fileID: 0}
     - target: {fileID: 6614058737596260056, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 146.3
+      value: 150.9
       objectReference: {fileID: 0}
     - target: {fileID: 6614058737596260056, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
       propertyPath: m_LocalScale.x
@@ -6869,8 +6905,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 100.84375}
-  m_SizeDelta: {x: 0, y: -201.6875}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &844891450
 MonoBehaviour:
@@ -6925,7 +6961,7 @@ PrefabInstance:
     - target: {fileID: 319084010097847465, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
       propertyPath: _imgAssignedIcon
       value: 
-      objectReference: {fileID: 848303554}
+      objectReference: {fileID: 0}
     - target: {fileID: 319084010097847465, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
       propertyPath: _slotPositionName
       value: PF
@@ -6933,7 +6969,7 @@ PrefabInstance:
     - target: {fileID: 319084010097847465, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
       propertyPath: _recommendHighlightRoot
       value: 
-      objectReference: {fileID: 848303555}
+      objectReference: {fileID: 0}
     - target: {fileID: 3986749012317471709, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
       propertyPath: m_Name
       value: StudentSlot_Prefab_Back2
@@ -6941,22 +6977,22 @@ PrefabInstance:
     - target: {fileID: 4538577936677061903, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 9178657534415313996, guid: 28c4305ca11f9e7439e3f90700eb215c, type: 3}
+      objectReference: {fileID: -6049055910977708906, guid: 0f6b0357a7dd5d7468f1ccf0f7fb7ae2, type: 3}
     - target: {fileID: 4538577936677061903, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
       propertyPath: m_Color.b
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4538577936677061903, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
       propertyPath: m_Color.g
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4538577936677061903, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
       propertyPath: m_Color.r
-      value: 0.909804
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4769365412722313040, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6614058737596260056, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
       propertyPath: m_Pivot.x
@@ -7052,32 +7088,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 319084010097847465, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 4769365412722313040, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
+    - {fileID: 4131305263303063786, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 6614058737596260056, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
-      insertIndex: 0
+      insertIndex: -1
       addedObject: {fileID: 824236214}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
 --- !u!224 &848303553 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 6614058737596260056, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
-  m_PrefabInstance: {fileID: 848303552}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &848303554 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2972521997601508509, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
-  m_PrefabInstance: {fileID: 848303552}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
---- !u!1 &848303555 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4131305263303063786, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
   m_PrefabInstance: {fileID: 848303552}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &853863272
@@ -9181,6 +9203,26 @@ PrefabInstance:
       propertyPath: _recommendHighlightRoot
       value: 
       objectReference: {fileID: 1033113598}
+    - target: {fileID: 493442475573925289, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 83.26226
+      objectReference: {fileID: 0}
+    - target: {fileID: 493442475573925289, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 168.15074
+      objectReference: {fileID: 0}
+    - target: {fileID: 493442475573925289, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 493442475573925289, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -35.300026
+      objectReference: {fileID: 0}
+    - target: {fileID: 2972521997601508509, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -2568206229644312777, guid: ad432b4a76bc069408bb9663d50db416, type: 3}
     - target: {fileID: 3986749012317471709, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
       propertyPath: m_Name
       value: StudentSlot_Prefab_1
@@ -9231,11 +9273,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6614058737596260056, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 176.9
+      value: 181.8
       objectReference: {fileID: 0}
     - target: {fileID: 6614058737596260056, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 146.3
+      value: 150.9
       objectReference: {fileID: 0}
     - target: {fileID: 6614058737596260056, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
       propertyPath: m_LocalScale.x
@@ -9737,40 +9779,32 @@ PrefabInstance:
     m_TransformParent: {fileID: 346484472}
     m_Modifications:
     - target: {fileID: 319084010097847465, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
-      propertyPath: _slotType
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 319084010097847465, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
       propertyPath: _imgAssignedIcon
       value: 
       objectReference: {fileID: 1120599507}
-    - target: {fileID: 319084010097847465, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
-      propertyPath: _slotPositionName
-      value: SF
+    - target: {fileID: 493442475573925289, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 83.2623
       objectReference: {fileID: 0}
-    - target: {fileID: 319084010097847465, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
-      propertyPath: _recommendHighlightRoot
+    - target: {fileID: 493442475573925289, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 168.1507
+      objectReference: {fileID: 0}
+    - target: {fileID: 493442475573925289, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0.000022888184
+      objectReference: {fileID: 0}
+    - target: {fileID: 493442475573925289, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -35.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2972521997601508509, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
+      propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 1120599506}
+      objectReference: {fileID: -2568206229644312777, guid: ad432b4a76bc069408bb9663d50db416, type: 3}
     - target: {fileID: 3986749012317471709, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
       propertyPath: m_Name
       value: StudentSlot_Prefab_5
-      objectReference: {fileID: 0}
-    - target: {fileID: 4538577936677061903, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 9178657534415313996, guid: 28c4305ca11f9e7439e3f90700eb215c, type: 3}
-    - target: {fileID: 4538577936677061903, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
-      propertyPath: m_Color.b
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4538577936677061903, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
-      propertyPath: m_Color.g
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4538577936677061903, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
-      propertyPath: m_Color.r
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4769365412722313040, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
       propertyPath: m_IsActive
@@ -9802,23 +9836,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6614058737596260056, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 176.9
+      value: 181.8
       objectReference: {fileID: 0}
     - target: {fileID: 6614058737596260056, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 146.3
-      objectReference: {fileID: 0}
-    - target: {fileID: 6614058737596260056, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6614058737596260056, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6614058737596260056, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 1
+      value: 150.9
       objectReference: {fileID: 0}
     - target: {fileID: 6614058737596260056, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
       propertyPath: m_LocalPosition.x
@@ -9871,10 +9893,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 3986749012317471709, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1120599509}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
 --- !u!224 &1120599504 stripped
 RectTransform:
@@ -9886,17 +9905,12 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 319084010097847465, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
   m_PrefabInstance: {fileID: 1120599503}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1120599508}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: eaeb5928d7a8c77439b69856ee1f983a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StudentSlot
---- !u!1 &1120599506 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4131305263303063786, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
-  m_PrefabInstance: {fileID: 1120599503}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1120599507 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2972521997601508509, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
@@ -9908,24 +9922,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
---- !u!1 &1120599508 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3986749012317471709, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
-  m_PrefabInstance: {fileID: 1120599503}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1120599509
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1120599508}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 31a19414c41e5ae4aae2af33fee712f6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Mask
-  m_ShowMaskGraphic: 1
 --- !u!1 &1128499661
 GameObject:
   m_ObjectHideFlags: 0
@@ -12282,7 +12278,7 @@ PrefabInstance:
     - target: {fileID: 319084010097847465, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
       propertyPath: _imgAssignedIcon
       value: 
-      objectReference: {fileID: 1615381579}
+      objectReference: {fileID: 0}
     - target: {fileID: 319084010097847465, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
       propertyPath: _slotPositionName
       value: PF
@@ -12290,7 +12286,7 @@ PrefabInstance:
     - target: {fileID: 319084010097847465, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
       propertyPath: _recommendHighlightRoot
       value: 
-      objectReference: {fileID: 1615381580}
+      objectReference: {fileID: 0}
     - target: {fileID: 3986749012317471709, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
       propertyPath: m_Name
       value: StudentSlot_Prefab_Back1
@@ -12298,22 +12294,22 @@ PrefabInstance:
     - target: {fileID: 4538577936677061903, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 9178657534415313996, guid: 28c4305ca11f9e7439e3f90700eb215c, type: 3}
+      objectReference: {fileID: -8372319212965029419, guid: 5da283684be39664e98350da069f5089, type: 3}
     - target: {fileID: 4538577936677061903, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
       propertyPath: m_Color.b
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4538577936677061903, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
       propertyPath: m_Color.g
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4538577936677061903, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
       propertyPath: m_Color.r
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4769365412722313040, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6614058737596260056, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
       propertyPath: m_Pivot.x
@@ -12409,32 +12405,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 319084010097847465, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 4769365412722313040, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
+    - {fileID: 4131305263303063786, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 6614058737596260056, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
-      insertIndex: 0
+      insertIndex: -1
       addedObject: {fileID: 1033113596}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
 --- !u!224 &1615381578 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 6614058737596260056, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
-  m_PrefabInstance: {fileID: 1615381577}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1615381579 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2972521997601508509, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
-  m_PrefabInstance: {fileID: 1615381577}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
---- !u!1 &1615381580 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4131305263303063786, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
   m_PrefabInstance: {fileID: 1615381577}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1659289172
@@ -14858,7 +14840,7 @@ PrefabInstance:
     - target: {fileID: 319084010097847465, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
       propertyPath: _imgAssignedIcon
       value: 
-      objectReference: {fileID: 1973645822}
+      objectReference: {fileID: 0}
     - target: {fileID: 319084010097847465, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
       propertyPath: _slotPositionName
       value: PF
@@ -14866,7 +14848,7 @@ PrefabInstance:
     - target: {fileID: 319084010097847465, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
       propertyPath: _recommendHighlightRoot
       value: 
-      objectReference: {fileID: 1973645823}
+      objectReference: {fileID: 0}
     - target: {fileID: 3986749012317471709, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
       propertyPath: m_Name
       value: StudentSlot_Prefab_Back3
@@ -14874,22 +14856,22 @@ PrefabInstance:
     - target: {fileID: 4538577936677061903, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 9178657534415313996, guid: 28c4305ca11f9e7439e3f90700eb215c, type: 3}
+      objectReference: {fileID: -6049055910977708906, guid: 0f6b0357a7dd5d7468f1ccf0f7fb7ae2, type: 3}
     - target: {fileID: 4538577936677061903, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
       propertyPath: m_Color.b
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4538577936677061903, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
       propertyPath: m_Color.g
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4538577936677061903, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
       propertyPath: m_Color.r
-      value: 0.909804
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4769365412722313040, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6614058737596260056, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
       propertyPath: m_Pivot.x
@@ -14985,32 +14967,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 319084010097847465, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 4769365412722313040, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
+    - {fileID: 4131305263303063786, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 6614058737596260056, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
-      insertIndex: 0
+      insertIndex: -1
       addedObject: {fileID: 479928049}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
 --- !u!224 &1973645821 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 6614058737596260056, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
-  m_PrefabInstance: {fileID: 1973645820}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1973645822 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2972521997601508509, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
-  m_PrefabInstance: {fileID: 1973645820}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
---- !u!1 &1973645823 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4131305263303063786, guid: 0bea5bf5a80249a4d8e2b37dc4fa0891, type: 3}
   m_PrefabInstance: {fileID: 1973645820}
   m_PrefabAsset: {fileID: 0}
 --- !u!114 &1982806643 stripped
