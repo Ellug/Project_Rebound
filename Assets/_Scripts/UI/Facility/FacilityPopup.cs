@@ -91,14 +91,14 @@ public class FacilityPopup : UIBase
 
     private void RefreshRow(string facility, FacilityUpgradeRowUI row)
     {
-        Debug.Log($"RefreshRow: {facility}");
-        if (row == null)
-        {
-            Debug.LogError($"Row NULL : {facility}");
-        }
         int level = FacilitySystem.Instance.GetLevel(facility);
         var current = FacilitySystem.Instance.GetCurrentData(facility);
         var next = FacilitySystem.Instance.GetNextData(facility);
+
+        if (current == null)
+        {
+            return;
+        }
 
         if (row.facilityNameLV != null)
         {
@@ -117,10 +117,21 @@ public class FacilityPopup : UIBase
 
         int money = MoneyManager.Instance.Gold;
 
+        if (facility == "school")
+        {
+            if (!FacilitySystem.Instance.CanUpgradeSchool())
+            {
+                row.upgradeButtonText.text = "조건 부족";
+                row.upgradeButton.interactable = false;
+                return;
+            }
+        }
+
         if (money < next.upgradeCost)
         {
             row.upgradeButtonText.text = "재화 부족";
             row.upgradeButton.interactable = false;
+            return;
         }
         else
         {
