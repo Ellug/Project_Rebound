@@ -29,7 +29,10 @@ public class LoadUI : MonoBehaviour
     public void LoadList()
     {
         foreach (Transform child in _loadListpanel)
-            Destroy(child.gameObject);
+        {
+            if (child.GetComponent<LoadPrefab>() != null)
+                Destroy(child.gameObject);
+        }
 
         for (int i = 0; i < 3; i++)
         {
