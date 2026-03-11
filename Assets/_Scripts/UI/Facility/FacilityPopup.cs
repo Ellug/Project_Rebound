@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,28 +8,28 @@ public class FacilityPopup : UIBase
     [Serializable]
     private class FacilityUpgradeRowUI
     {
-        public TMP_Text facilityNameLV;           // ½Ã¼³ ÀÌ¸§°ú ·¹º§
-        public TMP_Text upgradeCost;            // ¾÷±×·¹ÀÌµå ºñ¿ë
-        public Button upgradeButton;            // ¾÷±×·¹ÀÌµå ¹öÆ°
-        public TMP_Text upgradeButtonText;      // ¹öÆ° ÅØ½ºÆ®
+        public TMP_Text facilityNameLV;           // ì‹œì„¤ ì´ë¦„ê³¼ ë ˆë²¨
+        public TMP_Text upgradeCost;            // ì—…ê·¸ë ˆì´ë“œ ë¹„ìš©
+        public Button upgradeButton;            // ì—…ê·¸ë ˆì´ë“œ ë²„íŠ¼
+        public TMP_Text upgradeButtonText;      // ë²„íŠ¼ í…ìŠ¤íŠ¸
     }
 
-    [Header("½Ã¼³ ¼³¸í")]
+    [Header("ì‹œì„¤ ì„¤ëª…")]
     [SerializeField] private TMP_Text _txtDescription;
 
-    [Header("½Ã¼³ ¼±ÅÃ ¹öÆ°")]
+    [Header("ì‹œì„¤ ì„ íƒ ë²„íŠ¼")]
     [SerializeField] private Button _btnSchool;
     [SerializeField] private Button _btnGym;
     [SerializeField] private Button _btnCafeteria;
     [SerializeField] private Button _btnCounseling;
 
-    [Header("¾÷±×·¹ÀÌµå UI")]
+    [Header("ì—…ê·¸ë ˆì´ë“œ UI")]
     [SerializeField] private FacilityUpgradeRowUI _schoolRow;
     [SerializeField] private FacilityUpgradeRowUI _gymRow;
     [SerializeField] private FacilityUpgradeRowUI _cafeteriaRow;
     [SerializeField] private FacilityUpgradeRowUI _counselingRow;
     
-    // Áßº¹ ¹æÁö
+    // ì¤‘ë³µ ë°©ì§€
     private bool _inited;
     public override void Init()
     {
@@ -44,7 +44,7 @@ public class FacilityPopup : UIBase
         BindButtons();
         RefreshAll();
     }
-    // ½Ã¼³ Å¬¸¯½Ã ¼³¸í, ¾÷±×·¹ÀÌµå Å¬¸¯ ½Ã ¾÷±×·¹ÀÌµå
+    // ì‹œì„¤ í´ë¦­ì‹œ ì„¤ëª…, ì—…ê·¸ë ˆì´ë“œ í´ë¦­ ì‹œ ì—…ê·¸ë ˆì´ë“œ
     private void BindButtons()
     {
         if (_btnSchool != null)
@@ -78,9 +78,14 @@ public class FacilityPopup : UIBase
         if (FacilitySystem.Instance.TryUpgrade(facility))
         {
             RefreshAll();
+
+            if (SaveManager.Instance != null)
+            {
+                SaveManager.Instance.AutoSaveByBranch("ì‹œì„¤ ì—…ê·¸ë ˆì´ë“œ ì™„ë£Œ");
+            }
         }
     }
-    // °»½Å
+    // ê°±ì‹ 
     private void RefreshAll()
     {
         RefreshRow("school", _schoolRow);
@@ -121,7 +126,7 @@ public class FacilityPopup : UIBase
         {
             if (!FacilitySystem.Instance.CanUpgradeSchool())
             {
-                row.upgradeButtonText.text = "Á¶°Ç ºÎÁ·";
+                row.upgradeButtonText.text = "ì¡°ê±´ ë¶€ì¡±";
                 row.upgradeButton.interactable = false;
                 return;
             }
@@ -129,13 +134,13 @@ public class FacilityPopup : UIBase
 
         if (money < next.upgradeCost)
         {
-            row.upgradeButtonText.text = "ÀçÈ­ ºÎÁ·";
+            row.upgradeButtonText.text = "ì¬í™” ë¶€ì¡±";
             row.upgradeButton.interactable = false;
             return;
         }
         else
         {
-            row.upgradeButtonText.text = "¾÷±×·¹ÀÌµå";
+            row.upgradeButtonText.text = "ì—…ê·¸ë ˆì´ë“œ";
             row.upgradeButton.interactable = true;
         }
     }
@@ -145,19 +150,19 @@ public class FacilityPopup : UIBase
         switch (facility)
         {
             case "school":
-                _txtDescription.text = "ÇĞ±³´Â....";
+                _txtDescription.text = "í•™êµëŠ”....";
                 break;
 
             case "gym":
-                _txtDescription.text = "Ã¼À°°üÀº ¸àÅ»°ú ÄÁµğ¼Ç¿Ü ¸ğµç ½ºÅÈÀÇ ¼ºÀå¿¡ µµ¿òÀ» Áİ´Ï´Ù.";
+                _txtDescription.text = "ì²´ìœ¡ê´€ì€ ë©˜íƒˆê³¼ ì»¨ë””ì…˜ì™¸ ëª¨ë“  ìŠ¤íƒ¯ì˜ ì„±ì¥ì— ë„ì›€ì„ ì¤ë‹ˆë‹¤.";
                 break;
 
             case "cafeteria":
-                _txtDescription.text = "½Ä´çÀº ¸ğµç ¼±¼öÀÇ ¸àÅ» ¹× ÄÁµğ¼Ç °ü¸®¿¡ µµ¿òÀ» Áİ´Ï´Ù.";
+                _txtDescription.text = "ì‹ë‹¹ì€ ëª¨ë“  ì„ ìˆ˜ì˜ ë©˜íƒˆ ë° ì»¨ë””ì…˜ ê´€ë¦¬ì— ë„ì›€ì„ ì¤ë‹ˆë‹¤.";
                 break;
 
             case "counselingcenter":
-                _txtDescription.text = "½É¸® »ó´ã½ÇÀº ¼±¼ö °³ÀÎÀÇ ¸àÅ» ½ºÅÈ¿¡ Å« µµ¿òÀ» Áİ´Ï´Ù.";
+                _txtDescription.text = "ì‹¬ë¦¬ ìƒë‹´ì‹¤ì€ ì„ ìˆ˜ ê°œì¸ì˜ ë©˜íƒˆ ìŠ¤íƒ¯ì— í° ë„ì›€ì„ ì¤ë‹ˆë‹¤.";
                 break;
         }
     }

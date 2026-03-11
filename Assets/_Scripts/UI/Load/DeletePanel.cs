@@ -1,21 +1,34 @@
-using UnityEngine;
+Ôªøusing UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-// ºº¿Ã∫Í ΩΩ∑‘ ªË¡¶ ∆–≥Œ
+// ÏÑ∏Ïù¥Î∏å Ïä¨Î°Ø ÏÇ≠Ï†ú Ìå®ÎÑê
 public class DeletePanel : MonoBehaviour
 {
     [SerializeField] private TMP_Text _fileNumText;
     [SerializeField] private Button _checkButton;
     [SerializeField] private Button _cancelButton;
+    [SerializeField] private float _confirmEnableDelay = 3f;
 
     private int _slotIndex;
     private LoadUI _parent;
     private bool _bound;
+    private Coroutine _enableRoutine;
 
     void Awake()
     {
         gameObject.SetActive(false);
+    }
+
+    void OnEnable()
+    {
+        if (_checkButton != null)
+            _checkButton.interactable = false;
+
+        if (_enableRoutine != null)
+            StopCoroutine(_enableRoutine);
+
+        _enableRoutine = StartCoroutine(CoEnableConfirmButton());
     }
 
     public void Open(int slotIndex, string playTime, LoadUI parent)
@@ -41,8 +54,7 @@ public class DeletePanel : MonoBehaviour
 
         if (_checkButton != null)
         {
-            _checkButton.onClick.AddListener(OnDestroy);
-            _checkButton.onClick.AddListener(OnCancel);
+            _checkButton.onClick.AddListener(OnConfirmDelete);
         }
 
         if (_cancelButton != null)
@@ -57,8 +69,7 @@ public class DeletePanel : MonoBehaviour
     {
         if (_checkButton != null)
         {
-            _checkButton.onClick.RemoveListener(OnDestroy);
-            _checkButton.onClick.RemoveListener(OnCancel);
+            _checkButton.onClick.RemoveListener(OnConfirmDelete);
         }
 
         if (_cancelButton != null)
@@ -71,8 +82,20 @@ public class DeletePanel : MonoBehaviour
 
     private void Close()
     {
+        if (_enableRoutine != null)
+        {
+            StopCoroutine(_enableRoutine);
+            _enableRoutine = null;
+        }
+
         Unbind();
         gameObject.SetActive(false);
+    }
+
+    private void OnConfirmDelete()
+    {
+        _parent?.OnClickDelete(_slotIndex);
+        Close();
     }
 
     private void OnCancel()
@@ -80,8 +103,18 @@ public class DeletePanel : MonoBehaviour
         Close();
     }
 
-    private void OnDestroy()
+    private System.Collections.IEnumerator CoEnableConfirmButton()
     {
-        _parent?.OnClickDelete(_slotIndex);
+        yield return new WaitForSeconds(_confirmEnableDelay);
+
+        if (_checkButton != null)
+            _checkButton.interactable = true;
+
+        _enableRoutine = null;
+    }
+
+    void OnDestroy()
+    {
+        Unbind();
     }
 }

@@ -200,6 +200,11 @@ public class HeadCoachPopup : UIBase
     private void OnUnlockRequested(int nodeId)
     {
         bool success = HeadCoachManager.Instance.TryUnlockNode(nodeId);
+        if (success)
+        {
+            // 해금 성공 시 하단 상세 패널 슬라이드 아웃
+            _nodeInfoPopup?.Hide();
+        }
         if (!success)
         {
             // TODO: 명성치 부족 / 조건 미달 피드백 UI 연출

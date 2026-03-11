@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class LoadUI : MonoBehaviour
@@ -34,13 +34,12 @@ public class LoadUI : MonoBehaviour
                 Destroy(child.gameObject);
         }
 
-        for (int i = 0; i < 3; i++)
+        for (int i = 1; i <= 4; i++)
         {
             if (!SaveSystem.Instance.Exists(i))
             {
                 continue;
             }
-
 
             PlayData data = SaveSystem.Instance.Load(i);
 
@@ -106,5 +105,10 @@ public class LoadUI : MonoBehaviour
     {
         Debug.Log($"삭제 요청: {slotIndex}");
         SaveSystem.Instance.Delete(slotIndex);
+
+        if (SaveManager.Instance != null && SaveManager.Instance.CurrentSlotIndex == slotIndex)
+        {
+            SaveManager.Instance.Clear();
+        }
     }
 }
