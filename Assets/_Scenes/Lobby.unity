@@ -6568,7 +6568,7 @@ MonoBehaviour:
   - {fileID: 479928052}
   - {fileID: 217437595}
   - {fileID: 1120599505}
-  _studentInfoPopup: {fileID: 5295513624890793015}
+  _studentInfoPopup: {fileID: 1325615260100298729}
   _btnPositionGuide: {fileID: 1898204114}
   _btnClose: {fileID: 495393613}
   _positionGuideTitle: "\uD3EC\uC9C0\uC158 \uC548\uB0B4"
@@ -16301,7 +16301,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2419633514991850529, guid: 1d86e78e2d96561478b3f49e51533e2b, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3345892901533320301, guid: 1d86e78e2d96561478b3f49e51533e2b, type: 3}
       propertyPath: m_RaycastTarget
@@ -16423,6 +16423,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
+--- !u!114 &1325615260100298729 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 38621013781403265, guid: 1d86e78e2d96561478b3f49e51533e2b, type: 3}
+  m_PrefabInstance: {fileID: 1325615260100298727}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 185d461ea8db7fb498edadefb0facdde, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SelectStudentInfoPopup
 --- !u!222 &1611084131453031500
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -17319,17 +17330,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &5295513624890793015 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 38621013781403265, guid: 1d86e78e2d96561478b3f49e51533e2b, type: 3}
-  m_PrefabInstance: {fileID: 1325615260100298727}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 185d461ea8db7fb498edadefb0facdde, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SelectStudentInfoPopup
 --- !u!114 &5739143158876049233
 MonoBehaviour:
   m_ObjectHideFlags: 0
