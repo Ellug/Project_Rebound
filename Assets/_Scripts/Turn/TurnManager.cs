@@ -96,6 +96,14 @@ public class TurnManager : MonoBehaviour
 
         try
         {
+            if (SuddenEventManager.Instance != null)
+            {
+                SuddenEventManager.Instance.EvaluateEvents(
+                    SuddenEventConditionFlags.Daily,
+                    SuddenEventContextFlags.PreProcess
+                );
+            }
+
             SetState(TurnState.PreTurn);
             InitTurnContext(action);
             OnTurnStarted?.Invoke(_currentContext);
@@ -111,7 +119,15 @@ public class TurnManager : MonoBehaviour
 
             //모든 모듈 처리 완료 후 날짜 전진
             SetState(TurnState.PostTurn);
-            _dateManager.AdvanceDay();
+
+            if (SuddenEventManager.Instance != null)
+            {
+                SuddenEventManager.Instance.EvaluateEvents(
+                    SuddenEventConditionFlags.Daily,
+                    SuddenEventContextFlags.PostProcess
+                );
+            }
+                _dateManager.AdvanceDay();
             _turnIndex++;
 
             SetState(TurnState.WaitingForInput);
