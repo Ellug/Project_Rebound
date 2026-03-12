@@ -685,34 +685,48 @@ MonoBehaviour:
     targetMax: 5
     amountMin: -20
     amountMax: -20
+  - id: event_effect_1_money_p5
+    type: 1
+    targetName: text_status_10
+    targetMin: 10
+    targetMax: 10
+    amountMin: 5
+    amountMax: 5
   - id: event_effect_1_money_p10
     type: 1
     targetName: text_status_10
     targetMin: 10
     targetMax: 10
     amountMin: 10
-    amountMax: 100
+    amountMax: 10
   - id: event_effect_1_money_p20
     type: 1
     targetName: text_status_10
     targetMin: 10
     targetMax: 10
     amountMin: 20
-    amountMax: 200
+    amountMax: 20
   - id: event_effect_1_money_p50
     type: 1
     targetName: text_status_10
     targetMin: 10
     targetMax: 10
     amountMin: 50
-    amountMax: 500
+    amountMax: 50
   - id: event_effect_1_money_p100
     type: 1
     targetName: text_status_10
     targetMin: 10
     targetMax: 10
     amountMin: 100
-    amountMax: 1000
+    amountMax: 100
+  - id: event_effect_1_money_m5
+    type: 1
+    targetName: text_status_10
+    targetMin: 10
+    targetMax: 10
+    amountMin: -5
+    amountMax: -5
   - id: event_effect_1_money_m10
     type: 1
     targetName: text_status_10
@@ -741,7 +755,7 @@ MonoBehaviour:
     targetMax: 10
     amountMin: -100
     amountMax: -100
-  - id: event_effect_2_money_p50
+  - id: event_effect_2_money_p5
     type: 2
     targetName: text_status_10
     targetMin: 10
