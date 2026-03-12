@@ -38,6 +38,11 @@ public class SavedFlowData
     public int maxRecruitCount;                  // 모집 정원 저장
     public bool hasPendingFriendlyMatch;         // 친선경기 예약 여부 저장
 
+    // 친선경기 상세 저장
+    public string friendlyMatchDate;             // yyyy-MM-dd
+    public string friendlyOpponentName;          // 상대 학교명
+    public bool friendlyMatchConfirmed;          // 확정 여부
+
     // string → DateTime 변환 (파싱 실패 시 default 반환)
     public DateTime ParseCurrentDate()
     {
@@ -47,6 +52,11 @@ public class SavedFlowData
     public DateTime ParseLeagueTermEnd()
     {
         return DateTime.TryParse(leagueTermEnd, out DateTime result) ? result : default;
+    }
+
+    public DateTime ParseFriendlyMatchDate()
+    {
+        return DateTime.TryParse(friendlyMatchDate, out DateTime result) ? result : default;
     }
 }
 
@@ -91,7 +101,6 @@ public class SavedStudentData
 
     // 컨디션 및 상태
     public int condition;
-    public int trust;
 
     // 이벤트 효과
     public List<string> activeEffectIds = new();

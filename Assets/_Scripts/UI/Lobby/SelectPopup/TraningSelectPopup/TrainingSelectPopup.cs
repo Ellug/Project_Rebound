@@ -400,7 +400,7 @@ public class TrainingSelectPopup : UIPopup
             student.jump += Mathf.RoundToInt(data.jumpDelta + data.jumpDelta * statBonus);
             student.stamina += Mathf.RoundToInt(data.staminaDelta + data.staminaDelta * statBonus);
 
-            //멘탈
+            // 멘탈
             if (data.mentalDelta >= 0)
             {
                 student.mental += Mathf.RoundToInt(data.mentalDelta + data.mentalDelta * mentalBonus);
@@ -412,6 +412,12 @@ public class TrainingSelectPopup : UIPopup
 
             if (StudentManager.Instance != null)
                 StudentManager.Instance.NotifyStudentModified(student);
+        }
+
+        if (SaveManager.Instance != null)
+        {
+            Debug.Log($"[TrainingSelectPopup] 훈련 결과 저장 | key={data.trainingKey} | students={students.Count}");
+            SaveManager.Instance.SaveCurrent();
         }
     }
 

@@ -227,6 +227,12 @@ public class RecruitmentManager : MonoBehaviour
         Debug.Log($"[RecruitmentManager] 영입 완료: {recruits.Count}명");
         OnRecruitmentCompleted?.Invoke(recruits);
 
+        if (SaveManager.Instance != null)
+        {
+            Debug.Log($"[RecruitmentManager] 영입 완료 저장 | totalStudents={(StudentManager.Instance != null ? StudentManager.Instance.GetStudentCount() : -1)}");
+            SaveManager.Instance.SaveCurrent();
+        }
+
         // 후보는 한 번 쓰고 버리는 성격이므로 정리
         _candidateStudents.Clear();
     }

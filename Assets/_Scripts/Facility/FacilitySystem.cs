@@ -79,6 +79,12 @@ public class FacilitySystem : Singleton<FacilitySystem>
 
         Debug.Log($"{facility} 업그레이드 Lv {next.facilityLv}");
 
+        if (SaveManager.Instance != null)
+        {
+            Debug.Log($"[FacilitySystem] 업그레이드 저장 | facility={facility} | level={next.facilityLv}");
+            SaveManager.Instance.SaveCurrent();
+        }
+
         return true;
     }
 

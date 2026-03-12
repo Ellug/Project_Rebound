@@ -244,6 +244,12 @@ public class MatchGameManager : MonoBehaviour
     {
         WriteLog(selectionText);
         _isWaitingHalfTime = false;
+
+        if (SaveManager.Instance != null)
+        {
+            SaveManager.Instance.AutoSaveByBranch("하프타임 선택 후");
+        }
+
         MoveToStage(_halfTimeNextStage);
     }
 
