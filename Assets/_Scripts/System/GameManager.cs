@@ -48,7 +48,7 @@ public class GameManager : Singleton<GameManager>
         {
             if (_recruitmentManager != null)
                 return _recruitmentManager.MaxRecruitCount;
-
+                
             return 0;
         }
     }

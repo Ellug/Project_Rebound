@@ -4,11 +4,13 @@ using UnityEngine;
 
 public class SuddenEventManager : Singleton<SuddenEventManager>
 {
-    // 특정 상황(Daily, Match 등)에 맞는 이벤트를 확률적으로 발생시킴
+    // 특정 상황에 맞는 이벤트를 1개만 골라서 발생시킴
     public void EvaluateEvents(SuddenEventConditionFlags condition, SuddenEventContextFlags context)
     {
         var table = CachedSOData.Get<SuddenEventTableSO>();
         if (table == null) return;
+
+        List<SuddenEventRow> triggeredEvents = new List<SuddenEventRow>();
 
         foreach (var row in table.Rows)
         {
@@ -23,12 +25,18 @@ public class SuddenEventManager : Singleton<SuddenEventManager>
                     continue; // 확률 실패 시 패스
             }
 
-            // 조건과 확률을 모두 통과하면 이벤트 실행!
-            ExecuteEvent(row);
+            // 조건을 모두 통과한 이벤트를 후보 목록에 추가
+            triggeredEvents.Add(row);
+        }
+
+        // 후보 중 하나만 랜덤으로 뽑아서 실행 
+        if (triggeredEvents.Count > 0)
+        {
+            var selectedEvent = triggeredEvents[UnityEngine.Random.Range(0, triggeredEvents.Count)];
+            ExecuteEvent(selectedEvent);
         }
     }
 
-    // ID로 이벤트를 강제 실행할 때 사용
     public void ExecuteEventById(string eventId)
     {
         var table = CachedSOData.Get<SuddenEventTableSO>();
@@ -49,20 +57,39 @@ public class SuddenEventManager : Singleton<SuddenEventManager>
         // 1. 타겟 선정
         List<Student> targets = PickTargets(row.scope, row.targetMin, row.targetMax);
 
-        // 2. 효과 적용
-        ApplyEffect(row.effect1, targets);
+        // 2. 첫 번째 효과 적용 및 정보 추출 
+        int primaryAmount = 0;
+        string primaryStatName = "";
+
+        if (!string.IsNullOrEmpty(row.effect1) && row.effect1 != "-")
+        {
+            var effectTable = CachedSOData.Get<SuddenEventEffectTableSO>();
+            // Trim()으로 엑셀에 숨어있는 공백 제거
+            if (effectTable != null && effectTable.TryGet(row.effect1.Trim(), out var effectRow))
+            {
+                primaryAmount = UnityEngine.Random.Range(effectRow.amountMin, effectRow.amountMax + 1);
+                primaryStatName = GetStatNameKorean(effectRow.targetMin); // 스탯 이름을 한글로 변환
+
+                ApplyEffectWithCalculatedAmount(effectRow.targetMin, targets, primaryAmount);
+            }
+            else
+            {
+                Debug.LogWarning($"[SuddenEventManager] 효과를 찾을 수 없습니다: {row.effect1}");
+            }
+        }
+
+        // 3. 나머지 효과 적용
         ApplyEffect(row.effect2, targets);
         ApplyEffect(row.effect3, targets);
 
-        // 3. 텍스트 출력
-        ShowEventText(row, targets);
+        // 4. 텍스트 출력
+        ShowEventText(row, targets, primaryStatName, primaryAmount);
     }
 
     private List<Student> PickTargets(SuddenEventScope scope, int min, int max)
     {
         List<Student> pool = new List<Student>();
 
-        // 스코프에 따른 대상 풀 설정
         if (StudentManager.Instance != null)
         {
             if (scope == SuddenEventScope.Member || scope == SuddenEventScope.TeamMember)
@@ -71,18 +98,16 @@ public class SuddenEventManager : Singleton<SuddenEventManager>
             }
             else if (scope == SuddenEventScope.TeamKeyMember)
             {
-                // 출전 슬롯에 배치된 학생들만
                 foreach (var pair in StudentManager.Instance.SlotAssignments)
                 {
                     if (pair.Value != null) pool.Add(pair.Value);
                 }
             }
-            // TODO: 밴치멤버 등 필요 시 추가
         }
 
         if (pool.Count == 0) return pool;
 
-        // 무작위로 섞기
+        // 리스트 섞기
         for (int i = 0; i < pool.Count; i++)
         {
             int rnd = UnityEngine.Random.Range(0, pool.Count);
@@ -91,7 +116,6 @@ public class SuddenEventManager : Singleton<SuddenEventManager>
             pool[rnd] = temp;
         }
 
-        // min ~ max 사이의 랜덤 인원수 결정
         int count = UnityEngine.Random.Range(min, max + 1);
         count = Mathf.Clamp(count, 0, pool.Count);
 
@@ -103,28 +127,27 @@ public class SuddenEventManager : Singleton<SuddenEventManager>
         if (string.IsNullOrEmpty(effectId) || effectId == "-" || effectId == "none") return;
 
         var effectTable = CachedSOData.Get<SuddenEventEffectTableSO>();
-        if (effectTable == null || !effectTable.TryGet(effectId, out var effectRow))
-        {
-            Debug.LogWarning($"[SuddenEventManager] 효과를 찾을 수 없습니다: {effectId}");
-            return;
-        }
+        if (effectTable == null || !effectTable.TryGet(effectId.Trim(), out var effectRow)) return;
 
-        // 학생 스탯 변화인지, 재화 변화인지 판별하여 적용
-        bool isPlayerStat = effectRow.targetMin == PlayerStat.Money || effectRow.targetMin == PlayerStat.Fame;
+        int amount = UnityEngine.Random.Range(effectRow.amountMin, effectRow.amountMax + 1);
+
+        ApplyEffectWithCalculatedAmount(effectRow.targetMin, targets, amount);
+    }
+
+    private void ApplyEffectWithCalculatedAmount(PlayerStat targetStat, List<Student> targets, int amount)
+    {
+        bool isPlayerStat = targetStat == PlayerStat.Money || targetStat == PlayerStat.Fame;
 
         if (isPlayerStat)
         {
-            int amount = UnityEngine.Random.Range(effectRow.amountMin, effectRow.amountMax + 1);
-            ApplyPlayerStat(effectRow.targetMin, amount);
+            ApplyPlayerStat(targetStat, amount);
         }
         else
         {
             foreach (var student in targets)
             {
-                int amount = UnityEngine.Random.Range(effectRow.amountMin, effectRow.amountMax + 1);
-                ApplyStudentStat(student, effectRow.targetMin, amount);
+                ApplyStudentStat(student, targetStat, amount);
             }
-            // 스탯 변경 사항 UI 갱신 알림
             if (targets.Count > 0 && StudentManager.Instance != null)
             {
                 StudentManager.Instance.NotifyStudentModified(targets[0]);
@@ -161,7 +184,7 @@ public class SuddenEventManager : Singleton<SuddenEventManager>
         }
     }
 
-    private void ShowEventText(SuddenEventRow eventRow, List<Student> targets)
+    private void ShowEventText(SuddenEventRow eventRow, List<Student> targets, string statName, int amount)
     {
         if (string.IsNullOrEmpty(eventRow.description) || eventRow.description == "-") return;
 
@@ -170,15 +193,23 @@ public class SuddenEventManager : Singleton<SuddenEventManager>
         {
             string finalMsg = textRow.description;
 
-            // 문자열 치환 ({target1.name} 등)
+            // 엑셀에 작성된 불필요한 기호 제거
+            finalMsg = finalMsg.Replace("$\"", "").Replace("\"", "");
+
+            // 타겟 이름 치환
             if (targets.Count > 0) finalMsg = finalMsg.Replace("{target1.name}", targets[0].studentName);
             if (targets.Count > 1) finalMsg = finalMsg.Replace("{target2.name}", targets[1].studentName);
             if (targets.Count > 2) finalMsg = finalMsg.Replace("{target3.name}", targets[2].studentName);
 
-            //  이벤트 조건(Condition)에 따라 출력 위치 분기
+            // 효과 내용 치환
+            int displayAmount = Mathf.Abs(amount);
+            finalMsg = finalMsg.Replace("{event_effect.target_name}", statName);
+            finalMsg = finalMsg.Replace("{event_effect.amount}", displayAmount.ToString());
+            finalMsg = finalMsg.Replace("{event_event_effect.amount}", displayAmount.ToString());
+
+            // 출력 분기
             if ((eventRow.condition & SuddenEventConditionFlags.Daily) != 0)
             {
-                // 1. Daily 이벤트 -> 메신저 알림으로 전송
                 if (MessengerManager.Instance != null)
                 {
                     ChatMessage msg = new ChatMessage(MessageSenderType.Them, finalMsg);
@@ -187,15 +218,29 @@ public class SuddenEventManager : Singleton<SuddenEventManager>
             }
             else if ((eventRow.condition & SuddenEventConditionFlags.Match) != 0)
             {
-                // 2. Match(경기) 이벤트 -> 메신저에 보내지 않음
-                Debug.Log($"[경기장 돌발 이벤트 발생] {finalMsg}");
+                Debug.Log($"[경기장 돌발 이벤트] {finalMsg}");
             }
             else
             {
-                // School, Exercise 등 기타 조건 처리
-                Debug.Log($"[기타 돌발 이벤트 발생] {finalMsg}");
+                Debug.Log($"[기타 돌발 이벤트] {finalMsg}");
             }
         }
+    }
+
+    private string GetStatNameKorean(PlayerStat stat)
+    {
+        return stat switch
+        {
+            PlayerStat.Mental => "멘탈",
+            PlayerStat.Shoot => "슈팅",
+            PlayerStat.Speed => "속도",
+            PlayerStat.Jump => "점프력",
+            PlayerStat.Stamina => "지구력",
+            PlayerStat.Condition => "컨디션",
+            PlayerStat.Money => "자금",
+            PlayerStat.Fame => "명성치",
+            _ => stat.ToString()
+        };
     }
 
 #if UNITY_EDITOR

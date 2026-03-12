@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class MessengerManager : Singleton<MessengerManager>
 {
-    //private const int MAX_CHAT_ROOMS = 15;
     [SerializeField] private List<ChatRoom> _activeRooms = new List<ChatRoom>();
 
     public event Action OnRoomListUpdated;

@@ -47,9 +47,11 @@ public class TournamentManager : MonoBehaviour
     // 토너먼트 대진표 생성
     public void GenerateTournament()
     {
+        _mySchoolName = (_mySchoolName ?? string.Empty).Trim();
+
         // 학교 목록 생성 및 셔플
         List<string> schools = BuildSchoolList();
-        Shuffle(schools);
+        ShuffleKeepingMySchoolFirst(schools);
 
         // 토너먼트 초기화 - 32강부터 결승까지 구조 생성
         _allRounds.Clear();
@@ -61,18 +63,10 @@ public class TournamentManager : MonoBehaviour
         // 첫 라운드 매치업 생성 (32강)
         List<Matchup> firstRound = new();
         int matchupCount = _teamCount / 2;
+        
         for (int i = 0; i < matchupCount; i++)
-        {
-            string upTeam = schools[i * 2];
-            string downTeam = schools[i * 2 + 1];
-            firstRound.Add(new Matchup
-            {
-                UpTeam = upTeam,
-                DownTeam = downTeam,
-                Winner = null,
-                IncludeMySchool = upTeam == _mySchoolName || downTeam == _mySchoolName
-            });
-        }
+            firstRound.Add(CreateMatchup(schools[i * 2], schools[i * 2 + 1]));
+
         _allRounds.Add(firstRound);
 
         // 다음 라운드들 빈 구조만 생성 (16강, 8강, 4강, 결승)
@@ -136,17 +130,7 @@ public class TournamentManager : MonoBehaviour
 
         int nextMatchupCount = winners.Count / 2;
         for (int i = 0; i < nextMatchupCount; i++)
-        {
-            string upTeam = winners[i * 2];
-            string downTeam = winners[i * 2 + 1];
-            nextRound.Add(new Matchup
-            {
-                UpTeam = upTeam,
-                DownTeam = downTeam,
-                Winner = null,
-                IncludeMySchool = upTeam == _mySchoolName || downTeam == _mySchoolName
-            });
-        }
+            nextRound.Add(CreateMatchup(winners[i * 2], winners[i * 2 + 1]));
 
         RefreshUI();
     }
@@ -237,13 +221,41 @@ public class TournamentManager : MonoBehaviour
         return name;
     }
 
-    private static void Shuffle(List<string> list)
+    private void ShuffleKeepingMySchoolFirst(List<string> list)
     {
-        for (int i = list.Count - 1; i > 0; i--)
+        if (list == null || list.Count <= 1) return;
+
+        int shuffleStartIndex = 0;
+        int mySchoolIndex = list.FindIndex(IsMySchool);
+        if (mySchoolIndex >= 0)
         {
-            int randomIndex = UnityEngine.Random.Range(0, i + 1);
+            if (mySchoolIndex != 0)
+                (list[0], list[mySchoolIndex]) = (list[mySchoolIndex], list[0]);
+
+            shuffleStartIndex = 1;
+        }
+
+        for (int i = list.Count - 1; i > shuffleStartIndex; i--)
+        {
+            int randomIndex = UnityEngine.Random.Range(shuffleStartIndex, i + 1);
             (list[randomIndex], list[i]) = (list[i], list[randomIndex]);
         }
+    }
+
+    private Matchup CreateMatchup(string firstTeam, string secondTeam, string winner = null)
+    {
+        return new Matchup
+        {
+            UpTeam = firstTeam,
+            DownTeam = secondTeam,
+            Winner = winner,
+            IncludeMySchool = IsMySchool(firstTeam) || IsMySchool(secondTeam)
+        };
+    }
+
+    private bool IsMySchool(string teamName)
+    {
+        return string.Equals(teamName, _mySchoolName, StringComparison.Ordinal);
     }
 
     // 확인 버튼에 인스펙터에서 연결. 현재 라운드 진행 (내 학교 제외)
@@ -317,7 +329,7 @@ public class TournamentManager : MonoBehaviour
         if (!TryGetPendingMySchoolMatch(out int matchIndex, out Matchup matchup))
             return false;
 
-        string winner = didWin ? _mySchoolName : (matchup.UpTeam == _mySchoolName ? matchup.DownTeam : matchup.UpTeam);
+        string winner = didWin ? _mySchoolName : matchup.DownTeam;
         SetMatchWinner(matchIndex, winner, advanceWhenRoundComplete: false);
         return true;
     }
@@ -442,6 +454,7 @@ public class TournamentManager : MonoBehaviour
         if (data == null || !data.isInProgress)
             return;
 
+        _mySchoolName = (_mySchoolName ?? string.Empty).Trim();
         _teamCount = data.teamCount > 0 ? data.teamCount : _teamCount;
         _currentRoundIndex = data.currentRoundIndex;
         _mySchoolReachedRoundTeamCount = data.mySchoolReachedRoundTeamCount;
@@ -456,14 +469,10 @@ public class TournamentManager : MonoBehaviour
 
             foreach (SavedMatchupData matchupData in roundData.matchups)
             {
-                round.Add(new Matchup
-                {
-                    UpTeam = matchupData.upTeam,
-                    DownTeam = matchupData.downTeam,
-                    // 빈 문자열은 미진행으로 간주해 null로 복원
-                    Winner = string.IsNullOrEmpty(matchupData.winner) ? null : matchupData.winner,
-                    IncludeMySchool = matchupData.includeMySchool,
-                });
+                round.Add(CreateMatchup(
+                    matchupData.upTeam,
+                    matchupData.downTeam,
+                    string.IsNullOrEmpty(matchupData.winner) ? null : matchupData.winner));
             }
 
             _allRounds.Add(round);

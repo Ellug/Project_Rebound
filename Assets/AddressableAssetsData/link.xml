@@ -1,0 +1,88 @@
+<linker>
+  <assembly fullname="Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+    <type fullname="AlwaysEffectTableSO" preserve="all" />
+    <type fullname="AlwaysEventTableSO" preserve="all" />
+    <type fullname="CoachNodeEffectDetailTableSO" preserve="all" />
+    <type fullname="CoachNodeMasterTableSO" preserve="all" />
+    <type fullname="CoachNodePrerequisiteTableSO" preserve="all" />
+    <type fullname="ContentUnlockFeatureTableSO" preserve="all" />
+    <type fullname="EnemyStatTableSO" preserve="all" />
+    <type fullname="FacilityUpgradeTableSO" preserve="all" />
+    <type fullname="GraduateGiftPopupTableSO" preserve="all" />
+    <type fullname="GraduateGiftTierRewardTableSO" preserve="all" />
+    <type fullname="GraduateGradeTableSO" preserve="all" />
+    <type fullname="GrowthCommandTableSO" preserve="all" />
+    <type fullname="LobbySuddenEventMsgSaveDataTableSO" preserve="all" />
+    <type fullname="PositionInfoPopupTableSO" preserve="all" />
+    <type fullname="SchoolNameTableSO" preserve="all" />
+    <type fullname="StatusTextTableSO" preserve="all" />
+    <type fullname="StoryTableSO" preserve="all" />
+    <type fullname="StudentBodyTableSO" preserve="all" />
+    <type fullname="StudentNameTableSO" preserve="all" />
+    <type fullname="StudentPlusExpTableSO" preserve="all" />
+    <type fullname="StudentPositionTableSO" preserve="all" />
+    <type fullname="StudentPotentialTableSO" preserve="all" />
+    <type fullname="StudentStartStatTableSO" preserve="all" />
+    <type fullname="StudentStatExpTableSO" preserve="all" />
+    <type fullname="StudentStatTableSO" preserve="all" />
+    <type fullname="StudentStatusProbTableSO" preserve="all" />
+    <type fullname="SuddenEventEffectTableSO" preserve="all" />
+    <type fullname="SuddenEventMsgListTableSO" preserve="all" />
+    <type fullname="SuddenEventMsgSaveDataTableSO" preserve="all" />
+    <type fullname="SuddenEventMsgTableSO" preserve="all" />
+    <type fullname="SuddenEventMsgTextTableSO" preserve="all" />
+    <type fullname="SuddenEventTableSO" preserve="all" />
+    <type fullname="SuddenEventTextTableSO" preserve="all" />
+    <type fullname="TierManageOpenConditionTableSO" preserve="all" />
+    <type fullname="TutorialGuideTableSO" preserve="all" />
+    <type fullname="WeekendTrainingTableSO" preserve="all" />
+    <type fullname="AlwaysEffectRow" preserve="nothing" serialized="true" />
+    <type fullname="AlwaysEventRow" preserve="nothing" serialized="true" />
+    <type fullname="CoachNodeEffectDetailRow" preserve="nothing" serialized="true" />
+    <type fullname="CoachNodeMasterRow" preserve="nothing" serialized="true" />
+    <type fullname="CoachNodePrerequisiteRow" preserve="nothing" serialized="true" />
+    <type fullname="ContentUnlockFeatureRow" preserve="nothing" serialized="true" />
+    <type fullname="EnemyStatRow" preserve="nothing" serialized="true" />
+    <type fullname="FacilityUpgradeRow" preserve="nothing" serialized="true" />
+    <type fullname="GraduateGiftPopupRow" preserve="nothing" serialized="true" />
+    <type fullname="GraduateGiftTierRewardRow" preserve="nothing" serialized="true" />
+    <type fullname="GraduateGradeRow" preserve="nothing" serialized="true" />
+    <type fullname="GrowthCommandRow" preserve="nothing" serialized="true" />
+    <type fullname="LobbySuddenEventMsgSaveDataRow" preserve="nothing" serialized="true" />
+    <type fullname="PositionInfoPopupRow" preserve="nothing" serialized="true" />
+    <type fullname="SchoolNameRow" preserve="nothing" serialized="true" />
+    <type fullname="StatusTextRow" preserve="nothing" serialized="true" />
+    <type fullname="StoryRow" preserve="nothing" serialized="true" />
+    <type fullname="StudentBodyRow" preserve="nothing" serialized="true" />
+    <type fullname="StudentNameRow" preserve="nothing" serialized="true" />
+    <type fullname="StudentPlusExpRow" preserve="nothing" serialized="true" />
+    <type fullname="StudentPositionRow" preserve="nothing" serialized="true" />
+    <type fullname="StudentPotentialRow" preserve="nothing" serialized="true" />
+    <type fullname="StudentStartStatRow" preserve="nothing" serialized="true" />
+    <type fullname="StudentStatExpRow" preserve="nothing" serialized="true" />
+    <type fullname="StudentStatRow" preserve="nothing" serialized="true" />
+    <type fullname="StudentStatusProbRow" preserve="nothing" serialized="true" />
+    <type fullname="SuddenEventEffectRow" preserve="nothing" serialized="true" />
+    <type fullname="SuddenEventMsgListRow" preserve="nothing" serialized="true" />
+    <type fullname="SuddenEventMsgRow" preserve="nothing" serialized="true" />
+    <type fullname="SuddenEventMsgSaveDataRow" preserve="nothing" serialized="true" />
+    <type fullname="SuddenEventMsgTextRow" preserve="nothing" serialized="true" />
+    <type fullname="SuddenEventRow" preserve="nothing" serialized="true" />
+    <type fullname="SuddenEventTextRow" preserve="nothing" serialized="true" />
+    <type fullname="TierManageOpenConditionRow" preserve="nothing" serialized="true" />
+    <type fullname="TutorialGuideRow" preserve="nothing" serialized="true" />
+    <type fullname="WeekendTrainingRow" preserve="nothing" serialized="true" />
+  </assembly>
+  <assembly fullname="Unity.Addressables, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null" preserve="all">
+    <type fullname="UnityEngine.AddressableAssets.Addressables" preserve="all" />
+  </assembly>
+  <assembly fullname="Unity.ResourceManager, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null" preserve="all">
+    <type fullname="UnityEngine.ResourceManagement.ResourceProviders.AssetBundleProvider" preserve="all" />
+    <type fullname="UnityEngine.ResourceManagement.ResourceProviders.BundledAssetProvider" preserve="all" />
+    <type fullname="UnityEngine.ResourceManagement.ResourceProviders.InstanceProvider" preserve="all" />
+    <type fullname="UnityEngine.ResourceManagement.ResourceProviders.SceneProvider" preserve="all" />
+  </assembly>
+  <assembly fullname="UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+    <type fullname="UnityEngine.Object" preserve="all" />
+  </assembly>
+</linker>
