@@ -192,6 +192,25 @@ public class StudentManager : Singleton<StudentManager>
         Debug.Log("[StudentManager] 재학생 진급 처리 완료");
     }
 
+    // 주말 훈련/휴식 row를 전체 학생에게 일괄 적용
+    public void ApplyWeekendTrainingEffect(WeekendTrainingRow row)
+    {
+        foreach (Student student in _students)
+        {
+            if (student == null) continue;
+
+            student.condition = Student.ClampCondition(student.condition - row.conditionCost);
+            student.mental += row.mental;
+            student.shoot += Mathf.RoundToInt(row.shoot);
+            student.speed += Mathf.RoundToInt(row.speed);
+            student.jump += Mathf.RoundToInt(row.jump);
+            student.stamina += Mathf.RoundToInt(row.stamina);
+
+            OnStudentModified?.Invoke(student);
+        }
+
+        OnStudentsChanged?.Invoke(_students);
+    }
 
 
     // Title로 돌아갈 때 명시적 해제
