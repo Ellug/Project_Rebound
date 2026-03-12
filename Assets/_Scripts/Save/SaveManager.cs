@@ -214,57 +214,59 @@ public class SaveManager : Singleton<SaveManager>
 
     private static SavedFlowData CollectFlowData()
     {
-        GameManager gm = GameManager.Instance;
-        if (gm == null)
+        if (GameManager.Instance == null)
             return new SavedFlowData();
 
         return new SavedFlowData
         {
-            currentDate = gm.CurrentDate.ToString("yyyy-MM-dd"),
-            turnIndex = gm.TurnIndex,
-            dayIndex = gm.DayIndex,
-            currentYear = gm.CurrentYear,
-            phase = gm.CurrentPhase,
-            isLeagueOpened = gm.IsLeagueOpened,
-            isLeagueHandled = gm.IsLeagueHandled,
-            leagueTermEnd = gm.LeagueTermEnd == default
-                ? string.Empty
-                : gm.LeagueTermEnd.ToString("yyyy-MM-dd"),
-            activeEventIds = new List<string>(gm.ActiveEventIds),
-            maxRecruitCount = gm.MaxRecruitCount,
-            hasPendingFriendlyMatch = gm.HasPendingFriendlyMatch,
+            currentDate = GameManager.Instance.CurrentDate.ToString("yyyy-MM-dd"),
+            turnIndex = GameManager.Instance.TurnIndex,
+            dayIndex = GameManager.Instance.DayIndex,
+            currentYear = GameManager.Instance.CurrentYear,
+            phase = GameManager.Instance.CurrentPhase,
+            isLeagueOpened = GameManager.Instance.IsLeagueOpened,
+            isLeagueHandled = GameManager.Instance.IsLeagueHandled,
+            leagueTermEnd = GameManager.Instance.LeagueTermEnd != default
+                ? GameManager.Instance.LeagueTermEnd.ToString("yyyy-MM-dd")
+                : string.Empty,
+            activeEventIds = new List<string>(GameManager.Instance.ActiveEventIds),
+            maxRecruitCount = GameManager.Instance.MaxRecruitCount,
+            hasPendingFriendlyMatch = GameManager.Instance.HasPendingFriendlyMatch,
         };
     }
 
     private static List<SavedStudentData> CollectStudentData()
     {
-        List<SavedStudentData> result = new();
+        if (StudentManager.Instance == null)
+            return new List<SavedStudentData>();
 
-        foreach (Student student in StudentManager.Instance.Students)
+        List<Student> students = StudentManager.Instance.Students;
+        List<SavedStudentData> result = new(students.Count);
+
+        foreach (Student s in students)
         {
             result.Add(new SavedStudentData
             {
-                id = student.id,
-                studentName = student.studentName,
-                positionName = student.positionName,
-                grade = student.grade,
-                portraitColor = student.portraitColor,
-                portraitIndex = student.portraitIndex,
-                height = student.height,
-                weight = student.weight,
-                mental = student.mental,
-                shoot = student.shoot,
-                speed = student.speed,
-                jump = student.jump,
-                stamina = student.stamina,
-                potentialTier = student.potential_tier,
-                potential = student.potential,
-                condition = student.condition,
-                trust = student.trust,
-                activeEffectIds = new List<string>(student.activeEffectIds),
-                conditionRecoveryBonus = student.conditionRecoveryBonus,
-                trainingEfficiencyBonus = student.trainingEfficiencyBonus,
-                isTrainingBlocked = student.isTrainingBlocked,
+                id = s.id,
+                studentName = s.studentName,
+                positionName = s.positionName,
+                grade = s.grade,
+                portraitColor = s.portraitColor,
+                portraitIndex = s.portraitIndex,
+                height = s.height,
+                weight = s.weight,
+                mental = s.mental,
+                shoot = s.shoot,
+                speed = s.speed,
+                jump = s.jump,
+                stamina = s.stamina,
+                potentialTier = s.potential_tier,
+                potential = s.potential,
+                condition = s.condition,
+                activeEffectIds = new List<string>(s.activeEffectIds ?? new List<string>()),
+                conditionRecoveryBonus = s.conditionRecoveryBonus,
+                trainingEfficiencyBonus = s.trainingEfficiencyBonus,
+                isTrainingBlocked = s.isTrainingBlocked,
             });
         }
 
@@ -342,60 +344,59 @@ public class SaveManager : Singleton<SaveManager>
         FacilitySystem.Instance.SetLevel("counselingcenter", data.counselingCenterLevel);
     }
 
-    private static void ApplyStudentData(
-        List<SavedStudentData> savedStudents,
-        List<SavedSlotAssignment> savedSlots)
+    private static void ApplyStudentData(List<SavedStudentData> savedStudents, List<SavedSlotAssignment> savedSlots)
     {
+        if (StudentManager.Instance == null || savedStudents == null)
+            return;
+
         StudentManager.Instance.ClearAllStudents();
 
-        // 슬롯 배치 복원 시 id로 Student 객체를 빠르게 참조하기 위한 딕셔너리
-        Dictionary<int, Student> studentById = new();
         int maxId = 0;
+        List<Student> restoredStudents = new(savedStudents.Count); // 여기서 선언
 
-        foreach (SavedStudentData saved in savedStudents)
+        foreach (SavedStudentData data in savedStudents)
         {
-            Student student = new Student
+            Student student = new()
             {
-                id = saved.id,
-                studentName = saved.studentName,
-                positionName = saved.positionName,
-                grade = saved.grade,
-                portraitColor = saved.portraitColor,
-                portraitIndex = saved.portraitIndex,
-                height = saved.height,
-                weight = saved.weight,
-                mental = saved.mental,
-                shoot = saved.shoot,
-                speed = saved.speed,
-                jump = saved.jump,
-                stamina = saved.stamina,
-                potential_tier = saved.potentialTier,
-                potential = saved.potential,
-                condition = saved.condition,
-                trust = saved.trust,
-                activeEffectIds = new List<string>(saved.activeEffectIds),
-                conditionRecoveryBonus = saved.conditionRecoveryBonus,
-                trainingEfficiencyBonus = saved.trainingEfficiencyBonus,
-                isTrainingBlocked = saved.isTrainingBlocked,
+                id = data.id,
+                studentName = data.studentName,
+                positionName = data.positionName,
+                grade = data.grade,
+                portraitColor = data.portraitColor,
+                portraitIndex = data.portraitIndex,
+                height = data.height,
+                weight = data.weight,
+                mental = data.mental,
+                shoot = data.shoot,
+                speed = data.speed,
+                jump = data.jump,
+                stamina = data.stamina,
+                potential_tier = data.potentialTier,
+                potential = data.potential,
+                condition = data.condition,
+                activeEffectIds = data.activeEffectIds ?? new List<string>(),
+                conditionRecoveryBonus = data.conditionRecoveryBonus,
+                trainingEfficiencyBonus = data.trainingEfficiencyBonus,
+                isTrainingBlocked = data.isTrainingBlocked,
             };
-
-            StudentManager.Instance.AddStudent(student);
-            studentById[student.id] = student;
 
             if (student.id > maxId)
                 maxId = student.id;
+
+            restoredStudents.Add(student); // 같은 스코프
+            StudentManager.Instance.AddStudent(student);
         }
 
-        // 로드 후 신규 학생 생성 시 기존 id와 충돌하지 않도록 카운터 복원
         StudentFactory.RestoreStudentIdCounter(maxId + 1);
-        StudentFactory.RebuildRuntimeCaches(StudentManager.Instance.Students);
+        StudentFactory.RebuildRuntimeCaches(restoredStudents); // 같은 스코프
 
-        foreach (SavedSlotAssignment assignment in savedSlots)
+        if (savedSlots == null) return;
+
+        foreach (SavedSlotAssignment slotData in savedSlots)
         {
-            if (!studentById.TryGetValue(assignment.studentId, out Student student))
-                continue;
-
-            StudentManager.Instance.AssignSlot(assignment.slotIndex, student);
+            Student student = restoredStudents.Find(s => s.id == slotData.studentId); // 같은 스코프
+            if (student != null)
+                StudentManager.Instance.AssignSlot(slotData.slotIndex, student);
         }
     }
 
