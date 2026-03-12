@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -86,6 +86,12 @@ public class MatchGameManager : MonoBehaviour
         WriteLog(Divider);
         WriteLog($"{upTeam} VS {downTeam}");
         WriteLog(Divider);
+
+        // 경기 시뮬레이션 시작 세이브
+        if (SaveManager.Instance != null)
+        {
+            SaveManager.Instance.AutoSaveByBranch("경기 시뮬레이션 시작");
+        }
     }
 
     // UI 버튼 1회 = 공방 1회 또는 다음 스테이지로 이동 (TournamentManager.OnClickProgressMySchoolMatch에서 호출)
@@ -175,6 +181,12 @@ public class MatchGameManager : MonoBehaviour
         _context.AddQuarterScore(myQuarterScore, opponentQuarterScore);
         _quarterScores.Add(new QuarterScore(quarter, myQuarterScore, opponentQuarterScore));
         _matchGameUi.SetMatchScore(_context.GetLeftTeamScore(), _context.GetRightTeamScore());
+
+        // 쿼터별 결과 세이브
+        if (SaveManager.Instance != null)
+        {
+            SaveManager.Instance.AutoSaveByBranch($"{quarter}쿼터 결과");
+        }
     }
 
     // 공방 진행 중에도 현재 쿼터 점수를 누적 합산해 실시간으로 스코어보드에 반영
@@ -215,6 +227,13 @@ public class MatchGameManager : MonoBehaviour
         WriteLog(Divider);
         WriteLog($"{afterQuarter}쿼터 종료 후 작전타임");
         WriteLog(Divider);
+
+        // 하프타임 선택지 노출 전 세이브
+        if (SaveManager.Instance != null)
+        {
+            SaveManager.Instance.AutoSaveByBranch("하프타임 선택 전");
+        }
+
         if (_halfTimeSelectionUi != null)
             _halfTimeSelectionUi.Open();
     }
@@ -260,6 +279,12 @@ public class MatchGameManager : MonoBehaviour
             quarterScores = new List<QuarterScore>(_quarterScores),
             logs = new List<string>(_logs)
         };
+
+        // 경기 시뮬레이션 종료 세이브
+        if (SaveManager.Instance != null)
+        {
+            SaveManager.Instance.AutoSaveByBranch("경기 시뮬레이션 종료");
+        }
 
         OnMatchFinished?.Invoke(result);
     }
@@ -350,5 +375,90 @@ public class MatchGameManager : MonoBehaviour
             return teamName[..idx] + " " + teamName[idx..];
 
         return teamName;
+    }
+
+    // SaveManager.CollectMatchSimData()에서 호출
+    public SavedMatchSimData CollectSaveData()
+    {
+        // 경기 진행 중이 아니면 빈 데이터 반환
+        if (!_isMatchRunning)
+            return new SavedMatchSimData { isMatchRunning = false };
+
+        SavedMatchSimData data = new()
+        {
+            isMatchRunning = true,
+            upTeam = _context.IsMySchoolUpTeam ? _context.MySchoolName : _context.OpponentTeamName,
+            downTeam = _context.IsMySchoolUpTeam ? _context.OpponentTeamName : _context.MySchoolName,
+            mySchoolName = _context.MySchoolName,
+            progressStageIndex = _progressStageIndex,
+            logs = new List<string>(_logs),
+        };
+
+        foreach (QuarterScore qs in _quarterScores)
+        {
+            data.quarterScores.Add(new SavedQuarterScore
+            {
+                quarter = qs.quarter,
+                myScore = qs.mySchoolScore,
+                opponentScore = qs.opponentScore,
+            });
+        }
+
+        return data;
+    }
+
+    // SaveManager.ApplyMatchSimData()에서 호출
+    // 복원 시점: 하프타임 선택 전 or 쿼터 결과 직후 — 쿼터 점수/진행도만 복원하고 UI 갱신
+    public void RestoreSaveData(SavedMatchSimData data)
+    {
+        if (data == null || !data.isMatchRunning)
+            return;
+
+        // 기본 상태 복원
+        _isMatchRunning = true;
+        _isWaitingHalfTime = false;
+        _activeQuarterSession = null;
+        _activeQuarterNumber = 0;
+        _progressStageIndex = data.progressStageIndex;
+
+        // 로그 복원
+        _logs.Clear();
+        if (data.logs != null)
+            _logs.AddRange(data.logs);
+
+        // 쿼터 점수 복원
+        _quarterScores.Clear();
+        int myTotal = 0;
+        int opponentTotal = 0;
+
+        foreach (SavedQuarterScore qs in data.quarterScores)
+        {
+            _quarterScores.Add(new QuarterScore(qs.quarter, qs.myScore, qs.opponentScore));
+            myTotal += qs.myScore;
+            opponentTotal += qs.opponentScore;
+        }
+
+        // MatchContext 복원 — 선수 데이터는 StudentManager에서 재조회
+        List<Student> field = BuildFieldPlayers();
+        List<Student> bench = BuildBenchPlayers(field);
+        int currentDay = GameManager.Instance != null ? GameManager.Instance.DayIndex : 1;
+        EnemyStatTableSO enemyTable = GameData.Get<EnemyStatTableSO>();
+        EnemyStatRow enemyStat = enemyTable.GetOrNull(currentDay) ?? new EnemyStatRow();
+        _context = new MatchContext(data.upTeam, data.downTeam, data.mySchoolName, field, bench, enemyStat);
+        _context.RestoreScore(myTotal, opponentTotal);
+
+        // UI 갱신
+        _matchGameUi.PrepareMatchGameUi(
+            FormatTeamNameForDisplay(data.upTeam),
+            FormatTeamNameForDisplay(data.downTeam),
+            ProgressStages);
+
+        foreach (string log in _logs)
+            _matchGameUi.AppendMatchLog(log);
+
+        UpdateProgressUi();
+        _matchGameUi.SetMatchScore(_context.GetLeftTeamScore(), _context.GetRightTeamScore());
+
+        Debug.Log($"[MatchGameManager] 경기 복원 완료 — 스테이지 {_progressStageIndex}, 쿼터 {_quarterScores.Count}개 복원");
     }
 }
