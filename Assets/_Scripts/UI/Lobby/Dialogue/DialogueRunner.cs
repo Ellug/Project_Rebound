@@ -1,89 +1,104 @@
 using UnityEngine;
 using System.Collections;
+using System.Linq;
 
-// 대화 흐름을 제어하는 실행기
 public class DialogueRunner : Singleton<DialogueRunner>
 {
     [Header("Settings")]
-    [SerializeField] private float _typingDelay = 1.0f; // 상대방이 타자 치는 딜레이 시간
+    [SerializeField] private float _typingDelay = 1.0f; // 타자 치는 딜레이 시간
 
-    // 외부에서 영입이나 이벤트 시작 시 호출하는 진입점
-    public void PlayDialogue(string roomId, string roomName, string startNodeId)
+    // 외부에서 특정 대화를 시작할 때 호출
+    public void PlayDialogue(string roomId, string roomName, string diagId, string startNodeId = "index_000")
     {
-        StartCoroutine(ProcessNodeRoutine(roomId, roomName, startNodeId));
+        StartCoroutine(ProcessNodeRoutine(roomId, roomName, diagId, startNodeId));
     }
 
-    private IEnumerator ProcessNodeRoutine(string roomId, string roomName, string nodeId)
+    private IEnumerator ProcessNodeRoutine(string roomId, string roomName, string diagId, string nodeId)
     {
-        if (string.IsNullOrEmpty(nodeId) || nodeId == "EOS")
-            yield break; // 대화 완전 종료
+        // 1. 대화 종료 조건
+        if (string.IsNullOrEmpty(nodeId) || nodeId == "EOS" || nodeId == "END" || nodeId == "-")
+            yield break;
 
-        DialogueNode node = DialogueDB.GetNode(nodeId);
-        if (node == null)
+        var flowTable = CachedSOData.Get<SuddenEventMsgTableSO>();
+        var textTable = CachedSOData.Get<SuddenEventMsgTextTableSO>();
+
+        if (flowTable == null || textTable == null)
         {
-            Debug.LogWarning($"[DialogueRunner] 노드를 찾을 수 없습니다: {nodeId}");
+            Debug.LogError("[DialogueRunner] CachedSOData에서 다이얼로그 테이블을 찾을 수 없습니다.");
             yield break;
         }
 
-        // 1. 돌발 이벤트 트리거 확인
-        if (!string.IsNullOrEmpty(node.TriggerSuddenEventId) && node.TriggerSuddenEventId != "-")
+        // 2. 현재 흐름 노드 찾기
+        var row = flowTable.Rows.FirstOrDefault(r => r.iD == diagId && r.messageIndex == nodeId);
+        if (row == null)
         {
-            Debug.Log($"[DialogueRunner] 돌발 이벤트 연계 발동 ID: {node.TriggerSuddenEventId}");
-
-            // 향후 돌발 이벤트 매니저가 구현되면 아래 주석을 해제하고 연결
+            Debug.LogWarning($"[DialogueRunner] 노드를 찾을 수 없습니다: {diagId} / {nodeId}");
+            yield break;
         }
 
-        // 2. 선택지가 있는 노드인 경우
-        if (node.Choices != null && node.Choices.Count > 0)
+        // 3. 돌발 이벤트(스탯 변화) 연동
+        if (!string.IsNullOrEmpty(row.suddenEvent) && row.suddenEvent != "-")
         {
-            ChatMessage choiceMsg = new ChatMessage(node.SenderType, node.DialogueText, MessageEventType.Choice);
+            if (SuddenEventManager.Instance != null)
+                SuddenEventManager.Instance.ExecuteEventById(row.suddenEvent);
+        }
 
-            foreach (var choice in node.Choices)
+        // 4. 대사 및 화자 세팅
+        string messageText = "";
+        MessageSenderType senderType = MessageSenderType.Them;
+
+        var textRow = textTable.Rows.FirstOrDefault(r => r.iD == row.messageDialogue);
+        if (textRow != null)
+        {
+            messageText = textRow.dialogue;
+            if (textRow.speaker.ToLower() == "player")
+                senderType = MessageSenderType.Me; // 내가 보내는 메시지 (우측 정렬)
+        }
+
+        // 5. 선택지 분기 노드
+        if (row.isChoice)
+        {
+            ChatMessage choiceMsg = new ChatMessage(MessageSenderType.Them, "", MessageEventType.Choice);
+
+            void AddChoice(string choiceTextId, string choiceNextId)
             {
-                // 람다식 내에서 안전하게 값을 캡처하기 위해 지역 변수에 할당
-                string nextNodeId = choice.NextNodeId;
-
-                choiceMsg.Choices.Add(new ChoiceOption
+                if (!string.IsNullOrEmpty(choiceTextId) && choiceTextId != "-")
                 {
-                    Text = choice.ChoiceText,
-                    OnSelected = () =>
+                    string btnText = choiceTextId;
+                    var choiceTextRow = textTable.Rows.FirstOrDefault(r => r.iD == choiceTextId);
+                    if (choiceTextRow != null) btnText = choiceTextRow.dialogue;
+
+                    choiceMsg.Choices.Add(new ChoiceOption
                     {
-                        // 유저가 버튼을 누르면 상대방이 타이핑하는 딜레이를 살짝 준 뒤 다음 대화 진행
-                        StartCoroutine(DelayAndPlayNext(roomId, roomName, nextNodeId));
-                    }
-                });
+                        Text = btnText,
+                        OnSelected = () => StartCoroutine(DelayAndPlayNext(roomId, roomName, diagId, choiceNextId))
+                    });
+                }
             }
+
+            AddChoice(row.choice1Dialogue, row.choice1Next);
+            AddChoice(row.choice2Dialogue, row.choice2Next);
+            AddChoice(row.choice3Dialogue, row.choice3Next);
+
             MessengerManager.Instance.ReceiveMessage(roomId, roomName, choiceMsg);
         }
-        // 3. 일반 대화인 경우
+        // 6. 일반 대화 노드
         else
         {
-            ChatMessage normalMsg = new ChatMessage(node.SenderType, node.DialogueText, MessageEventType.NormalText);
+            ChatMessage normalMsg = new ChatMessage(senderType, messageText, MessageEventType.NormalText);
             MessengerManager.Instance.ReceiveMessage(roomId, roomName, normalMsg);
 
-            // 다음 대사로 넘어가기 전에 딜레이 적용
-            DialogueNode nextNode = DialogueDB.GetNode(node.NextNodeId);
-            if (nextNode != null)
-            {
-                if (nextNode.SenderType == MessageSenderType.Them)
-                {
-                    // 상대방이 칠 때는 길게 대기
-                    yield return new WaitForSeconds(_typingDelay);
-                }
-                else if (nextNode.SenderType == MessageSenderType.Me)
-                {
-                    // 내가 칠 때는 약간 빠르게 대기
-                    yield return new WaitForSeconds(_typingDelay * 0.5f);
-                }
-            }
+            // 타이핑 딜레이 (상대방은 길게, 나는 짧게)
+            if (senderType == MessageSenderType.Them) yield return new WaitForSeconds(_typingDelay);
+            else yield return new WaitForSeconds(_typingDelay * 0.5f);
 
-            StartCoroutine(ProcessNodeRoutine(roomId, roomName, node.NextNodeId));
+            StartCoroutine(ProcessNodeRoutine(roomId, roomName, diagId, row.next));
         }
     }
 
-    private IEnumerator DelayAndPlayNext(string roomId, string roomName, string nextNodeId)
+    private IEnumerator DelayAndPlayNext(string roomId, string roomName, string diagId, string nextNodeId)
     {
         yield return new WaitForSeconds(_typingDelay);
-        StartCoroutine(ProcessNodeRoutine(roomId, roomName, nextNodeId));
+        StartCoroutine(ProcessNodeRoutine(roomId, roomName, diagId, nextNodeId));
     }
 }
