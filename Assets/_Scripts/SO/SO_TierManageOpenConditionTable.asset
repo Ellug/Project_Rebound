@@ -16,12 +16,12 @@ MonoBehaviour:
   - id: 6001
     tierLevel: 1
     tierName: 1
-    unlockConditionCount: 3
+    unlockConditionCount: 4
     maxNodeCount: 6
     tierBonusEffectId: 5001
   - id: 6002
     tierLevel: 2
     tierName: 2
     unlockConditionCount: 99
-    maxNodeCount: 4
+    maxNodeCount: 6
     tierBonusEffectId: 0

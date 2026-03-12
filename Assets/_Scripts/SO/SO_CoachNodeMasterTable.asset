@@ -17,90 +17,117 @@ MonoBehaviour:
     tierId: 6001
     name: "\uC288\uD305 \uAC15\uD654 I"
     unlockCost: 15
-    description: "\uD300 \uC804\uCCB4\uC758 Shoot\uB2A5\uB825\uCE58\uB97C 1 \uC0C1\uC2B9\uC2DC\uD0B5\uB2C8\uB2E4."
+    description: "\uD300 \uC804\uCCB4\uC758 \uC288\uD305\uC744 1 \uC0C1\uC2B9\uC2DC\uD0B5\uB2C8\uB2E4.//"
     effectId: 1001
   - id: 102
     tierId: 6001
     name: "\uC288\uD305 \uB4DC\uB9B4 \uD6C8\uB828 \uD6A8\uC728"
     unlockCost: 15
     description: "\uC288\uD305 \uB4DC\uB9B4 \uD6C8\uB828 \uC2DC \uCEE8\uB514\uC158
-      \uC18C\uBAA8\uAC00 \uC904\uC5B4\uB4ED\uB2C8\uB2E4."
-    effectId: 1003
+      \uC18C\uBAA8\uAC00"
+    effectId: 0
+  - id: 0
+    tierId: 0
+    name: 
+    unlockCost: 0
+    description: 
+    effectId: 0
   - id: 201
     tierId: 6001
     name: "\uC218\uBE44 \uAC15\uD654 I"
     unlockCost: 15
-    description: "\uD300 \uC804\uCCB4\uC758 Jump\uB2A5\uB825\uCE58\uB97C 1 \uC0C1\uC2B9\uC2DC\uD0B5\uB2C8\uB2E4."
+    description: "\uD300 \uC804\uCCB4\uC758 \uC810\uD504\uB825\uC744 1 \uC0C1\uC2B9\uC2DC\uD0B5\uB2C8\uB2E4."
     effectId: 2001
   - id: 202
     tierId: 6001
     name: "\uB514\uD39C\uC2A4 \uC6CC\uD06C \uD6C8\uB828 \uD6A8\uC728"
     unlockCost: 15
     description: "\uB514\uD39C\uC2A4 \uC6CC\uD06C \uD6C8\uB828 \uC2DC \uCEE8\uB514\uC158
-      \uC18C\uBAA8\uAC00 \uC904\uC5B4\uB4ED\uB2C8\uB2E4."
-    effectId: 2002
+      \uC18C\uBAA8\uAC00"
+    effectId: 0
+  - id: 0
+    tierId: 0
+    name: 
+    unlockCost: 0
+    description: 
+    effectId: 0
   - id: 301
     tierId: 6001
     name: "\uBA85\uC131\uCE58 \uD68D\uB4DD\uB7C9 \uC99D\uAC00"
     unlockCost: 15
-    description: "\uACBD\uAE30 \uD6C4 \uD68D\uB4DD\uD558\uB294 \uBA85\uC131\uCE58\uAC00
-      10% \uC99D\uAC00\uD569\uB2C8\uB2E4."
-    effectId: 3002
+    description: "\uACBD\uAE30 \uD6C4 \uD68D\uB4DD\uD558\uB294 \uBA85\uC131\uCE58\uAC00"
+    effectId: 0
+  - id: 0
+    tierId: 0
+    name: 
+    unlockCost: 0
+    description: 
+    effectId: 0
   - id: 302
     tierId: 6001
     name: "\uC2DC\uC124 \uC5C5\uADF8\uB808\uC774\uB4DC \uBE44\uC6A9 \uAC10\uC18C"
     unlockCost: 15
-    description: "\uC2DC\uC124 \uC5C5\uADF8\uB808\uC774\uB4DC\uD558\uB294 \uBE44\uC6A9\uC774
-      5% \uAC10\uC18C\uD569\uB2C8\uB2E4."
-    effectId: 3001
+    description: "\uC2DC\uC124 \uC5C5\uADF8\uB808\uC774\uB4DC\uD558\uB294 \uBE44\uC6A9\uC774"
+    effectId: 0
+  - id: 0
+    tierId: 0
+    name: 
+    unlockCost: 0
+    description: 
+    effectId: 0
   - id: 501
     tierId: 6001
-    name: "\uD2F0\uC5B4 \uC2B9\uAE09 \uB178\uB4DC"
+    name: "2\uD2F0\uC5B4 \uC2B9\uAE09 \uB178\uB4DC"
     unlockCost: 0
-    description: "\uC870\uAC74 \uB2EC\uC131 \uC2DC \uD65C\uC131\uD654. \uBAA8\uB4E0
-      \uB2A5\uB825\uCE58 +1 \uBC0F 2\uD2F0\uC5B4 \uAC1C\uBC29"
+    description: "\uBAA8\uB4E0 \uB2A5\uB825\uCE58\uB97C 1 \uC0C1\uC2B9\uC2DC\uD0B5\uB2C8\uB2E4."
     effectId: 5001
   - id: 103
     tierId: 6002
-    name: "\uC288\uD305 \uAC15\uD654 II"
+    name: "\uC288\uD305 \uAC15\uD654 \u2161"
     unlockCost: 25
-    description: "\uD300 \uC804\uCCB4\uC758 Shoot\uB2A5\uB825\uCE58\uB97C 1 \uC0C1\uC2B9\uC2DC\uD0B5\uB2C8\uB2E4."
+    description: "\uD300 \uC804\uCCB4\uC758 \uC288\uD305\uC744 1 \uC0C1\uC2B9\uC2DC\uD0B5\uB2C8\uB2E4."
     effectId: 1001
   - id: 104
     tierId: 6002
-    name: "\uC288\uD305 \uAC15\uD654 III"
+    name: "\uC288\uD305 \uAC15\uD654 \u2162"
     unlockCost: 25
-    description: "\uD300 \uC804\uCCB4\uC758 Shoot\uB2A5\uB825\uCE58\uB97C 1 \uC0C1\uC2B9\uC2DC\uD0B5\uB2C8\uB2E4."
+    description: "\uD300 \uC804\uCCB4\uC758 \uC288\uD305\uC744 1 \uC0C1\uC2B9\uC2DC\uD0B5\uB2C8\uB2E4."
     effectId: 1001
   - id: 203
     tierId: 6002
-    name: "\uC218\uBE44 \uAC15\uD654 II"
+    name: "\uC218\uBE44 \uAC15\uD654 \u2161"
     unlockCost: 25
-    description: "\uD300 \uC804\uCCB4\uC758 Jump\uB2A5\uB825\uCE58\uB97C 1 \uC0C1\uC2B9\uC2DC\uD0B5\uB2C8\uB2E4."
+    description: "\uD300 \uC804\uCCB4\uC758 \uC810\uD504\uB825\uC744 1 \uC0C1\uC2B9\uC2DC\uD0B5\uB2C8\uB2E4."
     effectId: 2001
   - id: 204
     tierId: 6002
-    name: "\uC218\uBE44 \uAC15\uD654 III"
+    name: "\uC218\uBE44 \uAC15\uD654 \u2162"
     unlockCost: 25
-    description: "\uD300 \uC804\uCCB4\uC758 Jump\uB2A5\uB825\uCE58\uB97C 1 \uC0C1\uC2B9\uC2DC\uD0B5\uB2C8\uB2E4."
+    description: "\uD300 \uC804\uCCB4\uC758 \uC810\uD504\uB825\uC744 1 \uC0C1\uC2B9\uC2DC\uD0B5\uB2C8\uB2E4."
     effectId: 2001
   - id: 303
     tierId: 6002
     name: "\uB2E8\uCCB4 \uD6C8\uB828 \uD6A8\uC728"
     unlockCost: 25
     description: "\uBAA8\uB4E0 \uB2E8\uCCB4 \uD6C8\uB828 \uC2DC \uCEE8\uB514\uC158
-      \uC18C\uBAA8\uAC00 \uC904\uC5B4\uB4ED\uB2C8\uB2E4."
-    effectId: 3003
+      \uC18C\uBAA8\uAC00"
+    effectId: 0
+  - id: 0
+    tierId: 0
+    name: 
+    unlockCost: 0
+    description: 
+    effectId: 0
   - id: 401
     tierId: 6002
     name: "\uC120\uBB3C \uAE30\uB2A5 \uD574\uAE08"
     unlockCost: 25
     description: "\uD559\uC0DD\uB4E4\uC5D0\uAC8C \uC120\uBB3C\uC744 \uC904 \uC218
-      \uC788\uB294 \uAE30\uB2A5\uC774 \uD574\uAE08\uB429\uB2C8\uB2E4."
-    effectId: 4001
-  - id: 402
-    tierId: 6002
+      \uC788\uB294"
+    effectId: 0
+  - id: 0
+    tierId: 0
     name: 
-    unlockCost: 25
+    unlockCost: 0
     description: 
-    effectId: 4002
+    effectId: 0

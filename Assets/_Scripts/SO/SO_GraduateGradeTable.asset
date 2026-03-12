@@ -17,23 +17,23 @@ MonoBehaviour:
     grade: "1\uB4F1\uAE09"
     statAll: 400
     potentialMin: 85
-    trustLevel: 4
+    trustLevel: 0
     semiFinalPlus: 2
   - id: grade_002
     grade: "2\uB4F1\uAE09"
     statAll: 300
     potentialMin: 80
-    trustLevel: 4
+    trustLevel: 0
     semiFinalPlus: 2
   - id: grade_003
     grade: "3\uB4F1\uAE09"
     statAll: 250
     potentialMin: 75
-    trustLevel: 3
+    trustLevel: 0
     semiFinalPlus: 1
   - id: grade_004
     grade: "4\uB4F1\uAE09"
     statAll: 150
     potentialMin: 70
-    trustLevel: 3
+    trustLevel: 0
     semiFinalPlus: 1

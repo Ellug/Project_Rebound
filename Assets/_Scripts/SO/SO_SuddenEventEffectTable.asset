@@ -685,34 +685,55 @@ MonoBehaviour:
     targetMax: 5
     amountMin: -20
     amountMax: -20
+  - id: event_effect_1_money_p10
+    type: 1
+    targetName: text_status_10
+    targetMin: 10
+    targetMax: 10
+    amountMin: 10
+    amountMax: 100
+  - id: event_effect_1_money_p20
+    type: 1
+    targetName: text_status_10
+    targetMin: 10
+    targetMax: 10
+    amountMin: 20
+    amountMax: 200
+  - id: event_effect_1_money_p50
+    type: 1
+    targetName: text_status_10
+    targetMin: 10
+    targetMax: 10
+    amountMin: 50
+    amountMax: 500
   - id: event_effect_1_money_p100
     type: 1
     targetName: text_status_10
     targetMin: 10
     targetMax: 10
     amountMin: 100
-    amountMax: 100
-  - id: event_effect_1_money_p200
-    type: 1
-    targetName: text_status_10
-    targetMin: 10
-    targetMax: 10
-    amountMin: 200
-    amountMax: 200
-  - id: event_effect_1_money_p500
-    type: 1
-    targetName: text_status_10
-    targetMin: 10
-    targetMax: 10
-    amountMin: 500
-    amountMax: 500
-  - id: event_effect_1_money_p1000
-    type: 1
-    targetName: text_status_10
-    targetMin: 10
-    targetMax: 10
-    amountMin: 1000
     amountMax: 1000
+  - id: event_effect_1_money_m10
+    type: 1
+    targetName: text_status_10
+    targetMin: 10
+    targetMax: 10
+    amountMin: -10
+    amountMax: -10
+  - id: event_effect_1_money_m20
+    type: 1
+    targetName: text_status_10
+    targetMin: 10
+    targetMax: 10
+    amountMin: -20
+    amountMax: -20
+  - id: event_effect_1_money_m50
+    type: 1
+    targetName: text_status_10
+    targetMin: 10
+    targetMax: 10
+    amountMin: -50
+    amountMax: -50
   - id: event_effect_1_money_m100
     type: 1
     targetName: text_status_10
@@ -720,27 +741,34 @@ MonoBehaviour:
     targetMax: 10
     amountMin: -100
     amountMax: -100
-  - id: event_effect_1_money_m200
-    type: 1
+  - id: event_effect_2_money_p50
+    type: 2
     targetName: text_status_10
     targetMin: 10
     targetMax: 10
-    amountMin: -200
-    amountMax: -200
-  - id: event_effect_1_money_m500
-    type: 1
+    amountMin: 5
+    amountMax: 5
+  - id: event_effect_2_money_p10
+    type: 2
     targetName: text_status_10
     targetMin: 10
     targetMax: 10
-    amountMin: -500
-    amountMax: -500
-  - id: event_effect_1_money_m1000
-    type: 1
+    amountMin: 10
+    amountMax: 10
+  - id: event_effect_2_money_p20
+    type: 2
     targetName: text_status_10
     targetMin: 10
     targetMax: 10
-    amountMin: -1000
-    amountMax: -1000
+    amountMin: 20
+    amountMax: 20
+  - id: event_effect_2_money_p50
+    type: 2
+    targetName: text_status_10
+    targetMin: 10
+    targetMax: 10
+    amountMin: 50
+    amountMax: 50
   - id: event_effect_2_money_p100
     type: 2
     targetName: text_status_10
@@ -748,27 +776,34 @@ MonoBehaviour:
     targetMax: 10
     amountMin: 100
     amountMax: 100
-  - id: event_effect_2_money_p200
+  - id: event_effect_2_money_m5
     type: 2
     targetName: text_status_10
     targetMin: 10
     targetMax: 10
-    amountMin: 200
-    amountMax: 200
-  - id: event_effect_2_money_p500
+    amountMin: -5
+    amountMax: -5
+  - id: event_effect_2_money_m10
     type: 2
     targetName: text_status_10
     targetMin: 10
     targetMax: 10
-    amountMin: 500
-    amountMax: 500
-  - id: event_effect_2_money_p1000
+    amountMin: -10
+    amountMax: -10
+  - id: event_effect_2_money_m20
     type: 2
     targetName: text_status_10
     targetMin: 10
     targetMax: 10
-    amountMin: 1000
-    amountMax: 1000
+    amountMin: -20
+    amountMax: -20
+  - id: event_effect_2_money_m50
+    type: 2
+    targetName: text_status_10
+    targetMin: 10
+    targetMax: 10
+    amountMin: -50
+    amountMax: -50
   - id: event_effect_2_money_m100
     type: 2
     targetName: text_status_10
@@ -776,27 +811,6 @@ MonoBehaviour:
     targetMax: 10
     amountMin: -100
     amountMax: -100
-  - id: event_effect_2_money_m200
-    type: 2
-    targetName: text_status_10
-    targetMin: 10
-    targetMax: 10
-    amountMin: -200
-    amountMax: -200
-  - id: event_effect_2_money_m500
-    type: 2
-    targetName: text_status_10
-    targetMin: 10
-    targetMax: 10
-    amountMin: -500
-    amountMax: -500
-  - id: event_effect_2_money_m1000
-    type: 2
-    targetName: text_status_10
-    targetMin: 10
-    targetMax: 10
-    amountMin: -1000
-    amountMax: -1000
   - id: event_effect_1_fame_p1
     type: 1
     targetName: text_status_11
@@ -909,87 +923,178 @@ MonoBehaviour:
     targetMax: 11
     amountMin: -5
     amountMax: -5
-  - id: event_effect_1_randomPlayerStat_p2
+  - id: event_effect_1_experience_p1
+    type: 1
+    targetName: text_status_12
+    targetMin: 13
+    targetMax: 13
+    amountMin: 1
+    amountMax: 1
+  - id: event_effect_1_experience_p3
+    type: 1
+    targetName: text_status_12
+    targetMin: 13
+    targetMax: 13
+    amountMin: 3
+    amountMax: 3
+  - id: event_effect_1_experience_p5
+    type: 1
+    targetName: text_status_12
+    targetMin: 13
+    targetMax: 13
+    amountMin: 5
+    amountMax: 5
+  - id: event_effect_1_experience_p10
+    type: 1
+    targetName: text_status_12
+    targetMin: 13
+    targetMax: 13
+    amountMin: 10
+    amountMax: 10
+  - id: event_effect_1_experience_p15
+    type: 1
+    targetName: text_status_12
+    targetMin: 13
+    targetMax: 13
+    amountMin: 15
+    amountMax: 15
+  - id: event_effect_1_experience_p100
+    type: 1
+    targetName: text_status_12
+    targetMin: 13
+    targetMax: 13
+    amountMin: 100
+    amountMax: 100
+  - id: event_effect_1_experience_m50
+    type: 1
+    targetName: text_status_12
+    targetMin: 13
+    targetMax: 13
+    amountMin: -50
+    amountMax: -50
+  - id: event_effect_1_unable_p1
+    type: 1
+    targetName: text_status_21
+    targetMin: 21
+    targetMax: 21
+    amountMin: 1
+    amountMax: 1
+  - id: event_effect_1_unable_m1
+    type: 1
+    targetName: text_status_21
+    targetMin: 21
+    targetMax: 21
+    amountMin: -1
+    amountMax: -1
+  - id: event_effect_1_unable_training_p1
+    type: 1
+    targetName: text_status_22
+    targetMin: 22
+    targetMax: 22
+    amountMin: 1
+    amountMax: 1
+  - id: event_effect_1_unable_training_m1
+    type: 1
+    targetName: text_status_22
+    targetMin: 22
+    targetMax: 22
+    amountMin: -1
+    amountMax: -1
+  - id: event_effect_1_unable_match_p1
+    type: 1
+    targetName: text_status_23
+    targetMin: 23
+    targetMax: 23
+    amountMin: 1
+    amountMax: 1
+  - id: event_effect_1_unable_match_m1
+    type: 1
+    targetName: text_status_23
+    targetMin: 23
+    targetMax: 23
+    amountMin: -1
+    amountMax: -1
+  - id: event_effect_1_randomPlayerStat_p1
     type: 1
     targetName: text_status_random
     targetMin: 2
-    targetMax: 5
+    targetMax: 6
     amountMin: 2
     amountMax: 2
   - id: event_effect_1_randomPlayerStat_p3
     type: 1
     targetName: text_status_random
     targetMin: 2
-    targetMax: 5
+    targetMax: 6
     amountMin: 3
     amountMax: 3
   - id: event_effect_1_randomPlayerStat_p5
     type: 1
     targetName: text_status_random
     targetMin: 2
-    targetMax: 5
+    targetMax: 6
     amountMin: 5
     amountMax: 5
   - id: event_effect_1_randomPlayerStat_p10
     type: 1
     targetName: text_status_random
     targetMin: 2
-    targetMax: 5
+    targetMax: 6
     amountMin: 10
     amountMax: 10
   - id: event_effect_1_randomPlayerStat_p15
     type: 1
     targetName: text_status_random
     targetMin: 2
-    targetMax: 5
+    targetMax: 6
     amountMin: 15
     amountMax: 15
   - id: event_effect_1_randomPlayerStat_p20
     type: 1
     targetName: text_status_random
     targetMin: 2
-    targetMax: 5
+    targetMax: 6
     amountMin: 20
     amountMax: 20
   - id: event_effect_1_randomPlayerStat_m2
     type: 1
     targetName: text_status_random
     targetMin: 2
-    targetMax: 5
+    targetMax: 6
     amountMin: -2
     amountMax: -2
   - id: event_effect_1_randomPlayerStat_m3
     type: 1
     targetName: text_status_random
     targetMin: 2
-    targetMax: 5
+    targetMax: 6
     amountMin: -3
     amountMax: -3
   - id: event_effect_1_randomPlayerStat_m5
     type: 1
     targetName: text_status_random
     targetMin: 2
-    targetMax: 5
+    targetMax: 6
     amountMin: -5
     amountMax: -5
   - id: event_effect_1_randomPlayerStat_m10
     type: 1
     targetName: text_status_random
     targetMin: 2
-    targetMax: 5
+    targetMax: 6
     amountMin: -10
     amountMax: -10
   - id: event_effect_1_randomPlayerStat_m15
     type: 1
     targetName: text_status_random
     targetMin: 2
-    targetMax: 5
+    targetMax: 6
     amountMin: -15
     amountMax: -15
   - id: event_effect_1_randomPlayerStat_m20
     type: 1
     targetName: text_status_random
     targetMin: 2
-    targetMax: 5
+    targetMax: 6
     amountMin: -20
     amountMax: -20

@@ -54,7 +54,7 @@ MonoBehaviour:
     facilityLv: 1
     target: 2
     conditionCost: -15
-    mental: 15
+    mental: 75
     shoot: 0
     speed: 0
     jump: 0
@@ -70,7 +70,7 @@ MonoBehaviour:
     facilityLv: 1
     target: 1
     conditionCost: -10
-    mental: 5
+    mental: 25
     shoot: 0
     speed: 0
     jump: 0
@@ -89,8 +89,8 @@ MonoBehaviour:
     mental: 0
     shoot: 0
     speed: 0
-    jump: 2
-    stamina: 1
+    jump: 20
+    stamina: 10
     linkedEventId: 
     desc: "\uBAA8\uB4E0 \uC120\uC218\uC758 \uC810\uD504\uB825\uACFC \uC9C0\uAD6C\uB825\uC774
       \uC99D\uAC00\uD569\uB2C8\uB2E4."
@@ -103,11 +103,11 @@ MonoBehaviour:
     facilityLv: 1
     target: 1
     conditionCost: 6
-    mental: -5
+    mental: 0
     shoot: 0
-    speed: 2
+    speed: 20
     jump: 0
-    stamina: 5
+    stamina: 50
     linkedEventId: 
     desc: "\uBAA8\uB4E0 \uC120\uC218\uC758 \uC18D\uB3C4\uC640 \uC9C0\uAD6C\uB825\uC774
       \uB300\uD3ED \uC99D\uAC00\uD569\uB2C8\uB2E4."
@@ -121,9 +121,9 @@ MonoBehaviour:
     target: 1
     conditionCost: 2
     mental: 0
-    shoot: 1
+    shoot: 10
     speed: 0
-    jump: 1
+    jump: 10
     stamina: 0
     linkedEventId: 
     desc: "\uBAA8\uB4E0 \uC120\uC218\uC758 \uC288\uD305\uACFC \uC810\uD504\uB825\uC774
@@ -138,7 +138,7 @@ MonoBehaviour:
     target: 2
     conditionCost: 5
     mental: 0
-    shoot: 4
+    shoot: 40
     speed: 0
     jump: 0
     stamina: 0
@@ -154,9 +154,9 @@ MonoBehaviour:
     target: 2
     conditionCost: 5
     mental: 0
-    shoot: 2
+    shoot: 20
     speed: 0
-    jump: 2
+    jump: 20
     stamina: 0
     linkedEventId: 
     desc: "\uC288\uD305\uACFC \uC810\uD504\uB825\uC744 \uC131\uC7A5\uC2DC\uD0B5\uB2C8\uB2E4."
@@ -172,7 +172,7 @@ MonoBehaviour:
     mental: 0
     shoot: 0
     speed: 0
-    jump: 4
+    jump: 40
     stamina: 0
     linkedEventId: 
     desc: "\uC810\uD504\uB825 \uB2A5\uB825\uCE58\uB97C \uC9D1\uC911 \uC131\uC7A5\uC2DC\uD0B5\uB2C8\uB2E4."
@@ -187,8 +187,8 @@ MonoBehaviour:
     conditionCost: 5
     mental: 0
     shoot: 0
-    speed: 2
-    jump: 2
+    speed: 20
+    jump: 20
     stamina: 0
     linkedEventId: 
     desc: "\uC18D\uB3C4\uC640 \uC810\uD504\uB825\uC744 \uC131\uC7A5\uC2DC\uD0B5\uB2C8\uB2E4."

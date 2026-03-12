@@ -15,7 +15,7 @@ MonoBehaviour:
   _rows:
   - id: sch_001
     facilityReq: school
-    facilityName: "\uCC3D\uACE0"
+    facilityName: "\uCC3D\uACE01"
     facilityLv: 1
     upgradeCost: 100
     conditionDecayEfficiency: 0
@@ -23,7 +23,7 @@ MonoBehaviour:
     resourceId: res_sch_001
   - id: sch_002
     facilityReq: school
-    facilityName: "\uC815\uC2DD \uB18D\uAD6C\uBD80\uC2E4"
+    facilityName: "\uCC3D\uACE02"
     facilityLv: 2
     upgradeCost: 450
     conditionDecayEfficiency: 2
@@ -31,7 +31,7 @@ MonoBehaviour:
     resourceId: res_sch_002
   - id: sch_003
     facilityReq: school
-    facilityName: "\uBA40\uD2F0 \uD074\uB7FD\uD558\uC6B0\uC2A4"
+    facilityName: "\uCC3D\uACE03"
     facilityLv: 3
     upgradeCost: 1100
     conditionDecayEfficiency: 3
@@ -47,7 +47,7 @@ MonoBehaviour:
     resourceId: res_sch_004
   - id: gym_001
     facilityReq: gym
-    facilityName: "\uAC08\uB77C\uC9C4 \uC6B0\uB808\uD0C4 \uCF54\uD2B8"
+    facilityName: "\uAC08\uB77C\uC9C4 \uC6B0\uB808\uD0C4 \uCF54\uD2B81"
     facilityLv: 1
     upgradeCost: 35
     conditionDecayEfficiency: 0
@@ -55,7 +55,7 @@ MonoBehaviour:
     resourceId: res_gym_001
   - id: gym_002
     facilityReq: gym
-    facilityName: "\uC624\uB798\uB41C \uB098\uBB34 \uB9C8\uB8E8"
+    facilityName: "\uAC08\uB77C\uC9C4 \uC6B0\uB808\uD0C4 \uCF54\uD2B82"
     facilityLv: 2
     upgradeCost: 85
     conditionDecayEfficiency: 0
@@ -63,7 +63,7 @@ MonoBehaviour:
     resourceId: res_gym_002
   - id: gym_003
     facilityReq: gym
-    facilityName: "\uC804\uC6A9 \uBA54\uC774\uD50C \uD50C\uB85C\uC5B4"
+    facilityName: "\uAC08\uB77C\uC9C4 \uC6B0\uB808\uD0C4 \uCF54\uD2B83"
     facilityLv: 3
     upgradeCost: 170
     conditionDecayEfficiency: 0
@@ -71,7 +71,7 @@ MonoBehaviour:
     resourceId: res_gym_003
   - id: gym_004
     facilityReq: gym
-    facilityName: "\uC2A4\uB9C8\uD2B8 \uC870\uBA85 \uCF54\uD2B8"
+    facilityName: "\uAC08\uB77C\uC9C4 \uC6B0\uB808\uD0C4 \uCF54\uD2B84"
     facilityLv: 4
     upgradeCost: 320
     conditionDecayEfficiency: 0
@@ -79,7 +79,7 @@ MonoBehaviour:
     resourceId: res_gym_004
   - id: gym_005
     facilityReq: gym
-    facilityName: "\uC560\uB110\uB77C\uC774\uD2F1\uC2A4 \uC544\uB808\uB098"
+    facilityName: "\uAC08\uB77C\uC9C4 \uC6B0\uB808\uD0C4 \uCF54\uD2B85"
     facilityLv: 5
     upgradeCost: 740
     conditionDecayEfficiency: 0
@@ -87,7 +87,7 @@ MonoBehaviour:
     resourceId: res_gym_005
   - id: gym_006
     facilityReq: gym
-    facilityName: "\uAC74\uC0F7 \uC790\uB3D9 \uBC30\uAE09\uC18C"
+    facilityName: "\uAC08\uB77C\uC9C4 \uC6B0\uB808\uD0C4 \uCF54\uD2B86"
     facilityLv: 6
     upgradeCost: 1400
     conditionDecayEfficiency: 0
@@ -95,7 +95,7 @@ MonoBehaviour:
     resourceId: res_gym_006
   - id: gym_007
     facilityReq: gym
-    facilityName: "\uAE00\uB77C\uC2A4 \uBC31\uBCF4\uB4DC \uC2A4\uD018\uC5B4"
+    facilityName: "\uAC08\uB77C\uC9C4 \uC6B0\uB808\uD0C4 \uCF54\uD2B87"
     facilityLv: 7
     upgradeCost: 2000
     conditionDecayEfficiency: 0
@@ -111,7 +111,7 @@ MonoBehaviour:
     resourceId: res_gym_008
   - id: caf_001
     facilityReq: cafeteria
-    facilityName: "\uAC04\uC774 \uBC30\uC2DD\uB300"
+    facilityName: "\uAC04\uC774 \uBC30\uC2DD\uB3001"
     facilityLv: 1
     upgradeCost: 35
     conditionDecayEfficiency: 0
@@ -119,7 +119,7 @@ MonoBehaviour:
     resourceId: res_caf_001
   - id: caf_002
     facilityReq: cafeteria
-    facilityName: "\uACF5\uC6A9 \uC2DD\uB2F9 \uCF54\uB108"
+    facilityName: "\uAC04\uC774 \uBC30\uC2DD\uB3002"
     facilityLv: 2
     upgradeCost: 85
     conditionDecayEfficiency: 0
@@ -127,7 +127,7 @@ MonoBehaviour:
     resourceId: res_caf_002
   - id: caf_003
     facilityReq: cafeteria
-    facilityName: "\uC624\uD508 \uCE58\uD0A8"
+    facilityName: "\uAC04\uC774 \uBC30\uC2DD\uB3003"
     facilityLv: 3
     upgradeCost: 170
     conditionDecayEfficiency: 0
@@ -135,7 +135,7 @@ MonoBehaviour:
     resourceId: res_caf_003
   - id: caf_004
     facilityReq: cafeteria
-    facilityName: "\uD504\uB85C\uD2F4 \uC170\uC774\uD06C \uBC14"
+    facilityName: "\uAC04\uC774 \uBC30\uC2DD\uB3004"
     facilityLv: 4
     upgradeCost: 320
     conditionDecayEfficiency: 0
@@ -143,7 +143,7 @@ MonoBehaviour:
     resourceId: res_caf_004
   - id: caf_005
     facilityReq: cafeteria
-    facilityName: "\uC804\uBB38 \uC601\uC591 \uAD00\uB9AC\uC2E4"
+    facilityName: "\uAC04\uC774 \uBC30\uC2DD\uB3005"
     facilityLv: 5
     upgradeCost: 740
     conditionDecayEfficiency: 0
@@ -151,7 +151,7 @@ MonoBehaviour:
     resourceId: res_caf_005
   - id: caf_006
     facilityReq: cafeteria
-    facilityName: "\uC800\uC628 \uC9C4\uACF5 \uC870\uB9AC\uC2E4"
+    facilityName: "\uAC04\uC774 \uBC30\uC2DD\uB3006"
     facilityLv: 6
     upgradeCost: 1400
     conditionDecayEfficiency: 0
@@ -159,7 +159,7 @@ MonoBehaviour:
     resourceId: res_caf_006
   - id: caf_007
     facilityReq: cafeteria
-    facilityName: "\uC0B0\uC18C \uC2E0\uC120 \uBB3C\uB958\uCC3D\uACE0"
+    facilityName: "\uAC04\uC774 \uBC30\uC2DD\uB3007"
     facilityLv: 7
     upgradeCost: 2000
     conditionDecayEfficiency: 0
@@ -175,7 +175,7 @@ MonoBehaviour:
     resourceId: res_caf_008
   - id: cou_001
     facilityReq: counselingcenter
-    facilityName: "\uB0A1\uC740 \uAC00\uC8FD \uC18C\uD30C"
+    facilityName: "\uB0A1\uC740 \uAC00\uC8FD \uC18C\uD30C1"
     facilityLv: 1
     upgradeCost: 20
     conditionDecayEfficiency: 0
@@ -183,7 +183,7 @@ MonoBehaviour:
     resourceId: res_cou_001
   - id: cou_002
     facilityReq: counselingcenter
-    facilityName: "\uAC00\uB9BC\uB9C9 \uC0C1\uB2F4 \uB370\uC2A4\uD06C"
+    facilityName: "\uB0A1\uC740 \uAC00\uC8FD \uC18C\uD30C2"
     facilityLv: 2
     upgradeCost: 60
     conditionDecayEfficiency: 0
@@ -191,7 +191,7 @@ MonoBehaviour:
     resourceId: res_cou_002
   - id: cou_003
     facilityReq: counselingcenter
-    facilityName: "\uD14C\uB77C\uD53C \uB77C\uC6B4\uC9C0"
+    facilityName: "\uB0A1\uC740 \uAC00\uC8FD \uC18C\uD30C3"
     facilityLv: 3
     upgradeCost: 120
     conditionDecayEfficiency: 0
@@ -199,7 +199,7 @@ MonoBehaviour:
     resourceId: res_cou_003
   - id: cou_004
     facilityReq: counselingcenter
-    facilityName: "VR \uD790\uB9C1 \uC2A4\uD14C\uC774\uC158"
+    facilityName: "\uB0A1\uC740 \uAC00\uC8FD \uC18C\uD30C4"
     facilityLv: 4
     upgradeCost: 300
     conditionDecayEfficiency: 0
@@ -207,7 +207,7 @@ MonoBehaviour:
     resourceId: res_cou_004
   - id: cou_005
     facilityReq: counselingcenter
-    facilityName: "\uACE0\uC555 \uC0B0\uC18C \uCEA1\uC290\uC2E4"
+    facilityName: "\uB0A1\uC740 \uAC00\uC8FD \uC18C\uD30C5"
     facilityLv: 5
     upgradeCost: 680
     conditionDecayEfficiency: 0
@@ -215,7 +215,7 @@ MonoBehaviour:
     resourceId: res_cou_005
   - id: cou_006
     facilityReq: counselingcenter
-    facilityName: "\uD558\uC774\uB4DC\uB85C \uB9C8\uC0AC\uC9C0 \uD0D5"
+    facilityName: "\uB0A1\uC740 \uAC00\uC8FD \uC18C\uD30C6"
     facilityLv: 6
     upgradeCost: 1000
     conditionDecayEfficiency: 0
@@ -223,7 +223,7 @@ MonoBehaviour:
     resourceId: res_cou_006
   - id: cou_007
     facilityReq: counselingcenter
-    facilityName: "\uBC14\uC774\uC624 \uD53C\uB4DC\uBC31 \uB8F8"
+    facilityName: "\uB0A1\uC740 \uAC00\uC8FD \uC18C\uD30C7"
     facilityLv: 7
     upgradeCost: 1250
     conditionDecayEfficiency: 0

@@ -1,7 +1,0 @@
-trigger_condition,target_scope,increase_amount
-string,string,int
-주 3회 이상 훈련,개인,5
-경기 참여 및 승리,개인,5
-친성경기 참여 및 승리,개인,5
-잠재력에 맞는 스탯 레벨 업,개인,1
-시설 강화 레벨 증가,전체,5
