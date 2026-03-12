@@ -224,29 +224,8 @@ public class TournamentUI : MonoBehaviour
             if (!matchup.IsHighlighted)
                 continue;
 
-            if (string.IsNullOrWhiteSpace(mySchoolName))
-            {
-                myTeam = matchup.UpTeam;
-                opponentTeam = matchup.DownTeam;
-                break;
-            }
-
-            if (matchup.UpTeam == mySchoolName)
-            {
-                myTeam = matchup.UpTeam;
-                opponentTeam = matchup.DownTeam;
-            }
-            else if (matchup.DownTeam == mySchoolName)
-            {
-                myTeam = matchup.DownTeam;
-                opponentTeam = matchup.UpTeam;
-            }
-            else
-            {
-                myTeam = matchup.UpTeam;
-                opponentTeam = matchup.DownTeam;
-            }
-
+            myTeam = string.IsNullOrWhiteSpace(mySchoolName) ? matchup.UpTeam : mySchoolName;
+            opponentTeam = matchup.DownTeam;
             break;
         }
 

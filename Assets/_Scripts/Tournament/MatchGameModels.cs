@@ -51,8 +51,6 @@ public sealed class MatchContext
 
     public int MySchoolScore { get; private set; }
     public int OpponentScore { get; private set; }
-    // 우리 학교가 상단(홈) 팀인지 여부
-    public bool IsMySchoolUpTeam { get; }
 
     // 우리 팀 출전 선수(최대 5인) / 벤치 선수
     public List<Student> FieldPlayers { get; }
@@ -67,8 +65,7 @@ public sealed class MatchContext
         UpTeam = upTeam;
         DownTeam = downTeam;
         MySchoolName = mySchoolName;
-        IsMySchoolUpTeam = string.Equals(upTeam, mySchoolName, StringComparison.Ordinal);
-        OpponentTeamName = IsMySchoolUpTeam ? downTeam : upTeam;
+        OpponentTeamName = downTeam;
         MySchoolScore = 0;
         OpponentScore = 0;
         FieldPlayers = fieldPlayers ?? new List<Student>();
@@ -93,13 +90,13 @@ public sealed class MatchContext
     // UI의 좌측(상단 팀) 점수 반환
     public int GetLeftTeamScore()
     {
-        return IsMySchoolUpTeam ? MySchoolScore : OpponentScore;
+        return MySchoolScore;
     }
 
     // UI의 우측(하단 팀) 점수 반환
     public int GetRightTeamScore()
     {
-        return IsMySchoolUpTeam ? OpponentScore : MySchoolScore;
+        return OpponentScore;
     }
 }
 
