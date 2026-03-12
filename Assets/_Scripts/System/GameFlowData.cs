@@ -15,7 +15,6 @@ public struct GameFlowData
     public bool IsLeagueHandled;               // 토너먼트 씬 진입 완료 여부
     public DateTime LeagueTermEnd;             // 토너먼트 진입 시점의 리그 term_end 날짜
     public bool HasPendingFriendlyMatch;       // 주말 친선경기 예약 여부
-    public int MaxRecruitCount;                // 팀 최대 보유 인원
     public HashSet<string> ActiveEventIds;     // 현재 term 범위 내 활성 이벤트 id 집합
 
     // 초기값
@@ -29,7 +28,6 @@ public struct GameFlowData
         Phase = GamePhase.Init,
         IsLeagueOpened = false,
         IsLeagueHandled = false,
-        MaxRecruitCount = 7,
         ActiveEventIds = new HashSet<string>(StringComparer.Ordinal)
     };
 
@@ -45,7 +43,6 @@ public struct GameFlowData
         IsLeagueHandled = false;
         LeagueTermEnd = default;
         HasPendingFriendlyMatch = false;
-        MaxRecruitCount = 7;
         ActiveEventIds?.Clear();
     }
 

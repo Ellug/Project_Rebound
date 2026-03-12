@@ -3,31 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using AYellowpaper.SerializedCollections;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class StudentManager : Singleton<StudentManager>
 {
-    // 신뢰도 기반 퇴부 판정 기준값들
-    private const int TrustLowThreshold = 10;
-    private const int TrustCriticalThreshold = 0;
-    private const int LowTrustExpelDays = 7;
-    private const int CriticalTrustExpelDays = 3;
-
     [SerializeField] private List<Student> _students = new();
 
     // 슬롯 배치 정보: 슬롯 인덱스 -> 학생
     [SerializeField, SerializedDictionary("슬롯 인덱스", "학생")]
     private SerializedDictionary<int, Student> _slotAssignments = new();
-
-    // 학생별 신뢰도 저하/붕괴 연속 일수 추적용
-    [SerializeField, SerializedDictionary("학생 ID", "저신뢰 연속 일수")]
-    private SerializedDictionary<int, int> _lowTrustStreakByStudentId = new();
-    [SerializeField, SerializedDictionary("학생 ID", "중대저신뢰 연속 일수")]
-    private SerializedDictionary<int, int> _criticalTrustStreakByStudentId = new();
-
-    // 씬 전환 시 턴/날짜 이벤트 재연결용 참조
-    private TurnManager _turnManager;
-    private DateManager _dateManager;
 
     public event Action<List<Student>> OnStudentsChanged;
     public event Action<Student> OnStudentAdded;
@@ -90,18 +73,15 @@ public class StudentManager : Singleton<StudentManager>
     // 전체 슬롯 배치 정보 반환
     public IReadOnlyDictionary<int, Student> SlotAssignments => _slotAssignments;
 
+
     protected override void OnSingletonAwake()
     {
         // StudentManager 초기화 로직
-        SceneManager.sceneLoaded += HandleSceneLoaded;
-        RebindTurnManager();
         Debug.Log("[StudentManager] Initialized");
     }
 
     void OnDestroy()
     {
-        SceneManager.sceneLoaded -= HandleSceneLoaded;
-        UnbindTurnManager();
         Cleanup();
     }
 
@@ -110,7 +90,6 @@ public class StudentManager : Singleton<StudentManager>
     // 아니면 팩토리에서 생성하면서 Add 같이 해버리던? => 안될듯. 드래그앤드롭해서 영입 확정하는 순간 Add 하는 게 맞는듯.
     public void AddStudent(Student student)
     {
-        ClearTrustTracking(student);
         _students.Add(student);
         OnStudentAdded?.Invoke(student);
         OnStudentsChanged?.Invoke(_students);
@@ -128,8 +107,7 @@ public class StudentManager : Singleton<StudentManager>
             return false;
         }
 
-        RemoveStudentFromSlots(student);
-        ClearTrustTracking(student);
+
         _students.Remove(student);
         OnStudentRemoved?.Invoke(student);
         OnStudentsChanged?.Invoke(_students);
@@ -144,8 +122,6 @@ public class StudentManager : Singleton<StudentManager>
         if (student == null || !_students.Contains(student))
             return false;
 
-        RemoveStudentFromSlots(student);
-        ClearTrustTracking(student);
         _students.Remove(student);
         OnStudentRemoved?.Invoke(student);
         OnStudentsChanged?.Invoke(_students);
@@ -161,7 +137,6 @@ public class StudentManager : Singleton<StudentManager>
         foreach (var student in seniors)
         {
             RemoveStudentFromSlots(student);
-            ClearTrustTracking(student);
 
             _students.Remove(student);
             OnStudentRemoved?.Invoke(student);
@@ -178,7 +153,6 @@ public class StudentManager : Singleton<StudentManager>
         _students.Clear();
 
         _slotAssignments.Clear();
-        ClearAllTrustTracking();
         OnStudentsChanged?.Invoke(_students);
         Debug.Log("[StudentManager] Cleared all students");
     }
@@ -218,169 +192,7 @@ public class StudentManager : Singleton<StudentManager>
         Debug.Log("[StudentManager] 재학생 진급 처리 완료");
     }
 
-    private void HandleSceneLoaded(Scene scene, LoadSceneMode mode)
-    {
-        // 씬이 바뀔 때마다 현재 TurnManager/DateManager에 다시 바인딩
-        RebindTurnManager();
-    }
 
-    private void RebindTurnManager()
-    {
-        UnbindTurnManager();
-
-        _turnManager = FindFirstObjectByType<TurnManager>();
-        if (_turnManager == null) return;
-
-        _dateManager = _turnManager.DateManager;
-        if (_dateManager == null) return;
-
-        _dateManager.OnDateAdvanced -= HandleDateAdvanced;
-        _dateManager.OnDateAdvanced += HandleDateAdvanced;
-    }
-
-    private void UnbindTurnManager()
-    {
-        if (_dateManager != null)
-            _dateManager.OnDateAdvanced -= HandleDateAdvanced;
-
-        _dateManager = null;
-        _turnManager = null;
-    }
-
-    private void HandleDateAdvanced(DateTime currentDate, int dayIndex)
-    {
-        // 하루가 지날 때마다 신뢰도 기반 퇴부 규칙 평가
-        EvaluateTrustBasedExpulsions();
-    }
-
-    private void EvaluateTrustBasedExpulsions()
-    {
-        // 학생별 연속 일수를 갱신하고 퇴부 대상 목록을 계산
-        if (_students == null || _students.Count == 0)
-            return;
-
-        List<(Student student, bool isCritical)> expulsionTargets = new();
-
-        foreach (Student student in _students)
-        {
-            if (student == null)
-                continue;
-
-            int studentId = student.id;
-
-            if (student.trust <= TrustCriticalThreshold)
-            {
-                _lowTrustStreakByStudentId.Remove(studentId);
-                int criticalStreak = IncrementTrustStreak(_criticalTrustStreakByStudentId, studentId);
-
-                if (criticalStreak >= CriticalTrustExpelDays)
-                    expulsionTargets.Add((student, true));
-
-                continue;
-            }
-
-            _criticalTrustStreakByStudentId.Remove(studentId);
-
-            if (student.trust <= TrustLowThreshold)
-            {
-                int lowStreak = IncrementTrustStreak(_lowTrustStreakByStudentId, studentId);
-
-                if (lowStreak >= LowTrustExpelDays)
-                    expulsionTargets.Add((student, false));
-
-                continue;
-            }
-
-            _lowTrustStreakByStudentId.Remove(studentId);
-        }
-
-        foreach ((Student student, bool isCritical) in expulsionTargets)
-            ExpelStudentByTrustRule(student, isCritical);
-    }
-
-    private static int IncrementTrustStreak(SerializedDictionary<int, int> streakMap, int studentId)
-    {
-        // 특정 학생의 연속 일수 카운트를 1일 증가
-        if (streakMap.TryGetValue(studentId, out int currentStreak))
-            currentStreak++;
-        else
-            currentStreak = 1;
-
-        streakMap[studentId] = currentStreak;
-        return currentStreak;
-    }
-
-    private void ExpelStudentByTrustRule(Student student, bool isCritical)
-    {
-        // 규칙 충족 학생을 실제로 퇴부 처리하고 후속 로직 실행
-        if (student == null) return;
-
-        bool removed = RemoveStudent(student);
-        if (!removed) return;
-
-        if (isCritical)
-            TryReduceStudentCapacityByCriticalExpulsion(student);
-
-        ShowExpulsionPopup(student, isCritical);
-    }
-
-    private void ShowExpulsionPopup(Student student, bool isCritical)
-    {
-        // 퇴부 학생의 이름/학년/스펙/사유를 기본 팝업으로 안내
-        string reasonText = isCritical
-            ? "신뢰도 0 이하 상태가 3일 이상 지속되어 퇴부 처리되었습니다."
-            : "신뢰도 10 이하 상태가 7일 이상 지속되어 퇴부 처리되었습니다.";
-
-        string message =
-            $"{student.grade}학년 {student.studentName} 학생이 퇴부했습니다.\n" +
-            $"멘탈 {student.mental} / 슈팅 {student.shoot} / 속도 {student.speed} / 점프력 {student.jump} / 지구력 {student.stamina}\n\n" +
-            $"사유: {reasonText}";
-
-        string title = isCritical ? "학생 퇴부 (중대)" : "학생 퇴부";
-        UIPopupRequest req = UIPopupRequest.Default(
-            title: title,
-            message: message,
-            onPrimary: null,
-            onCancel: null,
-            subMessage: null,
-            previewSprite: null,
-            showCancel: false,
-            primaryKind: UIPopupRequest.PrimaryButtonKind.Confirm
-        );
-        req.AutoCloseOnPrimary = true;
-        req.AutoCloseOnCancel = true;
-
-        UIManager.Instance.ShowPopup(req);
-    }
-
-    private void TryReduceStudentCapacityByCriticalExpulsion(Student expelledStudent)
-    {
-        // 신뢰도 0 퇴부일 때만 모집 정원 감소를 시도
-        RecruitmentManager recruitmentManager = FindFirstObjectByType<RecruitmentManager>();
-        if (recruitmentManager == null)
-        {
-            Debug.LogWarning($"[StudentManager] RecruitmentManager를 찾지 못해 정원 감소를 적용하지 못했음. expelled={expelledStudent.studentName}");
-            return;
-        }
-
-        recruitmentManager.TryDecreaseMaxRecruitCountByTrustExpulsion();
-    }
-
-    private void ClearTrustTracking(Student student)
-    {
-        // 특정 학생의 신뢰도 연속 일수 추적 데이터를 제거
-        if (student == null) return;
-
-        _lowTrustStreakByStudentId.Remove(student.id);
-        _criticalTrustStreakByStudentId.Remove(student.id);
-    }
-
-    private void ClearAllTrustTracking()
-    {
-        // 전체 학생의 신뢰도 연속 일수 추적 데이터를 초기화
-        _lowTrustStreakByStudentId.Clear();
-        _criticalTrustStreakByStudentId.Clear();
-    }
 
     // Title로 돌아갈 때 명시적 해제
     public void Cleanup()
@@ -395,7 +207,6 @@ public class StudentManager : Singleton<StudentManager>
         // 데이터 초기화
         _students.Clear();
         _slotAssignments.Clear();
-        ClearAllTrustTracking();
 
         // StudentFactory 초기화
         StudentFactory.ResetUsedNames();

@@ -31,7 +31,6 @@ public class GameManager : Singleton<GameManager>
     public GamePhase CurrentPhase => _flowData.Phase;
     public bool IsLeagueOpened => _flowData.IsLeagueOpened;
     public bool IsLeagueHandled => _flowData.IsLeagueHandled;
-    public int MaxRecruitCount => _flowData.MaxRecruitCount;
 
     protected override void OnSingletonAwake()
     {
@@ -105,12 +104,6 @@ public class GameManager : Singleton<GameManager>
     public void SyncFlowState(DateTime currentDate, int turnIndex, int dayIndex, int currentYear, GamePhase phase, bool isLeagueOpened, bool isLeagueHandled)
     {
         _flowData.Sync(currentDate, turnIndex, dayIndex, currentYear, phase, isLeagueOpened, isLeagueHandled);
-    }
-
-    // 모집 정원 런타임 상태 저장
-    public void SetRecruitmentMaxCount(int maxRecruitCount)
-    {
-        _flowData.MaxRecruitCount = Mathf.Max(0, maxRecruitCount);
     }
 
     // 씬별 런타임 참조 및 상태 데이터 초기화
@@ -271,21 +264,12 @@ public class GameManager : Singleton<GameManager>
         _recruitmentManager = FindFirstObjectByType<RecruitmentManager>(); // 영입 매니저 참조
         _isLoadingTournament = false;
 
-        RestoreRecruitmentCapacity();
-
         // 영입 완료 이벤트 구독
         if (_recruitmentManager != null)
         {
             _recruitmentManager.OnRecruitmentCompleted -= HandleRecruitmentCompleted;
             _recruitmentManager.OnRecruitmentCompleted += HandleRecruitmentCompleted;
         }
-    }
-
-    // 씬 재진입 시 모집 정원 복원, 최초 진입 시 현재 정원 캡처
-    private void RestoreRecruitmentCapacity()
-    {
-        if (_recruitmentManager == null) return;
-        _recruitmentManager.ApplyPersistentMaxRecruitCount(_flowData.MaxRecruitCount);
     }
 
     // TurnManager 이벤트 구독
