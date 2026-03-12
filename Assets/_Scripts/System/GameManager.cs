@@ -44,8 +44,7 @@ public class GameManager : Singleton<GameManager>
         {
             if (_recruitmentManager != null)
                 return _recruitmentManager.MaxRecruitCount;
-
-            Debug.LogWarning("[GameManager] MaxRecruitCount: RecruitmentManager 참조 없음, 0 반환");
+                
             return 0;
         }
     }
