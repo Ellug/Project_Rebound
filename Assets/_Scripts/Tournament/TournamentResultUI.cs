@@ -134,13 +134,18 @@ public class TournamentResultUI : MonoBehaviour
     {
         // TODO: 패배 연출?? 보존 재화 계산?
         Hide();
+
+        if (SaveManager.Instance != null)
+        {
+            SaveManager.Instance.MarkCurrentRunForDeleteOnTitle();
+        }
         UnityEngine.SceneManagement.SceneManager.LoadScene("Title");
     }
 
-    
+
     // BodyText가 짧을 때 RewardRow가 스크롤 바닥에 붙도록 BodyText의 minHeight를 동적으로 조정
     // BodyText가 충분히 길면 자연스럽게 스크롤이 생기고 RewardRow는 스크롤 끝에 위치
-    
+
     private void AdjustScrollLayout()
     {
         if (_scrollRect == null || _scrollContent == null || _rewardRow == null || _bodyText == null)

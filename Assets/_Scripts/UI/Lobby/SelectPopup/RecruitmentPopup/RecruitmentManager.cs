@@ -16,6 +16,9 @@ public class RecruitmentManager : MonoBehaviour
 
     private AlwaysEventManager _alwaysEventManager;
 
+    // SaveManager.CollectFlowData() → GameManager.MaxRecruitCount 경유로 참조
+    public int MaxRecruitCount => _maxRecruitCount;
+
     // UIManager 기준 Canvas 루트 참조
     private Transform CanvasRoot => UIManager.Instance != null
         ? UIManager.Instance.GetCanvasRoot()

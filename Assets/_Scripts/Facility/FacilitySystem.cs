@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class FacilitySystem : Singleton<FacilitySystem>
@@ -19,6 +19,11 @@ public class FacilitySystem : Singleton<FacilitySystem>
     public int GetLevel(string facility)
     {
         return _levels.TryGetValue(facility, out int lv) ? lv : 1;
+    }
+
+    public void SetLevel(string facility, int level)
+    {
+        _levels[facility] = Mathf.Max(1, level); // 세이브 로드 복원용
     }
 
     // 현재 데이터

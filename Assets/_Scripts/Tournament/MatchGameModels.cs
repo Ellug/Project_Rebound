@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 // 한 경기의 최종 스코어 (우리 팀 / 상대 팀)
@@ -81,6 +81,13 @@ public sealed class MatchContext
     {
         MySchoolScore += mySchoolScore;
         OpponentScore += opponentScore;
+    }
+
+    // 세이브 복원 시 누적 점수 직접 주입
+    public void RestoreScore(int myScore, int opponentScore)
+    {
+        MySchoolScore = myScore;
+        OpponentScore = opponentScore;
     }
 
     // UI의 좌측(상단 팀) 점수 반환

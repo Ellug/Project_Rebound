@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using UnityEngine;
@@ -127,6 +127,29 @@ public static class StudentFactory
     public static void ResetStudentIdCounter()
     {
         _nextStudentId = 1;
+    }
+
+    // 세이브 로드 후 기존 id와 충돌하지 않도록 카운터 복원
+    public static void RestoreStudentIdCounter(int nextId)
+    {
+        _nextStudentId = Mathf.Max(1, nextId);
+    }
+
+    // 로드 후 이름/초상화 중복 캐시 재구성
+    public static void RebuildRuntimeCaches(IEnumerable<Student> students)
+    {
+        _usedNames.Clear();
+        _usedPortraits.Clear();
+
+        foreach (Student student in students)
+        {
+            if (student == null) continue;
+
+            if (!string.IsNullOrEmpty(student.studentName))
+                _usedNames.Add(student.studentName);
+
+            _usedPortraits.Add((student.portraitColor, student.portraitIndex));
+        }
     }
 
     // 포지션 선택 : 가중치 기반 랜덤 선택

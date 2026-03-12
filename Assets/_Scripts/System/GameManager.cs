@@ -32,6 +32,24 @@ public class GameManager : Singleton<GameManager>
     public bool IsLeagueOpened => _flowData.IsLeagueOpened;
     public bool IsLeagueHandled => _flowData.IsLeagueHandled;
 
+    // SaveManager.CollectFlowData()에서 사용
+    public DateTime LeagueTermEnd => _flowData.LeagueTermEnd;
+    public HashSet<string> ActiveEventIds => _flowData.ActiveEventIds;
+    public bool HasPendingFriendlyMatch => _flowData.HasPendingFriendlyMatch;
+
+    // MaxRecruitCount는 RecruitmentManager가 관리 — GameFlowData 경유 없이 직접 위임
+    public int MaxRecruitCount
+    {
+        get
+        {
+            if (_recruitmentManager != null)
+                return _recruitmentManager.MaxRecruitCount;
+
+            Debug.LogWarning("[GameManager] MaxRecruitCount: RecruitmentManager 참조 없음, 0 반환");
+            return 0;
+        }
+    }
+
     protected override void OnSingletonAwake()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;

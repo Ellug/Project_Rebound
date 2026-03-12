@@ -116,5 +116,11 @@ public class TournamentHalfTimeSelectionUI : MonoBehaviour
 
         Close();
         OnSelectionMade?.Invoke(option.LogText);
+
+        // 하프타임 선택지 선택 후 세이브
+        if (SaveManager.Instance != null)
+        {
+            SaveManager.Instance.AutoSaveByBranch("선택지 선택");
+        }
     }
 }
