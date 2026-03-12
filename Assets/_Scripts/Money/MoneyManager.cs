@@ -91,4 +91,10 @@ public class MoneyManager : Singleton<MoneyManager>
         OnGoldChanged?.Invoke(_gold);
         OnReputationChanged?.Invoke(_reputation);
     }
+    // UI °»½Å¿ë
+    public void ForceNotify()
+    {
+        OnGoldChanged?.Invoke(_gold);
+        OnReputationChanged?.Invoke(_reputation);
+    }
 }
