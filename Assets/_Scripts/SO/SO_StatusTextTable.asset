@@ -33,7 +33,7 @@ MonoBehaviour:
     text: "\uCEE8\uB514\uC158"
   - id: text_status_10
     index: 10
-    text: "\uB3C8"
+    text: "\uACE8\uB4DC"
   - id: text_status_11
     index: 11
     text: "\uBA85\uC131\uCE58"
@@ -69,7 +69,7 @@ MonoBehaviour:
     text: "\uCEE8\uB514\uC158"
   - id: text_status_random
     index: 10
-    text: "\uB3C8"
+    text: "\uACE8\uB4DC"
   - id: text_status_random
     index: 11
     text: "\uBA85\uC131\uCE58"
