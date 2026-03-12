@@ -1,0 +1,8 @@
+ID_index,ID_speaker,ID_dialogue,sender_category,date
+string,string,string,enum,int
+index_000001,student_1,diag_000001,event_student,260301
+index_000002,student_2,diag_000007,event_student,260305
+index_000003,student_3,diag_000003,event_student,260312
+index_000004,student_3,diag_000002,event_student,251223
+index_000005,system,diag_100001,notice,260301
+index_000006,npc_1,diag_200001,event_advertise,260301

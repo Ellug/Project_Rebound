@@ -1,4 +1,4 @@
-Ôªøusing System;
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,28 +8,30 @@ public class FacilityPopup : UIBase
     [Serializable]
     private class FacilityUpgradeRowUI
     {
-        public TMP_Text facilityNameLV;           // ÏãúÏÑ§ Ïù¥Î¶ÑÍ≥º Î†àÎ≤®
-        public TMP_Text upgradeCost;            // ÏóÖÍ∑∏Î†àÏù¥Îìú ÎπÑÏö©
-        public Button upgradeButton;            // ÏóÖÍ∑∏Î†àÏù¥Îìú Î≤ÑÌäº
-        public TMP_Text upgradeButtonText;      // Î≤ÑÌäº ÌÖçÏä§Ìä∏
+        public TMP_Text facilityLv;           // Ω√º≥ ∑π∫ß
+        public TMP_Text upgradeCost;            // æ˜±◊∑π¿ÃµÂ ∫ÒøÎ
+        public Button upgradeButton;            // æ˜±◊∑π¿ÃµÂ πˆ∆∞
+        public Image iconUpgrade;      // æ˜±◊∑π¿ÃµÂ ∞°¥…
+        public Image iconMoneyLack;      // ¿Á»≠ ∫Œ¡∑
+        public Image iconLock;            // ¡∂∞« ∫Œ¡∑
+        public Image iconMax;          // MAX
     }
 
-    [Header("ÏãúÏÑ§ ÏÑ§Î™Ö")]
-    [SerializeField] private TMP_Text _txtDescription;
-
-    [Header("ÏãúÏÑ§ ÏÑ†ÌÉù Î≤ÑÌäº")]
+    [SerializeField] private Button _btnClose;      // ¥›±‚ πˆ∆∞
+    [SerializeField] private FacilityPopup _panelClose;      // ¥›±‚ πˆ∆∞
+    [Header("Ω√º≥ º±≈√ πˆ∆∞")]
     [SerializeField] private Button _btnSchool;
     [SerializeField] private Button _btnGym;
     [SerializeField] private Button _btnCafeteria;
     [SerializeField] private Button _btnCounseling;
 
-    [Header("ÏóÖÍ∑∏Î†àÏù¥Îìú UI")]
+    [Header("æ˜±◊∑π¿ÃµÂ UI")]
     [SerializeField] private FacilityUpgradeRowUI _schoolRow;
     [SerializeField] private FacilityUpgradeRowUI _gymRow;
     [SerializeField] private FacilityUpgradeRowUI _cafeteriaRow;
     [SerializeField] private FacilityUpgradeRowUI _counselingRow;
     
-    // Ï§ëÎ≥µ Î∞©ÏßÄ
+    // ¡ﬂ∫π πÊ¡ˆ
     private bool _inited;
     public override void Init()
     {
@@ -44,28 +46,13 @@ public class FacilityPopup : UIBase
         BindButtons();
         RefreshAll();
     }
-    // ÏãúÏÑ§ ÌÅ¥Î¶≠Ïãú ÏÑ§Î™Ö, ÏóÖÍ∑∏Î†àÏù¥Îìú ÌÅ¥Î¶≠ Ïãú ÏóÖÍ∑∏Î†àÏù¥Îìú
+    // æ˜±◊∑π¿ÃµÂ ≈¨∏Ø Ω√ æ˜±◊∑π¿ÃµÂ
     private void BindButtons()
     {
-        if (_btnSchool != null)
-        {
-            _btnSchool.onClick.AddListener(() => ShowDescription("school"));
-        }
-
-        if (_btnGym != null)
-        {
-            _btnGym.onClick.AddListener(() => ShowDescription("gym"));
-        }
-
-        if (_btnCafeteria != null)
-        {
-            _btnCafeteria.onClick.AddListener(() => ShowDescription("cafeteria"));
-        }
-
-        if (_btnCounseling != null)
-        {
-            _btnCounseling.onClick.AddListener(() => ShowDescription("counselingcenter"));
-        }
+        _schoolRow.upgradeButton.onClick.RemoveAllListeners();
+        _gymRow.upgradeButton.onClick.RemoveAllListeners();
+        _cafeteriaRow.upgradeButton.onClick.RemoveAllListeners();
+        _counselingRow.upgradeButton.onClick.RemoveAllListeners();
 
         _schoolRow.upgradeButton.onClick.AddListener(() => TryUpgrade("school"));
         _gymRow.upgradeButton.onClick.AddListener(() => TryUpgrade("gym"));
@@ -75,17 +62,13 @@ public class FacilityPopup : UIBase
 
     private void TryUpgrade(string facility)
     {
+        Debug.Log("Upgrade Click: " + facility);
         if (FacilitySystem.Instance.TryUpgrade(facility))
         {
             RefreshAll();
-
-            if (SaveManager.Instance != null)
-            {
-                SaveManager.Instance.AutoSaveByBranch("ÏãúÏÑ§ ÏóÖÍ∑∏Î†àÏù¥Îìú ÏôÑÎ£å");
-            }
         }
     }
-    // Í∞±Ïã†
+    // ∞ªΩ≈
     private void RefreshAll()
     {
         RefreshRow("school", _schoolRow);
@@ -104,66 +87,56 @@ public class FacilityPopup : UIBase
         {
             return;
         }
-
-        if (row.facilityNameLV != null)
+        if (row == null)
         {
-            row.facilityNameLV.text = $"{current.facilityName} Lv {level}";
-        }
-
-        if (next == null)
-        {
-            row.upgradeCost.text = "-";
-            row.upgradeButtonText.text = "MAX";
-            row.upgradeButton.interactable = false;
             return;
         }
 
-        row.upgradeCost.text = next.upgradeCost.ToString();
+        row.facilityLv.text = $"LV.{level}";
+
+        row.iconLock.gameObject.SetActive(false);
+        row.iconUpgrade.gameObject.SetActive(false);
+        row.iconMoneyLack.gameObject.SetActive(false);
+        row.iconMax.gameObject.SetActive(false);
+        row.upgradeCost.gameObject.SetActive(false);
+
+        // max∑π∫ß ¿œãö
+        if (next == null)
+        {
+            row.iconMax.gameObject.SetActive(true);
+            row.upgradeButton.interactable = false;
+            row.upgradeButton.image.enabled = false;
+            return;
+        }
 
         int money = MoneyManager.Instance.Gold;
 
-        if (facility == "school")
+        if (facility == "school" && !FacilitySystem.Instance.CanUpgradeSchool())
         {
-            if (!FacilitySystem.Instance.CanUpgradeSchool())
-            {
-                row.upgradeButtonText.text = "Ï°∞Í±¥ Î∂ÄÏ°±";
-                row.upgradeButton.interactable = false;
-                return;
-            }
+            row.iconLock.gameObject.SetActive(true);
+            row.upgradeButton.interactable = false;
+            row.upgradeButton.image.enabled = false;
+            return;
         }
 
         if (money < next.upgradeCost)
         {
-            row.upgradeButtonText.text = "Ïû¨Ìôî Î∂ÄÏ°±";
+            row.iconMoneyLack.gameObject.SetActive(true);
+            row.upgradeCost.text = next.upgradeCost.ToString();
             row.upgradeButton.interactable = false;
+            row.upgradeButton.image.enabled = false;
             return;
         }
-        else
-        {
-            row.upgradeButtonText.text = "ÏóÖÍ∑∏Î†àÏù¥Îìú";
-            row.upgradeButton.interactable = true;
-        }
+
+        row.iconUpgrade.gameObject.SetActive(true);
+        row.upgradeCost.text = next.upgradeCost.ToString();
+        row.upgradeCost.gameObject.SetActive(true);
+        row.upgradeButton.interactable = true;
+        row.upgradeButton.image.enabled = true;
     }
 
-    private void ShowDescription(string facility)
+    public void CloseFacilityPopup()
     {
-        switch (facility)
-        {
-            case "school":
-                _txtDescription.text = "ÌïôÍµêÎäî....";
-                break;
-
-            case "gym":
-                _txtDescription.text = "Ï≤¥Ïú°Í¥ÄÏùÄ Î©òÌÉàÍ≥º Ïª®ÎîîÏÖòÏô∏ Î™®Îì† Ïä§ÌÉØÏùò ÏÑ±Ïû•Ïóê ÎèÑÏõÄÏùÑ Ï§çÎãàÎã§.";
-                break;
-
-            case "cafeteria":
-                _txtDescription.text = "ÏãùÎãπÏùÄ Î™®Îì† ÏÑ†ÏàòÏùò Î©òÌÉà Î∞è Ïª®ÎîîÏÖò Í¥ÄÎ¶¨Ïóê ÎèÑÏõÄÏùÑ Ï§çÎãàÎã§.";
-                break;
-
-            case "counselingcenter":
-                _txtDescription.text = "Ïã¨Î¶¨ ÏÉÅÎã¥Ïã§ÏùÄ ÏÑ†Ïàò Í∞úÏù∏Ïùò Î©òÌÉà Ïä§ÌÉØÏóê ÌÅ∞ ÎèÑÏõÄÏùÑ Ï§çÎãàÎã§.";
-                break;
-        }
+        _panelClose.gameObject.SetActive(false);
     }
 }

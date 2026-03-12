@@ -25,6 +25,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 17207f4e6057ffd4984384dacf3168ba
+    m_Address: WeekendTrainingTable
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 1b898e76ac68cc84b9e7882d5f6cd035
     m_Address: StudentPositionTable
     m_ReadOnly: 0
@@ -55,6 +60,16 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3a5c42fc21970fc42b437b0c57bbd938
+    m_Address: SuddenEventMsgSaveDataTable
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 400e73e3b577a57438d574db9d91fe21
+    m_Address: SuddenEventMsgTable
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 40c20ebd60e7e6b4d8aab2c6b5bcb2d3
     m_Address: GraduateGiftTierRewardTable
     m_ReadOnly: 0
@@ -62,16 +77,6 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 41c1d4c214c73e4469337a604d487db5
     m_Address: AlwaysEventTable
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 472a8ec205557b240825fc358f344e80
-    m_Address: StudentTrustLevelTable
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 54be606723bb0434a91f4bc7ead1d62f
-    m_Address: StudentTrustBenefitTable
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -90,13 +95,13 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 76f29e56e53fdbc46a93f19256bfb300
-    m_Address: StudentTrustUpConditionTable
+  - m_GUID: 76f9b9a7a5bafe547901a63789d1045b
+    m_Address: StatusTextTable
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 76f9b9a7a5bafe547901a63789d1045b
-    m_Address: StatusTextTable
+  - m_GUID: 79065714d076bc34c928e0a66d9a7736
+    m_Address: SuddenEventMsgListTable
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -130,13 +135,13 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: a0f3c45ce00981b42b445cd7e7e2e9d4
-    m_Address: EnemyStatTable
+  - m_GUID: 93a80b55a09abdc448da3fae2cdd8783
+    m_Address: LobbySuddenEventMsgSaveDataTable
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: a670a18477c21e34eb268fb59284e16e
-    m_Address: StudentTrustDownConditionStatusTable
+  - m_GUID: a0f3c45ce00981b42b445cd7e7e2e9d4
+    m_Address: EnemyStatTable
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -155,8 +160,8 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: ca6949fe2f637c94ca915f0422cb3fa6
-    m_Address: StudentTrustStartTable
+  - m_GUID: caaa9da3c0da24b4eab850394767170b
+    m_Address: SuddenEventMsgTextTable
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -170,13 +175,13 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: e157323945af6ab40bfdb8fa3976c7c1
-    m_Address: PositionInfoPopupTable
+  - m_GUID: dc266deca0543554daec8fa475f08eea
+    m_Address: StoryTable
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: e6b7ceacffa940247a191cd549fcd19a
-    m_Address: StudentTrustDownNeglectTable
+  - m_GUID: e157323945af6ab40bfdb8fa3976c7c1
+    m_Address: PositionInfoPopupTable
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

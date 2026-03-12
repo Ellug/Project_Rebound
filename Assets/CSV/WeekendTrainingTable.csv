@@ -1,0 +1,4 @@
+index,condition_cost,mental,shoot,speed,jump,stamina,linked_event_id
+int,int,int,float,float,float,float,enum
+901,-10,0,10,10,10,10,-
+902,-20,0,0,0,0,0,-
