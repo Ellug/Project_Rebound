@@ -7,7 +7,12 @@ using GameData = CachedSOData;
 // 경기 전체 흐름을 조율하는 컨트롤러 : 쿼터 > 공방 > 하프타임 > 경기 종료 순서를 관리
 public class MatchGameManager : MonoBehaviour
 {
-    private const string Divider = "---------------------------------------------";
+    private const string Divider = "-------------------------------------";
+    private const string MyTeamLogColorHex = "#1E90FF";
+    private const string OpponentTeamLogColorHex = "#E80000";
+    private const string SystemLogColorHex = "#A3A3A3";
+    private const string SystemLogPrefix = "[SYSTEM]";
+    private const string HighSchoolSuffix = "고등학교";
 
     // 경기 종료 시 MatchResult를 전달. TournamentManager가 구독해 승패 처리
     public event Action<MatchResult> OnMatchFinished;
@@ -57,12 +62,6 @@ public class MatchGameManager : MonoBehaviour
         if (string.IsNullOrWhiteSpace(upTeam) || string.IsNullOrWhiteSpace(downTeam) || string.IsNullOrWhiteSpace(mySchoolName))
         {
             WriteSystemLog("StartMatch 입력이 유효하지 않습니다.");
-            return;
-        }
-
-        if (string.Equals(upTeam, downTeam, StringComparison.Ordinal))
-        {
-            WriteSystemLog("같은 팀끼리는 경기를 시작할 수 없습니다.");
             return;
         }
 
@@ -148,8 +147,7 @@ public class MatchGameManager : MonoBehaviour
         WriteQuarterLogs(stepResult.logs);
         RefreshLiveScoreUi();
 
-        if (!stepResult.isQuarterCompleted)
-            return;
+        if (!stepResult.isQuarterCompleted) return;
 
         ApplyQuarterResult(_activeQuarterNumber, stepResult.quarterResult);
         CompleteQuarter(_activeQuarterNumber);
@@ -201,9 +199,7 @@ public class MatchGameManager : MonoBehaviour
             opponentScore += Mathf.Max(0, _activeQuarterSession.OpponentQuarterScore);
         }
 
-        int leftScore = _context.IsMySchoolUpTeam ? myScore : opponentScore;
-        int rightScore = _context.IsMySchoolUpTeam ? opponentScore : myScore;
-        _matchGameUi.SetMatchScore(leftScore, rightScore);
+        _matchGameUi.SetMatchScore(myScore, opponentScore);
     }
 
     private void CompleteQuarter(int quarter)
@@ -225,7 +221,7 @@ public class MatchGameManager : MonoBehaviour
         _isWaitingHalfTime = true;
         _halfTimeNextStage = nextStage;
         WriteLog(Divider);
-        WriteLog($"{afterQuarter}쿼터 종료 후 작전타임");
+        WriteLog(ApplyAnnouncementBold($"{afterQuarter}쿼터 종료 후 작전타임"));
         WriteLog(Divider);
 
         // 하프타임 선택지 노출 전 세이브
@@ -234,8 +230,8 @@ public class MatchGameManager : MonoBehaviour
             SaveManager.Instance.AutoSaveByBranch("하프타임 선택 전");
         }
 
-        if (_halfTimeSelectionUi != null)
-            _halfTimeSelectionUi.Open();
+        _halfTimeSelectionUi.Open();
+        _matchGameUi.ScrollMatchLogToBottom();
     }
 
     // 하프타임 선택에 대한 이벤트
@@ -243,6 +239,7 @@ public class MatchGameManager : MonoBehaviour
     private void HandleHalfTimeSelection(string selectionText)
     {
         WriteLog(selectionText);
+        WriteLog(ApplyAnnouncementBold("작전타임 종료"));
         _isWaitingHalfTime = false;
         MoveToStage(_halfTimeNextStage);
     }
@@ -319,15 +316,84 @@ public class MatchGameManager : MonoBehaviour
     {
         _logs.Add(message);
         Debug.Log(message);
-        _matchGameUi.AppendMatchLog(message);
+        AppendLogToUi(message, isSystem: false);
     }
 
     private void WriteSystemLog(string message)
     {
-        string formatted = $"[SYSTEM] {message}";
+        string formatted = $"{SystemLogPrefix} {message}";
         _logs.Add(formatted);
         Debug.Log(formatted);
-        _matchGameUi.AppendMatchLog(formatted);
+        AppendLogToUi(formatted, isSystem: true);
+    }
+
+    private void AppendLogToUi(string rawMessage, bool isSystem)
+    {
+        _matchGameUi.AppendMatchLog(FormatLogForUi(rawMessage, isSystem));
+    }
+
+    private string FormatLogForUi(string rawMessage, bool isSystem)
+    {
+        if (string.IsNullOrEmpty(rawMessage))
+            return rawMessage;
+
+        string formatted = rawMessage;
+        formatted = ReplaceTeamNameToken(formatted, _context != null ? _context.MySchoolName : null, isSystem ? null : MyTeamLogColorHex);
+        formatted = ReplaceTeamNameToken(formatted, _context != null ? _context.OpponentTeamName : null, isSystem ? null : OpponentTeamLogColorHex);
+
+        if (isSystem)
+            formatted = WrapColor(formatted, SystemLogColorHex);
+
+        return formatted;
+    }
+
+    private static string ReplaceTeamNameToken(string message, string fullTeamName, string colorHex)
+    {
+        if (string.IsNullOrEmpty(message) || string.IsNullOrWhiteSpace(fullTeamName))
+            return message;
+
+        string shortTeamName = ShortenSchoolName(fullTeamName);
+        string plainTag = $"[{shortTeamName}]";
+        string replacement = string.IsNullOrEmpty(colorHex) ? plainTag : WrapColor(plainTag, colorHex);
+
+        message = message.Replace($"[{fullTeamName}]", replacement);
+        message = message.Replace(fullTeamName, replacement);
+
+        if (!string.IsNullOrEmpty(colorHex))
+            message = message.Replace(plainTag, replacement);
+
+        return message;
+    }
+
+    private static string ShortenSchoolName(string schoolName)
+    {
+        if (string.IsNullOrWhiteSpace(schoolName))
+            return string.Empty;
+
+        string trimmed = schoolName.Trim();
+        if (trimmed.EndsWith(HighSchoolSuffix, StringComparison.Ordinal))
+        {
+            string withoutSuffix = trimmed[..^HighSchoolSuffix.Length].Trim();
+            if (!string.IsNullOrEmpty(withoutSuffix))
+                return withoutSuffix;
+        }
+
+        return trimmed;
+    }
+
+    private static string WrapColor(string message, string colorHex)
+    {
+        return $"<color={colorHex}>{message}</color>";
+    }
+
+    private static string ApplyAnnouncementBold(string message)
+    {
+        return $"<b>{message}</b>";
+    }
+
+    private static bool IsSystemLog(string message)
+    {
+        return !string.IsNullOrEmpty(message) && message.StartsWith(SystemLogPrefix, StringComparison.Ordinal);
     }
 
     // 슬롯에 배치된 학생을 출전 선수로 반환
@@ -387,8 +453,8 @@ public class MatchGameManager : MonoBehaviour
         SavedMatchSimData data = new()
         {
             isMatchRunning = true,
-            upTeam = _context.IsMySchoolUpTeam ? _context.MySchoolName : _context.OpponentTeamName,
-            downTeam = _context.IsMySchoolUpTeam ? _context.OpponentTeamName : _context.MySchoolName,
+            upTeam = _context.MySchoolName,
+            downTeam = _context.OpponentTeamName,
             mySchoolName = _context.MySchoolName,
             progressStageIndex = _progressStageIndex,
             logs = new List<string>(_logs),
@@ -449,12 +515,12 @@ public class MatchGameManager : MonoBehaviour
 
         // UI 갱신
         _matchGameUi.PrepareMatchGameUi(
-            FormatTeamNameForDisplay(data.upTeam),
-            FormatTeamNameForDisplay(data.downTeam),
+            FormatTeamNameForDisplay(_context.UpTeam),
+            FormatTeamNameForDisplay(_context.DownTeam),
             ProgressStages);
 
         foreach (string log in _logs)
-            _matchGameUi.AppendMatchLog(log);
+            AppendLogToUi(log, IsSystemLog(log));
 
         UpdateProgressUi();
         _matchGameUi.SetMatchScore(_context.GetLeftTeamScore(), _context.GetRightTeamScore());

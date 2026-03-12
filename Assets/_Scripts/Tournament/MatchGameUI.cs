@@ -132,6 +132,12 @@ public class MatchGameUI : MonoBehaviour
 
     public void HideMatchResultPanel() => _matchResultPanel.SetActive(false);
 
+    // 외부 UI 이벤트(예: 하프타임 선택 패널 오픈)에서 로그 스크롤 하단 정렬 용도
+    public void ScrollMatchLogToBottom()
+    {
+        MoveMatchLogToBottom();
+    }
+
     // Canvas 업데이트 후 스크롤 위치를 강제로 최하단(0)으로 고정
     private void MoveMatchLogToBottom()
     {
