@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -404,4 +404,76 @@ public class TournamentManager : MonoBehaviour
             OnMySchoolLose();
     }
 
+    // SaveManager.CollectTournamentData()에서 호출 — 현재 상태를 SavedTournamentData로 직렬화
+    public SavedTournamentData CollectSaveData()
+    {
+        SavedTournamentData data = new()
+        {
+            // _isMatchRunning은 MatchGameManager 소유 — 대진표가 존재하면 진행 중으로 판단
+            isInProgress = _allRounds.Count > 0,
+            teamCount = _teamCount,
+            currentRoundIndex = _currentRoundIndex,
+            mySchoolReachedRoundTeamCount = _mySchoolReachedRoundTeamCount,
+        };
+
+        foreach (List<Matchup> round in _allRounds)
+        {
+            SavedRoundData roundData = new();
+
+            foreach (Matchup matchup in round)
+            {
+                roundData.matchups.Add(new SavedMatchupData
+                {
+                    upTeam = matchup.UpTeam,
+                    downTeam = matchup.DownTeam,
+                    winner = matchup.Winner ?? string.Empty,
+                    includeMySchool = matchup.IncludeMySchool,
+                });
+            }
+
+            data.allRounds.Add(roundData);
+        }
+        return data;
+    }
+
+    // SaveManager.ApplyTournamentData()에서 호출 — SavedTournamentData를 런타임 상태로 복원
+    public void RestoreSaveData(SavedTournamentData data)
+    {
+        if (data == null || !data.isInProgress)
+            return;
+
+        _teamCount = data.teamCount > 0 ? data.teamCount : _teamCount;
+        _currentRoundIndex = data.currentRoundIndex;
+        _mySchoolReachedRoundTeamCount = data.mySchoolReachedRoundTeamCount;
+        _isWaitingForResultNext = false;
+        _mySchoolDefeatedThisMatch = false;
+
+        _allRounds.Clear();
+
+        foreach (SavedRoundData roundData in data.allRounds)
+        {
+            List<Matchup> round = new();
+
+            foreach (SavedMatchupData matchupData in roundData.matchups)
+            {
+                round.Add(new Matchup
+                {
+                    UpTeam = matchupData.upTeam,
+                    DownTeam = matchupData.downTeam,
+                    // 빈 문자열은 미진행으로 간주해 null로 복원
+                    Winner = string.IsNullOrEmpty(matchupData.winner) ? null : matchupData.winner,
+                    IncludeMySchool = matchupData.includeMySchool,
+                });
+            }
+
+            _allRounds.Add(round);
+        }
+
+        _matchGameUi.HideMatchGamePanel();
+        _matchGameUi.HideMatchResultPanel();
+        _matchGameManager.AbortCurrentMatch();
+
+        RefreshUI();
+        Debug.Log($"[TournamentManager] 대진표 복원 완료 — 라운드 {_currentRoundIndex}, 팀 수 {_teamCount}");
+    }
 }

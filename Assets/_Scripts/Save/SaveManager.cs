@@ -50,8 +50,10 @@ public class SaveManager : Singleton<SaveManager>
         }
 
         ApplyFacilityData(CurrentData.facilities);
-
         ApplyStudentData(CurrentData.students, CurrentData.slotAssignments);
+        ApplyTournamentData(CurrentData.tournament);    // 토너먼트 씬 복원 (로비에선 자동 스킵)
+        ApplyMatchSimData(CurrentData.matchSim);        // 경기 시뮬레이션 복원 (토너먼트 씬 외에선 자동 스킵)
+        ApplyActiveEventEffects(CurrentData.flowData);  // 이벤트 activeEffectIds 복원
 
         // HeadCoachManager는 InitFromTable() 완료 이후에 복원 가능
         if (HeadCoachManager.Instance != null && HeadCoachManager.Instance.IsInitialized)
@@ -72,8 +74,6 @@ public class SaveManager : Singleton<SaveManager>
     {
         return CurrentData?.flowData;
     }
-
-    // 제거: SetLoadedData() — 호출부 없는 데드코드였음
 
     public bool CreateNewGameSlot(string schoolName)
     {
@@ -131,10 +131,15 @@ public class SaveManager : Singleton<SaveManager>
         SaveUserData();
 
         CurrentData.facilities = CollectFacilityData();
-
         CurrentData.students = CollectStudentData();
         CurrentData.slotAssignments = CollectSlotAssignments();
         CurrentData.flowData = CollectFlowData();
+
+        // 토너먼트 데이터 수집
+        CurrentData.tournament = CollectTournamentData();
+
+        // 경기 시뮬레이션 상태 수집
+        CurrentData.matchSim = CollectMatchSimData();
 
         // 슬롯 카드 표시용 메타 갱신
         CurrentData.saveTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm");
@@ -299,6 +304,30 @@ public class SaveManager : Singleton<SaveManager>
         };
     }
 
+    // TournamentManager 내부 상태 수집
+    private static SavedTournamentData CollectTournamentData()
+    {
+        TournamentManager tm = UnityEngine.Object.FindFirstObjectByType<TournamentManager>();
+
+        // 토너먼트 씬이 아닐 때는 빈 데이터 반환
+        if (tm == null)
+        {
+            return new SavedTournamentData();
+        }
+        return tm.CollectSaveData();
+    }
+
+    // 경기 시뮬레이션 상태 수집
+    private static SavedMatchSimData CollectMatchSimData()
+    {
+        MatchGameManager mgm = UnityEngine.Object.FindFirstObjectByType<MatchGameManager>();
+        if (mgm == null)
+        {
+            return new SavedMatchSimData { isMatchRunning = false };
+        }
+        return mgm.CollectSaveData();
+    }
+
     private static void ApplyFacilityData(SavedFacilityData data)
     {
         if (data == null)
@@ -369,6 +398,138 @@ public class SaveManager : Singleton<SaveManager>
             StudentManager.Instance.AssignSlot(assignment.slotIndex, student);
         }
     }
+
+    // 토너먼트 데이터 복원 — TournamentManager가 씬에 존재할 때만 실행
+    private static void ApplyTournamentData(SavedTournamentData data)
+    {
+        if (data == null)
+            return;
+
+        TournamentManager tm = UnityEngine.Object.FindFirstObjectByType<TournamentManager>();
+        if (tm == null)
+            return;
+
+        tm.RestoreSaveData(data);
+    }
+
+    // 경기 시뮬레이션 상태 복원 — MatchGameManager가 씬에 존재할 때만 실행
+    private static void ApplyMatchSimData(SavedMatchSimData data)
+    {
+        if (data == null || !data.isMatchRunning)
+            return;
+
+        MatchGameManager mgm = UnityEngine.Object.FindFirstObjectByType<MatchGameManager>();
+        if (mgm == null)
+            return;
+
+        mgm.RestoreSaveData(data);
+    }
+
+    // 로드 시 activeEventIds 기준으로 학생의 activeEffectIds를 재동기화
+    // conditionRecoveryBonus 등 수치 보너스는 SavedStudentData에서 이미 복원되므로
+    // TickCondition()이 참조하는 activeEffectIds 누락분만 보충
+    private static void ApplyActiveEventEffects(SavedFlowData flowData)
+    {
+        if (flowData == null || flowData.activeEventIds == null || flowData.activeEventIds.Count == 0)
+            return;
+
+        if (StudentManager.Instance == null)
+            return;
+
+        AlwaysEventTableSO eventTable = CachedSOData.Get<AlwaysEventTableSO>();
+        if (eventTable == null || eventTable.Rows == null)
+        {
+            Debug.LogWarning("[SaveManager] AlwaysEventTable이 없어 이벤트 효과 복원을 건너뜁니다.");
+            return;
+        }
+
+        AlwaysEffectTableSO effectTable = CachedSOData.Get<AlwaysEffectTableSO>();
+        if (effectTable == null)
+        {
+            Debug.LogWarning("[SaveManager] AlwaysEffectTable이 없어 이벤트 효과 복원을 건너뜁니다.");
+            return;
+        }
+
+        foreach (string savedId in flowData.activeEventIds)
+        {
+            // savedId에 해당하는 AlwaysEventRow 탐색
+            // GetRowId()와 동일한 포맷: "{row.id}_{row.termStart}"
+            AlwaysEventRow matchedRow = FindEventRowById(eventTable, savedId);
+
+            if (matchedRow == null)
+            {
+                Debug.LogWarning($"[SaveManager] 저장된 이벤트 ID '{savedId}'에 해당하는 row를 찾을 수 없습니다.");
+                continue;
+            }
+
+            // effectId 없음 or roster 타입은 AlwaysEffectApplier가 처리하지 않는 케이스 → 스킵
+            if (string.IsNullOrEmpty(matchedRow.effectId) || matchedRow.type == "roster")
+                continue;
+
+            if (!effectTable.TryGet(matchedRow.effectId, out AlwaysEffectRow effectRow))
+            {
+                Debug.LogWarning($"[SaveManager] effectId '{matchedRow.effectId}'를 AlwaysEffectTable에서 찾을 수 없습니다.");
+                continue;
+            }
+
+            // 수치 보너스는 SavedStudentData에서 이미 복원됨
+            // TickCondition()이 참조하는 activeEffectIds만 재동기화
+            SyncActiveEffectId(matchedRow, effectRow);
+            Debug.Log($"[SaveManager] 이벤트 activeEffectId 복원: {savedId} → effectId={effectRow.id}");
+        }
+    }
+
+    // AlwaysEventManager.GetRowId()와 동일한 포맷으로 row 탐색
+    private static AlwaysEventRow FindEventRowById(AlwaysEventTableSO table, string targetId)
+    {
+        for (int i = 0; i < table.Rows.Count; i++)
+        {
+            AlwaysEventRow row = table.Rows[i];
+            if (row == null) continue;
+
+            string rowId = string.IsNullOrWhiteSpace(row.id) ? "(no-id)" : row.id.Trim();
+            string start = string.IsNullOrWhiteSpace(row.termStart) ? "" : row.termStart.Trim();
+
+            if ($"{rowId}_{start}" == targetId) return row;
+        }
+        return null;
+    }
+
+    // range == 0: 전체 학생 / range > 0: 특정 슬롯 학생
+    // activeEffectIds에 effectId가 없으면 추가
+    private static void SyncActiveEffectId(AlwaysEventRow eventRow, AlwaysEffectRow effectRow)
+    {
+        if (StudentManager.Instance == null) return;
+
+        if (eventRow.range == 0)
+        {
+            foreach (Student student in StudentManager.Instance.Students)
+                AddEffectIdIfMissing(student, effectRow.id);
+        }
+        else
+        {
+            Student student = StudentManager.Instance.GetAssignedStudent(eventRow.range);
+            if (student != null)
+                AddEffectIdIfMissing(student, effectRow.id);
+            else
+                Debug.LogWarning($"[SaveManager] 슬롯 {eventRow.range}에 배치된 학생이 없어 effectId 동기화 생략.");
+        }
+    }
+
+    private static void AddEffectIdIfMissing(Student student, string effectId)
+    {
+        if (student == null) return;
+
+        if (student.activeEffectIds == null)
+            student.activeEffectIds = new List<string>();
+
+        if (!student.activeEffectIds.Contains(effectId))
+        {
+            student.activeEffectIds.Add(effectId);
+            StudentManager.Instance.NotifyStudentModified(student);
+        }
+    }
+
 
     public void ConsumePendingNewGameFlag()
     {
