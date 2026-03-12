@@ -60,7 +60,7 @@ MonoBehaviour:
     effect3: 
     isProbable: 1
     probability: 0.2
-    description: text_SuddenEvent_000003
+    description: text_SuddenEvent_000004
   - id: event_000002
     name: "\uBD80\uB2F4\uAC10"
     context: 1
@@ -84,7 +84,7 @@ MonoBehaviour:
     effect3: 
     isProbable: 1
     probability: 0.6
-    description: text_SuddenEvent_000003
+    description: text_SuddenEvent_000004
   - id: event_000002
     name: "\uBD80\uB2F4\uAC10"
     context: 1
@@ -108,7 +108,7 @@ MonoBehaviour:
     effect3: 
     isProbable: 1
     probability: 0.8
-    description: text_SuddenEvent_000003
+    description: text_SuddenEvent_000004
   - id: event_000003
     name: "\uBD80\uC0C1"
     context: 3
@@ -132,7 +132,7 @@ MonoBehaviour:
     effect3: 
     isProbable: 1
     probability: 0.2
-    description: text_SuddenEvent_000004
+    description: text_SuddenEvent_000005
   - id: event_000003
     name: "\uBD80\uC0C1"
     context: 3
@@ -156,7 +156,7 @@ MonoBehaviour:
     effect3: 
     isProbable: 1
     probability: 0.5
-    description: text_SuddenEvent_000004
+    description: text_SuddenEvent_000005
   - id: event_000003
     name: "\uBD80\uC0C1"
     context: 3
@@ -180,7 +180,7 @@ MonoBehaviour:
     effect3: 
     isProbable: 1
     probability: 0.7
-    description: text_SuddenEvent_000004
+    description: text_SuddenEvent_000005
   - id: event_000003
     name: "\uBD80\uC0C1"
     context: 3
@@ -204,7 +204,7 @@ MonoBehaviour:
     effect3: 
     isProbable: 0
     probability: 1
-    description: text_SuddenEvent_000004
+    description: text_SuddenEvent_000005
   - id: event_000004
     name: "\uBD80\uC0C1"
     context: 3
@@ -228,7 +228,7 @@ MonoBehaviour:
     effect3: 
     isProbable: 1
     probability: 0.2
-    description: text_SuddenEvent_000004
+    description: text_SuddenEvent_000005
   - id: event_000004
     name: "\uBD80\uC0C1"
     context: 3
@@ -252,7 +252,7 @@ MonoBehaviour:
     effect3: 
     isProbable: 1
     probability: 0.5
-    description: text_SuddenEvent_000004
+    description: text_SuddenEvent_000005
   - id: event_000004
     name: "\uBD80\uC0C1"
     context: 3
@@ -276,7 +276,7 @@ MonoBehaviour:
     effect3: 
     isProbable: 1
     probability: 0.7
-    description: text_SuddenEvent_000004
+    description: text_SuddenEvent_000005
   - id: event_000004
     name: "\uBD80\uC0C1"
     context: 3
@@ -300,7 +300,7 @@ MonoBehaviour:
     effect3: 
     isProbable: 0
     probability: 1
-    description: text_SuddenEvent_000004
+    description: text_SuddenEvent_000005
   - id: event_000005
     name: "\uD2B9\uBCC4 \uD6C8\uB828"
     context: 3
@@ -324,7 +324,7 @@ MonoBehaviour:
     effect3: 
     isProbable: 0
     probability: 1
-    description: text_SuddenEvent_000006
+    description: text_SuddenEvent_000007
   - id: event_000006
     name: "\uBA58\uD0C8 \uAC15\uD654"
     context: 3
