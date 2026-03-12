@@ -88,8 +88,8 @@ public class SaveManager : Singleton<SaveManager>
         {
             slotIndex = slotIndex,
             school = schoolName,
-            playTime = string.Empty,
-            saveTime = string.Empty,
+            playTime = "게임 시작",
+            saveTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm"),
             gold = 0,
             reputation = CurrentUserData != null ? CurrentUserData.reputation : 0,
             unlockedNodeIds = CurrentUserData != null
@@ -117,6 +117,10 @@ public class SaveManager : Singleton<SaveManager>
             return;
         }
 
+        int studentCountBeforeSave = StudentManager.Instance != null
+            ? StudentManager.Instance.Students.Count
+            : -1;
+
         if (MoneyManager.Instance != null)
         {
             CurrentData.gold = MoneyManager.Instance.Gold;
@@ -131,8 +135,25 @@ public class SaveManager : Singleton<SaveManager>
         SaveUserData();
 
         CurrentData.facilities = CollectFacilityData();
-        CurrentData.students = CollectStudentData();
-        CurrentData.slotAssignments = CollectSlotAssignments();
+
+        List<SavedStudentData> collectedStudents = CollectStudentData();
+        List<SavedSlotAssignment> collectedSlots = CollectSlotAssignments();
+
+        bool hasExistingStudentData = CurrentData.students != null && CurrentData.students.Count > 0;
+        bool collectedStudentDataIsEmpty = collectedStudents.Count == 0;
+
+        // 기존 학생 데이터가 이미 있는데, 이번 저장에서만 0명으로 수집되면
+        // 잘못된 타이밍 저장으로 판단하고 학생/슬롯 데이터 덮어쓰기를 막음
+        if (hasExistingStudentData && collectedStudentDataIsEmpty)
+        {
+            Debug.LogWarning("[SaveManager] 기존 학생 데이터가 있는데 0명으로 수집되어 학생/슬롯 세이브 덮어쓰기를 방지합니다.");
+        }
+        else
+        {
+            CurrentData.students = collectedStudents;
+            CurrentData.slotAssignments = collectedSlots;
+        }
+
         CurrentData.flowData = CollectFlowData();
 
         // 토너먼트 데이터 수집
@@ -232,14 +253,22 @@ public class SaveManager : Singleton<SaveManager>
             activeEventIds = new List<string>(GameManager.Instance.ActiveEventIds),
             maxRecruitCount = GameManager.Instance.MaxRecruitCount,
             hasPendingFriendlyMatch = GameManager.Instance.HasPendingFriendlyMatch,
+
+            friendlyMatchDate = GameManager.Instance.FriendlyMatchDate != default
+                ? GameManager.Instance.FriendlyMatchDate.ToString("yyyy-MM-dd")
+                : string.Empty,
+            friendlyOpponentName = GameManager.Instance.FriendlyOpponentName,
+            friendlyMatchConfirmed = GameManager.Instance.IsFriendlyMatchConfirmed,
         };
     }
 
     private static List<SavedStudentData> CollectStudentData()
     {
         if (StudentManager.Instance == null)
+        {
             return new List<SavedStudentData>();
-
+        }
+           
         List<Student> students = StudentManager.Instance.Students;
         List<SavedStudentData> result = new(students.Count);
 
@@ -277,6 +306,11 @@ public class SaveManager : Singleton<SaveManager>
     {
         List<SavedSlotAssignment> result = new();
 
+        if (StudentManager.Instance == null)
+        {
+            return result;
+        }
+
         foreach (KeyValuePair<int, Student> pair in StudentManager.Instance.SlotAssignments)
         {
             if (pair.Value == null)
@@ -297,13 +331,14 @@ public class SaveManager : Singleton<SaveManager>
         if (FacilitySystem.Instance == null)
             return new SavedFacilityData();
 
-        return new SavedFacilityData
+        SavedFacilityData data = new SavedFacilityData
         {
             schoolLevel = FacilitySystem.Instance.GetLevel("school"),
             gymLevel = FacilitySystem.Instance.GetLevel("gym"),
             cafeteriaLevel = FacilitySystem.Instance.GetLevel("cafeteria"),
             counselingCenterLevel = FacilitySystem.Instance.GetLevel("counselingcenter"),
         };
+        return data;
     }
 
     // TournamentManager 내부 상태 수집
@@ -352,7 +387,7 @@ public class SaveManager : Singleton<SaveManager>
         StudentManager.Instance.ClearAllStudents();
 
         int maxId = 0;
-        List<Student> restoredStudents = new(savedStudents.Count); // 여기서 선언
+        List<Student> restoredStudents = new(savedStudents.Count);
 
         foreach (SavedStudentData data in savedStudents)
         {
@@ -383,20 +418,24 @@ public class SaveManager : Singleton<SaveManager>
             if (student.id > maxId)
                 maxId = student.id;
 
-            restoredStudents.Add(student); // 같은 스코프
+            restoredStudents.Add(student);
             StudentManager.Instance.AddStudent(student);
         }
 
         StudentFactory.RestoreStudentIdCounter(maxId + 1);
-        StudentFactory.RebuildRuntimeCaches(restoredStudents); // 같은 스코프
+        StudentFactory.RebuildRuntimeCaches(restoredStudents);
 
-        if (savedSlots == null) return;
-
-        foreach (SavedSlotAssignment slotData in savedSlots)
+        if (savedSlots != null)
         {
-            Student student = restoredStudents.Find(s => s.id == slotData.studentId); // 같은 스코프
-            if (student != null)
-                StudentManager.Instance.AssignSlot(slotData.slotIndex, student);
+            foreach (SavedSlotAssignment slotData in savedSlots)
+            {
+                Student student = restoredStudents.Find(s => s.id == slotData.studentId);
+                if (student != null)
+                {
+                    StudentManager.Instance.AssignSlot(slotData.slotIndex, student);
+                    Debug.Log($"[SaveManager] 슬롯 복원 | slot={slotData.slotIndex} | student={student.studentName}");
+                }
+            }
         }
     }
 
@@ -554,5 +593,11 @@ public class SaveManager : Singleton<SaveManager>
 
         CurrentData = null;
         ShouldDeleteCurrentRunOnTitle = false;
+    }
+
+    public void SaveAfterChoice(string branchName, Action choiceAction)
+    {
+        choiceAction?.Invoke();
+        AutoSaveByBranch(branchName);
     }
 }

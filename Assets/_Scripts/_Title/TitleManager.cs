@@ -13,6 +13,11 @@ public class TitleManager : MonoBehaviour
 
     void Start()
     {
+        if (SaveManager.Instance != null)
+        {
+            SaveManager.Instance.DeleteCurrentRunIfMarked();
+        }
+
         // 테이블 로드 완료 후 감독 노드 시스템 초기화
         HeadCoachTableInitializer.Init();
 
