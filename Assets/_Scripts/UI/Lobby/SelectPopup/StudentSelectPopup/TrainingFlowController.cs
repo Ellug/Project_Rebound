@@ -167,7 +167,7 @@ public class TrainingFlowController : MonoBehaviour
             potential = original.potential,
             potential_tier = original.potential_tier,
             condition = original.condition,
-            trust = original.trust
+            // trust = original.trust
         };
     }
 }
