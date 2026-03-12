@@ -35,7 +35,7 @@ public class Student
 
     // 컨디션 및 상태
     public int condition;
-    public int trust;
+    // public int trust;
 
     // 이벤트 효과 추적용
     public List<string> activeEffectIds = new();

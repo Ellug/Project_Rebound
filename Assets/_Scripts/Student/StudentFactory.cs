@@ -39,14 +39,14 @@ public static class StudentFactory
             potential = "",
             potential_tier = 0,
             condition = 0,
-            trust = 0,
+            // trust = 0,
             portraitColor = color,
             portraitIndex = portraitIndex,
         };
 
         GenerateStats(student, grade); // 학년 기반으로 기본 스탯 생성 및 할당
         GeneratePotential(student, position.id); // 포지션 기반 잠재력 생성
-        GenerateTrust(student, grade);
+        // GenerateTrust(student, grade);
 
         student.condition = Student.ClampCondition(student.mental + 20);
 
@@ -256,16 +256,16 @@ public static class StudentFactory
         _isColorInitialized = true;
     }
 
-    private static void GenerateTrust(Student student, int grade)
-    {
-        var table = CachedSOData.Get<StudentTrustStartTableSO>();
-        foreach (var row in table.Rows)
-        {
-            if (row.grade == grade)
-            {
-                student.trust = _random.Next(row.minTrust, row.maxTrust + 1);
-                return;
-            }
-        }
-    }
+    // private static void GenerateTrust(Student student, int grade)
+    // {
+    //     var table = CachedSOData.Get<StudentTrustStartTableSO>();
+    //     foreach (var row in table.Rows)
+    //     {
+    //         if (row.grade == grade)
+    //         {
+    //             student.trust = _random.Next(row.minTrust, row.maxTrust + 1);
+    //             return;
+    //         }
+    //     }
+    // }
 }
