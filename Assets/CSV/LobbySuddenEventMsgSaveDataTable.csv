@@ -1,0 +1,3 @@
+ID_speaker,ID_dialogue,date,latest_message,icon_image,is_visible_icon
+string,string,int,string,string,bool
+student_2,diag_000003,260312,text_000003_000,GUID_1234567,TRUE

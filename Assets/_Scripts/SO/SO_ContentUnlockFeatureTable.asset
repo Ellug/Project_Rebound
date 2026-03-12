@@ -17,10 +17,9 @@ MonoBehaviour:
     functionKey: Unlock_Student_Gift
     name: "\uD559\uC0DD \uC120\uBB3C \uC2DC\uC2A4\uD15C"
     category: Student
-    description: "\uD559\uC0DD\uC5D0\uAC8C \uC120\uBB3C\uC744 \uC8FC\uC5B4 \uD638\uAC10\uB3C4\uB97C
-      \uB192\uC774\uB294 \uAE30\uB2A5 \uAC1C\uBC29"
+    description: 
   - id: 402
     functionKey: Unlock_Scholarship_System
     name: "\uC7A5\uD559\uAE08 \uC2DC\uC2A4\uD15C"
     category: Student
-    description: "\uAE30\uD68D \uC911"
+    description: 

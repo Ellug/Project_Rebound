@@ -30,6 +30,7 @@ public enum SuddenEventCategoryFlags
     Neutral = 3,
     Body = 4,
     Mental = 8,
+    Mind = 8,
 }
 
 public enum SuddenEventScope
@@ -65,20 +66,27 @@ public enum SuddenEventTriggerStatus
     Condition = 5,
     Stamina = 6,
     Money = 10,
-    Fame = 11
+    Fame = 11,
+    Trust = 12,
+    Experience = 13,
+    Unable = 21,
+    UnableTraining = 22,
+    UnableMatch = 23
 }
 
+// 스펙 값: none=0, not=1, equal=2, not_equal=3, more=4, or_less=5, or_more=6, less=7
+// Flags 비트 조합 결과가 스펙 값과 일치함
 [Flags]
 public enum SuddenEventTriggerCondition
 {
     None = 0,
     Not = 1,
     Equal = 2,
-    NotEqual = Not | Equal,
+    NotEqual = Not | Equal,     // 3
     More = 4,
-    OrLess = Not | More,
-    OrMore = More | Equal,
-    Less = Not | More | Equal
+    OrLess = Not | More,        // 5
+    OrMore = More | Equal,      // 6
+    Less = Not | More | Equal   // 7
 }
 
 [Serializable]

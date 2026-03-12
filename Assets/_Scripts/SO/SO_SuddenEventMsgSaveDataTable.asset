@@ -1,0 +1,105 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fd3adb2a4c1676439b04169edc84da5, type: 3}
+  m_Name: SO_SuddenEventMsgSaveDataTable
+  m_EditorClassIdentifier: Assembly-CSharp::SuddenEventMsgSaveDataTableSO
+  _rows:
+  - iDStudent: 1
+    index: 0
+    sender: name_007
+    recentDialogue: diag_000001
+    status: read
+    dateStart: 260301
+    dateEnd: 260308
+    recentUpdate: 260301
+    latestMessage: index_027
+    messageTitle: text_000001_030
+  - iDStudent: 2
+    index: 1
+    sender: name_023
+    recentDialogue: diag_000003
+    status: not_read
+    dateStart: 260305
+    dateEnd: 260319
+    recentUpdate: 260312
+    latestMessage: index_000
+    messageTitle: text_000003_000
+  - iDStudent: 3
+    index: 2
+    sender: name_106
+    recentDialogue: diag_000002
+    status: expired
+    dateStart: 251223
+    dateEnd: 251230
+    recentUpdate: 251223
+    latestMessage: index_010
+    messageTitle: text_000002_010
+  - iDStudent: 4
+    index: 3
+    sender: name_017
+    recentDialogue: 
+    status: None
+    dateStart: 0
+    dateEnd: 0
+    recentUpdate: 0
+    latestMessage: 
+    messageTitle: 
+  - iDStudent: 5
+    index: 4
+    sender: name_123
+    recentDialogue: 
+    status: 
+    dateStart: 0
+    dateEnd: 0
+    recentUpdate: 0
+    latestMessage: 
+    messageTitle: 
+  - iDStudent: 6
+    index: 5
+    sender: name_035
+    recentDialogue: 
+    status: 
+    dateStart: 0
+    dateEnd: 0
+    recentUpdate: 0
+    latestMessage: 
+    messageTitle: 
+  - iDStudent: 7
+    index: 6
+    sender: name_011
+    recentDialogue: 
+    status: 
+    dateStart: 0
+    dateEnd: 0
+    recentUpdate: 0
+    latestMessage: 
+    messageTitle: 
+  - iDStudent: 0
+    index: -1
+    sender: '[SYSTEM]'
+    recentDialogue: diag_100000
+    status: read
+    dateStart: 260301
+    dateEnd: 260301
+    recentUpdate: 260301
+    latestMessage: index_000
+    messageTitle: text_100000_000
+  - iDStudent: 1
+    index: -1
+    sender: "[\uAD11\uACE0]"
+    recentDialogue: diag_200000
+    status: not_read
+    dateStart: 260301
+    dateEnd: 260301
+    recentUpdate: 260301
+    latestMessage: index_000
+    messageTitle: text_200000_000

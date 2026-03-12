@@ -1,6 +1,0 @@
-condition_max,condition_min,duration_days,favorability_penalty
-int,int,int,int
-50,31,5,-5
-50,31,10,-7
-30,0,5,-7
-30,0,10,-10

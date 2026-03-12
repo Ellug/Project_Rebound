@@ -1,4 +1,4 @@
-id,function_key,name,category,description
-int,string,string,string,string
+id,function_key,name,category,description(참고용)
+int,string,string,string,
 401,Unlock_Student_Gift,학생 선물 시스템,Student,학생에게 선물을 주어 호감도를 높이는 기능 개방
 402,Unlock_Scholarship_System,장학금 시스템,Student,기획 중

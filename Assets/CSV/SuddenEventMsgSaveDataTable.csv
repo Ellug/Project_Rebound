@@ -1,0 +1,11 @@
+ID_student,index,sender,recent_dialogue,status,date_start,date_end,recent_update,latest_message,message_title
+int,int,string,string,enum,int,int,int,string,string
+id_student_1,0,name_007,diag_000001,read,260301,260308,260301,index_027,text_000001_030
+id_student_2,1,name_023,diag_000003,not_read,260305,260319,260312,index_000,text_000003_000
+id_student_3,2,name_106,diag_000002,expired,251223,251230,251223,index_010,text_000002_010
+id_student_4,3,name_017,-,None,-,-,-,-,-
+id_student_5,4,name_123,-,-,-,-,-,-,-
+id_student_6,5,name_035,-,-,-,-,-,-,-
+id_student_7,6,name_011,-,-,-,-,-,-,-
+id_system,-1,[SYSTEM],diag_100000,read,260301,260301,260301,index_000,text_100000_000
+id_npc_1,-1,[광고],diag_200000,not_read,260301,260301,260301,index_000,text_200000_000

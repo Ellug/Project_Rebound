@@ -1,7 +1,0 @@
-trust_level,idletime,day_trust
-int,string,int
-1,5일 이상,10
-2,6일 이상,8
-3,7일 이상,6
-4,8일 이상,5
-5,10일 이상,4

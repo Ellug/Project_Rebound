@@ -1,10 +1,17 @@
 id,condition,target,speaker,description
 Strinig,enum,int,string,string
-id_Text_SuddenEvent_000001,Daily,1,[SYSTEM],{event_effect.target_name} {event_event_effect.amount} 감소
-id_Text_SuddenEvent_000001,Daily,2,[SYSTEM],{event_effect.target_name} {event_event_effect.amount} 감소
-id_Text_SuddenEvent_000001,Daily,3,[SYSTEM],{event_effect.target_name} {event_event_effect.amount} 감소
-id_Text_SuddenEvent_000002,Match,1,[SYSTEM],"$""{target1.name}이(가) 부담감을 느낀다...\n<color=grey>{target1.name} {event_effect.target_name} {event_event_effect.amount}<\color>"""
-id_Text_SuddenEvent_000002,Match,2,[SYSTEM],"$""학생들이(가) 부담감을 느낀다...\n<color=grey>{target1.name}, {target2.name} {event_effect.target_name} {event_event_effect.amount}<\color>"""
-id_Text_SuddenEvent_000002,Match,3,[SYSTEM],"$""학생들이(가) 부담감을 느낀다...\n<color=grey>{target1.name}, {target2.name}, {target3.name} {event_effect.target_name} {event_effect.amount}<\color>"""
-id_Text_SuddenEvent_000002,Match,4,[SYSTEM],"$""학생들이(가) 부담감을 느낀다...\n<color=grey>{target1.name}, {target2.name}, {target3.name}, {target4.name} {event_effect.target_name} {event_effect.amount}<\color>"""
-id_Text_SuddenEvent_000002,Match,5,[SYSTEM],"$""학생들이(가) 부담감을 느낀다...\n<color=grey> 모든 학생 {event_effect.target_name}  {event_effect.amount}<\color>"""
+text_SuddenEvent_000001,Daily,1,[SYSTEM],"$""{event_effect.target_name} {event_effect.amount} 감소"
+text_SuddenEvent_000001,Daily,2,[SYSTEM],"$""{event_effect.target_name} {event_effect.amount} 감소"
+text_SuddenEvent_000001,Daily,3,[SYSTEM],"$""{event_effect.target_name} {event_effect.amount} 감소"
+text_SuddenEvent_000002,Daily,1,[SYSTEM],"$""{event_effect.target_name} {event_effect.amount} 증가"
+text_SuddenEvent_000002,Daily,2,[SYSTEM],"$""{event_effect.target_name} {event_effect.amount} 증가"
+text_SuddenEvent_000002,Daily,3,[SYSTEM],"$""{event_effect.target_name} {event_effect.amount} 증가"
+text_SuddenEvent_000003,Match,1,[SYSTEM],"$""{target1.name}이(가) 부담감을 느낀다...\n<color=grey>{target1.name} {event_effect.target_name} {event_effect.amount}<\color>"""
+text_SuddenEvent_000003,Match,2,[SYSTEM],"$""학생들이(가) 부담감을 느낀다...\n<color=grey>{target1.name}, {target2.name} {event_effect.target_name} {event_effect.amount}<\color>"""
+text_SuddenEvent_000003,Match,3,[SYSTEM],"$""학생들이(가) 부담감을 느낀다...\n<color=grey>{target1.name}, {target2.name}, {target3.name} {event_effect.target_name} {event_effect.amount}<\color>"""
+text_SuddenEvent_000003,Match,4,[SYSTEM],"$""학생들이(가) 부담감을 느낀다...\n<color=grey>{target1.name}, {target2.name}, {target3.name}, {target4.name} {event_effect.target_name} {event_effect.amount}<\color>"""
+text_SuddenEvent_000003,Match,5,[SYSTEM],"$""학생들이(가) 부담감을 느낀다...\n<color=grey> 전원 {event_effect.target_name} {event_effect.amount}<\color>"""
+text_SuddenEvent_000004,Match,1,[SYSTEM],"$""{target1.name} {event_effect.amount} 일 입원"""
+text_SuddenEvent_000004,Match,2,[SYSTEM],"$""{target1.name}, {target2.name} {event_effect.amount} 일 입원"""
+text_SuddenEvent_000005,Daily,1,[SYSTEM],대화가 종료되었습니다.
+text_SuddenEvent_000006,Daily,1,[SYSTEM],"$""{event_effect1.target_name} {event_effect1.amount} 증가, {event_effect2.target_name} {event_effect2.amount} 증가"
