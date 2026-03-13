@@ -57,7 +57,6 @@ text_diag_000003_011,student,...네?
 text_diag_000003_012,student,일자 아니었어요?
 text_diag_000003_013,player,내일까지 반성문 써서 제출해라.
 text_diag_000003_014,student,...네.
-text_diag_000003_015,player,
 text_diag_000004_000,student,쌤! 저 방금 림 잡았어요!!!
 text_diag_000004_001,player,오 드디어? 덩크 가냐?
 text_diag_000004_002,student,네!! 근데 림 잡고 내려오다가 골대 흔들렸음요ㅋㅋ
@@ -141,13 +140,13 @@ text_diag_000006_034,student,꼰대같아요.
 text_diag_000006_035,player,우씨
 text_diag_000006_036,student,ㅋㅋ 장난이에요.
 text_diag_000006_037,player,혹시 모르지? 
-text_diag_000006_038,player,"너가 대타로 딱 들어가서, 게임을 캐리할지도?"
+text_diag_000006_038,player,"너가 주전으로 들어가서, 게임을 캐리할지도?"
 text_diag_000006_039,student,감사합니다. 선생님.
 text_diag_000006_040,student,"저, 계속 해볼께요."
 text_diag_000007_000,student,쌤 오늘 간식 뭐예요? 피자? 치킨?
 text_diag_000007_001,player,오늘 내 예전 제자 중 한명이 피자 사 들고 온대.
 text_diag_000007_002,student,와!! 대박!! 누구예요? 프로 선수?
-text_diag_000007_003,player,아니
+text_diag_000007_003,player,아니. 그건 아니고.
 text_diag_000007_004,player,이번에 개업했다더라.
 text_diag_000007_005,student,...맛있으면 됐죠.
 text_diag_000008_000,student,쌤!! 미르고 애들이 단톡방에서 시비 걸어요!
@@ -213,4 +212,6 @@ text_diag_000010_011,student,...네?
 text_diag_000010_012,player,기다려라. 내가 간다.
 text_diag_000010_013,student,(감동)
 text_diag_100000_000,student,"환영합니다, 코치님. 앞으로도 잘 부탁 드립니다."
-text_diag_200000_000,student,♚♚경일☆아카데미♚♚가입시$$전원 과제☜☜100%증정※ ♜mLua♜유니티 C# 무료증정￥ 특정조건 §§포트폴리오§§★자소서★스펙업이벤트기회@@@ 즉시이동https://www.kiweb.or.kr/main/
+text_diag_100001_000,student,"$""{target1.grade} {target1.name} 학생이 금일 지각하였습니다. 계도 부탁 드립니다."""
+text_diag_200001_000,student,학생들에게 간식을 사주었다.
+text_diag_300000_000,student,♚♚경일☆아카데미♚♚가입시$$전원 과제☜☜100%증정※ ♜mLua♜유니티 C# 무료증정￥ 특정조건 §§포트폴리오§§★자소서★스펙업이벤트기회@@@ 즉시이동https://www.kiweb.or.kr/main/

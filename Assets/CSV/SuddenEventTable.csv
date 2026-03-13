@@ -1,35 +1,38 @@
 id,name,context,condition,category,scope,target_min,target_max,term_min,term_max,is_trigger,trigger_status1,trigger_condition1,trigger_threshold1,trigger_status2,trigger_condition2,trigger_threshold2,term_scale,effect1,effect2,effect3,is_probable,probability,description
 string,string,enum,enum,enum,enum,int ,int,int ,int ,bool,enum,enum,int,enum,enum,int,enum,string,string,string,bool,float,string
-event_000001,밤샘,PreProcess,Daily,Negative | Mental,Member,1,3,1,1,FALSE,none,none,-1,none,none,-1,Day,event_effect_1_condition_m5,-,-,TRUE,0.4,text_SuddenEvent_000001
-event_000002,부담감,PreProcess,Match,Negative | Body | Mental,Team_Key_Member,1,5,1,4,TRUE,condition,less ,90,condition,or_more,80,Quarter,event_effect_1_randomPlayerStat_m3,-,-,TRUE,0.2,text_SuddenEvent_000004
-event_000002,부담감,PreProcess,Match,Negative | Body | Mental,Team_Key_Member,1,5,1,4,TRUE,condition,less ,80,condition,or_more,70,Quarter,event_effect_1_randomPlayerStat_m3,-,-,TRUE,0.6,text_SuddenEvent_000004
-event_000002,부담감,PreProcess,Match,Negative | Body | Mental,Team_Key_Member,1,5,1,4,TRUE,condition,less ,70,none,none,-1,Quarter,event_effect_1_randomPlayerStat_m3,-,-,TRUE,0.8,text_SuddenEvent_000004
-event_000003,부상,Both,Exercise,Negative | Body,Member,1,2,1,7,TRUE,condition,less ,80,condition,or_more,60,Day,event_effect_1_unable_match_p1,event_effect_1_experience_m50,-,TRUE,0.2,text_SuddenEvent_000005
-event_000003,부상,Both,Exercise,Negative | Body,Member,1,2,1,7,TRUE,condition,less ,60,condition,or_more,40,Day,event_effect_1_unable_match_p1,event_effect_1_experience_m50,-,TRUE,0.5,text_SuddenEvent_000005
-event_000003,부상,Both,Exercise,Negative | Body,Member,1,2,1,7,TRUE,condition,less ,40,condition,or_more,20,Day,event_effect_1_unable_match_p1,event_effect_1_experience_m50,-,TRUE,0.7,text_SuddenEvent_000005
-event_000003,부상,Both,Exercise,Negative | Body,Member,1,2,1,7,FALSE,condition,less ,20,none,none,-1,Day,event_effect_1_unable_match_p1,event_effect_1_experience_m50,-,FALSE,1,text_SuddenEvent_000005
-event_000004,부상,Both,Match,Negative | Body,Team_Key_Member,1,2,1,3,TRUE,condition,less ,80,condition,or_more,60,Day,event_effect_1_unable_match_p1,event_effect_1_experience_m50,-,TRUE,0.2,text_SuddenEvent_000005
-event_000004,부상,Both,Match,Negative | Body,Team_Key_Member,1,2,1,7,TRUE,condition,less ,60,condition,or_more,40,Day,event_effect_1_unable_match_p1,event_effect_1_experience_m50,-,TRUE,0.5,text_SuddenEvent_000005
-event_000004,부상,Both,Match,Negative | Body,Team_Key_Member,1,2,3,7,TRUE,condition,less ,40,condition,or_more,20,Day,event_effect_1_unable_match_p1,event_effect_1_experience_m50,-,TRUE,0.7,text_SuddenEvent_000005
-event_000004,부상,Both,Match,Negative | Body,Team_Key_Member,1,2,7,28,FALSE,condition,less ,20,none,none,-1,Day,event_effect_1_unable_match_p1,event_effect_1_experience_m50,-,FALSE,1,text_SuddenEvent_000005
-event_000005,특별 훈련,Both,Daily|School,Neutral | Body | Mind,Member,1,1,0,0,FALSE,none,none,-1,none,none,-1,none,event_effect_1_randomPlayerStat_p5,event_effect_1_stamina_p3,-,FALSE,1,text_SuddenEvent_000007
-event_000006,멘탈 강화,Both,Daily|School|Exercise|Match,Positive | Mind,Member,1,1,0,0,FALSE,none,none,-1,none,none,-1,none,event_effect_1_mental_p5,- ,-,FALSE,1,text_SuddenEvent_000002
-event_000007,멘탈 약화,Both,Daily|School|Exercise|Match,Negative | Mind,Member,1,1,0,0,FALSE,none,none,-1,none,none,-1,none,event_effect_1_mental_m5,- ,-,FALSE,1,text_SuddenEvent_000001
-event_000008,슈팅 강화,Both,Daily|School|Exercise|Match,Positive | Body,Member,1,1,0,0,FALSE,none,none,-1,none,none,-1,none,event_effect_1_shoot_p5,- ,-,FALSE,1,text_SuddenEvent_000002
-event_000009,슈팅 약화,Both,Daily|School|Exercise|Match,Negative | Body,Member,1,1,0,0,FALSE,none,none,-1,none,none,-1,none,event_effect_1_shoot_m5,- ,-,FALSE,1,text_SuddenEvent_000001
-event_000010,스피드 강화,Both,Daily|School|Exercise|Match,Negative | Body,Member,1,1,0,0,FALSE,none,none,-1,none,none,-1,none,event_effect_1_shoot_m6,- ,-,FALSE,1,text_SuddenEvent_000002
-event_000011,스피드 약화,Both,Daily|School|Exercise|Match,Negative | Body,Member,1,1,0,0,FALSE,none,none,-1,none,none,-1,none,event_effect_1_shoot_m7,- ,-,FALSE,1,text_SuddenEvent_000001
-event_000012,점프 성장,Both,Daily|School|Exercise|Match,Positive | Body,Member,1,1,0,0,FALSE,none,none,-1,none,none,-1,none,event_effect_1_jump_p5,- ,-,FALSE,1,text_SuddenEvent_000002
-event_000013,점프 약화,Both,Daily|School|Exercise|Match,Negative | Body,Member,1,1,0,0,FALSE,none,none,-1,none,none,-1,none,event_effect_1_jump_m5,- ,-,FALSE,1,text_SuddenEvent_000001
-event_000014,컨디션 증가,Both,Daily|School|Exercise|Match,Positive | Mind | Body,Member,1,1,0,0,FALSE,none,none,-1,none,none,-1,none,event_effect_1_condition_p5,- ,-,FALSE,1,text_SuddenEvent_000002
-event_000015,컨디션 감소,Both,Daily|School|Exercise|Match,Negative | Mind | Body,Member,1,1,0,0,FALSE,none,none,-1,none,none,-1,none,event_effect_1_condition_m5,- ,-,FALSE,1,text_SuddenEvent_000001
-event_000016,지구력 성장,Both,Daily|School|Exercise|Match,Positive | Body,Member,1,1,0,0,FALSE,none,none,-1,none,none,-1,none,event_effect_1_stamina_p5,- ,-,FALSE,1,text_SuddenEvent_000002
-event_000017,지구력 약화,Both,Daily|School|Exercise|Match,Negative | Body,Member,1,1,0,0,FALSE,none,none,-1,none,none,-1,none,event_effect_1_stamina_m5,- ,-,FALSE,1,text_SuddenEvent_000001
-event_000018,자금 획득,Both,Daily|School|Exercise|Match,Negative,Player,1,1,0,0,FALSE,none,none,-1,none,none,-1,none,event_effect_1_money_p5,- ,-,FALSE,1,text_SuddenEvent_000002
-event_000019,자금 손실,Both,Daily|School|Exercise|Match,Negative,Player,1,1,0,0,FALSE,none,none,-1,none,none,-1,none,event_effect_1_money_m5,- ,-,FALSE,1,text_SuddenEvent_000001
-event_000020,명성치 증가,Both,Daily|School|Exercise|Match,Negative,Player,1,1,0,0,FALSE,none,none,-1,none,none,-1,none,event_effect_1_fame_p5,- ,-,FALSE,1,text_SuddenEvent_000002
-event_000021,명성치 감소,Both,Daily|School|Exercise|Match,Negative,Player,1,1,0,0,FALSE,none,none,-1,none,none,-1,none,event_effect_1_fame_m5,- ,-,FALSE,1,text_SuddenEvent_000001
-event_000022,넘치는 힘,Both,Daily,Neutral | Body | Mind,Member,1,1,0,0,FALSE,none,none,-1,none,none,-1,none,event_effect_1_speed_p5,event_effect_1_stamina_p5,event_effect_1_condition_m5,FALSE,1,text_SuddenEvent_000002
-event_000023,운동기구 파손,Both,Daily | Exercise,Negative,Player,1,1,0,0,FALSE,none,none,-1,none,none,-1,none,event_effect_1_money_m10,-,-,FALSE,1,text_SuddenEvent_000001
-event_000024,농구부 회식,PostProcess,Daily,Positive | Body | Mind,Member,20,20,0,0,FALSE,none,none,-1,none,none,-1,none,event_effect_1_condition_p10,event_effect_1_experience_p10,-,FALSE,1,text_SuddenEvent_000002
-event_000025,랜덤 스탯 증가,Both,Daily,Neutral,Member,1,1,0,0,FALSE,none,none,-1,none,none,-1,none,event_effect_1_randomPlayerStat_p3,-,-,FALSE,1,text_SuddenEvent_000002
+event_000001,멘탈 강화,Both,School,Negative | Mind,Member,1,1,0,0,FALSE,none,none,-1,none,none,-1,none,event_effect_1_mental_p5,- ,-,FALSE,1,text_SuddenEvent_000001
+event_000002,멘탈 약화,Both,School,Positive | Body,Member,1,1,0,0,FALSE,none,none,-1,none,none,-1,none,event_effect_1_mental_m5,- ,-,FALSE,1,text_SuddenEvent_000002
+event_000003,슈팅 강화,Both,School,Negative | Body,Member,1,1,0,0,FALSE,none,none,-1,none,none,-1,none,event_effect_1_shoot_p5,- ,-,FALSE,1,text_SuddenEvent_000001
+event_000004,슈팅 약화,Both,School,Negative | Body,Member,1,1,0,0,FALSE,none,none,-1,none,none,-1,none,event_effect_1_shoot_m5,- ,-,FALSE,1,text_SuddenEvent_000002
+event_000005,스피드 강화,Both,School,Negative | Body,Member,1,1,0,0,FALSE,none,none,-1,none,none,-1,none,event_effect_1_shoot_m6,- ,-,FALSE,1,text_SuddenEvent_000001
+event_000006,스피드 약화,Both,School,Positive | Body,Member,1,1,0,0,FALSE,none,none,-1,none,none,-1,none,event_effect_1_shoot_m7,- ,-,FALSE,1,text_SuddenEvent_000002
+event_000007,점프 성장,Both,School,Negative | Body,Member,1,1,0,0,FALSE,none,none,-1,none,none,-1,none,event_effect_1_jump_p5,- ,-,FALSE,1,text_SuddenEvent_000001
+event_000008,점프 약화,Both,School,Positive | Mind | Body,Member,1,1,0,0,FALSE,none,none,-1,none,none,-1,none,event_effect_1_jump_m5,- ,-,FALSE,1,text_SuddenEvent_000002
+event_000009,컨디션 증가,Both,School,Negative | Mind | Body,Member,1,1,0,0,FALSE,none,none,-1,none,none,-1,none,event_effect_1_condition_p5,- ,-,FALSE,1,text_SuddenEvent_000001
+event_000010,컨디션 감소,Both,School,Positive | Body,Member,1,1,0,0,FALSE,none,none,-1,none,none,-1,none,event_effect_1_condition_m5,- ,-,FALSE,1,text_SuddenEvent_000002
+event_000011,지구력 성장,Both,School,Negative | Body,Member,1,1,0,0,FALSE,none,none,-1,none,none,-1,none,event_effect_1_stamina_p5,- ,-,FALSE,1,text_SuddenEvent_000001
+event_000012,지구력 약화,Both,School,Negative,Player,1,1,0,0,FALSE,none,none,-1,none,none,-1,none,event_effect_1_stamina_m5,- ,-,FALSE,1,text_SuddenEvent_000002
+event_000013,자금 획득,Both,School,Negative,Player,1,1,0,0,FALSE,none,none,-1,none,none,-1,none,event_effect_1_money_p5,- ,-,FALSE,1,text_SuddenEvent_000001
+event_000014,자금 손실,Both,School,Negative,Player,1,1,0,0,FALSE,none,none,-1,none,none,-1,none,event_effect_1_money_m5,- ,-,FALSE,1,text_SuddenEvent_000002
+event_000015,명성치 증가,Both,School,Negative,Player,1,1,0,0,FALSE,none,none,-1,none,none,-1,none,event_effect_1_fame_p5,- ,-,FALSE,1,text_SuddenEvent_000001
+event_000016,명성치 감소,Both,School,Negative,Player,1,1,0,0,FALSE,none,none,-1,none,none,-1,none,event_effect_1_fame_m5,- ,-,FALSE,1,text_SuddenEvent_000002
+event_000017,랜덤 스탯 증가,Both,School,Negative,Player,1,1,0,0,FALSE,none,none,-1,none,none,-1,none,event_effect_1_randomPlayerStat_p5,- ,-,FALSE,1,text_SuddenEvent_000001
+event_000018,랜덤 스탯 감소,Both,School,Negative,Player,1,1,0,0,FALSE,none,none,-1,none,none,-1,none,event_effect_1_randomPlayerStat_m5,- ,-,FALSE,1,text_SuddenEvent_000002
+event_000019,넘치는 힘,Both,School,Neutral | Body | Mind,Member,1,1,0,0,FALSE,none,none,-1,none,none,-1,none,event_effect_1_speed_p5,event_effect_1_stamina_p5,event_effect_1_condition_m5,FALSE,1,text_SuddenEvent_000002
+event_000020,운동기구 파손,Both,School,Negative,Player,1,1,0,0,FALSE,none,none,-1,none,none,-1,none,event_effect_1_money_m10,-,-,FALSE,0.2,text_SuddenEvent_000001
+event_000021,농구부 회식,PostProcess,School,Positive | Body | Mind,Member,20,20,0,0,FALSE,none,none,-1,none,none,-1,none,event_effect_1_condition_p10,event_effect_1_experience_p10,-,FALSE,0.35,text_SuddenEvent_000002
+event_000022,특별 훈련,Both,School,Neutral | Body | Mind,Member,1,1,0,0,FALSE,none,none,-1,none,none,-1,none,event_effect_1_randomPlayerStat_p5,event_effect_1_stamina_p3,-,FALSE,1,text_SuddenEvent_000008
+event_001001,부담감,PreProcess,Match,Negative | Body | Mental,Team_Key_Member,1,5,1,4,TRUE,condition,less ,90,condition,or_more,80,Quarter,event_effect_1_randomPlayerStat_m3,-,-,TRUE,0.2,text_SuddenEvent_000004
+event_001001,부담감,PreProcess,Match,Negative | Body | Mental,Team_Key_Member,1,5,1,4,TRUE,condition,less ,80,condition,or_more,70,Quarter,event_effect_1_randomPlayerStat_m3,-,-,TRUE,0.6,text_SuddenEvent_000004
+event_001001,부담감,PreProcess,Match,Negative | Body | Mental,Team_Key_Member,1,5,1,4,TRUE,condition,less ,70,none,none,-1,Quarter,event_effect_1_randomPlayerStat_m3,-,-,TRUE,0.8,text_SuddenEvent_000004
+event_001002,부상,Both,Exercise,Negative | Body,Member,1,2,1,7,TRUE,condition,less ,80,condition,or_more,60,Day,event_effect_1_unable_match_p1,event_effect_1_experience_m50,-,TRUE,0.2,text_SuddenEvent_000005
+event_001002,부상,Both,Exercise,Negative | Body,Member,1,2,1,7,TRUE,condition,less ,60,condition,or_more,40,Day,event_effect_1_unable_match_p1,event_effect_1_experience_m50,-,TRUE,0.5,text_SuddenEvent_000005
+event_001002,부상,Both,Exercise,Negative | Body,Member,1,2,1,7,TRUE,condition,less ,40,condition,or_more,20,Day,event_effect_1_unable_match_p1,event_effect_1_experience_m50,-,TRUE,0.7,text_SuddenEvent_000005
+event_001002,부상,Both,Exercise,Negative | Body,Member,1,2,1,7,FALSE,condition,less ,20,none,none,-1,Day,event_effect_1_unable_match_p1,event_effect_1_experience_m50,-,FALSE,1,text_SuddenEvent_000005
+event_001002,부상,Both,Match,Negative | Body,Team_Key_Member,1,2,1,3,TRUE,condition,less ,80,condition,or_more,60,Day,event_effect_1_unable_match_p1,event_effect_1_experience_m50,-,TRUE,0.2,text_SuddenEvent_000005
+event_001002,부상,Both,Match,Negative | Body,Team_Key_Member,1,2,1,7,TRUE,condition,less ,60,condition,or_more,40,Day,event_effect_1_unable_match_p1,event_effect_1_experience_m50,-,TRUE,0.5,text_SuddenEvent_000005
+event_001002,부상,Both,Match,Negative | Body,Team_Key_Member,1,2,3,7,TRUE,condition,less ,40,condition,or_more,20,Day,event_effect_1_unable_match_p1,event_effect_1_experience_m50,-,TRUE,0.7,text_SuddenEvent_000005
+event_001002,부상,Both,Match,Negative | Body,Team_Key_Member,1,2,7,28,FALSE,condition,less ,20,none,none,-1,Day,event_effect_1_unable_match_p1,event_effect_1_experience_m50,-,FALSE,1,text_SuddenEvent_000005
+event_010001,[공지]금일 지각자,PreProcess,Daily,Negative,Member,1,1,0,0,FALSE,none,none,-1,none,none,-1,none,-,-,-,TRUE,0.25,diag_010001
+event_020001,졸업생 방문,PreProcess,Daily,Negative,Member,1,1,0,0,FALSE,none,none,-1,none,none,-1,none,-,-,-,TRUE,0.1,diag_020001
+event_030000,경일 아카데미!,Both,Daily,Neutral,Player,1,1,0,0,FALSE,none,none,-1,none,none,-1,none,-,-,-,TRUE,0.1,diag_030000
