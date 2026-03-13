@@ -19,7 +19,7 @@ public sealed class FacilityUpgradeRow
 public sealed class FacilityUpgradeTableSO : ScriptableObject
 {
     [SerializeField] private List<FacilityUpgradeRow> _rows = new();
-    // Á¶È¸¿ë µñ¼Å³Ê¸®
+    // ì¡°íšŒìš© ë”•ì…”ë„ˆë¦¬
     private Dictionary<string, List<FacilityUpgradeRow>> _byFacility;
     void OnEnable()
     {

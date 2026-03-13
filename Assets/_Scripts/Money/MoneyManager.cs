@@ -1,9 +1,9 @@
 using System;
 using UnityEngine;
 
-// Áö±İ ÀçÈ­ Ãß°¡, »ç¿ë ÀÖÀ½
-// ÀçÈ­ ÃÊ±â°ª º¯°æ
-// ¼¼ÀÌºê ·Îµå ³ªÁß¿¡ Ãß°¡
+// ì§€ê¸ˆ ì¬í™” ì¶”ê°€, ì‚¬ìš© ìˆìŒ
+// ì¬í™” ì´ˆê¸°ê°’ ë³€ê²½
+// ì„¸ì´ë¸Œ ë¡œë“œ ë‚˜ì¤‘ì— ì¶”ê°€
 public class MoneyManager : Singleton<MoneyManager>
 {
     private const int DEFAULT_GOLD = 2000;
@@ -16,7 +16,7 @@ public class MoneyManager : Singleton<MoneyManager>
     public event Action<int> OnGoldChanged;
     public event Action<int> OnReputationChanged;
 
-    // ÀÚ±İ Ãß°¡
+    // ìê¸ˆ ì¶”ê°€
     public void AddGold(int amount)
     {
         if (amount <= 0)
@@ -28,7 +28,7 @@ public class MoneyManager : Singleton<MoneyManager>
         OnGoldChanged?.Invoke(_gold);
     }
 
-    // ÀÚ±İ »ç¿ë
+    // ìê¸ˆ ì‚¬ìš©
     public bool TrySpendGold(int amount)
     {
         if (amount <= 0)
@@ -46,7 +46,7 @@ public class MoneyManager : Singleton<MoneyManager>
         return true;
     }
 
-    // ¸í¼ºÄ¡ Ãß°¡
+    // ëª…ì„±ì¹˜ ì¶”ê°€
     public void AddReputation(int amount)
     {
         if (amount <= 0)
@@ -58,7 +58,7 @@ public class MoneyManager : Singleton<MoneyManager>
         OnReputationChanged?.Invoke(_reputation);
     }
 
-    // ¸í¼ºÄ¡ »ç¿ë
+    // ëª…ì„±ì¹˜ ì‚¬ìš©
     public bool TrySpendReputation(int amount)
     {
         if (amount <= 0)
@@ -76,7 +76,7 @@ public class MoneyManager : Singleton<MoneyManager>
         return true;
     }
 
-    // ÀÚ±İ ÃÊ±âÈ­
+    // ìê¸ˆ ì´ˆê¸°í™”
     public void ResetGold()
     {
         _gold = DEFAULT_GOLD;

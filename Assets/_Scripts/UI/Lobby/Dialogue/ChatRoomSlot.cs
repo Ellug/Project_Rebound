@@ -4,12 +4,12 @@ using TMPro;
 
 public class ChatRoomSlot : MonoBehaviour
 {
-    [SerializeField] private TMP_Text _txtPreview;      // ¹öÆ° ¾ÈÀÇ ³»¿ë
-    [SerializeField] private Image _btnBackgroundImage;   // ¹öÆ° ¹è°æ 
+    [SerializeField] private TMP_Text _txtPreview;      // ë²„íŠ¼ ì•ˆì˜ ë‚´ìš©
+    [SerializeField] private Image _btnBackgroundImage;   // ë²„íŠ¼ ë°°ê²½ 
     [SerializeField] private Button _btnOpenRoom;
 
-    [SerializeField] private Color _unreadBgColor = new Color(0.4f, 0.4f, 0.4f, 1f); // ¹àÀº È¸»ö
-    [SerializeField] private Color _readBgColor = new Color(0.15f, 0.15f, 0.15f, 1f); // ¾îµÎ¿î È¸»ö
+    [SerializeField] private Color _unreadBgColor = new Color(0.4f, 0.4f, 0.4f, 1f); // ë°ì€ íšŒìƒ‰
+    [SerializeField] private Color _readBgColor = new Color(0.15f, 0.15f, 0.15f, 1f); // ì–´ë‘ìš´ íšŒìƒ‰
 
     private ChatRoom _currentRoom;
     private MessengerInboxPopup _parentPopup;

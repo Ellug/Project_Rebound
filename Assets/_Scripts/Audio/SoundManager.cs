@@ -16,7 +16,7 @@ public class SoundManager : Singleton<SoundManager>
     private float lastBGMVolume = 1f;
 
 
-    // BGMÀº ¹İº¹ Àç»ı, È¿°úÀ½Àº ÇÑ ¹ø¸¸
+    // BGMì€ ë°˜ë³µ ì¬ìƒ, íš¨ê³¼ìŒì€ í•œ ë²ˆë§Œ
     protected override void Awake()
     {
         base.Awake();
@@ -40,7 +40,7 @@ public class SoundManager : Singleton<SoundManager>
         }
     }
 
-    // ÀúÀåµÈ º¼·ı°ú mute »óÅÂ È®ÀÎ
+    // ì €ì¥ëœ ë³¼ë¥¨ê³¼ mute ìƒíƒœ í™•ì¸
     private void Start()
     {
         float bgm = PlayerPrefs.GetFloat("BGM_VOL", 1f);
@@ -86,7 +86,7 @@ public class SoundManager : Singleton<SoundManager>
         ApplyVolume(type, normalized);
     }
 
-    // BGM À½¼Ò°Å
+    // BGM ìŒì†Œê±°
     public void SetBGMMute(bool isMute)
     {
         PlayerPrefs.SetInt("BGM_MUTE", isMute ? 1 : 0);
@@ -102,7 +102,7 @@ public class SoundManager : Singleton<SoundManager>
         }
     }
 
-    // È¿°úÀ½ À½¼Ò°Å
+    // íš¨ê³¼ìŒ ìŒì†Œê±°
     public void SetEffectMute(bool isMute)
     {
         PlayerPrefs.SetInt("EFFECT_MUTE", isMute ? 1 : 0);
@@ -138,7 +138,7 @@ public class SoundManager : Singleton<SoundManager>
             return clip;
         }
 
-        Debug.LogWarning($"Å¬¸³ ¾øÀ½: {clipName}");
+        Debug.LogWarning($"í´ë¦½ ì—†ìŒ: {clipName}");
         return null;
     }
 
