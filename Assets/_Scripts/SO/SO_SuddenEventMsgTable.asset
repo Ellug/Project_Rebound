@@ -216,7 +216,7 @@ MonoBehaviour:
     choice2Next: 
     choice3Dialogue: 
     choice3Next: 
-    suddenEvent: event_000014
+    suddenEvent: event_000009
   - iD: diag_000001
     messageIndex: index_017
     messageDialogue: text_000001_019
@@ -312,7 +312,7 @@ MonoBehaviour:
     choice2Next: 
     choice3Dialogue: 
     choice3Next: 
-    suddenEvent: event_000005
+    suddenEvent: event_000022
   - iD: diag_000001
     messageIndex: index_025
     messageDialogue: text_000001_028
@@ -348,7 +348,7 @@ MonoBehaviour:
     choice2Next: 
     choice3Dialogue: 
     choice3Next: 
-    suddenEvent: event_000015
+    suddenEvent: event_000010
   - iD: diag_000002
     messageIndex: index_000
     messageDialogue: text_000002_000
@@ -576,7 +576,7 @@ MonoBehaviour:
     choice2Next: 
     choice3Dialogue: 
     choice3Next: 
-    suddenEvent: event_000014
+    suddenEvent: event_000019
   - iD: diag_000003
     messageIndex: index_008
     messageDialogue: text_000003_010
@@ -648,7 +648,7 @@ MonoBehaviour:
     choice2Next: 
     choice3Dialogue: 
     choice3Next: 
-    suddenEvent: event_000014
+    suddenEvent: event_000020
   - iD: diag_000004
     messageIndex: index_000
     messageDialogue: text_000004_000
@@ -804,7 +804,7 @@ MonoBehaviour:
     choice2Next: 
     choice3Dialogue: 
     choice3Next: 
-    suddenEvent: event_000010
+    suddenEvent: event_000005
   - iD: diag_000004
     messageIndex: index_013
     messageDialogue: text_000004_014
@@ -828,7 +828,7 @@ MonoBehaviour:
     choice2Next: 
     choice3Dialogue: 
     choice3Next: 
-    suddenEvent: event_000023
+    suddenEvent: event_000010
   - iD: diag_000005
     messageIndex: index_000
     messageDialogue: text_000005_000
@@ -948,7 +948,7 @@ MonoBehaviour:
     choice2Next: 
     choice3Dialogue: 
     choice3Next: 
-    suddenEvent: event_000025
+    suddenEvent: event_000017
   - iD: diag_000005
     messageIndex: index_010
     messageDialogue: text_000005_012
@@ -1020,7 +1020,7 @@ MonoBehaviour:
     choice2Next: 
     choice3Dialogue: 
     choice3Next: 
-    suddenEvent: event_000014
+    suddenEvent: event_000009
   - iD: diag_000005
     messageIndex: index_016
     messageDialogue: text_000005_019
@@ -1260,7 +1260,7 @@ MonoBehaviour:
     choice2Next: 
     choice3Dialogue: 
     choice3Next: 
-    suddenEvent: event_000005
+    suddenEvent: event_000022
   - iD: diag_000006
     messageIndex: index_010
     messageDialogue: text_000006_012
@@ -1380,7 +1380,7 @@ MonoBehaviour:
     choice2Next: 
     choice3Dialogue: 
     choice3Next: 
-    suddenEvent: event_000014
+    suddenEvent: event_000009
   - iD: diag_000006
     messageIndex: index_020
     messageDialogue: text_000006_023
@@ -1596,7 +1596,7 @@ MonoBehaviour:
     choice2Next: 
     choice3Dialogue: 
     choice3Next: 
-    suddenEvent: event_000006
+    suddenEvent: event_000001
   - iD: diag_000007
     messageIndex: index_000
     messageDialogue: text_000007_000
@@ -1668,7 +1668,7 @@ MonoBehaviour:
     choice2Next: 
     choice3Dialogue: 
     choice3Next: 
-    suddenEvent: event_000024
+    suddenEvent: event_000021
   - iD: diag_000008
     messageIndex: index_000
     messageDialogue: text_000008_000
@@ -1788,7 +1788,7 @@ MonoBehaviour:
     choice2Next: 
     choice3Dialogue: 
     choice3Next: 
-    suddenEvent: event_000022
+    suddenEvent: event_000003
   - iD: diag_000008
     messageIndex: index_010
     messageDialogue: text_000008_012
@@ -2341,9 +2341,33 @@ MonoBehaviour:
     choice3Dialogue: 
     choice3Next: 
     suddenEvent: 
-  - iD: diag_020000
+  - iD: diag_010001
     messageIndex: index_000
-    messageDialogue: text_020000_000
+    messageDialogue: text_010001_000
+    next: END
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: event_000001
+  - iD: diag_020001
+    messageIndex: index_001
+    messageDialogue: text_020000_001
+    next: END
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: event_000021
+  - iD: diag_030000
+    messageIndex: index_001
+    messageDialogue: text_030000_001
     next: END
     isChoice: 0
     choice1Dialogue: 

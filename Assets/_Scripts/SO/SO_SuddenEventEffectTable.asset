@@ -461,112 +461,112 @@ MonoBehaviour:
     targetMax: 4
     amountMin: -20
     amountMax: -20
-  - id: event_effect_1_vital_p5
+  - id: event_effect_1_stamina_p5
     type: 1
     targetName: text_status_05
     targetMin: 6
     targetMax: 6
     amountMin: 5
     amountMax: 5
-  - id: event_effect_1_vital_p10
+  - id: event_effect_1_stamina_p10
     type: 1
     targetName: text_status_05
     targetMin: 6
     targetMax: 6
     amountMin: 10
     amountMax: 10
-  - id: event_effect_1_vital_p15
+  - id: event_effect_1_stamina_p15
     type: 1
     targetName: text_status_05
     targetMin: 6
     targetMax: 6
     amountMin: 15
     amountMax: 15
-  - id: event_effect_1_vital_p20
+  - id: event_effect_1_stamina_p20
     type: 1
     targetName: text_status_05
     targetMin: 6
     targetMax: 6
     amountMin: 20
     amountMax: 20
-  - id: event_effect_1_vital_m5
+  - id: event_effect_1_stamina_m5
     type: 1
     targetName: text_status_05
     targetMin: 6
     targetMax: 6
     amountMin: 5
     amountMax: 5
-  - id: event_effect_1_vital_m10
+  - id: event_effect_1_stamina_m10
     type: 1
     targetName: text_status_05
     targetMin: 6
     targetMax: 6
     amountMin: 10
     amountMax: 10
-  - id: event_effect_1_vital_m15
+  - id: event_effect_1_stamina_m15
     type: 1
     targetName: text_status_05
     targetMin: 6
     targetMax: 6
     amountMin: 15
     amountMax: 15
-  - id: event_effect_1_vital_m20
+  - id: event_effect_1_stamina_m20
     type: 1
     targetName: text_status_05
     targetMin: 6
     targetMax: 6
     amountMin: 20
     amountMax: 20
-  - id: event_effect_2_vital_p5
+  - id: event_effect_2_stamina_p5
     type: 2
     targetName: text_status_05
     targetMin: 6
     targetMax: 6
     amountMin: -5
     amountMax: -5
-  - id: event_effect_2_vital_p10
+  - id: event_effect_2_stamina_p10
     type: 2
     targetName: text_status_05
     targetMin: 6
     targetMax: 6
     amountMin: -10
     amountMax: -10
-  - id: event_effect_2_vital_p15
+  - id: event_effect_2_stamina_p15
     type: 2
     targetName: text_status_05
     targetMin: 6
     targetMax: 6
     amountMin: -15
     amountMax: -15
-  - id: event_effect_2_vital_p20
+  - id: event_effect_2_stamina_p20
     type: 2
     targetName: text_status_05
     targetMin: 6
     targetMax: 6
     amountMin: -20
     amountMax: -20
-  - id: event_effect_2_vital_m5
+  - id: event_effect_2_stamina_m5
     type: 2
     targetName: text_status_05
     targetMin: 6
     targetMax: 6
     amountMin: -5
     amountMax: -5
-  - id: event_effect_2_vital_m10
+  - id: event_effect_2_stamina_m10
     type: 2
     targetName: text_status_05
     targetMin: 6
     targetMax: 6
     amountMin: -10
     amountMax: -10
-  - id: event_effect_2_vital_m15
+  - id: event_effect_2_stamina_m15
     type: 2
     targetName: text_status_05
     targetMin: 6
     targetMax: 6
     amountMin: -15
     amountMax: -15
-  - id: event_effect_2_vital_m20
+  - id: event_effect_2_stamina_m20
     type: 2
     targetName: text_status_05
     targetMin: 6

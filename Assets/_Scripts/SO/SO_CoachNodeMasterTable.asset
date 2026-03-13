@@ -24,14 +24,8 @@ MonoBehaviour:
     name: "\uC288\uD305 \uB4DC\uB9B4 \uD6C8\uB828 \uD6A8\uC728"
     unlockCost: 15
     description: "\uC288\uD305 \uB4DC\uB9B4 \uD6C8\uB828 \uC2DC \uCEE8\uB514\uC158
-      \uC18C\uBAA8\uAC00"
-    effectId: 0
-  - id: 0
-    tierId: 0
-    name: 
-    unlockCost: 0
-    description: 
-    effectId: 0
+      \uC18C\uBAA8\uAC00\n5% \uAC10\uC18C\uD569\uB2C8\uB2E4."
+    effectId: 1002
   - id: 201
     tierId: 6001
     name: "\uC218\uBE44 \uAC15\uD654 I"
@@ -43,38 +37,22 @@ MonoBehaviour:
     name: "\uB514\uD39C\uC2A4 \uC6CC\uD06C \uD6C8\uB828 \uD6A8\uC728"
     unlockCost: 15
     description: "\uB514\uD39C\uC2A4 \uC6CC\uD06C \uD6C8\uB828 \uC2DC \uCEE8\uB514\uC158
-      \uC18C\uBAA8\uAC00"
-    effectId: 0
-  - id: 0
-    tierId: 0
-    name: 
-    unlockCost: 0
-    description: 
-    effectId: 0
+      \uC18C\uBAA8\uAC00\n5% \uAC10\uC18C\uD569\uB2C8\uB2E4."
+    effectId: 2002
   - id: 301
     tierId: 6001
     name: "\uBA85\uC131\uCE58 \uD68D\uB4DD\uB7C9 \uC99D\uAC00"
     unlockCost: 15
-    description: "\uACBD\uAE30 \uD6C4 \uD68D\uB4DD\uD558\uB294 \uBA85\uC131\uCE58\uAC00"
-    effectId: 0
-  - id: 0
-    tierId: 0
-    name: 
-    unlockCost: 0
-    description: 
-    effectId: 0
+    description: "\uACBD\uAE30 \uD6C4 \uD68D\uB4DD\uD558\uB294 \uBA85\uC131\uCE58\uAC00
+      \n10% \uC99D\uAC00\uD569\uB2C8\uB2E4."
+    effectId: 3002
   - id: 302
     tierId: 6001
     name: "\uC2DC\uC124 \uC5C5\uADF8\uB808\uC774\uB4DC \uBE44\uC6A9 \uAC10\uC18C"
     unlockCost: 15
-    description: "\uC2DC\uC124 \uC5C5\uADF8\uB808\uC774\uB4DC\uD558\uB294 \uBE44\uC6A9\uC774"
-    effectId: 0
-  - id: 0
-    tierId: 0
-    name: 
-    unlockCost: 0
-    description: 
-    effectId: 0
+    description: "\uC2DC\uC124 \uC5C5\uADF8\uB808\uC774\uB4DC\uD558\uB294 \uBE44\uC6A9\uC774\n5%
+      \uAC10\uC18C\uD569\uB2C8\uB2E4."
+    effectId: 3001
   - id: 501
     tierId: 6001
     name: "2\uD2F0\uC5B4 \uC2B9\uAE09 \uB178\uB4DC"
@@ -110,24 +88,12 @@ MonoBehaviour:
     name: "\uB2E8\uCCB4 \uD6C8\uB828 \uD6A8\uC728"
     unlockCost: 25
     description: "\uBAA8\uB4E0 \uB2E8\uCCB4 \uD6C8\uB828 \uC2DC \uCEE8\uB514\uC158
-      \uC18C\uBAA8\uAC00"
-    effectId: 0
-  - id: 0
-    tierId: 0
-    name: 
-    unlockCost: 0
-    description: 
-    effectId: 0
+      \uC18C\uBAA8\uAC00\n3% \uAC10\uC18C\uD569\uB2C8\uB2E4."
+    effectId: 3003
   - id: 401
     tierId: 6002
     name: "\uC120\uBB3C \uAE30\uB2A5 \uD574\uAE08"
     unlockCost: 25
     description: "\uD559\uC0DD\uB4E4\uC5D0\uAC8C \uC120\uBB3C\uC744 \uC904 \uC218
-      \uC788\uB294"
-    effectId: 0
-  - id: 0
-    tierId: 0
-    name: 
-    unlockCost: 0
-    description: 
-    effectId: 0
+      \uC788\uB294 \n\uAE30\uB2A5\uC774 \uD574\uAE08\uB429\uB2C8\uB2E4."
+    effectId: 4001
