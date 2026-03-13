@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,34 +8,34 @@ public class FacilityPopup : UIBase
     [Serializable]
     private class FacilityUpgradeRowUI
     {
-        public TMP_Text facilityLv;     // ½Ã¼³ ·¹º§
-        public TMP_Text upgradeCost;    // ¾÷±×·¹ÀÌµå ºñ¿ë
-        public Button upgradeButton;    // ¾÷±×·¹ÀÌµå ¹öÆ°
-        public Image iconUpgrade;       // ¾÷±×·¹ÀÌµå °¡´É
-        public Image iconMoneyLack;     // ÀçÈ­ ºÎÁ·
-        public Image iconLock;          // Á¶°Ç ºÎÁ·
+        public TMP_Text facilityLv;     // ì‹œì„¤ ë ˆë²¨
+        public TMP_Text upgradeCost;    // ì—…ê·¸ë ˆì´ë“œ ë¹„ìš©
+        public Button upgradeButton;    // ì—…ê·¸ë ˆì´ë“œ ë²„íŠ¼
+        public Image iconUpgrade;       // ì—…ê·¸ë ˆì´ë“œ ê°€ëŠ¥
+        public Image iconMoneyLack;     // ì¬í™” ë¶€ì¡±
+        public Image iconLock;          // ì¡°ê±´ ë¶€ì¡±
         public Image iconMax;           // MAX
-        public Image normalImage;       // ±âº» ÀÌ¹ÌÁö
-        public Image normalImage2;       // ±âº» ÀÌ¹ÌÁö
-        public Image maxImage;          // ¸¸·¾ ÀÌ¹ÌÁö
-        public Image maxImage2;          // ¸¸·¾ ÀÌ¹ÌÁö
+        public Image normalImage;       // ê¸°ë³¸ ì´ë¯¸ì§€
+        public Image normalImage2;       // ê¸°ë³¸ ì´ë¯¸ì§€
+        public Image maxImage;          // ë§Œë ™ ì´ë¯¸ì§€
+        public Image maxImage2;          // ë§Œë ™ ì´ë¯¸ì§€
     }
 
-    [SerializeField] private Button _btnClose;      // ´İ±â ¹öÆ°
-    [SerializeField] private FacilityPopup _panelClose;      // ´İ±â ¹öÆ°
-    [Header("½Ã¼³ ¼±ÅÃ ¹öÆ°")]
+    [SerializeField] private Button _btnClose;      // ë‹«ê¸° ë²„íŠ¼
+    [SerializeField] private FacilityPopup _panelClose;      // ë‹«ê¸° ë²„íŠ¼
+    [Header("ì‹œì„¤ ì„ íƒ ë²„íŠ¼")]
     [SerializeField] private Button _btnSchool;
     [SerializeField] private Button _btnGym;
     [SerializeField] private Button _btnCafeteria;
     [SerializeField] private Button _btnCounseling;
 
-    [Header("¾÷±×·¹ÀÌµå UI")]
+    [Header("ì—…ê·¸ë ˆì´ë“œ UI")]
     [SerializeField] private FacilityUpgradeRowUI _schoolRow;
     [SerializeField] private FacilityUpgradeRowUI _gymRow;
     [SerializeField] private FacilityUpgradeRowUI _cafeteriaRow;
     [SerializeField] private FacilityUpgradeRowUI _counselingRow;
     
-    // Áßº¹ ¹æÁö
+    // ì¤‘ë³µ ë°©ì§€
     private bool _inited;
     public override void Init()
     {
@@ -50,7 +50,7 @@ public class FacilityPopup : UIBase
         BindButtons();
         RefreshAll();
     }
-    // ¾÷±×·¹ÀÌµå Å¬¸¯ ½Ã ¾÷±×·¹ÀÌµå
+    // ì—…ê·¸ë ˆì´ë“œ í´ë¦­ ì‹œ ì—…ê·¸ë ˆì´ë“œ
     private void BindButtons()
     {
         _schoolRow.upgradeButton.onClick.RemoveAllListeners();
@@ -72,7 +72,7 @@ public class FacilityPopup : UIBase
             RefreshAll();
         }
     }
-    // °»½Å
+    // ê°±ì‹ 
     private void RefreshAll()
     {
         RefreshRow("school", _schoolRow);
@@ -104,7 +104,7 @@ public class FacilityPopup : UIBase
         row.iconMax.gameObject.SetActive(false);
         row.upgradeCost.gameObject.SetActive(false);
 
-        // max·¹º§ ÀÏ‹š
+        // maxë ˆë²¨ ì¼ë–„
         if (next == null)
         {
             row.iconMax.gameObject.SetActive(true);
