@@ -119,7 +119,18 @@ public class LobbyUI : UIBase
             MessengerManager.Instance.OnLatestMessageReceived += UpdateMessagePreview;
         }
 
+        // MoneyManager 구독
+        if (MoneyManager.Instance != null)
+        {
+            MoneyManager.Instance.OnGoldChanged -= UpdateGoldUI;
+            MoneyManager.Instance.OnGoldChanged += UpdateGoldUI;
+
+            MoneyManager.Instance.OnReputationChanged -= UpdateReputationUI;
+            MoneyManager.Instance.OnReputationChanged += UpdateReputationUI;
+        }
+
         RefreshBottomNavTabSprites();
+        MoneyManager.Instance.ForceNotify();
     }
 
     private void UpdateMessagePreview(ChatMessage latestMessage)
@@ -481,6 +492,18 @@ public class LobbyUI : UIBase
         Sprite nextSprite = isActive ? (activeSprite != null ? activeSprite : defaultSprite) : defaultSprite;
         if (nextSprite != null)
             targetImage.sprite = nextSprite;
+    }
+
+    private void UpdateGoldUI(int gold)
+    {
+        if (_txtMoney != null)
+            _txtMoney.text = gold.ToString();
+    }
+
+    private void UpdateReputationUI(int reputation)
+    {
+        if (_txtFame != null)
+            _txtFame.text = reputation.ToString();
     }
 
     // 버튼 타겟 이미지에서 현재 스프라이트를 읽는다

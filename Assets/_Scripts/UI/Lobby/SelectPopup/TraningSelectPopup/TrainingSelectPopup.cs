@@ -30,6 +30,7 @@ public class TrainingSelectPopup : UIPopup
 
     [Header("Navigation")]
     [SerializeField] private Button _btnBack;
+    [SerializeField] private Button _btnTrainingClose;
 
     private TrainingFlowController _trainingFlow;
 
@@ -52,6 +53,12 @@ public class TrainingSelectPopup : UIPopup
         {
             _btnBack.onClick.RemoveAllListeners();
             _btnBack.onClick.AddListener(HandleBackButton);
+        }
+
+        if (_btnTrainingClose != null)
+        {
+            _btnTrainingClose.onClick.RemoveAllListeners();
+            _btnTrainingClose.onClick.AddListener(HandleCloseButton);
         }
 
         ShowPage(0, pushHistory: false);
@@ -462,5 +469,12 @@ public class TrainingSelectPopup : UIPopup
     private void ClearPageHistory()
     {
         _pageHistory.Clear();
+    }
+
+    private void HandleCloseButton()
+    {
+        ClearPageHistory();
+        ClearButtons();
+        Close();
     }
 }
