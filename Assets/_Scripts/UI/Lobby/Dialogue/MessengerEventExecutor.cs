@@ -4,10 +4,10 @@ using UnityEngine;
 public class MessengerEventExecutor : ScriptableObject
 {
     [SerializeField] private string _roomId = "event_01";
-    [SerializeField] private string _roomName = "½Ã½ºÅÛ ¾Ë¸²";
+    [SerializeField] private string _roomName = "ì‹œìŠ¤í…œ ì•Œë¦¼";
     [SerializeField] private MessageSenderType _senderType = MessageSenderType.Them;
     [TextArea(3, 5)]
-    [SerializeField] private string _messageContent = "¸Þ½ÃÁö ³»¿ë";
+    [SerializeField] private string _messageContent = "ë©”ì‹œì§€ ë‚´ìš©";
     [SerializeField] private MessageEventType _eventType = MessageEventType.NormalText;
 
     public void Execute(GameState gameState)

@@ -132,7 +132,7 @@ public class OptionUI : MonoBehaviour
             icon.sprite = _volume2Sprite;
     }
 
-    // º¼·ı ÅØ½ºÆ® ¾÷µ¥ÀÌÆ®
+    // ë³¼ë¥¨ í…ìŠ¤íŠ¸ ì—…ë°ì´íŠ¸
     private void UpdateVolumeText()
     {
         int bgm = Mathf.RoundToInt(_bgmSlider.value * 100f);
