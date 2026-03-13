@@ -68,8 +68,8 @@ public class FacilitySystem : Singleton<FacilitySystem>
                 return false;
             }
         }
-
-        if (!MoneyManager.Instance.TrySpendGold(next.upgradeCost))
+        var current = GetCurrentData(facility);
+        if (!MoneyManager.Instance.TrySpendGold(current.upgradeCost))
         {
             Debug.Log("골드 부족");
             return false;
