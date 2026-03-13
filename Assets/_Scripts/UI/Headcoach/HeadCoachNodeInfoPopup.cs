@@ -155,7 +155,7 @@ public class HeadCoachNodeInfoPopup : MonoBehaviour
         if (_txtDescription != null)
         {
             _txtDescription.text = _selectedNode.nodeData.description;
-            _txtDescription.color = isUnlocked ? _descColorUnlocked : _descColorLocked;
+            _txtDescription.color = _descColorLocked;
         }
 
         SetActive(_txtBlockReason?.gameObject, prereqBlock);
