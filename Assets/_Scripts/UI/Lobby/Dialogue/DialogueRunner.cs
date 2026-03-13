@@ -5,9 +5,9 @@ using System.Linq;
 public class DialogueRunner : Singleton<DialogueRunner>
 {
     [Header("Settings")]
-    [SerializeField] private float _typingDelay = 1.0f; // Å¸ÀÚ Ä¡´Â µô·¹ÀÌ ½Ã°£
+    [SerializeField] private float _typingDelay = 1.0f; // íƒ€ì ì¹˜ëŠ” ë”œë ˆì´ ì‹œê°„
 
-    // ¿ÜºÎ¿¡¼­ Æ¯Á¤ ´ëÈ­¸¦ ½ÃÀÛÇÒ ¶§ È£Ãâ
+    // ì™¸ë¶€ì—ì„œ íŠ¹ì • ëŒ€í™”ë¥¼ ì‹œì‘í•  ë•Œ í˜¸ì¶œ
     public void PlayDialogue(string roomId, string roomName, string diagId, string startNodeId = "index_000")
     {
         StartCoroutine(ProcessNodeRoutine(roomId, roomName, diagId, startNodeId));
@@ -15,7 +15,7 @@ public class DialogueRunner : Singleton<DialogueRunner>
 
     private IEnumerator ProcessNodeRoutine(string roomId, string roomName, string diagId, string nodeId)
     {
-        // 1. ´ëÈ­ Á¾·á Á¶°Ç
+        // 1. ëŒ€í™” ì¢…ë£Œ ì¡°ê±´
         if (string.IsNullOrEmpty(nodeId) || nodeId == "EOS" || nodeId == "END" || nodeId == "-")
             yield break;
 
@@ -24,26 +24,26 @@ public class DialogueRunner : Singleton<DialogueRunner>
 
         if (flowTable == null || textTable == null)
         {
-            Debug.LogError("[DialogueRunner] CachedSOData¿¡¼­ ´ÙÀÌ¾ó·Î±× Å×ÀÌºíÀ» Ã£À» ¼ö ¾ø½À´Ï´Ù.");
+            Debug.LogError("[DialogueRunner] CachedSODataì—ì„œ ë‹¤ì´ì–¼ë¡œê·¸ í…Œì´ë¸”ì„ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤.");
             yield break;
         }
 
-        // 2. ÇöÀç Èå¸§ ³ëµå Ã£±â
+        // 2. í˜„ì¬ íë¦„ ë…¸ë“œ ì°¾ê¸°
         var row = flowTable.Rows.FirstOrDefault(r => r.iD == diagId && r.messageIndex == nodeId);
         if (row == null)
         {
-            Debug.LogWarning($"[DialogueRunner] ³ëµå¸¦ Ã£À» ¼ö ¾ø½À´Ï´Ù: {diagId} / {nodeId}");
+            Debug.LogWarning($"[DialogueRunner] ë…¸ë“œë¥¼ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤: {diagId} / {nodeId}");
             yield break;
         }
 
-        // 3. µ¹¹ß ÀÌº¥Æ®(½ºÅÈ º¯È­) ¿¬µ¿
+        // 3. ëŒë°œ ì´ë²¤íŠ¸(ìŠ¤íƒ¯ ë³€í™”) ì—°ë™
         if (!string.IsNullOrEmpty(row.suddenEvent) && row.suddenEvent != "-")
         {
             if (SuddenEventManager.Instance != null)
                 SuddenEventManager.Instance.ExecuteEventById(row.suddenEvent);
         }
 
-        // 4. ´ë»ç ¹× È­ÀÚ ¼¼ÆÃ
+        // 4. ëŒ€ì‚¬ ë° í™”ì ì„¸íŒ…
         string messageText = "";
         MessageSenderType senderType = MessageSenderType.Them;
 
@@ -52,10 +52,10 @@ public class DialogueRunner : Singleton<DialogueRunner>
         {
             messageText = textRow.dialogue;
             if (textRow.speaker.ToLower() == "player")
-                senderType = MessageSenderType.Me; // ³»°¡ º¸³»´Â ¸Ş½ÃÁö (¿ìÃø Á¤·Ä)
+                senderType = MessageSenderType.Me; // ë‚´ê°€ ë³´ë‚´ëŠ” ë©”ì‹œì§€ (ìš°ì¸¡ ì •ë ¬)
         }
 
-        // 5. ¼±ÅÃÁö ºĞ±â ³ëµå
+        // 5. ì„ íƒì§€ ë¶„ê¸° ë…¸ë“œ
         if (row.isChoice)
         {
             ChatMessage choiceMsg = new ChatMessage(MessageSenderType.Them, "", MessageEventType.Choice);
@@ -82,13 +82,13 @@ public class DialogueRunner : Singleton<DialogueRunner>
 
             MessengerManager.Instance.ReceiveMessage(roomId, roomName, choiceMsg);
         }
-        // 6. ÀÏ¹İ ´ëÈ­ ³ëµå
+        // 6. ì¼ë°˜ ëŒ€í™” ë…¸ë“œ
         else
         {
             ChatMessage normalMsg = new ChatMessage(senderType, messageText, MessageEventType.NormalText);
             MessengerManager.Instance.ReceiveMessage(roomId, roomName, normalMsg);
 
-            // Å¸ÀÌÇÎ µô·¹ÀÌ (»ó´ë¹æÀº ±æ°Ô, ³ª´Â Âª°Ô)
+            // íƒ€ì´í•‘ ë”œë ˆì´ (ìƒëŒ€ë°©ì€ ê¸¸ê²Œ, ë‚˜ëŠ” ì§§ê²Œ)
             if (senderType == MessageSenderType.Them) yield return new WaitForSeconds(_typingDelay);
             else yield return new WaitForSeconds(_typingDelay * 0.5f);
 
