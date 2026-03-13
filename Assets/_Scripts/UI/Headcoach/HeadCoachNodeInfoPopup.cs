@@ -155,7 +155,7 @@ public class HeadCoachNodeInfoPopup : MonoBehaviour
         if (_txtDescription != null)
         {
             _txtDescription.text = _selectedNode.nodeData.description;
-            _txtDescription.color = isUnlocked ? _descColorUnlocked : _descColorLocked;
+            _txtDescription.color = _descColorLocked;
         }
 
         SetActive(_txtBlockReason?.gameObject, prereqBlock);
@@ -219,7 +219,7 @@ public class HeadCoachNodeInfoPopup : MonoBehaviour
     {
         UIManager.Instance.ShowPopup(UIPopupRequest.Simple(
             title: "재화 부족",
-            message: "노드를 해금하기엔 아직 이름이 \r알려지지 않았습니다. \n\r\n경기를 통해 명성을 더 쌓으세요.",
+            message: "노드를 해금하기엔 아직 이름이 \n알려지지 않았습니다. \n\n경기를 통해 명성을 더 쌓으세요.",
             onPrimary: null,
             onCancel: null,
             showCancel: false
