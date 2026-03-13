@@ -14,7 +14,12 @@ public class SaveManager : Singleton<SaveManager>
 
     protected override void OnSingletonAwake()
     {
-        CurrentUserData = new UserData();
+        LoadUserData();
+
+        if (CurrentUserData == null)
+        {
+            CurrentUserData = new UserData();
+        }
     }
 
     public void LoadSlot(int slotIndex, string sceneName)
@@ -54,6 +59,7 @@ public class SaveManager : Singleton<SaveManager>
         ApplyTournamentData(CurrentData.tournament);    // 토너먼트 씬 복원 (로비에선 자동 스킵)
         ApplyMatchSimData(CurrentData.matchSim);        // 경기 시뮬레이션 복원 (토너먼트 씬 외에선 자동 스킵)
         ApplyActiveEventEffects(CurrentData.flowData);  // 이벤트 activeEffectIds 복원
+        RestoreHeadCoachNodesIfPossible();              // 감독 노드 복원 시도 (HeadCoachManager 초기화 여부에 따라 내부에서 처리)
 
         // HeadCoachManager는 InitFromTable() 완료 이후에 복원 가능
         if (HeadCoachManager.Instance != null && HeadCoachManager.Instance.IsInitialized)
@@ -77,6 +83,8 @@ public class SaveManager : Singleton<SaveManager>
 
     public bool CreateNewGameSlot(string schoolName)
     {
+        LoadUserData();
+
         int slotIndex = SaveSystem.Instance.FindFirstEmptySlotIndex();
         if (slotIndex < 0)
         {
@@ -130,7 +138,9 @@ public class SaveManager : Singleton<SaveManager>
         if (HeadCoachManager.Instance != null && HeadCoachManager.Instance.IsInitialized)
         {
             CurrentData.unlockedNodeIds = HeadCoachManager.Instance.GetUnlockedNodeIds();
+            Debug.Log($"[SaveManager] SaveCurrent | slot unlockedNodeIds.Count={CurrentData.unlockedNodeIds.Count}");
         }
+
 
         SaveUserData();
 
@@ -214,6 +224,7 @@ public class SaveManager : Singleton<SaveManager>
         if (HeadCoachManager.Instance != null && HeadCoachManager.Instance.IsInitialized)
             CurrentUserData.unlockedNodeIds = HeadCoachManager.Instance.GetUnlockedNodeIds();
 
+        Debug.Log($"[SaveManager] SaveUserData | unlockedNodeIds.Count={(CurrentUserData.unlockedNodeIds != null ? CurrentUserData.unlockedNodeIds.Count : -1)}");
         SaveSystem.Instance.SaveUserData(CurrentUserData);
     }
 
@@ -231,6 +242,8 @@ public class SaveManager : Singleton<SaveManager>
         CurrentUserData = SaveSystem.Instance.LoadUserData();
         if (CurrentUserData == null)
             CurrentUserData = new UserData();
+
+        Debug.Log($"[SaveManager] LoadUserData | unlockedNodeIds.Count={(CurrentUserData.unlockedNodeIds != null ? CurrentUserData.unlockedNodeIds.Count : -1)}");
     }
 
     private static SavedFlowData CollectFlowData()
@@ -599,5 +612,31 @@ public class SaveManager : Singleton<SaveManager>
     {
         choiceAction?.Invoke();
         AutoSaveByBranch(branchName);
+    }
+
+    public void RestoreHeadCoachNodesIfPossible()
+    {
+        if (HeadCoachManager.Instance == null || !HeadCoachManager.Instance.IsInitialized)
+        {
+            Debug.LogWarning("[SaveManager] HeadCoachManager가 아직 초기화되지 않아 감독 노드 복원을 건너뜁니다.");
+            return;
+        }
+
+        List<int> unlockedNodeIds = null;
+
+        if (CurrentUserData != null && CurrentUserData.unlockedNodeIds != null && CurrentUserData.unlockedNodeIds.Count > 0)
+        {
+            unlockedNodeIds = CurrentUserData.unlockedNodeIds;
+        }
+        else if (CurrentData != null && CurrentData.unlockedNodeIds != null)
+        {
+            unlockedNodeIds = CurrentData.unlockedNodeIds;
+        }
+
+        if (unlockedNodeIds == null)
+            unlockedNodeIds = new List<int>();
+
+        HeadCoachManager.Instance.RestoreUnlockedNodes(unlockedNodeIds);
+        Debug.Log($"[SaveManager] 감독 노드 복원 완료. count={unlockedNodeIds.Count}");
     }
 }
