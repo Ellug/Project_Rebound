@@ -8,11 +8,14 @@ public class GameManager : Singleton<GameManager>
     private const string LobbyScene = "Lobby";
     private const string TournamentScene = "Tournament";
     private const string TitleScene = "Title";
+    private const int WeekendTrainingConfirmIndex = 901;
+    private const int WeekendTrainingCancelIndex = 902;
 
     private TurnManager _turnManager;               // Lobby 씬의 TurnManager (씬별 런타임 참조)
     private AlwaysEventManager _alwaysEventManager; // Lobby 씬의 AlwaysEventManager
     private LobbyUI _lobbyUI;                       // Lobby 씬의 LobbyUI
     private TournamentResultUI _tournamentResultUI; // Lobby 씬의 TournamentResultUI
+    private TrainingFlowController _trainingFlowController; // Lobby 씬의 TrainingFlowController
     private RecruitmentManager _recruitmentManager; // Lobby 씬의 RecruitmentManager
     private bool _isLoadingTournament;              // 토너먼트 씬 로딩 중 플래그
     private bool _initialRecruitmentTriggered;      // 게임 시작 시 최초 영입 트리거 여부 (중복 방지)
@@ -36,6 +39,10 @@ public class GameManager : Singleton<GameManager>
     public DateTime LeagueTermEnd => _flowData.LeagueTermEnd;
     public HashSet<string> ActiveEventIds => _flowData.ActiveEventIds;
     public bool HasPendingFriendlyMatch => _flowData.HasPendingFriendlyMatch;
+
+    public DateTime FriendlyMatchDate { get; private set; }
+    public string FriendlyOpponentName { get; private set; } = string.Empty;
+    public bool IsFriendlyMatchConfirmed { get; private set; }
 
     // MaxRecruitCount는 RecruitmentManager가 관리 — GameFlowData 경유 없이 직접 위임
     public int MaxRecruitCount
@@ -90,9 +97,10 @@ public class GameManager : Singleton<GameManager>
         ClearFlowRuntimeState();
     }
 
-    // 새 게임 시작 시 모든 상태 초기화 => 타이틀에서 새게임시 실행해야할 듯
-    // GameManager가 로비 씬에만 존재하므로 TryInitializeLobbyFlow 내부에서 자동 처리됨
-    public void StartNewGame()
+    // 새 게임 시작 시 학생/팩토리 상태 초기화
+    // ClearFlowRuntimeState()와 달리 _isNewGame을 건드리지 않음
+    // — TryTriggerInitialRecruitment()가 _isNewGame을 읽어야 하므로
+    private void ResetNewGameState()
     {
         StudentFactory.ResetUsedNames();
         StudentFactory.ResetStudentIdCounter();
@@ -100,8 +108,7 @@ public class GameManager : Singleton<GameManager>
         if (StudentManager.Instance != null)
             StudentManager.Instance.ClearAllStudents();
 
-        _initialRecruitmentTriggered = false; // 새 게임 시 영입 트리거 초기화
-        ClearFlowRuntimeState();
+        _initialRecruitmentTriggered = false;
     }
 
     // 로비에서 턴 실행 요청
@@ -137,6 +144,7 @@ public class GameManager : Singleton<GameManager>
         _alwaysEventManager = null;
         _lobbyUI = null;
         _tournamentResultUI = null;
+        _trainingFlowController = null;
         _recruitmentManager = null;
         _isLoadingTournament = false;
         _lobbyInitialized = false; // 로비 초기화 플래그 리셋
@@ -237,14 +245,18 @@ public class GameManager : Singleton<GameManager>
         if (!scene.IsValid() || scene.name != LobbyScene)
             return;
 
-        if (_lobbyInitialized) return; // 이중 호출 방지
+        if (_lobbyInitialized) return;
         _lobbyInitialized = true;
 
-        // SyncFlowStateFromLobby 실행 전에 새 게임 여부를 먼저 저장
+        // SaveManager flowData → _flowData 복원
+        RestoreFlowDataFromSave();
+
         _isNewGame = !_flowData.HasFlowState;
 
         if (_isNewGame)
+        {
             ResetNewGameState();
+        }
 
         CacheSceneReferences();         // 1. 씬 오브젝트 참조 캐싱
         SubscribeTurnManager();         // 2. TurnManager 이벤트 구독
@@ -258,19 +270,6 @@ public class GameManager : Singleton<GameManager>
         TryTriggerInitialRecruitment(); // 10. 게임 시작 시 최초 영입 트리거
     }
 
-    // 새 게임 상태 초기화
-    // GameManager가 타이틀 씬에 없으므로 로비 씬 최초 진입 시점에 처리
-    private void ResetNewGameState()
-    {
-        StudentFactory.ResetUsedNames();
-        StudentFactory.ResetStudentIdCounter();
-
-        if (StudentManager.Instance != null)
-            StudentManager.Instance.ClearAllStudents();
-
-        _initialRecruitmentTriggered = false;
-    }
-
     // Lobby 씬 오브젝트 참조 캐싱
     private void CacheSceneReferences()
     {
@@ -278,6 +277,7 @@ public class GameManager : Singleton<GameManager>
         _alwaysEventManager = FindFirstObjectByType<AlwaysEventManager>();
         _lobbyUI = FindFirstObjectByType<LobbyUI>();
         _tournamentResultUI = FindFirstObjectByType<TournamentResultUI>(FindObjectsInactive.Include);
+        _trainingFlowController = FindFirstObjectByType<TrainingFlowController>(FindObjectsInactive.Include);
         _recruitmentManager = FindFirstObjectByType<RecruitmentManager>(); // 영입 매니저 참조
         _isLoadingTournament = false;
 
@@ -390,21 +390,32 @@ public class GameManager : Singleton<GameManager>
     }
 
     // 게임 시작 시 최초 영입 트리거
-    // _isNewGame 플래그로 판단 (SyncFlowStateFromLobby 이후에도 새 게임 여부 유지)
+    // _isNewGame이 아닌 SaveManager.IsPendingNewGame을 기준으로 판단
+    // — _isNewGame은 ClearFlowRuntimeState()에서 false로 리셋되어
+    //   이어하기 시에도 영입이 뜨는 버그가 있었음
+    // — IsPendingNewGame은 CreateNewGameSlot()에서 true,
+    //   LoadSlot()에서 false로 명시적으로 세팅되므로 신뢰도 높음
     private void TryTriggerInitialRecruitment()
     {
         if (_initialRecruitmentTriggered) return;   // 이미 트리거됨
-        if (!_isNewGame) return;                     // 새 게임이 아님 (씬 복귀)
+
+        // SaveManager.IsPendingNewGame이 명시적으로 새 게임임을 보장
+        bool isNewGame = SaveManager.Instance != null && SaveManager.Instance.IsPendingNewGame;
+        if (!isNewGame) return;
+
         if (_recruitmentManager == null) return;
 
         _initialRecruitmentTriggered = true;
+        SaveManager.Instance.ConsumePendingNewGameFlag(); // IsPendingNewGame → false 소비
         _recruitmentManager.TriggerInitialRecruitment();
     }
 
-    // 영입 완료 시 호출 — 새 게임 최초 영입인 경우에만 슬롯 자동 배치
+    // 영입 완료 시 호출 — 최초 영입 트리거된 경우에만 슬롯 자동 배치
+    // _isNewGame 대신 _initialRecruitmentTriggered 사용
+    // — 영입 완료 시점에 _isNewGame이 이미 false로 바뀌어 있을 수 있으므로
     private void HandleRecruitmentCompleted(List<Student> recruits)
     {
-        if (!_isNewGame) return;
+        if (!_initialRecruitmentTriggered) return;
 
         AutoAssignStudentsToSlots(recruits);
     }
@@ -485,18 +496,13 @@ public class GameManager : Singleton<GameManager>
     // 주말 훈련 확인 (훈련 진행)
     private void OnWeekendTrainingConfirmed()
     {
-        Debug.Log("[GameManager] 주말 훈련 확인");
+        ExecuteWeekendTrainingFlow(WeekendTrainingConfirmIndex, "주말 훈련");
     }
 
     // 주말 훈련 취소 (주말 스킵 → 월요일로)
     private void OnWeekendTrainingCancelled()
     {
-        if (_turnManager == null) return;
-
-        // 금요일 기준 토·일 2일 스킵 → 월요일
-        _turnManager.SkipDays(2);
-        SyncFlowStateFromLobby();
-        RefreshLobbyTopInfo();
+        ExecuteWeekendTrainingFlow(WeekendTrainingCancelIndex, "주말 휴식");
     }
 
     // 친선경기 진입 처리 (추후 구현)
@@ -505,6 +511,69 @@ public class GameManager : Singleton<GameManager>
         _flowData.HasPendingFriendlyMatch = false;
         // TODO: 친선경기 씬/흐름 연결
         Debug.Log("[GameManager] 친선경기 진입 (미구현)");
+    }
+
+    // 토요일 기준 토·일 2일을 건너뛰어 월요일로 이동
+    private void SkipWeekendToMonday()
+    {
+        _turnManager.SkipDays(2);
+        SyncFlowStateFromLobby();
+        RefreshLobbyTopInfo();
+    }
+
+    // WeekendTrainingTable에서 index로 row를 조회해 전체 학생에게 적용
+    private void ApplyWeekendTrainingEffect(int rowIndex)
+    {
+        WeekendTrainingTableSO table = CachedSOData.Get<WeekendTrainingTableSO>();
+        WeekendTrainingRow row = FindWeekendTrainingRow(table, rowIndex);
+
+        StudentManager.Instance.ApplyWeekendTrainingEffect(row);
+        Debug.Log($"[GameManager] 주말 효과 적용 완료 index={rowIndex}");
+    }
+
+    private static WeekendTrainingRow FindWeekendTrainingRow(WeekendTrainingTableSO table, int rowIndex)
+    {
+        for (int i = 0; i < table.Rows.Count; i++)
+        {
+            WeekendTrainingRow row = table.Rows[i];
+            if (row != null && row.index == rowIndex)
+                return row;
+        }
+
+        return null;
+    }
+
+    // 기존 육성 커맨드와 동일하게 TrainingFlowController를 통해 주말 효과를 적용
+    private void ExecuteWeekendTrainingFlow(int rowIndex, string trainingName)
+    {
+        if (_trainingFlowController == null)
+            _trainingFlowController = FindFirstObjectByType<TrainingFlowController>(FindObjectsInactive.Include);
+
+        if (_trainingFlowController == null)
+        {
+            ApplyWeekendTrainingEffect(rowIndex);
+            SkipWeekendToMonday();
+            return;
+        }
+
+        _trainingFlowController.OnFlowComplete -= HandleWeekendTrainingFlowComplete;
+        _trainingFlowController.OnFlowComplete += HandleWeekendTrainingFlowComplete;
+
+        _trainingFlowController.Execute(
+            trainingKey: $"weekend_{rowIndex}",
+            trainingName: trainingName,
+            students: StudentManager.Instance.Students,
+            applyEffect: (_, __) => ApplyWeekendTrainingEffect(rowIndex),
+            backgroundSprite: null
+        );
+    }
+
+    private void HandleWeekendTrainingFlowComplete()
+    {
+        if (_trainingFlowController != null)
+            _trainingFlowController.OnFlowComplete -= HandleWeekendTrainingFlowComplete;
+
+        SkipWeekendToMonday();
     }
 
     // AlwaysEventManager가 이벤트 활성화를 알릴 때 호출 — row.type / row.id 기반으로 분기
@@ -566,5 +635,71 @@ public class GameManager : Singleton<GameManager>
         _flowData.LeagueTermEnd = default;
         _flowData.IsLeagueOpened = false;
         _flowData.IsLeagueHandled = false;
+    }
+
+    //친선경기 예약
+    public void ScheduleFriendlyMatch(DateTime matchDate, string opponentName)
+    {
+        FriendlyMatchDate = matchDate.Date;
+        FriendlyOpponentName = opponentName ?? string.Empty;
+        IsFriendlyMatchConfirmed = true;
+    }
+
+    //친선경기 해제 
+    public void ClearFriendlyMatchSchedule()
+    {
+        FriendlyMatchDate = default;
+        FriendlyOpponentName = string.Empty;
+        IsFriendlyMatchConfirmed = false;
+    }
+
+    // SaveManager.CurrentData.flowData → GameManager._flowData 복원
+    // 이어하기 로드 시에만 유효. 새 게임 슬롯은 currentDate가 비어 있으므로 자동 스킵됨
+    private void RestoreFlowDataFromSave()
+    {
+        if (SaveManager.Instance == null)
+            return;
+
+        SavedFlowData saved = SaveManager.Instance.GetSavedFlowData();
+        if (saved == null)
+            return;
+
+        // currentDate가 비어 있으면 새 게임 슬롯 → 복원 스킵
+        if (string.IsNullOrEmpty(saved.currentDate))
+            return;
+
+        DateTime parsedDate = saved.ParseCurrentDate();
+        if (parsedDate == default)
+            return;
+
+        _flowData.Sync(
+            parsedDate,
+            saved.turnIndex,
+            saved.dayIndex,
+            saved.currentYear,
+            saved.phase,
+            saved.isLeagueOpened,
+            saved.isLeagueHandled
+        );
+
+        _flowData.LeagueTermEnd = saved.ParseLeagueTermEnd();
+        _flowData.HasPendingFriendlyMatch = saved.hasPendingFriendlyMatch;
+
+        _flowData.ActiveEventIds.Clear();
+        if (saved.activeEventIds != null)
+        {
+            foreach (string id in saved.activeEventIds)
+                _flowData.ActiveEventIds.Add(id);
+        }
+
+        // 친선경기 상세 복원
+        DateTime friendlyDate = saved.ParseFriendlyMatchDate();
+        FriendlyMatchDate = friendlyDate != default ? friendlyDate.Date : default;
+        FriendlyOpponentName = saved.friendlyOpponentName ?? string.Empty;
+        IsFriendlyMatchConfirmed = saved.friendlyMatchConfirmed;
+
+        Debug.Log($"[GameManager] flowData 복원: {parsedDate:yyyy-MM-dd}, phase={saved.phase}, events={_flowData.ActiveEventIds.Count}");
+
+        SaveManager.Instance.ApplyLoadedData();
     }
 }
