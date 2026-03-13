@@ -8,13 +8,17 @@ public class FacilityPopup : UIBase
     [Serializable]
     private class FacilityUpgradeRowUI
     {
-        public TMP_Text facilityLv;           // 시설 레벨
-        public TMP_Text upgradeCost;            // 업그레이드 비용
-        public Button upgradeButton;            // 업그레이드 버튼
-        public Image iconUpgrade;      // 업그레이드 가능
-        public Image iconMoneyLack;      // 재화 부족
-        public Image iconLock;            // 조건 부족
-        public Image iconMax;          // MAX
+        public TMP_Text facilityLv;     // 시설 레벨
+        public TMP_Text upgradeCost;    // 업그레이드 비용
+        public Button upgradeButton;    // 업그레이드 버튼
+        public Image iconUpgrade;       // 업그레이드 가능
+        public Image iconMoneyLack;     // 재화 부족
+        public Image iconLock;          // 조건 부족
+        public Image iconMax;           // MAX
+        public Image normalImage;       // 기본 이미지
+        public Image normalImage2;       // 기본 이미지
+        public Image maxImage;          // 만렙 이미지
+        public Image maxImage2;          // 만렙 이미지
     }
 
     [SerializeField] private Button _btnClose;      // 닫기 버튼
@@ -106,7 +110,48 @@ public class FacilityPopup : UIBase
             row.iconMax.gameObject.SetActive(true);
             row.upgradeButton.interactable = false;
             row.upgradeButton.image.enabled = false;
+
+            if (row.normalImage != null)
+            {
+                row.normalImage.gameObject.SetActive(false);
+            }
+
+            if (row.maxImage != null)
+            {
+                row.maxImage.gameObject.SetActive(true);
+            }
+            if (row.normalImage2 != null)
+            {
+                row.normalImage2.gameObject.SetActive(false);
+            }
+
+            if (row.maxImage2 != null)
+            {
+                row.maxImage2.gameObject.SetActive(true);
+            }
+
             return;
+        }
+        else
+        {
+            if (row.normalImage != null)
+            {
+                row.normalImage.gameObject.SetActive(true);
+            }
+
+            if (row.maxImage != null)
+            {
+                row.maxImage.gameObject.SetActive(false);
+            }
+            if (row.normalImage2 != null)
+            {
+                row.normalImage2.gameObject.SetActive(true);
+            }
+
+            if (row.maxImage2 != null)
+            {
+                row.maxImage2.gameObject.SetActive(false);
+            }
         }
 
         int money = MoneyManager.Instance.Gold;
@@ -119,18 +164,22 @@ public class FacilityPopup : UIBase
             return;
         }
 
-        if (money < next.upgradeCost)
+        int cost = current.upgradeCost;
+        if (money < cost)
         {
             row.iconMoneyLack.gameObject.SetActive(true);
-            row.upgradeCost.text = next.upgradeCost.ToString();
+            row.upgradeCost.text = cost.ToString();
+            row.upgradeCost.gameObject.SetActive(true);
+            row.upgradeCost.color = Color.white;
             row.upgradeButton.interactable = false;
             row.upgradeButton.image.enabled = false;
             return;
         }
 
         row.iconUpgrade.gameObject.SetActive(true);
-        row.upgradeCost.text = next.upgradeCost.ToString();
+        row.upgradeCost.text = cost.ToString();
         row.upgradeCost.gameObject.SetActive(true);
+        row.upgradeCost.color = Color.black;
         row.upgradeButton.interactable = true;
         row.upgradeButton.image.enabled = true;
     }
