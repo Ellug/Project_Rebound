@@ -28,8 +28,8 @@ public class HeadCoachPopup : UIBase
     [SerializeField] private Button _btnClose;
 
     private bool _isInited;
-    private HeadCoachNodeSlot _selectedSlot; // 현재 하이라이트 중인 슬롯
-    private int _selectedNodeId = -1;        // 현재 선택 중인 노드 ID
+    private HeadCoachNodeSlot _selectedSlot;
+    private int _selectedNodeId = -1;
 
     public override void Init()
     {
@@ -44,13 +44,14 @@ public class HeadCoachPopup : UIBase
     public override void Open()
     {
         base.Open();
+
         HeadCoachManager.Instance.OnTreeChanged -= RefreshAll;
         HeadCoachManager.Instance.OnTreeChanged += RefreshAll;
+
         MoneyManager.Instance.OnReputationChanged -= RefreshFameArea;
         MoneyManager.Instance.OnReputationChanged += RefreshFameArea;
-        RefreshAll();
 
-        // 진입 시 스크롤 초점을 최하단(1티어 시작점)에 맞춤
+        RefreshAll();
         StartCoroutine(ScrollToBottomNextFrame());
     }
 
@@ -58,8 +59,10 @@ public class HeadCoachPopup : UIBase
     {
         HeadCoachManager.Instance.OnTreeChanged -= RefreshAll;
         MoneyManager.Instance.OnReputationChanged -= RefreshFameArea;
-        ClearHighlight();
+
+        ClearSelection();
         _nodeInfoPopup?.Hide();
+
         base.Close();
     }
 
@@ -84,7 +87,6 @@ public class HeadCoachPopup : UIBase
         RestoreHighlight();
     }
 
-    // Content 하위 전체에서 티어 게이트 슬롯을 찾아 진행도 갱신
     private void RefreshTierGateSlots()
     {
         if (_contentRoot == null) return;
@@ -93,7 +95,6 @@ public class HeadCoachPopup : UIBase
             gateSlot.RefreshSlot();
     }
 
-    // 각 슬롯에 지정된 nodeId로 노드를 찾아 할당, 매칭되는 노드가 없으면 슬롯 비활성화
     private void RebuildLane(Transform laneRoot)
     {
         if (laneRoot == null) return;
@@ -117,7 +118,6 @@ public class HeadCoachPopup : UIBase
         RefreshConnectors(laneRoot);
     }
 
-    // 두 노드의 해금 상태에 따라 연결선 색상 갱신
     private static void RefreshConnectors(Transform laneRoot)
     {
         foreach (Transform child in laneRoot)
@@ -151,15 +151,15 @@ public class HeadCoachPopup : UIBase
     {
         bool success = HeadCoachManager.Instance.TryUnlockNode(nodeId);
 
-        // 해금 성공 시 팝업을 닫지 않고 MAX 상태로 즉시 갱신
         if (success)
         {
+            SaveManager.Instance?.SaveCurrent();
+
             RestoreHighlight();
             _nodeInfoPopup?.RefreshPopup();
         }
     }
 
-    // 레인 전체를 순회해 nodeId가 일치하는 슬롯 반환
     private HeadCoachNodeSlot FindSlot(int nodeId)
     {
         foreach (Transform laneRoot in new[] { _attackLaneRoot, _defenseLaneRoot, _supportLaneRoot })
@@ -177,25 +177,34 @@ public class HeadCoachPopup : UIBase
         return null;
     }
 
-    private void RestoreHighlight()
+    // 하이라이트만 해제, 선택 정보는 유지
+    private void ClearHighlight()
     {
-        if (_selectedNodeId < 0)
-            return;
-
-        _selectedSlot = FindSlot(_selectedNodeId);
-        _selectedSlot?.SetHighlight(true);
+        _selectedSlot?.SetHighlight(false);
     }
 
-    private void ClearHighlight()
+    // 하이라이트 + 선택 정보까지 완전 초기화
+    private void ClearSelection()
     {
         _selectedSlot?.SetHighlight(false);
         _selectedSlot = null;
         _selectedNodeId = -1;
     }
 
+    private void RestoreHighlight()
+    {
+        if (_selectedNodeId < 0)
+            return;
+
+        _selectedSlot?.SetHighlight(false);
+        _selectedSlot = FindSlot(_selectedNodeId);
+        _selectedSlot?.SetHighlight(true);
+    }
+
     private IEnumerator ScrollToBottomNextFrame()
     {
-        if (_laneScrollRect == null) yield break;
+        if (_laneScrollRect == null)
+            yield break;
 
         yield return null;
         Canvas.ForceUpdateCanvases();

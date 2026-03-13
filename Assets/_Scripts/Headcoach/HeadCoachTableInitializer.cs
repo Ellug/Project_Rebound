@@ -22,7 +22,6 @@ public static class HeadCoachTableInitializer
         }
 
         foreach (CoachNodePrerequisiteRow row in prerequisiteTable.Rows)
-            Debug.Log($"[Prerequisite] id={row.col1} nodeId={row.nodeId} targetId={row.targetPrerequisiteId}");
 
         HeadCoachManager.Instance.InitFromTable(
             ConvertMasterRows(masterTable),

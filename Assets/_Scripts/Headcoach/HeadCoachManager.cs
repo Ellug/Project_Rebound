@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 // 감독 노드 시스템 매니저
 // NodeContainer를 소유하고 노드 해금/조회/저장복원을 담당
@@ -37,6 +38,10 @@ public class HeadCoachManager : Singleton<HeadCoachManager>
     {
         if (IsInitialized) return;
         IsInitialized = true;
+        Debug.Log("[HeadCoachTableInitializer] 초기화 완료");
+
+        SaveManager.Instance?.RestoreHeadCoachNodesIfPossible();
+
 
         Dictionary<int, HeadCoachEffectData> effectMap = effectRows.ToDictionary(e => e.effectId);
 
@@ -65,6 +70,11 @@ public class HeadCoachManager : Singleton<HeadCoachManager>
 
         foreach (HeadCoachPrerequisiteData prerequisite in prerequisiteRows)
             _container.AddPrerequisite(prerequisite.nodeId, prerequisite.targetPrerequisiteId);
+
+        if (SaveManager.Instance != null)
+        {
+            SaveManager.Instance.RestoreHeadCoachNodesIfPossible();
+        }
     }
 
     // 명성치 차감 후 노드 해금, 실패 시 false 반환
