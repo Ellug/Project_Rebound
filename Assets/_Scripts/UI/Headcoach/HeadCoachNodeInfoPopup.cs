@@ -218,8 +218,8 @@ public class HeadCoachNodeInfoPopup : MonoBehaviour
     private void ShowShortageModal()
     {
         UIManager.Instance.ShowPopup(UIPopupRequest.Simple(
-            title: "명성치 부족",
-            message: "명성치가 부족합니다.",
+            title: "재화 부족",
+            message: "노드를 해금하기엔 아직 이름이 \r알려지지 않았습니다. \n\r\n경기를 통해 명성을 더 쌓으세요.",
             onPrimary: null,
             onCancel: null,
             showCancel: false
