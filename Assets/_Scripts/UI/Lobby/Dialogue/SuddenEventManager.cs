@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SuddenEventManager : Singleton<SuddenEventManager>
 {
-    // Æ¯Á¤ »óÈ²¿¡ ¸Â´Â ÀÌº¥Æ®¸¦ 1°³¸¸ °ñ¶ó¼­ ¹ß»ı½ÃÅ´
+    // íŠ¹ì • ìƒí™©ì— ë§ëŠ” ì´ë²¤íŠ¸ë¥¼ 1ê°œë§Œ ê³¨ë¼ì„œ ë°œìƒì‹œí‚´
     public void EvaluateEvents(SuddenEventConditionFlags condition, SuddenEventContextFlags context)
     {
         var table = CachedSOData.Get<SuddenEventTableSO>();
@@ -14,22 +14,22 @@ public class SuddenEventManager : Singleton<SuddenEventManager>
 
         foreach (var row in table.Rows)
         {
-            // Á¶°ÇÀÌ³ª ½ÃÁ¡ÀÌ ¸ÂÁö ¾ÊÀ¸¸é ÆĞ½º
+            // ì¡°ê±´ì´ë‚˜ ì‹œì ì´ ë§ì§€ ì•Šìœ¼ë©´ íŒ¨ìŠ¤
             if ((row.condition & condition) == 0) continue;
             if ((row.context & context) == 0) continue;
 
-            // È®·ü °è»ê
+            // í™•ë¥  ê³„ì‚°
             if (row.isProbable)
             {
                 if (UnityEngine.Random.value > row.probability)
-                    continue; // È®·ü ½ÇÆĞ ½Ã ÆĞ½º
+                    continue; // í™•ë¥  ì‹¤íŒ¨ ì‹œ íŒ¨ìŠ¤
             }
 
-            // Á¶°ÇÀ» ¸ğµÎ Åë°úÇÑ ÀÌº¥Æ®¸¦ ÈÄº¸ ¸ñ·Ï¿¡ Ãß°¡
+            // ì¡°ê±´ì„ ëª¨ë‘ í†µê³¼í•œ ì´ë²¤íŠ¸ë¥¼ í›„ë³´ ëª©ë¡ì— ì¶”ê°€
             triggeredEvents.Add(row);
         }
 
-        // ÈÄº¸ Áß ÇÏ³ª¸¸ ·£´ıÀ¸·Î »Ì¾Æ¼­ ½ÇÇà 
+        // í›„ë³´ ì¤‘ í•˜ë‚˜ë§Œ ëœë¤ìœ¼ë¡œ ë½‘ì•„ì„œ ì‹¤í–‰ 
         if (triggeredEvents.Count > 0)
         {
             var selectedEvent = triggeredEvents[UnityEngine.Random.Range(0, triggeredEvents.Count)];
@@ -46,43 +46,43 @@ public class SuddenEventManager : Singleton<SuddenEventManager>
         }
         else
         {
-            Debug.LogWarning($"[SuddenEventManager] ÀÌº¥Æ®¸¦ Ã£À» ¼ö ¾ø½À´Ï´Ù: {eventId}");
+            Debug.LogWarning($"[SuddenEventManager] ì´ë²¤íŠ¸ë¥¼ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤: {eventId}");
         }
     }
 
     private void ExecuteEvent(SuddenEventRow row)
     {
-        Debug.Log($"[SuddenEventManager] µ¹¹ß ÀÌº¥Æ® ¹ß»ı: {row.name} ({row.id})");
+        Debug.Log($"[SuddenEventManager] ëŒë°œ ì´ë²¤íŠ¸ ë°œìƒ: {row.name} ({row.id})");
 
-        // 1. Å¸°Ù ¼±Á¤
+        // 1. íƒ€ê²Ÿ ì„ ì •
         List<Student> targets = PickTargets(row.scope, row.targetMin, row.targetMax);
 
-        // 2. Ã¹ ¹øÂ° È¿°ú Àû¿ë ¹× Á¤º¸ ÃßÃâ 
+        // 2. ì²« ë²ˆì§¸ íš¨ê³¼ ì ìš© ë° ì •ë³´ ì¶”ì¶œ 
         int primaryAmount = 0;
         string primaryStatName = "";
 
         if (!string.IsNullOrEmpty(row.effect1) && row.effect1 != "-")
         {
             var effectTable = CachedSOData.Get<SuddenEventEffectTableSO>();
-            // Trim()À¸·Î ¿¢¼¿¿¡ ¼û¾îÀÖ´Â °ø¹é Á¦°Å
+            // Trim()ìœ¼ë¡œ ì—‘ì…€ì— ìˆ¨ì–´ìˆëŠ” ê³µë°± ì œê±°
             if (effectTable != null && effectTable.TryGet(row.effect1.Trim(), out var effectRow))
             {
                 primaryAmount = UnityEngine.Random.Range(effectRow.amountMin, effectRow.amountMax + 1);
-                primaryStatName = GetStatNameKorean(effectRow.targetMin); // ½ºÅÈ ÀÌ¸§À» ÇÑ±Û·Î º¯È¯
+                primaryStatName = GetStatNameKorean(effectRow.targetMin); // ìŠ¤íƒ¯ ì´ë¦„ì„ í•œê¸€ë¡œ ë³€í™˜
 
                 ApplyEffectWithCalculatedAmount(effectRow.targetMin, targets, primaryAmount);
             }
             else
             {
-                Debug.LogWarning($"[SuddenEventManager] È¿°ú¸¦ Ã£À» ¼ö ¾ø½À´Ï´Ù: {row.effect1}");
+                Debug.LogWarning($"[SuddenEventManager] íš¨ê³¼ë¥¼ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤: {row.effect1}");
             }
         }
 
-        // 3. ³ª¸ÓÁö È¿°ú Àû¿ë
+        // 3. ë‚˜ë¨¸ì§€ íš¨ê³¼ ì ìš©
         ApplyEffect(row.effect2, targets);
         ApplyEffect(row.effect3, targets);
 
-        // 4. ÅØ½ºÆ® Ãâ·Â
+        // 4. í…ìŠ¤íŠ¸ ì¶œë ¥
         ShowEventText(row, targets, primaryStatName, primaryAmount);
     }
 
@@ -107,7 +107,7 @@ public class SuddenEventManager : Singleton<SuddenEventManager>
 
         if (pool.Count == 0) return pool;
 
-        // ¸®½ºÆ® ¼¯±â
+        // ë¦¬ìŠ¤íŠ¸ ì„ê¸°
         for (int i = 0; i < pool.Count; i++)
         {
             int rnd = UnityEngine.Random.Range(0, pool.Count);
@@ -193,36 +193,36 @@ public class SuddenEventManager : Singleton<SuddenEventManager>
         {
             string finalMsg = textRow.description;
 
-            // ¿¢¼¿¿¡ ÀÛ¼ºµÈ ºÒÇÊ¿äÇÑ ±âÈ£ Á¦°Å
+            // ì—‘ì…€ì— ì‘ì„±ëœ ë¶ˆí•„ìš”í•œ ê¸°í˜¸ ì œê±°
             finalMsg = finalMsg.Replace("$\"", "").Replace("\"", "");
 
-            // Å¸°Ù ÀÌ¸§ Ä¡È¯
+            // íƒ€ê²Ÿ ì´ë¦„ ì¹˜í™˜
             if (targets.Count > 0) finalMsg = finalMsg.Replace("{target1.name}", targets[0].studentName);
             if (targets.Count > 1) finalMsg = finalMsg.Replace("{target2.name}", targets[1].studentName);
             if (targets.Count > 2) finalMsg = finalMsg.Replace("{target3.name}", targets[2].studentName);
 
-            // È¿°ú ³»¿ë Ä¡È¯
+            // íš¨ê³¼ ë‚´ìš© ì¹˜í™˜
             int displayAmount = Mathf.Abs(amount);
             finalMsg = finalMsg.Replace("{event_effect.target_name}", statName);
             finalMsg = finalMsg.Replace("{event_effect.amount}", displayAmount.ToString());
             finalMsg = finalMsg.Replace("{event_event_effect.amount}", displayAmount.ToString());
 
-            // Ãâ·Â ºĞ±â
+            // ì¶œë ¥ ë¶„ê¸°
             if ((eventRow.condition & SuddenEventConditionFlags.Daily) != 0)
             {
                 if (MessengerManager.Instance != null)
                 {
                     ChatMessage msg = new ChatMessage(MessageSenderType.Them, finalMsg);
-                    MessengerManager.Instance.ReceiveMessage("sys_sudden_event", "¾Ë¸² ¼¾ÅÍ", msg);
+                    MessengerManager.Instance.ReceiveMessage("sys_sudden_event", "ì•Œë¦¼ ì„¼í„°", msg);
                 }
             }
             else if ((eventRow.condition & SuddenEventConditionFlags.Match) != 0)
             {
-                Debug.Log($"[°æ±âÀå µ¹¹ß ÀÌº¥Æ®] {finalMsg}");
+                Debug.Log($"[ê²½ê¸°ì¥ ëŒë°œ ì´ë²¤íŠ¸] {finalMsg}");
             }
             else
             {
-                Debug.Log($"[±âÅ¸ µ¹¹ß ÀÌº¥Æ®] {finalMsg}");
+                Debug.Log($"[ê¸°íƒ€ ëŒë°œ ì´ë²¤íŠ¸] {finalMsg}");
             }
         }
     }
@@ -231,14 +231,14 @@ public class SuddenEventManager : Singleton<SuddenEventManager>
     {
         return stat switch
         {
-            PlayerStat.Mental => "¸àÅ»",
-            PlayerStat.Shoot => "½´ÆÃ",
-            PlayerStat.Speed => "¼Óµµ",
-            PlayerStat.Jump => "Á¡ÇÁ·Â",
-            PlayerStat.Stamina => "Áö±¸·Â",
-            PlayerStat.Condition => "ÄÁµğ¼Ç",
-            PlayerStat.Money => "ÀÚ±İ",
-            PlayerStat.Fame => "¸í¼ºÄ¡",
+            PlayerStat.Mental => "ë©˜íƒˆ",
+            PlayerStat.Shoot => "ìŠˆíŒ…",
+            PlayerStat.Speed => "ì†ë„",
+            PlayerStat.Jump => "ì í”„ë ¥",
+            PlayerStat.Stamina => "ì§€êµ¬ë ¥",
+            PlayerStat.Condition => "ì»¨ë””ì…˜",
+            PlayerStat.Money => "ìê¸ˆ",
+            PlayerStat.Fame => "ëª…ì„±ì¹˜",
             _ => stat.ToString()
         };
     }
