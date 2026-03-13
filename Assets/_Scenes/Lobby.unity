@@ -13824,7 +13824,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HeadCoachNodeConnector
   fromNodeId: 201
-  toNodeId: 203
+  toNodeId: 204
   _connectedColor: {r: 0.11764707, g: 0.5647059, b: 0.9960785, a: 1}
   _disconnectedColor: {r: 0, g: 0.22352943, b: 0.45098042, a: 1}
 --- !u!114 &1582156750
