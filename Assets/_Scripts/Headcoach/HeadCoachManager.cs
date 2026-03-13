@@ -3,31 +3,32 @@ using System.Collections.Generic;
 using System.Linq;
 
 // 감독 노드 시스템 매니저
-// NodeContainer를 소유하고 외부 시스템(StudentManager 등)에 스탯 보너스를 제공
-// 감독은 실존 객체가 없으므로 이 매니저가 그 역할을 대행
+// NodeContainer를 소유하고 노드 해금/조회/저장복원을 담당
+// 해금된 노드의 스탯 보너스를 StudentManager 등 외부에 제공
 public class HeadCoachManager : Singleton<HeadCoachManager>
 {
     public event Action OnTreeChanged;
-
-    // 콘텐츠 해금 이벤트 (function_key 전달)
     public event Action<string> OnContentUnlocked;
 
     private readonly HeadCoachNodeContainer _container = new();
-
-    // 콘텐츠/기능 해금 테이블 (functionId → ContentUnlockData)
     private readonly Dictionary<int, HeadCoachContentUnlockData> _contentUnlockMap = new();
 
-    public bool IsInitialized { get; private set; } = false;
+    public bool IsInitialized { get; private set; }
 
     protected override void OnSingletonAwake()
     {
-        // TODO: 데이터 테이블 로드 완료 후 InitFromTable() 호출
     }
 
-    // 초기화
-    // 데이터 테이블로부터 노드/티어/효과/선행조건/콘텐츠 해금 데이터를 주입받아 트리를 구성
-    public void InitFromTable(
+    // 테이블 핫리로드 또는 에디터 재진입 시 호출해 컨테이너를 비우고 재초기화 허용
+    public void ResetContainer()
+    {
+        _container.Clear();
+        _contentUnlockMap.Clear();
+        IsInitialized = false;
+    }
 
+    // StartManager의 Initializing 시점에 HeadCoachTableInitializer를 통해 호출
+    public void InitFromTable(
         IEnumerable<HeadCoachNodeData> masterRows,
         IEnumerable<HeadCoachEffectData> effectRows,
         IEnumerable<HeadCoachPrerequisiteData> prerequisiteRows,
@@ -49,6 +50,7 @@ public class HeadCoachManager : Singleton<HeadCoachManager>
         {
             effectMap.TryGetValue(nodeData.effectId, out HeadCoachEffectData effectData);
 
+            // effectId 5000번대는 티어 승급 노드
             bool isTierGate = nodeData.effectId >= 5000 && nodeData.effectId < 6000;
 
             HeadCoachNode node = new()
@@ -65,8 +67,7 @@ public class HeadCoachManager : Singleton<HeadCoachManager>
             _container.AddPrerequisite(prerequisite.nodeId, prerequisite.targetPrerequisiteId);
     }
 
-    // 해금
-    // 명성치 차감 후 노드를 해금. 실패 시 false 반환
+    // 명성치 차감 후 노드 해금, 실패 시 false 반환
     public bool TryUnlockNode(int nodeId)
     {
         HeadCoachNode node = _container.GetNode(nodeId);
@@ -77,15 +78,14 @@ public class HeadCoachManager : Singleton<HeadCoachManager>
         node.SetUnlocked(true);
 
         HandleContentUnlock(node);
-        CheckAndActivateTierGate(node.TierId);
+        CheckTierGateActivation(node.TierId);
 
         OnTreeChanged?.Invoke();
         return true;
     }
 
-    // 티어 게이트
-    // 현재 tierId의 일반 노드 해금 수가 승급 조건을 충족하면 티어 승급 노드를 자동 활성화
-    private void CheckAndActivateTierGate(int tierId)
+    // 현재 티어의 해금 수가 조건을 충족하면 티어 게이트 노드를 자동 활성화
+    private void CheckTierGateActivation(int tierId)
     {
         if (!_container.TryGetTierConfig(tierId, out HeadCoachTierConfigData tierConfig)) return;
 
@@ -99,7 +99,6 @@ public class HeadCoachManager : Singleton<HeadCoachManager>
         OnTreeChanged?.Invoke();
     }
 
-    // 콘텐츠/기능 해금
     private void HandleContentUnlock(HeadCoachNode node)
     {
         int functionId = node.effectData.functionId;
@@ -109,13 +108,28 @@ public class HeadCoachManager : Singleton<HeadCoachManager>
         OnContentUnlocked?.Invoke(content.functionKey);
     }
 
-    // 조회
-    public HeadCoachNode GetNode(int nodeId) => _container.GetNode(nodeId);
+    public HeadCoachNode GetNode(int nodeId)
+    {
+        return _container.GetNode(nodeId);
+    }
+
+    public bool TryGetTierConfig(int tierId, out HeadCoachTierConfigData tierConfig)
+    {
+        return _container.TryGetTierConfig(tierId, out tierConfig);
+    }
+
+    // 특정 티어의 현재 해금된 일반 노드 수 반환
+    public int GetUnlockedCountByTierId(int tierId)
+    {
+        return _container.GetNodesByTierId(tierId).Count(n => n.IsUnlocked);
+    }
 
     public IEnumerable<HeadCoachNode> GetNodesByCategory(NodeCategory category)
-        => _container.GetNodesByCategory(category);
+    {
+        return _container.GetNodesByCategory(category);
+    }
 
-    // 해금된 노드의 targetStat 기준으로 effectValue를 합산하여 반환
+    // 해금된 노드의 targetStat 기준으로 effectValue를 합산해 반환
     // StudentManager 등 실제 스탯 적용 주체가 이 값을 읽어 사용
     public Dictionary<string, float> GetActiveStatBonus()
     {
@@ -133,30 +147,23 @@ public class HeadCoachManager : Singleton<HeadCoachManager>
         return result;
     }
 
-    // 감독 노드 보너스를 특정 학생에게 즉시 적용
-    // 노드 해금 시 또는 신입생 입학 시 호출
     public void ApplyStatBonusTo(Student student)
     {
         if (student == null) return;
 
-        Dictionary<string, float> bonus = GetActiveStatBonus();
-
-        foreach (KeyValuePair<string, float> pair in bonus)
-        {
-            int value = (int)pair.Value;
-            ApplySingleBonus(student, pair.Key, value);
-        }
+        foreach (KeyValuePair<string, float> pair in GetActiveStatBonus())
+            ApplyStatBonus(student, pair.Key, (int)pair.Value);
     }
 
-    // StudentManager의 전체 학생에게 일괄 적용
     public void ApplyStatBonusToAll()
     {
         if (StudentManager.Instance == null) return;
+
         foreach (Student student in StudentManager.Instance.Students)
             ApplyStatBonusTo(student);
     }
 
-    private static void ApplySingleBonus(Student student, string targetStat, int value)
+    private static void ApplyStatBonus(Student student, string targetStat, int value)
     {
         switch (targetStat)
         {
@@ -179,22 +186,18 @@ public class HeadCoachManager : Singleton<HeadCoachManager>
         }
     }
 
-    // 저장 / 복원
-    // SaveManager.SaveCurrent() 호출 시 사용 - 현재 해금된 노드 id 목록 반환
+    // SaveManager.SaveCurrent() 호출 시 사용
     public List<int> GetUnlockedNodeIds()
     {
         List<int> result = new();
+
         foreach (HeadCoachNode node in _container.GetAllNodes())
-        {
-            if (node.IsUnlocked)
-                result.Add(node.NodeId);
-        }
+            if (node.IsUnlocked) result.Add(node.NodeId);
 
         return result;
     }
 
-    // SaveManager.LoadSlot() 이후 호출 - 저장된 해금 목록을 트리에 복원
-    // InitFromTable() 완료 후에 호출해야 함
+    // SaveManager.LoadSlot() 이후 호출, InitFromTable() 완료 후에 사용해야 함
     public void RestoreUnlockedNodes(List<int> unlockedNodeIds)
     {
         if (unlockedNodeIds == null) return;
@@ -203,7 +206,6 @@ public class HeadCoachManager : Singleton<HeadCoachManager>
         {
             HeadCoachNode node = _container.GetNode(nodeId);
             if (node == null) continue;
-
             node.SetUnlocked(true);
         }
 
