@@ -1,12 +1,32 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
 public class SuddenEventManager : Singleton<SuddenEventManager>
 {
-    // 특정 상황에 맞는 이벤트를 1개만 골라서 발생시킴
+    // 턴 당 발생 횟수 추적용 변수
+    private int _dailyEventCount = 0;
+    private int _lastTurnIndex = -1;
+    private const int MAX_EVENTS_PER_TURN = 3;
     public void EvaluateEvents(SuddenEventConditionFlags condition, SuddenEventContextFlags context)
     {
+        // 1. 턴이 바뀌었는지 확인하고 카운트 초기화
+        TurnManager tm = FindFirstObjectByType<TurnManager>();
+        int currentTurn = tm != null ? tm.TurnIndex : -1;
+
+        if (_lastTurnIndex != currentTurn)
+        {
+            _lastTurnIndex = currentTurn;
+            _dailyEventCount = 0;
+        }
+
+        // 2. 턴 당 최대 발생 횟수 제한 체크
+        if (_dailyEventCount >= MAX_EVENTS_PER_TURN)
+        {
+            Debug.Log($"[SuddenEventManager] 턴 당 돌발 이벤트 제한({MAX_EVENTS_PER_TURN}회) 도달로 평가를 생략합니다.");
+            return;
+        }
+
         var table = CachedSOData.Get<SuddenEventTableSO>();
         if (table == null) return;
 
@@ -14,31 +34,29 @@ public class SuddenEventManager : Singleton<SuddenEventManager>
 
         foreach (var row in table.Rows)
         {
-            // 조건이나 시점이 맞지 않으면 패스
             if ((row.condition & condition) == 0) continue;
             if ((row.context & context) == 0) continue;
 
-            // 확률 계산
             if (row.isProbable)
             {
                 if (UnityEngine.Random.value > row.probability)
-                    continue; // 확률 실패 시 패스
+                    continue;
             }
 
-            // 조건을 모두 통과한 이벤트를 후보 목록에 추가
             triggeredEvents.Add(row);
         }
 
-        // 후보 중 하나만 랜덤으로 뽑아서 실행 
         if (triggeredEvents.Count > 0)
         {
+            // 후보 중 하나를 랜덤으로 뽑아서 실행 후 카운트 증가
             var selectedEvent = triggeredEvents[UnityEngine.Random.Range(0, triggeredEvents.Count)];
             ExecuteEvent(selectedEvent);
+            _dailyEventCount++;
         }
     }
-
     public void ExecuteEventById(string eventId)
     {
+        // DialogueRunner 등에서 확정적으로 호출할 때는 카운트를 무시하고 무조건 실행
         var table = CachedSOData.Get<SuddenEventTableSO>();
         if (table != null && table.TryGet(eventId, out var row))
         {
@@ -57,35 +75,48 @@ public class SuddenEventManager : Singleton<SuddenEventManager>
         // 1. 타겟 선정
         List<Student> targets = PickTargets(row.scope, row.targetMin, row.targetMax);
 
-        // 2. 첫 번째 효과 적용 및 정보 추출 
-        int primaryAmount = 0;
-        string primaryStatName = "";
+        // 2.Effect 1, 2, 3 처리 및 텍스트 치환용 데이터 수집
+        Dictionary<string, string> textVars = new Dictionary<string, string>();
 
-        if (!string.IsNullOrEmpty(row.effect1) && row.effect1 != "-")
+        // 타겟 이름 미리 캐싱
+        if (targets.Count > 0) textVars["{target1.name}"] = targets[0].studentName;
+        if (targets.Count > 1) textVars["{target2.name}"] = targets[1].studentName;
+        if (targets.Count > 2) textVars["{target3.name}"] = targets[2].studentName;
+        if (targets.Count > 3) textVars["{target4.name}"] = targets[3].studentName;
+
+        void ProcessEffect(string effectId, int effectIndex)
         {
-            var effectTable = CachedSOData.Get<SuddenEventEffectTableSO>();
-            // Trim()으로 엑셀에 숨어있는 공백 제거
-            if (effectTable != null && effectTable.TryGet(row.effect1.Trim(), out var effectRow))
-            {
-                primaryAmount = UnityEngine.Random.Range(effectRow.amountMin, effectRow.amountMax + 1);
-                primaryStatName = GetStatNameKorean(effectRow.targetMin); // 스탯 이름을 한글로 변환
+            if (string.IsNullOrEmpty(effectId) || effectId == "-" || effectId == "none") return;
 
-                ApplyEffectWithCalculatedAmount(effectRow.targetMin, targets, primaryAmount);
-            }
-            else
+            var effectTable = CachedSOData.Get<SuddenEventEffectTableSO>();
+            if (effectTable != null && effectTable.TryGet(effectId.Trim(), out var effectRow))
             {
-                Debug.LogWarning($"[SuddenEventManager] 효과를 찾을 수 없습니다: {row.effect1}");
+                int amount = UnityEngine.Random.Range(effectRow.amountMin, effectRow.amountMax + 1);
+                ApplyEffectWithCalculatedAmount(effectRow.targetMin, targets, amount);
+
+                string statName = GetStatNameKorean(effectRow.targetMin);
+
+                // 새로운 텍스트 포맷을 위한 치환 데이터 등록 ({effect1.target_name}, {effect1.amount} 등)
+                textVars[$"{{effect{effectIndex}.target_name}}"] = statName;
+                textVars[$"{{effect{effectIndex}.amount}}"] = Mathf.Abs(amount).ToString();
+
+
+                if (effectIndex == 1)
+                {
+                    textVars["{event_effect.target_name}"] = statName;
+                    textVars["{event_effect.amount}"] = Mathf.Abs(amount).ToString();
+                }
             }
         }
 
-        // 3. 나머지 효과 적용
-        ApplyEffect(row.effect2, targets);
-        ApplyEffect(row.effect3, targets);
+        // 효과 3개를 모두 평가하고 적용
+        ProcessEffect(row.effect1, 1);
+        ProcessEffect(row.effect2, 2);
+        ProcessEffect(row.effect3, 3);
 
-        // 4. 텍스트 출력
-        ShowEventText(row, targets, primaryStatName, primaryAmount);
+        // 3. 텍스트 또는 다이얼로그 출력 분기
+        ShowEventTextOrDialogue(row, targets, textVars);
     }
-
     private List<Student> PickTargets(SuddenEventScope scope, int min, int max)
     {
         List<Student> pool = new List<Student>();
@@ -120,18 +151,6 @@ public class SuddenEventManager : Singleton<SuddenEventManager>
         count = Mathf.Clamp(count, 0, pool.Count);
 
         return pool.Take(count).ToList();
-    }
-
-    private void ApplyEffect(string effectId, List<Student> targets)
-    {
-        if (string.IsNullOrEmpty(effectId) || effectId == "-" || effectId == "none") return;
-
-        var effectTable = CachedSOData.Get<SuddenEventEffectTableSO>();
-        if (effectTable == null || !effectTable.TryGet(effectId.Trim(), out var effectRow)) return;
-
-        int amount = UnityEngine.Random.Range(effectRow.amountMin, effectRow.amountMax + 1);
-
-        ApplyEffectWithCalculatedAmount(effectRow.targetMin, targets, amount);
     }
 
     private void ApplyEffectWithCalculatedAmount(PlayerStat targetStat, List<Student> targets, int amount)
@@ -184,46 +203,48 @@ public class SuddenEventManager : Singleton<SuddenEventManager>
         }
     }
 
-    private void ShowEventText(SuddenEventRow eventRow, List<Student> targets, string statName, int amount)
+    private void ShowEventTextOrDialogue(SuddenEventRow eventRow, List<Student> targets, Dictionary<string, string> textVars)
     {
-        if (string.IsNullOrEmpty(eventRow.description) || eventRow.description == "-") return;
+        string desc = eventRow.description?.Trim();
+        if (string.IsNullOrEmpty(desc) || desc == "-") return;
 
-        var textTable = CachedSOData.Get<SuddenEventTextTableSO>();
-        if (textTable != null && textTable.TryGet(eventRow.description, targets.Count, out var textRow))
+        bool isSystemNotice = eventRow.name.Contains("[공지]") || eventRow.name.Contains("[시스템]");
+
+        string roomId = (targets.Count > 0 && !isSystemNotice) ? $"student_{targets[0].studentName}" : "sys_sudden_event";
+        string roomName = (targets.Count > 0 && !isSystemNotice) ? targets[0].studentName : "알림";
+
+        string previewText = ""; // 팝업에 띄울 미리보기 텍스트
+
+        // 분기 1: 메신저 대화(Dialogue) 트리거
+        if (desc.StartsWith("diag_"))
         {
-            string finalMsg = textRow.description;
-
-            // 엑셀에 작성된 불필요한 기호 제거
-            finalMsg = finalMsg.Replace("$\"", "").Replace("\"", "");
-
-            // 타겟 이름 치환
-            if (targets.Count > 0) finalMsg = finalMsg.Replace("{target1.name}", targets[0].studentName);
-            if (targets.Count > 1) finalMsg = finalMsg.Replace("{target2.name}", targets[1].studentName);
-            if (targets.Count > 2) finalMsg = finalMsg.Replace("{target3.name}", targets[2].studentName);
-
-            // 효과 내용 치환
-            int displayAmount = Mathf.Abs(amount);
-            finalMsg = finalMsg.Replace("{event_effect.target_name}", statName);
-            finalMsg = finalMsg.Replace("{event_effect.amount}", displayAmount.ToString());
-            finalMsg = finalMsg.Replace("{event_event_effect.amount}", displayAmount.ToString());
-
-            // 출력 분기
-            if ((eventRow.condition & SuddenEventConditionFlags.Daily) != 0)
+            if (DialogueRunner.Instance != null)
             {
-                if (MessengerManager.Instance != null)
+                DialogueRunner.Instance.PlayDialogue(roomId, roomName, desc);
+                previewText = $"{roomName}의 새로운 메시지가 도착했습니다.";
+            }
+        }
+        // 분기 2: 단순 텍스트 메시지 출력
+        else
+        {
+            var textTable = CachedSOData.Get<SuddenEventTextTableSO>();
+            if (textTable != null && textTable.TryGet(desc, targets.Count, out var textRow))
+            {
+                string finalMsg = textRow.description.Replace("$", "").Replace("\"", "").Replace("\\n", "\n");
+                foreach (var kvp in textVars) finalMsg = finalMsg.Replace(kvp.Key, kvp.Value);
+
+                if ((eventRow.condition & SuddenEventConditionFlags.Daily) != 0 && MessengerManager.Instance != null)
                 {
-                    ChatMessage msg = new ChatMessage(MessageSenderType.Them, finalMsg);
-                    MessengerManager.Instance.ReceiveMessage("sys_sudden_event", "알림 센터", msg);
+                    ChatMessage msg = new ChatMessage(MessageSenderType.Them, finalMsg, MessageEventType.System);
+                    MessengerManager.Instance.ReceiveMessage(roomId, roomName, msg);
+                    previewText = finalMsg; // 팝업에는 실제 내용을 띄움
                 }
             }
-            else if ((eventRow.condition & SuddenEventConditionFlags.Match) != 0)
-            {
-                Debug.Log($"[경기장 돌발 이벤트] {finalMsg}");
-            }
-            else
-            {
-                Debug.Log($"[기타 돌발 이벤트] {finalMsg}");
-            }
+        }
+
+        if (!string.IsNullOrEmpty(previewText))
+        {
+            EnqueueEventPopup(eventRow.name, roomId, roomName, previewText);
         }
     }
 
@@ -243,11 +264,39 @@ public class SuddenEventManager : Singleton<SuddenEventManager>
         };
     }
 
-#if UNITY_EDITOR
-    [ContextMenu("Test Random Daily Event")]
-    private void DebugTestDailyEvent()
+    public struct EventPopupData
     {
-        EvaluateEvents(SuddenEventConditionFlags.Daily, SuddenEventContextFlags.PreProcess);
+        public string title;
+        public string roomId;
+        public string roomName;
+        public string previewText;
     }
-#endif
+    private Queue<EventPopupData> _popupQueue = new Queue<EventPopupData>();
+    public event System.Action<EventPopupData> OnPopupRequested; // 로비 UI로 신호를 보낼 이벤트
+
+    private bool _isPopupShowing = false;
+
+    private void EnqueueEventPopup(string title, string roomId, string roomName, string preview)
+    {
+        _popupQueue.Enqueue(new EventPopupData { title = title, roomId = roomId, roomName = roomName, previewText = preview });
+
+        if (!_isPopupShowing)
+        {
+            ProcessNextPopup();
+        }
+    }
+
+    public void ProcessNextPopup()
+    {
+        if (_popupQueue.Count > 0)
+        {
+            _isPopupShowing = true; // 팝업 노출 상태로 잠금
+            var data = _popupQueue.Dequeue();
+            OnPopupRequested?.Invoke(data);
+        }
+        else
+        {
+            _isPopupShowing = false; // 모든 팝업을 다 봤으면 잠금 해제
+        }
+    }
 }
