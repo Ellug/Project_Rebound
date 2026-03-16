@@ -11,8 +11,9 @@ public class TrainingButtonData
     public int conditionDelta;                      // 컨디션 가감치
     public int navigateToPageIndex = -1;            // 이동할 페이지 인덱스 (-1이면 바로 실행)
     public string trainingKey;                      // 훈련 고유 식별 키
-    public string previewImageId;                   // 팝업창에 표시할 이미지 파일명 ID (Addressable)
-    public string backgroundImageId;                // ProgressUI 배경 이미지
+    public string previewImageId;                   // 훈련 안내 팝업 이미지 파일명 ID (Addressable)
+    public string backgroundImageId;                // ProgressUI 배경 이미지 파일명 ID (Addressable)
+    public string resultImageId;                    // 훈련 결과 팝업 이미지 파일명 ID (Addressable)
     public bool requiresStudentSelection = true;    // 학생 선택이 필요한 훈련인지 (기본: true)
     public int maxSelectCount = 0;                  // 학생 선택 최대 인원 (0이면 무제한)
     public int requiredFacilityLv;                  // 필요 시설레벨

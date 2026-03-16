@@ -19323,6 +19323,14 @@ PrefabInstance:
       propertyPath: _weekendTrainingConfirmBgImageId
       value: TrainingPopup03_img
       objectReference: {fileID: 0}
+    - target: {fileID: 8313116447302640032, guid: 2872640eb66560844bb5942b4e01d542, type: 3}
+      propertyPath: _weekendTrainingCancelResultImageId
+      value: TrainingPopup04_img
+      objectReference: {fileID: 0}
+    - target: {fileID: 8313116447302640032, guid: 2872640eb66560844bb5942b4e01d542, type: 3}
+      propertyPath: _weekendTrainingConfirmResultImageId
+      value: TrainingPopup04_img
+      objectReference: {fileID: 0}
     - target: {fileID: 8800154559438791188, guid: 2872640eb66560844bb5942b4e01d542, type: 3}
       propertyPath: m_Name
       value: TrainingFlowController
@@ -20198,6 +20206,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2379587934076401821, guid: 6e6bd5fd7f5bcbc4ebe52421d92bc071, type: 3}
+      propertyPath: m_Color.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4672450000530673294, guid: 6e6bd5fd7f5bcbc4ebe52421d92bc071, type: 3}
+      propertyPath: _imgTrainingPreview
+      value: 
+      objectReference: {fileID: 4285298896083913531}
     - target: {fileID: 5397177492536680875, guid: 6e6bd5fd7f5bcbc4ebe52421d92bc071, type: 3}
       propertyPath: m_AnchorMax.x
       value: 1
@@ -20273,6 +20289,17 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &4285298896083913531 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2379587934076401821, guid: 6e6bd5fd7f5bcbc4ebe52421d92bc071, type: 3}
+  m_PrefabInstance: {fileID: 4285298896083913528}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
 --- !u!224 &4466769800690297729
 RectTransform:
   m_ObjectHideFlags: 0

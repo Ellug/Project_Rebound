@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 
 // 훈련 결과 데이터 (학생 1명분)
 [Serializable]
@@ -23,6 +23,7 @@ public class TrainingResultPopup : UIPopup
 
     [Header("Content")]
     [SerializeField] private TMP_Text _txtTrainingName;                 // 훈련 이름 표시
+    [SerializeField] private Image _imgTrainingPreview;                 // 훈련 결과 이미지
     [SerializeField] private Transform _rowContainer;                   // 학생 행 부모 (Vertical Layout Group)
     [SerializeField] private TrainingResultStudentRow _rowPrefab;       // 학생 행 프리팹 (없어도 동작)
 
@@ -30,6 +31,7 @@ public class TrainingResultPopup : UIPopup
     [SerializeField] private Button _btnConfirm;                        // 확인 버튼
 
     private readonly List<TrainingResultStudentRow> _spawnedRows = new List<TrainingResultStudentRow>(); // 생성된 Row 목록
+    private string _currentPreviewImageId;                              // 현재 로드된 이미지 ID (해제용)
 
     public event Action OnConfirm; // 확인 버튼 클릭 이벤트
 
@@ -55,10 +57,13 @@ public class TrainingResultPopup : UIPopup
     }
 
     // 외부에서 결과 데이터 세팅
-    public void Setup(string trainingName, List<TrainingResult> results)
+    public void Setup(string trainingName, List<TrainingResult> results, string previewImageId = null)
     {
         if (_txtTrainingName != null)
             _txtTrainingName.text = trainingName;
+
+        // 훈련 결과 이미지 로드
+        LoadPreviewImage(previewImageId);
 
         ClearRows();
 
@@ -79,6 +84,42 @@ public class TrainingResultPopup : UIPopup
         {
             LogResult(result);
         }
+    }
+
+    // 이미지 ID 기준으로 Addressable 비동기 로드
+    private void LoadPreviewImage(string imageId)
+    {
+        if (!string.IsNullOrEmpty(_currentPreviewImageId))
+        {
+            AddressableImageManager.Instance.ReleaseSprite(_currentPreviewImageId);
+            _currentPreviewImageId = null;
+        }
+
+        if (_imgTrainingPreview == null) return;
+
+        if (string.IsNullOrEmpty(imageId))
+        {
+            _imgTrainingPreview.gameObject.SetActive(false);
+            return;
+        }
+
+        _imgTrainingPreview.gameObject.SetActive(false);
+        _currentPreviewImageId = imageId;
+
+        AddressableImageManager.Instance.LoadSprite(imageId, sprite =>
+        {
+            if (_imgTrainingPreview == null) return;
+
+            if (sprite != null)
+            {
+                _imgTrainingPreview.sprite = sprite;
+                _imgTrainingPreview.gameObject.SetActive(true);
+            }
+            else
+            {
+                _imgTrainingPreview.gameObject.SetActive(false);
+            }
+        });
     }
 
     // 콘솔에 결과 출력 (디버그용)
@@ -113,6 +154,12 @@ public class TrainingResultPopup : UIPopup
     // 팝업 종료 및 내부 정리
     private void CloseAndCleanup()
     {
+        if (!string.IsNullOrEmpty(_currentPreviewImageId))
+        {
+            AddressableImageManager.Instance.ReleaseSprite(_currentPreviewImageId);
+            _currentPreviewImageId = null;
+        }
+
         OnConfirm = null;   // 이벤트 초기화
         ClearRows();
         Close();

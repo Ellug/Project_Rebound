@@ -348,7 +348,8 @@ public class TrainingSelectPopup : UIPopup
             trainingName: name,
             students: students,
             applyEffect: (k, list) => ApplyCsvEffect(data, list),
-            backgroundImageId: bgImageId
+            backgroundImageId: bgImageId,
+            resultImageId: data.resultImageId
         );
     }
 

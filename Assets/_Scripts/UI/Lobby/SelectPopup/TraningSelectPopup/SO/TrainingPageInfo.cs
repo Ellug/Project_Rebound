@@ -18,6 +18,9 @@ public class TrainingPageInfo
     // ProgressUI 배경 이미지
     public List<string> buttonBackgroundImageIds = new List<string>();
 
+    // 훈련 결과 팝업 이미지
+    public List<string> buttonResultImageIds = new List<string>();
+
     // 런타임 전용 — Builder가 채워주는 버튼 데이터 (SO에 저장되지 않음)
     [NonSerialized]
     public List<TrainingButtonData> buttons = new List<TrainingButtonData>();
