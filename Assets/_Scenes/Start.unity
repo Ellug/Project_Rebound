@@ -597,6 +597,77 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 615415500}
   m_CullTransparentMesh: 1
+--- !u!1 &681275706
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 681275708}
+  - component: {fileID: 681275707}
+  - component: {fileID: 681275709}
+  m_Layer: 0
+  m_Name: AddressablesManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &681275707
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 681275706}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4935736860a7a042905547e8ed5e2dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AddressableImageManager
+  _dontDestroyOnLoad: 1
+  _libraryReference:
+    m_AssetGUID: 0e5545182aaa2b54ba4edb3c071ba8e1
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
+--- !u!4 &681275708
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 681275706}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 486.09134, y: 998.78253, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &681275709
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 681275706}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7136ba1050f6cca4a992f495df7226ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AddressableAudioManager
+  _dontDestroyOnLoad: 1
+  _libraryReference:
+    m_AssetGUID: 2da06c0ecbda89646a21434c5415e7c7
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
 --- !u!1 &866624250
 GameObject:
   m_ObjectHideFlags: 0
@@ -1040,6 +1111,17 @@ MonoBehaviour:
   _loadingSlider: {fileID: 269886561}
   _statusText: {fileID: 1698672233}
   _tableLoadConfig: {fileID: 11400000, guid: 3d1528538ad263045861601e7e94bc8a, type: 2}
+  _additionalPreloadRefs:
+  - m_AssetGUID: 0e5545182aaa2b54ba4edb3c071ba8e1
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
+  - m_AssetGUID: 2da06c0ecbda89646a21434c5415e7c7
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
 --- !u!4 &1903666999
 Transform:
   m_ObjectHideFlags: 0
@@ -1143,3 +1225,4 @@ SceneRoots:
   - {fileID: 210371099}
   - {fileID: 1860470984}
   - {fileID: 1903666999}
+  - {fileID: 681275708}
