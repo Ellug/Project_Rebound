@@ -9,10 +9,17 @@ using UnityEngine.UI;
 
 public class StartManager : MonoBehaviour
 {
+    private const float CatalogCheckEnd = 0.08f;
+    private const float CatalogUpdateEnd = 0.18f;
+    private const float VerifyResourcesEnd = 0.28f;
+    private const float DownloadResourcesEnd = 0.80f;
+    private const float TableLoadEnd = 0.95f;
+    private const float InitStart = 0.96f;
+
     [SerializeField] private Slider _loadingSlider;
-    [SerializeField] private TMP_Text _statusText;
-    // 자동 동기화된 테이블 참조 목록
-    [SerializeField] private TableLoadConfigSO _tableLoadConfig;
+    [SerializeField] private TMP_Text _statusText;    
+    [SerializeField] private TableLoadConfigSO _tableLoadConfig; // 자동 동기화된 테이블 참조 목록
+    [SerializeField] private List<AssetReference> _additionalPreloadRefs = new(); // 테이블 외 선다운로드 대상(AddressableImageLibrary SO, AddressableAudioLibrary SO)
 
     private readonly WaitForSeconds _waitOneSecond = new(1f);
 
@@ -29,8 +36,8 @@ public class StartManager : MonoBehaviour
     // 업데이트 확인 -> 다운로드 -> 테이블 로드 -> 캐시 등록까지 초기 로딩 전체 수행
     private IEnumerator LoadingProcess()
     {
-        var allTableRefs = CollectTableReferences();
-        if (allTableRefs.Count == 0)
+        var tableRefs = CollectTableReferences();
+        if (tableRefs.Count == 0)
         {
             FailLoading("Missing table config", "[StartManager] No table references found. Check TableLoadConfig.");
             yield break;
@@ -44,7 +51,7 @@ public class StartManager : MonoBehaviour
         float progress;
         while (!checkHandle.IsDone)
         {
-            progress = checkHandle.PercentComplete * 0.1f;
+            progress = checkHandle.PercentComplete * CatalogCheckEnd;
             _loadingSlider.value = progress;
             yield return null;
         }
@@ -59,7 +66,7 @@ public class StartManager : MonoBehaviour
                 var updateHandle = Addressables.UpdateCatalogs(catalogsToUpdate, false);
                 while (!updateHandle.IsDone)
                 {
-                    progress = 0.1f + (updateHandle.PercentComplete * 0.15f);
+                    progress = CatalogCheckEnd + (updateHandle.PercentComplete * (CatalogUpdateEnd - CatalogCheckEnd));
                     _loadingSlider.value = progress;
                     yield return null;
                 }
@@ -68,18 +75,23 @@ public class StartManager : MonoBehaviour
             }
             else
             {
-                _loadingSlider.value = 0.25f;
+                _loadingSlider.value = CatalogUpdateEnd;
             }
         }
 
         Addressables.Release(checkHandle);
 
+        _statusText.text = "Preparing resources...";
+
+        var additionalPreloadRefs = new List<AssetReference>();
+        yield return CollectAdditionalPreloadReferencesRoutine(additionalPreloadRefs);
+
         _statusText.text = "Verifying resources...";
 
         long totalDownloadSize = 0;
-        for (int i = 0; i < allTableRefs.Count; i++)
+        for (int i = 0; i < additionalPreloadRefs.Count; i++)
         {
-            var sizeHandle = Addressables.GetDownloadSizeAsync(allTableRefs[i]);
+            var sizeHandle = Addressables.GetDownloadSizeAsync(additionalPreloadRefs[i]);
             yield return sizeHandle;
 
             if (sizeHandle.Status == AsyncOperationStatus.Succeeded)
@@ -87,23 +99,23 @@ public class StartManager : MonoBehaviour
 
             Addressables.Release(sizeHandle);
 
-            progress = 0.25f + ((float)(i + 1) / allTableRefs.Count) * 0.1f;
+            progress = CatalogUpdateEnd + ((float)(i + 1) / additionalPreloadRefs.Count) * (VerifyResourcesEnd - CatalogUpdateEnd);
             _loadingSlider.value = progress;
         }
 
-        _loadingSlider.value = 0.35f;
+        _loadingSlider.value = VerifyResourcesEnd;
 
         if (totalDownloadSize > 0)
         {
             _statusText.text = "Downloading game data...";
 
-            for (int i = 0; i < allTableRefs.Count; i++)
+            for (int i = 0; i < additionalPreloadRefs.Count; i++)
             {
-                var downloadHandle = Addressables.DownloadDependenciesAsync(allTableRefs[i]);
+                var downloadHandle = Addressables.DownloadDependenciesAsync(additionalPreloadRefs[i]);
                 while (!downloadHandle.IsDone)
                 {
-                    float tableProgress = downloadHandle.PercentComplete / Mathf.Max(1, allTableRefs.Count);
-                    progress = 0.35f + ((i + tableProgress) / Mathf.Max(1, allTableRefs.Count)) * 0.2f;
+                    float preloadProgress = downloadHandle.PercentComplete / Mathf.Max(1, additionalPreloadRefs.Count);
+                    progress = VerifyResourcesEnd + ((i + preloadProgress) / Mathf.Max(1, additionalPreloadRefs.Count)) * (DownloadResourcesEnd - VerifyResourcesEnd);
                     _loadingSlider.value = progress;
                     yield return null;
                 }
@@ -113,19 +125,19 @@ public class StartManager : MonoBehaviour
         }
         else
         {
-            _loadingSlider.value = 0.55f;
+            _loadingSlider.value = DownloadResourcesEnd;
         }
 
         _statusText.text = "Loading game data...";
 
-        int tableCount = Mathf.Max(1, allTableRefs.Count);
-        float tableStep = 0.3f / tableCount;
-        float baseProgress = 0.55f;
+        int tableCount = Mathf.Max(1, tableRefs.Count);
+        float tableStep = (TableLoadEnd - DownloadResourcesEnd) / tableCount;
+        float baseProgress = DownloadResourcesEnd;
 
-        for (int i = 0; i < allTableRefs.Count; i++)
+        for (int i = 0; i < tableRefs.Count; i++)
         {
             bool loadSucceeded = false;
-            yield return LoadTable(allTableRefs[i], table =>
+            yield return LoadTable(tableRefs[i], table =>
             {
                 CachedSOData.RegisterTable(table);
                 loadSucceeded = true;
@@ -133,20 +145,20 @@ public class StartManager : MonoBehaviour
 
             if (!loadSucceeded)
             {
-                FailLoading("Failed to load game data", $"[StartManager] Failed to load required table: {allTableRefs[i].AssetGUID}");
+                FailLoading("Failed to load game data", $"[StartManager] Failed to load required table: {tableRefs[i].AssetGUID}");
                 yield break;
             }
 
             baseProgress += tableStep;
-            _loadingSlider.value = Mathf.Min(baseProgress, 0.85f);
+            _loadingSlider.value = Mathf.Min(baseProgress, TableLoadEnd);
         }
 
-        _loadingSlider.value = 0.85f;
+        _loadingSlider.value = TableLoadEnd;
 
         _statusText.text = "Initializing...";
-        _loadingSlider.value = 0.9f;
+        _loadingSlider.value = InitStart;
 
-        progress = 0.95f;
+        progress = InitStart;
         while (progress < 1f)
         {
             progress += Time.deltaTime * 0.5f;
@@ -167,7 +179,6 @@ public class StartManager : MonoBehaviour
     private List<AssetReference> CollectTableReferences()
     {
         var result = new List<AssetReference>();
-        var seenGuids = new HashSet<string>();
 
         if (_tableLoadConfig == null)
         {
@@ -175,21 +186,113 @@ public class StartManager : MonoBehaviour
             return result;
         }
 
-        AddTableRefs(result, seenGuids, _tableLoadConfig.TableRefs);
+        AddTableRefs(result, _tableLoadConfig.TableRefs);
 
         return result;
     }
 
-    // 유효한 Addressable 참조만 중복 없이 수집
-    private static void AddTableRefs(List<AssetReference> result, HashSet<string> seenGuids, IEnumerable<AssetReference> source)
+    // 테이블 외 선다운로드 대상 Addressable 참조를 수집
+    private IEnumerator CollectAdditionalPreloadReferencesRoutine(List<AssetReference> result)
     {
+        if (result == null)
+            yield break;
+
+        AddPreloadRefs(result, _additionalPreloadRefs);
+
+        for (int i = 0; i < _additionalPreloadRefs.Count; i++)
+        {
+            AssetReference preloadRef = _additionalPreloadRefs[i];
+            if (preloadRef == null) continue;
+            if (string.IsNullOrEmpty(preloadRef.AssetGUID)) continue;
+            if (!preloadRef.RuntimeKeyIsValid()) continue;
+
+            var loadHandle = preloadRef.LoadAssetAsync<ScriptableObject>();
+            yield return loadHandle;
+
+            if (loadHandle.Status == AsyncOperationStatus.Succeeded)
+            {
+                if (loadHandle.Result is AddressableImageLibrarySO imageLibrary)
+                {
+                    AddImageLibraryRefs(result, imageLibrary);
+                }
+                else if (loadHandle.Result is AddressableAudioLibrarySO audioLibrary)
+                {
+                    AddAudioLibraryRefs(result, audioLibrary);
+                }
+            }
+            else
+            {
+                Debug.LogWarning($"[StartManager] Failed to load preload library: {preloadRef.AssetGUID}");
+            }
+
+            if (loadHandle.IsValid())
+                Addressables.Release(loadHandle);
+        }
+    }
+
+    // 유효한 Addressable 참조만 수집
+    private static void AddTableRefs(List<AssetReference> result, IEnumerable<AssetReference> source)
+    {
+        if (source == null) return;
+
         foreach (var tableRef in source)
         {
             if (tableRef == null) continue;
             if (string.IsNullOrEmpty(tableRef.AssetGUID)) continue;
             if (!tableRef.RuntimeKeyIsValid()) continue;
-            if (!seenGuids.Add(tableRef.AssetGUID)) continue;
             result.Add(tableRef);
+        }
+    }
+
+    // 유효한 선다운로드 Addressable 참조만 수집
+    private static void AddPreloadRefs(List<AssetReference> result, IEnumerable<AssetReference> source)
+    {
+        if (source == null) return;
+
+        foreach (var preloadRef in source)
+        {
+            if (preloadRef == null) continue;
+            if (string.IsNullOrEmpty(preloadRef.AssetGUID)) continue;
+            if (!preloadRef.RuntimeKeyIsValid()) continue;
+            result.Add(preloadRef);
+        }
+    }
+
+    // 이미지 라이브러리 SO의 스프라이트 참조를 선다운로드 목록에 추가
+    private static void AddImageLibraryRefs(List<AssetReference> result, AddressableImageLibrarySO library)
+    {
+        if (library == null) return;
+
+        var entries = library.Entries;
+        if (entries == null) return;
+
+        for (int i = 0; i < entries.Count; i++)
+        {
+            var entry = entries[i];
+            if (entry == null) continue;
+            if (entry.spriteReference == null) continue;
+            if (string.IsNullOrEmpty(entry.spriteReference.AssetGUID)) continue;
+            if (!entry.spriteReference.RuntimeKeyIsValid()) continue;
+            result.Add(entry.spriteReference);
+        }
+    }
+
+    // 오디오 라이브러리 SO의 클립 참조를 선다운로드 목록에 추가
+    private static void AddAudioLibraryRefs(List<AssetReference> result, AddressableAudioLibrarySO library)
+    {
+        if (library == null) return;
+
+        var entries = library.Entries;
+        if (entries == null) return;
+
+        for (int i = 0; i < entries.Count; i++)
+        {
+            var entry = entries[i];
+            if (entry == null) continue;
+            if (entry.clipReference == null) continue;
+            if (string.IsNullOrEmpty(entry.clipReference.AssetGUID)) continue;
+            if (!entry.clipReference.RuntimeKeyIsValid()) continue;
+            result.Add(entry.clipReference);
         }
     }
 
