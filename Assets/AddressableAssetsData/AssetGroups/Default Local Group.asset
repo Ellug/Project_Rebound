@@ -50,6 +50,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2e1124698719a9a448359f8a27d5374d
+    m_Address: FriendlyMatchScheduleMsgListTable
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 31dc3a478bf62d346b78bda77784c0b5
     m_Address: StudentStartStatTable
     m_ReadOnly: 0
@@ -75,8 +80,23 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 416f4cd30d42e8445938c9f13b5f28d6
+    m_Address: HalftimeSelectTextTable
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 41c1d4c214c73e4469337a604d487db5
     m_Address: AlwaysEventTable
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 501f9521696e812429fa667dda4613f9
+    m_Address: RewardPopupTable
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 606dd2cc23d74d9408dc70602ed33e0b
+    m_Address: FriendlyMatchScheduleMsgTextTable
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -112,6 +132,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 7b594a029d60ac548b7e0838cdab0631
     m_Address: FacilityUpgradeTable
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7c780b146bafc8346954deea1970e4aa
+    m_Address: FriendlyMatchScheduleMsgTable
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -187,6 +212,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: f0056fd8a8e10d04baba9f1f86a4e60f
     m_Address: GraduateGradeTable
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f8b5f20f135f9734285cbc9a64ea2d3b
+    m_Address: HalftimeSelectTable
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

@@ -49,6 +49,13 @@ public static class GoogleSheetSyncConfig
     private const string GID_LOBBY_SUDDEN_EVENT_MSG_SAVE_DATA   = "2095264250";     // 로비 돌발 이벤트 메시지 세이브 데이터 테이블
     private const string GID_STORY                              = "1767584745";     // 스토리 데이터 테이블
 
+    private const string GID_FRIENDLY_MATCH_SCHEDULE_MSG_TEXT   = "176960736";      // 친선경기 스케쥴 메시지 텍스트 테이블
+    private const string GID_FRIENDLY_MATCH_SCHEDULE_MSG        = "123577051";      // 친선경기 스케쥴 메시지 테이블
+    private const string GID_FRIENDLY_MATCH_SCHEDULE_MSG_LIST   = "1587989658";     // 친선경기 스케쥴 메시지 목록 테이블
+    private const string GID_REWARD_POPUP                       = "435958384";      // 보상 팝업창
+    private const string GID_HALFTIME_SELECT_TEXT               = "2038993277";     // 작전타임 선택지 텍스트 테이블
+    private const string GID_HALFTIME_SELECT                    = "930760343";      // 작전타임 선택지 테이블
+
 
     public static readonly IReadOnlyList<SheetTableEntry> Tables = new List<SheetTableEntry>
     {
@@ -90,6 +97,13 @@ public static class GoogleSheetSyncConfig
         new("SuddenEventMsgSaveDataTable.csv",          Url(GID_SUDDEN_EVENT_MSG_SAVE_DATA)),              // 돌발 이벤트 메시지 세이브 데이터 테이블
         new("LobbySuddenEventMsgSaveDataTable.csv",     Url(GID_LOBBY_SUDDEN_EVENT_MSG_SAVE_DATA)),        // 로비 돌발 이벤트 메시지 세이브 데이터 테이블
         new("StoryTable.csv",                           Url(GID_STORY)),                                   // 스토리 데이터 테이블
+
+        new("FriendlyMatchScheduleMsgTextTable.csv",    Url(GID_FRIENDLY_MATCH_SCHEDULE_MSG_TEXT)),         // 친선경기 스케쥴 메시지 텍스트 테이블
+        new("FriendlyMatchScheduleMsgTable.csv",        Url(GID_FRIENDLY_MATCH_SCHEDULE_MSG)),              // 친선경기 스케쥴 메시지 테이블
+        new("FriendlyMatchScheduleMsgListTable.csv",    Url(GID_FRIENDLY_MATCH_SCHEDULE_MSG_LIST)),         // 친선경기 스케쥴 메시지 목록 테이블
+        new("RewardPopupTable.csv",                     Url(GID_REWARD_POPUP)),                             // 보상 팝업창
+        new("HalftimeSelectTextTable.csv",              Url(GID_HALFTIME_SELECT_TEXT)),                     // 작전타임 선택지 텍스트 테이블
+        new("HalftimeSelectTable.csv",                  Url(GID_HALFTIME_SELECT)),                          // 작전타임 선택지 테이블
     };
 }
 

@@ -1,0 +1,22 @@
+id,type,speaker,dialogue
+string,string,string,string
+text_diag_schedule_001,format,right,(몇 일로 해야 할까...)
+text_diag_schedule_002,format,center,${date1}일
+text_diag_schedule_003,format,center,${date2}일
+text_diag_schedule_004,format,center,${date3}일
+text_diag_schedule_005,format,right,한울고등학교 농구부 입니다.
+text_diag_schedule_006,format,right,$이번 주 {date_choice}일 귀 학교와 친선전이 가능할까요?
+text_diag_schedule_007,format,left,${school_choice} 농구부 입니다.
+text_diag_schedule_008,format,right,네. 답변 감사합니다.
+text_diag_schedule_009,accept,left,가능합니다.
+text_diag_schedule_010,accept,left,좋습니다.
+text_diag_schedule_011,accept,left,ㅇㅋ.
+text_diag_schedule_012,accept,left,좋아요 좋아요.
+text_diag_schedule_013,accept,left,네. 경기 가능합니다.
+text_diag_schedule_014,accept,left,윤허하노라.
+text_diag_schedule_015,decline,left,일신 상의 사정으로 {date_choice}일은 안됩니다.
+text_diag_schedule_016,decline,left,개교기념일이라 쉽니다.
+text_diag_schedule_017,decline,left,그 날은 쉽지 않습니다.
+text_diag_schedule_018,decline,left,그 날은 공대 뛰어야 해서 어렵습니다.
+text_diag_schedule_019,decline,left,거절한다.
+text_diag_schedule_020,decline,left,"${date_choice}일 이라니, 이븐하지 않군요"

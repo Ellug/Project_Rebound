@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 749e0443f16381a42bc9e12e2fa73d94, type: 3}
+  m_Name: SO_FriendlyMatchScheduleMsgListTable
+  m_EditorClassIdentifier: Assembly-CSharp::FriendlyMatchScheduleMsgListTableSO
+  _rows:
+  - id: index_000001
+    schoolName: school_001
+    latestScheduledDate: 260305
+  - id: index_000002
+    schoolName: school_017
+    latestScheduledDate: 0
+  - id: index_000003
+    schoolName: school_053
+    latestScheduledDate: 260123
+  - id: index_000004
+    schoolName: school_098
+    latestScheduledDate: 260307
+  - id: index_000005
+    schoolName: school_003
+    latestScheduledDate: 260508
+  - id: index_000006
+    schoolName: school_037
+    latestScheduledDate: 260223
