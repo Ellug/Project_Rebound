@@ -975,6 +975,7 @@ MonoBehaviour:
   _bubbleLeftPrefab: {fileID: 2060850960887225480, guid: 5a46cb138a2937241ba237ffc0eab96e, type: 3}
   _bubbleRightPrefab: {fileID: 3897371903441367529, guid: 11096b21ab9653b44bbdb1827709daef, type: 3}
   _choiceBoxPrefab: {fileID: 1684409359144065982, guid: 030d9d8444eacb044b304a71237e2a5a, type: 3}
+  _bubbleSystemPrefab: {fileID: 3897371903441367529, guid: 3ea70c356751bf04890077b3e35dccde, type: 3}
 --- !u!1 &7763151073056719740
 GameObject:
   m_ObjectHideFlags: 0

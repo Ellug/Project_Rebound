@@ -128,16 +128,60 @@ public class LobbyUI : UIBase
             MoneyManager.Instance.OnReputationChanged -= UpdateReputationUI;
             MoneyManager.Instance.OnReputationChanged += UpdateReputationUI;
         }
-
+        if (SuddenEventManager.Instance != null)
+        {
+            SuddenEventManager.Instance.OnPopupRequested -= ShowEventPopup;
+            SuddenEventManager.Instance.OnPopupRequested += ShowEventPopup;
+        }
         RefreshBottomNavTabSprites();
         MoneyManager.Instance.ForceNotify();
+    }
+
+    private void ShowEventPopup(SuddenEventManager.EventPopupData data)
+    {
+        UIPopupRequest req = new UIPopupRequest
+        {
+            Type = UIPopupRequest.PanelType.Simple, // 안내 위주이므로 Simple 패널 사용
+            Title = data.title,
+            Message = data.previewText,
+            ShowCancel = true, // 취소 버튼 표시
+            AutoCloseOnPrimary = true, 
+            AutoCloseOnCancel = true,
+            OnPrimary = () =>
+            {
+                // 1. 인박스 팝업을 열고
+                OpenMessengerInbox();
+
+                // 2. 해당 채팅방으로 다이렉트 이동
+                if (_messengerInboxPopup != null)
+                {
+                    _messengerInboxPopup.OpenRoom(data.roomId);
+                }
+
+                // 3. 다 봤으면 큐에 있는 다음 팝업 띄우기 요청
+                if (SuddenEventManager.Instance != null)
+                {
+                    SuddenEventManager.Instance.ProcessNextPopup();
+                }
+            },
+            OnCancel = () =>
+            {
+                // 취소 누르면 방금 창은 닫히고 다음 팝업 띄우기
+                if (SuddenEventManager.Instance != null)
+                {
+                    SuddenEventManager.Instance.ProcessNextPopup();
+                }
+            }
+        };
+
+        UIManager.Instance.ShowPopup(req); // UIManager를 통해 안전하게 팝업 호출
     }
 
     private void UpdateMessagePreview(ChatMessage latestMessage)
     {
         if (_txtMessage != null && latestMessage != null)
         {
-            _txtMessage.text = $"[{latestMessage.SenderType}] {latestMessage.Content}";
+            _txtMessage.text = latestMessage.Content;
         }
     }
 
@@ -332,7 +376,19 @@ public class LobbyUI : UIBase
         if (_txtSchoolName) _txtSchoolName.text = FormatSchoolNameWithHighlightedPrefix("한울고등학교");
         if (_txtMoney) _txtMoney.text = MoneyManager.Instance.Gold.ToString();
         if (_txtFame) _txtFame.text = MoneyManager.Instance.Reputation.ToString();
-        if (_txtMessage) _txtMessage.text = "감독님, 신입생들이 입학했습니다. 훈련 일정을 잡아주세요.";
+        if (_txtMessage)
+        {
+            var rooms = MessengerManager.Instance?.ActiveRooms;
+            if (rooms != null && rooms.Count > 0 && rooms[0].Messages.Count > 0)
+            {
+                var lastMsg = rooms[0].Messages[rooms[0].Messages.Count - 1];
+                _txtMessage.text = lastMsg.Content;
+            }
+            else
+            {
+                _txtMessage.text = "감독님, 신입생들이 입학했습니다. 훈련 일정을 잡아주세요.";
+            }
+        }
     }
 
     // 학교명 접두부(고등학교 앞)를 강조 색상으로 감싼 TMP RichText 문자열 생성
