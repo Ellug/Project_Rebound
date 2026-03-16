@@ -55,22 +55,22 @@ MonoBehaviour:
   - id: description_match_choice_010
     description: "\uB530\uBD09\uB3C4\uCE58\uC57C \uACE0\uB9C8\uC6CC!"
   - id: effect_description_match_choice_001
-    description: '{text_status_05} +5'
+    description: "\uC9C0\uAD6C\uB825 +5"
   - id: effect_description_match_choice_002
     description: "\uB79C\uB364 1\uAC1C \uC2A4\uD0EF +10"
   - id: effect_description_match_choice_003
-    description: "{text_status_10} -5, \uB79C\uB364 1\uAC1C \uC2A4\uD0EF +5"
+    description: "\uC790\uAE08 -5, \uB79C\uB364 1\uAC1C \uC2A4\uD0EF +15"
   - id: effect_description_match_choice_004
-    description: '{text_status_02} +10, {text_status_03} +10, {text_status_04} +10'
+    description: "\uC288\uD305 +10, \uC18D\uB3C4 +10, \uC810\uD504\uB825 +10"
   - id: effect_description_match_choice_005
-    description: '{text_status_02} +5, {text_status_03} +5, {text_status_04} +5'
+    description: "\uC288\uD305 +5, \uC18D\uB3C4 +5, \uC810\uD504\uB825 +5"
   - id: effect_description_match_choice_006
-    description: '{text_status_05} +5, {text_status_06} +5'
+    description: "\uC9C0\uAD6C\uB825 +5, \uCEE8\uB514\uC158 +5"
   - id: effect_description_match_choice_007
-    description: '{text_06} +10'
+    description: "\uCEE8\uB514\uC158 +10"
   - id: effect_description_match_choice_008
-    description: '{text_status_10} -10, {text_status_05} +10, {text_06} +10'
+    description: "\uC790\uAE08 -10, \uC9C0\uAD6C\uB825 +10, \uCEE8\uB514\uC158 +10"
   - id: effect_description_match_choice_009
-    description: '{text_status_06} -5, {text_status_02} +10, {text_status_04} +10'
+    description: "\uCEE8\uB514\uC158 -5, \uC288\uD305 +10, \uC810\uD504\uB825 +10"
   - id: effect_description_match_choice_010
     description: "\uB79C\uB364 1\uAC1C \uC2A4\uD0EF +20"
