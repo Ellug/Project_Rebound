@@ -1,0 +1,98 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc233df5b38030a43889417da0bfb1bc, type: 3}
+  m_Name: SO_FriendlyMatchScheduleMsgTextTable
+  m_EditorClassIdentifier: Assembly-CSharp::FriendlyMatchScheduleMsgTextTableSO
+  _rows:
+  - id: text_diag_schedule_001
+    type: format
+    speaker: right
+    dialogue: "(\uBA87 \uC77C\uB85C \uD574\uC57C \uD560\uAE4C...)"
+  - id: text_diag_schedule_002
+    type: format
+    speaker: center
+    dialogue: "${date1}\uC77C"
+  - id: text_diag_schedule_003
+    type: format
+    speaker: center
+    dialogue: "${date2}\uC77C"
+  - id: text_diag_schedule_004
+    type: format
+    speaker: center
+    dialogue: "${date3}\uC77C"
+  - id: text_diag_schedule_005
+    type: format
+    speaker: right
+    dialogue: "\uD55C\uC6B8\uACE0\uB4F1\uD559\uAD50 \uB18D\uAD6C\uBD80 \uC785\uB2C8\uB2E4."
+  - id: text_diag_schedule_006
+    type: format
+    speaker: right
+    dialogue: "$\uC774\uBC88 \uC8FC {date_choice}\uC77C \uADC0 \uD559\uAD50\uC640
+      \uCE5C\uC120\uC804\uC774 \uAC00\uB2A5\uD560\uAE4C\uC694?"
+  - id: text_diag_schedule_007
+    type: format
+    speaker: left
+    dialogue: "${school_choice} \uB18D\uAD6C\uBD80 \uC785\uB2C8\uB2E4."
+  - id: text_diag_schedule_008
+    type: format
+    speaker: right
+    dialogue: "\uB124. \uB2F5\uBCC0 \uAC10\uC0AC\uD569\uB2C8\uB2E4."
+  - id: text_diag_schedule_009
+    type: accept
+    speaker: left
+    dialogue: "\uAC00\uB2A5\uD569\uB2C8\uB2E4."
+  - id: text_diag_schedule_010
+    type: accept
+    speaker: left
+    dialogue: "\uC88B\uC2B5\uB2C8\uB2E4."
+  - id: text_diag_schedule_011
+    type: accept
+    speaker: left
+    dialogue: "\u3147\u314B."
+  - id: text_diag_schedule_012
+    type: accept
+    speaker: left
+    dialogue: "\uC88B\uC544\uC694 \uC88B\uC544\uC694."
+  - id: text_diag_schedule_013
+    type: accept
+    speaker: left
+    dialogue: "\uB124. \uACBD\uAE30 \uAC00\uB2A5\uD569\uB2C8\uB2E4."
+  - id: text_diag_schedule_014
+    type: accept
+    speaker: left
+    dialogue: "\uC724\uD5C8\uD558\uB178\uB77C."
+  - id: text_diag_schedule_015
+    type: decline
+    speaker: left
+    dialogue: "\uC77C\uC2E0 \uC0C1\uC758 \uC0AC\uC815\uC73C\uB85C {date_choice}\uC77C\uC740
+      \uC548\uB429\uB2C8\uB2E4."
+  - id: text_diag_schedule_016
+    type: decline
+    speaker: left
+    dialogue: "\uAC1C\uAD50\uAE30\uB150\uC77C\uC774\uB77C \uC27D\uB2C8\uB2E4."
+  - id: text_diag_schedule_017
+    type: decline
+    speaker: left
+    dialogue: "\uADF8 \uB0A0\uC740 \uC27D\uC9C0 \uC54A\uC2B5\uB2C8\uB2E4."
+  - id: text_diag_schedule_018
+    type: decline
+    speaker: left
+    dialogue: "\uADF8 \uB0A0\uC740 \uACF5\uB300 \uB6F0\uC5B4\uC57C \uD574\uC11C \uC5B4\uB835\uC2B5\uB2C8\uB2E4."
+  - id: text_diag_schedule_019
+    type: decline
+    speaker: left
+    dialogue: "\uAC70\uC808\uD55C\uB2E4."
+  - id: text_diag_schedule_020
+    type: decline
+    speaker: left
+    dialogue: "${date_choice}\uC77C \uC774\uB77C\uB2C8, \uC774\uBE10\uD558\uC9C0
+      \uC54A\uAD70\uC694"

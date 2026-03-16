@@ -127,6 +127,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 893617675}
     m_Modifications:
+    - target: {fileID: 1467225313799631084, guid: b21b94a65b718244f9d1fa4a9edc2998, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 4645574695727784495, guid: 787b62e7de6c753438bb6b10fb77cf21, type: 3}
     - target: {fileID: 4191891082301072644, guid: b21b94a65b718244f9d1fa4a9edc2998, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -222,6 +226,10 @@ PrefabInstance:
     - target: {fileID: 5353452424897617394, guid: b21b94a65b718244f9d1fa4a9edc2998, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: LoadUI, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 7396348762943299584, guid: b21b94a65b718244f9d1fa4a9edc2998, type: 3}
+      propertyPath: m_text
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 9173775962939408422, guid: b21b94a65b718244f9d1fa4a9edc2998, type: 3}
       propertyPath: m_Name
@@ -626,6 +634,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 893617675}
     m_Modifications:
+    - target: {fileID: 1467225313799631084, guid: b21b94a65b718244f9d1fa4a9edc2998, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 4645574695727784495, guid: 787b62e7de6c753438bb6b10fb77cf21, type: 3}
     - target: {fileID: 4191891082301072644, guid: b21b94a65b718244f9d1fa4a9edc2998, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -721,6 +733,10 @@ PrefabInstance:
     - target: {fileID: 5353452424897617394, guid: b21b94a65b718244f9d1fa4a9edc2998, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: LoadUI, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 7396348762943299584, guid: b21b94a65b718244f9d1fa4a9edc2998, type: 3}
+      propertyPath: m_text
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 9173775962939408422, guid: b21b94a65b718244f9d1fa4a9edc2998, type: 3}
       propertyPath: m_Name
@@ -2009,7 +2025,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MoneyManager
   _dontDestroyOnLoad: 1
-  _gold: 2000
+  _gold: 30000
   _reputation: 2000
 --- !u!4 &1023721666
 Transform:
@@ -3171,6 +3187,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 893617675}
     m_Modifications:
+    - target: {fileID: 1467225313799631084, guid: b21b94a65b718244f9d1fa4a9edc2998, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 4645574695727784495, guid: 787b62e7de6c753438bb6b10fb77cf21, type: 3}
     - target: {fileID: 4191891082301072644, guid: b21b94a65b718244f9d1fa4a9edc2998, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -3266,6 +3286,10 @@ PrefabInstance:
     - target: {fileID: 5353452424897617394, guid: b21b94a65b718244f9d1fa4a9edc2998, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: LoadUI, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 7396348762943299584, guid: b21b94a65b718244f9d1fa4a9edc2998, type: 3}
+      propertyPath: m_text
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 9173775962939408422, guid: b21b94a65b718244f9d1fa4a9edc2998, type: 3}
       propertyPath: m_Name
@@ -4339,6 +4363,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 893617675}
     m_Modifications:
+    - target: {fileID: 1467225313799631084, guid: b21b94a65b718244f9d1fa4a9edc2998, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 4645574695727784495, guid: 787b62e7de6c753438bb6b10fb77cf21, type: 3}
     - target: {fileID: 4191891082301072644, guid: b21b94a65b718244f9d1fa4a9edc2998, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -4442,6 +4470,10 @@ PrefabInstance:
     - target: {fileID: 5353452424897617394, guid: b21b94a65b718244f9d1fa4a9edc2998, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 7396348762943299584, guid: b21b94a65b718244f9d1fa4a9edc2998, type: 3}
+      propertyPath: m_text
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 9173775962939408422, guid: b21b94a65b718244f9d1fa4a9edc2998, type: 3}
       propertyPath: m_Name

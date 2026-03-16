@@ -19,7 +19,13 @@ public class HeadCoachNodeContainer
         _tierConfigMap[tierConfig.tierId] = tierConfig;
     }
 
-    // 트리 연결
+    // HeadCoachManager.ResetContainer() 에서 재초기화 시 호출
+    public void Clear()
+    {
+        _nodeMap.Clear();
+        _tierConfigMap.Clear();
+    }
+
     public void LinkParent(int childId, int parentId)
     {
         HeadCoachNode child = GetNode(childId);
@@ -62,16 +68,17 @@ public class HeadCoachNodeContainer
     // 특정 tierId에 속한 일반 노드 목록
     public IEnumerable<HeadCoachNode> GetNodesByTierId(int tierId)
     {
-        return _nodeMap.Values
-            .Where(n => n.TierId == tierId && n.nodeType == NodeType.Normal);
+        return _nodeMap.Values.Where(n => n.TierId == tierId && n.nodeType == NodeType.Normal);
     }
 
     // tierId에 속한 티어 승급 노드
     public HeadCoachNode GetTierGateNode(int tierId)
     {
-        return _nodeMap.Values
-            .FirstOrDefault(n => n.TierId == tierId && n.nodeType == NodeType.TierGate);
+        return _nodeMap.Values.FirstOrDefault(n => n.TierId == tierId && n.nodeType == NodeType.TierGate);
     }
 
-    public IEnumerable<HeadCoachNode> GetAllNodes() => _nodeMap.Values;
+    public IEnumerable<HeadCoachNode> GetAllNodes()
+    {
+        return _nodeMap.Values;
+    }
 }

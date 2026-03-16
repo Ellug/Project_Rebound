@@ -1,19 +1,14 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-// SO 데이터 테이블 → HeadCoachManager.InitFromTable() 연동
-// StartManager의 Initializing 시점에 호출
+// SO 데이터 테이블을 읽어 HeadCoachManager를 초기화하는 정적 클래스
+// StartManager의 Initializing 시점에 Init() 호출
 public static class HeadCoachTableInitializer
 {
-    // CachedSOData에서 테이블을 읽어 HeadCoachManager를 초기화
-    // 이미 초기화된 경우 복원만 수행 (Lobby 재진입 시)
     public static void Init()
     {
-        if (HeadCoachManager.Instance.IsInitialized)
-        {
-            RestoreUnlockedNodes();
-            return;
-        }
+        // 테이블 업데이트 후 노드 미출력 방지: 항상 컨테이너를 초기화하고 재구성
+        HeadCoachManager.Instance.ResetContainer();
 
         if (!TryGetRequiredTables(
                 out CoachNodeMasterTableSO masterTable,
@@ -27,7 +22,6 @@ public static class HeadCoachTableInitializer
         }
 
         foreach (CoachNodePrerequisiteRow row in prerequisiteTable.Rows)
-            Debug.Log($"[Prerequisite] id={row.col1} nodeId={row.nodeId} targetId={row.targetPrerequisiteId}");
 
         HeadCoachManager.Instance.InitFromTable(
             ConvertMasterRows(masterTable),
@@ -56,11 +50,10 @@ public static class HeadCoachTableInitializer
         return isAllLoaded;
     }
 
-    // CoachNodeMasterRow → HeadCoachNodeData
+    // TODO: 노드 102의 effect_id가 테이블에 1003으로 기재되어 있으나 실제로는 1002 → 테이블 수정 필요
     private static IEnumerable<HeadCoachNodeData> ConvertMasterRows(CoachNodeMasterTableSO table)
     {
-        var result = new List<HeadCoachNodeData>(table.Rows.Count);
-
+        List<HeadCoachNodeData> result = new(table.Rows.Count);
         foreach (CoachNodeMasterRow row in table.Rows)
         {
             result.Add(new HeadCoachNodeData
@@ -76,10 +69,9 @@ public static class HeadCoachTableInitializer
         return result;
     }
 
-    // CoachNodeEffectDetailRow → HeadCoachEffectData
     private static IEnumerable<HeadCoachEffectData> ConvertEffectRows(CoachNodeEffectDetailTableSO table)
     {
-        var result = new List<HeadCoachEffectData>(table.Rows.Count);
+        List<HeadCoachEffectData> result = new(table.Rows.Count);
         foreach (CoachNodeEffectDetailRow row in table.Rows)
         {
             result.Add(new HeadCoachEffectData
@@ -94,12 +86,10 @@ public static class HeadCoachTableInitializer
         return result;
     }
 
-    // CoachNodePrerequisiteRow → HeadCoachPrerequisiteData
-    // targetPrerequisiteId가 0인 행은 선행 조건 없음으로 간주하여 스킵
+    // targetPrerequisiteId가 0인 행은 선행 조건 없음으로 간주해 스킵
     private static IEnumerable<HeadCoachPrerequisiteData> ConvertPrerequisiteRows(CoachNodePrerequisiteTableSO table)
     {
-        var result = new List<HeadCoachPrerequisiteData>(table.Rows.Count);
-
+        List<HeadCoachPrerequisiteData> result = new(table.Rows.Count);
         foreach (CoachNodePrerequisiteRow row in table.Rows)
         {
             if (row.targetPrerequisiteId == 0) continue;
@@ -114,11 +104,9 @@ public static class HeadCoachTableInitializer
         return result;
     }
 
-    // TierManageOpenConditionRow → HeadCoachTierConfigData
     private static IEnumerable<HeadCoachTierConfigData> ConvertTierConfigRows(TierManageOpenConditionTableSO table)
     {
-        var result = new List<HeadCoachTierConfigData>(table.Rows.Count);
-
+        List<HeadCoachTierConfigData> result = new(table.Rows.Count);
         foreach (TierManageOpenConditionRow row in table.Rows)
         {
             result.Add(new HeadCoachTierConfigData
@@ -134,26 +122,19 @@ public static class HeadCoachTableInitializer
         return result;
     }
 
-    // ContentUnlockFeatureRow → HeadCoachContentUnlockData
-    // 효과 테이블에서 참조되지 않는 콘텐츠는 등록하지 않음
+    // 효과 테이블에서 참조되는 functionId만 등록
     private static IEnumerable<HeadCoachContentUnlockData> ConvertContentUnlockRows(
         ContentUnlockFeatureTableSO contentTable,
         CoachNodeEffectDetailTableSO effectTable)
     {
-        // 효과 테이블에서 functionId가 있는 항목만 수집
-        var referencedFunctionIds = new HashSet<int>();
-
+        HashSet<int> referencedFunctionIds = new();
         foreach (CoachNodeEffectDetailRow row in effectTable.Rows)
-        {
-            if (row.functionId != 0)
-                referencedFunctionIds.Add(row.functionId);
-        }
-        var result = new List<HeadCoachContentUnlockData>();
+            if (row.functionId != 0) referencedFunctionIds.Add(row.functionId);
 
+        List<HeadCoachContentUnlockData> result = new();
         foreach (ContentUnlockFeatureRow row in contentTable.Rows)
         {
             if (!referencedFunctionIds.Contains(row.id)) continue;
-
             result.Add(new HeadCoachContentUnlockData
             {
                 functionId = row.id,
@@ -166,7 +147,6 @@ public static class HeadCoachTableInitializer
         return result;
     }
 
-    // applyMethod 문자열 → ApplyMethod enum 변환
     private static ApplyMethod ParseApplyMethod(string raw)
     {
         if (System.Enum.TryParse(raw, ignoreCase: true, out ApplyMethod method))
@@ -180,8 +160,6 @@ public static class HeadCoachTableInitializer
     {
         PlayData data = SaveManager.Instance.CurrentData;
         if (data != null)
-        {
             HeadCoachManager.Instance.RestoreUnlockedNodes(data.unlockedNodeIds);
-        }
     }
 }

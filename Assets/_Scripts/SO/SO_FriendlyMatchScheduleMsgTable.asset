@@ -1,0 +1,70 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cdef4a8913ad3c942b53237cc2ffae2f, type: 3}
+  m_Name: SO_FriendlyMatchScheduleMsgTable
+  m_EditorClassIdentifier: Assembly-CSharp::FriendlyMatchScheduleMsgTableSO
+  _rows:
+  - iD: diag_schedule_001
+    messageIndex: index_001
+    messageDialogue: text_diag_schedule_001
+    branchType: 3
+    next: 
+    choice1Dialogue: text_diag_schedule_002
+    choice1Next: index_002
+    choice2Dialogue: text_diag_schedule_003
+    choice2Next: index_002
+    choice3Dialogue: text_diag_schedule_004
+    choice3Next: index_002
+  - iD: diag_schedule_001
+    messageIndex: index_002
+    messageDialogue: text_diag_schedule_005
+    branchType: 2
+    next: index_003
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+  - iD: diag_schedule_001
+    messageIndex: index_003
+    messageDialogue: text_diag_schedule_006
+    branchType: 2
+    next: index_004
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+  - iD: diag_schedule_001
+    messageIndex: index_004
+    messageDialogue: text_diag_schedule_007
+    branchType: 1
+    next: 
+    choice1Dialogue: text_diag_schedule_accept
+    choice1Next: index_005
+    choice2Dialogue: text_diag_schedule_decline
+    choice2Next: index_005
+    choice3Dialogue: 
+    choice3Next: 
+  - iD: diag_schedule_001
+    messageIndex: index_005
+    messageDialogue: text_diag_schedule_008
+    branchType: 3
+    next: END
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 

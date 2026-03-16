@@ -37,6 +37,7 @@ public class LobbyUI : UIBase
     [SerializeField] private StudentManagementPopup _studentManagementPopup; // 씬에 배치된 학생 관리 팝업(비활성화 상태)
     [SerializeField] private HeadCoachPopup _headCoachPopup; // 씬에 배치된 감독 노드 팝업 (비활성화 상태)
     [SerializeField] private FacilityPopup _facilityPopup; // 씬에 배치된 감독 노드 팝업 (비활성화 상태)
+    [SerializeField] private AlwaysEffectPopup _alwaysEffectPopup; // 씬에 배치된 상시 효과 확인 팝업 (비활성화 상태)
 
     [Header("Center Message")]
     [SerializeField] private TMP_Text _txtMessage;
@@ -50,6 +51,7 @@ public class LobbyUI : UIBase
     [SerializeField] private Button _btnFacility; // 시설 (MVP 개발 X)
     [SerializeField] private Button _btnCoach;    // 감독 노드 (MVP 개발 X)
     [SerializeField] private Button _btnShop;     // 상점 (MVP 개발 X)
+    [SerializeField] private Button _btnEffectIcon; // 현재 적용 중인 상시 효과 확인
     [SerializeField] private BottomTabActiveSpriteSet _activeTabSprites; // 탭 활성 시 교체할 스프라이트
 
     [Header("Test")]
@@ -128,11 +130,18 @@ public class LobbyUI : UIBase
             MoneyManager.Instance.OnReputationChanged -= UpdateReputationUI;
             MoneyManager.Instance.OnReputationChanged += UpdateReputationUI;
         }
+
         if (SuddenEventManager.Instance != null)
         {
             SuddenEventManager.Instance.OnPopupRequested -= ShowEventPopup;
             SuddenEventManager.Instance.OnPopupRequested += ShowEventPopup;
         }
+
+
+        // AlwaysEffectPopup 초기화
+        if (_alwaysEffectPopup != null)
+            _alwaysEffectPopup.Init();
+
         RefreshBottomNavTabSprites();
         MoneyManager.Instance.ForceNotify();
     }
@@ -245,6 +254,10 @@ public class LobbyUI : UIBase
         // MVP 미구현 기능들은 '준비중' 알림
         if (_btnShop != null)
             _btnShop.onClick.AddListener(() => ShowNotImplemented("상점"));
+
+        // 현재 적용 중인 상시 효과 확인 팝업 오픈
+        if (_btnEffectIcon != null)
+            _btnEffectIcon.onClick.AddListener(OnClickEffectIcon);
     }
 
     private void OnClickTraining()
@@ -354,6 +367,22 @@ public class LobbyUI : UIBase
         //_headCoachPopup.transform.SetAsLastSibling();
         _facilityPopup.Open();
         RefreshBottomNavTabSprites();
+    }
+
+    // 상시 효과 확인 팝업 — 다른 로비 팝업과 독립적으로 토글
+    private void OnClickEffectIcon()
+    {
+        if (_alwaysEffectPopup == null)
+            return;
+
+        if (_alwaysEffectPopup.gameObject.activeSelf)
+        {
+            _alwaysEffectPopup.Close();
+            return;
+        }
+
+        _alwaysEffectPopup.transform.SetAsLastSibling();
+        _alwaysEffectPopup.Open();
     }
 
     // 데이터 매니저 등에서 정보를 받아와 UI 갱신
