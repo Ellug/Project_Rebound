@@ -24,7 +24,7 @@ public class TrainingFlowController : MonoBehaviour
         string trainingName,
         List<Student> students,
         Action<string, List<Student>> applyEffect = null,
-        Sprite backgroundSprite = null)
+        string backgroundImageId = null)
     {
         if (students == null || students.Count == 0)
         {
@@ -53,7 +53,7 @@ public class TrainingFlowController : MonoBehaviour
 
         // 진행 UI 표시
         if (_progressUI != null)
-            _progressUI.Show(backgroundSprite);
+            _progressUI.Show(backgroundImageId);
 
         // 게이지 연출 시작
         _running = StartCoroutine(ProgressRoutine(

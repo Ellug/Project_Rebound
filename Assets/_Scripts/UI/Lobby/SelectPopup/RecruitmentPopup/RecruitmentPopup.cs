@@ -321,7 +321,7 @@ public class RecruitmentPopup : UIPopup
             },
             onCancel: () => { },
             subMessage: null,
-            previewSprite: null,
+            previewImageId: null,
             showCancel: true,
             primaryKind: UIPopupRequest.PrimaryButtonKind.Confirm
         );

@@ -7462,19 +7462,19 @@ MonoBehaviour:
   - title: "\uD3EC\uC9C0\uC158 \uC774\uB780?"
     content: "\uC124\uBA85 1"
     subMessage: 
-    image: {fileID: -3228104907866816974, guid: df9f792b6f98f0e4e9799a25637927bf, type: 3}
+    imageId: StudentPopup01_img_01
   - title: "\uC13C\uD130 \uD3EC\uC9C0\uC158"
     content: "\uC124\uBA85 2"
     subMessage: 
-    image: {fileID: -3228104907866816974, guid: df9f792b6f98f0e4e9799a25637927bf, type: 3}
+    imageId: StudentPopup01_img_02
   - title: "\uAC00\uB4DC \uD3EC\uC9C0\uC158"
     content: "\uC124\uBA85 3"
     subMessage: 
-    image: {fileID: -3228104907866816974, guid: df9f792b6f98f0e4e9799a25637927bf, type: 3}
+    imageId: StudentPopup01_img_03
   - title: "\uD3EC\uC6CC\uB4DC \uD3EC\uC9C0\uC158"
     content: "\uC124\uBA85 4"
     subMessage: 
-    image: {fileID: -3228104907866816974, guid: df9f792b6f98f0e4e9799a25637927bf, type: 3}
+    imageId: StudentPopup01_img_04
   _btnPlacementComplete: {fileID: 627564503}
 --- !u!1 &815628211
 GameObject:
@@ -12158,7 +12158,7 @@ MonoBehaviour:
   _dontDestroyOnLoad: 1
   _canvasRoot: {fileID: 1542067910}
   _uiPopupPrefab: {fileID: 2709569829720818253, guid: 12b32fafa91fc074fbb429aa6509eab7, type: 3}
-  _defaultPopupPreviewSprite: {fileID: -6551554479474966430, guid: 0d5f6a2c5aacb8e45a269aebb112f878, type: 3}
+  _defaultPopupPreviewImageId: 
   _studentSelectPopupPrefab: {fileID: 5655431246991369327, guid: 2eefce8b8a34e304b82db8b2d577031f, type: 3}
 --- !u!4 &1317058962
 Transform:
@@ -18390,7 +18390,6 @@ MonoBehaviour:
     facility: {fileID: 21300000, guid: c74d783ff9c841b48a2431b8b5fa1a83, type: 3}
     coach: {fileID: 21300000, guid: 99b663a4613ccb148b933c70ab1de25c, type: 3}
     shop: {fileID: 21300000, guid: e85863a9751825f48b8cd05b6a4c9eb4, type: 3}
-  _testSprite: {fileID: 8037539321571114111, guid: 7515a6442954d74499bd13e864a3efb3, type: 3}
   _recruitmentManager: {fileID: 112001511}
 --- !u!114 &2068180154 stripped
 MonoBehaviour:

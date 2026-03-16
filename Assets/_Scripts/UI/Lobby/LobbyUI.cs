@@ -54,9 +54,6 @@ public class LobbyUI : UIBase
     [SerializeField] private Button _btnEffectIcon; // 현재 적용 중인 상시 효과 확인
     [SerializeField] private BottomTabActiveSpriteSet _activeTabSprites; // 탭 활성 시 교체할 스프라이트
 
-    [Header("Test")]
-    [SerializeField] private Sprite _testSprite;
-
     [SerializeField] private RecruitmentManager _recruitmentManager;
 
     private bool _inited;
@@ -218,7 +215,7 @@ public class LobbyUI : UIBase
                     Title = "특수 훈련",
                     Message = "이 훈련은 부상 위험이 높지만\n성장 속도가 매우 빠릅니다.",
                     SubMessage = "체력 소모 -30 / 부상 확률 10%",
-                    PreviewSprite = _testSprite,
+                    PreviewImageId = null,
                     ShowCancel = true,
                     OnPrimary = () => Debug.Log("이미지 팝업 확인됨"),
                     OnCancel = null,

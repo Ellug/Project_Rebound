@@ -97,7 +97,7 @@ public class TournamentHalfTimeSelectionUI : MonoBehaviour
             onPrimary: () => ConfirmSelection(row),
             onCancel: () => { },
             subMessage: ResolveText(row.effectDescription),
-            previewSprite: null,
+            previewImageId: "EventGame00_img_halftime",
             showCancel: true,
             primaryKind: UIPopupRequest.PrimaryButtonKind.Confirm
         );

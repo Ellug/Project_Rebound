@@ -151,7 +151,7 @@ public class AlwaysEventManager : MonoBehaviour
             onPrimary: onConfirm,
             onCancel: null,
             subMessage: GetEventSubMessage(row),
-            previewSprite: null,
+            previewImageId: GetEventPreviewImageId(row),
             showCancel: false,
             primaryKind: UIPopupRequest.PrimaryButtonKind.Confirm
         );
@@ -262,5 +262,55 @@ public class AlwaysEventManager : MonoBehaviour
             "holiday" => "컨디션 회복량 +5  /  훈련 효율 x1.5",
             _ => string.Empty
         };
+    }
+
+    // type/name 기준으로 이벤트 팝업 이미지 ID 반환
+    private static string GetEventPreviewImageId(AlwaysEventRow row)
+    {
+        switch (row.name)
+        {
+            // 시험 기간
+            case "first_midterm_exam":
+            case "first_final_exam":
+            case "second_midterm_exam":
+            case "second_final_exam":
+                return "EventPopup_exam_img";
+
+            // 학교 행사
+            case "festival_sports_day":
+                return "EventPopup_tournament_img";
+            case "festival_school":
+                return "EventPopup_festival_img";
+
+            // 방학
+            case "vacation_summer":
+                return "EventPopup_summer_img";
+            case "vacation_winter":
+                return "EventPopup_winter_img";
+
+            // 공휴일
+            case "holiday_children_day":
+                return "EventPopup_children_img";
+            case "holiday_buddha":
+                return "EventPopup_buddha_img";
+            case "holiday_memorial_day":
+                return "EventPopup_memorial_img";
+            case "holiday_liberation_Day":
+            case "holiday_liberation_day":
+                return "EventPopup_liberation_img";
+            case "holiday_chuseok":
+                return "EventPopup_chuseok_img";
+            case "holiday_foundation_day":
+                return "EventPopup_national_img";
+            case "holiday_hangul_day":
+                return "EventPopup_hangul_img";
+            case "holiday_christmas":
+                return "EventPopup_christmas_img";
+            case "holiday_independence":
+                return "EventPopup_independence_img";
+
+            default:
+                return null;
+        }
     }
 }

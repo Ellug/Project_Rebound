@@ -259,7 +259,7 @@ public class TrainingSelectPopup : UIPopup
             onPrimary: null,
             onCancel: () => { },
             subMessage: data.statModifierText,
-            previewSprite: data.previewSprite,
+            previewImageId: data.previewImageId,
             showCancel: true,
             primaryKind: UIPopupRequest.PrimaryButtonKind.StartTraining
         );
@@ -299,6 +299,7 @@ public class TrainingSelectPopup : UIPopup
         UIManager.Instance.ShowPopup(req);
     }
 
+
     private void StartTrainingFlowFromConfirm(TrainingButtonData data, List<Student> students)
     {
         if (data == null)
@@ -310,10 +311,11 @@ public class TrainingSelectPopup : UIPopup
 
         string key = data.trainingKey;
         string name = data.trainingName;
-        Sprite bgSprite = data.previewSprite;
+        string bgImageId = data.previewImageId;
 
-        StartFlow(key, name, students, bgSprite, data);
+        StartFlow(key, name, students, bgImageId, data);
     }
+
 
     private List<Student> GetDefaultStudentsForNoSelect()
     {
@@ -324,7 +326,7 @@ public class TrainingSelectPopup : UIPopup
     }
 
     // FlowController 실행
-    private void StartFlow(string key, string name, List<Student> students, Sprite bgSprite, TrainingButtonData data)
+    private void StartFlow(string key, string name, List<Student> students, string bgImageId, TrainingButtonData data)
     {
         if (_trainingFlow == null)
             _trainingFlow = FindFirstObjectByType<TrainingFlowController>();
@@ -346,7 +348,7 @@ public class TrainingSelectPopup : UIPopup
             trainingName: name,
             students: students,
             applyEffect: (k, list) => ApplyCsvEffect(data, list),
-            backgroundSprite: bgSprite
+            backgroundImageId: bgImageId
         );
     }
 
