@@ -44,7 +44,7 @@ public class StartManager : MonoBehaviour
         float progress;
         while (!checkHandle.IsDone)
         {
-            progress = checkHandle.PercentComplete * 0.3f;
+            progress = checkHandle.PercentComplete * 0.1f;
             _loadingSlider.value = progress;
             yield return null;
         }
@@ -59,7 +59,7 @@ public class StartManager : MonoBehaviour
                 var updateHandle = Addressables.UpdateCatalogs(catalogsToUpdate, false);
                 while (!updateHandle.IsDone)
                 {
-                    progress = 0.3f + (updateHandle.PercentComplete * 0.3f);
+                    progress = 0.1f + (updateHandle.PercentComplete * 0.15f);
                     _loadingSlider.value = progress;
                     yield return null;
                 }
@@ -68,7 +68,7 @@ public class StartManager : MonoBehaviour
             }
             else
             {
-                _loadingSlider.value = 0.6f;
+                _loadingSlider.value = 0.25f;
             }
         }
 
@@ -86,9 +86,12 @@ public class StartManager : MonoBehaviour
                 totalDownloadSize += sizeHandle.Result;
 
             Addressables.Release(sizeHandle);
+
+            progress = 0.25f + ((float)(i + 1) / allTableRefs.Count) * 0.1f;
+            _loadingSlider.value = progress;
         }
 
-        _loadingSlider.value = 0.7f;
+        _loadingSlider.value = 0.35f;
 
         if (totalDownloadSize > 0)
         {
@@ -100,7 +103,7 @@ public class StartManager : MonoBehaviour
                 while (!downloadHandle.IsDone)
                 {
                     float tableProgress = downloadHandle.PercentComplete / Mathf.Max(1, allTableRefs.Count);
-                    progress = 0.7f + ((i + tableProgress) / Mathf.Max(1, allTableRefs.Count)) * 0.1f;
+                    progress = 0.35f + ((i + tableProgress) / Mathf.Max(1, allTableRefs.Count)) * 0.2f;
                     _loadingSlider.value = progress;
                     yield return null;
                 }
@@ -110,14 +113,14 @@ public class StartManager : MonoBehaviour
         }
         else
         {
-            _loadingSlider.value = 0.8f;
+            _loadingSlider.value = 0.55f;
         }
 
         _statusText.text = "Loading game data...";
 
         int tableCount = Mathf.Max(1, allTableRefs.Count);
-        float tableStep = 0.1f / tableCount;
-        float baseProgress = 0.8f;
+        float tableStep = 0.3f / tableCount;
+        float baseProgress = 0.55f;
 
         for (int i = 0; i < allTableRefs.Count; i++)
         {
@@ -135,13 +138,13 @@ public class StartManager : MonoBehaviour
             }
 
             baseProgress += tableStep;
-            _loadingSlider.value = Mathf.Min(baseProgress, 0.9f);
+            _loadingSlider.value = Mathf.Min(baseProgress, 0.85f);
         }
 
-        _loadingSlider.value = 0.9f;
+        _loadingSlider.value = 0.85f;
 
         _statusText.text = "Initializing...";
-        _loadingSlider.value = 0.95f;
+        _loadingSlider.value = 0.9f;
 
         progress = 0.95f;
         while (progress < 1f)
