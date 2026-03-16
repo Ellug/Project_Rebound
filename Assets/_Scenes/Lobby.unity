@@ -2651,21 +2651,11 @@ MonoBehaviour:
   _failedImage: {fileID: 26626975867926279, guid: 8c817fa4736b2264f8057c36f5a37c49, type: 3}
   _goldIcon: {fileID: 6734850202343107688, guid: 1be428b245f26504aa860258100704f5, type: 3}
   _fameIcon: {fileID: -805237271934909618, guid: 9e32ebe18d864c9488a3c9b717758c1a, type: 3}
-  _achievedTitleFormat: "{PLACEMENT} \uB2EC\uC131!"
-  _failedTitle: "\uD0C8\uB77D..."
-  _achievedContentTemplate: "<size=54.8>{PLACEMENT} \uB2EC\uC131 \uCD95\uD558\uB4DC\uB9BD\uB2C8\uB2E4!\n\uB2E4\uC74C
-    \uD559\uAE30\uC5D0\uB3C4 \uD300\uC744 \uC774\uB04C\uC5B4 \uC8FC\uC138\uC694!</size>\n\n\uB2E4\uC74C
-    \uC790\uC6D0\uC744 \uD68D\uB4DD\uD588\uC2B5\uB2C8\uB2E4."
-  _failedContentTemplate: "<size=54.8>\uACB0\uACFC\uB294 \uB0C9\uD639\uD588\uC2B5\uB2C8\uB2E4.</size>\n\n\uC774\uC0AC\uD68C\uB294
-    \uB2F9\uC2E0\uC5D0\uAC8C \uD574\uC784\uC744 \uD1B5\uBCF4\uD588\uACE0, \n\uC815\uB4E4\uC5C8\uB358
-    \uC124\uBE44\uB4E4\uC740 \uBAA8\uB450 \uB9E4\uAC01\uB410\uC2B5\uB2C8\uB2E4.\n\uD559\uC0DD\uB4E4\uC740
-    \uB208\uBB3C\uC744 \uD758\uB9AC\uBA70 \uD769\uC5B4\uC9D1\uB2C8\uB2E4.\n\n\uD558\uC9C0\uB9CC
-    \uB2F9\uC2E0\uC758 \uC774\uB984\uC740 \uC5C5\uACC4\uC5D0 \uB0A8\uC558\uC2B5\uB2C8\uB2E4.\n\uB2E4\uC74C
-    \uC790\uC6D0\uC744 \uD68D\uB4DD\uD588\uC2B5\uB2C8\uB2E4."
-  _achievedGold: 0
-  _achievedFame: 0
-  _failedGold: 0
-  _failedFame: 0
+  _rank1RewardId: 201
+  _rank2RewardId: 202
+  _rank3RewardId: 203
+  _rank4RewardId: 204
+  _failedRewardId: 205
   _scrollRect: {fileID: 1169403431}
   _scrollContent: {fileID: 1169403430}
   _rewardRow: {fileID: 1797675216}
@@ -7180,7 +7170,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 30}
+  m_SizeDelta: {x: 0, y: 200}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &745888551
 MonoBehaviour:
@@ -7212,7 +7202,7 @@ MonoBehaviour:
     m_Left: 44
     m_Right: 0
     m_Top: 0
-    m_Bottom: 65
+    m_Bottom: 235
   m_ChildAlignment: 0
   m_StartCorner: 0
   m_StartAxis: 0
