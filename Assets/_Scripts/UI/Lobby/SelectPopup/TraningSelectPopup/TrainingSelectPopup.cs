@@ -311,7 +311,7 @@ public class TrainingSelectPopup : UIPopup
 
         string key = data.trainingKey;
         string name = data.trainingName;
-        string bgImageId = data.previewImageId;
+        string bgImageId = data.backgroundImageId;  // ProgressUI 배경 이미지
 
         StartFlow(key, name, students, bgImageId, data);
     }

@@ -11849,6 +11849,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8208459115265765917, guid: df1df13b385a43645b5902ed830013aa, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 8913316296741631172, guid: df1df13b385a43645b5902ed830013aa, type: 3}
       propertyPath: _imgBackground
       value: 
@@ -11891,6 +11895,7 @@ PrefabInstance:
     - {fileID: 2690823081894564844, guid: df1df13b385a43645b5902ed830013aa, type: 3}
     - {fileID: -8947847698097383022, guid: df1df13b385a43645b5902ed830013aa, type: 3}
     - {fileID: -2460676518421759870, guid: df1df13b385a43645b5902ed830013aa, type: 3}
+    - {fileID: 3903527376483470558, guid: df1df13b385a43645b5902ed830013aa, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: df1df13b385a43645b5902ed830013aa, type: 3}
@@ -11901,7 +11906,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
 --- !u!114 &1296495326 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8208459115265765917, guid: df1df13b385a43645b5902ed830013aa, type: 3}
+  m_CorrespondingSourceObject: {fileID: 444045818049889668, guid: df1df13b385a43645b5902ed830013aa, type: 3}
   m_PrefabInstance: {fileID: 1296495324}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
@@ -19310,6 +19315,14 @@ PrefabInstance:
       propertyPath: _resultPopupPrefab
       value: 
       objectReference: {fileID: 3394568378502047101}
+    - target: {fileID: 8313116447302640032, guid: 2872640eb66560844bb5942b4e01d542, type: 3}
+      propertyPath: _weekendTrainingCancelBgImageId
+      value: TrainingPopup03_img_02
+      objectReference: {fileID: 0}
+    - target: {fileID: 8313116447302640032, guid: 2872640eb66560844bb5942b4e01d542, type: 3}
+      propertyPath: _weekendTrainingConfirmBgImageId
+      value: TrainingPopup03_img
+      objectReference: {fileID: 0}
     - target: {fileID: 8800154559438791188, guid: 2872640eb66560844bb5942b4e01d542, type: 3}
       propertyPath: m_Name
       value: TrainingFlowController

@@ -561,12 +561,15 @@ public class GameManager : Singleton<GameManager>
         _trainingFlowController.OnFlowComplete -= HandleWeekendTrainingFlowComplete;
         _trainingFlowController.OnFlowComplete += HandleWeekendTrainingFlowComplete;
 
+        // rowIndex 기준으로 배경 이미지 ID 선택
+        string backgroundImageId = _trainingFlowController.GetWeekendBgImageId(rowIndex);
+
         _trainingFlowController.Execute(
             trainingKey: $"weekend_{rowIndex}",
             trainingName: trainingName,
             students: StudentManager.Instance.Students,
             applyEffect: (_, __) => ApplyWeekendTrainingEffect(rowIndex),
-            backgroundImageId: null
+            backgroundImageId: backgroundImageId
         );
     }
 

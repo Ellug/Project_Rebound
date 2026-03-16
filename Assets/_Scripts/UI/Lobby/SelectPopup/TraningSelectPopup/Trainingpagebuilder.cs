@@ -96,6 +96,14 @@ public static class TrainingPageBuilder
                     }
                 }
 
+                // 인스펙터에서 입력한 배경 이미지 ID 주입
+                if (page.buttonBackgroundImageIds != null && buttonIndex < page.buttonBackgroundImageIds.Count)
+                {
+                    string bgImageId = page.buttonBackgroundImageIds[buttonIndex];
+                    if (!string.IsNullOrEmpty(bgImageId))
+                        btnData.backgroundImageId = bgImageId;
+                }
+
                 page.buttons.Add(btnData);
                 buttonIndex++;
             }

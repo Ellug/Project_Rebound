@@ -15,6 +15,10 @@ public class TrainingFlowController : MonoBehaviour
     [SerializeField] private float _fillDuration = 2.0f;         // 게이지 채우는 시간
     [SerializeField] private float _holdDuration = 0.5f;         // 완료 후 대기 시간
 
+    [Header("Weekend Training Images")]
+    [SerializeField] private string _weekendTrainingConfirmBgImageId;  // 주말 훈련 배경 이미지 ID
+    [SerializeField] private string _weekendTrainingCancelBgImageId;   // 주말 휴식 배경 이미지 ID
+
     public event Action OnFlowComplete;                          // 전체 흐름 종료 콜백
     private Coroutine _running;                                  // 실행중 코루틴
 
@@ -169,5 +173,12 @@ public class TrainingFlowController : MonoBehaviour
             condition = original.condition,
             // trust = original.trust
         };
+    }
+
+    public string GetWeekendBgImageId(int rowIndex)
+    {
+        return rowIndex == 901
+            ? _weekendTrainingConfirmBgImageId
+            : _weekendTrainingCancelBgImageId;
     }
 }
