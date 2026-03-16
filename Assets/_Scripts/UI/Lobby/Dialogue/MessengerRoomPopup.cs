@@ -14,6 +14,7 @@ public class MessengerRoomPopup : UIBase
     [SerializeField] private ChatBubble _bubbleLeftPrefab;
     [SerializeField] private ChatBubble _bubbleRightPrefab;
     [SerializeField] private ChatChoiceBox _choiceBoxPrefab;
+    [SerializeField] private ChatBubble _bubbleSystemPrefab;
 
     private List<GameObject> _spawnedItems = new List<GameObject>();
 
@@ -70,11 +71,59 @@ public class MessengerRoomPopup : UIBase
 
     private void HandleNewMessage(ChatRoom room)
     {
-        if (room.RoomId == CurrentRoomId)
+        if (room.RoomId != CurrentRoomId) return;
+
+        foreach (var item in _spawnedItems)
         {
-            RefreshChat(room);
-            MessengerManager.Instance.MarkAsRead(CurrentRoomId);
+            Destroy(item);
         }
+        _spawnedItems.Clear();
+
+        DateTime? currentDateGroup = null;
+
+        foreach (var msg in room.Messages)
+        {
+            if (currentDateGroup == null || currentDateGroup.Value.Date != msg.Timestamp.Date)
+            {
+                currentDateGroup = msg.Timestamp.Date;
+                SpawnDateDivider(currentDateGroup.Value);
+            }
+
+            // 1. 선택지 분기
+            if (msg.EventType == MessageEventType.Choice)
+            {
+                ChatChoiceBox choiceBox = Instantiate(_choiceBoxPrefab, _chatContentRoot);
+                choiceBox.Setup(msg, this);
+                choiceBox.gameObject.SetActive(true);
+                _spawnedItems.Add(choiceBox.gameObject);
+            }
+            // 2.  시스템 메시지 분기
+            else if (msg.EventType == MessageEventType.System)
+            {
+                if (_bubbleSystemPrefab != null)
+                {
+                    ChatBubble bubble = Instantiate(_bubbleSystemPrefab, _chatContentRoot);
+                    bubble.Setup(msg.Content);
+                    bubble.gameObject.SetActive(true);
+                    _spawnedItems.Add(bubble.gameObject);
+                }
+            }
+            // 3. 기존 일반 텍스트 분기
+            else
+            {
+                ChatBubble prefabToUse = msg.SenderType == MessageSenderType.Them ? _bubbleLeftPrefab : _bubbleRightPrefab;
+
+                if (prefabToUse != null)
+                {
+                    ChatBubble bubble = Instantiate(prefabToUse, _chatContentRoot);
+                    bubble.Setup(msg.Content);
+                    bubble.gameObject.SetActive(true);
+                    _spawnedItems.Add(bubble.gameObject);
+                }
+            }
+        }
+
+        Canvas.ForceUpdateCanvases();
     }
 
     private void RefreshChat(ChatRoom room)

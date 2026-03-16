@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 using System.Linq;
 
@@ -29,7 +29,18 @@ public class DialogueRunner : Singleton<DialogueRunner>
         }
 
         // 2. 현재 흐름 노드 찾기
+
         var row = flowTable.Rows.FirstOrDefault(r => r.iD == diagId && r.messageIndex == nodeId);
+
+        if (row == null && nodeId == "index_000")
+        {
+            row = flowTable.Rows.FirstOrDefault(r => r.iD == diagId);
+            if (row != null)
+            {
+                Debug.Log($"[DialogueRunner] {diagId}의 index_000이 없어 {row.messageIndex}부터 시작합니다");
+            }
+        }
+
         if (row == null)
         {
             Debug.LogWarning($"[DialogueRunner] 노드를 찾을 수 없습니다: {diagId} / {nodeId}");
@@ -48,6 +59,14 @@ public class DialogueRunner : Singleton<DialogueRunner>
         MessageSenderType senderType = MessageSenderType.Them;
 
         var textRow = textTable.Rows.FirstOrDefault(r => r.iD == row.messageDialogue);
+
+        if (textRow == null)
+        {
+            string fallbackId = row.messageDialogue.Replace("text_", "text_diag_");
+            textRow = textTable.Rows.FirstOrDefault(r => r.iD == fallbackId);
+        }
+
+
         if (textRow != null)
         {
             messageText = textRow.dialogue;

@@ -15,7 +15,7 @@ MonoBehaviour:
   _rows:
   - id: event_000001
     name: "\uBA58\uD0C8 \uAC15\uD654"
-    context: 3
+    context: -1
     condition: 2
     category: 10
     scope: 2
@@ -855,7 +855,7 @@ MonoBehaviour:
     description: diag_020001
   - id: event_030000
     name: "\uACBD\uC77C \uC544\uCE74\uB370\uBBF8!"
-    context: 3
+    context: -1
     condition: 1
     category: 3
     scope: 7

@@ -265,6 +265,7 @@ GameObject:
   m_Component:
   - component: {fileID: 31166443}
   - component: {fileID: 31166442}
+  - component: {fileID: 31166444}
   m_Layer: 0
   m_Name: SuddenEventManager
   m_TagString: Untagged

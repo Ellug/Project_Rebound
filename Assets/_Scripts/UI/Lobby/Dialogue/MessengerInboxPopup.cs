@@ -65,7 +65,6 @@ public class MessengerInboxPopup : UIBase
     // 1. 리스트를 새로 그릴 때 기존 항목들을 깔끔하게 지워주는 로직 추가
     private void RefreshList()
     {
-        // [핵심 추가] 기존에 생성된 방 슬롯과 날짜 구분선 싹 다 지우기
         foreach (var item in _spawnedItems)
         {
             if (item != null) Destroy(item);
@@ -102,8 +101,6 @@ public class MessengerInboxPopup : UIBase
         {
             _currentRoomPopup = Instantiate(_roomPopupPrefab, transform.parent);
         }
-
-        // [핵심 추가] 채팅방 UI를 하이어라키 최하단으로 내려서 가장 앞에 보이게 만듦
         _currentRoomPopup.transform.SetAsLastSibling();
 
         _currentRoomPopup.OpenRoom(room);

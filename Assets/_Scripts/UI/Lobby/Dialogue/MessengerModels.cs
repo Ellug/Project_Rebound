@@ -1,16 +1,17 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 public enum MessageSenderType
 {
     Them,       // 상대방 (좌측 정렬)
-    Me          // 나 (우측 정렬)
+    Me,          // 나 (우측 정렬)
 }
 
 public enum MessageEventType
 {
     NormalText,
-    Choice
+    Choice,
+    System
 }
 
 [Serializable]
