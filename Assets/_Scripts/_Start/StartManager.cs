@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -13,8 +13,9 @@ public class StartManager : MonoBehaviour
     private const float CatalogUpdateEnd = 0.18f;
     private const float VerifyResourcesEnd = 0.28f;
     private const float DownloadResourcesEnd = 0.80f;
-    private const float TableLoadEnd = 0.95f;
-    private const float InitStart = 0.96f;
+    private const float TableLoadEnd = 0.93f;
+    private const float ImagePreloadEnd = 0.96f;
+    private const float InitStart = 0.97f;
 
     // 선다운로드 대상 1건의 메타 정보
     private sealed class PreloadAssetEntry
@@ -25,11 +26,12 @@ public class StartManager : MonoBehaviour
     }
 
     [SerializeField] private Slider _loadingSlider;
-    [SerializeField] private TMP_Text _statusText;    
+    [SerializeField] private TMP_Text _statusText;
     [SerializeField] private TableLoadConfigSO _tableLoadConfig; // 자동 동기화된 테이블 참조 목록
     [SerializeField] private List<AssetReference> _additionalPreloadRefs = new(); // 테이블 외 선다운로드 대상(AddressableImageLibrary SO, AddressableAudioLibrary SO)
 
     private readonly WaitForSeconds _waitOneSecond = new(1f);
+    private readonly List<string> _preloadImageFileNames = new(); // 프리로드할 이미지 파일명 목록
 
     void Awake()
     {
@@ -194,6 +196,11 @@ public class StartManager : MonoBehaviour
 
         _loadingSlider.value = TableLoadEnd;
 
+        // 이미지 라이브러리 SO의 모든 스프라이트를 AddressableImageManager 캐시에 미리 로드
+        _statusText.text = "Loading images...";
+        yield return PreloadAllImagesRoutine();
+        _loadingSlider.value = ImagePreloadEnd;
+
         _statusText.text = "Initializing...";
         _loadingSlider.value = InitStart;
 
@@ -212,6 +219,34 @@ public class StartManager : MonoBehaviour
 
         yield return _waitOneSecond;
         SceneManager.LoadScene("Title");
+    }
+
+    // 수집된 파일명으로 AddressableImageManager 캐시에 병렬 로드 후 고정 등록
+    private IEnumerator PreloadAllImagesRoutine()
+    {
+        if (AddressableImageManager.Instance == null)
+            yield break;
+
+        if (_preloadImageFileNames.Count == 0)
+            yield break;
+
+        // 모든 이미지를 병렬로 로드 시작
+        int total = _preloadImageFileNames.Count;
+        int completed = 0;
+
+        for (int i = 0; i < total; i++)
+        {
+            string fileName = _preloadImageFileNames[i];
+            AddressableImageManager.Instance.LoadSprite(fileName, _ => completed++);
+        }
+
+        // 전부 완료될 때까지 대기
+        while (completed < total)
+            yield return null;
+
+        // 프리로드된 이미지는 고정 캐시로 등록해 해제 방지
+        foreach (string fileName in _preloadImageFileNames)
+            AddressableImageManager.Instance.PinSprite(fileName);
     }
 
     // TableLoadConfig에서 유효한 Addressable 참조를 수집
@@ -253,6 +288,13 @@ public class StartManager : MonoBehaviour
                 if (loadHandle.Result is AddressableImageLibrarySO imageLibrary)
                 {
                     AddImageLibraryRefs(result, imageLibrary);
+
+                    // 이미지 파일명 목록을 미리 수집해 PreloadAllImagesRoutine에서 재사용
+                    foreach (var entry in imageLibrary.Entries)
+                    {
+                        if (entry != null && !string.IsNullOrEmpty(entry.fileName))
+                            _preloadImageFileNames.Add(entry.fileName);
+                    }
                 }
                 else if (loadHandle.Result is AddressableAudioLibrarySO audioLibrary)
                 {
