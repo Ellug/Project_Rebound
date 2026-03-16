@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-
 
 // UIPopup (Host)
 // Simple / Default / Guide 3패널 고정 레이아웃
@@ -14,14 +14,14 @@ public class UIPopup : UIPopupBase
     [SerializeField] private GameObject _panelSimple;           // Simple 패널 루트
     [SerializeField] private GameObject _panelDefault;          // Default 패널 루트
     [SerializeField] private GameObject _panelGuide;            // Guide 패널 루트
-                                                                
-    [Header("Simple UI")]                                       
+
+    [Header("Simple UI")]
     [SerializeField] private TMP_Text _txtSimpleTitle;          // Simple 제목
     [SerializeField] private TMP_Text _txtSimpleMessage;        // Simple 본문
     [SerializeField] private Button _btnSimpleCancel;           // Simple 취소 버튼
     [SerializeField] private Button _btnSimpleConfirm;          // Simple 확인 버튼
-                                                                
-    [Header("Default UI")]                                      
+
+    [Header("Default UI")]
     [SerializeField] private TMP_Text _txtDefaultTitle;         // Default 제목
     [SerializeField] private TMP_Text _txtDefaultSub;           // Default 서브
     [SerializeField] private TMP_Text _txtDefaultMessage;       // Default 본문
@@ -41,11 +41,11 @@ public class UIPopup : UIPopupBase
     [SerializeField] private Button _btnGuideCancel;            // 가이드 취소 버튼
     [SerializeField] private Button _btnGuideNext;              // 다음 페이지 버튼
     [SerializeField] private Button _btnGuideClose;             // 마지막 페이지 닫기 버튼 (Primary 액션)
-                                                                
-    [Header("Guide Dots")]                                      
+
+    [Header("Guide Dots")]
     [SerializeField] private Transform _dotRoot;                // 페이지 도트 부모
     [SerializeField] private Image _dotPrefab;                  // 페이지 도트 프리팹
-                                                                
+
     [SerializeField] private float _dotNormalScale = 1.0f;      // 비활성 스케일
     [SerializeField] private float _dotActiveScale = 1.4f;      // 활성 스케일
 
@@ -56,6 +56,8 @@ public class UIPopup : UIPopupBase
 
     private UIPopupRequest _request;                            // 현재 팝업 요청 데이터
     private int _pageIndex;                                     // 가이드 현재 페이지 인덱스
+    private string _currentDefaultImageId;                      // Default 패널 현재 로드된 이미지 ID (해제용)
+    private string _currentGuideImageId;                        // Guide 패널 현재 로드된 이미지 ID (해제용)
 
     public override void Init()
     {
@@ -90,6 +92,8 @@ public class UIPopup : UIPopupBase
     public override void Close()
     {
         TryInvokePrimaryOnClose(); // 닫힘 시 Primary 호출 옵션 처리
+        ReleaseDefaultImage();
+        ReleaseGuideImage();
         base.Close();
     }
 
@@ -150,16 +154,8 @@ public class UIPopup : UIPopupBase
             if (hasSub) _txtDefaultSub.text = request.SubMessage;
         }
 
-        if (_imgDefaultPreview != null)
-        {
-            bool hasSprite = request.PreviewSprite != null;
-            _imgDefaultPreview.gameObject.SetActive(hasSprite);
-            if (hasSprite)
-            {
-                _imgDefaultPreview.sprite = request.PreviewSprite;
-                _imgDefaultPreview.preserveAspect = true;
-            }
-        }
+        // 이미지 ID 기준으로 Addressable 비동기 로드
+        LoadDefaultImage(request.PreviewImageId);
 
         if (_btnDefaultCancel != null)
         {
@@ -225,8 +221,8 @@ public class UIPopup : UIPopupBase
             if (_txtGuideTitle != null) _txtGuideTitle.text = _request != null ? (_request.Title ?? "") : "";
             if (_txtGuideMessage != null) _txtGuideMessage.text = _request != null ? (_request.Message ?? "") : "";
             if (_txtGuideSub != null) _txtGuideSub.gameObject.SetActive(false);
-            if (_imgGuidePreview != null) _imgGuidePreview.gameObject.SetActive(false);
 
+            LoadGuideImage(null);
             ApplyGuideButtonState(isLast: true);
             RefreshDots();
             return;
@@ -245,16 +241,8 @@ public class UIPopup : UIPopupBase
             if (hasSub) _txtGuideSub.text = page.SubMessage;
         }
 
-        if (_imgGuidePreview != null)
-        {
-            bool hasSprite = page.PreviewSprite != null;
-            _imgGuidePreview.gameObject.SetActive(hasSprite);
-            if (hasSprite)
-            {
-                _imgGuidePreview.sprite = page.PreviewSprite;
-                _imgGuidePreview.preserveAspect = true;
-            }
-        }
+        // 이미지 ID 기준으로 Addressable 비동기 로드
+        LoadGuideImage(page.PreviewImageId);
 
         bool isLast = _pageIndex == pages.Count - 1;
         ApplyGuideButtonState(isLast);
@@ -350,6 +338,89 @@ public class UIPopup : UIPopupBase
             float scale = active ? _dotActiveScale : _dotNormalScale;
             dot.rectTransform.localScale = new Vector3(scale, scale, 1f);
         }
+    }
+
+    // Default 패널 이미지 ID 기준으로 Addressable 비동기 로드
+    private void LoadDefaultImage(string imageId)
+    {
+        ReleaseDefaultImage();
+
+        if (_imgDefaultPreview == null) return;
+
+        if (string.IsNullOrEmpty(imageId))
+        {
+            _imgDefaultPreview.gameObject.SetActive(false);
+            return;
+        }
+
+        _imgDefaultPreview.gameObject.SetActive(false);
+        _currentDefaultImageId = imageId;
+
+        AddressableImageManager.Instance.LoadSprite(imageId, sprite =>
+        {
+            if (_imgDefaultPreview == null) return;
+
+            if (sprite != null)
+            {
+                _imgDefaultPreview.sprite = sprite;
+                _imgDefaultPreview.gameObject.SetActive(true);
+            }
+            else
+            {
+                _imgDefaultPreview.gameObject.SetActive(false);
+            }
+        });
+    }
+
+    // Guide 패널 이미지 ID 기준으로 Addressable 비동기 로드
+    private void LoadGuideImage(string imageId)
+    {
+        ReleaseGuideImage();
+
+        if (_imgGuidePreview == null) return;
+
+        if (string.IsNullOrEmpty(imageId))
+        {
+            _imgGuidePreview.gameObject.SetActive(false);
+            return;
+        }
+
+        _imgGuidePreview.gameObject.SetActive(false);
+        _currentGuideImageId = imageId;
+
+        AddressableImageManager.Instance.LoadSprite(imageId, sprite =>
+        {
+            if (_imgGuidePreview == null) return;
+
+            if (sprite != null)
+            {
+                _imgGuidePreview.sprite = sprite;
+                _imgGuidePreview.preserveAspect = true;
+                _imgGuidePreview.gameObject.SetActive(true);
+            }
+            else
+            {
+                _imgGuidePreview.gameObject.SetActive(false);
+            }
+        });
+    }
+
+    // Default 패널 이미지 해제
+    private void ReleaseDefaultImage()
+    {
+        if (string.IsNullOrEmpty(_currentDefaultImageId)) return;
+
+        AddressableImageManager.Instance.ReleaseSprite(_currentDefaultImageId);
+        _currentDefaultImageId = null;
+    }
+
+    // Guide 패널 이미지 해제
+    private void ReleaseGuideImage()
+    {
+        if (string.IsNullOrEmpty(_currentGuideImageId)) return;
+
+        AddressableImageManager.Instance.ReleaseSprite(_currentGuideImageId);
+        _currentGuideImageId = null;
     }
 
     // Shared

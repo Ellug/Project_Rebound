@@ -15,7 +15,21 @@ MonoBehaviour:
   pages:
   - pageTitle: "\uD6C8\uB828 \uC120\uD0DD"
     commandIndices: e9030000ea030000eb030000ec030000
+    buttonPreviewImageIds:
+    - 
+    - 
+    - TrainingPopup03_img_02
+    - TrainingPopup03_img_02
   - pageTitle: "\uB2E8\uCCB4 \uD6C8\uB828"
     commandIndices: 4d0400004e0400004f040000
+    buttonPreviewImageIds:
+    - TrainingPopup03_img_01
+    - TrainingPopup03_img_01
+    - TrainingPopup03_img_01
   - pageTitle: "\uAC1C\uC778 \uD6C8\uB828"
     commandIndices: b1040000b2040000b3040000b4040000
+    buttonPreviewImageIds:
+    - TrainingPopup03_img_01
+    - TrainingPopup03_img_01
+    - TrainingPopup03_img_01
+    - TrainingPopup03_img_01

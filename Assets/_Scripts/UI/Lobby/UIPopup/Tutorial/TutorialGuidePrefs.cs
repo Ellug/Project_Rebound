@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-
 // TutorialGuidePrefs
 // 튜토리얼 "다시 보지 않기" 저장/리셋 (PlayerPrefs)
 // TutorialGuideTableSO -> UIPopupRequest.GuidePage 변환
@@ -53,27 +52,18 @@ public static class TutorialGuidePrefs
         {
             TutorialGuideRow r = sorted[i];
 
-            Sprite sprite = TryLoadSpriteByRow(r);
-
             UIPopupRequest.GuidePage page = new UIPopupRequest.GuidePage
             {
                 Title = r.titleText,
                 Message = r.desc,
                 SubMessage = null,
-                PreviewSprite = sprite
+                // img 필드를 Addressable 파일명 ID로 직접 사용
+                PreviewImageId = string.IsNullOrWhiteSpace(r.img) ? null : r.img.Trim()
             };
+
             pages.Add(page);
         }
 
         return pages;
-    }
-
-    private static Sprite TryLoadSpriteByRow(TutorialGuideRow row)
-    {
-        if (row == null) return null;
-        if (string.IsNullOrWhiteSpace(row.img)) return null;
-
-        // Resources 경로 예: "Tutorial/guide_01"
-        return Resources.Load<Sprite>(row.img.Trim());
     }
 }
