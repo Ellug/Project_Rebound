@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using UnityEngine;
 
 // 지금 재화 추가, 사용 있음
@@ -91,10 +91,25 @@ public class MoneyManager : Singleton<MoneyManager>
         OnGoldChanged?.Invoke(_gold);
         OnReputationChanged?.Invoke(_reputation);
     }
-    // UI ���ſ�
+
+    // UI 갱신용
     public void ForceNotify()
     {
         OnGoldChanged?.Invoke(_gold);
         OnReputationChanged?.Invoke(_reputation);
+    }
+
+    // 골드/명성치를 한 번에 지급
+    public void ApplyReward(int money, int fame)
+    {
+        if (money > 0)
+        {
+            AddGold(money);
+        }
+
+        if (fame > 0)
+        {
+            AddReputation(fame);
+        }
     }
 }
