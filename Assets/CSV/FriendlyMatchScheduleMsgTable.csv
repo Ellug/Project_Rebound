@@ -1,0 +1,7 @@
+ID,message_index,message_dialogue,branch_type,next,choice1_dialogue,choice1_next,choice2_dialogue,choice2_next,choice3_dialogue,choice3_next
+string,string,string,int,string,string,string,string,string,string,string
+diag_schedule_001,index_001,text_diag_schedule_001,3,-,text_diag_schedule_002,index_002,text_diag_schedule_003,index_002,text_diag_schedule_004,index_002
+diag_schedule_001,index_002,text_diag_schedule_005,2,index_003,-,-,-,-,-,-
+diag_schedule_001,index_003,text_diag_schedule_006,2,index_004,-,-,-,-,-,-
+diag_schedule_001,index_004,text_diag_schedule_007,1,-,text_diag_schedule_accept,index_005,text_diag_schedule_decline,index_005,-,-
+diag_schedule_001,index_005,text_diag_schedule_008,3,END,-,-,-,-,-,-

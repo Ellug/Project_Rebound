@@ -1,0 +1,32 @@
+id,description
+string,string
+name_match_choice_001,삭발 어택
+name_match_choice_002,스팀팩
+name_match_choice_003,응원단 고용
+name_match_choice_004,실전 위주 교육
+name_match_choice_005,스트레칭
+name_match_choice_006,격려
+name_match_choice_007,이온 음료
+name_match_choice_008,긴급 공수
+name_match_choice_009,과감한 결정
+name_match_choice_010,따봉도치
+description_match_choice_001,삭발을 각오한 투지를 불태운다.
+description_match_choice_002,"힘내라, 내일의 나."
+description_match_choice_003,얘들아 3년동안 수고했고 나중에 웃으면서 보자.
+description_match_choice_004,넌 이미 강해졌다.
+description_match_choice_005,다치지 마라. 건강이 제일이다.
+description_match_choice_006,포기하는 순간 지는거다.
+description_match_choice_007,"얘들아, 무리하지는 마라."
+description_match_choice_008,오늘은 내가 쏜다!
+description_match_choice_009,"바로, 지금."
+description_match_choice_010,따봉도치야 고마워!
+effect_description_match_choice_001,{text_status_05} +5
+effect_description_match_choice_002,랜덤 1개 스탯 +10
+effect_description_match_choice_003,"{text_status_10} -5, 랜덤 1개 스탯 +5"
+effect_description_match_choice_004,"{text_status_02} +10, {text_status_03} +10, {text_status_04} +10"
+effect_description_match_choice_005,"{text_status_02} +5, {text_status_03} +5, {text_status_04} +5"
+effect_description_match_choice_006,"{text_status_05} +5, {text_status_06} +5"
+effect_description_match_choice_007,{text_06} +10
+effect_description_match_choice_008,"{text_status_10} -10, {text_status_05} +10, {text_06} +10"
+effect_description_match_choice_009,"{text_status_06} -5, {text_status_02} +10, {text_status_04} +10"
+effect_description_match_choice_010,랜덤 1개 스탯 +20
