@@ -828,7 +828,7 @@ MonoBehaviour:
     effect3: 
     isProbable: 1
     probability: 0.15
-    description: text_SuddenEvent_100001
+    description: text_diag_000001_000
   - id: event_100002
     name: "\uC0C8\uB85C\uC6B4 \uBA54\uC2DC\uC9C0\uAC00 \uC654\uC2B5\uB2C8\uB2E4."
     context: 3
@@ -852,7 +852,7 @@ MonoBehaviour:
     effect3: 
     isProbable: 1
     probability: 0.15
-    description: text_SuddenEvent_100002
+    description: text_diag_000002_000
   - id: event_100003
     name: "\uC0C8\uB85C\uC6B4 \uBA54\uC2DC\uC9C0\uAC00 \uC654\uC2B5\uB2C8\uB2E4."
     context: 3
@@ -876,7 +876,7 @@ MonoBehaviour:
     effect3: 
     isProbable: 1
     probability: 0.15
-    description: text_SuddenEvent_100003
+    description: text_diag_000003_000
   - id: event_100004
     name: "\uC0C8\uB85C\uC6B4 \uBA54\uC2DC\uC9C0\uAC00 \uC654\uC2B5\uB2C8\uB2E4."
     context: 3
@@ -900,7 +900,7 @@ MonoBehaviour:
     effect3: 
     isProbable: 1
     probability: 0.15
-    description: text_SuddenEvent_100004
+    description: text_diag_000004_000
   - id: event_100005
     name: "\uC0C8\uB85C\uC6B4 \uBA54\uC2DC\uC9C0\uAC00 \uC654\uC2B5\uB2C8\uB2E4."
     context: 3
@@ -924,7 +924,7 @@ MonoBehaviour:
     effect3: 
     isProbable: 1
     probability: 0.15
-    description: text_SuddenEvent_100005
+    description: text_diag_000005_000
   - id: event_100006
     name: "\uC0C8\uB85C\uC6B4 \uBA54\uC2DC\uC9C0\uAC00 \uC654\uC2B5\uB2C8\uB2E4."
     context: 3
@@ -948,7 +948,7 @@ MonoBehaviour:
     effect3: 
     isProbable: 1
     probability: 0.15
-    description: text_SuddenEvent_100006
+    description: text_diag_000006_000
   - id: event_100007
     name: "\uC0C8\uB85C\uC6B4 \uBA54\uC2DC\uC9C0\uAC00 \uC654\uC2B5\uB2C8\uB2E4."
     context: 3
@@ -972,7 +972,7 @@ MonoBehaviour:
     effect3: 
     isProbable: 1
     probability: 0.15
-    description: text_SuddenEvent_100007
+    description: text_diag_000007_000
   - id: event_100008
     name: "\uC0C8\uB85C\uC6B4 \uBA54\uC2DC\uC9C0\uAC00 \uC654\uC2B5\uB2C8\uB2E4."
     context: 3
@@ -996,7 +996,7 @@ MonoBehaviour:
     effect3: 
     isProbable: 1
     probability: 0.15
-    description: text_SuddenEvent_100008
+    description: text_diag_000008_000
   - id: event_100009
     name: "\uC0C8\uB85C\uC6B4 \uBA54\uC2DC\uC9C0\uAC00 \uC654\uC2B5\uB2C8\uB2E4."
     context: 3
@@ -1020,7 +1020,7 @@ MonoBehaviour:
     effect3: 
     isProbable: 1
     probability: 0.15
-    description: text_SuddenEvent_100009
+    description: text_diag_000009_000
   - id: event_100010
     name: "\uC0C8\uB85C\uC6B4 \uBA54\uC2DC\uC9C0\uAC00 \uC654\uC2B5\uB2C8\uB2E4."
     context: 3
@@ -1044,7 +1044,7 @@ MonoBehaviour:
     effect3: 
     isProbable: 1
     probability: 0.15
-    description: text_SuddenEvent_100010
+    description: text_diag_000010_000
   - id: event_110001
     name: "[\uACF5\uC9C0]\uAE08\uC77C \uC9C0\uAC01\uC790"
     context: 1

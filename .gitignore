@@ -64,6 +64,9 @@ sysinfo.txt
 *.unitypackage.meta
 *.app
 
+# Addressables remote build outputs
+/ServerData/
+
 # Crashlytics generated file
 crashlytics-build.properties
 
