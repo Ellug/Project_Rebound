@@ -104,3 +104,53 @@ MonoBehaviour:
     speaker: '[SYSTEM]'
     description: "${effect1.target_name} {effect1.amount} \uC99D\uAC00, {effect2.target_name}
       {effect2.amount} \uC99D\uAC00"
+  - id: text_SuddenEvent_100001
+    condition: 1
+    target: 1
+    speaker: ${target1.name}
+    description: text_diag_000001_000
+  - id: text_SuddenEvent_100002
+    condition: 1
+    target: 1
+    speaker: ${target1.name}
+    description: text_diag_000002_000
+  - id: text_SuddenEvent_100003
+    condition: 1
+    target: 1
+    speaker: ${target1.name}
+    description: text_diag_000003_000
+  - id: text_SuddenEvent_100004
+    condition: 1
+    target: 1
+    speaker: ${target1.name}
+    description: text_diag_000004_000
+  - id: text_SuddenEvent_100005
+    condition: 1
+    target: 1
+    speaker: ${target1.name}
+    description: text_diag_000005_000
+  - id: text_SuddenEvent_100006
+    condition: 1
+    target: 1
+    speaker: ${target1.name}
+    description: text_diag_000006_000
+  - id: text_SuddenEvent_100007
+    condition: 1
+    target: 1
+    speaker: ${target1.name}
+    description: text_diag_000007_000
+  - id: text_SuddenEvent_100008
+    condition: 1
+    target: 1
+    speaker: ${target1.name}
+    description: text_diag_000008_000
+  - id: text_SuddenEvent_100009
+    condition: 1
+    target: 1
+    speaker: ${target1.name}
+    description: text_diag_000009_000
+  - id: text_SuddenEvent_100010
+    condition: 1
+    target: 1
+    speaker: ${target1.name}
+    description: text_diag_000010_000
