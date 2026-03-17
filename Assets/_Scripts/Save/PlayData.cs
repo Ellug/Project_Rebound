@@ -19,6 +19,7 @@ public class PlayData
     public List<SavedSlotAssignment> slotAssignments = new();   // JsonUtility가 Dictionary 직렬화 불가 → List로 저장
     public SavedTournamentData tournament = new();
     public SavedMatchSimData matchSim = new();                  // 경기 시뮬레이션 진행 상태
+    public SavedMessengerData messenger = new();                // 메신저 상태
 }
 
 // GameFlowData 날짜/턴 관련 필드 대응
@@ -171,4 +172,48 @@ public class UserData
 {
     public int reputation;                                // 영구 명성치
     public List<int> unlockedNodeIds = new();             // 영구 감독 노드 해금 목록
+}
+
+// 메신저 전체 저장 데이터
+// 현재 보고 있던 방 ID
+// 채팅방 목록
+[Serializable]
+public class SavedMessengerData
+{
+    public string currentViewingRoomId;
+    public List<SavedChatRoomData> rooms = new();
+}
+
+// 채팅방 1개 저장 데이터
+// 방 ID / 이름 / 읽음 상태 / 마지막 갱신 시각 / 메시지 목록
+[Serializable]
+public class SavedChatRoomData
+{
+    public string roomId;
+    public string roomName;
+    public bool hasUnread;
+    public string lastUpdatedDate;
+    public List<SavedChatMessageData> messages = new();
+}
+
+// 메시지 1개 저장 데이터
+// 발신자 / 메시지 타입 / 내용 / 시각 / 선택지 선택 상태
+[Serializable]
+public class SavedChatMessageData
+{
+    public int senderType;
+    public int eventType;
+    public string content;
+    public string timestamp;
+
+    public int selectedChoiceIndex = -1;
+    public List<SavedChoiceOptionData> choices = new();
+}
+
+// 선택지 버튼 1개 저장 데이터
+// 표시 텍스트만 저장
+[Serializable]
+public class SavedChoiceOptionData
+{
+    public string text;
 }
