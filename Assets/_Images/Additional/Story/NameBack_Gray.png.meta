@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 7d5e1356bccb81041bbb835275cd2fff
+guid: fcd0fe1a54aa105468b26245b157d6a1
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -6582720625783064075
-    second: "Story00_char_02_idle(\uC784\uC2DC)_0"
+      213: -2434896879446253369
+    second: Rectangle 5071_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: "Story00_char_02_idle(\uC784\uC2DC)_0"
+      name: Rectangle 5071_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 387
-        height: 660
+        width: 165
+        height: 60
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 5f93094b77a75a4a0800000000000000
-      internalID: -6582720625783064075
+      spriteID: 7c026e35032853ed0800000000000000
+      internalID: -2434896879446253369
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      "Story00_char_02_idle(\uC784\uC2DC)_0": -6582720625783064075
+      Rectangle 5071_0: -2434896879446253369
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

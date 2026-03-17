@@ -136,3 +136,6 @@ crashlytics-build.properties
 
 /[Aa]ssets/GoogleService-Info.plist
 /[Aa]ssets/GoogleService-Info.plist.meta
+
+# Local .NET CLI cache
+.dotnet/
