@@ -42,6 +42,12 @@ public class SaveManager : Singleton<SaveManager>
                 CurrentUserData != null ? CurrentUserData.reputation : data.reputation);
         }
 
+        // 슬롯 로드 시 시설 상태를 먼저 현재 슬롯 데이터 기준으로 맞춘다.
+        if (FacilitySystem.Instance != null)
+        {
+            ApplyFacilityData(data.facilities);
+        }
+
         SceneManager.LoadScene(sceneName);
     }
 
@@ -110,6 +116,12 @@ public class SaveManager : Singleton<SaveManager>
             tournament = new SavedTournamentData(),
         };
 
+        // 새 게임 생성 시 런타임 시설 상태도 반드시 기본값으로 초기화
+        if (FacilitySystem.Instance != null)
+        {
+            FacilitySystem.Instance.ResetLevelsToDefault();
+        }
+
         IsPendingNewGame = true;
 
         SaveUserData();
@@ -140,7 +152,6 @@ public class SaveManager : Singleton<SaveManager>
             CurrentData.unlockedNodeIds = HeadCoachManager.Instance.GetUnlockedNodeIds();
             Debug.Log($"[SaveManager] SaveCurrent | slot unlockedNodeIds.Count={CurrentData.unlockedNodeIds.Count}");
         }
-
 
         SaveUserData();
 
@@ -283,7 +294,7 @@ public class SaveManager : Singleton<SaveManager>
         {
             return new List<SavedStudentData>();
         }
-           
+
         List<Student> students = StudentManager.Instance.Students;
         List<SavedStudentData> result = new(students.Count);
 
@@ -382,16 +393,21 @@ public class SaveManager : Singleton<SaveManager>
 
     private static void ApplyFacilityData(SavedFacilityData data)
     {
-        if (data == null)
+        if (FacilitySystem.Instance == null)
             return;
 
-        if (FacilitySystem.Instance == null)
+        // 어떤 슬롯을 적용하든 먼저 기본값으로 초기화해서 이전 슬롯 잔존 상태를 제거
+        FacilitySystem.Instance.ResetLevelsToDefault();
+
+        if (data == null)
             return;
 
         FacilitySystem.Instance.SetLevel("school", data.schoolLevel);
         FacilitySystem.Instance.SetLevel("gym", data.gymLevel);
         FacilitySystem.Instance.SetLevel("cafeteria", data.cafeteriaLevel);
         FacilitySystem.Instance.SetLevel("counselingcenter", data.counselingCenterLevel);
+
+        Debug.Log($"[SaveManager] 시설 데이터 복원 완료 | school={data.schoolLevel}, gym={data.gymLevel}, cafeteria={data.cafeteriaLevel}, counseling={data.counselingCenterLevel}");
     }
 
     private static void ApplyStudentData(List<SavedStudentData> savedStudents, List<SavedSlotAssignment> savedSlots)

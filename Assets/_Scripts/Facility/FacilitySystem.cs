@@ -8,11 +8,19 @@ public class FacilitySystem : Singleton<FacilitySystem>
 
     protected override void OnSingletonAwake()
     {
-        // 초기 레벨
+        ResetLevelsToDefault();
+    }
+
+    // 시설 레벨을 기본값으로 초기화
+    public void ResetLevelsToDefault()
+    {
+        _levels.Clear();
         _levels["school"] = 1;
         _levels["gym"] = 1;
         _levels["cafeteria"] = 1;
         _levels["counselingcenter"] = 1;
+
+        Debug.Log("[FacilitySystem] 시설 레벨 기본값으로 초기화");
     }
 
     // 레벨 반환
@@ -68,6 +76,7 @@ public class FacilitySystem : Singleton<FacilitySystem>
                 return false;
             }
         }
+
         var current = GetCurrentData(facility);
         int cost = GetFinalUpgradeCost(facility);
         if (!MoneyManager.Instance.TrySpendGold(cost))
