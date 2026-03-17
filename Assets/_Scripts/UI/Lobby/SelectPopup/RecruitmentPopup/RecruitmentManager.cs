@@ -221,6 +221,9 @@ public class RecruitmentManager : MonoBehaviour
             foreach (Student student in recruits)
             {
                 StudentManager.Instance.AddStudent(student);
+
+                // 현재 해금된 노드 보너스를 신규 학생에게 적용
+                HeadCoachManager.Instance.ApplyAllUnlockedBonusTo(student);
             }
         }
 
