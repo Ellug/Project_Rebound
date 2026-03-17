@@ -48,6 +48,12 @@ public class SaveManager : Singleton<SaveManager>
             ApplyFacilityData(data.facilities);
         }
 
+        // 슬롯 로드 시 메신저 상태도 현재 슬롯 기준으로 먼저 맞춘다.
+        if (MessengerManager.Instance != null)
+        {
+            MessengerManager.Instance.RestoreSaveData(data.messenger);
+        }
+
         SceneManager.LoadScene(sceneName);
     }
 
@@ -64,6 +70,7 @@ public class SaveManager : Singleton<SaveManager>
         ApplyStudentData(CurrentData.students, CurrentData.slotAssignments);
         ApplyTournamentData(CurrentData.tournament);    // 토너먼트 씬 복원 (로비에선 자동 스킵)
         ApplyMatchSimData(CurrentData.matchSim);        // 경기 시뮬레이션 복원 (토너먼트 씬 외에선 자동 스킵)
+        ApplyMessengerData(CurrentData.messenger);      // 메신저 복원
         ApplyActiveEventEffects(CurrentData.flowData);  // 이벤트 activeEffectIds 복원
         RestoreHeadCoachNodesIfPossible();              // 감독 노드 복원 시도 (HeadCoachManager 초기화 여부에 따라 내부에서 처리)
 
@@ -114,12 +121,19 @@ public class SaveManager : Singleton<SaveManager>
             students = new List<SavedStudentData>(),
             slotAssignments = new List<SavedSlotAssignment>(),
             tournament = new SavedTournamentData(),
+            messenger = new SavedMessengerData(),
         };
 
         // 새 게임 생성 시 런타임 시설 상태도 반드시 기본값으로 초기화
         if (FacilitySystem.Instance != null)
         {
             FacilitySystem.Instance.ResetLevelsToDefault();
+        }
+
+        // 새 게임 생성 시 메신저 상태도 반드시 초기화
+        if (MessengerManager.Instance != null)
+        {
+            MessengerManager.Instance.ClearAll();
         }
 
         IsPendingNewGame = true;
@@ -183,6 +197,9 @@ public class SaveManager : Singleton<SaveManager>
         // 경기 시뮬레이션 상태 수집
         CurrentData.matchSim = CollectMatchSimData();
 
+        // 메신저 상태 수집
+        CurrentData.messenger = CollectMessengerData();
+
         // 슬롯 카드 표시용 메타 갱신
         CurrentData.saveTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm");
         CurrentData.playTime = GameManager.Instance != null
@@ -216,12 +233,23 @@ public class SaveManager : Singleton<SaveManager>
         }
 
         CurrentData = null;
+
+        if (MessengerManager.Instance != null)
+        {
+            MessengerManager.Instance.ClearAll();
+        }
+
         SceneManager.LoadScene("Title");
     }
 
     public void Clear()
     {
         CurrentData = null;
+
+        if (MessengerManager.Instance != null)
+        {
+            MessengerManager.Instance.ClearAll();
+        }
     }
 
     private void SaveUserData()
@@ -391,6 +419,15 @@ public class SaveManager : Singleton<SaveManager>
         return mgm.CollectSaveData();
     }
 
+    // 메신저 상태 수집
+    private static SavedMessengerData CollectMessengerData()
+    {
+        if (MessengerManager.Instance == null)
+            return new SavedMessengerData();
+
+        return MessengerManager.Instance.CollectSaveData();
+    }
+
     private static void ApplyFacilityData(SavedFacilityData data)
     {
         if (FacilitySystem.Instance == null)
@@ -494,6 +531,15 @@ public class SaveManager : Singleton<SaveManager>
             return;
 
         mgm.RestoreSaveData(data);
+    }
+
+    // 메신저 데이터 복원
+    private static void ApplyMessengerData(SavedMessengerData data)
+    {
+        if (MessengerManager.Instance == null)
+            return;
+
+        MessengerManager.Instance.RestoreSaveData(data);
     }
 
     // 로드 시 activeEventIds 기준으로 학생의 activeEffectIds를 재동기화
@@ -601,7 +647,6 @@ public class SaveManager : Singleton<SaveManager>
         }
     }
 
-
     public void ConsumePendingNewGameFlag()
     {
         IsPendingNewGame = false;
@@ -659,6 +704,11 @@ public class SaveManager : Singleton<SaveManager>
 
         CurrentData = null;
         ShouldDeleteCurrentRunOnTitle = false;
+
+        if (MessengerManager.Instance != null)
+        {
+            MessengerManager.Instance.ClearAll();
+        }
     }
 
     public void SaveAfterChoice(string branchName, Action choiceAction)
