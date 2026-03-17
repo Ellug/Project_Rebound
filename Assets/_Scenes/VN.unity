@@ -522,7 +522,7 @@ MonoBehaviour:
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
-  m_lineSpacing: 0
+  m_lineSpacing: 30
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
@@ -1718,7 +1718,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_text: "\uC0AC\uC2E4, \uC774\uC0AC\uD68C\uAC00 \uB18D\uAD6C\uBD80\uB97C \uC5C6\uC560\uACE0
-    \uC2F6\uC5B4\uD569\uB2C8\uB2E4."
+    \uC2F6\uC5B4\uD569\uB2C8\uB2E4. \uADF8\uB798\uC11C \uC800\uB294 \uC774\uC0AC\uD68C\uB97C
+    \uD30C\uAD34\uD560 \uC0DD\uAC01\uC785\uB2C8\uB2E4."
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 916482b748132954e9797964492ca891, type: 2}
   m_sharedMaterial: {fileID: -5273016886018761783, guid: 916482b748132954e9797964492ca891, type: 2}
@@ -1757,7 +1758,7 @@ MonoBehaviour:
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
-  m_lineSpacing: 0
+  m_lineSpacing: 30
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
@@ -2252,7 +2253,7 @@ MonoBehaviour:
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
-  m_lineSpacing: 0
+  m_lineSpacing: 30
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
@@ -2550,9 +2551,9 @@ MonoBehaviour:
   _leftText: {fileID: 1203280016}
   _rightText: {fileID: 437283676}
   _narText: {fileID: 1586634685}
+  _bg: {fileID: 177233661}
   _leftImage: {fileID: 596862981}
   _rightImage: {fileID: 96731427}
-  _bg: {fileID: 177233661}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
