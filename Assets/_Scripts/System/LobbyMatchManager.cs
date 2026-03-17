@@ -5,6 +5,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
 // 로비에서 토너먼트/친선전 진입과 결과 표시 흐름을 담당한다.
+// 인풋 0 테스트용 코드 빼면 얘도 실질적으로 모노비해비어 필요 없어짐. 뺀 뒤에 제거 고려
 public class LobbyMatchManager : MonoBehaviour
 {
     private const string LobbyScene = "Lobby";
