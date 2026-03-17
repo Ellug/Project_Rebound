@@ -220,6 +220,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fb8da6ee5b0a6ca43bb13b5145939255
+    m_Address: Assets/_Images/Addressables/Popup/EventGame00_image01.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: fdb2f49c21fefdd4da86f43ec7f916de
     m_Address: TutorialGuideTable
     m_ReadOnly: 0

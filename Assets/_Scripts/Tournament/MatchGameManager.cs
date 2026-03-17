@@ -13,6 +13,9 @@ public class MatchGameManager : MonoBehaviour
     private const string SystemLogColorHex = "#A3A3A3";
     private const string SystemLogPrefix = "[SYSTEM]";
     private const string HighSchoolSuffix = "고등학교";
+    private const string DefaultMatchImageId = "EventGame00_image01";
+    private const string QuarterWhistleImageId = "EventGame00_img_whistle";
+    private const string HalfTimeImageId = "EventGame00_img_halftime";
 
     // 경기 종료 시 MatchResult를 전달. TournamentManager가 구독해 승패 처리
     public event Action<MatchResult> OnMatchFinished;
@@ -23,10 +26,10 @@ public class MatchGameManager : MonoBehaviour
 
     [Header("Quarter Pod Config")]
     [FormerlySerializedAs("_maxPossessionsPerQuarter")]
-    [SerializeField] [Min(0)] private int _maxPlayTurnsPerQuarter = 5;
+    [SerializeField][Min(0)] private int _maxPlayTurnsPerQuarter = 5;
     [FormerlySerializedAs("_scorePerPossessionWin")]
-    [SerializeField] [Min(1)] private int _scorePerPlayTurnWin = 2;
-    [SerializeField] [Min(0)] private int _benchRecoverCondition = 3;
+    [SerializeField][Min(1)] private int _scorePerPlayTurnWin = 2;
+    [SerializeField][Min(0)] private int _benchRecoverCondition = 3;
 
     private readonly List<QuarterScore> _quarterScores = new(4);
     private readonly List<string> _logs = new(64);  // 경기 종료 후 MatchResult.logs로 복사됨
@@ -42,7 +45,6 @@ public class MatchGameManager : MonoBehaviour
 
     // MatchGameStages.Default의 래퍼: 스테이지 배열을 읽기 전용으로 노출
     private static IReadOnlyList<string> ProgressStages => MatchGameStages.Default;
-
 
     void Awake()
     {
@@ -72,6 +74,8 @@ public class MatchGameManager : MonoBehaviour
         EnemyStatRow enemyStat = enemyTable.GetOrNull(currentDay) ?? new EnemyStatRow();
         _context = new MatchContext(upTeam, downTeam, mySchoolName, field, bench, enemyStat);
         _isMatchRunning = true;
+        _isWaitingHalfTime = false;
+        _halfTimeNextStage = 0;
         _progressStageIndex = 0;
         _activeQuarterSession = null;
         _activeQuarterNumber = 0;
@@ -81,6 +85,9 @@ public class MatchGameManager : MonoBehaviour
         _matchGameUi.PrepareMatchGameUi(FormatTeamNameForDisplay(upTeam), FormatTeamNameForDisplay(downTeam), ProgressStages);
         UpdateProgressUi();
         RefreshLiveScoreUi();
+
+        // 경기 시작 기본 이미지
+        _matchGameUi.SetMatchContextImage(DefaultMatchImageId);
 
         WriteLog(Divider);
         WriteLog($"{upTeam} VS {downTeam}");
@@ -103,7 +110,8 @@ public class MatchGameManager : MonoBehaviour
         }
 
         // 하프타임 선택 대기 중이면 진행 차단
-        if (_isWaitingHalfTime) return;
+        if (_isWaitingHalfTime)
+            return;
 
         // 공방 세션이 활성화 중이면 쿼터 내부 스텝만 진행
         if (_activeQuarterSession != null)
@@ -147,7 +155,14 @@ public class MatchGameManager : MonoBehaviour
         WriteQuarterLogs(stepResult.logs);
         RefreshLiveScoreUi();
 
-        if (!stepResult.isQuarterCompleted) return;
+        // 공방 결과 상황 이미지 교체
+        if (!string.IsNullOrEmpty(stepResult.contextImageId))
+        {
+            _matchGameUi.SetMatchContextImage(stepResult.contextImageId);
+        }
+
+        if (!stepResult.isQuarterCompleted)
+            return;
 
         ApplyQuarterResult(_activeQuarterNumber, stepResult.quarterResult);
         CompleteQuarter(_activeQuarterNumber);
@@ -156,6 +171,8 @@ public class MatchGameManager : MonoBehaviour
     public void AbortCurrentMatch()
     {
         _isMatchRunning = false;
+        _isWaitingHalfTime = false;
+        _halfTimeNextStage = 0;
         _progressStageIndex = 0;
         _activeQuarterSession = null;
         _activeQuarterNumber = 0;
@@ -169,6 +186,9 @@ public class MatchGameManager : MonoBehaviour
         _activeQuarterSession = beginResult.session;
         _activeQuarterNumber = quarter;
         WriteQuarterLogs(beginResult.logs);
+
+        // 쿼터 시작 이미지
+        _matchGameUi.SetMatchContextImage(QuarterWhistleImageId);
     }
 
     private void ApplyQuarterResult(int quarter, QuarterSimulationResult quarterResult)
@@ -179,6 +199,9 @@ public class MatchGameManager : MonoBehaviour
         _context.AddQuarterScore(myQuarterScore, opponentQuarterScore);
         _quarterScores.Add(new QuarterScore(quarter, myQuarterScore, opponentQuarterScore));
         _matchGameUi.SetMatchScore(_context.GetLeftTeamScore(), _context.GetRightTeamScore());
+
+        // 쿼터 종료 이미지
+        _matchGameUi.SetMatchContextImage(QuarterWhistleImageId);
 
         // 쿼터별 결과 세이브
         if (SaveManager.Instance != null)
@@ -230,6 +253,9 @@ public class MatchGameManager : MonoBehaviour
             SaveManager.Instance.AutoSaveByBranch("하프타임 선택 전");
         }
 
+        // 하프타임 이미지
+        _matchGameUi.SetMatchContextImage(HalfTimeImageId);
+
         _halfTimeSelectionUi.Open();
         _matchGameUi.ScrollMatchLogToBottom();
     }
@@ -264,7 +290,8 @@ public class MatchGameManager : MonoBehaviour
 
     private void FinishMatch()
     {
-        if (!_isMatchRunning) return;
+        if (!_isMatchRunning)
+            return;
 
         _isMatchRunning = false;
 
@@ -489,6 +516,7 @@ public class MatchGameManager : MonoBehaviour
         // 기본 상태 복원
         _isMatchRunning = true;
         _isWaitingHalfTime = false;
+        _halfTimeNextStage = 0;
         _activeQuarterSession = null;
         _activeQuarterNumber = 0;
         _progressStageIndex = data.progressStageIndex;
@@ -530,6 +558,9 @@ public class MatchGameManager : MonoBehaviour
 
         UpdateProgressUi();
         _matchGameUi.SetMatchScore(_context.GetLeftTeamScore(), _context.GetRightTeamScore());
+
+        // 복원 직후 기본 이미지
+        _matchGameUi.SetMatchContextImage(DefaultMatchImageId);
 
         Debug.Log($"[MatchGameManager] 경기 복원 완료 — 스테이지 {_progressStageIndex}, 쿼터 {_quarterScores.Count}개 복원");
     }

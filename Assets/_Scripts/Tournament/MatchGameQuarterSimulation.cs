@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 // 쿼터 1개 책임: 쿼터 시작, 공방 루프 진행, 쿼터 종료 결과 조합
@@ -90,10 +90,11 @@ public sealed class QuarterPodSimulator
         {
             QuarterSimulationResult quarterResult = BuildQuarterResult(context, session, logs);
             session.Complete();
-            return new QuarterPodStepResult(true, quarterResult, logs);
+            // 쿼터 종료 시 마지막 공방 이미지 유지
+            return new QuarterPodStepResult(true, quarterResult, logs, playTurnResult.contextImageId);
         }
 
-        return new QuarterPodStepResult(false, default, logs);
+        return new QuarterPodStepResult(false, default, logs, playTurnResult.contextImageId);
     }
 
     // 세션의 최종 득점을 집계하고 벤치 컨디션 회복 후 QuarterSimulationResult를 생성
