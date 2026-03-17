@@ -986,3 +986,10 @@ MonoBehaviour:
       m_SubObjectType: 
       m_SubObjectGUID: 
       m_EditorAssetChanged: 0
+  - fileName: EventGame00_image01
+    spriteReference:
+      m_AssetGUID: fb8da6ee5b0a6ca43bb13b5145939255
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0

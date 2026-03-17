@@ -146,12 +146,15 @@ public readonly struct QuarterPodStepResult
     public readonly bool isQuarterCompleted;
     public readonly QuarterSimulationResult quarterResult;
     public readonly IReadOnlyList<QuarterLogEntry> logs;
+    public readonly string contextImageId; // 공방 결과 상황 이미지 ID
 
-    public QuarterPodStepResult(bool isQuarterCompleted, QuarterSimulationResult quarterResult, IReadOnlyList<QuarterLogEntry> logs)
+    public QuarterPodStepResult(bool isQuarterCompleted, QuarterSimulationResult quarterResult,
+        IReadOnlyList<QuarterLogEntry> logs, string contextImageId = null)
     {
         this.isQuarterCompleted = isQuarterCompleted;
         this.quarterResult = quarterResult;
         this.logs = logs;
+        this.contextImageId = contextImageId;
     }
 }
 
