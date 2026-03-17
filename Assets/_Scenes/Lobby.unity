@@ -1252,8 +1252,8 @@ MonoBehaviour:
   _sprBtnUnlockDefense: {fileID: -4610381019001405772, guid: 6494c91fc63735f43a05b1fd5112bd40, type: 3}
   _sprBtnUnlockSupport: {fileID: -2311694111726200877, guid: 3e09b44c732d978409a041b11fbe3b24, type: 3}
   _sprBtnShortageAttack: {fileID: 3442787808948095099, guid: 31f1d43f7493bb345acacfaed0101e79, type: 3}
-  _sprBtnShortageDefense: {fileID: -8332704678631367557, guid: 4af8039431e6d014b9f9c84265a56f89, type: 3}
-  _sprBtnShortageSupport: {fileID: 8894191933513930123, guid: b7e8d372fc040fc49a1150bf0196d632, type: 3}
+  _sprBtnShortageDefense: {fileID: 8894191933513930123, guid: b7e8d372fc040fc49a1150bf0196d632, type: 3}
+  _sprBtnShortageSupport: {fileID: -8332704678631367557, guid: 4af8039431e6d014b9f9c84265a56f89, type: 3}
   _sprBtnMaxAttack: {fileID: 6510811574257542448, guid: 1d5790fa376030349acae9d737b12fbb, type: 3}
   _sprBtnMaxDefense: {fileID: -9168701150353419510, guid: 1fa4c5ea58931c245895623e54cb40d5, type: 3}
   _sprBtnMaxSupport: {fileID: 6523373689554812455, guid: 9383340690f1c6049870092a334488ef, type: 3}
