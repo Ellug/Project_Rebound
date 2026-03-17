@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -25,15 +26,18 @@ public class TournamentResultUI : MonoBehaviour
     [SerializeField] private int _rank2RewardId = 202;  // 2위
     [SerializeField] private int _rank3RewardId = 203;  // 3위
     [SerializeField] private int _rank4RewardId = 204;  // 4강
-    [SerializeField] private int _failedRewardId = 205;  // 탈락
+    [SerializeField] private int _failedRewardId = 205; // 탈락
 
     [Header("Scroll Layout")]
     [SerializeField] private ScrollRect _scrollRect;
-    [SerializeField] private RectTransform _scrollContent;   // Content RectTransform
-    [SerializeField] private RectTransform _rewardRow;       // RewardRow RectTransform
+    [SerializeField] private RectTransform _scrollContent; // Content RectTransform
+    [SerializeField] private RectTransform _rewardRow; // RewardRow RectTransform
 
     private bool _isCurrentResultAchieved;
     private int _currentRewardId;
+    private bool _isFriendlyResultMode;
+    private int _friendlyRewardMoney;
+    private int _friendlyRewardFame;
 
     void Awake()
     {
@@ -44,115 +48,142 @@ public class TournamentResultUI : MonoBehaviour
     {
         if (!tournamentResultData.HasPendingResult) return;
 
-        string champion = string.IsNullOrWhiteSpace(tournamentResultData.PendingChampion)
-            ? "미정"
-            : tournamentResultData.PendingChampion;
+        _isFriendlyResultMode = false;
+        _friendlyRewardMoney = 0;
+        _friendlyRewardFame = 0;
 
         int reachedRoundTeamCount = tournamentResultData.PendingMySchoolReachedRoundTeamCount;
         _isCurrentResultAchieved = IsAchievedResult(reachedRoundTeamCount);
         _currentRewardId = ResolveRewardId(reachedRoundTeamCount);
 
         RewardPopupRow row = GetRewardRow(_currentRewardId);
+        _titleText.text = row.titleText;
+        _bodyText.text = row.desc;
 
-        if (_titleText != null)
-            _titleText.text = row != null ? row.titleText : string.Empty;
+        _resultImage.sprite = _isCurrentResultAchieved ? _achievedImage : _failedImage;
+        _resultImage.enabled = _resultImage.sprite != null;
 
-        if (_bodyText != null)
-        {
-            string body = row != null ? row.desc : string.Empty;
-            // {CHAMPION} 치환 지원
-            _bodyText.text = body.Replace("{CHAMPION}", champion);
-        }
+        _goldIconImage.sprite = _goldIcon;
+        _goldIconImage.enabled = _goldIconImage.sprite != null;
 
-        if (_resultImage != null)
-        {
-            _resultImage.sprite = _isCurrentResultAchieved ? _achievedImage : _failedImage;
-            _resultImage.enabled = _resultImage.sprite != null;
-        }
+        _fameIconImage.sprite = _fameIcon;
+        _fameIconImage.enabled = _fameIconImage.sprite != null;
 
-        if (_goldIconImage != null)
-        {
-            _goldIconImage.sprite = _goldIcon;
-            _goldIconImage.enabled = _goldIconImage.sprite != null;
-        }
+        _goldValueText.text = row.money.ToString("N0");
 
-        if (_fameIconImage != null)
-        {
-            _fameIconImage.sprite = _fameIcon;
-            _fameIconImage.enabled = _fameIconImage.sprite != null;
-        }
+        int fameValue = row.fame;
+        if (MoneyManager.Instance != null)
+            fameValue = MoneyManager.Instance.GetAdjustedReputationAmount(fameValue);
 
-        if (_goldValueText != null)
-            _goldValueText.text = (row != null ? row.money : 0).ToString("N0");
-
-        if (_fameValueText != null)
-        {
-            int fameValue = row != null ? row.fame : 0;
-
-            if (MoneyManager.Instance != null)
-            {
-                fameValue = MoneyManager.Instance.GetAdjustedReputationAmount(fameValue);
-            }
-
-            _fameValueText.text = fameValue.ToString("N0");
-        }
+        _fameValueText.text = fameValue.ToString("N0");
 
         _panelRoot.SetActive(true);
         _panelRoot.transform.SetAsLastSibling();
 
-        // 텍스트 세팅 완료 후 스크롤 레이아웃 조정
-        // BodyText 길이에 따라 RewardRow가 항상 스크롤 최하단에 위치하도록 보정
+        // 텍스트 반영 후 스크롤 레이아웃을 맞춘다.
+        AdjustScrollLayout();
+    }
+
+    public void ShowFriendlyResult(bool didWin, string opponentName, int winRewardId)
+    {
+        _isFriendlyResultMode = true;
+        _friendlyRewardMoney = 0;
+        _friendlyRewardFame = 0;
+
+        string normalizedOpponent = string.IsNullOrWhiteSpace(opponentName) ? "상대 학교" : opponentName.Trim();
+
+        if (didWin)
+        {
+            RewardPopupRow row = GetRewardRow(winRewardId);
+            _friendlyRewardMoney = row.money;
+            _friendlyRewardFame = row.fame;
+            _isCurrentResultAchieved = true;
+            _titleText.text = row.titleText;
+            _bodyText.text = row.desc;
+        }
+        else
+        {
+            _isCurrentResultAchieved = false;
+            _titleText.text = "친선전 패배...";
+            _bodyText.text = $"{normalizedOpponent}와의 친선전에서 패배했습니다.\n다음 경기를 준비하세요.";
+        }
+
+        _resultImage.sprite = _isCurrentResultAchieved ? _achievedImage : _failedImage;
+        _resultImage.enabled = _resultImage.sprite != null;
+
+        _goldIconImage.sprite = _goldIcon;
+        _goldIconImage.enabled = _goldIconImage.sprite != null;
+
+        _fameIconImage.sprite = _fameIcon;
+        _fameIconImage.enabled = _fameIconImage.sprite != null;
+
+        _goldValueText.text = _friendlyRewardMoney.ToString("N0");
+
+        int fameValue = _friendlyRewardFame;
+        if (MoneyManager.Instance != null)
+            fameValue = MoneyManager.Instance.GetAdjustedReputationAmount(fameValue);
+
+        _fameValueText.text = fameValue.ToString("N0");
+
+        _panelRoot.SetActive(true);
+        _panelRoot.transform.SetAsLastSibling();
         AdjustScrollLayout();
     }
 
     public void Hide()
     {
-        if (_panelRoot != null)
-            _panelRoot.SetActive(false);
+        _panelRoot.SetActive(false);
     }
 
     // 확인 버튼 : 인스펙터에 직접 연결
     public void OnClickConfirm()
     {
+        if (_isFriendlyResultMode)
+        {
+            OnConfirmFriendly();
+            return;
+        }
+
         if (_isCurrentResultAchieved)
             OnConfirmAchieved();
         else
             OnConfirmFailed();
     }
 
+    private void OnConfirmFriendly()
+    {
+        MoneyManager.Instance.ApplyReward(_friendlyRewardMoney, _friendlyRewardFame);
+
+        _friendlyRewardMoney = 0;
+        _friendlyRewardFame = 0;
+        _isFriendlyResultMode = false;
+        Hide();
+    }
+
     // 승리(입상) 확인
     private void OnConfirmAchieved()
     {
-        // CachedSOData에서 보상 row를 조회해 MoneyManager에 지급
+        // 보상 row를 조회해 지급한다.
         RewardPopupRow row = GetRewardRow(_currentRewardId);
-        if (row != null && MoneyManager.Instance != null)
-            MoneyManager.Instance.ApplyReward(row.money, row.fame);
-
-        // TODO: 다음 시즌 진입 등 후처리
+        MoneyManager.Instance.ApplyReward(row.money, row.fame);
         Hide();
     }
 
     // 패배(탈락) 확인 -> 타이틀로 이동
-    // GameManager.OnSceneLoaded에서 TitleScene 감지 시 CleanupManagers() -> ClearFlowRuntimeState() 자동 호출해서 초기화
     private void OnConfirmFailed()
     {
-        // CachedSOData에서 보상 row를 조회해 MoneyManager에 지급
+        // 보상 row를 조회해 지급한다.
         RewardPopupRow row = GetRewardRow(_currentRewardId);
-        if (row != null && MoneyManager.Instance != null)
-            MoneyManager.Instance.ApplyReward(row.money, row.fame);
-
-        // TODO: 패배 연출?? 보존 재화 계산?
+        MoneyManager.Instance.ApplyReward(row.money, row.fame);
         Hide();
 
         if (SaveManager.Instance != null)
-        {
             SaveManager.Instance.MarkCurrentRunForDeleteOnTitle();
-        }
+
         UnityEngine.SceneManagement.SceneManager.LoadScene("Title");
     }
 
-    // BodyText가 짧을 때 RewardRow가 스크롤 바닥에 붙도록 BodyText의 minHeight를 동적으로 조정
-    // BodyText가 충분히 길면 자연스럽게 스크롤이 생기고 RewardRow는 스크롤 끝에 위치
+    // BodyText 길이에 맞춰 RewardRow를 스크롤 하단에 붙인다.
     private void AdjustScrollLayout()
     {
         if (_scrollRect == null || _scrollContent == null || _rewardRow == null || _bodyText == null)
@@ -162,8 +193,6 @@ public class TournamentResultUI : MonoBehaviour
 
         float viewportHeight = _scrollRect.viewport.rect.height;
         float rewardHeight = _rewardRow.rect.height;
-
-        // Viewport를 꽉 채우려면 BodyText가 최소한 이 높이 이상이어야 함
         float requiredBodyHeight = viewportHeight - rewardHeight;
 
         LayoutElement bodyLayoutElement = _bodyText.GetComponent<LayoutElement>();
@@ -174,22 +203,19 @@ public class TournamentResultUI : MonoBehaviour
 
         if (actualBodyHeight < requiredBodyHeight)
         {
-            // 텍스트가 짧은 경우: BodyText 영역을 늘려 RewardRow를 바닥으로 밀어냄
             bodyLayoutElement.minHeight = requiredBodyHeight;
             bodyLayoutElement.preferredHeight = requiredBodyHeight;
         }
         else
         {
-            // 텍스트가 긴 경우: 텍스트 크기 그대로 사용, 스크롤이 자동으로 생김
             bodyLayoutElement.minHeight = -1;
             bodyLayoutElement.preferredHeight = -1;
         }
 
-        // LayoutElement 변경 사항을 Content에 즉시 반영
         LayoutRebuilder.ForceRebuildLayoutImmediate(_scrollContent);
     }
 
-    // reachedRoundTeamCount 기준으로 보상 id 결정
+    // reachedRoundTeamCount 기준으로 보상 id를 반환한다.
     private int ResolveRewardId(int reachedRoundTeamCount)
     {
         switch (reachedRoundTeamCount)
@@ -202,19 +228,14 @@ public class TournamentResultUI : MonoBehaviour
         }
     }
 
-    // CachedSOData에서 RewardPopupTableSO를 꺼내 id로 row 조회
+    // RewardPopupTableSO에서 id로 보상 row를 찾는다.
     private static RewardPopupRow GetRewardRow(int id)
     {
-        if (!CachedSOData.TryGet<RewardPopupTableSO>(out var table))
-        {
-            Debug.LogWarning("[TournamentResultUI] RewardPopupTableSO가 CachedSOData에 등록되지 않았습니다.");
-            return null;
-        }
-        foreach (var row in table.Rows)
+        RewardPopupTableSO table = CachedSOData.Get<RewardPopupTableSO>();
+        foreach (RewardPopupRow row in table.Rows)
             if (row.id == id) return row;
 
-        Debug.LogWarning($"[TournamentResultUI] id {id} 에 해당하는 보상 데이터를 찾을 수 없습니다.");
-        return null;
+        throw new InvalidOperationException($"[TournamentResultUI] id {id} 보상 데이터를 찾을 수 없습니다.");
     }
 
     private static bool IsAchievedResult(int reachedRoundTeamCount)
