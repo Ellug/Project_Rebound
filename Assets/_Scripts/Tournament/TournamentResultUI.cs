@@ -86,7 +86,16 @@ public class TournamentResultUI : MonoBehaviour
             _goldValueText.text = (row != null ? row.money : 0).ToString("N0");
 
         if (_fameValueText != null)
-            _fameValueText.text = (row != null ? row.fame : 0).ToString("N0");
+        {
+            int fameValue = row != null ? row.fame : 0;
+
+            if (MoneyManager.Instance != null)
+            {
+                fameValue = MoneyManager.Instance.GetAdjustedReputationAmount(fameValue);
+            }
+
+            _fameValueText.text = fameValue.ToString("N0");
+        }
 
         _panelRoot.SetActive(true);
         _panelRoot.transform.SetAsLastSibling();
