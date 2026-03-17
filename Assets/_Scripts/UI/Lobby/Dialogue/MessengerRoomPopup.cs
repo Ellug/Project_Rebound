@@ -48,6 +48,12 @@ public class MessengerRoomPopup : UIBase
         CurrentRoomId = room.RoomId;
         CurrentRoomName = room.RoomName;
 
+        if (MessengerManager.Instance != null)
+        {
+            MessengerManager.Instance.CurrentViewingRoomId = CurrentRoomId;
+            MessengerManager.Instance.MarkAsRead(CurrentRoomId);
+        }
+
         if (_txtRoomName != null) _txtRoomName.text = room.RoomName;
 
         RefreshChat(room);
@@ -61,6 +67,11 @@ public class MessengerRoomPopup : UIBase
     }
     public override void Close()
     {
+        if (MessengerManager.Instance != null)
+        {
+            MessengerManager.Instance.CurrentViewingRoomId = "";
+        }
+
         base.Close();
 
         if (UIManager.Instance != null)
