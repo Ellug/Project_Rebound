@@ -5,6 +5,12 @@ using UnityEngine.UI;
 
 public class TournamentResultUI : MonoBehaviour
 {
+    private const string Rank1ImageId = "EventGamePopup01_img_1";
+    private const string Rank2ImageId = "EventGamePopup01_img_2";
+    private const string Rank3ImageId = "EventGamePopup01_img_3";
+    private const string Rank4ImageId = "EventGamePopup01_img_4";
+    private const string FailedImageId = "EventGamePopup02_img";
+
     [Header("Scene References")]
     [SerializeField] private GameObject _panelRoot;
     [SerializeField] private TMP_Text _titleText;
@@ -38,6 +44,7 @@ public class TournamentResultUI : MonoBehaviour
     private bool _isFriendlyResultMode;
     private int _friendlyRewardMoney;
     private int _friendlyRewardFame;
+    private string _currentResultImageId;
 
     void Awake()
     {
@@ -60,8 +67,7 @@ public class TournamentResultUI : MonoBehaviour
         _titleText.text = row.titleText;
         _bodyText.text = row.desc;
 
-        _resultImage.sprite = _isCurrentResultAchieved ? _achievedImage : _failedImage;
-        _resultImage.enabled = _resultImage.sprite != null;
+        SetTournamentResultImage(ResolveTournamentResultImageId(reachedRoundTeamCount));
 
         _goldIconImage.sprite = _goldIcon;
         _goldIconImage.enabled = _goldIconImage.sprite != null;
@@ -108,6 +114,8 @@ public class TournamentResultUI : MonoBehaviour
             _bodyText.text = $"{normalizedOpponent}와의 친선전에서 패배했습니다.\n다음 경기를 준비하세요.";
         }
 
+        ReleaseTournamentResultImage();
+
         _resultImage.sprite = _isCurrentResultAchieved ? _achievedImage : _failedImage;
         _resultImage.enabled = _resultImage.sprite != null;
 
@@ -132,6 +140,7 @@ public class TournamentResultUI : MonoBehaviour
 
     public void Hide()
     {
+        ReleaseTournamentResultImage();
         _panelRoot.SetActive(false);
     }
 
@@ -241,5 +250,57 @@ public class TournamentResultUI : MonoBehaviour
     private static bool IsAchievedResult(int reachedRoundTeamCount)
     {
         return reachedRoundTeamCount > 0 && reachedRoundTeamCount <= 4;
+    }
+
+    private static string ResolveTournamentResultImageId(int reachedRoundTeamCount)
+    {
+        switch (reachedRoundTeamCount)
+        {
+            case 1: return Rank1ImageId;
+            case 2: return Rank2ImageId;
+            case 3: return Rank3ImageId;
+            case 4: return Rank4ImageId;
+            default: return FailedImageId;
+        }
+    }
+    private void SetTournamentResultImage(string imageId)
+    {
+        ReleaseTournamentResultImage();
+
+        if (_resultImage == null || string.IsNullOrEmpty(imageId))
+            return;
+
+        AddressableImageManager.Instance.LoadSprite(imageId, sprite =>
+        {
+            if (_resultImage == null)
+                return;
+
+            if (sprite != null)
+            {
+                _currentResultImageId = imageId;
+                _resultImage.sprite = sprite;
+                _resultImage.enabled = true;
+            }
+            else
+            {
+                _resultImage.sprite = null;
+                _resultImage.enabled = false;
+            }
+        });
+    }
+
+    private void ReleaseTournamentResultImage()
+    {
+        if (!string.IsNullOrEmpty(_currentResultImageId))
+        {
+            AddressableImageManager.Instance.ReleaseSprite(_currentResultImageId);
+            _currentResultImageId = null;
+        }
+
+        if (_resultImage != null && _isFriendlyResultMode == false)
+        {
+            _resultImage.sprite = null;
+            _resultImage.enabled = false;
+        }
     }
 }
