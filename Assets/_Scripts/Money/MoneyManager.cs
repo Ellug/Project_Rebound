@@ -3,7 +3,6 @@ using UnityEngine;
 
 // 지금 재화 추가, 사용 있음
 // 재화 초기값 변경
-// 세이브 로드 나중에 추가
 public class MoneyManager : Singleton<MoneyManager>
 {
     private const int DEFAULT_GOLD = 2000;
@@ -46,15 +45,14 @@ public class MoneyManager : Singleton<MoneyManager>
         return true;
     }
 
-    // 명성치 추가
-    public void AddReputation(int amount)
+    // 명성치 보너스 적용 후 최종 지급량 계산
+    public int GetAdjustedReputationAmount(int amount)
     {
         if (amount <= 0)
         {
-            return;
+            return 0;
         }
 
-        // 감독 노드 명성치 획득률 보너스 적용
         if (HeadCoachManager.Instance != null && HeadCoachManager.Instance.IsInitialized)
         {
             float bonusRate = HeadCoachManager.Instance.GetStatBonusValue("Fame_Gain_Rate");
@@ -63,6 +61,31 @@ public class MoneyManager : Singleton<MoneyManager>
                 amount = Mathf.RoundToInt(amount * (1f + bonusRate * 0.01f));
             }
         }
+
+        return amount;
+    }
+
+    // 명성치 추가
+    public void AddReputation(int amount)
+    {
+        if (amount <= 0)
+        {
+            return;
+        }
+
+        int originalAmount = amount;
+        amount = GetAdjustedReputationAmount(amount);
+
+        if (originalAmount != amount)
+        {
+            float appliedBonusRate = HeadCoachManager.Instance != null && HeadCoachManager.Instance.IsInitialized
+                ? HeadCoachManager.Instance.GetStatBonusValue("Fame_Gain_Rate")
+                : 0f;
+
+            Debug.Log($"[MoneyManager] 명성치 보너스 적용: 기본 {originalAmount}, 보너스 {appliedBonusRate}%, 최종 {amount}");
+        }
+        Debug.Log($"[MoneyManager] 명성치 증가: 현재 {_reputation + amount}");
+
         _reputation += amount;
         OnReputationChanged?.Invoke(_reputation);
     }
