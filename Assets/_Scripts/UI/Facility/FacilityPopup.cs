@@ -164,7 +164,7 @@ public class FacilityPopup : UIBase
             return;
         }
 
-        int cost = current.upgradeCost;
+        int cost = FacilitySystem.Instance.GetFinalUpgradeCost(facility);
         if (money < cost)
         {
             row.iconMoneyLack.gameObject.SetActive(true);
@@ -183,9 +183,21 @@ public class FacilityPopup : UIBase
         row.upgradeButton.interactable = true;
         row.upgradeButton.image.enabled = true;
     }
-
-    public void CloseFacilityPopup()
+    // 갱신용 구독
+    void OnEnable()
     {
-        _panelClose.gameObject.SetActive(false);
+        if (HeadCoachManager.Instance != null)
+        {
+            HeadCoachManager.Instance.OnTreeChanged += RefreshAll;
+        }
+        RefreshAll();
+    }
+
+    void OnDisable()
+    {
+        if (HeadCoachManager.Instance != null)
+        {
+            HeadCoachManager.Instance.OnTreeChanged -= RefreshAll;
+        }
     }
 }

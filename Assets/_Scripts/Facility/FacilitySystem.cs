@@ -69,7 +69,8 @@ public class FacilitySystem : Singleton<FacilitySystem>
             }
         }
         var current = GetCurrentData(facility);
-        if (!MoneyManager.Instance.TrySpendGold(current.upgradeCost))
+        int cost = GetFinalUpgradeCost(facility);
+        if (!MoneyManager.Instance.TrySpendGold(cost))
         {
             Debug.Log("골드 부족");
             return false;
@@ -125,5 +126,22 @@ public class FacilitySystem : Singleton<FacilitySystem>
     public int GetCafeteriaBonus()
     {
         return GetCurrentData("cafeteria").trainingExpEfficiency;
+    }
+
+    public int GetFinalUpgradeCost(string facility)
+    {
+        var current = GetCurrentData(facility);
+        if (current == null) return 0;
+
+        int baseCost = current.upgradeCost;
+
+        float discountPercent = HeadCoachManager.Instance.GetStatBonusValue("Facility_Upgrade_Cost");
+
+        float multiplier = 1f + (discountPercent / 100f);
+
+        int finalCost = Mathf.RoundToInt(baseCost * multiplier);
+
+
+        return Mathf.Max(1, finalCost);
     }
 }
