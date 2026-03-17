@@ -379,13 +379,68 @@ public class TrainingSelectPopup : UIPopup
         float cafeteriaBonus = FacilitySystem.Instance.GetCafeteriaBonus() * 0.01f;
         float counselingBonus = FacilitySystem.Instance.GetMentalBonus() * 0.01f;
 
-        // 임시 감독노드 나중에 감독노드 들어오면 삭제 예정
-        float directorBonusTest = 0f;
-
         // 훈련시 보너스들
-        float statBonus = (gymBonus * gymDiff) + directorBonusTest;
-        float conditionBonus = (schoolBonus * schoolDiff) + (cafeteriaBonus * cafeteriaDiff) + directorBonusTest;
-        float mentalBonus = (counselingBonus * counselingDiff) + (cafeteriaBonus * cafeteriaDiff) + directorBonusTest;
+        float statBonus = gymBonus * gymDiff;
+        float conditionBonus = (schoolBonus * schoolDiff) + (cafeteriaBonus * cafeteriaDiff);
+        float mentalBonus = (counselingBonus * counselingDiff) + (cafeteriaBonus * cafeteriaDiff);
+
+        // 감독 노드 훈련 컨디션 소모 감소 보너스 적용
+        float nodeConditionBonus = 0f;
+        if (HeadCoachManager.Instance != null && HeadCoachManager.Instance.IsInitialized)
+        {
+            string trainingKey = data.trainingKey;
+
+            // 슈팅 드릴 (index: 1201)
+            if (trainingKey == "cmd_1201")
+            {
+                nodeConditionBonus += 
+                    HeadCoachManager.Instance.GetStatBonusValue("Condition_Drain_ShootingDrill") * 0.01f;
+                
+                int previewCost =
+                    Mathf.Max(
+                        0, Mathf.FloorToInt(
+                            data.conditionDelta *
+                            (1f + nodeConditionBonus)
+                            )
+                        );
+
+                Debug.Log($"[TrainingSelectPopup] 슈팅 드릴 컨디션 소모 감소 : 기본 소모: {data.conditionDelta}, 실제 소모: {previewCost}");
+            }
+
+            // 디펜스 워크 (index: 1203)
+            if (trainingKey == "cmd_1203")
+            {
+                nodeConditionBonus +=
+                    HeadCoachManager.Instance.GetStatBonusValue("Condition_Drain_DefenceWork") * 0.01f;
+                
+                int previewCost =
+                    Mathf.Max(
+                        0, Mathf.FloorToInt(
+                            data.conditionDelta *
+                            (1f + nodeConditionBonus)
+                            )
+                        );
+
+                Debug.Log($"[TrainingSelectPopup] 디펜스 워크 컨디션 소모 감소 : 기본 소모: {data.conditionDelta}, 실제 소모: {previewCost}");
+            }
+
+            // 단체 훈련 계열 (index: 1101, 1102, 1103)
+            if (trainingKey == "cmd_1101" || trainingKey == "cmd_1102" || trainingKey == "cmd_1103")
+            {
+                nodeConditionBonus +=
+                    HeadCoachManager.Instance.GetStatBonusValue("Condition_Drain_TeamPractice") * 0.01f;
+
+                int previewCost = 
+                    Mathf.Max(
+                        0, Mathf.FloorToInt(
+                            data.conditionDelta *
+                            (1f + nodeConditionBonus)
+                            )
+                    );
+
+                Debug.Log($"[TrainingSelectPopup] 단체 훈련 컨디션 소모 감소 : 기본 소모: {data.conditionDelta}, 실제 소모: {previewCost}");
+            }
+        }
 
         foreach (Student student in students)
         {
@@ -394,7 +449,10 @@ public class TrainingSelectPopup : UIPopup
             // 컨디션
             if (data.conditionDelta >= 0)
             {
-                student.condition -= data.conditionDelta;
+                // 소모량에 노드 감소 보너스 적용 (Floor로 내림 처리해 소량 보너스도 반영)
+                int cost = Mathf.FloorToInt(data.conditionDelta * (1f + nodeConditionBonus));
+                cost = Mathf.Max(0, cost);
+                student.condition -= cost;
             }
             else
             {

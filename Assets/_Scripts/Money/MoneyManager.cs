@@ -54,6 +54,15 @@ public class MoneyManager : Singleton<MoneyManager>
             return;
         }
 
+        // 감독 노드 명성치 획득률 보너스 적용
+        if (HeadCoachManager.Instance != null && HeadCoachManager.Instance.IsInitialized)
+        {
+            float bonusRate = HeadCoachManager.Instance.GetStatBonusValue("Fame_Gain_Rate");
+            if (bonusRate != 0f)
+            {
+                amount = Mathf.RoundToInt(amount * (1f + bonusRate * 0.01f));
+            }
+        }
         _reputation += amount;
         OnReputationChanged?.Invoke(_reputation);
     }

@@ -43,6 +43,11 @@ public class Student
     public float trainingEfficiencyBonus;
     public bool isTrainingBlocked;
 
+    // 현재 적용된 노드 보너스
+    public int appliedShootBonus;     // 슈팅
+    public int appliedJumpBonus;      // 점프력
+    public int appliedAllStatBonus;   // 올스텟
+
     public static int ClampCondition(int value)
     {
         if (value < ConditionMin) return ConditionMin;
