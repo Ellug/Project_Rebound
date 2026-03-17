@@ -1,4 +1,4 @@
-﻿%YAML 1.1
+%YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
 --- !u!114 &11400000
 MonoBehaviour:
@@ -61,7 +61,7 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 0ad688a92aa790c4dbe0bd628beb8854
-    m_Address: Story07_bg_Stadium
+    m_Address: Assets/_Images/Addressables/Story/Story07_bg_Stadium.png
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -71,7 +71,7 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 0dd624a6a7954d543a9e4d45b8412852
-    m_Address: Story01_char_Manager_idle
+    m_Address: Assets/_Images/Addressables/Story/Story01_char_Manager_idle.png
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -86,12 +86,12 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 157516746cb0d2c4bb0deefe16f6af87
-    m_Address: Story01_bg_WatingRoom
+    m_Address: Assets/_Images/Addressables/Story/Story01_bg_WatingRoom.png
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 16880f5d7e09501418fca963d1505ea6
-    m_Address: Story01_char_Principal_imotion_03
+    m_Address: Assets/_Images/Addressables/Story/Story01_char_Principal_imotion_03.png
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -176,7 +176,7 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 2ae9e00109ba92248aa5be0602047c04
-    m_Address: Story05_bg_Gym
+    m_Address: Assets/_Images/Addressables/Story/Story05_bg_Gym.png
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -226,7 +226,7 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 48956424876077a45b6207edfccfecbe
-    m_Address: Story01_char_Coach_idle
+    m_Address: Assets/_Images/Addressables/Story/Story01_char_Coach_idle.png
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -256,7 +256,7 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 53e0988ed1a35d541855da393bbdba12
-    m_Address: Story06_bg_ChairmanOffice
+    m_Address: Assets/_Images/Addressables/Story/Story06_bg_ChairmanOffice.png
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -291,7 +291,7 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 622668f14697e824e872c1a4373781d9
-    m_Address: Story08_bg_Hallway
+    m_Address: Assets/_Images/Addressables/Story/Story08_bg_Hallway.png
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -316,7 +316,7 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 717908cc927cd054e861c90eb2b33bed
-    m_Address: Story01_char_Coach_imotion_03
+    m_Address: Assets/_Images/Addressables/Story/Story01_char_Coach_imotion_03.png
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -326,7 +326,7 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 725c5029cfebcf44293ee0f74e335199
-    m_Address: Story01_char_Coach_imotion_02
+    m_Address: Assets/_Images/Addressables/Story/Story01_char_Coach_imotion_02.png
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -395,6 +395,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8e48e2df20abd9c49a93f8d057960ec6
+    m_Address: Assets/_Images/Addressables/Story/Story01_char_Manager_imotion_01.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 8e4fcb9fb2129cb439cd662ab378741f
     m_Address: char_green_09
     m_ReadOnly: 0
@@ -405,13 +410,18 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8faed866683bd1e468209f583a783439
+    m_Address: Assets/_Images/Addressables/Story/Story01_char_Mom_idle.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 91b140360d978b74db26bfc56fd61a13
     m_Address: Lobby00_bg_school
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 940bb053e4fd72b4d90ce57cc0afbbf2
-    m_Address: Story01_char_Announcer_idle
+    m_Address: Assets/_Images/Addressables/Story/Story01_char_Announcer_idle.png
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -491,12 +501,17 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b245248deecc3c74dae459fc31e531ea
-    m_Address: Story03_bg_Gate
+    m_Address: Assets/_Images/Addressables/Story/Story03_bg_Gate.png
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b36137b6e0f8caf4da288e5fab8ce327
     m_Address: char_red_13
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b98b79b98f829864c88616b2a7c8e313
+    m_Address: Assets/_Images/Addressables/Story/Story01_char_Principal_imotion_02.png
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -526,7 +541,7 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: c829d0fe21c673542823ecce1c5f15d7
-    m_Address: Story01_char_Chairman_idle
+    m_Address: Assets/_Images/Addressables/Story/Story01_char_Chairman_idle.png
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -541,7 +556,7 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: cd9097b26fcb2b84b9a8f22fd0a7c8ce
-    m_Address: Story04_bg_PrincipalOffice
+    m_Address: Assets/_Images/Addressables/Story/Story04_bg_PrincipalOffice.png
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -567,6 +582,16 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: d4b76843fe71d0341b02db5dc2030c8a
     m_Address: EventGame00_img_attack_second
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d576073a283e5d34a8b24b455aee3e03
+    m_Address: Assets/_Images/Addressables/Story/Story01_char_Principal_imotion_01.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d611bb09656daeb4a9b15e90bd8017c7
+    m_Address: Assets/_Images/Addressables/Story/Story01_char_Player_idle.png
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -611,7 +636,7 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: dd7b96c7caf622f40a08d0a2741e8204
-    m_Address: Story01_char_Chairman_imotion_01
+    m_Address: Assets/_Images/Addressables/Story/Story01_char_Chairman_imotion_01.png
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -650,13 +675,23 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e9f337563f8b82f4ea5799743d9e043a
+    m_Address: Assets/_Images/Addressables/Story/Story01_char_Principal_idle.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: ea2de33704cf6264096f3358aacad378
     m_Address: EventGame00_img_whistle
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: eeaa3aafcf726304bac52d45fc28faa2
+    m_Address: Assets/_Images/Addressables/Story/Story01_char_Manager_imotion_02.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: f13f6c79341b442458c2837648c6ce18
-    m_Address: Story02_bg_Room
+    m_Address: Assets/_Images/Addressables/Story/Story02_bg_Room.png
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -666,12 +701,12 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: fbee20a147a973845b861b1a973c9e5b
-    m_Address: Story01_char_Coach_imotion_04
+    m_Address: Assets/_Images/Addressables/Story/Story01_char_Coach_imotion_04.png
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: fd483e088580199408a15ad926d65f48
-    m_Address: Story01_char_Coach_imotion_01
+    m_Address: Assets/_Images/Addressables/Story/Story01_char_Coach_imotion_01.png
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -686,6 +721,3 @@ MonoBehaviour:
     m_Schemas:
     - {fileID: 11400000, guid: 80e0b7bb10bc4ee3be9374130d221c1b, type: 2}
     - {fileID: 11400000, guid: a6235875b18d4e92adbff899d94a8237, type: 2}
-
-
-

@@ -4,6 +4,8 @@ using UnityEngine.UI;
 
 public class TitleManager : MonoBehaviour
 {
+    private const int IntroStoryId = 10001;
+
     [SerializeField] private Button _continueButton;
     [SerializeField] private GameObject _viewLoadPanel;
 
@@ -43,7 +45,8 @@ public class TitleManager : MonoBehaviour
 
         // 새 게임 시작 시에만 튜토리얼 가이드 버튼 재노출 가능하도록 리셋
         TutorialGuidePrefs.ResetDismissed();
-        SceneManager.LoadScene("Lobby");
+        VNBridge.RequestStory(IntroStoryId, VNBridge.DefaultReturnSceneName);
+        SceneManager.LoadScene(VNBridge.VNSceneName);
     }
 
     public void OnClickContinueButton()

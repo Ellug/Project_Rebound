@@ -937,3 +937,52 @@ MonoBehaviour:
       m_SubObjectType: 
       m_SubObjectGUID: 
       m_EditorAssetChanged: 0
+  - fileName: Story01_char_Manager_imotion_01
+    spriteReference:
+      m_AssetGUID: 8e48e2df20abd9c49a93f8d057960ec6
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+  - fileName: Story01_char_Manager_imotion_02
+    spriteReference:
+      m_AssetGUID: eeaa3aafcf726304bac52d45fc28faa2
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+  - fileName: Story01_char_Mom_idle
+    spriteReference:
+      m_AssetGUID: 8faed866683bd1e468209f583a783439
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+  - fileName: Story01_char_Player_idle
+    spriteReference:
+      m_AssetGUID: d611bb09656daeb4a9b15e90bd8017c7
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+  - fileName: Story01_char_Principal_idle
+    spriteReference:
+      m_AssetGUID: e9f337563f8b82f4ea5799743d9e043a
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+  - fileName: Story01_char_Principal_imotion_01
+    spriteReference:
+      m_AssetGUID: d576073a283e5d34a8b24b455aee3e03
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+  - fileName: Story01_char_Principal_imotion_02
+    spriteReference:
+      m_AssetGUID: b98b79b98f829864c88616b2a7c8e313
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
