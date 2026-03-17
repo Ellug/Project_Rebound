@@ -37,7 +37,6 @@ public class SavedFlowData
     public List<string> activeEventIds = new();  // HashSet<string> → List<string>
     public int maxRecruitCount;                  // 모집 정원 저장
     public bool hasPendingFriendlyMatch;         // 친선경기 예약 여부 저장
-    public bool hasPlayedVn10001;                // 10001 시청 여부 저장
     public bool hasPlayedVn10002;                // 10002 시청 여부 저장
     public bool hasPlayedVn10003;                // 10003 시청 여부 저장
 

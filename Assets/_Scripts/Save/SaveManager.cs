@@ -266,7 +266,6 @@ public class SaveManager : Singleton<SaveManager>
             activeEventIds = new List<string>(GameManager.Instance.ActiveEventIds),
             maxRecruitCount = GameManager.Instance.MaxRecruitCount,
             hasPendingFriendlyMatch = GameManager.Instance.HasPendingFriendlyMatch,
-            hasPlayedVn10001 = GameManager.Instance.HasPlayedVn10001,
             hasPlayedVn10002 = GameManager.Instance.HasPlayedVn10002,
             hasPlayedVn10003 = GameManager.Instance.HasPlayedVn10003,
 
@@ -599,7 +598,6 @@ public class SaveManager : Singleton<SaveManager>
 
         return storyId switch
         {
-            10001 => CurrentData.flowData.hasPlayedVn10001,
             10002 => CurrentData.flowData.hasPlayedVn10002,
             10003 => CurrentData.flowData.hasPlayedVn10003,
             _ => false
@@ -616,9 +614,6 @@ public class SaveManager : Singleton<SaveManager>
 
         switch (storyId)
         {
-            case 10001:
-                CurrentData.flowData.hasPlayedVn10001 = true;
-                break;
             case 10002:
                 CurrentData.flowData.hasPlayedVn10002 = true;
                 break;

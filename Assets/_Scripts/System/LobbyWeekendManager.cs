@@ -1,7 +1,7 @@
 using UnityEngine;
 
 // 로비 주말 분기(친선 우선/주말훈련) 전담
-public class LobbyWeekendManager : MonoBehaviour
+public class LobbyWeekendManager
 {
     private const int WeekendTrainingConfirmIndex = 901;
     private const int WeekendTrainingCancelIndex = 902;
@@ -17,7 +17,7 @@ public class LobbyWeekendManager : MonoBehaviour
         _gameManager = gameManager;
         _turnManager = turnManager;
         _lobbyMatchManager = lobbyMatchManager;
-        _trainingFlowController = FindFirstObjectByType<TrainingFlowController>(FindObjectsInactive.Include);
+        _trainingFlowController = Object.FindFirstObjectByType<TrainingFlowController>(FindObjectsInactive.Include);
     }
 
     // 씬 이탈 시 내부 참조 정리
@@ -98,7 +98,7 @@ public class LobbyWeekendManager : MonoBehaviour
     private void ExecuteWeekendTrainingFlow(int rowIndex, string trainingName)
     {
         if (_trainingFlowController == null)
-            _trainingFlowController = FindFirstObjectByType<TrainingFlowController>(FindObjectsInactive.Include);
+            _trainingFlowController = Object.FindFirstObjectByType<TrainingFlowController>(FindObjectsInactive.Include);
 
         if (_trainingFlowController == null)
         {

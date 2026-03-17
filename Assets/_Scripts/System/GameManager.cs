@@ -7,23 +7,17 @@ public class GameManager : Singleton<GameManager>
 {
     private const string LobbyScene = "Lobby";
     private const string TitleScene = "Title";
-    private const int PreWinterStoryId = 10002;
-    private const int WinterChampionStoryId = 10003;
-    private const int PreWinterStoryOffsetMonths = 2;
 
     private TurnManager _turnManager;               // Lobby 씬의 TurnManager (씬별 런타임 참조)
     private AlwaysEventManager _alwaysEventManager; // Lobby 씬의 AlwaysEventManager
     private LobbyUI _lobbyUI;                       // Lobby 씬의 LobbyUI
-    private TournamentResultUI _tournamentResultUI; // Lobby 씬의 TournamentResultUI
     private LobbyMatchManager _lobbyMatchManager;   // Lobby 씬의 매치 흐름 전담 매니저
     private LobbyWeekendManager _lobbyWeekendManager; // Lobby 씬의 주말 흐름 전담 매니저
+    private LobbyStoryFlowManager _lobbyStoryFlowManager; // 로비 스토리 트리거 전담 매니저
     private RecruitmentManager _recruitmentManager; // Lobby 씬의 RecruitmentManager
     private bool _initialRecruitmentTriggered;      // 게임 시작 시 최초 영입 트리거 여부 (중복 방지)
     private bool _lobbyInitialized;                 // 로비 씬 초기화 완료 여부 (이중 호출 방지)
     private bool _isNewGame;                        // 새 게임 여부 (SyncFlowState 실행 전에 판단해야 하므로 별도 보관)
-    private DateTime _firstWinterStartDate;         // 테이블 기반 첫 겨울방학 시작일
-    private DateTime _firstWinterPreStoryDate;      // 첫 겨울방학 2개월 전 VN 트리거 날짜
-    private bool _hasFirstWinterSchedule;           // 첫 겨울방학 일정 조회 성공 여부
     private bool _hasPendingFriendlyMatchResult;    // 로비 복귀 후 친선전 결과 팝업 대기 여부
     private bool _pendingFriendlyMatchDidWin;       // 대기 중인 친선전 승패
     private string _pendingFriendlyOpponentName = string.Empty; // 대기 중인 친선전 상대 학교명
@@ -44,7 +38,6 @@ public class GameManager : Singleton<GameManager>
     public DateTime LeagueTermEnd => _flowData.LeagueTermEnd;
     public HashSet<string> ActiveEventIds => _flowData.ActiveEventIds;
     public bool HasPendingFriendlyMatch => _flowData.HasPendingFriendlyMatch;
-    public bool HasPlayedVn10001 => _flowData.HasPlayedVn10001;
     public bool HasPlayedVn10002 => _flowData.HasPlayedVn10002;
     public bool HasPlayedVn10003 => _flowData.HasPlayedVn10003;
 
@@ -66,6 +59,8 @@ public class GameManager : Singleton<GameManager>
 
     protected override void OnSingletonAwake()
     {
+        _lobbyWeekendManager = new LobbyWeekendManager();
+        _lobbyStoryFlowManager = new LobbyStoryFlowManager(this);
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
@@ -143,9 +138,6 @@ public class GameManager : Singleton<GameManager>
     {
         switch (storyId)
         {
-            case 10001:
-                _flowData.HasPlayedVn10001 = true;
-                break;
             case 10002:
                 _flowData.HasPlayedVn10002 = true;
                 break;
@@ -170,17 +162,13 @@ public class GameManager : Singleton<GameManager>
         _turnManager = null;
         _alwaysEventManager = null;
         _lobbyUI = null;
-        _tournamentResultUI = null;
         _lobbyMatchManager?.ClearRuntimeState();
-        _lobbyWeekendManager?.ClearRuntimeState();
+        _lobbyWeekendManager.ClearRuntimeState();
+        _lobbyStoryFlowManager.ClearLobbyContext();
         _lobbyMatchManager = null;
-        _lobbyWeekendManager = null;
         _recruitmentManager = null;
         _lobbyInitialized = false; // 로비 초기화 플래그 리셋
         _isNewGame = false;
-        _firstWinterStartDate = default;
-        _firstWinterPreStoryDate = default;
-        _hasFirstWinterSchedule = false;
         _hasPendingFriendlyMatchResult = false;
         _pendingFriendlyMatchDidWin = false;
         _pendingFriendlyOpponentName = string.Empty;
@@ -243,19 +231,7 @@ public class GameManager : Singleton<GameManager>
     // 첫 겨울방학 우승 VN(10003) 진입 조건을 확인하고 씬 전환
     public bool TryEnterFirstWinterChampionStory()
     {
-        if (_flowData.HasPlayedVn10003)
-            return false;
-
-        if (!TryGetFirstWinterDates(out DateTime firstWinterStart, out DateTime firstWinterEnd))
-            return false;
-
-        DateTime today = _flowData.CurrentDate.Date;
-        if (today < firstWinterStart || today > firstWinterEnd)
-            return false;
-
-        VNBridge.RequestStory(WinterChampionStoryId, LobbyScene);
-        SceneManager.LoadScene(VNBridge.VNSceneName);
-        return true;
+        return _lobbyStoryFlowManager.TryEnterFirstWinterChampionStory();
     }
 
     // AlwaysEventManager 에서 호출하는 토너먼트 진입 API
@@ -277,43 +253,6 @@ public class GameManager : Singleton<GameManager>
             return -1;
 
         return (nextLeagueDate.Date - _turnManager.DateManager.CurrentDate.Date).Days;
-    }
-
-    // 첫 겨울방학 시작/종료일과 10002 트리거 날짜를 테이블 기준으로 캐싱
-    private void CacheFirstWinterSchedule()
-    {
-        if (!TryGetFirstWinterDates(out DateTime firstWinterStart, out DateTime firstWinterEnd))
-        {
-            _hasFirstWinterSchedule = false;
-            _firstWinterStartDate = default;
-            _firstWinterPreStoryDate = default;
-            return;
-        }
-
-        _hasFirstWinterSchedule = true;
-        _firstWinterStartDate = firstWinterStart;
-        _firstWinterPreStoryDate = _firstWinterStartDate.AddMonths(-PreWinterStoryOffsetMonths).Date;
-    }
-
-    // 첫 겨울방학 2개월 전 날짜에 10002를 1회 실행
-    private bool TryTriggerPreWinterStory()
-    {
-        if (_turnManager == null) return false;
-        if (_flowData.HasPlayedVn10002) return false;
-
-        if (!_hasFirstWinterSchedule)
-            CacheFirstWinterSchedule();
-
-        if (!_hasFirstWinterSchedule)
-            return false;
-
-        DateTime today = _turnManager.DateManager.CurrentDate.Date;
-        if (today < _firstWinterPreStoryDate || today >= _firstWinterStartDate)
-            return false;
-
-        VNBridge.RequestStory(PreWinterStoryId, LobbyScene);
-        SceneManager.LoadScene(VNBridge.VNSceneName);
-        return true;
     }
 
     // Lobby 씬 로드 시 턴 흐름 초기화/복원
@@ -341,13 +280,13 @@ public class GameManager : Singleton<GameManager>
         RegisterTurnModules();          // 3. TurnModule 등록 (AlwaysEffectTickModule 등)
         RestoreTurnManagerState();      // 4. TurnManager 상태 복원 (씬 복귀 시)
         InitializeEventManager();       // 5. EventManager 초기화
-        CacheFirstWinterSchedule();     // 6. 첫 겨울방학 일정 캐싱
+        _lobbyStoryFlowManager.CacheFirstWinterSchedule(); // 6. 첫 겨울방학 일정 캐싱
         SetInitialPhase();              // 7. 초기 페이즈 설정
         _lobbyMatchManager.HandlePendingResults(); // 8. 토너먼트/친선 결과 처리
         SyncFlowStateFromLobby();       // 10. GameFlowData 동기화 (이후 HasFlowState = true)
         RefreshLobbyTopInfo();          // 11. 로비 UI 갱신
         TryTriggerInitialRecruitment(); // 12. 게임 시작 시 최초 영입 트리거
-        TryTriggerPreWinterStory();     // 13. 첫 겨울방학 2개월 전 VN 트리거
+        _lobbyStoryFlowManager.TryTriggerPreWinterStory(); // 13. 첫 겨울방학 2개월 전 VN 트리거
     }
 
     // Lobby 씬 오브젝트 참조 캐싱
@@ -356,13 +295,12 @@ public class GameManager : Singleton<GameManager>
         _turnManager = FindFirstObjectByType<TurnManager>();
         _alwaysEventManager = FindFirstObjectByType<AlwaysEventManager>();
         _lobbyUI = FindFirstObjectByType<LobbyUI>();
-        _tournamentResultUI = FindFirstObjectByType<TournamentResultUI>(FindObjectsInactive.Include);
         _lobbyMatchManager = FindFirstObjectByType<LobbyMatchManager>(FindObjectsInactive.Include);
-        _lobbyWeekendManager = FindFirstObjectByType<LobbyWeekendManager>(FindObjectsInactive.Include);
         _recruitmentManager = FindFirstObjectByType<RecruitmentManager>(); // 영입 매니저 참조
 
-        _lobbyMatchManager.Bind(this, _turnManager, _lobbyUI, _tournamentResultUI);
+        _lobbyMatchManager.Bind(this, _turnManager, _lobbyUI);
         _lobbyWeekendManager.Bind(this, _turnManager, _lobbyMatchManager);
+        _lobbyStoryFlowManager.BindLobbyContext(_turnManager);
 
         // 영입 완료 이벤트 구독
         if (_recruitmentManager != null)
@@ -514,7 +452,7 @@ public class GameManager : Singleton<GameManager>
         SyncFlowStateFromLobby();
         RefreshLobbyTopInfo();
 
-        if (TryTriggerPreWinterStory())
+        if (_lobbyStoryFlowManager.TryTriggerPreWinterStory())
             return;
 
         // 금요일 종료 시 주말 분기 처리
@@ -546,12 +484,6 @@ public class GameManager : Singleton<GameManager>
             return;
 
         ResetLeagueWindowState();
-    }
-
-    // AlwaysEventTable에서 첫 겨울방학 termStart/termEnd를 조회
-    private static bool TryGetFirstWinterDates(out DateTime termStartDate, out DateTime termEndDate)
-    {
-        return AlwaysEventDateUtil.TryGetFirstWinterVacationTerm(out termStartDate, out termEndDate);
     }
 
     // Lobby 씬의 TurnManager 상태를 GameFlowData에 동기화
@@ -615,7 +547,6 @@ public class GameManager : Singleton<GameManager>
         if (saved == null)
             return;
 
-        _flowData.HasPlayedVn10001 = saved.hasPlayedVn10001;
         _flowData.HasPlayedVn10002 = saved.hasPlayedVn10002;
         _flowData.HasPlayedVn10003 = saved.hasPlayedVn10003;
 
