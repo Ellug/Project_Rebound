@@ -80,6 +80,7 @@ public class GraduationManager : MonoBehaviour
                 "3학년 학생들이 졸업합니다.\n\n" +
                 "졸업생 목록을 확인하시겠습니까?",
             ShowCancel = true,
+            PreviewImageId = "EventPopup_graduate_img",
             OnPrimary = OpenGraduationStudentsPopup,
             OnCancel = null,
             AutoCloseOnPrimary = true,

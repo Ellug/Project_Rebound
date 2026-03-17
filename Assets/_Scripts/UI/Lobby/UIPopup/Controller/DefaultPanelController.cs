@@ -18,6 +18,8 @@ public sealed class DefaultPanelController : MonoBehaviour
     [SerializeField] private GameObject _primaryStartTrainingRoot;  // StartTraining Primary 루트(프리팹에서 위치 고정)
     [SerializeField] private Button _btnStartTraining;              // 훈련 시작 버튼
 
+    private string _currentPreviewImageId;                          // 현재 로드된 이미지 ID (해제용)
+
     // 요청 데이터를 Default 패널 UI에 바인딩
     // closeSelf: AutoClose 옵션에 따라 패널/팝업을 닫기 위해 외부에서 주입
     public void Bind(UIPopupRequest request, Action closeSelf)
@@ -32,16 +34,8 @@ public sealed class DefaultPanelController : MonoBehaviour
             if (hasSub) _txtSub.text = request.SubMessage;
         }
 
-        if (_imgPreview != null)
-        {
-            bool hasSprite = request.PreviewSprite != null;
-            _imgPreview.gameObject.SetActive(hasSprite);
-            if (hasSprite)
-            {
-                _imgPreview.sprite = request.PreviewSprite;
-                _imgPreview.preserveAspect = true;
-            }
-        }
+        // 이미지 ID가 있으면 Addressable로 비동기 로드
+        LoadPreviewImage(request.PreviewImageId);
 
         if (_btnCancel != null)
         {
@@ -56,6 +50,43 @@ public sealed class DefaultPanelController : MonoBehaviour
         }
 
         ApplyPrimaryKind(request, closeSelf);
+    }
+
+    // 이미지 ID 기준으로 Addressable 비동기 로드
+    private void LoadPreviewImage(string imageId)
+    {
+        // 기존 이미지 해제
+        if (!string.IsNullOrEmpty(_currentPreviewImageId))
+        {
+            AddressableImageManager.Instance.ReleaseSprite(_currentPreviewImageId);
+            _currentPreviewImageId = null;
+        }
+
+        if (_imgPreview == null) return;
+
+        if (string.IsNullOrEmpty(imageId))
+        {
+            _imgPreview.gameObject.SetActive(false);
+            return;
+        }
+
+        _imgPreview.gameObject.SetActive(false);
+        _currentPreviewImageId = imageId;
+
+        AddressableImageManager.Instance.LoadSprite(imageId, sprite =>
+        {
+            if (_imgPreview == null) return;
+
+            if (sprite != null)
+            {
+                _imgPreview.sprite = sprite;
+                _imgPreview.gameObject.SetActive(true);
+            }
+            else
+            {
+                _imgPreview.gameObject.SetActive(false);
+            }
+        });
     }
 
     // Primary 버튼 종류(Confirm/StartTraining)에 따라 루트 토글 + 클릭 콜백 바인딩

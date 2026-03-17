@@ -16,7 +16,7 @@ public class UIManager : Singleton<UIManager>
     [SerializeField] private UIPopup _uiPopupPrefab;
 
     [Header("Popup Defaults")]
-    [SerializeField] private Sprite _defaultPopupPreviewSprite;
+    [SerializeField] private string _defaultPopupPreviewImageId; // 기본 이미지 파일명 ID (Addressable)
 
     [Header("Student Select Prefab")]
     [SerializeField] private StudentSelectPopup _studentSelectPopupPrefab;
@@ -121,9 +121,9 @@ public class UIManager : Singleton<UIManager>
     {
         if (request == null) return;
         if (request.Type != UIPopupRequest.PanelType.Default) return;
-        if (request.PreviewSprite != null) return;
+        if (!string.IsNullOrEmpty(request.PreviewImageId)) return;
 
-        request.PreviewSprite = _defaultPopupPreviewSprite;
+        request.PreviewImageId = _defaultPopupPreviewImageId;
     }
 
     // PopupData 경로 (기존 호출 유지용 어댑터)

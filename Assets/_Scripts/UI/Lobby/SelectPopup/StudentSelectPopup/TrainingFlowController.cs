@@ -15,6 +15,13 @@ public class TrainingFlowController : MonoBehaviour
     [SerializeField] private float _fillDuration = 2.0f;         // 게이지 채우는 시간
     [SerializeField] private float _holdDuration = 0.5f;         // 완료 후 대기 시간
 
+    [Header("Weekend Training Images")]
+    [SerializeField] private string _weekendTrainingConfirmBgImageId;  // 주말 훈련 배경 이미지 ID
+    [SerializeField] private string _weekendTrainingCancelBgImageId;   // 주말 휴식 배경 이미지 ID
+    [SerializeField] private string _weekendTrainingConfirmResultImageId;  // 주말 훈련 결과 이미지 ID
+    [SerializeField] private string _weekendTrainingCancelResultImageId;   // 주말 휴식 결과 이미지 ID
+
+
     public event Action OnFlowComplete;                          // 전체 흐름 종료 콜백
     private Coroutine _running;                                  // 실행중 코루틴
 
@@ -24,7 +31,8 @@ public class TrainingFlowController : MonoBehaviour
         string trainingName,
         List<Student> students,
         Action<string, List<Student>> applyEffect = null,
-        Sprite backgroundSprite = null)
+        string backgroundImageId = null,
+        string resultImageId = null)
     {
         if (students == null || students.Count == 0)
         {
@@ -53,7 +61,7 @@ public class TrainingFlowController : MonoBehaviour
 
         // 진행 UI 표시
         if (_progressUI != null)
-            _progressUI.Show(backgroundSprite);
+            _progressUI.Show(backgroundImageId);
 
         // 게이지 연출 시작
         _running = StartCoroutine(ProgressRoutine(
@@ -71,7 +79,7 @@ public class TrainingFlowController : MonoBehaviour
                     _progressUI.SetStatus("완료!");
                 }
 
-                StartCoroutine(HoldAndFinish(trainingKey, trainingName, students, results, applyEffect));
+                StartCoroutine(HoldAndFinish(trainingKey, trainingName, students, results, applyEffect, resultImageId));
             }
         ));
     }
@@ -103,7 +111,8 @@ public class TrainingFlowController : MonoBehaviour
         string trainingName,
         List<Student> students,
         List<TrainingResult> results,
-        Action<string, List<Student>> applyEffect)
+        Action<string, List<Student>> applyEffect,
+        string resultImageId = null)
     {
         yield return new WaitForSeconds(_holdDuration);
 
@@ -116,13 +125,13 @@ public class TrainingFlowController : MonoBehaviour
         else
             Debug.LogWarning("[TrainingFlowController] applyEffect가 null이라 스탯 적용을 건너뜁니다.");
 
-        ShowResultPopup(trainingName, results);
+        ShowResultPopup(trainingName, results, resultImageId);
 
         _running = null;
     }
 
     // 결과 팝업 표시
-    private void ShowResultPopup(string trainingName, List<TrainingResult> results)
+    private void ShowResultPopup(string trainingName, List<TrainingResult> results, string resultImageId = null)
     {
         if (_resultPopup == null)
         {
@@ -132,7 +141,7 @@ public class TrainingFlowController : MonoBehaviour
         }
 
         _resultPopup.Init();
-        _resultPopup.Setup(trainingName, results);
+        _resultPopup.Setup(trainingName, results, resultImageId);
         _resultPopup.Open();
 
         _resultPopup.OnConfirm -= HandlePopupConfirm;
@@ -169,5 +178,19 @@ public class TrainingFlowController : MonoBehaviour
             condition = original.condition,
             // trust = original.trust
         };
+    }
+
+    public string GetWeekendBgImageId(int rowIndex)
+    {
+        return rowIndex == 901
+            ? _weekendTrainingConfirmBgImageId
+            : _weekendTrainingCancelBgImageId;
+    }
+
+    public string GetWeekendResultImageId(int rowIndex)
+    {
+        return rowIndex == 901
+            ? _weekendTrainingConfirmResultImageId
+            : _weekendTrainingCancelResultImageId;
     }
 }

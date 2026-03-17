@@ -42,7 +42,7 @@ public class StudentManagementPopup : UIBase
         [TextArea(1, 5)]
         public string subMessage;
 
-        public Sprite image;
+        public string imageId;  // Addressable 파일명 ID
     }
 
     [Header("토너먼트 시작")]
@@ -174,7 +174,7 @@ public class StudentManagementPopup : UIBase
                 Title = p.title,
                 Message = p.content,
                 SubMessage = p.subMessage,
-                PreviewSprite = p.image
+                PreviewImageId = string.IsNullOrWhiteSpace(p.imageId) ? null : p.imageId.Trim()
             });
         }
 

@@ -26,7 +26,7 @@ public sealed class UIPopupRequest
         public string Title;                                // 페이지 제목
         public string Message;                              // 페이지 본문
         public string SubMessage;                           // 페이지 서브 문구
-        public Sprite PreviewSprite;                        // 페이지 이미지
+        public string PreviewImageId;                       // 페이지 이미지 파일명 ID (Addressable)
     }
 
     public PanelType Type = PanelType.Default;              // 패널 타입
@@ -34,7 +34,7 @@ public sealed class UIPopupRequest
     public string Title;                                    // 팝업 제목
     public string Message;                                  // 본문 메시지
     public string SubMessage;                               // 서브 메시지
-    public Sprite PreviewSprite;                            // 미리보기 이미지
+    public string PreviewImageId;                           // 미리보기 이미지 파일명 ID (Addressable)
 
     public bool ShowCancel = true;                                    // 취소 버튼 표시 여부
     public PrimaryButtonKind PrimaryKind = PrimaryButtonKind.Confirm; // Primary 버튼 종류
@@ -92,7 +92,7 @@ public sealed class UIPopupRequest
         Action onPrimary = null,
         Action onCancel = null,
         string subMessage = null,
-        Sprite previewSprite = null,
+        string previewImageId = null,
         bool showCancel = true,
         PrimaryButtonKind primaryKind = PrimaryButtonKind.Confirm
     )
@@ -103,7 +103,7 @@ public sealed class UIPopupRequest
             Title = title,
             Message = message,
             SubMessage = subMessage,
-            PreviewSprite = previewSprite,
+            PreviewImageId = previewImageId,
             ShowCancel = showCancel,
             PrimaryKind = primaryKind,
             OnPrimary = onPrimary,

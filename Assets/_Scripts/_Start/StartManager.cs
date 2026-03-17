@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -11,17 +11,27 @@ public class StartManager : MonoBehaviour
 {
     private const float CatalogCheckEnd = 0.08f;
     private const float CatalogUpdateEnd = 0.18f;
-    private const float VerifyResourcesEnd = 0.28f;
+    private const float PrepareResourcesEnd = 0.26f;
+    private const float VerifyResourcesEnd = 0.34f;
     private const float DownloadResourcesEnd = 0.80f;
-    private const float TableLoadEnd = 0.95f;
-    private const float InitStart = 0.96f;
+    private const float TableLoadEnd = 0.93f;
+    private const float ImagePreloadEnd = 0.96f;
+    private const float InitStart = 0.97f;
+
+    // 선다운로드 대상 1건의 메타 정보
+    private sealed class PreloadAssetEntry
+    {
+        public AssetReference Reference;
+        public string Category;
+    }
 
     [SerializeField] private Slider _loadingSlider;
-    [SerializeField] private TMP_Text _statusText;    
+    [SerializeField] private TMP_Text _statusText;
     [SerializeField] private TableLoadConfigSO _tableLoadConfig; // 자동 동기화된 테이블 참조 목록
     [SerializeField] private List<AssetReference> _additionalPreloadRefs = new(); // 테이블 외 선다운로드 대상(AddressableImageLibrary SO, AddressableAudioLibrary SO)
 
     private readonly WaitForSeconds _waitOneSecond = new(1f);
+    private readonly List<string> _preloadImageFileNames = new(); // 프리로드할 이미지 파일명 목록
 
     void Awake()
     {
@@ -83,50 +93,172 @@ public class StartManager : MonoBehaviour
 
         _statusText.text = "Preparing resources...";
 
-        var additionalPreloadRefs = new List<AssetReference>();
-        yield return CollectAdditionalPreloadReferencesRoutine(additionalPreloadRefs);
+        var additionalPreloadEntries = new List<PreloadAssetEntry>();
+        yield return CollectAdditionalPreloadReferencesRoutine(additionalPreloadEntries);
+        _loadingSlider.value = PrepareResourcesEnd;
 
         _statusText.text = "Verifying resources...";
 
+        CountPreloadCategories(
+            additionalPreloadEntries,
+            out int totalImageCount,
+            out int totalAudioCount,
+            out int totalLibraryCount);
+
+        var downloadSizes = new List<long>(additionalPreloadEntries.Count);
         long totalDownloadSize = 0;
-        for (int i = 0; i < additionalPreloadRefs.Count; i++)
+        int verifiedImageCount = 0;
+        int verifiedAudioCount = 0;
+        int verifiedLibraryCount = 0;
+        long verifiedImageBytes = 0;
+        long verifiedAudioBytes = 0;
+        long verifiedLibraryBytes = 0;
+
+        if (additionalPreloadEntries.Count > 0)
         {
-            var sizeHandle = Addressables.GetDownloadSizeAsync(additionalPreloadRefs[i]);
-            yield return sizeHandle;
+            for (int i = 0; i < additionalPreloadEntries.Count; i++)
+            {
+                PreloadAssetEntry entry = additionalPreloadEntries[i];
+                string category = NormalizePreloadCategory(entry.Category);
 
-            if (sizeHandle.Status == AsyncOperationStatus.Succeeded)
-                totalDownloadSize += sizeHandle.Result;
+                var sizeHandle = Addressables.GetDownloadSizeAsync(entry.Reference);
+                yield return sizeHandle;
 
-            Addressables.Release(sizeHandle);
+                long size = 0;
+                if (sizeHandle.Status == AsyncOperationStatus.Succeeded)
+                {
+                    size = sizeHandle.Result;
+                    totalDownloadSize += size;
+                }
 
-            progress = CatalogUpdateEnd + ((float)(i + 1) / additionalPreloadRefs.Count) * (VerifyResourcesEnd - CatalogUpdateEnd);
-            _loadingSlider.value = progress;
+                downloadSizes.Add(size);
+                Addressables.Release(sizeHandle);
+
+                IncrementCategoryCount(
+                    category,
+                    ref verifiedImageCount,
+                    ref verifiedAudioCount,
+                    ref verifiedLibraryCount);
+                AddCategoryBytes(
+                    category,
+                    size,
+                    ref verifiedImageBytes,
+                    ref verifiedAudioBytes,
+                    ref verifiedLibraryBytes);
+
+                _statusText.text = BuildVerifySummaryStatusText(
+                    totalImageCount,
+                    totalAudioCount,
+                    totalLibraryCount,
+                    verifiedImageCount,
+                    verifiedAudioCount,
+                    verifiedLibraryCount,
+                    verifiedImageBytes,
+                    verifiedAudioBytes,
+                    verifiedLibraryBytes);
+
+                progress = PrepareResourcesEnd + ((float)(i + 1) / additionalPreloadEntries.Count) * (VerifyResourcesEnd - PrepareResourcesEnd);
+                _loadingSlider.value = progress;
+            }
         }
 
         _loadingSlider.value = VerifyResourcesEnd;
 
         if (totalDownloadSize > 0)
         {
-            _statusText.text = "Downloading game data...";
+            long completedDownloadedBytes = 0;
+            int downloadedImageCount = 0;
+            int downloadedAudioCount = 0;
+            int downloadedLibraryCount = 0;
+            long downloadedImageBytes = 0;
+            long downloadedAudioBytes = 0;
+            long downloadedLibraryBytes = 0;
 
-            for (int i = 0; i < additionalPreloadRefs.Count; i++)
+            for (int i = 0; i < additionalPreloadEntries.Count; i++)
             {
-                var downloadHandle = Addressables.DownloadDependenciesAsync(additionalPreloadRefs[i]);
+                PreloadAssetEntry entry = additionalPreloadEntries[i];
+                long sizeForEntry = i < downloadSizes.Count ? downloadSizes[i] : 0;
+                string category = NormalizePreloadCategory(entry.Category);
+
+                var downloadHandle = Addressables.DownloadDependenciesAsync(entry.Reference);
                 while (!downloadHandle.IsDone)
                 {
-                    float preloadProgress = downloadHandle.PercentComplete / Mathf.Max(1, additionalPreloadRefs.Count);
-                    progress = VerifyResourcesEnd + ((i + preloadProgress) / Mathf.Max(1, additionalPreloadRefs.Count)) * (DownloadResourcesEnd - VerifyResourcesEnd);
+                    var downloadStatus = downloadHandle.GetDownloadStatus();
+                    long currentDownloadedBytes = ClampDownloadedBytes((long)downloadStatus.DownloadedBytes, sizeForEntry);
+                    long totalDownloadedBytes = completedDownloadedBytes + currentDownloadedBytes;
+                    if (totalDownloadedBytes > totalDownloadSize)
+                        totalDownloadedBytes = totalDownloadSize;
+
+                    long currentImageBytes = downloadedImageBytes;
+                    long currentAudioBytes = downloadedAudioBytes;
+                    long currentLibraryBytes = downloadedLibraryBytes;
+                    AddCategoryBytes(
+                        category,
+                        currentDownloadedBytes,
+                        ref currentImageBytes,
+                        ref currentAudioBytes,
+                        ref currentLibraryBytes);
+
+                    float downloadRatio = (float)totalDownloadedBytes / totalDownloadSize;
+                    progress = VerifyResourcesEnd + downloadRatio * (DownloadResourcesEnd - VerifyResourcesEnd);
                     _loadingSlider.value = progress;
+                    _statusText.text = BuildDownloadSummaryStatusText(
+                        totalImageCount,
+                        totalAudioCount,
+                        totalLibraryCount,
+                        downloadedImageCount,
+                        downloadedAudioCount,
+                        downloadedLibraryCount,
+                        currentImageBytes,
+                        currentAudioBytes,
+                        currentLibraryBytes,
+                        totalDownloadedBytes,
+                        totalDownloadSize);
                     yield return null;
                 }
 
-                Addressables.Release(downloadHandle);
+                var finalStatus = downloadHandle.GetDownloadStatus();
+                long downloadedForEntry = ClampDownloadedBytes((long)finalStatus.DownloadedBytes, sizeForEntry);
+                if (downloadedForEntry < sizeForEntry)
+                    downloadedForEntry = sizeForEntry;
+
+                completedDownloadedBytes += downloadedForEntry;
+                if (completedDownloadedBytes > totalDownloadSize)
+                    completedDownloadedBytes = totalDownloadSize;
+
+                IncrementCategoryCount(
+                    category,
+                    ref downloadedImageCount,
+                    ref downloadedAudioCount,
+                    ref downloadedLibraryCount);
+                AddCategoryBytes(
+                    category,
+                    downloadedForEntry,
+                    ref downloadedImageBytes,
+                    ref downloadedAudioBytes,
+                    ref downloadedLibraryBytes);
+
+                float completedRatio = (float)completedDownloadedBytes / totalDownloadSize;
+                _loadingSlider.value = VerifyResourcesEnd + completedRatio * (DownloadResourcesEnd - VerifyResourcesEnd);
+                _statusText.text = BuildDownloadSummaryStatusText(
+                    totalImageCount,
+                    totalAudioCount,
+                    totalLibraryCount,
+                    downloadedImageCount,
+                    downloadedAudioCount,
+                    downloadedLibraryCount,
+                    downloadedImageBytes,
+                    downloadedAudioBytes,
+                    downloadedLibraryBytes,
+                    completedDownloadedBytes,
+                    totalDownloadSize);
+
+                if (downloadHandle.IsValid())
+                    Addressables.Release(downloadHandle);
             }
         }
-        else
-        {
-            _loadingSlider.value = DownloadResourcesEnd;
-        }
+
+        _loadingSlider.value = DownloadResourcesEnd;
 
         _statusText.text = "Loading game data...";
 
@@ -155,6 +287,11 @@ public class StartManager : MonoBehaviour
 
         _loadingSlider.value = TableLoadEnd;
 
+        // 이미지 라이브러리 SO의 모든 스프라이트를 AddressableImageManager 캐시에 미리 로드
+        _statusText.text = "Loading images...";
+        yield return PreloadAllImagesRoutine();
+        _loadingSlider.value = ImagePreloadEnd;
+
         _statusText.text = "Initializing...";
         _loadingSlider.value = InitStart;
 
@@ -175,6 +312,34 @@ public class StartManager : MonoBehaviour
         SceneManager.LoadScene("Title");
     }
 
+    // 수집된 파일명으로 AddressableImageManager 캐시에 병렬 로드 후 고정 등록
+    private IEnumerator PreloadAllImagesRoutine()
+    {
+        if (AddressableImageManager.Instance == null)
+            yield break;
+
+        if (_preloadImageFileNames.Count == 0)
+            yield break;
+
+        // 모든 이미지를 병렬로 로드 시작
+        int total = _preloadImageFileNames.Count;
+        int completed = 0;
+
+        for (int i = 0; i < total; i++)
+        {
+            string fileName = _preloadImageFileNames[i];
+            AddressableImageManager.Instance.LoadSprite(fileName, _ => completed++);
+        }
+
+        // 전부 완료될 때까지 대기
+        while (completed < total)
+            yield return null;
+
+        // 프리로드된 이미지는 고정 캐시로 등록해 해제 방지
+        foreach (string fileName in _preloadImageFileNames)
+            AddressableImageManager.Instance.PinSprite(fileName);
+    }
+
     // TableLoadConfig에서 유효한 Addressable 참조를 수집
     private List<AssetReference> CollectTableReferences()
     {
@@ -192,28 +357,59 @@ public class StartManager : MonoBehaviour
     }
 
     // 테이블 외 선다운로드 대상 Addressable 참조를 수집
-    private IEnumerator CollectAdditionalPreloadReferencesRoutine(List<AssetReference> result)
+    private IEnumerator CollectAdditionalPreloadReferencesRoutine(List<PreloadAssetEntry> result)
     {
         if (result == null)
             yield break;
 
-        AddPreloadRefs(result, _additionalPreloadRefs);
-
+        var validPreloadRefs = new List<AssetReference>();
         for (int i = 0; i < _additionalPreloadRefs.Count; i++)
         {
             AssetReference preloadRef = _additionalPreloadRefs[i];
             if (preloadRef == null) continue;
             if (string.IsNullOrEmpty(preloadRef.AssetGUID)) continue;
             if (!preloadRef.RuntimeKeyIsValid()) continue;
+            validPreloadRefs.Add(preloadRef);
+        }
+
+        AddPreloadRefs(result, validPreloadRefs);
+
+        int totalLibraryCount = validPreloadRefs.Count;
+        int loadedLibraryCount = 0;
+        _statusText.text = BuildPrepareSummaryStatusText(loadedLibraryCount, totalLibraryCount, result.Count, 0f);
+
+        if (totalLibraryCount == 0)
+        {
+            _loadingSlider.value = PrepareResourcesEnd;
+            yield break;
+        }
+
+        for (int i = 0; i < validPreloadRefs.Count; i++)
+        {
+            AssetReference preloadRef = validPreloadRefs[i];
 
             var loadHandle = preloadRef.LoadAssetAsync<ScriptableObject>();
-            yield return loadHandle;
+            while (!loadHandle.IsDone)
+            {
+                float currentLibraryProgress = Mathf.Clamp01(loadHandle.PercentComplete);
+                float prepareRatio = ((float)loadedLibraryCount + currentLibraryProgress) / totalLibraryCount;
+                _loadingSlider.value = CatalogUpdateEnd + prepareRatio * (PrepareResourcesEnd - CatalogUpdateEnd);
+                _statusText.text = BuildPrepareSummaryStatusText(loadedLibraryCount, totalLibraryCount, result.Count, currentLibraryProgress);
+                yield return null;
+            }
 
             if (loadHandle.Status == AsyncOperationStatus.Succeeded)
             {
                 if (loadHandle.Result is AddressableImageLibrarySO imageLibrary)
                 {
                     AddImageLibraryRefs(result, imageLibrary);
+
+                    // 이미지 파일명 목록을 미리 수집해 PreloadAllImagesRoutine에서 재사용
+                    foreach (var entry in imageLibrary.Entries)
+                    {
+                        if (entry != null && !string.IsNullOrEmpty(entry.fileName))
+                            _preloadImageFileNames.Add(entry.fileName);
+                    }
                 }
                 else if (loadHandle.Result is AddressableAudioLibrarySO audioLibrary)
                 {
@@ -224,6 +420,11 @@ public class StartManager : MonoBehaviour
             {
                 Debug.LogWarning($"[StartManager] Failed to load preload library: {preloadRef.AssetGUID}");
             }
+
+            loadedLibraryCount++;
+            float completedRatio = (float)loadedLibraryCount / totalLibraryCount;
+            _loadingSlider.value = CatalogUpdateEnd + completedRatio * (PrepareResourcesEnd - CatalogUpdateEnd);
+            _statusText.text = BuildPrepareSummaryStatusText(loadedLibraryCount, totalLibraryCount, result.Count, 0f);
 
             if (loadHandle.IsValid())
                 Addressables.Release(loadHandle);
@@ -245,7 +446,7 @@ public class StartManager : MonoBehaviour
     }
 
     // 유효한 선다운로드 Addressable 참조만 수집
-    private static void AddPreloadRefs(List<AssetReference> result, IEnumerable<AssetReference> source)
+    private static void AddPreloadRefs(List<PreloadAssetEntry> result, IEnumerable<AssetReference> source)
     {
         if (source == null) return;
 
@@ -254,12 +455,16 @@ public class StartManager : MonoBehaviour
             if (preloadRef == null) continue;
             if (string.IsNullOrEmpty(preloadRef.AssetGUID)) continue;
             if (!preloadRef.RuntimeKeyIsValid()) continue;
-            result.Add(preloadRef);
+            result.Add(new PreloadAssetEntry
+            {
+                Reference = preloadRef,
+                Category = "library"
+            });
         }
     }
 
     // 이미지 라이브러리 SO의 스프라이트 참조를 선다운로드 목록에 추가
-    private static void AddImageLibraryRefs(List<AssetReference> result, AddressableImageLibrarySO library)
+    private static void AddImageLibraryRefs(List<PreloadAssetEntry> result, AddressableImageLibrarySO library)
     {
         if (library == null) return;
 
@@ -273,12 +478,16 @@ public class StartManager : MonoBehaviour
             if (entry.spriteReference == null) continue;
             if (string.IsNullOrEmpty(entry.spriteReference.AssetGUID)) continue;
             if (!entry.spriteReference.RuntimeKeyIsValid()) continue;
-            result.Add(entry.spriteReference);
+            result.Add(new PreloadAssetEntry
+            {
+                Reference = entry.spriteReference,
+                Category = "image"
+            });
         }
     }
 
     // 오디오 라이브러리 SO의 클립 참조를 선다운로드 목록에 추가
-    private static void AddAudioLibraryRefs(List<AssetReference> result, AddressableAudioLibrarySO library)
+    private static void AddAudioLibraryRefs(List<PreloadAssetEntry> result, AddressableAudioLibrarySO library)
     {
         if (library == null) return;
 
@@ -292,8 +501,145 @@ public class StartManager : MonoBehaviour
             if (entry.clipReference == null) continue;
             if (string.IsNullOrEmpty(entry.clipReference.AssetGUID)) continue;
             if (!entry.clipReference.RuntimeKeyIsValid()) continue;
-            result.Add(entry.clipReference);
+            result.Add(new PreloadAssetEntry
+            {
+                Reference = entry.clipReference,
+                Category = "audio"
+            });
         }
+    }
+
+    // 선다운로드 목록의 카테고리별 개수를 집계
+    private static void CountPreloadCategories(
+        List<PreloadAssetEntry> entries,
+        out int imageCount,
+        out int audioCount,
+        out int libraryCount)
+    {
+        imageCount = 0;
+        audioCount = 0;
+        libraryCount = 0;
+
+        if (entries == null)
+            return;
+
+        for (int i = 0; i < entries.Count; i++)
+        {
+            string category = NormalizePreloadCategory(entries[i]?.Category);
+            IncrementCategoryCount(category, ref imageCount, ref audioCount, ref libraryCount);
+        }
+    }
+
+    // 카테고리 문자열을 고정 키로 정규화
+    private static string NormalizePreloadCategory(string category)
+    {
+        if (category == "image")
+            return "image";
+        if (category == "audio")
+            return "audio";
+        return "library";
+    }
+
+    // 카테고리 카운트 증가
+    private static void IncrementCategoryCount(
+        string category,
+        ref int imageCount,
+        ref int audioCount,
+        ref int libraryCount)
+    {
+        if (category == "image")
+            imageCount++;
+        else if (category == "audio")
+            audioCount++;
+        else
+            libraryCount++;
+    }
+
+    // 카테고리 바이트 누적
+    private static void AddCategoryBytes(
+        string category,
+        long bytes,
+        ref long imageBytes,
+        ref long audioBytes,
+        ref long libraryBytes)
+    {
+        if (category == "image")
+            imageBytes += bytes;
+        else if (category == "audio")
+            audioBytes += bytes;
+        else
+            libraryBytes += bytes;
+    }
+
+    // 다운로드 상태의 바이트 값을 예상 용량 범위로 보정
+    private static long ClampDownloadedBytes(long downloadedBytes, long expectedBytes)
+    {
+        if (downloadedBytes < 0)
+            return 0;
+        if (expectedBytes > 0 && downloadedBytes > expectedBytes)
+            return expectedBytes;
+        return downloadedBytes;
+    }
+
+    // 검증 단계 상태 텍스트 구성
+    private static string BuildVerifySummaryStatusText(
+        int totalImageCount,
+        int totalAudioCount,
+        int totalLibraryCount,
+        int verifiedImageCount,
+        int verifiedAudioCount,
+        int verifiedLibraryCount,
+        long verifiedImageBytes,
+        long verifiedAudioBytes,
+        long verifiedLibraryBytes)
+    {
+        int totalCount = totalImageCount + totalAudioCount + totalLibraryCount;
+        int verifiedCount = verifiedImageCount + verifiedAudioCount + verifiedLibraryCount;
+        return $"Verifying resources... {verifiedCount}/{totalCount} | img {verifiedImageCount}/{totalImageCount} {ToMb(verifiedImageBytes):0.0}MB, aud {verifiedAudioCount}/{totalAudioCount} {ToMb(verifiedAudioBytes):0.0}MB, lib {verifiedLibraryCount}/{totalLibraryCount} {ToMb(verifiedLibraryBytes):0.0}MB";
+    }
+
+    // 준비 단계 상태 텍스트 구성
+    private static string BuildPrepareSummaryStatusText(
+        int loadedLibraryCount,
+        int totalLibraryCount,
+        int collectedRefCount,
+        float currentLibraryProgress)
+    {
+        if (totalLibraryCount <= 0)
+            return $"Preparing resources... 100.0% | lib 0/0 | refs {collectedRefCount}";
+
+        float inFlightProgress = loadedLibraryCount < totalLibraryCount ? Mathf.Clamp01(currentLibraryProgress) : 0f;
+        float percent = ((loadedLibraryCount + inFlightProgress) / totalLibraryCount) * 100f;
+        if (percent > 100f)
+            percent = 100f;
+
+        return $"Preparing resources... {percent:0.0}% | lib {loadedLibraryCount}/{totalLibraryCount} | refs {collectedRefCount}";
+    }
+
+    // 다운로드 단계 상태 텍스트 구성
+    private static string BuildDownloadSummaryStatusText(
+        int totalImageCount,
+        int totalAudioCount,
+        int totalLibraryCount,
+        int downloadedImageCount,
+        int downloadedAudioCount,
+        int downloadedLibraryCount,
+        long downloadedImageBytes,
+        long downloadedAudioBytes,
+        long downloadedLibraryBytes,
+        long downloadedTotalBytes,
+        long totalBytes)
+    {
+        int totalCount = totalImageCount + totalAudioCount + totalLibraryCount;
+        int downloadedCount = downloadedImageCount + downloadedAudioCount + downloadedLibraryCount;
+        float percent = totalBytes > 0 ? (float)downloadedTotalBytes / totalBytes * 100f : 100f;
+        return $"Downloading resources... {percent:0.0}% {downloadedCount}/{totalCount} | img {downloadedImageCount}/{totalImageCount} {ToMb(downloadedImageBytes):0.0}MB, aud {downloadedAudioCount}/{totalAudioCount} {ToMb(downloadedAudioBytes):0.0}MB, lib {downloadedLibraryCount}/{totalLibraryCount} {ToMb(downloadedLibraryBytes):0.0}MB | total {ToMb(downloadedTotalBytes):0.0}/{ToMb(totalBytes):0.0}MB";
+    }
+
+    // 바이트를 MB(float)로 변환
+    private static float ToMb(long bytes)
+    {
+        return bytes / (1024f * 1024f);
     }
 
     // Addressables에서 ScriptableObject를 로드해 콜백으로 전달

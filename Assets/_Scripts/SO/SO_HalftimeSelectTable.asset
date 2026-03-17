@@ -19,9 +19,9 @@ MonoBehaviour:
     targetNum: 5
     description: description_match_choice_001
     effectDescription: effect_description_match_choice_001
-    effect1: event_effect_1_condition_m5
-    effect2: 
-    effect3: 
+    effect1: event_effect_1_shoot_p10
+    effect2: event_effect_1_speed_p10
+    effect3: event_effect_1_jump_p10
   - id: match_choice_002
     choiceName: name_match_choice_002
     target: 1
@@ -38,7 +38,7 @@ MonoBehaviour:
     description: description_match_choice_003
     effectDescription: effect_description_match_choice_003
     effect1: event_effect_1_money_m5
-    effect2: event_effect_1_randomplayerStat_p5
+    effect2: event_effect_2_randomplayerStat_p15
     effect3: 
   - id: match_choice_004
     choiceName: name_match_choice_004
@@ -46,9 +46,9 @@ MonoBehaviour:
     targetNum: 5
     description: description_match_choice_004
     effectDescription: effect_description_match_choice_004
-    effect1: event_effect_1_shoot_p10
-    effect2: event_effect_1_speed_p10
-    effect3: event_effect_1_jump_p10
+    effect1: event_effect_1_shoot_p15
+    effect2: event_effect_1_speed_p15
+    effect3: event_effect_1_jump_p15
   - id: match_choice_005
     choiceName: name_match_choice_005
     target: 1
@@ -64,7 +64,7 @@ MonoBehaviour:
     targetNum: 5
     description: description_match_choice_006
     effectDescription: effect_description_match_choice_006
-    effect1: event_effect_2_vital_p5
+    effect1: event_effect_1_stamina_p5
     effect2: event_effect_1_condition_p5
     effect3: 
   - id: match_choice_007
@@ -83,7 +83,7 @@ MonoBehaviour:
     description: description_match_choice_008
     effectDescription: effect_description_match_choice_008
     effect1: event_effect_1_money_m10
-    effect2: event_effect_2_vital_p10
+    effect2: event_effect_1_stamina_p10
     effect3: event_effect_1_condition_p10
   - id: match_choice_009
     choiceName: name_match_choice_009
@@ -100,6 +100,6 @@ MonoBehaviour:
     targetNum: 5
     description: description_match_choice_010
     effectDescription: effect_description_match_choice_010
-    effect1: event_effect_2_randomPlayerStat_p10
+    effect1: event_effect_2_randomPlayerStat_p20
     effect2: 
     effect3: 

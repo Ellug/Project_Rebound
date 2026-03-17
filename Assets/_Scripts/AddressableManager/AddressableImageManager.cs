@@ -17,6 +17,7 @@ public sealed class AddressableImageManager : Singleton<AddressableImageManager>
     private readonly Dictionary<string, Sprite> _spriteCache = new(StringComparer.OrdinalIgnoreCase); // 파일명 id - Sprite 캐시 구조
     private readonly Dictionary<string, AsyncOperationHandle<Sprite>> _spriteHandles = new(StringComparer.OrdinalIgnoreCase); // 파일명 id - Sprite 로드 핸들 캐시 구조
     private readonly Dictionary<string, List<Action<Sprite>>> _pendingCallbacks = new(StringComparer.OrdinalIgnoreCase); // 같은 id 동시 요청 콜백 대기열
+    private readonly HashSet<string> _pinnedKeys = new(StringComparer.OrdinalIgnoreCase); // 프리로드된 이미지는 해제하지 않도록 고정 캐시
 
     public bool IsLibraryLoaded => _library != null; // 라이브러리 로드 상태
 
@@ -113,12 +114,22 @@ public sealed class AddressableImageManager : Singleton<AddressableImageManager>
         return _spriteCache.TryGetValue(normalized, out sprite) && sprite != null;
     }
 
-    // 특정 파일명(ID) 스프라이트만 캐시에서 해제
+    // 특정 파일명(ID)을 고정 캐시로 등록 (해제 불가)
+    public void PinSprite(string fileName)
+    {
+        string normalized = NormalizeKey(fileName);
+        if (!string.IsNullOrEmpty(normalized))
+            _pinnedKeys.Add(normalized);
+    }
+
+    // 특정 파일명(ID) 스프라이트만 캐시에서 해제 (고정된 경우 스킵)
     public void ReleaseSprite(string fileName)
     {
         string normalized = NormalizeKey(fileName);
-        if (string.IsNullOrEmpty(normalized))
-            return;
+        if (string.IsNullOrEmpty(normalized)) return;
+
+        // 고정 캐시는 해제하지 않음
+        if (_pinnedKeys.Contains(normalized)) return;
 
         ReleaseSpriteInternal(normalized);
     }
@@ -136,6 +147,7 @@ public sealed class AddressableImageManager : Singleton<AddressableImageManager>
         _spriteHandles.Clear();
         _spriteCache.Clear();
         _pendingCallbacks.Clear();
+        _pinnedKeys.Clear();
     }
 
     // 파일명(ID) 목록을 미리 로드

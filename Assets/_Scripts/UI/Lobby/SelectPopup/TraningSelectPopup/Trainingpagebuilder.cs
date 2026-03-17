@@ -60,8 +60,11 @@ public static class TrainingPageBuilder
             TrainingPageInfo page = pageData.pages[i];
             IReadOnlyList<GrowthCommandRow> rows = ResolveRows(page, table, i);
 
+            int buttonIndex = 0;
             foreach (GrowthCommandRow row in rows)
             {
+                TrainingButtonData btnData;
+
                 if (row.btnType == GrowthCommandBtnType.Category)
                 {
                     int childPageIndex = FindLinkedChildPage(pageData, table, row.index, i + 1);
@@ -76,12 +79,41 @@ public static class TrainingPageBuilder
                         pageData.pages.Add(childPage);
                     }
 
-                    page.buttons.Add(BuildNavigateButton(row, childPageIndex));
+                    btnData = BuildNavigateButton(row, childPageIndex);
                 }
                 else
                 {
-                    page.buttons.Add(BuildActionButton(row));
+                    btnData = BuildActionButton(row);
                 }
+
+                // 인스펙터에서 입력한 이미지 ID 주입
+                if (page.buttonPreviewImageIds != null && buttonIndex < page.buttonPreviewImageIds.Count)
+                {
+                    string imageId = page.buttonPreviewImageIds[buttonIndex];
+                    if (!string.IsNullOrEmpty(imageId))
+                    {
+                        btnData.previewImageId = imageId;
+                    }
+                }
+
+                // 인스펙터에서 입력한 배경 이미지 ID 주입
+                if (page.buttonBackgroundImageIds != null && buttonIndex < page.buttonBackgroundImageIds.Count)
+                {
+                    string bgImageId = page.buttonBackgroundImageIds[buttonIndex];
+                    if (!string.IsNullOrEmpty(bgImageId))
+                        btnData.backgroundImageId = bgImageId;
+                }
+
+                // 인스펙터에서 입력한 결과 팝업 이미지 ID 주입
+                if (page.buttonResultImageIds != null && buttonIndex < page.buttonResultImageIds.Count)
+                {
+                    string resultImageId = page.buttonResultImageIds[buttonIndex];
+                    if (!string.IsNullOrEmpty(resultImageId))
+                        btnData.resultImageId = resultImageId;
+                }
+
+                page.buttons.Add(btnData);
+                buttonIndex++;
             }
         }
     }
@@ -155,7 +187,7 @@ public static class TrainingPageBuilder
             conditionDelta = 0,
             navigateToPageIndex = targetPageIndex,
             trainingKey = $"category_{row.index}",
-            previewSprite = null,
+            previewImageId = null,
             requiresStudentSelection = false,
             maxSelectCount = 0,
 
@@ -177,7 +209,7 @@ public static class TrainingPageBuilder
             conditionDelta = row.conditionCost,
             navigateToPageIndex = -1,
             trainingKey = $"cmd_{row.index}",
-            previewSprite = null,
+            previewImageId = null,
             requiresStudentSelection = row.target == GrowthCommandTarget.Individual,
             maxSelectCount = row.target == GrowthCommandTarget.Individual ? 1 : 0,
 

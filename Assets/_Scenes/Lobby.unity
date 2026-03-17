@@ -2651,21 +2651,11 @@ MonoBehaviour:
   _failedImage: {fileID: 26626975867926279, guid: 8c817fa4736b2264f8057c36f5a37c49, type: 3}
   _goldIcon: {fileID: 6734850202343107688, guid: 1be428b245f26504aa860258100704f5, type: 3}
   _fameIcon: {fileID: -805237271934909618, guid: 9e32ebe18d864c9488a3c9b717758c1a, type: 3}
-  _achievedTitleFormat: "{PLACEMENT} \uB2EC\uC131!"
-  _failedTitle: "\uD0C8\uB77D..."
-  _achievedContentTemplate: "<size=54.8>{PLACEMENT} \uB2EC\uC131 \uCD95\uD558\uB4DC\uB9BD\uB2C8\uB2E4!\n\uB2E4\uC74C
-    \uD559\uAE30\uC5D0\uB3C4 \uD300\uC744 \uC774\uB04C\uC5B4 \uC8FC\uC138\uC694!</size>\n\n\uB2E4\uC74C
-    \uC790\uC6D0\uC744 \uD68D\uB4DD\uD588\uC2B5\uB2C8\uB2E4."
-  _failedContentTemplate: "<size=54.8>\uACB0\uACFC\uB294 \uB0C9\uD639\uD588\uC2B5\uB2C8\uB2E4.</size>\n\n\uC774\uC0AC\uD68C\uB294
-    \uB2F9\uC2E0\uC5D0\uAC8C \uD574\uC784\uC744 \uD1B5\uBCF4\uD588\uACE0, \n\uC815\uB4E4\uC5C8\uB358
-    \uC124\uBE44\uB4E4\uC740 \uBAA8\uB450 \uB9E4\uAC01\uB410\uC2B5\uB2C8\uB2E4.\n\uD559\uC0DD\uB4E4\uC740
-    \uB208\uBB3C\uC744 \uD758\uB9AC\uBA70 \uD769\uC5B4\uC9D1\uB2C8\uB2E4.\n\n\uD558\uC9C0\uB9CC
-    \uB2F9\uC2E0\uC758 \uC774\uB984\uC740 \uC5C5\uACC4\uC5D0 \uB0A8\uC558\uC2B5\uB2C8\uB2E4.\n\uB2E4\uC74C
-    \uC790\uC6D0\uC744 \uD68D\uB4DD\uD588\uC2B5\uB2C8\uB2E4."
-  _achievedGold: 0
-  _achievedFame: 0
-  _failedGold: 0
-  _failedFame: 0
+  _rank1RewardId: 201
+  _rank2RewardId: 202
+  _rank3RewardId: 203
+  _rank4RewardId: 204
+  _failedRewardId: 205
   _scrollRect: {fileID: 1169403431}
   _scrollContent: {fileID: 1169403430}
   _rewardRow: {fileID: 1797675216}
@@ -7180,7 +7170,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 30}
+  m_SizeDelta: {x: 0, y: 200}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &745888551
 MonoBehaviour:
@@ -7212,7 +7202,7 @@ MonoBehaviour:
     m_Left: 44
     m_Right: 0
     m_Top: 0
-    m_Bottom: 65
+    m_Bottom: 235
   m_ChildAlignment: 0
   m_StartCorner: 0
   m_StartAxis: 0
@@ -7472,19 +7462,19 @@ MonoBehaviour:
   - title: "\uD3EC\uC9C0\uC158 \uC774\uB780?"
     content: "\uC124\uBA85 1"
     subMessage: 
-    image: {fileID: -3228104907866816974, guid: df9f792b6f98f0e4e9799a25637927bf, type: 3}
+    imageId: StudentPopup01_img_01
   - title: "\uC13C\uD130 \uD3EC\uC9C0\uC158"
     content: "\uC124\uBA85 2"
     subMessage: 
-    image: {fileID: -3228104907866816974, guid: df9f792b6f98f0e4e9799a25637927bf, type: 3}
+    imageId: StudentPopup01_img_02
   - title: "\uAC00\uB4DC \uD3EC\uC9C0\uC158"
     content: "\uC124\uBA85 3"
     subMessage: 
-    image: {fileID: -3228104907866816974, guid: df9f792b6f98f0e4e9799a25637927bf, type: 3}
+    imageId: StudentPopup01_img_03
   - title: "\uD3EC\uC6CC\uB4DC \uD3EC\uC9C0\uC158"
     content: "\uC124\uBA85 4"
     subMessage: 
-    image: {fileID: -3228104907866816974, guid: df9f792b6f98f0e4e9799a25637927bf, type: 3}
+    imageId: StudentPopup01_img_04
   _btnPlacementComplete: {fileID: 627564503}
 --- !u!1 &815628211
 GameObject:
@@ -11859,6 +11849,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8208459115265765917, guid: df1df13b385a43645b5902ed830013aa, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 8913316296741631172, guid: df1df13b385a43645b5902ed830013aa, type: 3}
       propertyPath: _imgBackground
       value: 
@@ -11901,6 +11895,7 @@ PrefabInstance:
     - {fileID: 2690823081894564844, guid: df1df13b385a43645b5902ed830013aa, type: 3}
     - {fileID: -8947847698097383022, guid: df1df13b385a43645b5902ed830013aa, type: 3}
     - {fileID: -2460676518421759870, guid: df1df13b385a43645b5902ed830013aa, type: 3}
+    - {fileID: 3903527376483470558, guid: df1df13b385a43645b5902ed830013aa, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: df1df13b385a43645b5902ed830013aa, type: 3}
@@ -11911,7 +11906,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
 --- !u!114 &1296495326 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8208459115265765917, guid: df1df13b385a43645b5902ed830013aa, type: 3}
+  m_CorrespondingSourceObject: {fileID: 444045818049889668, guid: df1df13b385a43645b5902ed830013aa, type: 3}
   m_PrefabInstance: {fileID: 1296495324}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
@@ -12168,7 +12163,7 @@ MonoBehaviour:
   _dontDestroyOnLoad: 1
   _canvasRoot: {fileID: 1542067910}
   _uiPopupPrefab: {fileID: 2709569829720818253, guid: 12b32fafa91fc074fbb429aa6509eab7, type: 3}
-  _defaultPopupPreviewSprite: {fileID: -6551554479474966430, guid: 0d5f6a2c5aacb8e45a269aebb112f878, type: 3}
+  _defaultPopupPreviewImageId: 
   _studentSelectPopupPrefab: {fileID: 5655431246991369327, guid: 2eefce8b8a34e304b82db8b2d577031f, type: 3}
 --- !u!4 &1317058962
 Transform:
@@ -18400,7 +18395,6 @@ MonoBehaviour:
     facility: {fileID: 21300000, guid: c74d783ff9c841b48a2431b8b5fa1a83, type: 3}
     coach: {fileID: 21300000, guid: 99b663a4613ccb148b933c70ab1de25c, type: 3}
     shop: {fileID: 21300000, guid: e85863a9751825f48b8cd05b6a4c9eb4, type: 3}
-  _testSprite: {fileID: 8037539321571114111, guid: 7515a6442954d74499bd13e864a3efb3, type: 3}
   _recruitmentManager: {fileID: 112001511}
 --- !u!114 &2068180154 stripped
 MonoBehaviour:
@@ -19321,6 +19315,22 @@ PrefabInstance:
       propertyPath: _resultPopupPrefab
       value: 
       objectReference: {fileID: 3394568378502047101}
+    - target: {fileID: 8313116447302640032, guid: 2872640eb66560844bb5942b4e01d542, type: 3}
+      propertyPath: _weekendTrainingCancelBgImageId
+      value: TrainingPopup03_img_02
+      objectReference: {fileID: 0}
+    - target: {fileID: 8313116447302640032, guid: 2872640eb66560844bb5942b4e01d542, type: 3}
+      propertyPath: _weekendTrainingConfirmBgImageId
+      value: TrainingPopup03_img
+      objectReference: {fileID: 0}
+    - target: {fileID: 8313116447302640032, guid: 2872640eb66560844bb5942b4e01d542, type: 3}
+      propertyPath: _weekendTrainingCancelResultImageId
+      value: TrainingPopup04_img
+      objectReference: {fileID: 0}
+    - target: {fileID: 8313116447302640032, guid: 2872640eb66560844bb5942b4e01d542, type: 3}
+      propertyPath: _weekendTrainingConfirmResultImageId
+      value: TrainingPopup04_img
+      objectReference: {fileID: 0}
     - target: {fileID: 8800154559438791188, guid: 2872640eb66560844bb5942b4e01d542, type: 3}
       propertyPath: m_Name
       value: TrainingFlowController
@@ -20196,6 +20206,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2379587934076401821, guid: 6e6bd5fd7f5bcbc4ebe52421d92bc071, type: 3}
+      propertyPath: m_Color.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4672450000530673294, guid: 6e6bd5fd7f5bcbc4ebe52421d92bc071, type: 3}
+      propertyPath: _imgTrainingPreview
+      value: 
+      objectReference: {fileID: 4285298896083913531}
     - target: {fileID: 5397177492536680875, guid: 6e6bd5fd7f5bcbc4ebe52421d92bc071, type: 3}
       propertyPath: m_AnchorMax.x
       value: 1
@@ -20271,6 +20289,17 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &4285298896083913531 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2379587934076401821, guid: 6e6bd5fd7f5bcbc4ebe52421d92bc071, type: 3}
+  m_PrefabInstance: {fileID: 4285298896083913528}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
 --- !u!224 &4466769800690297729
 RectTransform:
   m_ObjectHideFlags: 0

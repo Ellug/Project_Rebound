@@ -10,12 +10,12 @@ public sealed class GuidePanelController : MonoBehaviour
     [SerializeField] private TMP_Text _txtSub;                      // 페이지 서브
     [SerializeField] private TMP_Text _txtMessage;                  // 페이지 본문
     [SerializeField] private Image _imgPreview;                     // 페이지 이미지
-                                                                    
+
     [SerializeField] private Button _btnCancel;                     // 취소 버튼
     [SerializeField] private Button _btnNext;                       // 다음 버튼
     [SerializeField] private Button _btnGuideClose;                 // 마지막 페이지 닫기 버튼
-                                                                    
-    [Header("Dots")]                                                
+
+    [Header("Dots")]
     [SerializeField] private Transform _dotRoot;                    // 도트 부모
     [SerializeField] private Image _dotPrefab;                      // 도트 프리팹
     [SerializeField] private float _dotNormalScale = 1.0f;          // 비활성 스케일
@@ -28,6 +28,7 @@ public sealed class GuidePanelController : MonoBehaviour
     private UIPopupRequest _request;                                // 현재 요청 데이터
     private Action _closeSelf;                                      // AutoClose 처리를 위한 닫기 콜백
     private int _pageIndex;                                         // 현재 페이지 인덱스
+    private string _currentPreviewImageId;                          // 현재 로드된 이미지 ID (해제용)
 
     // 요청 데이터를 Guide 패널에 바인딩
     public void Bind(UIPopupRequest request, Action closeSelf)
@@ -63,8 +64,8 @@ public sealed class GuidePanelController : MonoBehaviour
             if (_txtTitle != null) _txtTitle.text = _request != null ? (_request.Title ?? "") : "";
             if (_txtMessage != null) _txtMessage.text = _request != null ? (_request.Message ?? "") : "";
             if (_txtSub != null) _txtSub.gameObject.SetActive(false);
-            if (_imgPreview != null) _imgPreview.gameObject.SetActive(false);
 
+            LoadPreviewImage(null);
             ApplyButtonState(isLast: true);
             RefreshDots();
             return;
@@ -83,22 +84,51 @@ public sealed class GuidePanelController : MonoBehaviour
             if (hasSub) _txtSub.text = page.SubMessage;
         }
 
-        if (_imgPreview != null)
-        {
-            bool hasSprite = page.PreviewSprite != null;
-            _imgPreview.gameObject.SetActive(hasSprite);
-            if (hasSprite)
-            {
-                _imgPreview.sprite = page.PreviewSprite;
-                _imgPreview.preserveAspect = true;
-            }
-        }
+        // 이미지 ID 기준으로 Addressable 비동기 로드
+        LoadPreviewImage(page.PreviewImageId);
 
         bool isLast = _pageIndex == pages.Count - 1;
         ApplyButtonState(isLast);
 
         EnsureDots();  // 페이지 수 변경 대응
         RefreshDots(); // 현재 페이지 강조 표시
+    }
+
+    // 이미지 ID 기준으로 Addressable 비동기 로드
+    private void LoadPreviewImage(string imageId)
+    {
+        // 기존 이미지 해제
+        if (!string.IsNullOrEmpty(_currentPreviewImageId))
+        {
+            AddressableImageManager.Instance.ReleaseSprite(_currentPreviewImageId);
+            _currentPreviewImageId = null;
+        }
+
+        if (_imgPreview == null) return;
+
+        if (string.IsNullOrEmpty(imageId))
+        {
+            _imgPreview.gameObject.SetActive(false);
+            return;
+        }
+
+        _imgPreview.gameObject.SetActive(false);
+        _currentPreviewImageId = imageId;
+
+        AddressableImageManager.Instance.LoadSprite(imageId, sprite =>
+        {
+            if (_imgPreview == null) return;
+
+            if (sprite != null)
+            {
+                _imgPreview.sprite = sprite;
+                _imgPreview.gameObject.SetActive(true);
+            }
+            else
+            {
+                _imgPreview.gameObject.SetActive(false);
+            }
+        });
     }
 
     // 마지막 페이지 여부에 따라 Next/Close 토글

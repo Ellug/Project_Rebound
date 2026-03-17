@@ -133,7 +133,7 @@ public class RecruitmentManager : MonoBehaviour
             onPrimary: onPrimary,
             onCancel: onCancel,
             subMessage: isFull ? "현재 보유 학생이 정원에 도달해 영입을 진행할 수 없습니다." : null,
-            previewSprite: null,
+            previewImageId: "EventPopup_recruit_img",
             showCancel: canSkip,
             primaryKind: UIPopupRequest.PrimaryButtonKind.Confirm
         );
@@ -221,6 +221,9 @@ public class RecruitmentManager : MonoBehaviour
             foreach (Student student in recruits)
             {
                 StudentManager.Instance.AddStudent(student);
+
+                // 현재 해금된 노드 보너스를 신규 학생에게 적용
+                HeadCoachManager.Instance.ApplyAllUnlockedBonusTo(student);
             }
         }
 

@@ -28,7 +28,7 @@ public static class PopupRequestAdapter
                 onPrimary: onPrimary,
                 onCancel: onCancel,
                 subMessage: data.SubContent,
-                previewSprite: data.Image,
+                previewImageId: null,   // PopupData.Image는 Sprite 직접 참조 — Addressable 미지원으로 null 처리
                 showCancel: showCancel,
                 primaryKind: UIPopupRequest.PrimaryButtonKind.Confirm
             );
