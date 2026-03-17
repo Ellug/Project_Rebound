@@ -87,6 +87,8 @@ public class HeadCoachManager : Singleton<HeadCoachManager>
 
         node.SetUnlocked(true);
 
+        Debug.Log($"[HeadCoachManager] {node.Name} 해금 | targetStat:{node.effectData.targetStat} | value:{node.effectData.effectValue}");
+
         // 해금된 노드의 스탯 증분을 전체 학생에게 즉시 적용
         ApplyNodeBonusToAll(node);
 
