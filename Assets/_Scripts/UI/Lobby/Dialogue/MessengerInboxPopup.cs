@@ -38,6 +38,9 @@ public class MessengerInboxPopup : UIBase
 
     public override void Open()
     {
+        if (SuddenEventManager.Instance != null)
+            SuddenEventManager.Instance.IsMessengerOpen = true;
+
         Init();
         RefreshList();
         base.Open();
@@ -50,6 +53,12 @@ public class MessengerInboxPopup : UIBase
 
     public override void Close()
     {
+        if (SuddenEventManager.Instance != null)
+        {
+            SuddenEventManager.Instance.IsMessengerOpen = false;
+            SuddenEventManager.Instance.ProcessNextPopup();
+        }
+
         gameObject.SetActive(false);
         
         if (UIManager.Instance != null)

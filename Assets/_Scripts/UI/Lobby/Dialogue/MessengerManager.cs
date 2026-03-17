@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -6,6 +6,8 @@ using UnityEngine;
 public class MessengerManager : Singleton<MessengerManager>
 {
     [SerializeField] private List<ChatRoom> _activeRooms = new List<ChatRoom>();
+
+    public string CurrentViewingRoomId { get; set; } = "";
 
     public event Action OnRoomListUpdated;
     public event Action<ChatRoom> OnMessageAdded;

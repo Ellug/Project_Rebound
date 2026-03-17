@@ -407,11 +407,21 @@ public class LobbyUI : UIBase
             var rooms = MessengerManager.Instance?.ActiveRooms;
             if (rooms != null && rooms.Count > 0 && rooms[0].Messages.Count > 0)
             {
-                var lastMsg = rooms[0].Messages[rooms[0].Messages.Count - 1];
-                _txtMessage.text = lastMsg.Content;
+                var lastRoom = rooms[0];
+                var lastMsg = lastRoom.Messages[lastRoom.Messages.Count - 1];
+
+                string content = lastMsg.Content.Replace("\n", " ");
+
+                if (content.Length > 18)
+                {
+                    content = content.Substring(0, 18) + "...";
+                }
+
+                _txtMessage.text = $"<b>{lastRoom.RoomName}</b>\n{content}";
             }
             else
             {
+                // 기존 기본 대사 유지
                 _txtMessage.text = "감독님, 신입생들이 입학했습니다. 훈련 일정을 잡아주세요.";
             }
         }

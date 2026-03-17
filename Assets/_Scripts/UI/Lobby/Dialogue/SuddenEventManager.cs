@@ -121,18 +121,18 @@ public class SuddenEventManager : Singleton<SuddenEventManager>
     {
         List<Student> pool = new List<Student>();
 
-        if (StudentManager.Instance != null)
+        if (StudentManager.Instance != null && StudentManager.Instance.Students != null)
         {
-            if (scope == SuddenEventScope.Member || scope == SuddenEventScope.TeamMember)
-            {
-                pool.AddRange(StudentManager.Instance.Students);
-            }
-            else if (scope == SuddenEventScope.TeamKeyMember)
+            if (scope == SuddenEventScope.TeamKeyMember)
             {
                 foreach (var pair in StudentManager.Instance.SlotAssignments)
                 {
                     if (pair.Value != null) pool.Add(pair.Value);
                 }
+            }
+            else
+            {
+                pool.AddRange(StudentManager.Instance.Students);
             }
         }
 
@@ -208,13 +208,39 @@ public class SuddenEventManager : Singleton<SuddenEventManager>
         string desc = eventRow.description?.Trim();
         if (string.IsNullOrEmpty(desc) || desc == "-") return;
 
-        bool isSystemNotice = eventRow.name.Contains("[공지]") || eventRow.name.Contains("[시스템]");
+        if (desc.StartsWith("text_diag_"))
+        {
+            desc = desc.Replace("text_diag_", "diag_");
+            int lastIdx = desc.LastIndexOf('_');
+            if (lastIdx > 0 && desc.Length - lastIdx == 4)
+            {
+                desc = desc.Substring(0, lastIdx); 
+            }
+        }
 
-        string roomId = (targets.Count > 0 && !isSystemNotice) ? $"student_{targets[0].studentName}" : "sys_sudden_event";
-        string roomName = (targets.Count > 0 && !isSystemNotice) ? targets[0].studentName : "알림";
+        // 1. 공지방 이름 세팅 
+        string schoolName = "한울";
+        string sysRoomId = "sys_sudden_event";
+        string sysRoomName = $"[공지]{schoolName}고등학교";
 
-        string previewText = ""; // 팝업에 띄울 미리보기 텍스트
+        string roomId = sysRoomId;
+        string roomName = sysRoomName;
 
+        bool isNotice = eventRow.name.Contains("[공지]") || eventRow.name.Contains("[시스템]");
+
+        // 2. 공지가 아니고, 타겟이 존재하는 경우
+        if (!isNotice && targets != null && targets.Count > 0)
+        {
+            roomId = $"[학생] " +
+                $"{targets[0].studentName}";
+            roomName = targets[0].studentName;
+        }
+        else if (!isNotice && desc.StartsWith("diag_"))
+        {
+            Debug.LogWarning($"<color=orange>[데이터 확인 필요]</color> '{eventRow.name}' 대화형 이벤트의 대상이 존재하지 않습니다.");
+        }
+
+        string previewText = "";
         // 분기 1: 메신저 대화(Dialogue) 트리거
         if (desc.StartsWith("diag_"))
         {
@@ -275,6 +301,7 @@ public class SuddenEventManager : Singleton<SuddenEventManager>
     public event System.Action<EventPopupData> OnPopupRequested; // 로비 UI로 신호를 보낼 이벤트
 
     private bool _isPopupShowing = false;
+    public bool IsMessengerOpen { get; set; } = false;
 
     private void EnqueueEventPopup(string title, string roomId, string roomName, string preview)
     {
@@ -288,15 +315,30 @@ public class SuddenEventManager : Singleton<SuddenEventManager>
 
     public void ProcessNextPopup()
     {
+        if (IsMessengerOpen) return;
+
         if (_popupQueue.Count > 0)
         {
-            _isPopupShowing = true; // 팝업 노출 상태로 잠금
-            var data = _popupQueue.Dequeue();
-            OnPopupRequested?.Invoke(data);
+            var data = _popupQueue.Peek();
+
+            if (MessengerManager.Instance != null)
+            {
+                var room = MessengerManager.Instance.GetRoom(data.roomId);
+                if (room != null && !room.HasUnread)
+                {
+                    _popupQueue.Dequeue();
+                    ProcessNextPopup();
+                    return;
+                }
+            }
+
+            _isPopupShowing = true;
+            var actualData = _popupQueue.Dequeue();
+            OnPopupRequested?.Invoke(actualData);
         }
         else
         {
-            _isPopupShowing = false; // 모든 팝업을 다 봤으면 잠금 해제
+            _isPopupShowing = false;
         }
     }
 }
