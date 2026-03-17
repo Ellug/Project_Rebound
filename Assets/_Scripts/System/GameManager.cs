@@ -11,7 +11,6 @@ public class GameManager : Singleton<GameManager>
     private TurnManager _turnManager;               // Lobby 씬의 TurnManager (씬별 런타임 참조)
     private AlwaysEventManager _alwaysEventManager; // Lobby 씬의 AlwaysEventManager
     private LobbyUI _lobbyUI;                       // Lobby 씬의 LobbyUI
-    private TournamentResultUI _tournamentResultUI; // Lobby 씬의 TournamentResultUI
     private LobbyMatchManager _lobbyMatchManager;   // Lobby 씬의 매치 흐름 전담 매니저
     private LobbyWeekendManager _lobbyWeekendManager; // Lobby 씬의 주말 흐름 전담 매니저
     private LobbyStoryFlowManager _lobbyStoryFlowManager; // 로비 스토리 트리거 전담 매니저
@@ -163,7 +162,6 @@ public class GameManager : Singleton<GameManager>
         _turnManager = null;
         _alwaysEventManager = null;
         _lobbyUI = null;
-        _tournamentResultUI = null;
         _lobbyMatchManager?.ClearRuntimeState();
         _lobbyWeekendManager.ClearRuntimeState();
         _lobbyStoryFlowManager.ClearLobbyContext();
@@ -297,11 +295,10 @@ public class GameManager : Singleton<GameManager>
         _turnManager = FindFirstObjectByType<TurnManager>();
         _alwaysEventManager = FindFirstObjectByType<AlwaysEventManager>();
         _lobbyUI = FindFirstObjectByType<LobbyUI>();
-        _tournamentResultUI = FindFirstObjectByType<TournamentResultUI>(FindObjectsInactive.Include);
         _lobbyMatchManager = FindFirstObjectByType<LobbyMatchManager>(FindObjectsInactive.Include);
         _recruitmentManager = FindFirstObjectByType<RecruitmentManager>(); // 영입 매니저 참조
 
-        _lobbyMatchManager.Bind(this, _turnManager, _lobbyUI, _tournamentResultUI);
+        _lobbyMatchManager.Bind(this, _turnManager, _lobbyUI);
         _lobbyWeekendManager.Bind(this, _turnManager, _lobbyMatchManager);
         _lobbyStoryFlowManager.BindLobbyContext(_turnManager);
 

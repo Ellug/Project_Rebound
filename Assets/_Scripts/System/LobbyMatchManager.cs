@@ -29,25 +29,22 @@ public class LobbyMatchManager : MonoBehaviour
     }
 
     // GameManager에서 현재 로비 참조 주입
-    public void Bind(GameManager gameManager, TurnManager turnManager, LobbyUI lobbyUI, TournamentResultUI tournamentResultUI)
+    public void Bind(GameManager gameManager, TurnManager turnManager, LobbyUI lobbyUI)
     {
         _gameManager = gameManager;
         _turnManager = turnManager;
         _lobbyUI = lobbyUI;
-        _tournamentResultUI = tournamentResultUI;
+        _tournamentResultUI = FindFirstObjectByType<TournamentResultUI>(FindObjectsInactive.Include);
         _isLoadingTournament = false;
     }
 
-    // 상대 학교명을 정규화해 친선전을 예약한다.
+    // 상대 학교명을 정규화해 친선전 예약
     public void ScheduleFriendlyMatch(DateTime matchDate, string opponentName)
     {
-        if (_gameManager == null)
-            return;
-
         _gameManager.ScheduleFriendlyMatch(matchDate, NormalizeOpponentName(opponentName));
     }
 
-    // 학교 테이블 랜덤 상대명으로 친선전을 예약한다.
+    // 학교 테이블 랜덤 상대명으로 친선전 예약
     public void ScheduleRandomFriendlyMatch(DateTime matchDate)
     {
         ScheduleFriendlyMatch(matchDate, GetRandomOpponentName());
@@ -61,8 +58,7 @@ public class LobbyMatchManager : MonoBehaviour
             return;
 
         Keyboard keyboard = Keyboard.current;
-        if (keyboard == null)
-            return;
+        if (keyboard == null) return;
 
         bool pressedZero = keyboard.digit0Key.wasPressedThisFrame || keyboard.numpad0Key.wasPressedThisFrame;
         if (!pressedZero)
@@ -106,8 +102,7 @@ public class LobbyMatchManager : MonoBehaviour
     // 금요일 종료 시 친선전 예약이 있으면 진입 팝업
     public bool TryShowFriendlyMatchEntryPopup()
     {
-        if (_gameManager == null || !_gameManager.HasPendingFriendlyMatch) return false;
-        if (UIManager.Instance == null) return false;
+        if (!_gameManager.HasPendingFriendlyMatch) return false;
 
         var req = UIPopupRequest.Default(
             title: "친선경기",
@@ -150,9 +145,6 @@ public class LobbyMatchManager : MonoBehaviour
     // Tournament 씬을 일반 토너먼트 모드 진입
     private void ProceedToTournament()
     {
-        if (_gameManager == null || _turnManager == null)
-            return;
-
         TournamentSceneBridge.RequestTournament();
         _gameManager.MarkLeagueHandled();
         _turnManager.SetPhase(GamePhase.MatchInProgress);
@@ -165,9 +157,6 @@ public class LobbyMatchManager : MonoBehaviour
     // 친선전 예약이 있으면 단일 경기 모드로 토너먼트 씬 진입
     private void EnterFriendlyMatch()
     {
-        if (_gameManager == null)
-            return;
-
         string opponentName = NormalizeOpponentName(_gameManager.FriendlyOpponentName);
 
         TournamentSceneBridge.RequestFriendlyMatch(opponentName);
@@ -181,9 +170,6 @@ public class LobbyMatchManager : MonoBehaviour
     // 토너먼트 결과를 소비하고 결과 UI 출력
     private void HandleTournamentResult()
     {
-        if (_gameManager == null || _turnManager == null || _tournamentResultUI == null)
-            return;
-
         if (!_gameManager.TryConsumePendingTournamentResult(out TournamentData tournamentResultData))
             return;
 
