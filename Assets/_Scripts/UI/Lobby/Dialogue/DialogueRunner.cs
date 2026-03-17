@@ -106,8 +106,10 @@ public class DialogueRunner : Singleton<DialogueRunner>
         {
             ChatMessage normalMsg = new ChatMessage(senderType, messageText, MessageEventType.NormalText);
             MessengerManager.Instance.ReceiveMessage(roomId, roomName, normalMsg);
+            // 플레이어가 들어올 때까지 대기
+            yield return new WaitUntil(() => MessengerManager.Instance.CurrentViewingRoomId == roomId);
 
-            // 타이핑 딜레이 (상대방은 길게, 나는 짧게)
+            // 타이핑 딜레이
             if (senderType == MessageSenderType.Them) yield return new WaitForSeconds(_typingDelay);
             else yield return new WaitForSeconds(_typingDelay * 0.5f);
 
