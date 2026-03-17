@@ -266,6 +266,9 @@ public class SaveManager : Singleton<SaveManager>
             activeEventIds = new List<string>(GameManager.Instance.ActiveEventIds),
             maxRecruitCount = GameManager.Instance.MaxRecruitCount,
             hasPendingFriendlyMatch = GameManager.Instance.HasPendingFriendlyMatch,
+            hasPlayedVn10001 = GameManager.Instance.HasPlayedVn10001,
+            hasPlayedVn10002 = GameManager.Instance.HasPlayedVn10002,
+            hasPlayedVn10003 = GameManager.Instance.HasPlayedVn10003,
 
             friendlyMatchDate = GameManager.Instance.FriendlyMatchDate != default
                 ? GameManager.Instance.FriendlyMatchDate.ToString("yyyy-MM-dd")
@@ -587,6 +590,45 @@ public class SaveManager : Singleton<SaveManager>
     public void ConsumePendingNewGameFlag()
     {
         IsPendingNewGame = false;
+    }
+
+    public bool HasPlayedVnStory(int storyId)
+    {
+        if (CurrentData == null || CurrentData.flowData == null)
+            return false;
+
+        return storyId switch
+        {
+            10001 => CurrentData.flowData.hasPlayedVn10001,
+            10002 => CurrentData.flowData.hasPlayedVn10002,
+            10003 => CurrentData.flowData.hasPlayedVn10003,
+            _ => false
+        };
+    }
+
+    public void MarkVnStoryPlayed(int storyId)
+    {
+        if (CurrentData == null)
+            return;
+
+        if (CurrentData.flowData == null)
+            CurrentData.flowData = new SavedFlowData();
+
+        switch (storyId)
+        {
+            case 10001:
+                CurrentData.flowData.hasPlayedVn10001 = true;
+                break;
+            case 10002:
+                CurrentData.flowData.hasPlayedVn10002 = true;
+                break;
+            case 10003:
+                CurrentData.flowData.hasPlayedVn10003 = true;
+                break;
+        }
+
+        if (GameManager.Instance != null)
+            GameManager.Instance.MarkVnStoryPlayed(storyId);
     }
 
     public void MarkCurrentRunForDeleteOnTitle()

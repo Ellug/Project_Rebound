@@ -55,6 +55,9 @@ public sealed class VNManager : MonoBehaviour
         if (string.IsNullOrWhiteSpace(_returnSceneName))
             _returnSceneName = DefaultReturnSceneName;
 
+        if (SaveManager.Instance != null)
+            SaveManager.Instance.MarkVnStoryPlayed(storyId);
+
         _activeRows.Clear();
 
         StoryTableSO table = CachedSOData.Get<StoryTableSO>();

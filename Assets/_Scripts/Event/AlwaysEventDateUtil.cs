@@ -45,6 +45,49 @@ public static class AlwaysEventDateUtil
         return true;
     }
 
+    // AlwaysEventTable에서 첫 겨울방학 기간(termStart ~ termEnd)을 반환
+    public static bool TryGetFirstWinterVacationTerm(out DateTime termStartDate, out DateTime termEndDate)
+    {
+        termStartDate = default;
+        termEndDate = default;
+
+        var table = CachedSOData.Get<AlwaysEventTableSO>();
+        if (table == null || table.Rows == null || table.Rows.Count == 0)
+            return false;
+
+        bool found = false;
+        DateTime bestStart = default;
+        DateTime bestEnd = default;
+
+        var rows = table.Rows;
+        for (int i = 0; i < rows.Count; i++)
+        {
+            var row = rows[i];
+            if (row == null) continue;
+            if (row.type != "vacation") continue;
+            if (row.name != "vacation_winter") continue;
+
+            if (!TryParseTableDate(row.termStart, out DateTime start))
+                continue;
+            if (!TryParseTableDate(row.termEnd, out DateTime end))
+                continue;
+
+            if (!found || start.Date < bestStart.Date)
+            {
+                found = true;
+                bestStart = start.Date;
+                bestEnd = end.Date;
+            }
+        }
+
+        if (!found)
+            return false;
+
+        termStartDate = bestStart;
+        termEndDate = bestEnd;
+        return true;
+    }
+
     public static bool TryParseTableDate(string value, out DateTime date)
     {
         date = default;
