@@ -56,32 +56,41 @@ public class SettingsPanel : UIBase
 
     private void RestartTutorialConfirmed()
     {
-        // 1) 다시 보지 않기 해제
-        TutorialGuidePrefs.ResetDismissed();
+        if (UIManager.Instance == null)
+        {
+            Debug.LogWarning("[SettingsPanel] UIManager.Instance가 없습니다.");
+            return;
+        }
 
-        // 2) 안내 팝업에서 "확인"을 누르는 순간 Entry를 다시 켠다
-        UIManager.Instance.ShowPopup(new PopupData(
-            title: "안내",
-            content: "튜토리얼은 로비에서 다시 표시됩니다.",
-            buttons: new List<PopupButtonInfo>
+        TutorialGuideTableSO table = CachedSOData.Get<TutorialGuideTableSO>();
+        if (table == null)
+        {
+            Debug.LogWarning("[SettingsPanel] CachedSOData.TutorialGuideTable이 null입니다.");
+            return;
+        }
+
+        List<UIPopupRequest.GuidePage> pages = TutorialGuidePrefs.BuildPages(table);
+        if (pages == null || pages.Count == 0)
+        {
+            Debug.LogWarning("[SettingsPanel] 튜토리얼 페이지가 비어있습니다.");
+            return;
+        }
+
+        UIPopupRequest req = UIPopupRequest.Guide(
+            title: "튜토리얼",
+            pages: pages,
+            onClose: () =>
             {
-            new PopupButtonInfo(() =>
-            {
-                // 비활성 포함 검색
-                var entry = FindFirstObjectByType<LobbyTutorialGuideEntry>(FindObjectsInactive.Include);
-                if (entry != null)
-                {
-                    
-                    // entry.ShowEntry(true);          // 엔트리+검정패널만 다시 띄움
-                    entry.RestartAndShowEntry();       // Prefs 리셋 포함 버전이면 이걸 권장
-                }
-                else
-                {
-                    Debug.LogWarning("[SettingsPanel] LobbyTutorialGuideEntry를 찾지 못했습니다.");
-                }
-            })
-            }
-        ));
+                TutorialGuidePrefs.SetDismissed(true);
+            },
+            onCancel: null
+        );
+
+        req.ShowCancel = false;
+        req.AutoCloseOnPrimary = true;
+        req.AutoCloseOnCancel = true;
+
+        UIManager.Instance.ShowPopup(req);
     }
 
     private void OnClickGoTitle()
