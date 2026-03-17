@@ -7,8 +7,6 @@ public class GameManager : Singleton<GameManager>
 {
     private const string LobbyScene = "Lobby";
     private const string TitleScene = "Title";
-    private const int WeekendTrainingConfirmIndex = 901;
-    private const int WeekendTrainingCancelIndex = 902;
     private const int PreWinterStoryId = 10002;
     private const int WinterChampionStoryId = 10003;
     private const int PreWinterStoryOffsetMonths = 2;
@@ -18,7 +16,7 @@ public class GameManager : Singleton<GameManager>
     private LobbyUI _lobbyUI;                       // Lobby 씬의 LobbyUI
     private TournamentResultUI _tournamentResultUI; // Lobby 씬의 TournamentResultUI
     private LobbyMatchManager _lobbyMatchManager;   // Lobby 씬의 매치 흐름 전담 매니저
-    private TrainingFlowController _trainingFlowController; // Lobby 씬의 TrainingFlowController
+    private LobbyWeekendManager _lobbyWeekendManager; // Lobby 씬의 주말 흐름 전담 매니저
     private RecruitmentManager _recruitmentManager; // Lobby 씬의 RecruitmentManager
     private bool _initialRecruitmentTriggered;      // 게임 시작 시 최초 영입 트리거 여부 (중복 방지)
     private bool _lobbyInitialized;                 // 로비 씬 초기화 완료 여부 (이중 호출 방지)
@@ -174,8 +172,9 @@ public class GameManager : Singleton<GameManager>
         _lobbyUI = null;
         _tournamentResultUI = null;
         _lobbyMatchManager?.ClearRuntimeState();
+        _lobbyWeekendManager?.ClearRuntimeState();
         _lobbyMatchManager = null;
-        _trainingFlowController = null;
+        _lobbyWeekendManager = null;
         _recruitmentManager = null;
         _lobbyInitialized = false; // 로비 초기화 플래그 리셋
         _isNewGame = false;
@@ -359,10 +358,11 @@ public class GameManager : Singleton<GameManager>
         _lobbyUI = FindFirstObjectByType<LobbyUI>();
         _tournamentResultUI = FindFirstObjectByType<TournamentResultUI>(FindObjectsInactive.Include);
         _lobbyMatchManager = FindFirstObjectByType<LobbyMatchManager>(FindObjectsInactive.Include);
-        _trainingFlowController = FindFirstObjectByType<TrainingFlowController>(FindObjectsInactive.Include);
+        _lobbyWeekendManager = FindFirstObjectByType<LobbyWeekendManager>(FindObjectsInactive.Include);
         _recruitmentManager = FindFirstObjectByType<RecruitmentManager>(); // 영입 매니저 참조
 
         _lobbyMatchManager.Bind(this, _turnManager, _lobbyUI, _tournamentResultUI);
+        _lobbyWeekendManager.Bind(this, _turnManager, _lobbyMatchManager);
 
         // 영입 완료 이벤트 구독
         if (_recruitmentManager != null)
@@ -519,105 +519,7 @@ public class GameManager : Singleton<GameManager>
 
         // 금요일 종료 시 주말 분기 처리
         if (context.IsFriday)
-            HandleFridayEnd();
-    }
-
-    // 금요일 턴 종료 후 친선경기 or 주말 훈련 팝업 분기
-    private void HandleFridayEnd()
-    {
-        if (UIManager.Instance == null) return;
-        if (_lobbyMatchManager != null && _lobbyMatchManager.TryShowFriendlyMatchEntryPopup()) return;
-
-        var req = UIPopupRequest.Default(
-            title: "주말 훈련 제안",
-            message: "금요일 일정이 끝났습니다.\n주말 훈련을 진행하시겠습니까?",
-            previewImageId: "EventPopup00_image01(임시)",
-            onPrimary: OnWeekendTrainingConfirmed,
-            onCancel: OnWeekendTrainingCancelled,
-            subMessage: "확인: 전원 스탯 소량 상승, 주말 휴식 효율 50%\n취소: 주말 푹 쉬기 (체력 대폭 회복)",
-            showCancel: true
-        );
-
-        UIManager.Instance.ShowPopup(req);
-    }
-
-    // 주말 훈련 확인 (훈련 진행)
-    private void OnWeekendTrainingConfirmed()
-    {
-        ExecuteWeekendTrainingFlow(WeekendTrainingConfirmIndex, "주말 훈련");
-    }
-
-    // 주말 훈련 취소 (주말 스킵 → 월요일로)
-    private void OnWeekendTrainingCancelled()
-    {
-        ExecuteWeekendTrainingFlow(WeekendTrainingCancelIndex, "주말 휴식");
-    }
-
-    // 토요일 기준 토·일 2일을 건너뛰어 월요일로 이동
-    private void SkipWeekendToMonday()
-    {
-        _turnManager.SkipDays(2);
-        SyncFlowStateFromLobby();
-        RefreshLobbyTopInfo();
-    }
-
-    // WeekendTrainingTable에서 index로 row를 조회해 전체 학생에게 적용
-    private void ApplyWeekendTrainingEffect(int rowIndex)
-    {
-        WeekendTrainingTableSO table = CachedSOData.Get<WeekendTrainingTableSO>();
-        WeekendTrainingRow row = FindWeekendTrainingRow(table, rowIndex);
-
-        StudentManager.Instance.ApplyWeekendTrainingEffect(row);
-        Debug.Log($"[GameManager] 주말 효과 적용 완료 index={rowIndex}");
-    }
-
-    private static WeekendTrainingRow FindWeekendTrainingRow(WeekendTrainingTableSO table, int rowIndex)
-    {
-        for (int i = 0; i < table.Rows.Count; i++)
-        {
-            WeekendTrainingRow row = table.Rows[i];
-            if (row != null && row.index == rowIndex)
-                return row;
-        }
-
-        return null;
-    }
-
-    // 기존 육성 커맨드와 동일하게 TrainingFlowController를 통해 주말 효과를 적용
-    private void ExecuteWeekendTrainingFlow(int rowIndex, string trainingName)
-    {
-        if (_trainingFlowController == null)
-            _trainingFlowController = FindFirstObjectByType<TrainingFlowController>(FindObjectsInactive.Include);
-
-        if (_trainingFlowController == null)
-        {
-            ApplyWeekendTrainingEffect(rowIndex);
-            SkipWeekendToMonday();
-            return;
-        }
-
-        _trainingFlowController.OnFlowComplete -= HandleWeekendTrainingFlowComplete;
-        _trainingFlowController.OnFlowComplete += HandleWeekendTrainingFlowComplete;
-
-        string backgroundImageId = _trainingFlowController.GetWeekendBgImageId(rowIndex);
-        string resultImageId = _trainingFlowController.GetWeekendResultImageId(rowIndex);
-
-        _trainingFlowController.Execute(
-            trainingKey: $"weekend_{rowIndex}",
-            trainingName: trainingName,
-            students: StudentManager.Instance.Students,
-            applyEffect: (_, __) => ApplyWeekendTrainingEffect(rowIndex),
-            backgroundImageId: backgroundImageId,
-            resultImageId: resultImageId
-        );
-    }
-
-    private void HandleWeekendTrainingFlowComplete()
-    {
-        if (_trainingFlowController != null)
-            _trainingFlowController.OnFlowComplete -= HandleWeekendTrainingFlowComplete;
-
-        SkipWeekendToMonday();
+            _lobbyWeekendManager.HandleFridayEnd();
     }
 
     // AlwaysEventManager가 이벤트 활성화를 알릴 때 호출 — row.type / row.id 기반으로 분기
@@ -670,11 +572,8 @@ public class GameManager : Singleton<GameManager>
     }
 
     // 로비 UI 상단 정보 갱신 (날짜 / D-Day)
-    private void RefreshLobbyTopInfo()
+    public void RefreshLobbyTopInfo()
     {
-        if (_lobbyUI == null || _turnManager == null)
-            return;
-
         int dDay = GetTournamentDday();
         _lobbyUI.UpdateDateAndDday(_turnManager.DateManager.CurrentDate, dDay);
     }
