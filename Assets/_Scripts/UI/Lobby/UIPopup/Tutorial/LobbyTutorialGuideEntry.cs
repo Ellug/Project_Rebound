@@ -14,7 +14,7 @@ public class LobbyTutorialGuideEntry : MonoBehaviour
     [Header("Options")]
     [SerializeField] private bool _openOnLobbyEnter = true;
 
-    private void Start()
+    private void Awake()
     {
         BindButtons();
 
@@ -60,31 +60,33 @@ public class LobbyTutorialGuideEntry : MonoBehaviour
         ShowEntry(true);
     }
 
-private void OnClickCloseX()
-{
-    if (UIManager.Instance == null)
+    private void OnClickCloseX()
     {
-        // UIManager가 없으면 안전하게 그냥 끈다
-        ShowEntry(false);
-        return;
-    }
-
-    UIManager.Instance.ShowPopup(UIPopupRequest.Simple(
-        title: "안내",
-        message: "'튜토리얼 가이드는' 언제든지\n'환경설정'에서 다시 볼 수 있습니다.",
-        onPrimary: () =>
+        if (UIManager.Instance == null)
         {
-            // 확인 시 엔트리 + 오버레이 같이 끄기
+            // UIManager가 없으면 안전하게 그냥 끈다
             ShowEntry(false);
-        },
-        onCancel: () =>
-        {
-        },
-        showCancel: false,
-        autoCloseOnPrimary: true,
-        autoCloseOnCancel: true
-    ));
-}
+            return;
+        }
+
+        UIManager.Instance.ShowPopup(UIPopupRequest.Simple(
+            title: "안내",
+            message: "'튜토리얼 가이드는' 언제든지\n'환경설정'에서 다시 볼 수 있습니다.",
+            onPrimary: () =>
+            {
+                // X 닫기는 재노출 방지 상태로 저장한다.
+                TutorialGuidePrefs.SetDismissed(true);
+                // 확인 시 엔트리 + 오버레이 같이 끄기
+                ShowEntry(false);
+            },
+            onCancel: () =>
+            {
+            },
+            showCancel: false,
+            autoCloseOnPrimary: true,
+            autoCloseOnCancel: true
+        ));
+    }
     public void OpenTutorial()
     {
         if (UIManager.Instance == null)
