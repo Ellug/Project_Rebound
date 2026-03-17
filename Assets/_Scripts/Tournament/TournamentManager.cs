@@ -147,6 +147,12 @@ public class TournamentManager : MonoBehaviour
         else
             Debug.LogWarning("[TournamentManager] GameManager가 없어 우승 결과를 저장하지 못했습니다.");
 
+        if (_mySchoolReachedRoundTeamCount == 1 && GameManager.Instance != null)
+        {
+            if (GameManager.Instance.TryEnterFirstWinterChampionStory())
+                return;
+        }
+
         SceneManager.LoadScene(LobbyScene);
     }
 

@@ -1,6 +1,4 @@
-using UnityEngine;
-
-public sealed class VNBridge : MonoBehaviour
+public static class VNBridge
 {
     public const string VNSceneName = "VN";
     public const string DefaultReturnSceneName = "Lobby";
