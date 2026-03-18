@@ -100,8 +100,18 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6289ad2cfdf660a4b9c3b7cbb93c7b77
+    m_Address: Assets/_Images/Addressables/Popup/TrainingPopup02_img_05.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 631270dd11a216045883df32cf0abce8
     m_Address: StudentNameTable
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 63f5c286a4b246e45bdbc62b9d968ba2
+    m_Address: Assets/_Images/Addressables/Popup/TrainingPopup02_img_01.png
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -112,6 +122,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 6abbea51538ab21478d1457122d25438
     m_Address: StudentPotentialTable
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 72e87abdbd46aec40b0939eaa9865210
+    m_Address: Assets/_Images/Addressables/Popup/TrainingPopup01_img_02.png
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -155,6 +170,16 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8e2fd2b76469e66459ad392992a280fe
+    m_Address: Assets/_Images/Addressables/Popup/TrainingPopup01_img_01.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8e743afc2f1d2cb4c8a6ba01a82072c1
+    m_Address: Assets/_Images/Addressables/Popup/TrainingPopup02_img_02.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 8fdba17a9453c0247b9cc87d22e05a7b
     m_Address: StudentStatExpTable
     m_ReadOnly: 0
@@ -175,6 +200,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ae008ab19bcb33343b991c1d3e8cbfd3
+    m_Address: Assets/_Images/Addressables/Popup/TrainingPopup02_img_04.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b0389c1f9d1729044b4be41a31819b3e
     m_Address: StudentStatusProbTable
     m_ReadOnly: 0
@@ -182,6 +212,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b28b376e195049e4aa15bd274d043a6a
     m_Address: SuddenEventEffectTable
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c2af696d3d252f642b267366ea4c2dc6
+    m_Address: Assets/_Images/Addressables/Popup/TrainingPopup02_img_07.png
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -200,6 +235,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d825f0642245b0a4a915d5b02c524eaf
+    m_Address: Assets/_Images/Addressables/Popup/TrainingPopup02_img_06.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: dc266deca0543554daec8fa475f08eea
     m_Address: StoryTable
     m_ReadOnly: 0
@@ -207,6 +247,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: e157323945af6ab40bfdb8fa3976c7c1
     m_Address: PositionInfoPopupTable
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ed0cf0ec493e413409107cfe18420094
+    m_Address: Assets/_Images/Addressables/Popup/TrainingPopup02_img_03.png
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

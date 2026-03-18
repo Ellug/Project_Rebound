@@ -986,9 +986,65 @@ MonoBehaviour:
       m_SubObjectType: 
       m_SubObjectGUID: 
       m_EditorAssetChanged: 0
-  - fileName: EventGame00_image01
+  - fileName: TrainingPopup01_img_01
     spriteReference:
-      m_AssetGUID: fb8da6ee5b0a6ca43bb13b5145939255
+      m_AssetGUID: 8e2fd2b76469e66459ad392992a280fe
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+  - fileName: TrainingPopup01_img_02
+    spriteReference:
+      m_AssetGUID: 72e87abdbd46aec40b0939eaa9865210
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+  - fileName: TrainingPopup02_img_01
+    spriteReference:
+      m_AssetGUID: 63f5c286a4b246e45bdbc62b9d968ba2
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+  - fileName: TrainingPopup02_img_02
+    spriteReference:
+      m_AssetGUID: 8e743afc2f1d2cb4c8a6ba01a82072c1
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+  - fileName: TrainingPopup02_img_03
+    spriteReference:
+      m_AssetGUID: ed0cf0ec493e413409107cfe18420094
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+  - fileName: TrainingPopup02_img_04
+    spriteReference:
+      m_AssetGUID: ae008ab19bcb33343b991c1d3e8cbfd3
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+  - fileName: TrainingPopup02_img_05
+    spriteReference:
+      m_AssetGUID: 6289ad2cfdf660a4b9c3b7cbb93c7b77
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+  - fileName: TrainingPopup02_img_06
+    spriteReference:
+      m_AssetGUID: d825f0642245b0a4a915d5b02c524eaf
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+  - fileName: TrainingPopup02_img_07
+    spriteReference:
+      m_AssetGUID: c2af696d3d252f642b267366ea4c2dc6
       m_SubObjectName: 
       m_SubObjectType: 
       m_SubObjectGUID: 
