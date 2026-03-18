@@ -163,12 +163,6 @@ public class LobbyUI : UIBase
                 {
                     _messengerInboxPopup.OpenRoom(data.roomId);
                 }
-
-                // 3. 다 봤으면 큐에 있는 다음 팝업 띄우기 요청
-                if (SuddenEventManager.Instance != null)
-                {
-                    SuddenEventManager.Instance.ProcessNextPopup();
-                }
             },
             OnCancel = () =>
             {

@@ -18,6 +18,9 @@ public class MessengerRoomPopup : UIBase
     [SerializeField] private ScrollRect _scrollRect;
     private List<GameObject> _spawnedItems = new List<GameObject>();
 
+    private int _spawnedCount = 0;
+    private DateTime? _lastDate = null;
+
     public string CurrentRoomId { get; private set; }
     public string CurrentRoomName { get; private set; }
 
@@ -62,19 +65,31 @@ public class MessengerRoomPopup : UIBase
 
         if (_txtRoomName != null) _txtRoomName.text = room.RoomName;
 
-        RefreshChat(room);
-        MessengerManager.Instance.MarkAsRead(CurrentRoomId);
+        foreach (var item in _spawnedItems)
+            if (item != null) Destroy(item);
+        _spawnedItems.Clear();
+        _spawnedCount = 0;
+        _lastDate = null;
+
+        SpawnMissingMessages(room);
+
+        if (MessengerManager.Instance != null)
+            MessengerManager.Instance.MarkAsRead(CurrentRoomId);
+
         base.Open();
 
         if (UIManager.Instance != null)
         {
             UIManager.Instance.PushMessenger(this);
         }
+
+        StartCoroutine(ScrollToBottomRoutine());
     }
     public override void Close()
     {
         if (MessengerManager.Instance != null)
         {
+            MessengerManager.Instance.MarkAsRead(CurrentRoomId);
             MessengerManager.Instance.CurrentViewingRoomId = "";
         }
 
@@ -89,63 +104,26 @@ public class MessengerRoomPopup : UIBase
         {
             UIManager.Instance.PopMessenger(this);
         }
+        if (SuddenEventManager.Instance != null)
+        {
+            SuddenEventManager.Instance.ProcessNextPopup();
+        }
     }
 
     private void HandleNewMessage(ChatRoom room)
     {
         if (room.RoomId != CurrentRoomId) return;
 
-        foreach (var item in _spawnedItems)
+        bool isNearBottom = true;
+        if (_scrollRect != null)
         {
-            Destroy(item);
-        }
-        _spawnedItems.Clear();
-
-        DateTime? currentDateGroup = null;
-
-        foreach (var msg in room.Messages)
-        {
-            if (currentDateGroup == null || currentDateGroup.Value.Date != msg.Timestamp.Date)
-            {
-                currentDateGroup = msg.Timestamp.Date;
-                SpawnDateDivider(currentDateGroup.Value);
-            }
-
-            // 1. 선택지 분기
-            if (msg.EventType == MessageEventType.Choice)
-            {
-                ChatChoiceBox choiceBox = Instantiate(_choiceBoxPrefab, _chatContentRoot);
-                choiceBox.Setup(msg, this);
-                choiceBox.gameObject.SetActive(true);
-                _spawnedItems.Add(choiceBox.gameObject);
-            }
-            // 2.  시스템 메시지 분기
-            else if (msg.EventType == MessageEventType.System)
-            {
-                if (_bubbleSystemPrefab != null)
-                {
-                    ChatBubble bubble = Instantiate(_bubbleSystemPrefab, _chatContentRoot);
-                    bubble.Setup(msg.Content);
-                    bubble.gameObject.SetActive(true);
-                    _spawnedItems.Add(bubble.gameObject);
-                }
-            }
-            // 3. 기존 일반 텍스트 분기
-            else
-            {
-                ChatBubble prefabToUse = msg.SenderType == MessageSenderType.Them ? _bubbleLeftPrefab : _bubbleRightPrefab;
-
-                if (prefabToUse != null)
-                {
-                    ChatBubble bubble = Instantiate(prefabToUse, _chatContentRoot);
-                    bubble.Setup(msg.Content);
-                    bubble.gameObject.SetActive(true);
-                    _spawnedItems.Add(bubble.gameObject);
-                }
-            }
+            isNearBottom = _scrollRect.verticalNormalizedPosition <= 0.05f;
         }
 
-        if (gameObject.activeInHierarchy)
+        SpawnMissingMessages(room);
+
+        // 유저가 밑을 보고 있었을 때만 스크롤을 자동으로 내려줌
+        if (isNearBottom && gameObject.activeInHierarchy)
         {
             StartCoroutine(ScrollToBottomRoutine());
         }
@@ -160,20 +138,32 @@ public class MessengerRoomPopup : UIBase
             _scrollRect.verticalNormalizedPosition = 0f; // 0이 맨 아래, 1이 맨 위
         }
     }
-    private void RefreshChat(ChatRoom room)
+
+    private void SpawnDateDivider(DateTime date)
     {
-        foreach (var item in _spawnedItems)
-            if (item != null) Destroy(item);
-        _spawnedItems.Clear();
+        if (_dateDividerPrefab == null) return;
+        GameObject divider = Instantiate(_dateDividerPrefab, _chatContentRoot);
+        divider.SetActive(true);
+        TMP_Text txtDate = divider.GetComponentInChildren<TMP_Text>();
+        if (txtDate != null) txtDate.text = date.ToString("yyyy. M. d");
+        _spawnedItems.Add(divider);
+    }
 
-        DateTime? currentDateGroup = null;
+    private void SpawnMissingMessages(ChatRoom room)
+    {
+        if (room == null || room.Messages == null) return;
 
-        foreach (var msg in room.Messages)
+        bool addedNew = false;
+
+        // 이미 그려진 개수부터 시작해서 새로 온 메시지만 추가
+        for (int i = _spawnedCount; i < room.Messages.Count; i++)
         {
-            if (currentDateGroup == null || currentDateGroup.Value.Date != msg.Timestamp.Date)
+            var msg = room.Messages[i];
+
+            if (_lastDate == null || _lastDate.Value.Date != msg.Timestamp.Date)
             {
-                currentDateGroup = msg.Timestamp.Date;
-                SpawnDateDivider(currentDateGroup.Value);
+                _lastDate = msg.Timestamp.Date;
+                SpawnDateDivider(_lastDate.Value);
             }
 
             if (msg.EventType == MessageEventType.Choice)
@@ -183,7 +173,7 @@ public class MessengerRoomPopup : UIBase
                 choiceBox.gameObject.SetActive(true);
                 _spawnedItems.Add(choiceBox.gameObject);
             }
-            else if (msg.EventType == MessageEventType.System) // 시스템 메시지 분기 처리
+            else if (msg.EventType == MessageEventType.System)
             {
                 if (_bubbleSystemPrefab != null)
                 {
@@ -205,18 +195,14 @@ public class MessengerRoomPopup : UIBase
                     _spawnedItems.Add(bubble.gameObject);
                 }
             }
+
+            _spawnedCount++;
+            addedNew = true;
         }
 
-        Canvas.ForceUpdateCanvases();
-    }
-
-    private void SpawnDateDivider(DateTime date)
-    {
-        if (_dateDividerPrefab == null) return;
-        GameObject divider = Instantiate(_dateDividerPrefab, _chatContentRoot);
-        divider.SetActive(true);
-        TMP_Text txtDate = divider.GetComponentInChildren<TMP_Text>();
-        if (txtDate != null) txtDate.text = date.ToString("yyyy. M. d");
-        _spawnedItems.Add(divider);
+        if (addedNew)
+        {
+            Canvas.ForceUpdateCanvases();
+        }
     }
 }

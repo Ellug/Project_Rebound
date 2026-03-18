@@ -45,7 +45,15 @@ public class MessengerInboxPopup : UIBase
         RefreshList();
         RefreshFriendlyMatchUI();
     }
+    public override void Close()
+    {
+        base.Close();
 
+        if (SuddenEventManager.Instance != null)
+        {
+            SuddenEventManager.Instance.ProcessNextPopup();
+        }
+    }
     public void RefreshList()
     {
         foreach (var item in _spawnedItems) Destroy(item);

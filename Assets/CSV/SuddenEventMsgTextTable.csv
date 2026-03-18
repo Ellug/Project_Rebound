@@ -45,7 +45,7 @@ text_diag_000002_010,player,두 번 들어라.
 text_diag_000003_000,student,감독님 체단실 기구 제가 고쳤어요!!
 text_diag_000003_001,player,오 대단한데? 
 text_diag_000003_002,player,근데 왜 불안하지?
-text_diag_000003_003,student,벤치프레스 바가 좀 휘어 있어서 
+text_diag_000003_003,student,벤치프레스 바가\n좀 휘어 있어서 
 text_diag_000003_004,player,있어서
 text_diag_000003_005,student,폈어요
 text_diag_000003_006,choice,폈...뭐?
@@ -76,7 +76,7 @@ text_diag_000004_015,student,ㅜㅜ
 text_diag_000005_000,student,감독님 !
 text_diag_000005_001,student,옆 여고 애들이 농구 가르쳐달래요!
 text_diag_000005_002,choice,너가?
-text_diag_000005_003,student,쌤도 아시잖아요.
+text_diag_000005_003,student,감독님도 아시잖아요.
 text_diag_000005_004,student,저 요즘 컨디션 최고에요!
 text_diag_000005_005,student,게다가 여친한테 보여줄거라
 text_diag_000005_006,student,엄청 연습했
@@ -85,8 +85,8 @@ text_diag_000005_008,student,아
 text_diag_000005_009,player,요즘 폼 올랐으니까 봐준다.
 text_diag_000005_010,student,감독님 짱
 text_diag_000005_011,choice,왜?
-text_diag_000005_012,player,"에이, 팬 서비스죠~ 가도 되죠?"
-text_diag_000005_013,student,"가도 되는데, 실수 하지 마라."
+text_diag_000005_012,student,"에이, 팬 서비스죠~ 가도 되죠?"
+text_diag_000005_013,player,"가도 되는데, 실수 하지 마라."
 text_diag_000005_014,player,실수하면 그거 만큼 쪽팔린게 어딨냐?
 text_diag_000005_015,player,항상 실전같이. 알지?
 text_diag_000005_016,student,"에이, 걱정 마세요!"
@@ -143,15 +143,15 @@ text_diag_000006_037,player,혹시 모르지?
 text_diag_000006_038,player,즐겁게 농구 하다보면\n실력이 확 늘지도?
 text_diag_000006_039,student,감사합니다. 선생님.
 text_diag_000006_040,student,"저, 계속 해볼께요."
-text_diag_000007_000,student,쌤 오늘 간식 뭐예요? 피자? 치킨?
+text_diag_000007_000,student,"감독님, 오늘 간식 뭐예요?\n피자? 치킨?"
 text_diag_000007_001,player,오늘 내 예전 제자 중 한명이 피자 사 들고 온대.
 text_diag_000007_002,student,와!! 대박!! 누구예요? 프로 선수?
 text_diag_000007_003,player,아니. 그건 아니고.
 text_diag_000007_004,player,이번에 개업했다더라.
 text_diag_000007_005,student,...맛있으면 됐죠.
-text_diag_000008_000,student,쌤!! 미르고 애들이 단톡방에서 시비 걸어요!
+text_diag_000008_000,student,감독님! 미르고 애들이 단톡방에서 시비 걸어요!
 text_diag_000008_001,player,뭐라고 하는데?
-text_diag_000008_002,student,우리 팀 그물은 절대 안 흔들릴 거래요ㅋㅋ
+text_diag_000008_002,student,우리 팀 그물은 절대 안 흔들릴 거래요ㅜㅜ
 text_diag_000008_003,player,오.. 
 text_diag_000008_004,choice,멘트 좀 치는데?
 text_diag_000008_005,student,저 너무 화나서 잠이 안 와요;;
@@ -170,21 +170,21 @@ text_diag_000008_017,player,상대 팀이 우리 수비를 못 뚫었다는거 �
 text_diag_000008_018,student,...어
 text_diag_000008_019,student,그렇네요?
 text_diag_000008_020,player,...에휴.
-text_diag_000009_000,student,쌤 체육관 비번 바꿨어요?
+text_diag_000009_000,student,감독님\n체육관 비번 바꿨어요?
 text_diag_000009_001,player,아닌데? 그대로 0423 아냐?
 text_diag_000009_002,student,안 열려요.
-text_diag_000009_003,student,설마 코치님이 어제 바꾸고 까먹은 거 아니에요?
+text_diag_000009_003,student,어제 바꾸고 까먹으신 거 아니에요?
 text_diag_000009_004,player,잠깐만... 어.. 
 text_diag_000009_005,choice,1111
 text_diag_000009_006,student,열렸어요
-text_diag_000009_007,student,쌤 진짜 그렇게 봤는데
+text_diag_000009_007,student,감독님 진짜 그렇게 봤는데
 text_diag_000009_008,student,엄청 단순하네요
 text_diag_000009_009,player,조용히 해
 text_diag_000009_010,choice,1234
 text_diag_000009_011,student,...5회 이상 틀려서 30분 기다리래요.
 text_diag_000009_012,player,이런;;
 text_diag_000009_013,choice,0423
-text_diag_000009_014,student,아니 코치님
+text_diag_000009_014,student,아니 감독님;;
 text_diag_000009_015,student,안됐다니까요?
 text_diag_000009_016,player,다시 해봐.
 text_diag_000009_017,player,....어?
@@ -196,11 +196,11 @@ text_diag_000009_022,student,앗 아아;;
 text_diag_000009_023,student,역시 감독님
 text_diag_000009_024,student,짜릿해 새로워
 text_diag_000009_025,student,동경하게 돼
-text_diag_000009_026,student,에휴.
+text_diag_000009_026,player,에휴.
 text_diag_000010_000,student,"감독님, 오늘 영어쌤이 농구부 다 남으래요!"
 text_diag_000010_001,player,왜? 또 사고 쳤냐?
 text_diag_000010_002,student,수업 시간에 경기 분석하다 결려서\nNBA 영상 보고 독해 해오래요;;
-text_diag_000010_003,choice,ㅋㅋㅋ 야 이건 기회다.
+text_diag_000010_003,choice,ㅋㅋㅋㅋㅋ
 text_diag_000010_004,player,전술 공부도 하고 좋네.
 text_diag_000010_005,student,해석이 안 되는데 무슨 전술이에요ㅠㅠ\n다 할 때 까지 집에 못간단 말이에요;;
 text_diag_000010_006,player,모르면 'Pass'라고 해. 농구 용어잖아.

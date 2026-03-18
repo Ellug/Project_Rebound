@@ -17,7 +17,7 @@ MonoBehaviour:
     tierId: 6001
     name: "\uC288\uD305 \uAC15\uD654 I"
     unlockCost: 15
-    description: "\uD300 \uC804\uCCB4\uC758 \uC288\uD305\uC744 1 \uC0C1\uC2B9\uC2DC\uD0B5\uB2C8\uB2E4.//"
+    description: "\uD300 \uC804\uCCB4\uC758 \uC288\uD305\uC744 1 \uC0C1\uC2B9\uC2DC\uD0B5\uB2C8\uB2E4."
     effectId: 1001
   - id: 102
     tierId: 6001
