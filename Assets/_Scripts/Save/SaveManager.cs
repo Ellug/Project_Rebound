@@ -33,11 +33,7 @@ public class SaveManager : Singleton<SaveManager>
     public void LoadSlot(int slotIndex, string sceneName)
     {
         PlayData data = SaveSystem.Instance.Load(slotIndex);
-
-        if (data == null)
-        {
-            return;
-        }
+        if (data == null) return;
 
         CurrentData = data;
 
@@ -48,26 +44,42 @@ public class SaveManager : Singleton<SaveManager>
         IsPendingNewGame = false;
         LoadUserData();
 
+
+        // 돈과 평판은 런타임 매니저가 존재할 때만 적용 (로비 씬에서 먼저 적용, 이후 씬에서도 계속 유지)
         if (MoneyManager.Instance != null)
-        {
             MoneyManager.Instance.ApplySaveData(
                 data.gold,
                 CurrentUserData != null ? CurrentUserData.reputation : data.reputation);
-        }
 
-        // 슬롯 로드 시 시설 상태를 먼저 현재 슬롯 데이터 기준으로 맞춘다.
+        // 슬롯 로드 시 시설 상태를 먼저 현재 슬롯 데이터 기준으로 맞춤
         if (FacilitySystem.Instance != null)
-        {
             ApplyFacilityData(data.facilities);
-        }
 
-        // 슬롯 로드 시 메신저 상태도 현재 슬롯 기준으로 먼저 맞춘다.
+        // 슬롯 로드 시 메신저 상태도 현재 슬롯 기준으로 먼저 맞춤
         if (MessengerManager.Instance != null)
-        {
             MessengerManager.Instance.RestoreSaveData(data.messenger);
-        }
 
-        SceneManager.LoadScene(sceneName);
+        // 토너먼트 진행 중이면 로비를 경유해 토너먼트로 이동
+        // (UIManager가 로비에 있으므로 로비를 반드시 거쳐야 함)
+        _pendingTournamentRestore = IsTournamentInProgress(data);
+        SceneManager.LoadScene(sceneName); // 항상 로비로 먼저 이동
+    }
+
+    // 로비 씬 초기화 완료 시점(GameManager 등)에서 호출
+    public bool ConsumePendingTournamentRestore()
+    {
+        if (!_pendingTournamentRestore) return false;
+        _pendingTournamentRestore = false;
+        return true;
+    }
+
+    private bool _pendingTournamentRestore;
+
+    private static bool IsTournamentInProgress(PlayData data)
+    {
+        bool tournamentInProgress = data.tournament != null && data.tournament.isInProgress;
+        bool matchInProgress = data.matchSim != null && data.matchSim.isMatchRunning;
+        return tournamentInProgress || matchInProgress;
     }
 
     // 씬 로드 완료 후 각 매니저에 데이터 적용 (GameManager.ApplySaveDataIfLoaded에서 호출)

@@ -3631,6 +3631,8 @@ MonoBehaviour:
   _button1: {fileID: 1044661735}
   _button2: {fileID: 1918227702}
   _button3: {fileID: 1446281554}
+  _popupPrefab: {fileID: 2709569829720818253, guid: 12b32fafa91fc074fbb429aa6509eab7, type: 3}
+  _popupParent: {fileID: 1542067910}
 --- !u!114 &1230140055
 MonoBehaviour:
   m_ObjectHideFlags: 0
