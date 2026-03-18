@@ -41,7 +41,13 @@ public class MessengerRoomPopup : UIBase
             MessengerManager.Instance.OnMessageAdded += HandleNewMessage;
         }
     }
-
+    void OnDestroy()
+    {
+        if (MessengerManager.Instance != null)
+        {
+            MessengerManager.Instance.OnMessageAdded -= HandleNewMessage;
+        }
+    }
     public void OpenRoom(ChatRoom room)
     {
         Init();

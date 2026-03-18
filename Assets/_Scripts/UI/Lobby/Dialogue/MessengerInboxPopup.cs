@@ -12,11 +12,9 @@ public class MessengerInboxPopup : UIBase
     [SerializeField] private Button _btnInboxClose;
     [SerializeField] private MessengerRoomPopup _roomPopupPrefab;
 
-
     [Header("Friendly Match")]
     [SerializeField] private Button _btnFriendlyMatch;
-    [SerializeField] private TMP_Text _txtFriendlyMatchCount;
-    [SerializeField] private FriendlyMatchSelectPopup _friendlyMatchSelectPopup; // 씬에 배치된 상대 선택 팝업
+    [SerializeField] private FriendlyMatchSelectPopup _friendlyMatchSelectPopup;
 
     private MessengerRoomPopup _currentRoomPopup;
     private List<GameObject> _spawnedItems = new List<GameObject>();
@@ -43,68 +41,14 @@ public class MessengerInboxPopup : UIBase
 
     public override void Open()
     {
-        if (SuddenEventManager.Instance != null)
-            SuddenEventManager.Instance.IsMessengerOpen = true;
-
-        Init();
+        base.Open(); 
         RefreshList();
-        base.Open();
-
-        if (UIManager.Instance != null)
-        {
-            UIManager.Instance.PushMessenger(this);
-        }
         RefreshFriendlyMatchUI();
     }
-    public void RefreshFriendlyMatchUI()
+
+    public void RefreshList()
     {
-        if (_btnFriendlyMatch == null || _txtFriendlyMatchCount == null) return;
-
-        int current = FriendlyMatchManager.Instance.CurrentApplyCount;
-        int max = FriendlyMatchManager.Instance.MaxMonthlyCount;
-
-        // 우측 상단 횟수 (예: 친선경기 (1/3))
-        _txtFriendlyMatchCount.text = $"친선경기 ({current}/{max})";
-
-        _btnFriendlyMatch.onClick.RemoveAllListeners();
-        _btnFriendlyMatch.onClick.AddListener(() => {
-            if (current < max)
-            {
-                if (_friendlyMatchSelectPopup != null) _friendlyMatchSelectPopup.Open();
-            }
-            else
-            {
-                Debug.Log("이번 달 횟수를 모두 소진했습니다.");
-            }
-        });
-    }
-    public override void Close()
-    {
-        if (SuddenEventManager.Instance != null)
-        {
-            SuddenEventManager.Instance.IsMessengerOpen = false;
-            SuddenEventManager.Instance.ProcessNextPopup();
-        }
-
-        gameObject.SetActive(false);
-        
-        if (UIManager.Instance != null)
-        {
-            UIManager.Instance.PopMessenger(this);
-        }
-
-        base.Close();
-
-        if (UIManager.Instance != null) UIManager.Instance.PopMessenger(this);
-    }
-
-    // 1. 리스트를 새로 그릴 때 기존 항목들을 깔끔하게 지워주는 로직 추가
-    private void RefreshList()
-    {
-        foreach (var item in _spawnedItems)
-        {
-            if (item != null) Destroy(item);
-        }
+        foreach (var item in _spawnedItems) Destroy(item);
         _spawnedItems.Clear();
 
         var rooms = MessengerManager.Instance.ActiveRooms;
@@ -112,6 +56,9 @@ public class MessengerInboxPopup : UIBase
 
         foreach (var room in rooms)
         {
+            // 친선 경기 채팅방은 목록에 절대 나타나지 않도록 차단
+            if (room.RoomId.StartsWith("friendly_")) continue;
+
             if (currentDateGroup == null || currentDateGroup.Value.Date != room.LastUpdatedDate.Date)
             {
                 currentDateGroup = room.LastUpdatedDate.Date;
@@ -125,13 +72,19 @@ public class MessengerInboxPopup : UIBase
         }
     }
 
-    // 2. 채팅방 팝업을 열 때 무조건 화면 맨 앞으로 끌어오는 로직 추가
     public void OpenRoom(string roomId)
     {
-        if (_roomPopupPrefab == null) return;
+        if (_roomPopupPrefab == null)
+        {
+            return;
+        }
 
         ChatRoom room = MessengerManager.Instance.GetRoom(roomId);
-        if (room == null) return;
+        if (room == null)
+        {
+            Debug.LogError($"[MessengerInboxPopup] '{roomId}' 채팅방을 찾을 수 없습니다!");
+            return;
+        }
 
         if (_currentRoomPopup == null)
         {
@@ -142,6 +95,7 @@ public class MessengerInboxPopup : UIBase
         _currentRoomPopup.OpenRoom(room);
         _currentRoomPopup.gameObject.SetActive(true);
     }
+
     private void SpawnDateDivider(DateTime date)
     {
         if (_dateDividerPrefab == null) return;
@@ -150,10 +104,17 @@ public class MessengerInboxPopup : UIBase
         divider.SetActive(true);
 
         TMP_Text txtDate = divider.GetComponentInChildren<TMP_Text>();
-        if (txtDate != null)
-            txtDate.text = date.ToString("yyyy. M. d");
-
+        if (txtDate != null) txtDate.text = date.ToString("yyyy. M. d");
         _spawnedItems.Add(divider);
     }
 
+    public void RefreshFriendlyMatchUI()
+    {
+        if (_btnFriendlyMatch == null) return;
+
+        _btnFriendlyMatch.onClick.RemoveAllListeners();
+        _btnFriendlyMatch.onClick.AddListener(() => {
+            if (_friendlyMatchSelectPopup != null) _friendlyMatchSelectPopup.Open();
+        });
+    }
 }
