@@ -85,8 +85,8 @@ text_diag_000005_008,student,아
 text_diag_000005_009,player,요즘 폼 올랐으니까 봐준다.
 text_diag_000005_010,student,감독님 짱
 text_diag_000005_011,choice,왜?
-text_diag_000005_012,player,"에이, 팬 서비스죠~ 가도 되죠?"
-text_diag_000005_013,student,"가도 되는데, 실수 하지 마라."
+text_diag_000005_012,student,"에이, 팬 서비스죠~ 가도 되죠?"
+text_diag_000005_013,player,"가도 되는데, 실수 하지 마라."
 text_diag_000005_014,player,실수하면 그거 만큼 쪽팔린게 어딨냐?
 text_diag_000005_015,player,항상 실전같이. 알지?
 text_diag_000005_016,student,"에이, 걱정 마세요!"
@@ -196,7 +196,7 @@ text_diag_000009_022,student,앗 아아;;
 text_diag_000009_023,student,역시 감독님
 text_diag_000009_024,student,짜릿해 새로워
 text_diag_000009_025,student,동경하게 돼
-text_diag_000009_026,student,에휴.
+text_diag_000009_026,player,에휴.
 text_diag_000010_000,student,"감독님, 오늘 영어쌤이 농구부 다 남으래요!"
 text_diag_000010_001,player,왜? 또 사고 쳤냐?
 text_diag_000010_002,student,수업 시간에 경기 분석하다 결려서\nNBA 영상 보고 독해 해오래요;;

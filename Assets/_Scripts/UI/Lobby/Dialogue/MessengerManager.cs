@@ -36,12 +36,12 @@ public class MessengerManager : Singleton<MessengerManager>
 
         if (room == null)
         {
-            room = new ChatRoom { RoomId = roomId, RoomName = roomName, HasUnread = true };
+            room = new ChatRoom { RoomId = roomId, RoomName = roomName, HasUnread = !isViewing };
             _activeRooms.Add(room);
         }
         else
         {
-            room.HasUnread = true;
+            if (!isViewing) room.HasUnread = true;
         }
 
         room.Messages.Add(newMessage);

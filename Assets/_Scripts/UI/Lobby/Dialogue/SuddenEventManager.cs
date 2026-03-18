@@ -38,48 +38,56 @@ public class SuddenEventManager : Singleton<SuddenEventManager>
 
         if (triggeredEvents.Count > 0)
         {
-            var selectedEvent = triggeredEvents[UnityEngine.Random.Range(0, triggeredEvents.Count)];
-            ExecuteEvent(selectedEvent);
-            _dailyEventCount++;
+            for (int i = 0; i < triggeredEvents.Count; i++)
+            {
+                int rnd = UnityEngine.Random.Range(0, triggeredEvents.Count);
+                var temp = triggeredEvents[i];
+                triggeredEvents[i] = triggeredEvents[rnd];
+                triggeredEvents[rnd] = temp;
+            }
+
+            foreach (var evt in triggeredEvents)
+            {
+                if (_dailyEventCount >= MAX_EVENTS_PER_TURN) break;
+                ExecuteEvent(evt);
+                _dailyEventCount++;
+            }
         }
     }
 
-    public void ExecuteEventById(string eventId, string specificTargetName = "", bool fromDialogue = false)
+    // [추가] originRoomId 매개변수를 추가하여 방 번호를 전달받습니다.
+    public void ExecuteEventById(string eventId, string specificTargetName = "", bool fromDialogue = false, Dictionary<string, string> passedVars = null, string originRoomId = "")
     {
         var table = CachedSOData.Get<SuddenEventTableSO>();
         if (table != null && table.TryGet(eventId, out var row))
         {
-            ExecuteEvent(row, specificTargetName, fromDialogue);
+            ExecuteEvent(row, specificTargetName, fromDialogue, passedVars, originRoomId);
         }
     }
 
-    private void ExecuteEvent(SuddenEventRow row, string specificTargetName = "", bool fromDialogue = false)
+    private void ExecuteEvent(SuddenEventRow row, string specificTargetName = "", bool fromDialogue = false, Dictionary<string, string> passedVars = null, string originRoomId = "")
     {
         List<Student> targets = new List<Student>();
 
-        if (fromDialogue && !string.IsNullOrEmpty(specificTargetName) && !specificTargetName.Contains("[공지]"))
+        if (fromDialogue && passedVars != null && passedVars.TryGetValue("{target1.name}", out string tName))
         {
             if (StudentManager.Instance != null)
             {
-                // student_2 형태일 경우 숫자 ID를 추출해서 정확한 학생을 찾음
-                if (specificTargetName.StartsWith("student_"))
-                {
-                    if (int.TryParse(specificTargetName.Replace("student_", ""), out int studentId))
-                    {
-                        var student = StudentManager.Instance.Students.FirstOrDefault(s => s.id == studentId);
-                        if (student != null) targets.Add(student);
-                    }
-                }
-                else
-                {
-                    // 실제 이름이 들어올 경우를 대비한 기존 로직 유지
-                    var student = StudentManager.Instance.Students.FirstOrDefault(s => s.studentName == specificTargetName);
-                    if (student != null) targets.Add(student);
-                }
+                var student = StudentManager.Instance.Students.FirstOrDefault(s => s.studentName == tName);
+                if (student != null) targets.Add(student);
+            }
+        }
+        else if (fromDialogue && !string.IsNullOrEmpty(specificTargetName) && !specificTargetName.Contains("[공지]"))
+        {
+            if (StudentManager.Instance != null)
+            {
+                string parsedName = specificTargetName.Replace("student_", "");
+                var student = StudentManager.Instance.Students.FirstOrDefault(s => s.studentName == parsedName);
+                if (student != null) targets.Add(student);
             }
         }
 
-        if (targets.Count == 0)
+        if (targets.Count == 0 && !fromDialogue)
         {
             targets = PickTargets(row.scope, row.targetMin, row.targetMax);
         }
@@ -133,7 +141,7 @@ public class SuddenEventManager : Singleton<SuddenEventManager>
         ProcessEffect(row.effect2, 2);
         ProcessEffect(row.effect3, 3);
 
-        ShowEventTextOrDialogue(row, targets, textVars, fromDialogue);
+        ShowEventTextOrDialogue(row, targets, textVars, fromDialogue, originRoomId);
     }
 
     private List<Student> PickTargets(SuddenEventScope scope, int min, int max)
@@ -239,7 +247,7 @@ public class SuddenEventManager : Singleton<SuddenEventManager>
         return false;
     }
 
-    private void ShowEventTextOrDialogue(SuddenEventRow eventRow, List<Student> targets, Dictionary<string, string> textVars, bool fromDialogue)
+    private void ShowEventTextOrDialogue(SuddenEventRow eventRow, List<Student> targets, Dictionary<string, string> textVars, bool fromDialogue, string originRoomId)
     {
         string desc = eventRow.description?.Trim();
         if (string.IsNullOrEmpty(desc) || desc == "-") return;
@@ -257,7 +265,20 @@ public class SuddenEventManager : Singleton<SuddenEventManager>
         string roomName = sysRoomName;
         bool isNotice = eventRow.name.Contains("[공지]") || eventRow.name.Contains("[시스템]");
 
-        if (!isNotice && targets != null && targets.Count > 0)
+        if (!string.IsNullOrEmpty(originRoomId))
+        {
+            roomId = originRoomId;
+            if (roomId == "sys_notice")
+            {
+                isNotice = true;
+                roomName = sysRoomName;
+            }
+            else
+            {
+                if (targets != null && targets.Count > 0) roomName = targets[0].studentName;
+            }
+        }
+        else if (!isNotice && targets != null && targets.Count > 0)
         {
             roomId = $"student_{targets[0].studentName}";
             roomName = targets[0].studentName;
@@ -283,6 +304,15 @@ public class SuddenEventManager : Singleton<SuddenEventManager>
 
             systemMsgContent = System.Text.RegularExpressions.Regex.Replace(systemMsgContent, @"\{effect\d+\.[^}]+\}", "");
             systemMsgContent = System.Text.RegularExpressions.Regex.Replace(systemMsgContent, @"\{target\d+\.[^}]+\}", "");
+        }
+
+        if (roomId == "sys_notice" && targets != null && targets.Count == 1 && !string.IsNullOrEmpty(systemMsgContent))
+        {
+            string tName = targets[0].studentName;
+            if (!systemMsgContent.Contains(tName))
+            {
+                systemMsgContent = $"{tName} {systemMsgContent}";
+            }
         }
 
         if (desc.StartsWith("diag_"))
@@ -324,6 +354,9 @@ public class SuddenEventManager : Singleton<SuddenEventManager>
         };
     }
 
+    // ==========================================
+    // 팝업 스케줄링 관리 로직
+    // ==========================================
     public struct EventPopupData
     {
         public string title;
@@ -336,22 +369,27 @@ public class SuddenEventManager : Singleton<SuddenEventManager>
     public event System.Action<EventPopupData> OnPopupRequested;
 
     private bool _isPopupShowing = false;
-    public bool IsMessengerOpen { get; set; } = false;
 
     private void EnqueueEventPopup(string title, string roomId, string roomName, string preview)
     {
         _popupQueue.Enqueue(new EventPopupData { title = title, roomId = roomId, roomName = roomName, previewText = preview });
-        if (!_isPopupShowing) ProcessNextPopup();
+
+        // 현재 떠 있는 팝업이 없다면 즉시 실행
+        if (!_isPopupShowing)
+        {
+            ProcessNextPopup();
+        }
     }
 
     public void ProcessNextPopup()
     {
-        if (IsMessengerOpen) return;
+        _isPopupShowing = false; // 이전 팝업이 닫혔음을 선언
 
         if (_popupQueue.Count > 0)
         {
             var data = _popupQueue.Peek();
 
+            // 이미 읽은 메시지라면 큐에서 빼고 바로 다음 것 검사
             if (MessengerManager.Instance != null)
             {
                 var room = MessengerManager.Instance.GetRoom(data.roomId);
@@ -363,13 +401,10 @@ public class SuddenEventManager : Singleton<SuddenEventManager>
                 }
             }
 
+            // 조건 통과 시 즉시 팝업 실앵
             _isPopupShowing = true;
             var actualData = _popupQueue.Dequeue();
             OnPopupRequested?.Invoke(actualData);
-        }
-        else
-        {
-            _isPopupShowing = false;
         }
     }
 }

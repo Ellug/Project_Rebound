@@ -100,10 +100,10 @@ MonoBehaviour:
     description: "\uB300\uD654\uAC00 \uC885\uB8CC\uB418\uC5C8\uC2B5\uB2C8\uB2E4."
   - id: text_SuddenEvent_000008
     condition: 1
-    target: 1
+    target: 20
     speaker: '[SYSTEM]'
-    description: "{effect1.target_name} {effect1.amount} \uC99D\uAC00, {effect2.target_name}
-      {effect2.amount} \uC99D\uAC00"
+    description: "\uD300 {effect1.target_name} {effect1.amount} \uC99D\uAC00, \uD6C8\uB828
+      \uD6A8\uC728 {effect2.amount} \uC99D\uAC00"
   - id: text_SuddenEvent_000009
     condition: 1
     target: 1

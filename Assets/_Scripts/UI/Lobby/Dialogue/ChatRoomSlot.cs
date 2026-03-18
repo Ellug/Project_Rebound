@@ -36,6 +36,8 @@ public class ChatRoomSlot : MonoBehaviour
         if (_txtPreview != null)
         {
             _txtPreview.color = room.HasUnread ? _unreadTextColor : _readTextColor;
+            _txtPreview.overflowMode = TextOverflowModes.Ellipsis;
+            _txtPreview.maxVisibleLines = 2;
 
             if (room.Messages.Count > 0)
             {

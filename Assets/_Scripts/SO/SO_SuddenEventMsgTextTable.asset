@@ -273,10 +273,10 @@ MonoBehaviour:
     speaker: choice
     dialogue: "\uC65C?"
   - iD: text_diag_000005_012
-    speaker: player
+    speaker: student
     dialogue: "\uC5D0\uC774, \uD32C \uC11C\uBE44\uC2A4\uC8E0~ \uAC00\uB3C4 \uB418\uC8E0?"
   - iD: text_diag_000005_013
-    speaker: student
+    speaker: player
     dialogue: "\uAC00\uB3C4 \uB418\uB294\uB370, \uC2E4\uC218 \uD558\uC9C0 \uB9C8\uB77C."
   - iD: text_diag_000005_014
     speaker: player
@@ -618,7 +618,7 @@ MonoBehaviour:
     speaker: student
     dialogue: "\uB3D9\uACBD\uD558\uAC8C \uB3FC"
   - iD: text_diag_000009_026
-    speaker: student
+    speaker: player
     dialogue: "\uC5D0\uD734."
   - iD: text_diag_000010_000
     speaker: student
