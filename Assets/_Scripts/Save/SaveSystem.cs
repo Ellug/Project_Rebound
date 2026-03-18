@@ -95,4 +95,9 @@ public class SaveSystem : Singleton<SaveSystem>
 
         return -1;
     }
+
+    public int GetTotalSlotCount()
+    {
+        return MAX_SLOT_INDEX;
+    }
 }

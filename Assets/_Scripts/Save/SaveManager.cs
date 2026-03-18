@@ -10,7 +10,15 @@ public class SaveManager : Singleton<SaveManager>
     public bool IsPendingNewGame { get; private set; }
     public bool ShouldDeleteCurrentRunOnTitle { get; private set; }
 
-    public int CurrentSlotIndex => CurrentData != null ? CurrentData.slotIndex : -1;
+    // 현재 플레이 중인 슬롯 인덱스를 런타임에서 고정
+    private int _currentRuntimeSlotIndex = -1;
+
+    public int CurrentSlotIndex => _currentRuntimeSlotIndex;
+
+    private void Start()
+    {
+        CleanupIncompleteNewGameSlots(); // SaveSystem이 초기화된 이후 실행
+    }
 
     protected override void OnSingletonAwake()
     {
@@ -32,6 +40,11 @@ public class SaveManager : Singleton<SaveManager>
         }
 
         CurrentData = data;
+
+        // 로드한 슬롯을 현재 런타임 슬롯으로 고정
+        _currentRuntimeSlotIndex = slotIndex;
+        CurrentData.slotIndex = slotIndex;
+
         IsPendingNewGame = false;
         LoadUserData();
 
@@ -124,6 +137,10 @@ public class SaveManager : Singleton<SaveManager>
             messenger = new SavedMessengerData(),
         };
 
+        // 새로 만든 슬롯을 현재 런타임 슬롯으로 고정
+        _currentRuntimeSlotIndex = slotIndex;
+        CurrentData.slotIndex = slotIndex;
+
         // 새 게임 생성 시 런타임 시설 상태도 반드시 기본값으로 초기화
         if (FacilitySystem.Instance != null)
         {
@@ -139,7 +156,6 @@ public class SaveManager : Singleton<SaveManager>
         IsPendingNewGame = true;
 
         SaveUserData();
-        SaveSystem.Instance.Save(CurrentData);
         return true;
     }
 
@@ -148,6 +164,13 @@ public class SaveManager : Singleton<SaveManager>
         if (CurrentData == null)
         {
             Debug.LogWarning("저장할 데이터 없음");
+            return;
+        }
+
+        // 현재 슬롯이 없으면 다른 빈 슬롯으로 저장되지 않도록 중단
+        if (_currentRuntimeSlotIndex < 0)
+        {
+            Debug.LogWarning("[SaveManager] 현재 슬롯 인덱스가 없어 저장을 중단합니다.");
             return;
         }
 
@@ -206,6 +229,9 @@ public class SaveManager : Singleton<SaveManager>
             ? GameManager.Instance.CurrentDate.ToString("yyyy.MM.dd")
             : string.Empty;
 
+        // 저장 직전 현재 플레이 중인 슬롯 번호를 강제로 유지
+        CurrentData.slotIndex = _currentRuntimeSlotIndex;
+
         SaveSystem.Instance.Save(CurrentData);
     }
 
@@ -222,6 +248,7 @@ public class SaveManager : Singleton<SaveManager>
         if (CurrentData != null && CurrentData.slotIndex == slotIndex)
         {
             CurrentData = null;
+            _currentRuntimeSlotIndex = -1;
         }
     }
 
@@ -233,6 +260,7 @@ public class SaveManager : Singleton<SaveManager>
         }
 
         CurrentData = null;
+        _currentRuntimeSlotIndex = -1;
 
         if (MessengerManager.Instance != null)
         {
@@ -245,6 +273,7 @@ public class SaveManager : Singleton<SaveManager>
     public void Clear()
     {
         CurrentData = null;
+        _currentRuntimeSlotIndex = -1;
 
         if (MessengerManager.Instance != null)
         {
@@ -703,6 +732,7 @@ public class SaveManager : Singleton<SaveManager>
         }
 
         CurrentData = null;
+        _currentRuntimeSlotIndex = -1;
         ShouldDeleteCurrentRunOnTitle = false;
 
         if (MessengerManager.Instance != null)
@@ -741,5 +771,40 @@ public class SaveManager : Singleton<SaveManager>
 
         HeadCoachManager.Instance.RestoreUnlockedNodes(unlockedNodeIds);
         Debug.Log($"[SaveManager] 감독 노드 복원 완료. count={unlockedNodeIds.Count}");
+    }
+
+    // 새 게임 첫 영입 미완료 슬롯 삭제
+    // isRecruitmentInProgress == true && students.Count == 0 → 새 게임 영입 중 강제종료
+    // isRecruitmentInProgress == true && students.Count > 0  → 학기 중 영입 중 강제종료 → 플래그만 초기화, 슬롯 유지
+    private void CleanupIncompleteNewGameSlots()
+    {
+        Debug.Log("[SaveManager] CleanupIncompleteNewGameSlots 시작");
+        if (SaveSystem.Instance == null)
+        {
+            Debug.LogWarning("[SaveManager] SaveSystem.Instance가 null");
+            return;
+        }
+
+        int totalSlots = SaveSystem.Instance.GetTotalSlotCount();
+        for (int i = 1; i <= totalSlots; i++)
+        {
+            PlayData data = SaveSystem.Instance.Load(i);
+            if (data == null) continue;
+            if (!data.isRecruitmentInProgress) continue;
+
+            bool hasStudents = data.students != null && data.students.Count > 0;
+            if (hasStudents)
+            {
+                // 학기 중 영입 강제종료 → 플래그만 초기화 후 슬롯 유지
+                data.isRecruitmentInProgress = false;
+                SaveSystem.Instance.Save(data);
+                Debug.Log($"[SaveManager] 슬롯 {i}: 학기 영입 미완료 감지 → 플래그 초기화 후 유지");
+                continue;
+            }
+
+            // 새 게임 첫 영입 강제종료 → 슬롯 삭제
+            Debug.LogWarning($"[SaveManager] 슬롯 {i}: 새 게임 영입 미완료 감지 → 삭제");
+            SaveSystem.Instance.Delete(i);
+        }
     }
 }
