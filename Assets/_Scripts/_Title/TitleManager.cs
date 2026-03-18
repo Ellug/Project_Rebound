@@ -12,7 +12,18 @@ public class TitleManager : MonoBehaviour
     // 타이틀 씬 전용 슬롯 가득 찼을 때 팝업
     [SerializeField] private GameObject _slotFullPopup;
     [SerializeField] private Button _slotFullConfirmButton;
+    [SerializeField] private QuitPopup _quitPopup;
+    private InputSystem_Actions _input;
 
+    private void Awake()
+    {
+        if (UIManager.Instance == null)
+        {
+            _input = new InputSystem_Actions();
+            _input.UI.Cancel.performed += ctx => OnEscKey();
+            _input.Enable();
+        }
+    }
     void Start()
     {
         if (SaveManager.Instance != null)
@@ -28,7 +39,17 @@ public class TitleManager : MonoBehaviour
 
         if (_slotFullConfirmButton != null)
             _slotFullConfirmButton.onClick.AddListener(() => _slotFullPopup.SetActive(false));
+
+        if (_quitPopup != null)
+            _quitPopup.Hide();
     }
+
+    private void OnDestroy()
+    {
+        _input?.Disable();
+        _input?.Dispose();
+    }
+
 
     public void OnClickStartButton()
     {
@@ -54,8 +75,20 @@ public class TitleManager : MonoBehaviour
         _viewLoadPanel.SetActive(true);
     }
 
+    private void OnEscKey()
+    {
+        // 팝업이 열려있으면 닫기, 없으면 종료 팝업 띄우기
+        if (_quitPopup != null && _quitPopup.gameObject.activeSelf)
+        {
+            _quitPopup.Hide();
+            return;
+        }
+
+        _quitPopup?.Show();
+    }
+
     public void OnClickExitButton()
     {
-        Application.Quit();
+        _quitPopup?.Show();
     }
 }
