@@ -13,6 +13,10 @@ public class TournamentHalfTimeSelectionUI : MonoBehaviour
     [SerializeField] private Button _button2;
     [SerializeField] private Button _button3;
 
+    [Header("Popup (토너먼트 씬 전용)")]
+    [SerializeField] private UIPopup _popupPrefab;   // UIPopup 프리팹 연결
+    [SerializeField] private Transform _popupParent; // 토너먼트 씬 Canvas 연결
+
     // CachedSOData에서 로드한 선택지 row 목록 (최대 3개)
     private readonly List<HalftimeSelectRow> _selectRows = new(3);
 
@@ -89,20 +93,57 @@ public class TournamentHalfTimeSelectionUI : MonoBehaviour
 
         HalftimeSelectRow row = _selectRows[optionIndex];
 
-        if (UIManager.Instance == null) return; // 싱글톤이라 없으면 안됨. 없으면 뭔가 잘못된 거임 혼남.
+        // 선택지 팝업 표시 전 세이브
+        if (SaveManager.Instance != null)
+            SaveManager.Instance.AutoSaveByBranch("선택지 선택 전");
 
-        var req = UIPopupRequest.Default(
+        UIPopupRequest req = UIPopupRequest.Default(
             title: ResolveText(row.choiceName),
             message: ResolveText(row.description),
             onPrimary: () => ConfirmSelection(row),
-            onCancel: () => { },
+            onCancel: () =>
+            {
+               // 선택지 팝업 취소(반환) 시 세이브
+                if (SaveManager.Instance != null)
+                {
+                    SaveManager.Instance.AutoSaveByBranch("선택지 취소");
+                }
+            },
             subMessage: ResolveText(row.effectDescription),
             previewImageId: "EventGame00_img_halftime",
             showCancel: true,
             primaryKind: UIPopupRequest.PrimaryButtonKind.Confirm
         );
 
-        UIManager.Instance.ShowPopup(req);
+        // UIManager가 있으면 UIManager 경유, 없으면(토너먼트 씬) 직접 생성
+        if (UIManager.Instance != null)
+        {
+            UIManager.Instance.ShowPopup(req);
+        }
+        else
+        {
+            if (UIManager.Instance == null) // 싱글톤이라 없으면 안됨. 없으면 뭔가 잘못된 거임 혼남.
+            {
+                Debug.LogWarning("[TournamentHalfTimeSelectionUI] UIManager.Instance가 없어 직접 팝업을 생성합니다.");
+            }
+            ShowPopupDirect(req);
+        }
+    }
+
+    // UIManager 없이 팝업을 직접 생성 (토너먼트 씬 전용)
+    private void ShowPopupDirect(UIPopupRequest req)
+    {
+        if (_popupPrefab == null || _popupParent == null)
+        {
+            Debug.LogWarning("[TournamentHalfTimeSelectionUI] _popupPrefab 또는 _popupParent가 연결되지 않았습니다.");
+            return;
+        }
+
+        UIPopup popup = Instantiate(_popupPrefab, _popupParent, false);
+        popup.transform.SetAsLastSibling();
+        popup.Init();
+        popup.Setup(req);
+        popup.Open();
     }
 
     private void ConfirmSelection(HalftimeSelectRow row)
@@ -211,7 +252,7 @@ public class TournamentHalfTimeSelectionUI : MonoBehaviour
             else
             {
                 MoneyManager.Instance.TrySpendGold(-amount);
-            }    
+            }
         }
         else if (stat == PlayerStat.Fame)
         {

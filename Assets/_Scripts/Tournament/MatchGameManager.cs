@@ -277,12 +277,12 @@ public class MatchGameManager : MonoBehaviour
         WriteLog(ApplyAnnouncementBold("작전타임 종료"));
         _isWaitingHalfTime = false;
 
+        MoveToStage(_halfTimeNextStage); // 먼저 스테이지 이동 후 세이브
+
         if (SaveManager.Instance != null)
         {
             SaveManager.Instance.AutoSaveByBranch("하프타임 선택 후");
         }
-
-        MoveToStage(_halfTimeNextStage);
     }
 
     private void MoveToStage(int stageIndex)
