@@ -8,6 +8,8 @@ using UnityEngine.InputSystem;
 public class SoundManager : Singleton<SoundManager>
 {
     private const int UiTouchSfxId = 201;
+    private const int StatUpSfxId = 206;
+    private const int StatExpUpSfxId = 207;
     private const float UiTouchSuppressDuration = 0.05f;
 
     private static readonly int[] DefaultPreloadAudioIds =
@@ -34,6 +36,8 @@ public class SoundManager : Singleton<SoundManager>
     private bool _preloadRequested;
     private int _pendingUiTouchFrame = -1;
     private int _touchSuppressFrame = -1;
+    private int _statUpSfxFrame = -1;
+    private int _statExpUpSfxFrame = -1;
     private float _touchSuppressUntilTime = -1f;
 
     private float lastEffectVolume = 1f;
@@ -187,6 +191,16 @@ public class SoundManager : Singleton<SoundManager>
         _effectSource.PlayOneShot(clip);
     }
 
+    public void PlayStatUpSfx()
+    {
+        PlayDedupedSfx(StatUpSfxId, ref _statUpSfxFrame);
+    }
+
+    public void PlayStatExpUpSfx()
+    {
+        PlayDedupedSfx(StatExpUpSfxId, ref _statExpUpSfxFrame);
+    }
+
     public void PlayBGM(int clipId)
     {
         if (clipId <= 0) return;
@@ -305,6 +319,15 @@ public class SoundManager : Singleton<SoundManager>
 
         _touchSuppressFrame = Time.frameCount;
         _touchSuppressUntilTime = Time.unscaledTime + UiTouchSuppressDuration;
+    }
+
+    private void PlayDedupedSfx(int clipId, ref int lastPlayedFrame)
+    {
+        if (lastPlayedFrame == Time.frameCount)
+            return;
+
+        lastPlayedFrame = Time.frameCount;
+        PlayEffect(clipId);
     }
 
     private static bool IsUiPointerReleasedThisFrame()

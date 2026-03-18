@@ -30,6 +30,7 @@ public static class StudentFactory
         {
             id = _nextStudentId++,
             studentName = studentName,
+            positionId = position.id,
             positionName = position.positionName,
             grade = grade,
             height = bodyInfo.height,
@@ -44,7 +45,6 @@ public static class StudentFactory
 
         GenerateStats(student, grade); // 학년 기반으로 기본 스탯 생성 및 할당
         GeneratePotential(student, position.id); // 포지션 기반 잠재력 생성
-        // GenerateTrust(student, grade);
 
         student.condition = Student.ClampCondition(student.mental + 20);
 
@@ -276,17 +276,4 @@ public static class StudentFactory
 
         _isColorInitialized = true;
     }
-
-    // private static void GenerateTrust(Student student, int grade)
-    // {
-    //     var table = CachedSOData.Get<StudentTrustStartTableSO>();
-    //     foreach (var row in table.Rows)
-    //     {
-    //         if (row.grade == grade)
-    //         {
-    //             student.trust = _random.Next(row.minTrust, row.maxTrust + 1);
-    //             return;
-    //         }
-    //     }
-    // }
 }

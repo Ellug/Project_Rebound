@@ -81,6 +81,7 @@ public class SavedStudentData
     // 기본 정보
     public int id;
     public string studentName;
+    public string positionId;
     public string positionName;
     public int grade;
 
@@ -98,6 +99,11 @@ public class SavedStudentData
     public int speed;
     public int jump;
     public int stamina;
+    public int shootExp;
+    public int speedExp;
+    public int jumpExp;
+    public int staminaExp;
+    public int mentalExp;
 
     // 잠재 능력
     public int potentialTier;
@@ -158,6 +164,7 @@ public class SavedMatchSimData
     public int progressStageIndex;                        // MatchGameStages.Default 배열 인덱스
     public List<SavedQuarterScore> quarterScores = new(); // 완료된 쿼터 점수 누적
     public List<string> logs = new();                     // 경기 로그
+    public List<SavedMatchStudentStatSnapshot> studentStatSnapshots = new(); // 경기 시작 시점 학생 스탯 스냅샷
 }
 
 [Serializable]
@@ -166,6 +173,17 @@ public class SavedQuarterScore
     public int quarter;
     public int myScore;
     public int opponentScore;
+}
+
+[Serializable]
+public class SavedMatchStudentStatSnapshot
+{
+    public int studentId;
+    public int mental;
+    public int shoot;
+    public int speed;
+    public int jump;
+    public int stamina;
 }
 
 [Serializable]

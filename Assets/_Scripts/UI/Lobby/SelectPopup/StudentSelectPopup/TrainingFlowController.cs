@@ -164,6 +164,7 @@ public class TrainingFlowController : MonoBehaviour
         {
             id = original.id,
             studentName = original.studentName,
+            positionId = original.positionId,
             positionName = original.positionName,
             grade = original.grade,
             height = original.height,
@@ -173,10 +174,14 @@ public class TrainingFlowController : MonoBehaviour
             speed = original.speed,
             jump = original.jump,
             stamina = original.stamina,
+            shootExp = original.shootExp,
+            speedExp = original.speedExp,
+            jumpExp = original.jumpExp,
+            staminaExp = original.staminaExp,
+            mentalExp = original.mentalExp,
             potential = original.potential,
             potential_tier = original.potential_tier,
             condition = original.condition,
-            // trust = original.trust
         };
     }
 

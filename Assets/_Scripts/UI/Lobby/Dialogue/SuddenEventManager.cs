@@ -177,8 +177,13 @@ public class SuddenEventManager : Singleton<SuddenEventManager>
         if (isPlayerStat) ApplyPlayerStat(targetStat, amount);
         else
         {
-            foreach (var student in targets) ApplyStudentStat(student, targetStat, amount);
+            bool statIncreased = false;
+            foreach (var student in targets)
+                statIncreased |= ApplyStudentStat(student, targetStat, amount);
+
             if (targets.Count > 0 && StudentManager.Instance != null) StudentManager.Instance.NotifyStudentModified(targets[0]);
+            if (statIncreased)
+                SoundManager.Instance?.PlayStatUpSfx();
         }
     }
 
@@ -189,17 +194,49 @@ public class SuddenEventManager : Singleton<SuddenEventManager>
         else if (statType == PlayerStat.Fame) { if (amount > 0) MoneyManager.Instance.AddReputation(amount); else MoneyManager.Instance.TrySpendReputation(-amount); }
     }
 
-    private void ApplyStudentStat(Student student, PlayerStat statType, int amount)
+    private bool ApplyStudentStat(Student student, PlayerStat statType, int amount)
     {
         switch (statType)
         {
-            case PlayerStat.Condition: student.condition = Student.ClampCondition(student.condition + amount); break;
-            case PlayerStat.Mental: student.mental += amount; break;
-            case PlayerStat.Shoot: student.shoot += amount; break;
-            case PlayerStat.Speed: student.speed += amount; break;
-            case PlayerStat.Jump: student.jump += amount; break;
-            case PlayerStat.Stamina: student.stamina += amount; break;
+            case PlayerStat.Condition:
+            {
+                int before = student.condition;
+                student.condition = Student.ClampCondition(student.condition + amount);
+                return student.condition > before;
+            }
+            case PlayerStat.Mental:
+            {
+                int before = student.mental;
+                student.mental += amount;
+                return student.mental > before;
+            }
+            case PlayerStat.Shoot:
+            {
+                int before = student.shoot;
+                student.shoot += amount;
+                return student.shoot > before;
+            }
+            case PlayerStat.Speed:
+            {
+                int before = student.speed;
+                student.speed += amount;
+                return student.speed > before;
+            }
+            case PlayerStat.Jump:
+            {
+                int before = student.jump;
+                student.jump += amount;
+                return student.jump > before;
+            }
+            case PlayerStat.Stamina:
+            {
+                int before = student.stamina;
+                student.stamina += amount;
+                return student.stamina > before;
+            }
         }
+
+        return false;
     }
 
     private void ShowEventTextOrDialogue(SuddenEventRow eventRow, List<Student> targets, Dictionary<string, string> textVars, bool fromDialogue)

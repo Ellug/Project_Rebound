@@ -33,6 +33,7 @@ public class MatchGameManager : MonoBehaviour
 
     private readonly List<QuarterScore> _quarterScores = new(4);
     private readonly List<string> _logs = new(64);  // 경기 종료 후 MatchResult.logs로 복사됨
+    private readonly Dictionary<int, StudentStatSnapshot> _studentStatSnapshots = new();
 
     private QuarterPodSimulator _quarterSimulator;
     private MatchContext _context;
@@ -42,6 +43,16 @@ public class MatchGameManager : MonoBehaviour
     private bool _isWaitingHalfTime;                     // 하프타임 선택 대기 중
     private int _halfTimeNextStage;                      // 하프타임 완료 후 이동할 스테이지
     private int _progressStageIndex;                     // MatchGameStages.Default 배열 인덱스
+    private bool _hasStudentSnapshot;
+
+    private struct StudentStatSnapshot
+    {
+        public int mental;
+        public int shoot;
+        public int speed;
+        public int jump;
+        public int stamina;
+    }
 
     // MatchGameStages.Default의 래퍼: 스테이지 배열을 읽기 전용으로 노출
     private static IReadOnlyList<string> ProgressStages => MatchGameStages.Default;
@@ -55,6 +66,8 @@ public class MatchGameManager : MonoBehaviour
 
     void OnDestroy()
     {
+        RestoreStudentStatsFromSnapshot();
+
         if (_halfTimeSelectionUi != null)
             _halfTimeSelectionUi.OnSelectionMade -= HandleHalfTimeSelection;
     }
@@ -66,6 +79,8 @@ public class MatchGameManager : MonoBehaviour
             WriteSystemLog("StartMatch 입력이 유효하지 않습니다.");
             return;
         }
+
+        CaptureStudentStatSnapshot();
 
         List<Student> field = BuildFieldPlayers();
         List<Student> bench = BuildBenchPlayers(field);
@@ -173,6 +188,8 @@ public class MatchGameManager : MonoBehaviour
 
     public void AbortCurrentMatch()
     {
+        RestoreStudentStatsFromSnapshot();
+
         _isMatchRunning = false;
         _isWaitingHalfTime = false;
         _halfTimeNextStage = 0;
@@ -302,6 +319,7 @@ public class MatchGameManager : MonoBehaviour
         if (!_isMatchRunning)
             return;
 
+        RestoreStudentStatsFromSnapshot();
         _isMatchRunning = false;
 
         string winnerTeamName = ResolveWinnerTeamName();
@@ -502,6 +520,23 @@ public class MatchGameManager : MonoBehaviour
             logs = new List<string>(_logs),
         };
 
+        if (!_hasStudentSnapshot)
+            CaptureStudentStatSnapshot();
+
+        foreach (KeyValuePair<int, StudentStatSnapshot> pair in _studentStatSnapshots)
+        {
+            StudentStatSnapshot snapshot = pair.Value;
+            data.studentStatSnapshots.Add(new SavedMatchStudentStatSnapshot
+            {
+                studentId = pair.Key,
+                mental = snapshot.mental,
+                shoot = snapshot.shoot,
+                speed = snapshot.speed,
+                jump = snapshot.jump,
+                stamina = snapshot.stamina
+            });
+        }
+
         foreach (QuarterScore qs in _quarterScores)
         {
             data.quarterScores.Add(new SavedQuarterScore
@@ -548,6 +583,7 @@ public class MatchGameManager : MonoBehaviour
         }
 
         // MatchContext 복원 — 선수 데이터는 StudentManager에서 재조회
+        RestoreStudentStatSnapshotFromSaveData(data);
         List<Student> field = BuildFieldPlayers();
         List<Student> bench = BuildBenchPlayers(field);
         int currentDay = GameManager.Instance != null ? GameManager.Instance.DayIndex : 1;
@@ -572,5 +608,100 @@ public class MatchGameManager : MonoBehaviour
         _matchGameUi.SetMatchContextImage(DefaultMatchImageId);
 
         Debug.Log($"[MatchGameManager] 경기 복원 완료 — 스테이지 {_progressStageIndex}, 쿼터 {_quarterScores.Count}개 복원");
+    }
+
+    private void RestoreStudentStatSnapshotFromSaveData(SavedMatchSimData data)
+    {
+        _studentStatSnapshots.Clear();
+        _hasStudentSnapshot = false;
+
+        if (data?.studentStatSnapshots != null && data.studentStatSnapshots.Count > 0)
+        {
+            foreach (SavedMatchStudentStatSnapshot saved in data.studentStatSnapshots)
+            {
+                if (saved == null) continue;
+
+                _studentStatSnapshots[saved.studentId] = new StudentStatSnapshot
+                {
+                    mental = saved.mental,
+                    shoot = saved.shoot,
+                    speed = saved.speed,
+                    jump = saved.jump,
+                    stamina = saved.stamina
+                };
+            }
+
+            _hasStudentSnapshot = _studentStatSnapshots.Count > 0;
+            return;
+        }
+
+        // 구버전 세이브 호환: 스냅샷 필드가 없으면 현재값을 기준으로 캡처
+        CaptureStudentStatSnapshot();
+    }
+
+    private void CaptureStudentStatSnapshot()
+    {
+        _studentStatSnapshots.Clear();
+        _hasStudentSnapshot = false;
+
+        if (StudentManager.Instance == null || StudentManager.Instance.Students == null)
+            return;
+
+        foreach (Student student in StudentManager.Instance.Students)
+        {
+            if (student == null) continue;
+
+            _studentStatSnapshots[student.id] = new StudentStatSnapshot
+            {
+                mental = student.mental,
+                shoot = student.shoot,
+                speed = student.speed,
+                jump = student.jump,
+                stamina = student.stamina
+            };
+        }
+
+        _hasStudentSnapshot = _studentStatSnapshots.Count > 0;
+    }
+
+    private void RestoreStudentStatsFromSnapshot()
+    {
+        if (!_hasStudentSnapshot)
+            return;
+
+        if (StudentManager.Instance == null || StudentManager.Instance.Students == null)
+        {
+            _studentStatSnapshots.Clear();
+            _hasStudentSnapshot = false;
+            return;
+        }
+
+        bool hasModified = false;
+        foreach (Student student in StudentManager.Instance.Students)
+        {
+            if (student == null) continue;
+            if (!_studentStatSnapshots.TryGetValue(student.id, out StudentStatSnapshot snapshot))
+                continue;
+
+            if (student.mental != snapshot.mental ||
+                student.shoot != snapshot.shoot ||
+                student.speed != snapshot.speed ||
+                student.jump != snapshot.jump ||
+                student.stamina != snapshot.stamina)
+            {
+                student.mental = snapshot.mental;
+                student.shoot = snapshot.shoot;
+                student.speed = snapshot.speed;
+                student.jump = snapshot.jump;
+                student.stamina = snapshot.stamina;
+                hasModified = true;
+            }
+        }
+
+        if (hasModified && StudentManager.Instance.Students.Count > 0)
+            StudentManager.Instance.NotifyStudentModified(StudentManager.Instance.Students[0]);
+
+        _studentStatSnapshots.Clear();
+        _hasStudentSnapshot = false;
     }
 }
