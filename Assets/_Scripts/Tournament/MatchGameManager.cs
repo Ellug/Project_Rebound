@@ -88,6 +88,9 @@ public class MatchGameManager : MonoBehaviour
 
         // 경기 시작 기본 이미지
         _matchGameUi.SetMatchContextImage(DefaultMatchImageId);
+        
+        SoundManager.Instance.PlayBGM(103);
+        SoundManager.Instance.PlayEffect(301);
 
         WriteLog(Divider);
         WriteLog($"{upTeam} VS {downTeam}");
@@ -182,6 +185,9 @@ public class MatchGameManager : MonoBehaviour
 
     private void BeginQuarter(int quarter)
     {
+        SoundManager.Instance.PlayBGM(103);
+        if (quarter > 1) SoundManager.Instance.PlayEffect(301);
+
         QuarterPodBeginResult beginResult = _quarterSimulator.BeginQuarter(_context, quarter);
         _activeQuarterSession = beginResult.session;
         _activeQuarterNumber = quarter;
@@ -202,6 +208,9 @@ public class MatchGameManager : MonoBehaviour
 
         // 쿼터 종료 이미지
         _matchGameUi.SetMatchContextImage(QuarterWhistleImageId);
+
+        SoundManager.Instance.PlayEffect(302);
+        SoundManager.Instance.FadeOutBGM(0.2f);
 
         // 쿼터별 결과 세이브
         if (SaveManager.Instance != null)

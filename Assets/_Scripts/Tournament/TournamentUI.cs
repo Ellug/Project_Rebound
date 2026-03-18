@@ -32,6 +32,8 @@ public class TournamentUI : MonoBehaviour
     [SerializeField] private float _roundColumnSpacing = 160f;
     [SerializeField] private float _connectorXOffset = 64f;
 
+    private bool _hasPlayedFinalBracketSfx;
+
     // 단일 라운드 입력을 다중 라운드 렌더러 포맷으로 감싸 전달
     public void RenderRound(IReadOnlyList<TournamentMatchViewData> matchups, string mySchoolName)
     {
@@ -58,6 +60,19 @@ public class TournamentUI : MonoBehaviour
 
         _roundListPanel.SetActive(!isFinalRound);
         _focusedMatchPanel.SetActive(isFinalRound);
+
+        if (isFinalRound)
+        {
+            if (!_hasPlayedFinalBracketSfx)
+            {
+                SoundManager.Instance.PlayEffect(305);
+                _hasPlayedFinalBracketSfx = true;
+            }
+        }
+        else
+        {
+            _hasPlayedFinalBracketSfx = false;
+        }
 
         if (isFinalRound)
         {

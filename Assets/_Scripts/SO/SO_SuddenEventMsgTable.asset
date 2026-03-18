@@ -220,7 +220,7 @@ MonoBehaviour:
   - iD: diag_000001
     messageIndex: index_017
     messageDialogue: text_diag_000001_019
-    next: index_019
+    next: index_018
     isChoice: 0
     choice1Dialogue: 
     choice1Next: 
@@ -232,7 +232,7 @@ MonoBehaviour:
   - iD: diag_000001
     messageIndex: index_018
     messageDialogue: text_diag_000001_020
-    next: index_020
+    next: index_019
     isChoice: 1
     choice1Dialogue: 
     choice1Next: 
@@ -244,7 +244,7 @@ MonoBehaviour:
   - iD: diag_000001
     messageIndex: index_019
     messageDialogue: text_diag_000001_021
-    next: index_021
+    next: index_020
     isChoice: 0
     choice1Dialogue: 
     choice1Next: 
@@ -256,7 +256,7 @@ MonoBehaviour:
   - iD: diag_000001
     messageIndex: index_020
     messageDialogue: text_diag_000001_022
-    next: index_022
+    next: index_021
     isChoice: 0
     choice1Dialogue: 
     choice1Next: 
@@ -268,7 +268,7 @@ MonoBehaviour:
   - iD: diag_000001
     messageIndex: index_021
     messageDialogue: text_diag_000001_023
-    next: index_023
+    next: index_022
     isChoice: 0
     choice1Dialogue: 
     choice1Next: 
@@ -280,7 +280,7 @@ MonoBehaviour:
   - iD: diag_000001
     messageIndex: index_022
     messageDialogue: text_diag_000001_024
-    next: index_024
+    next: index_023
     isChoice: 0
     choice1Dialogue: 
     choice1Next: 
@@ -292,7 +292,7 @@ MonoBehaviour:
   - iD: diag_000001
     messageIndex: index_023
     messageDialogue: text_diag_000001_025
-    next: index_025
+    next: index_024
     isChoice: 0
     choice1Dialogue: 
     choice1Next: 
@@ -844,7 +844,7 @@ MonoBehaviour:
   - iD: diag_000005
     messageIndex: index_001
     messageDialogue: text_diag_000005_001
-    next: index_002
+    next: 
     isChoice: 1
     choice1Dialogue: text_diag_000005_002
     choice1Next: index_002
@@ -2352,10 +2352,10 @@ MonoBehaviour:
     choice2Next: 
     choice3Dialogue: 
     choice3Next: 
-    suddenEvent: event_000001
+    suddenEvent: event_000010
   - iD: diag_200001
     messageIndex: index_000
-    messageDialogue: text_diag_200000_000
+    messageDialogue: text_diag_200001_000
     next: END
     isChoice: 0
     choice1Dialogue: 

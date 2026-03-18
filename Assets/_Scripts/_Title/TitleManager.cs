@@ -31,6 +31,8 @@ public class TitleManager : MonoBehaviour
             SaveManager.Instance.DeleteCurrentRunIfMarked();
         }
 
+        SoundManager.Instance.PlayBGM(101);
+
         // 테이블 로드 완료 후 감독 노드 시스템 초기화
         HeadCoachTableInitializer.Init();
 
@@ -53,6 +55,8 @@ public class TitleManager : MonoBehaviour
 
     public void OnClickStartButton()
     {
+        SoundManager.Instance.PlayEffect(204);
+
         if (!SaveManager.Instance.CreateNewGameSlot("기본 학교"))   // 새 게임 시작 시 빈 슬롯 자동 할당
         {
             // 슬롯 생성 실패 시 팝업 표시 후 씬 전환 차단

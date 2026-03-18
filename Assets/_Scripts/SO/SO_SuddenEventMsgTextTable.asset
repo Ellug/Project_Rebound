@@ -21,10 +21,10 @@ MonoBehaviour:
     dialogue: '?'
   - iD: text_diag_000001_002
     speaker: player
-    dialogue: "\uC6B4\uB3D9\uC7A5 \uB3CC\uACE0 \uC2F6\uB0D0"
+    dialogue: "\uC65C"
   - iD: text_diag_000001_003
     speaker: student
-    dialogue: "\uC544 \uC65C\uC694;;"
+    dialogue: "\uADF8\uAC8C..."
   - iD: text_diag_000001_004
     speaker: student
     dialogue: "\uC800 \uC624\uB298 \uC57C\uC790 \uBABB \uD560 \uAC70 \uAC19\uC544\uC694."
@@ -69,7 +69,7 @@ MonoBehaviour:
     dialogue: "\uB135!"
   - iD: text_diag_000001_018
     speaker: choice
-    dialogue: "\uC6B0\uB9AC \uCE5C\uAD6C\uAC00 \uAFC8\uC774 \uC544\uC8FC \uD06C\uAD6C\uB098."
+    dialogue: "\uC6B0\uB9AC \uCE5C\uAD6C\uAC00 \uAFC8\uC774 \uC544\uC8FC \uD06C\uAD6C\uB098!"
   - iD: text_diag_000001_019
     speaker: student
     dialogue: "\uADF8\uB7FC\uC694!"
@@ -110,7 +110,7 @@ MonoBehaviour:
       \uC120\uACE0)"
   - iD: text_diag_000002_000
     speaker: student
-    dialogue: "\uAC10\uB3C5\uB2D8.. \uC800 \uC624\uB298 \uD6C8\uB828 \uBABB \uAC00\uC694"
+    dialogue: "\uAC10\uB3C5\uB2D8.. \uC800 \uC624\uB298 \uD6C8\uB828 \uBABB \uAC00\uC694."
   - iD: text_diag_000002_001
     speaker: player
     dialogue: "\uC0AC\uC720."
@@ -146,7 +146,7 @@ MonoBehaviour:
     dialogue: "\uAC10\uB3C5\uB2D8 \uCCB4\uB2E8\uC2E4 \uAE30\uAD6C \uC81C\uAC00 \uACE0\uCCE4\uC5B4\uC694!!"
   - iD: text_diag_000003_001
     speaker: player
-    dialogue: "\uC624 \uAE30\uD2B9\uD558\uB124?"
+    dialogue: "\uC624 \uB300\uB2E8\uD55C\uB370?"
   - iD: text_diag_000003_002
     speaker: player
     dialogue: "\uADFC\uB370 \uC65C \uBD88\uC548\uD558\uC9C0?"
@@ -179,7 +179,7 @@ MonoBehaviour:
     dialogue: "...\uB124?"
   - iD: text_diag_000003_012
     speaker: student
-    dialogue: "\uC77C\uC790 \uC544\uB2C8\uC694?"
+    dialogue: "\uC77C\uC790 \uC544\uB2C8\uC5D0\uC694?"
   - iD: text_diag_000003_013
     speaker: player
     dialogue: "\uB0B4\uC77C\uAE4C\uC9C0 \uBC18\uC131\uBB38 \uC368\uC11C \uC81C\uCD9C\uD574\uB77C."
@@ -194,8 +194,8 @@ MonoBehaviour:
     dialogue: "\uC624 \uB4DC\uB514\uC5B4? \uB369\uD06C \uAC00\uB0D0?"
   - iD: text_diag_000004_002
     speaker: student
-    dialogue: "\uB124!! \uADFC\uB370 \uB9BC \uC7A1\uACE0 \uB0B4\uB824\uC624\uB2E4\uAC00
-      \uACE8\uB300 \uD754\uB4E4\uB838\uC74C\uC694\u314B\u314B"
+    dialogue: "\uB124!! \uADFC\uB370 \uB9BC \uC7A1\uACE0 \uB0B4\uB824\uC624\uB2E4\uAC00\\n\uACE8\uB300
+      \uD754\uB4E4\uB838\uC74C\uC694\u314B\u314B"
   - iD: text_diag_000004_003
     speaker: player
     dialogue: "\uC544"
@@ -267,29 +267,29 @@ MonoBehaviour:
     dialogue: "\uC694\uC998 \uD3FC \uC62C\uB790\uC73C\uB2C8\uAE4C \uBD10\uC900\uB2E4."
   - iD: text_diag_000005_010
     speaker: student
-    dialogue: "\uCF54\uCE58\uB2D8 \uC9F1"
+    dialogue: "\uAC10\uB3C5\uB2D8 \uC9F1"
   - iD: text_diag_000005_011
     speaker: choice
     dialogue: "\uC65C?"
   - iD: text_diag_000005_012
     speaker: player
-    dialogue: "\uC5D0\uC774 \uD32C \uC11C\uBE44\uC2A4\uC8E0~ \uAC00\uB3C4 \uB418\uC8E0?"
+    dialogue: "\uC5D0\uC774, \uD32C \uC11C\uBE44\uC2A4\uC8E0~ \uAC00\uB3C4 \uB418\uC8E0?"
   - iD: text_diag_000005_013
     speaker: student
-    dialogue: "\uD480\uC5B4\uC9C0\uC9C0 \uB9C8\uB77C."
+    dialogue: "\uAC00\uB3C4 \uB418\uB294\uB370, \uC2E4\uC218 \uD558\uC9C0 \uB9C8\uB77C."
   - iD: text_diag_000005_014
     speaker: player
     dialogue: "\uC2E4\uC218\uD558\uBA74 \uADF8\uAC70 \uB9CC\uD07C \uCABD\uD314\uB9B0\uAC8C
       \uC5B4\uB528\uB0D0?"
   - iD: text_diag_000005_015
     speaker: player
-    dialogue: "\uD56D\uC0C1 \uC2E4\uC804\uAC19\uC774, \uC54C\uC9C0?"
+    dialogue: "\uD56D\uC0C1 \uC2E4\uC804\uAC19\uC774. \uC54C\uC9C0?"
   - iD: text_diag_000005_016
     speaker: student
     dialogue: "\uC5D0\uC774, \uAC71\uC815 \uB9C8\uC138\uC694!"
   - iD: text_diag_000005_017
     speaker: student
-    dialogue: "\uC800 \uCEE8\uB514\uC158 \uCD5C\uC0C1\uC784!"
+    dialogue: "\uC800 \uC5F0\uC2B5 \uC5C4\uCCAD \uD588\uC5B4\uC694!"
   - iD: text_diag_000005_018
     speaker: choice
     dialogue: "\uADF8\uB798"
@@ -316,7 +316,7 @@ MonoBehaviour:
     dialogue: "\uC800\uBC88\uC5D0 \uD6C8\uB828 \uB3C4\uB9DD\uCE5C\uAC70"
   - iD: text_diag_000005_026
     speaker: player
-    dialogue: "\uADF8\uAC70 \uB54C\uBB38\uC774\uC5C8\uB0D0?!"
+    dialogue: "\uADF8\uAC70 \uB54C\uBB38\uC774\uC5C8\uB0D0?"
   - iD: text_diag_000005_027
     speaker: player
     dialogue: "\uC65C \uB2F5\uC774 \uC5C6\uB0D0?"
@@ -325,10 +325,10 @@ MonoBehaviour:
     dialogue: "\uB300\uB2F5"
   - iD: text_diag_000006_000
     speaker: student
-    dialogue: "\uC324 \uC790\uC694?"
+    dialogue: "\uAC10\uB3C5\uB2D8... \uC8FC\uBB34\uC138\uC694?"
   - iD: text_diag_000006_001
     speaker: player
-    dialogue: "1\uC2DC\uC57C \uC778\uB9C8. \uC65C."
+    dialogue: "\uC9C0\uAE08 \uC0C8\uBCBD 1\uC2DC\uB2E4. \uC65C."
   - iD: text_diag_000006_002
     speaker: student
     dialogue: "\uC800 \uC544\uBB34\uB9AC \uD574\uB3C4 \uC548 \uB290\uB294 \uAC83
@@ -344,14 +344,13 @@ MonoBehaviour:
     dialogue: "\uC57C, \uC2AC\uB7A8\uB369\uD06C \uC548 \uBD24\uB0D0?"
   - iD: text_diag_000006_006
     speaker: student
-    dialogue: "...\uC324 \uADF8 \uB9CC\uD654 90\uB144\uB300 \uAC70\uC796\uC544\uC694;;"
+    dialogue: "\uADF8 \uB9CC\uD654 90\uB144\uB300 \uAC70\uC796\uC544\uC694;;"
   - iD: text_diag_000006_007
     speaker: player
     dialogue: "...\uADF8\uAC8C \uC911\uC694\uD55C\uAC8C \uC544\uB2C8\uACE0."
   - iD: text_diag_000006_008
     speaker: player
-    dialogue: "\uB2E8\uB150\uD558\uBA74, \uADF8\uB54C \uC2DC\uD569\uC774 \uB05D\uB098\uB294
-      \uAC70\uB2E4."
+    dialogue: "\uB2E8\uB150\uD558\uBA74, \uC804\uBD80 \uB05D\uB098\uB294 \uAC70\uB2E4."
   - iD: text_diag_000006_009
     speaker: player
     dialogue: "\uB0B4\uC77C \uC77C\uCC0D \uC640\uB77C. \uD2B9\uD6C8\uC774\uB2E4."
@@ -376,8 +375,8 @@ MonoBehaviour:
       \uC544\uB2C8\uB2E4."
   - iD: text_diag_000006_016
     speaker: player
-    dialogue: "\uB108\uB294, \uACBD\uAE30 \uC804\uCCB4\uB97C \uBCF4\uB294 \uB208\uC774
-      \uC788\uB2E4."
+    dialogue: "\uB108\uB294 \uACBD\uAE30 \uC804\uCCB4\uB97C \uBCF4\uB294 \uB208\uC774
+      \uC788\uC5B4."
   - iD: text_diag_000006_017
     speaker: player
     dialogue: "\uD3EC\uAE30\uD558\uC9C0 \uB9C8\uB77C."
@@ -405,7 +404,7 @@ MonoBehaviour:
     dialogue: "\uC990\uAC81\uB0D0\uACE0. \uB18D\uAD6C\uD560 \uB54C."
   - iD: text_diag_000006_025
     speaker: student
-    dialogue: "...\uB124. \uC990\uAC70\uC6CC\uC694."
+    dialogue: "\uB124. \uC990\uAC70\uC6CC\uC694."
   - iD: text_diag_000006_026
     speaker: student
     dialogue: "\uC5C4\uCCAD"
@@ -424,7 +423,7 @@ MonoBehaviour:
       \uCD94\uC5B5\uC774"
   - iD: text_diag_000006_031
     speaker: player
-    dialogue: "\uB9C8\uC74C\uC18D\uC5D0 \uB0A8\uC544 \uC788\uC73C\uB2C8\uAE4C"
+    dialogue: "\uB9C8\uC74C\uC18D\uC5D0 \uB0A8\uC544 \uC788\uC73C\uB2C8\uAE4C."
   - iD: text_diag_000006_032
     speaker: student
     dialogue: "....\uCF54\uCE58\uB2D8"
@@ -445,8 +444,8 @@ MonoBehaviour:
     dialogue: "\uD639\uC2DC \uBAA8\uB974\uC9C0?"
   - iD: text_diag_000006_038
     speaker: player
-    dialogue: "\uB108\uAC00 \uC8FC\uC804\uC73C\uB85C \uB4E4\uC5B4\uAC00\uC11C, \uAC8C\uC784\uC744
-      \uCE90\uB9AC\uD560\uC9C0\uB3C4?"
+    dialogue: "\uC990\uAC81\uAC8C \uB18D\uAD6C \uD558\uB2E4\uBCF4\uBA74\\n\uC2E4\uB825\uC774
+      \uD655 \uB298\uC9C0\uB3C4?"
   - iD: text_diag_000006_039
     speaker: student
     dialogue: "\uAC10\uC0AC\uD569\uB2C8\uB2E4. \uC120\uC0DD\uB2D8."
@@ -525,20 +524,20 @@ MonoBehaviour:
     dialogue: "\uB9D0\uC740 \uB05D\uAE4C\uC9C0 \uB4E4\uC5B4\uB77C."
   - iD: text_diag_000008_016
     speaker: player
-    dialogue: "\uAC54\uB124 \uC694\uC998 \uD1A0\uB108\uBA3C\uD2B8\uC5D0\uC11C \uBCF4\uC774\uC9C0\uB3C4
-      \uC54A\uB354\uB9CC"
+    dialogue: "\uC6B0\uB9AC\uD300 \uADF8\uBB3C\uC774 \uC548 \uD754\uB4E4\uB9B0\uB2E4\uB294\uAC74"
   - iD: text_diag_000008_017
     speaker: player
-    dialogue: "\uD5C8\uC811\uB4E4\uC774 \uC785\uB9CC \uC0B4\uC544\uC11C\uB294. \uCBE7."
+    dialogue: "\uC0C1\uB300 \uD300\uC774 \uC6B0\uB9AC \uC218\uBE44\uB97C \uBABB \uB6AB\uC5C8\uB2E4\uB294\uAC70
+      \uC544\uB2C8\uB0D0?"
   - iD: text_diag_000008_018
     speaker: student
-    dialogue: "...\uCF54\uCE58\uB2D8"
+    dialogue: "...\uC5B4"
   - iD: text_diag_000008_019
-    speaker: player
-    dialogue: "\uC65C"
-  - iD: text_diag_000008_020
     speaker: student
-    dialogue: "\uB098\uC774\uC2A4"
+    dialogue: "\uADF8\uB807\uB124\uC694?"
+  - iD: text_diag_000008_020
+    speaker: player
+    dialogue: "...\uC5D0\uD734."
   - iD: text_diag_000009_000
     speaker: student
     dialogue: "\uC324 \uCCB4\uC721\uAD00 \uBE44\uBC88 \uBC14\uAFE8\uC5B4\uC694?"
@@ -611,7 +610,7 @@ MonoBehaviour:
     dialogue: "\uC557 \uC544\uC544;;"
   - iD: text_diag_000009_023
     speaker: student
-    dialogue: "\uC5ED\uC2DC \uC2A4\uC2B9\uB2D8"
+    dialogue: "\uC5ED\uC2DC \uAC10\uB3C5\uB2D8"
   - iD: text_diag_000009_024
     speaker: student
     dialogue: "\uC9DC\uB9BF\uD574 \uC0C8\uB85C\uC6CC"
@@ -623,14 +622,15 @@ MonoBehaviour:
     dialogue: "\uC5D0\uD734."
   - iD: text_diag_000010_000
     speaker: student
-    dialogue: "\uC324 \uC601\uC5B4\uC324\uC774 \uB18D\uAD6C\uBD80 \uB2E4 \uB098\uC624\uB798\uC694"
+    dialogue: "\uAC10\uB3C5\uB2D8, \uC624\uB298 \uC601\uC5B4\uC324\uC774 \uB18D\uAD6C\uBD80
+      \uB2E4 \uB0A8\uC73C\uB798\uC694!"
   - iD: text_diag_000010_001
     speaker: player
     dialogue: "\uC65C? \uB610 \uC0AC\uACE0 \uCCE4\uB0D0?"
   - iD: text_diag_000010_002
     speaker: student
-    dialogue: "NBA \uC601\uC0C1 \uBCF4\uBA74\uC11C \uB3C5\uD574\uD558\uB798\uC694;;
-      \uBABB \uD558\uBA74 \uC9D1 \uBABB \uAC04\uB300\uC694"
+    dialogue: "\uC218\uC5C5 \uC2DC\uAC04\uC5D0 \uACBD\uAE30 \uBD84\uC11D\uD558\uB2E4
+      \uACB0\uB824\uC11C\\nNBA \uC601\uC0C1 \uBCF4\uACE0 \uB3C5\uD574 \uD574\uC624\uB798\uC694;;"
   - iD: text_diag_000010_003
     speaker: choice
     dialogue: "\u314B\u314B\u314B \uC57C \uC774\uAC74 \uAE30\uD68C\uB2E4."
@@ -639,13 +639,14 @@ MonoBehaviour:
     dialogue: "\uC804\uC220 \uACF5\uBD80\uB3C4 \uD558\uACE0 \uC88B\uB124."
   - iD: text_diag_000010_005
     speaker: student
-    dialogue: "\uD574\uC11D\uC774 \uC548 \uB418\uB294\uB370 \uBB34\uC2A8 \uC804\uC220\uC774\uC5D0\uC694\u3160\u3160"
+    dialogue: "\uD574\uC11D\uC774 \uC548 \uB418\uB294\uB370 \uBB34\uC2A8 \uC804\uC220\uC774\uC5D0\uC694\u3160\u3160\\n\uB2E4
+      \uD560 \uB54C \uAE4C\uC9C0 \uC9D1\uC5D0 \uBABB\uAC04\uB2E8 \uB9D0\uC774\uC5D0\uC694;;"
   - iD: text_diag_000010_006
     speaker: player
     dialogue: "\uBAA8\uB974\uBA74 'Pass'\uB77C\uACE0 \uD574. \uB18D\uAD6C \uC6A9\uC5B4\uC796\uC544."
   - iD: text_diag_000010_007
     speaker: student
-    dialogue: "\uC324 \uC9C4\uC9DC \uB3C4\uC6C0 1\uB3C4 \uC548 \uB3FC\uC694;;"
+    dialogue: "\uAC10\uB3C5\uB2D8 \uC9C4\uC9DC \uB3C4\uC6C0 1\uB3C4 \uC548 \uB3FC;;"
   - iD: text_diag_000010_008
     speaker: choice
     dialogue: "\uC5B4\uB514\uB0D0"
@@ -654,7 +655,8 @@ MonoBehaviour:
     dialogue: "\uB124?"
   - iD: text_diag_000010_010
     speaker: player
-    dialogue: "\uAC10\uD788 \uC5F0\uC2B5\uC2DC\uAC04\uC744 \uBE8F\uC5B4?"
+    dialogue: "\uAC10\uD788 \uB0B4 \uC81C\uC790\uB4E4 \uC5F0\uC2B5\uC2DC\uAC04\uC744
+      \uBE8F\uC5B4?"
   - iD: text_diag_000010_011
     speaker: student
     dialogue: "...\uB124?"

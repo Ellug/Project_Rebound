@@ -282,6 +282,11 @@ public class GameManager : Singleton<GameManager>
         InitializeEventManager();       // 5. EventManager 초기화
         _lobbyStoryFlowManager.CacheFirstWinterSchedule(); // 6. 첫 겨울방학 일정 캐싱
         SetInitialPhase();              // 7. 초기 페이즈 설정
+
+        // 로비 기본 BGM은 결과 처리 전에 먼저 세팅하고,
+        // 결과창 BGM(104/105)이 필요한 경우 해당 흐름에서 덮어쓴다.
+        SoundManager.Instance.PlayBGM(102);
+
         _lobbyMatchManager.HandlePendingResults(); // 8. 토너먼트/친선 결과 처리
         SyncFlowStateFromLobby();       // 10. GameFlowData 동기화 (이후 HasFlowState = true)
         RefreshLobbyTopInfo();          // 11. 로비 UI 갱신
