@@ -471,7 +471,24 @@ public class GameManager : Singleton<GameManager>
 
         // 금요일 종료 시 주말 분기 처리
         if (context.IsFriday)
+        {
+            DateTime tomorrow = context.CurrentDate.AddDays(1).Date;
+
+
+            if (IsFriendlyMatchConfirmed && FriendlyMatchDate.Date == tomorrow)
+            {
+                _flowData.HasPendingFriendlyMatch = true;
+                Debug.Log("내일 친선전이 진행됩니다");
+            }
+            else
+            {
+                _flowData.HasPendingFriendlyMatch = false;
+                Debug.Log("이번 주는 친선전이 없습니다. 일반 훈련을 진행합니다.");
+            }
+
             _lobbyWeekendManager.HandleFridayEnd();
+        }
+            
     }
 
     // AlwaysEventManager가 이벤트 활성화를 알릴 때 호출 — row.type / row.id 기반으로 분기
@@ -538,7 +555,7 @@ public class GameManager : Singleton<GameManager>
         FriendlyMatchDate = matchDate.Date;
         FriendlyOpponentName = string.IsNullOrWhiteSpace(opponentName) ? string.Empty : opponentName.Trim();
         IsFriendlyMatchConfirmed = true;
-        _flowData.HasPendingFriendlyMatch = true; // 금요일 이후 분기에서 친선전 팝업 띄우기 위함
+        _flowData.HasPendingFriendlyMatch = false; // 금요일 이후 분기에서 친선전 팝업 띄우기 위함
     }
 
     //친선경기 해제 

@@ -60,11 +60,6 @@ public class ChatChoiceBox : MonoBehaviour
         _messageData.SelectedChoiceIndex = index;
         RefreshVisualState();
 
-        ChatMessage myReply = new ChatMessage(MessageSenderType.Me, _messageData.Choices[index].Text);
-        string roomId = _parentRoom.CurrentRoomId;
-        string roomName = _parentRoom.CurrentRoomName;
-
-        MessengerManager.Instance.ReceiveMessage(roomId, roomName, myReply);
         _messageData.Choices[index].OnSelected?.Invoke();
     }
 

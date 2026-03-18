@@ -1,7 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class FriendlyMatchRunner : Singleton<FriendlyMatchRunner>
 {
@@ -20,12 +22,61 @@ public class FriendlyMatchRunner : Singleton<FriendlyMatchRunner>
 
     private IEnumerator ProcessNodeRoutine(string roomId, string roomName, string diagId, string nodeId, Dictionary<string, string> textVars)
     {
+        // =================================================================================
+        // 1. 대화 종료 및 시스템 메시지 출력 로직
+        // =================================================================================
         if (string.IsNullOrEmpty(nodeId) || nodeId == "EOS" || nodeId == "END" || nodeId == "-")
         {
             if (_skippedRooms.Contains(roomId)) _skippedRooms.Remove(roomId);
+
+            // 상대방이 수락했는지 여부와 선택한 날짜 가져오기
+            bool isAccepted = textVars != null && textVars.ContainsKey("{is_accepted}") && textVars["{is_accepted}"] == "true";
+            string dateChoice = (textVars != null && textVars.ContainsKey("{date_choice}")) ? textVars["{date_choice}"] : "";
+
+            //  시스템 메시지 띄우고 GameManager에 실제 예약 진행
+            if (isAccepted && !string.IsNullOrEmpty(dateChoice))
+            {
+                string sysText = $"{dateChoice}에 친선전 일정이 잡혔습니다.";
+                ChatMessage sysMsg1 = new ChatMessage(MessageSenderType.Them, sysText, MessageEventType.System);
+                MessengerManager.Instance.ReceiveMessage(roomId, roomName, sysMsg1);
+
+                // GameManager 연동: "3월 14일" 같은 텍스트를 파싱해서 DateTime으로 전달
+                if (GameManager.Instance != null)
+                {
+                    TurnManager tm = FindFirstObjectByType<TurnManager>();
+                    if (tm != null && tm.DateManager != null)
+                    {
+                        try
+                        {
+                            int currentYear = tm.DateManager.CurrentDate.Year;
+                            string[] parts = dateChoice.Split(new char[] { '월', '일' }, StringSplitOptions.RemoveEmptyEntries);
+                            if (parts.Length >= 2)
+                            {
+                                int m = int.Parse(parts[0].Trim());
+                                int d = int.Parse(parts[1].Trim());
+                                DateTime matchDate = new DateTime(currentYear, m, d);
+                                GameManager.Instance.ScheduleFriendlyMatch(matchDate, roomName);
+                            }
+                        }
+                        catch { Debug.LogWarning("[FriendlyMatchRunner] 날짜 파싱 실패. 형식을 확인해주세요."); }
+                    }
+                }
+            }
+
+            // 횟수 차감 시스템 메시지 출력
+            ChatMessage sysMsg2 = new ChatMessage(MessageSenderType.Them, "친선전 신청 횟수 -1", MessageEventType.System);
+            MessengerManager.Instance.ReceiveMessage(roomId, roomName, sysMsg2);
+
+            // 로비 UI 숫자 갱신 (선택 창은 이미 닫혔지만, 메인 로비나 인박스 등에서 새로고침 필요시)
+            var inbox = FindFirstObjectByType<MessengerInboxPopup>();
+            if (inbox != null) inbox.RefreshFriendlyMatchUI();
+
             yield break;
         }
 
+        // =================================================================================
+        // 2. 대화 노드 파싱
+        // =================================================================================
         var flowTable = CachedSOData.Get<FriendlyMatchScheduleMsgTableSO>();
         var textTable = CachedSOData.Get<FriendlyMatchScheduleMsgTextTableSO>();
         if (flowTable == null || textTable == null) yield break;
@@ -39,19 +90,6 @@ public class FriendlyMatchRunner : Singleton<FriendlyMatchRunner>
         MessageEventType eventType = MessageEventType.NormalText;
 
         var textRow = textTable.Rows.FirstOrDefault(r => r.id == row.messageDialogue);
-
-        // accept / decline 중 하나를 랜덤으로 뽑아서 출력
-        if (row.messageDialogue == "text_diag_schedule_accept")
-        {
-            var acceptRows = textTable.Rows.Where(r => r.type == "accept").ToList();
-            if (acceptRows.Count > 0) textRow = acceptRows[Random.Range(0, acceptRows.Count)];
-        }
-        else if (row.messageDialogue == "text_diag_schedule_decline")
-        {
-            var declineRows = textTable.Rows.Where(r => r.type == "decline").ToList();
-            if (declineRows.Count > 0) textRow = declineRows[Random.Range(0, declineRows.Count)];
-        }
-
         if (textRow != null)
         {
             messageText = textRow.dialogue;
@@ -61,7 +99,7 @@ public class FriendlyMatchRunner : Singleton<FriendlyMatchRunner>
             else if (speaker == "center")
             {
                 senderType = MessageSenderType.Them;
-                eventType = MessageEventType.System; // 중앙 정렬 시스템 메시지
+                eventType = MessageEventType.System;
             }
             else senderType = MessageSenderType.Them;
 
@@ -71,11 +109,27 @@ public class FriendlyMatchRunner : Singleton<FriendlyMatchRunner>
 
         bool isSkipping = _skippedRooms.Contains(roomId);
 
+        bool hasChoices = !string.IsNullOrEmpty(row.choice1Dialogue) && row.choice1Dialogue != "-";
+        if (branchType == 3 && !hasChoices)
+        {
+            branchType = 0;
+        }
+
+        // =================================================================================
         // 분기 3: 선택지
+        // =================================================================================
         if (branchType == 3)
         {
+            if (!string.IsNullOrEmpty(messageText) && messageText != "-")
+            {
+                ChatMessage preNormalMsg = new ChatMessage(senderType, messageText, eventType);
+                MessengerManager.Instance.ReceiveMessage(roomId, roomName, preNormalMsg);
+                if (!isSkipping) yield return new WaitForSeconds(_typingDelay);
+            }
+
             if (isSkipping)
             {
+                if (textVars != null && textVars.ContainsKey("{date1}")) textVars["{date_choice}"] = textVars["{date1}"];
                 StartCoroutine(ProcessNodeRoutine(roomId, roomName, diagId, row.choice1Next, textVars));
                 yield break;
             }
@@ -99,7 +153,7 @@ public class FriendlyMatchRunner : Singleton<FriendlyMatchRunner>
                         OnSelected = () => {
                             choiceMade = true;
                             nextNodeToPlay = choiceNextId;
-                            // 내가 고른 날짜를 {date_choice}에 저장하여 다음 대사에서 출력되게 함
+                            // 내가 고른 날짜를 {date_choice}에 저장
                             if (textVars != null && textVars.ContainsKey($"{{date{choiceIdx}}}"))
                                 textVars["{date_choice}"] = textVars[$"{{date{choiceIdx}}}"];
                         }
@@ -116,56 +170,61 @@ public class FriendlyMatchRunner : Singleton<FriendlyMatchRunner>
 
             if (_skippedRooms.Contains(roomId) && !choiceMade)
             {
-                if (MessengerManager.Instance != null)
-                {
-                    var room = MessengerManager.Instance.GetRoom(roomId);
-                    if (room != null) room.HasUnread = false;
-                }
                 if (textVars != null && textVars.ContainsKey("{date1}")) textVars["{date_choice}"] = textVars["{date1}"];
-
-                choiceMsg.SelectedChoiceIndex = 0;
-                string autoReplyText = choiceMsg.Choices.Count > 0 ? choiceMsg.Choices[0].Text : "선택";
-                ChatMessage autoReply = new ChatMessage(MessageSenderType.Me, autoReplyText);
-                MessengerManager.Instance.ReceiveMessage(roomId, roomName, autoReply);
-
                 StartCoroutine(ProcessNodeRoutine(roomId, roomName, diagId, row.choice1Next, textVars));
             }
             else StartCoroutine(ProcessNodeRoutine(roomId, roomName, diagId, nextNodeToPlay, textVars));
         }
-        else // 일반 대화 및 확률 분기
+        // =================================================================================
+        // 분기 1: 확률 결과 판정 (수락/거절)
+        // =================================================================================
+        else if (branchType == 1)
         {
-            ChatMessage normalMsg = new ChatMessage(senderType, messageText, eventType);
-            MessengerManager.Instance.ReceiveMessage(roomId, roomName, normalMsg);
-
-            yield return new WaitUntil(() =>
-                (MessengerManager.Instance != null && MessengerManager.Instance.CurrentViewingRoomId == roomId) ||
-                _skippedRooms.Contains(roomId)
-            );
-
-            isSkipping = _skippedRooms.Contains(roomId);
-
-            if (isSkipping && MessengerManager.Instance != null)
+            // 1. 현재 노드의 대사 먼저 출력
+            if (!string.IsNullOrEmpty(messageText) && messageText != "-")
             {
-                var room = MessengerManager.Instance.GetRoom(roomId);
-                if (room != null) room.HasUnread = false;
+                ChatMessage normalMsg = new ChatMessage(senderType, messageText, eventType);
+                MessengerManager.Instance.ReceiveMessage(roomId, roomName, normalMsg);
+                if (!isSkipping) yield return new WaitForSeconds(_typingDelay);
             }
 
-            if (!isSkipping)
+            // 2. 확률 판정 후 수락/거절 텍스트 무작위 가져오기
+            bool isAccepted = Random.value > 0.5f; // 임시로 50% 수락 확률
+            if (textVars != null) textVars["{is_accepted}"] = isAccepted ? "true" : "false";
+
+            string typeToFetch = isAccepted ? "accept" : "decline";
+            var availableRows = textTable.Rows.Where(r => r.type == typeToFetch).ToList();
+
+            // 3. 수락/거절 대사 출력
+            if (availableRows.Count > 0)
             {
-                if (senderType == MessageSenderType.Them) yield return new WaitForSeconds(_typingDelay);
-                else yield return new WaitForSeconds(_typingDelay * 0.5f);
+                var randomTextRow = availableRows[Random.Range(0, availableRows.Count)];
+                string replyText = randomTextRow.dialogue;
+                if (textVars != null) foreach (var kvp in textVars) replyText = replyText.Replace(kvp.Key, kvp.Value);
+
+                ChatMessage replyMsg = new ChatMessage(MessageSenderType.Them, replyText, MessageEventType.NormalText);
+                MessengerManager.Instance.ReceiveMessage(roomId, roomName, replyMsg);
+
+                if (!isSkipping) yield return new WaitForSeconds(_typingDelay);
             }
 
-            string nextNodeToPlay = row.next;
-
-            // 확률 판정을 하여 수락 / 거절 결정
-            if (branchType == 1)
-            {
-                bool isAccepted = Random.value > 0.5f; // 50% 확률 (추후 명성치로 조절 가능)
-                nextNodeToPlay = isAccepted ? row.choice1Next : row.choice2Next;
-            }
-
+            // 4. 다음 노드로 넘어가기
+            string nextNodeToPlay = isAccepted ? row.choice1Next : row.choice2Next;
             StartCoroutine(ProcessNodeRoutine(roomId, roomName, diagId, nextNodeToPlay, textVars));
+        }
+        // =================================================================================
+        // 분기 0 또는 2: 일반 대화
+        // =================================================================================
+        else
+        {
+            if (!string.IsNullOrEmpty(messageText) && messageText != "-")
+            {
+                ChatMessage normalMsg = new ChatMessage(senderType, messageText, eventType);
+                MessengerManager.Instance.ReceiveMessage(roomId, roomName, normalMsg);
+                if (!isSkipping) yield return new WaitForSeconds(senderType == MessageSenderType.Them ? _typingDelay : _typingDelay * 0.5f);
+            }
+
+            StartCoroutine(ProcessNodeRoutine(roomId, roomName, diagId, row.next, textVars));
         }
     }
 }

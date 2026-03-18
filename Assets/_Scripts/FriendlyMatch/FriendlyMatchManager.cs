@@ -1,42 +1,43 @@
-﻿using System;
+﻿﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class FriendlyMatchManager : Singleton<FriendlyMatchManager>
 {
     public int MaxMonthlyCount = 3;
-    public int CurrentApplyCount { get; private set; } = 0;
 
+    private int _currentApplyCount = 0;
     private int _lastMonth = -1;
-    private bool _isEventHooked = false;
 
-    private void Start()
+    // [핵심] 횟수를 확인할 때마다 달이 바뀌었는지 무조건 먼저 체크합니다!
+    public int CurrentApplyCount
     {
-        HookDateEvent();
-    }
-
-    // DateManager의 날짜 변경 이벤트를 구독하여 달이 바뀌면 알아서 초기화
-    private void HookDateEvent()
-    {
-        if (_isEventHooked) return;
-
-        TurnManager tm = FindFirstObjectByType<TurnManager>();
-        if (tm != null && tm.DateManager != null)
+        get
         {
-            _lastMonth = tm.DateManager.CurrentDate.Month;
-            tm.DateManager.OnDateAdvanced += HandleDateAdvanced;
-            _isEventHooked = true;
+            CheckMonthlyReset();
+            return _currentApplyCount;
         }
     }
 
-    // 인게임 날짜가 하루 지날 때마다 자동으로 실행되는 함수
-    private void HandleDateAdvanced(DateTime newDate, int dayIndex)
+    private void CheckMonthlyReset()
     {
-        if (_lastMonth != newDate.Month)
+        TurnManager tm = FindFirstObjectByType<TurnManager>();
+        if (tm != null && tm.DateManager != null)
         {
-            _lastMonth = newDate.Month;
-            CurrentApplyCount = 0; // 달이 바뀌면 신청 횟수 0으로 자동 리셋
-            Debug.Log($"[FriendlyMatch] {newDate.Month}월이 되어 친선경기 신청 횟수가 리셋되었습니다.");
+            int currentMonth = tm.DateManager.CurrentDate.Month;
+
+            // 처음 체크할 때는 현재 달로 설정만 함
+            if (_lastMonth == -1)
+            {
+                _lastMonth = currentMonth;
+            }
+            // 달이 바뀌었다면 즉시 0으로 리셋!
+            else if (_lastMonth != currentMonth)
+            {
+                _lastMonth = currentMonth;
+                _currentApplyCount = 0;
+                Debug.Log($"[FriendlyMatch] {currentMonth}월이 되어 친선경기 신청 횟수가 리셋되었습니다.");
+            }
         }
     }
 
@@ -49,10 +50,9 @@ public class FriendlyMatchManager : Singleton<FriendlyMatchManager>
             return;
         }
 
-        HookDateEvent(); // 혹시 Start에서 연결 안 됐을 경우를 대비한 안전장치
         DateTime currentDate = tm.DateManager.CurrentDate;
 
-        // 1. 횟수 제한 체크
+        // 1. 횟수 제한 체크 (여기서 CurrentApplyCount를 부르며 자동으로 리셋 여부가 체크됨)
         if (CurrentApplyCount >= MaxMonthlyCount)
         {
             Debug.Log("이번 달 친선전 신청 횟수를 모두 소진했습니다.");
@@ -60,7 +60,7 @@ public class FriendlyMatchManager : Singleton<FriendlyMatchManager>
         }
 
         // 2. 횟수 차감 
-        CurrentApplyCount++;
+        _currentApplyCount++;
 
         // 3. 현재 인게임 날짜 기준으로 가장 가까운 토요일 3개
         List<DateTime> saturdays = new List<DateTime>();
@@ -79,10 +79,10 @@ public class FriendlyMatchManager : Singleton<FriendlyMatchManager>
         Dictionary<string, string> textVars = new Dictionary<string, string>
         {
             { "{school_choice}", schoolName },
-            { "{date1}", saturdays[0].ToString("M월 d일") },
-            { "{date2}", saturdays[1].ToString("M월 d일") },
-            { "{date3}", saturdays[2].ToString("M월 d일") },
-            { "{date_choice}", "" } // 유저가 누른 선택지 날짜가 들어갈 공간
+            { "{date1}", saturdays[0].ToString("M월 d") },
+            { "{date2}", saturdays[1].ToString("M월 d") },
+            { "{date3}", saturdays[2].ToString("M월 d") },
+            { "{date_choice}", "" }
         };
 
         // 5. 친선전 전용 대화 러너 실행

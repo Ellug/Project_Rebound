@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -193,6 +193,13 @@ public class LobbyMatchManager : MonoBehaviour
             return;
 
         string normalizedOpponent = NormalizeOpponentName(opponentName);
+
+        if (_turnManager != null)
+        {
+            _turnManager.SkipDays(2);
+            _gameManager.SyncFlowStateFromLobby();
+            _gameManager.RefreshLobbyTopInfo();
+        }
 
         _tournamentResultUI.ShowFriendlyResult(didWin, normalizedOpponent, FriendlyMatchWinRewardId);
     }
