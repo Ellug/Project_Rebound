@@ -12,10 +12,10 @@ public class CheckPanel : MonoBehaviour
     private LoadUI _parent;
     private bool _bound;
 
-    void Awake()
-    {
-        gameObject.SetActive(false);
-    }
+    //void Awake()
+    //{
+    //    gameObject.SetActive(false);
+    //}
 
     public void Open(int slotIndex, string playTime, LoadUI parent)
     {
@@ -27,7 +27,6 @@ public class CheckPanel : MonoBehaviour
             _fileNumText.text = $"FILE {slotIndex}: {playTime}";
         }
 
-        gameObject.SetActive(true);
         Bind();
     }
 
