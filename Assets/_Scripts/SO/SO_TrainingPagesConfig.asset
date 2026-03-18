@@ -15,7 +15,11 @@ MonoBehaviour:
   pages:
   - pageTitle: "\uD6C8\uB828 \uC120\uD0DD"
     commandIndices: e9030000ea030000eb030000ec030000
-    buttonPreviewImageIds: []
+    buttonPreviewImageIds:
+    - 
+    - 
+    - TrainingPopup01_img_01
+    - TrainingPopup01_img_02
     buttonBackgroundImageIds:
     - 
     - 
@@ -28,7 +32,10 @@ MonoBehaviour:
     - TrainingPopup04_img
   - pageTitle: "\uB2E8\uCCB4 \uD6C8\uB828"
     commandIndices: 4d0400004e0400004f040000
-    buttonPreviewImageIds: []
+    buttonPreviewImageIds:
+    - TrainingPopup02_img_01
+    - TrainingPopup02_img_02
+    - TrainingPopup02_img_03
     buttonBackgroundImageIds:
     - TrainingPopup03_img
     - TrainingPopup03_img
@@ -39,7 +46,11 @@ MonoBehaviour:
     - TrainingPopup04_img
   - pageTitle: "\uAC1C\uC778 \uD6C8\uB828"
     commandIndices: b1040000b2040000b3040000b4040000
-    buttonPreviewImageIds: []
+    buttonPreviewImageIds:
+    - TrainingPopup02_img_04
+    - TrainingPopup02_img_05
+    - TrainingPopup02_img_06
+    - TrainingPopup02_img_07
     buttonBackgroundImageIds:
     - TrainingPopup03_img
     - TrainingPopup03_img

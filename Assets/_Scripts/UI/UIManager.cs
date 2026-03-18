@@ -75,7 +75,7 @@ public class UIManager : Singleton<UIManager>
 
         ShowPopup(new UIPopupRequest
         {
-            Type = UIPopupRequest.PanelType.Default,
+            Type = UIPopupRequest.PanelType.Simple,
             Title = "게임 종료",
             Message = "게임을 종료하시겠습니까?",
             ShowCancel = true,
@@ -85,6 +85,8 @@ public class UIManager : Singleton<UIManager>
             AutoCloseOnCancel = true
         });
     }
+
+
 
     // UIPopupRequest 경로
     public UIPopup ShowPopup(UIPopupRequest request)

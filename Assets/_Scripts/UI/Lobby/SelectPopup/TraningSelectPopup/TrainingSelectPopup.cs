@@ -599,27 +599,22 @@ public class TrainingSelectPopup : UIPopup
 
     private string StatTextChange(TrainingStat result)
     {
-        System.Text.StringBuilder sb = new System.Text.StringBuilder();
+        List<string> parts = new List<string>();
 
         if (result.condition != 0)
-            sb.AppendLine($"컨디션 {(result.condition > 0 ? "+" : "")}{result.condition}");
-
+            parts.Add($"컨디션 {(result.condition > 0 ? "+" : "")}{result.condition}");
         if (result.shoot != 0)
-            sb.AppendLine($"슛 {(result.shoot > 0 ? "+" : "")}{result.shoot}");
-
+            parts.Add($"슛 {(result.shoot > 0 ? "+" : "")}{result.shoot}");
         if (result.speed != 0)
-            sb.AppendLine($"스피드 {(result.speed > 0 ? "+" : "")}{result.speed}");
-
+            parts.Add($"스피드 {(result.speed > 0 ? "+" : "")}{result.speed}");
         if (result.jump != 0)
-            sb.AppendLine($"점프 {(result.jump > 0 ? "+" : "")}{result.jump}");
-
+            parts.Add($"점프 {(result.jump > 0 ? "+" : "")}{result.jump}");
         if (result.stamina != 0)
-            sb.AppendLine($"체력 {(result.stamina > 0 ? "+" : "")}{result.stamina}");
-
+            parts.Add($"체력 {(result.stamina > 0 ? "+" : "")}{result.stamina}");
         if (result.mental != 0)
-            sb.AppendLine($"멘탈 {(result.mental > 0 ? "+" : "")}{result.mental}");
+            parts.Add($"멘탈 {(result.mental > 0 ? "+" : "")}{result.mental}");
 
-        return sb.ToString();
+        return string.Join(" / ", parts);
     }
     private void HandleFlowComplete()
     {

@@ -86,17 +86,15 @@ public static class TrainingPageBuilder
                     btnData = BuildActionButton(row);
                 }
 
-                // 인스펙터에서 입력한 이미지 ID 주입
+                // 인스펙터에서 입력한 이미지 ID 주입 (CSV icon이 없을 때 폴백용)
                 if (page.buttonPreviewImageIds != null && buttonIndex < page.buttonPreviewImageIds.Count)
                 {
                     string imageId = page.buttonPreviewImageIds[buttonIndex];
                     if (!string.IsNullOrEmpty(imageId))
-                    {
                         btnData.previewImageId = imageId;
-                    }
                 }
 
-                // 인스펙터에서 입력한 배경 이미지 ID 주입
+                // 인스펙터에서 입력한 배경 이미지 ID 주입 (CSV icon이 없을 때 폴백용)
                 if (page.buttonBackgroundImageIds != null && buttonIndex < page.buttonBackgroundImageIds.Count)
                 {
                     string bgImageId = page.buttonBackgroundImageIds[buttonIndex];
@@ -104,7 +102,7 @@ public static class TrainingPageBuilder
                         btnData.backgroundImageId = bgImageId;
                 }
 
-                // 인스펙터에서 입력한 결과 팝업 이미지 ID 주입
+                // 인스펙터에서 입력한 결과 팝업 이미지 ID 주입 (CSV icon이 없을 때 폴백용)
                 if (page.buttonResultImageIds != null && buttonIndex < page.buttonResultImageIds.Count)
                 {
                     string resultImageId = page.buttonResultImageIds[buttonIndex];
@@ -179,6 +177,7 @@ public static class TrainingPageBuilder
 
     private static TrainingButtonData BuildNavigateButton(GrowthCommandRow row, int targetPageIndex)
     {
+        string previewId = row.icon;
         return new TrainingButtonData
         {
             trainingName = row.name,
@@ -187,7 +186,9 @@ public static class TrainingPageBuilder
             conditionDelta = 0,
             navigateToPageIndex = targetPageIndex,
             trainingKey = $"category_{row.index}",
-            previewImageId = null,
+            previewImageId = previewId,
+            backgroundImageId = string.IsNullOrEmpty(previewId) ? null : previewId + "_bg",
+            resultImageId = string.IsNullOrEmpty(previewId) ? null : previewId + "_result",
             requiresStudentSelection = false,
             maxSelectCount = 0,
 
@@ -201,6 +202,7 @@ public static class TrainingPageBuilder
 
     private static TrainingButtonData BuildActionButton(GrowthCommandRow row)
     {
+        string previewId = row.icon;
         return new TrainingButtonData
         {
             trainingName = row.name,
@@ -209,9 +211,12 @@ public static class TrainingPageBuilder
             conditionDelta = row.conditionCost,
             navigateToPageIndex = -1,
             trainingKey = $"cmd_{row.index}",
-            previewImageId = null,
+            previewImageId = previewId,
+            backgroundImageId = string.IsNullOrEmpty(previewId) ? null : previewId + "_bg",
+            resultImageId = string.IsNullOrEmpty(previewId) ? null : previewId + "_result",
             requiresStudentSelection = row.target == GrowthCommandTarget.Individual,
             maxSelectCount = row.target == GrowthCommandTarget.Individual ? 1 : 0,
+            requiredFacilityLv = row.facilityLv,
 
             shootDelta = row.shoot,
             speedDelta = row.speed,
