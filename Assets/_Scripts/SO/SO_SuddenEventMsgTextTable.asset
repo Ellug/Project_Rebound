@@ -15,7 +15,7 @@ MonoBehaviour:
   _rows:
   - iD: text_diag_000001_000
     speaker: student
-    dialogue: "\uC324\uC324"
+    dialogue: "\uAC10\uB3C5\uB2D8"
   - iD: text_diag_000001_001
     speaker: player
     dialogue: '?'
@@ -27,7 +27,7 @@ MonoBehaviour:
     dialogue: "\uC544 \uC65C\uC694;;"
   - iD: text_diag_000001_004
     speaker: student
-    dialogue: "\uC324 \uC800 \uC624\uB298 \uC57C\uC790 \uBABB \uD560 \uAC70 \uAC19\uC544\uC694."
+    dialogue: "\uC800 \uC624\uB298 \uC57C\uC790 \uBABB \uD560 \uAC70 \uAC19\uC544\uC694."
   - iD: text_diag_000001_005
     speaker: player
     dialogue: "\uC0AC\uC720"
@@ -36,7 +36,7 @@ MonoBehaviour:
     dialogue: "\uC544 \uC788\uC5B4\uC694 \uADF8\uB7F0\uAC8C..."
   - iD: text_diag_000001_007
     speaker: student
-    dialogue: "\uC624\uB298\uB9CC \uC880 \uBD10\uC8FC\uC2DC\uBA74 \uC548\uB3FC\uC694?"
+    dialogue: "\uC624\uB298\uB9CC \uC880 \uBD10\uC8FC\uC138\uC694. \uB124?"
   - iD: text_diag_000001_008
     speaker: choice
     dialogue: "\uC798 \uB4E4\uC5B4."
@@ -87,7 +87,7 @@ MonoBehaviour:
     dialogue: "10\uBD84 \uC8FC\uB9C8!"
   - iD: text_diag_000001_024
     speaker: student
-    dialogue: "...\uADF8\uB7FC \uC57C\uC790 \uD558\uB7EC \uAC00\uBCF4\uACA0\uC2B5\uB2C8\uB2F7!"
+    dialogue: "...\uC774\uB9CC \uC57C\uC790 \uD558\uB7EC \uAC00\uBCF4\uACA0\uC2B5\uB2C8\uB2F7!"
   - iD: text_diag_000001_025
     speaker: player
     dialogue: 9
@@ -106,11 +106,11 @@ MonoBehaviour:
     dialogue: "\uBE44\uC2A4\uB4EC\uD574\uC9C8\uD14C\uB2E4."
   - iD: text_diag_000001_030
     speaker: player
-    dialogue: "(\uB300\uCDA9 \uC7A1\uD788\uBA74 \uC6B4\uB3D9\uC7A5 100\uBC14\uD034\uB77C\uB294
-      \uC120\uC5B8)"
+    dialogue: "(\uB300\uCDA9 \uB108\uB294 \uC7A1\uD788\uBA74 \uC6B4\uB3D9\uC7A5 100\uBC14\uD034\uB77C\uB294
+      \uC120\uACE0)"
   - iD: text_diag_000002_000
     speaker: student
-    dialogue: "\uC324.. \uC800 \uC624\uB298 \uD6C8\uB828 \uBABB \uAC00\uC694"
+    dialogue: "\uAC10\uB3C5\uB2D8.. \uC800 \uC624\uB298 \uD6C8\uB828 \uBABB \uAC00\uC694"
   - iD: text_diag_000002_001
     speaker: player
     dialogue: "\uC0AC\uC720."
@@ -125,7 +125,7 @@ MonoBehaviour:
     dialogue: "\uC798 \uC880 \uD558\uC9C0;;"
   - iD: text_diag_000002_005
     speaker: student
-    dialogue: "\uC544 \uC324!! \uC800 \uB098\uB984 \uC5F4\uC2EC\uD788 \uD588\uB2E4\uACE0\uC694!!"
+    dialogue: "\uC800 \uB098\uB984 \uC5F4\uC2EC\uD788 \uD588\uB2E4\uACE0\uC694!"
   - iD: text_diag_000002_006
     speaker: player
     dialogue: "\uADF8\uB7FC \uC0AC\uACFC \uC601\uC5B4\uB85C \uC368\uBD10"
@@ -143,13 +143,13 @@ MonoBehaviour:
     dialogue: "\uB450 \uBC88 \uB4E4\uC5B4\uB77C."
   - iD: text_diag_000003_000
     speaker: student
-    dialogue: "\uC324 \uCCB4\uB2E8\uC2E4 \uAE30\uAD6C \uC81C\uAC00 \uACE0\uCCE4\uC5B4\uC694!!"
+    dialogue: "\uAC10\uB3C5\uB2D8 \uCCB4\uB2E8\uC2E4 \uAE30\uAD6C \uC81C\uAC00 \uACE0\uCCE4\uC5B4\uC694!!"
   - iD: text_diag_000003_001
     speaker: player
     dialogue: "\uC624 \uAE30\uD2B9\uD558\uB124?"
   - iD: text_diag_000003_002
     speaker: player
-    dialogue: "\uADFC\uB370 \uC65C \uBD88\uAE38\uD558\uC9C0?"
+    dialogue: "\uADFC\uB370 \uC65C \uBD88\uC548\uD558\uC9C0?"
   - iD: text_diag_000003_003
     speaker: student
     dialogue: "\uBCA4\uCE58\uD504\uB808\uC2A4 \uBC14\uAC00 \uC880 \uD718\uC5B4 \uC788\uC5B4\uC11C"
@@ -158,10 +158,10 @@ MonoBehaviour:
     dialogue: "\uC788\uC5B4\uC11C"
   - iD: text_diag_000003_005
     speaker: student
-    dialogue: "\uD798\uC73C\uB85C \uD3C8\uC5B4\uC694"
+    dialogue: "\uD3C8\uC5B4\uC694"
   - iD: text_diag_000003_006
     speaker: choice
-    dialogue: "\uD798\uC73C\uB85C...\uBB50?"
+    dialogue: "\uD3C8...\uBB50?"
   - iD: text_diag_000003_007
     speaker: player
     dialogue: "\uADF8\uAC8C \uAC00\uB2A5\uD574?"
@@ -179,16 +179,16 @@ MonoBehaviour:
     dialogue: "...\uB124?"
   - iD: text_diag_000003_012
     speaker: student
-    dialogue: "\uC77C\uC790 \uC544\uB2C8\uC5C8\uC5B4\uC694?"
+    dialogue: "\uC77C\uC790 \uC544\uB2C8\uC694?"
   - iD: text_diag_000003_013
     speaker: player
     dialogue: "\uB0B4\uC77C\uAE4C\uC9C0 \uBC18\uC131\uBB38 \uC368\uC11C \uC81C\uCD9C\uD574\uB77C."
   - iD: text_diag_000003_014
     speaker: student
-    dialogue: "...\uB124."
+    dialogue: "\uC73C\uC544\uC544;;;"
   - iD: text_diag_000004_000
     speaker: student
-    dialogue: "\uC324! \uC800 \uBC29\uAE08 \uB9BC \uC7A1\uC558\uC5B4\uC694!!!"
+    dialogue: "\uAC10\uB3C5\uB2D8! \uC800 \uBC29\uAE08 \uB9BC \uC7A1\uC558\uC5B4\uC694!!!"
   - iD: text_diag_000004_001
     speaker: player
     dialogue: "\uC624 \uB4DC\uB514\uC5B4? \uB369\uD06C \uAC00\uB0D0?"
@@ -222,8 +222,7 @@ MonoBehaviour:
     dialogue: "\uB9BC\uC774 \uB098\uCC98\uB7FC \uB9CE\uC774 \uD53C\uACE4\uD55C\uAC00\uBCF4\uB2E4"
   - iD: text_diag_000004_011
     speaker: player
-    dialogue: "\uADFC\uCC98 \uD480\uC232\uC5D0 \uCF54 \uC790\uAC8C \uB450\uACE0 \uC870\uC6A9\uD788
-      \uC640\uB77C."
+    dialogue: "\uADFC\uCC98 \uD480\uC232\uC5D0 \uB450\uACE0 \uC870\uC6A9\uD788 \uC640\uB77C."
   - iD: text_diag_000004_012
     speaker: student
     dialogue: "(\uB135)"
@@ -238,7 +237,7 @@ MonoBehaviour:
     dialogue: "\u315C\u315C"
   - iD: text_diag_000005_000
     speaker: student
-    dialogue: "\uCF54\uCE58\uB2D8 !"
+    dialogue: "\uAC10\uB3C5\uB2D8 !"
   - iD: text_diag_000005_001
     speaker: student
     dialogue: "\uC606 \uC5EC\uACE0 \uC560\uB4E4\uC774 \uB18D\uAD6C \uAC00\uB974\uCCD0\uB2EC\uB798\uC694!"
@@ -566,7 +565,7 @@ MonoBehaviour:
     speaker: student
     dialogue: "\uC324 \uC9C4\uC9DC \uADF8\uB807\uAC8C \uBD24\uB294\uB370"
   - iD: text_diag_000009_008
-    speaker: player
+    speaker: student
     dialogue: "\uC5C4\uCCAD \uB2E8\uC21C\uD558\uB124\uC694"
   - iD: text_diag_000009_009
     speaker: player
@@ -671,14 +670,8 @@ MonoBehaviour:
       \uC798 \uBD80\uD0C1 \uB4DC\uB9BD\uB2C8\uB2E4."
   - iD: text_diag_100001_000
     speaker: student
-    dialogue: "$\"{target1.grade} {target1.name} \uD559\uC0DD\uC774 \uAE08\uC77C
-      \uC9C0\uAC01\uD558\uC600\uC2B5\uB2C8\uB2E4. \uACC4\uB3C4 \uBD80\uD0C1 \uB4DC\uB9BD\uB2C8\uB2E4.\""
+    dialogue: "{target1.grade} {target1.name} \uD559\uC0DD\uC774 \uAE08\uC77C \uC9C0\uAC01\uD558\uC600\uC2B5\uB2C8\uB2E4.
+      \uACC4\uB3C4 \uBD80\uD0C1 \uB4DC\uB9BD\uB2C8\uB2E4."
   - iD: text_diag_200001_000
     speaker: student
     dialogue: "\uD559\uC0DD\uB4E4\uC5D0\uAC8C \uAC04\uC2DD\uC744 \uC0AC\uC8FC\uC5C8\uB2E4."
-  - iD: text_diag_300000_000
-    speaker: student
-    dialogue: "\u265A\u265A\uACBD\uC77C\u2606\uC544\uCE74\uB370\uBBF8\u265A\u265A\uAC00\uC785\uC2DC$$\uC804\uC6D0
-      \uACFC\uC81C\u261C\u261C100%\uC99D\uC815\u203B \u265CmLua\u265C\uC720\uB2C8\uD2F0
-      C# \uBB34\uB8CC\uC99D\uC815\uFFE5 \uD2B9\uC815\uC870\uAC74 \xA7\xA7\uD3EC\uD2B8\uD3F4\uB9AC\uC624\xA7\xA7\u2605\uC790\uC18C\uC11C\u2605\uC2A4\uD399\uC5C5\uC774\uBCA4\uD2B8\uAE30\uD68C@@@
-      \uC989\uC2DC\uC774\uB3D9https://www.kiweb.or.kr/main/"

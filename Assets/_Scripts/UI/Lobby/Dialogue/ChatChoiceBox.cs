@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -15,10 +15,15 @@ public class ChatChoiceBox : MonoBehaviour
 
     [SerializeField] private List<ChoiceButtonUI> _choiceButtons;
 
-    [SerializeField] private Color _normalBgColor = new Color(0.4f, 0.4f, 0.4f, 1f);
-    [SerializeField] private Color _selectedBgColor = new Color(0.1f, 0.1f, 0.1f, 1f);
-    [SerializeField] private Color _unselectedBgColor = new Color(0.9f, 0.9f, 0.9f, 0.3f);
-    [SerializeField] private Color _unselectedTextColor = new Color(0.7f, 0.7f, 0.7f, 1f);
+    [Header("Button Sprites (버튼 이미지)")]
+    [SerializeField] private Sprite _normalSprite;     // 1. 기본 상태 (하얀 배경)
+    [SerializeField] private Sprite _selectedSprite;   // 2. 선택된 상태 (까만 배경)
+    [SerializeField] private Sprite _unselectedSprite; // 3. 선택 안 된 상태 (회색 테두리)
+
+    [Header("Text Colors (글자 색상)")]
+    [SerializeField] private Color _normalTextColor = Color.black;
+    [SerializeField] private Color _selectedTextColor = Color.white;
+    [SerializeField] private Color _unselectedTextColor = Color.gray;
 
     private ChatMessage _messageData;
     private MessengerRoomPopup _parentRoom;
@@ -33,7 +38,7 @@ public class ChatChoiceBox : MonoBehaviour
             if (i < messageData.Choices.Count)
             {
                 _choiceButtons[i].button.gameObject.SetActive(true);
-                _choiceButtons[i].text.text = $"{i + 1}. {messageData.Choices[i].Text}";
+                _choiceButtons[i].text.text = messageData.Choices[i].Text;
 
                 int choiceIndex = i;
                 _choiceButtons[i].button.onClick.RemoveAllListeners();
@@ -69,24 +74,32 @@ public class ChatChoiceBox : MonoBehaviour
 
         for (int i = 0; i < _messageData.Choices.Count; i++)
         {
+            if (i >= _messageData.Choices.Count) continue;
+
             var btnUI = _choiceButtons[i];
             btnUI.button.interactable = !isAnswered;
 
+            // 스프라이트 본연의 색을 내기 위해 틴트를 흰색으로 고정
+            btnUI.bgImage.color = Color.white;
+
             if (!isAnswered)
             {
-                btnUI.bgImage.color = _normalBgColor;
-                btnUI.text.color = Color.white;
+                // 1. 선택 전
+                btnUI.bgImage.sprite = _normalSprite;
+                btnUI.text.color = _normalTextColor;
             }
             else
             {
                 if (i == _messageData.SelectedChoiceIndex)
                 {
-                    btnUI.bgImage.color = _selectedBgColor;
-                    btnUI.text.color = Color.white;
+                    // 2. 내가 선택한 버튼 
+                    btnUI.bgImage.sprite = _selectedSprite;
+                    btnUI.text.color = _selectedTextColor;
                 }
                 else
                 {
-                    btnUI.bgImage.color = _unselectedBgColor;
+                    // 3. 선택받지 못한 버튼
+                    btnUI.bgImage.sprite = _unselectedSprite;
                     btnUI.text.color = _unselectedTextColor;
                 }
             }

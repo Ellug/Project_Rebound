@@ -806,7 +806,7 @@ MonoBehaviour:
     probability: 1
     description: text_SuddenEvent_000005
   - id: event_100001
-    name: "\uC0C8\uB85C\uC6B4 \uBA54\uC2DC\uC9C0\uAC00 \uC654\uC2B5\uB2C8\uB2E4."
+    name: "\uC0C8\uB85C\uC6B4 \uBA54\uC2DC\uC9C0."
     context: 3
     condition: 1
     category: 3
@@ -830,7 +830,7 @@ MonoBehaviour:
     probability: 0.15
     description: text_diag_000001_000
   - id: event_100002
-    name: "\uC0C8\uB85C\uC6B4 \uBA54\uC2DC\uC9C0\uAC00 \uC654\uC2B5\uB2C8\uB2E4."
+    name: "\uC0C8\uB85C\uC6B4 \uBA54\uC2DC\uC9C0."
     context: 3
     condition: 1
     category: 3
@@ -854,7 +854,7 @@ MonoBehaviour:
     probability: 0.15
     description: text_diag_000002_000
   - id: event_100003
-    name: "\uC0C8\uB85C\uC6B4 \uBA54\uC2DC\uC9C0\uAC00 \uC654\uC2B5\uB2C8\uB2E4."
+    name: "\uC0C8\uB85C\uC6B4 \uBA54\uC2DC\uC9C0."
     context: 3
     condition: 1
     category: 3
@@ -878,7 +878,7 @@ MonoBehaviour:
     probability: 0.15
     description: text_diag_000003_000
   - id: event_100004
-    name: "\uC0C8\uB85C\uC6B4 \uBA54\uC2DC\uC9C0\uAC00 \uC654\uC2B5\uB2C8\uB2E4."
+    name: "\uC0C8\uB85C\uC6B4 \uBA54\uC2DC\uC9C0."
     context: 3
     condition: 1
     category: 3
@@ -902,7 +902,7 @@ MonoBehaviour:
     probability: 0.15
     description: text_diag_000004_000
   - id: event_100005
-    name: "\uC0C8\uB85C\uC6B4 \uBA54\uC2DC\uC9C0\uAC00 \uC654\uC2B5\uB2C8\uB2E4."
+    name: "\uC0C8\uB85C\uC6B4 \uBA54\uC2DC\uC9C0."
     context: 3
     condition: 1
     category: 3
@@ -926,7 +926,7 @@ MonoBehaviour:
     probability: 0.15
     description: text_diag_000005_000
   - id: event_100006
-    name: "\uC0C8\uB85C\uC6B4 \uBA54\uC2DC\uC9C0\uAC00 \uC654\uC2B5\uB2C8\uB2E4."
+    name: "\uC0C8\uB85C\uC6B4 \uBA54\uC2DC\uC9C0."
     context: 3
     condition: 1
     category: 3
@@ -950,7 +950,7 @@ MonoBehaviour:
     probability: 0.15
     description: text_diag_000006_000
   - id: event_100007
-    name: "\uC0C8\uB85C\uC6B4 \uBA54\uC2DC\uC9C0\uAC00 \uC654\uC2B5\uB2C8\uB2E4."
+    name: "\uC0C8\uB85C\uC6B4 \uBA54\uC2DC\uC9C0."
     context: 3
     condition: 1
     category: 3
@@ -974,7 +974,7 @@ MonoBehaviour:
     probability: 0.15
     description: text_diag_000007_000
   - id: event_100008
-    name: "\uC0C8\uB85C\uC6B4 \uBA54\uC2DC\uC9C0\uAC00 \uC654\uC2B5\uB2C8\uB2E4."
+    name: "\uC0C8\uB85C\uC6B4 \uBA54\uC2DC\uC9C0."
     context: 3
     condition: 1
     category: 3
@@ -998,7 +998,7 @@ MonoBehaviour:
     probability: 0.15
     description: text_diag_000008_000
   - id: event_100009
-    name: "\uC0C8\uB85C\uC6B4 \uBA54\uC2DC\uC9C0\uAC00 \uC654\uC2B5\uB2C8\uB2E4."
+    name: "\uC0C8\uB85C\uC6B4 \uBA54\uC2DC\uC9C0."
     context: 3
     condition: 1
     category: 3
@@ -1022,7 +1022,7 @@ MonoBehaviour:
     probability: 0.15
     description: text_diag_000009_000
   - id: event_100010
-    name: "\uC0C8\uB85C\uC6B4 \uBA54\uC2DC\uC9C0\uAC00 \uC654\uC2B5\uB2C8\uB2E4."
+    name: "\uC0C8\uB85C\uC6B4 \uBA54\uC2DC\uC9C0."
     context: 3
     condition: 1
     category: 3
@@ -1046,7 +1046,7 @@ MonoBehaviour:
     probability: 0.15
     description: text_diag_000010_000
   - id: event_110001
-    name: "[\uACF5\uC9C0]\uAE08\uC77C \uC9C0\uAC01\uC790"
+    name: "[\uACF5\uC9C0] \uAE08\uC77C \uC9C0\uAC01\uC790"
     context: 1
     condition: 1
     category: 2
@@ -1070,7 +1070,7 @@ MonoBehaviour:
     probability: 0.25
     description: text_diag_100001_000
   - id: event_120001
-    name: "\uC878\uC5C5\uC0DD \uBC29\uBB38"
+    name: "[\uACF5\uC9C0] \uC878\uC5C5\uC0DD \uBC29\uBB38"
     context: 1
     condition: 1
     category: 2
@@ -1093,27 +1093,3 @@ MonoBehaviour:
     isProbable: 1
     probability: 0.1
     description: text_diag_200001_000
-  - id: event_130000
-    name: "\uACBD\uC77C \uC544\uCE74\uB370\uBBF8!"
-    context: 3
-    condition: 1
-    category: 3
-    scope: 7
-    targetMin: 1
-    targetMax: 1
-    termMin: 0
-    termMax: 0
-    termScale: 0
-    isTrigger: 0
-    triggerStatus1: 0
-    triggerCondition1: 0
-    triggerThreshold1: -1
-    triggerStatus2: 0
-    triggerCondition2: 0
-    triggerThreshold2: -1
-    effect1: 
-    effect2: 
-    effect3: 
-    isProbable: 1
-    probability: 0.1
-    description: text_diag_300000_000
