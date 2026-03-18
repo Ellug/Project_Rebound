@@ -45,7 +45,7 @@ text_diag_000002_010,player,두 번 들어라.
 text_diag_000003_000,student,감독님 체단실 기구 제가 고쳤어요!!
 text_diag_000003_001,player,오 대단한데? 
 text_diag_000003_002,player,근데 왜 불안하지?
-text_diag_000003_003,student,벤치프레스 바가 좀 휘어 있어서 
+text_diag_000003_003,student,벤치프레스 바가\n좀 휘어 있어서 
 text_diag_000003_004,player,있어서
 text_diag_000003_005,student,폈어요
 text_diag_000003_006,choice,폈...뭐?

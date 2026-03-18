@@ -152,7 +152,8 @@ MonoBehaviour:
     dialogue: "\uADFC\uB370 \uC65C \uBD88\uC548\uD558\uC9C0?"
   - iD: text_diag_000003_003
     speaker: student
-    dialogue: "\uBCA4\uCE58\uD504\uB808\uC2A4 \uBC14\uAC00 \uC880 \uD718\uC5B4 \uC788\uC5B4\uC11C"
+    dialogue: "\uBCA4\uCE58\uD504\uB808\uC2A4 \uBC14\uAC00\\n\uC880 \uD718\uC5B4
+      \uC788\uC5B4\uC11C"
   - iD: text_diag_000003_004
     speaker: player
     dialogue: "\uC788\uC5B4\uC11C"
