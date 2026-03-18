@@ -63,6 +63,11 @@ public class TournamentResultUI : MonoBehaviour
         _isCurrentResultAchieved = IsAchievedResult(reachedRoundTeamCount);
         _currentRewardId = ResolveRewardId(reachedRoundTeamCount);
 
+        if (_isCurrentResultAchieved)
+            SoundManager.Instance.PlayBGM(105);
+        else
+            SoundManager.Instance.PlayBGM(104);
+
         RewardPopupRow row = GetRewardRow(_currentRewardId);
         _titleText.text = row.titleText;
         _bodyText.text = row.desc;

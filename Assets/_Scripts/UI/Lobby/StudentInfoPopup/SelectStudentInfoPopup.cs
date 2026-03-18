@@ -112,6 +112,7 @@ public class SelectStudentInfoPopup : UIBase
 
         // 활성화 + 최상단
         gameObject.SetActive(true);
+        PlayPopupOpenSfx();
         transform.SetAsLastSibling();
 
         // 슬라이드 인은 다음 프레임에 실행
@@ -138,6 +139,8 @@ public class SelectStudentInfoPopup : UIBase
     {
         if (!gameObject.activeSelf)
             return;
+
+        PlayPopupCloseSfx();
 
         // 슬라이드 아웃 → 끝나면 비활성
         PlaySlide(_hiddenPos, _slideOutDuration, _slideOutEase, () =>

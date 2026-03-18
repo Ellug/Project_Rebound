@@ -36,7 +36,7 @@ MonoBehaviour:
   - id: text_diag_schedule_006
     type: format
     speaker: right
-    dialogue: "\uC774\uBC88 \uC8FC {date_choice}\uC77C \uADC0 \uD559\uAD50\uC640
+    dialogue: "\uC774\uBC88 \uC8FC {date_choice}\uC77C\\n\uADC0 \uD559\uAD50\uC640
       \uCE5C\uC120\uC804\uC774 \uAC00\uB2A5\uD560\uAE4C\uC694?"
   - id: text_diag_schedule_007
     type: format

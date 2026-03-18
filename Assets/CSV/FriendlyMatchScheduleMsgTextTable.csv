@@ -5,7 +5,7 @@ text_diag_schedule_002,format,center,{date1}일
 text_diag_schedule_003,format,center,{date2}일
 text_diag_schedule_004,format,center,{date3}일
 text_diag_schedule_005,format,right,한울고등학교 농구부 입니다.
-text_diag_schedule_006,format,right,이번 주 {date_choice}일 귀 학교와 친선전이 가능할까요?
+text_diag_schedule_006,format,right,이번 주 {date_choice}일\n귀 학교와 친선전이 가능할까요?
 text_diag_schedule_007,format,left,{school_choice} 농구부 입니다.
 text_diag_schedule_008,format,right,네. 답변 감사합니다.
 text_diag_schedule_009,accept,left,가능합니다.

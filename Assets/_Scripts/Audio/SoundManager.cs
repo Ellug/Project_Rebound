@@ -1,16 +1,40 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
+using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 
 public class SoundManager : Singleton<SoundManager>
 {
+    private const int UiTouchSfxId = 201;
+    private const float UiTouchSuppressDuration = 0.05f;
+
+    private static readonly int[] DefaultPreloadAudioIds =
+    {
+        101, 102, 103, 104, 105, 108,
+        201, 202, 203, 204, 205, 206, 207, 209, 211, 212,
+        301, 302, 305
+    };
+
+    // 아래 SFX가 재생되는 클릭에서는 201(터치음)을 겹치지 않게 막는다.
+    private static readonly HashSet<int> TouchSfxNoOverlapIds = new()
+    {
+        202, 203, 204, 205, 209, 211, 212
+    };
+
     [SerializeField] private AudioMixer _audioMixer;
     [SerializeField] private AudioClip[] _preloadClips;
+    [SerializeField] private AudioSource _bgmSource;
+    [SerializeField] private AudioSource _effectSource;
 
     private Dictionary<string, AudioClip> _clipCache;
-
-    private AudioSource _bgmSource;
-    private AudioSource _effectSource;
+    private Coroutine _bgmFadeRoutine;
+    private int _bgmRequestToken;
+    private bool _preloadRequested;
+    private int _pendingUiTouchFrame = -1;
+    private int _touchSuppressFrame = -1;
+    private float _touchSuppressUntilTime = -1f;
 
     private float lastEffectVolume = 1f;
     private float lastBGMVolume = 1f;
@@ -21,27 +45,17 @@ public class SoundManager : Singleton<SoundManager>
     {
         base.Awake();
 
-        _bgmSource = gameObject.AddComponent<AudioSource>();
-        _bgmSource.loop = true;
-        _bgmSource.outputAudioMixerGroup = _audioMixer.FindMatchingGroups("BGM")[0];
-
-        _effectSource = gameObject.AddComponent<AudioSource>();
-        _effectSource.loop = false;
-        _effectSource.outputAudioMixerGroup = _audioMixer.FindMatchingGroups("EFFECT")[0];
-
         _clipCache = new Dictionary<string, AudioClip>();
 
         foreach (var clip in _preloadClips)
         {
             if (!_clipCache.ContainsKey(clip.name))
-            {
                 _clipCache.Add(clip.name, clip);
-            }
         }
     }
 
     // 저장된 볼륨과 mute 상태 확인
-    private void Start()
+    void Start()
     {
         float bgm = PlayerPrefs.GetFloat("BGM_VOL", 1f);
         float effect = PlayerPrefs.GetFloat("EFFECT_VOL", 1f);
@@ -51,14 +65,29 @@ public class SoundManager : Singleton<SoundManager>
 
         ApplyVolume(SoundType.BGM, bgmMute ? 0f : bgm);
         ApplyVolume(SoundType.EFFECT, effectMute ? 0f : effect);
+
+        TryPreloadAddressableAudio();
+    }
+
+    void Update()
+    {
+        if (IsUiPointerReleasedThisFrame())
+            _pendingUiTouchFrame = Time.frameCount;
+    }
+
+    void LateUpdate()
+    {
+        if (_pendingUiTouchFrame != Time.frameCount)
+            return;
+
+        _pendingUiTouchFrame = -1;
+        PlayEffect(UiTouchSfxId);
     }
 
     private float NormalizedToDB(float value)
     {
         if (value <= 0.0001f)
-        {
             return -80f;
-        }
 
         return Mathf.Lerp(-80f, 0f, value);
     }
@@ -121,57 +150,188 @@ public class SoundManager : Singleton<SoundManager>
     private AudioClip GetClip(string clipName)
     {
         if (_clipCache.TryGetValue(clipName, out var clip))
-        {
             return clip;
-        }
-
-        clip = Resources.Load<AudioClip>($"Sound/BGM/{clipName}");
-
-        if (clip == null)
-        {
-            clip = Resources.Load<AudioClip>($"Sound/SFX/{clipName}");
-        }
-
-        if (clip != null)
-        {
-            _clipCache.Add(clipName, clip);
-            return clip;
-        }
 
         Debug.LogWarning($"클립 없음: {clipName}");
         return null;
     }
 
-    public void PlayEffect(string clipName)
+    public void PlayEffect(int clipId)
     {
-        AudioClip clip = GetClip(clipName);
-        if (clip == null)
+        if (clipId <= 0) return;
+
+        if (ShouldSuppressTouchSfx(clipId))
+            return;
+
+        MarkTouchSuppressionIfNeeded(clipId);
+
+        if (AddressableAudioManager.Instance.TryGetCachedClip(clipId, out AudioClip cached) && cached != null)
         {
+            _effectSource.PlayOneShot(cached);
             return;
         }
 
+        AddressableAudioManager.Instance.LoadClip(clipId, loaded =>
+        {
+            if (loaded == null) return;
+
+            _effectSource.PlayOneShot(loaded);
+        });
+    }
+
+    public void PlayEffect(string clipName)
+    {
+        AudioClip clip = GetClip(clipName);
+        if (clip == null) return;
+
         _effectSource.PlayOneShot(clip);
+    }
+
+    public void PlayBGM(int clipId)
+    {
+        if (clipId <= 0) return;
+
+        _bgmRequestToken++;
+        int requestToken = _bgmRequestToken;
+
+        if (AddressableAudioManager.Instance.TryGetCachedClip(clipId, out AudioClip cached) && cached != null)
+        {
+            ApplyBgmClip(cached);
+            return;
+        }
+
+        AddressableAudioManager.Instance.LoadClip(clipId, loaded =>
+        {
+            if (requestToken != _bgmRequestToken) return;
+            if (loaded == null) return;
+
+            ApplyBgmClip(loaded);
+        });
     }
 
     public void PlayBGM(string clipName)
     {
         AudioClip clip = GetClip(clipName);
-        if (clip == null)
-        {
-            return;
-        }
-        
-        if (_bgmSource.clip == clip && _bgmSource.isPlaying)
-        {
-            return;
-        }
+        if (clip == null) return;
 
-        _bgmSource.clip = clip;
-        _bgmSource.Play();
+        ApplyBgmClip(clip);
     }
 
     public void StopBGM()
     {
+        if (_bgmFadeRoutine != null)
+        {
+            StopCoroutine(_bgmFadeRoutine);
+            _bgmFadeRoutine = null;
+        }
+
         _bgmSource.Stop();
+        _bgmSource.clip = null;
+    }
+
+    public void FadeOutBGM(float duration = 0.2f)
+    {
+        if (!_bgmSource.isPlaying) return;
+
+        if (duration <= 0f)
+        {
+            StopBGM();
+            return;
+        }
+
+        if (_bgmFadeRoutine != null)
+            StopCoroutine(_bgmFadeRoutine);
+
+        _bgmFadeRoutine = StartCoroutine(FadeOutBgmRoutine(duration));
+    }
+
+    private void ApplyBgmClip(AudioClip clip)
+    {
+        if (clip == null) return;
+
+        if (_bgmFadeRoutine != null)
+        {
+            StopCoroutine(_bgmFadeRoutine);
+            _bgmFadeRoutine = null;
+        }
+
+        if (_bgmSource.clip == clip && _bgmSource.isPlaying)
+            return;
+
+        _bgmSource.volume = 1f;
+        _bgmSource.clip = clip;
+        _bgmSource.Play();
+    }
+
+    private IEnumerator FadeOutBgmRoutine(float duration)
+    {
+        float startVolume = _bgmSource.volume;
+        float elapsed = 0f;
+
+        while (elapsed < duration)
+        {
+            elapsed += Time.unscaledDeltaTime;
+            float t = Mathf.Clamp01(elapsed / duration);
+            _bgmSource.volume = Mathf.Lerp(startVolume, 0f, t);
+            yield return null;
+        }
+
+        _bgmSource.Stop();
+        _bgmSource.clip = null;
+        _bgmSource.volume = startVolume;
+        _bgmFadeRoutine = null;
+    }
+
+    private void TryPreloadAddressableAudio()
+    {
+        if (_preloadRequested) return;
+
+        _preloadRequested = true;
+
+        AddressableAudioManager.Instance.PreloadClips(DefaultPreloadAudioIds);
+    }
+
+    private bool ShouldSuppressTouchSfx(int clipId)
+    {
+        if (clipId != UiTouchSfxId) return false;
+        if (_touchSuppressFrame == Time.frameCount) return true;
+
+        return _touchSuppressUntilTime > Time.unscaledTime;
+    }
+
+    private void MarkTouchSuppressionIfNeeded(int clipId)
+    {
+        if (!TouchSfxNoOverlapIds.Contains(clipId)) return;
+
+        _touchSuppressFrame = Time.frameCount;
+        _touchSuppressUntilTime = Time.unscaledTime + UiTouchSuppressDuration;
+    }
+
+    private static bool IsUiPointerReleasedThisFrame()
+    {
+        EventSystem eventSystem = EventSystem.current;
+        if (eventSystem == null)
+            return false;
+
+        Mouse mouse = Mouse.current;
+        if (mouse != null && mouse.leftButton.wasReleasedThisFrame && eventSystem.IsPointerOverGameObject())
+            return true;
+
+        Touchscreen touch = Touchscreen.current;
+        if (touch == null)
+            return false;
+
+        for (int i = 0; i < touch.touches.Count; i++)
+        {
+            var touchControl = touch.touches[i];
+            if (!touchControl.press.wasReleasedThisFrame)
+                continue;
+
+            int touchId = touchControl.touchId.ReadValue();
+            if (eventSystem.IsPointerOverGameObject(touchId))
+                return true;
+        }
+
+        return false;
     }
 }

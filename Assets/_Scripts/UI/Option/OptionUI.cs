@@ -34,11 +34,13 @@ public class OptionUI : MonoBehaviour
     public void OptinonPanelOpen()
     {
         InitUI();
+        SoundManager.Instance.PlayEffect(202);
         _optinonPanel.SetActive(true);
     }
 
     public void OptinonPanelClose()
     {
+        SoundManager.Instance.PlayEffect(203);
         _optinonPanel.SetActive(false);
     }
     private void InitUI()

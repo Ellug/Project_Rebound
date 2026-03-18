@@ -391,4 +391,5 @@ public class UIManager : Singleton<UIManager>
             _uiStack.Push(ui);
         }
     }
+
 }

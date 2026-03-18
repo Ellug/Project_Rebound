@@ -381,7 +381,9 @@ public class StudentManagementPopup : UIBase
 
         // 새 슬롯에 배치
         slot.AssignStudent(_selectedStudent, _selectedStudentPortrait);
-        StudentManager.Instance?.AssignSlot(_fieldSlots.IndexOf(slot), _selectedStudent);
+        StudentManager.Instance.AssignSlot(_fieldSlots.IndexOf(slot), _selectedStudent);
+
+        SoundManager.Instance.PlayEffect(209);
 
         CloseStudentInfoPopup();
         ClearSelection();
@@ -441,11 +443,13 @@ public class StudentManagementPopup : UIBase
                         {
                             int existingIndex = _fieldSlots.IndexOf(existing);
                             existing.ClearSlot();
-                            StudentManager.Instance?.ClearSlot(existingIndex);
+                            StudentManager.Instance.ClearSlot(existingIndex);
                         }
 
                         slot.AssignStudent(_selectedStudent, _selectedStudentPortrait);
-                        StudentManager.Instance?.AssignSlot(slotIndex, _selectedStudent);
+                        StudentManager.Instance.AssignSlot(slotIndex, _selectedStudent);
+
+                        SoundManager.Instance.PlayEffect(209);
 
                         CloseStudentInfoPopup();
                     }
