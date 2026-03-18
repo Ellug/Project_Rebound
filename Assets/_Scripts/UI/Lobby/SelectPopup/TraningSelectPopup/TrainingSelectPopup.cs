@@ -203,9 +203,12 @@ public class TrainingSelectPopup : UIPopup
             Sprite buttonSprite = ResolveButtonSprite(pageKind, i);
             bool centerName = pageKind == TrainingPageKind.Default;
 
+            var preview = TrainingStatsView(captured);
+            string statText = StatTextChange(preview);
+
             item.Setup(
                 captured.trainingName,
-                captured.statModifierText,
+                statText,
                 () => HandleTrainingButton(captured),
                 buttonSprite,
                 centerName
@@ -253,12 +256,15 @@ public class TrainingSelectPopup : UIPopup
             return;
         }
 
+        var preview = TrainingStatsView(data);
+        string statText = StatTextChange(preview);
+
         var req = UIPopupRequest.Default(
             title: data.trainingName,
             message: data.trainingDesc,
             onPrimary: null,
             onCancel: () => { },
-            subMessage: data.statModifierText,
+            subMessage: statText,
             previewImageId: data.previewImageId,
             showCancel: true,
             primaryKind: UIPopupRequest.PrimaryButtonKind.StartTraining
@@ -488,7 +494,133 @@ public class TrainingSelectPopup : UIPopup
             SaveManager.Instance.SaveCurrent();
         }
     }
+    public struct TrainingStat
+    {
+        public int condition;
+        public int shoot;
+        public int speed;
+        public int jump;
+        public int stamina;
+        public int mental;
+    }
+    // ApplyCsvEffect 복사 안쓰는 것들 빼기 ui 표시용
+    private TrainingStat TrainingStatsView(TrainingButtonData data)
+    {
+        TrainingStat result = new TrainingStat();
 
+        if (data == null)
+            return result;
+
+        // 현재 시설 레벨
+        int schoolLv = FacilitySystem.Instance.GetLevel("school");
+        int gymLv = FacilitySystem.Instance.GetLevel("gym");
+        int cafeteriaLv = FacilitySystem.Instance.GetLevel("cafeteria");
+        int counselingLv = FacilitySystem.Instance.GetLevel("counselingcenter");
+
+        // 필요 시설 레벨
+        int requiredLv = data.requiredFacilityLv;
+
+        // 시설 레벨 차이
+        int schoolDiff = Mathf.Max(0, schoolLv - requiredLv);
+        int gymDiff = Mathf.Max(0, gymLv - requiredLv);
+        int cafeteriaDiff = Mathf.Max(0, cafeteriaLv - requiredLv);
+        int counselingDiff = Mathf.Max(0, counselingLv - requiredLv);
+
+        // 시설 보너스 %라 0.01f 곱함
+        float schoolBonus = FacilitySystem.Instance.GetConditionDecayBonus() * 0.01f;
+        float gymBonus = FacilitySystem.Instance.GetTrainingExpBonus() * 0.01f;
+        float cafeteriaBonus = FacilitySystem.Instance.GetCafeteriaBonus() * 0.01f;
+        float counselingBonus = FacilitySystem.Instance.GetMentalBonus() * 0.01f;
+
+        // 훈련시 보너스들
+        float statBonus = gymBonus * gymDiff;
+        float conditionBonus = (schoolBonus * schoolDiff) + (cafeteriaBonus * cafeteriaDiff);
+        float mentalBonus = (counselingBonus * counselingDiff) + (cafeteriaBonus * cafeteriaDiff);
+
+        // 감독 노드 훈련 컨디션 소모 감소 보너스 적용
+        float nodeConditionBonus = 0f;
+        if (HeadCoachManager.Instance != null && HeadCoachManager.Instance.IsInitialized)
+        {
+            string trainingKey = data.trainingKey;
+
+            // 슈팅 드릴 (index: 1201)
+            if (trainingKey == "cmd_1201")
+            {
+                nodeConditionBonus +=
+                    HeadCoachManager.Instance.GetStatBonusValue("Condition_Drain_ShootingDrill") * 0.01f;
+            }
+
+            // 디펜스 워크 (index: 1203)
+            if (trainingKey == "cmd_1203")
+            {
+                nodeConditionBonus +=
+                    HeadCoachManager.Instance.GetStatBonusValue("Condition_Drain_DefenceWork") * 0.01f;
+            }
+
+            // 단체 훈련 계열 (index: 1101, 1102, 1103)
+            if (trainingKey == "cmd_1101" || trainingKey == "cmd_1102" || trainingKey == "cmd_1103")
+            {
+                nodeConditionBonus +=
+                    HeadCoachManager.Instance.GetStatBonusValue("Condition_Drain_TeamPractice") * 0.01f;
+            }
+        }
+        // 컨디션
+        if (data.conditionDelta >= 0)
+        {
+            // 소모량에 노드 감소 보너스 적용 (Floor로 내림 처리해 소량 보너스도 반영)
+            int cost = Mathf.FloorToInt(data.conditionDelta * (1f + nodeConditionBonus));
+            cost = Mathf.Max(0, cost);
+            result.condition = -cost;
+        }
+        else
+        {
+            int recover = -data.conditionDelta;
+            recover += Mathf.RoundToInt(recover * conditionBonus);
+            result.condition = recover;
+        }
+        // 스탯
+        result.shoot = Mathf.RoundToInt(data.shootDelta + data.shootDelta * statBonus);
+        result.speed = Mathf.RoundToInt(data.speedDelta + data.speedDelta * statBonus);
+        result.jump = Mathf.RoundToInt(data.jumpDelta + data.jumpDelta * statBonus);
+        result.stamina = Mathf.RoundToInt(data.staminaDelta + data.staminaDelta * statBonus);
+
+        // 멘탈
+        if (data.mentalDelta >= 0)
+        {
+            result.mental = Mathf.RoundToInt(data.mentalDelta + data.mentalDelta * mentalBonus);
+        }
+        else
+        {
+            result.mental = data.mentalDelta;
+        }
+
+        return result;
+    }
+
+    private string StatTextChange(TrainingStat result)
+    {
+        System.Text.StringBuilder sb = new System.Text.StringBuilder();
+
+        if (result.condition != 0)
+            sb.AppendLine($"컨디션 {(result.condition > 0 ? "+" : "")}{result.condition}");
+
+        if (result.shoot != 0)
+            sb.AppendLine($"슛 {(result.shoot > 0 ? "+" : "")}{result.shoot}");
+
+        if (result.speed != 0)
+            sb.AppendLine($"스피드 {(result.speed > 0 ? "+" : "")}{result.speed}");
+
+        if (result.jump != 0)
+            sb.AppendLine($"점프 {(result.jump > 0 ? "+" : "")}{result.jump}");
+
+        if (result.stamina != 0)
+            sb.AppendLine($"체력 {(result.stamina > 0 ? "+" : "")}{result.stamina}");
+
+        if (result.mental != 0)
+            sb.AppendLine($"멘탈 {(result.mental > 0 ? "+" : "")}{result.mental}");
+
+        return sb.ToString();
+    }
     private void HandleFlowComplete()
     {
         if (_trainingFlow != null)
