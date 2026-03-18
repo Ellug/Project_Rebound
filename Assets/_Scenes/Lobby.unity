@@ -12050,6 +12050,7 @@ MonoBehaviour:
   _uiPopupPrefab: {fileID: 2709569829720818253, guid: 12b32fafa91fc074fbb429aa6509eab7, type: 3}
   _defaultPopupPreviewImageId: 
   _studentSelectPopupPrefab: {fileID: 5655431246991369327, guid: 2eefce8b8a34e304b82db8b2d577031f, type: 3}
+  _quitPopupPrefab: {fileID: 7450537433408718352, guid: cb20ecaeaff640d449143061e8d39416, type: 3}
 --- !u!4 &1317058962
 Transform:
   m_ObjectHideFlags: 0
