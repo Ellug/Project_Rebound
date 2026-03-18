@@ -288,6 +288,15 @@ public class GameManager : Singleton<GameManager>
         SoundManager.Instance.PlayBGM(102);
 
         _lobbyMatchManager.HandlePendingResults(); // 8. 토너먼트/친선 결과 처리
+
+        // 토너먼트 진행 중이면 로비 초기화 완료 후 바로 토너먼트 씬으로 이동
+        if (SaveManager.Instance != null && SaveManager.Instance.ConsumePendingTournamentRestore())
+        {
+            TournamentSceneBridge.RequestTournament();
+            SceneManager.LoadScene("Tournament");
+            return;
+        }
+
         SyncFlowStateFromLobby();       // 10. GameFlowData 동기화 (이후 HasFlowState = true)
         RefreshLobbyTopInfo();          // 11. 로비 UI 갱신
         TryTriggerInitialRecruitment(); // 12. 게임 시작 시 최초 영입 트리거

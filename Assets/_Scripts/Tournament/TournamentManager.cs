@@ -40,7 +40,6 @@ public class TournamentManager : MonoBehaviour
     {
         _matchGameManager.OnMatchFinished += HandleMySchoolMatchFinished;
 
-        // 외부에서 친선전 모드로 요청한 경우 단일 경기만 시작한다.
         if (TournamentSceneBridge.TryConsumeRequest(out TournamentSceneMode sceneMode, out string opponentName)
             && sceneMode == TournamentSceneMode.FriendlyMatch)
         {
@@ -48,6 +47,21 @@ public class TournamentManager : MonoBehaviour
             return;
         }
 
+        // 이어하기 복원: SaveManager에 토너먼트 진행 데이터가 있으면 복원 후 리턴
+        if (SaveManager.Instance != null)
+        {
+            SavedTournamentData savedTournament = SaveManager.Instance.CurrentData?.tournament;
+            if (savedTournament != null && savedTournament.isInProgress)
+            {
+                RestoreSaveData(savedTournament);
+
+                SavedMatchSimData savedMatchSim = SaveManager.Instance.CurrentData?.matchSim;
+                if (savedMatchSim != null && savedMatchSim.isMatchRunning)
+                    _matchGameManager.RestoreSaveData(savedMatchSim);
+
+                return;
+            }
+        }
         GenerateTournament();
     }
 
