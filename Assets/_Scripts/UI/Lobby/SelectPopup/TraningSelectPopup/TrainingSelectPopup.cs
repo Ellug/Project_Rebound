@@ -257,14 +257,14 @@ public class TrainingSelectPopup : UIPopup
         }
 
         var preview = TrainingStatsView(data);
-        string statText = StatTextChange(preview);
+        string conditionText = ConditionTextChange(preview);
 
         var req = UIPopupRequest.Default(
             title: data.trainingName,
             message: data.trainingDesc,
             onPrimary: null,
             onCancel: () => { },
-            subMessage: statText,
+            subMessage: conditionText,
             previewImageId: data.previewImageId,
             showCancel: true,
             primaryKind: UIPopupRequest.PrimaryButtonKind.StartTraining
@@ -601,8 +601,6 @@ public class TrainingSelectPopup : UIPopup
     {
         List<string> parts = new List<string>();
 
-        if (result.condition != 0)
-            parts.Add($"컨디션 {(result.condition > 0 ? "+" : "")}{result.condition}");
         if (result.shoot != 0)
             parts.Add($"슛 {(result.shoot > 0 ? "+" : "")}{result.shoot}");
         if (result.speed != 0)
@@ -611,10 +609,17 @@ public class TrainingSelectPopup : UIPopup
             parts.Add($"점프 {(result.jump > 0 ? "+" : "")}{result.jump}");
         if (result.stamina != 0)
             parts.Add($"체력 {(result.stamina > 0 ? "+" : "")}{result.stamina}");
-        if (result.mental != 0)
-            parts.Add($"멘탈 {(result.mental > 0 ? "+" : "")}{result.mental}");
+        //if (result.mental != 0)
+        //    parts.Add($"멘탈 {(result.mental > 0 ? "+" : "")}{result.mental}");
 
         return string.Join(" / ", parts);
+    }
+    private string ConditionTextChange(TrainingStat result)
+    {
+        if (result.condition == 0)
+            return "";
+
+        return $"컨디션 {(result.condition > 0 ? "+" : "")}{result.condition}";
     }
     private void HandleFlowComplete()
     {
