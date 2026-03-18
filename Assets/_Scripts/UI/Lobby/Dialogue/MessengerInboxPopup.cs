@@ -13,6 +13,11 @@ public class MessengerInboxPopup : UIBase
     [SerializeField] private MessengerRoomPopup _roomPopupPrefab;
 
 
+    [Header("Friendly Match")]
+    [SerializeField] private Button _btnFriendlyMatch;
+    [SerializeField] private TMP_Text _txtFriendlyMatchCount;
+    [SerializeField] private FriendlyMatchSelectPopup _friendlyMatchSelectPopup; // 씬에 배치된 상대 선택 팝업
+
     private MessengerRoomPopup _currentRoomPopup;
     private List<GameObject> _spawnedItems = new List<GameObject>();
     private bool _isInited;
@@ -49,8 +54,30 @@ public class MessengerInboxPopup : UIBase
         {
             UIManager.Instance.PushMessenger(this);
         }
+        RefreshFriendlyMatchUI();
     }
+    public void RefreshFriendlyMatchUI()
+    {
+        if (_btnFriendlyMatch == null || _txtFriendlyMatchCount == null) return;
 
+        int current = FriendlyMatchManager.Instance.CurrentApplyCount;
+        int max = FriendlyMatchManager.Instance.MaxMonthlyCount;
+
+        // 우측 상단 횟수 (예: 친선경기 (1/3))
+        _txtFriendlyMatchCount.text = $"친선경기 ({current}/{max})";
+
+        _btnFriendlyMatch.onClick.RemoveAllListeners();
+        _btnFriendlyMatch.onClick.AddListener(() => {
+            if (current < max)
+            {
+                if (_friendlyMatchSelectPopup != null) _friendlyMatchSelectPopup.Open();
+            }
+            else
+            {
+                Debug.Log("이번 달 횟수를 모두 소진했습니다.");
+            }
+        });
+    }
     public override void Close()
     {
         if (SuddenEventManager.Instance != null)

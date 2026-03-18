@@ -59,8 +59,10 @@ public class DialogueRunner : Singleton<DialogueRunner>
 
         if (!string.IsNullOrEmpty(row.suddenEvent) && row.suddenEvent != "-")
         {
-            if (SuddenEventManager.Instance != null) SuddenEventManager.Instance.ExecuteEventById(row.suddenEvent);
-            SuddenEventManager.Instance.ExecuteEventById(row.suddenEvent, roomName, true);
+            if (SuddenEventManager.Instance != null)
+            {
+                SuddenEventManager.Instance.ExecuteEventById(row.suddenEvent, roomName, true);
+            }
         }
 
         string messageText = "";

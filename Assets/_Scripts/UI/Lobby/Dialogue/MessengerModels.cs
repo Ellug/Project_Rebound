@@ -5,6 +5,7 @@ public enum MessageSenderType
 {
     Them,       // 상대방 (좌측 정렬)
     Me,          // 나 (우측 정렬)
+    System
 }
 
 public enum MessageEventType
