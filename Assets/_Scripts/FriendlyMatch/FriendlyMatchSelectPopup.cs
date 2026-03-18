@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 using TMPro;
 using System.Collections.Generic;
-using System.Linq; // FirstOrDefault를 위해 추가
+using System.Linq;
 
 public class FriendlyMatchSelectPopup : UIBase
 {
@@ -10,6 +10,9 @@ public class FriendlyMatchSelectPopup : UIBase
     [SerializeField] private Transform _contentRoot;
     [SerializeField] private Button _btnSchoolPrefab;
     [SerializeField] private Button _btnClose;
+
+    // 상단에 표시될 남은 횟수 텍스트
+    [SerializeField] private TMP_Text _txtFriendlyMatchCount;
 
     private List<GameObject> _spawnedItems = new List<GameObject>();
 
@@ -22,9 +25,22 @@ public class FriendlyMatchSelectPopup : UIBase
 
     public override void Open()
     {
-        base.Open();
+        base.Open(); // 뒤로가기 지원
+        transform.SetAsLastSibling(); // 다른 UI에 가려지지 않게 맨 앞으로 땡겨오기
+
         if (_inputSearch != null) _inputSearch.text = "";
+        UpdateMatchCountUI();
         PopulateSchools("");
+    }
+
+    private void UpdateMatchCountUI()
+    {
+        if (_txtFriendlyMatchCount != null)
+        {
+            int current = FriendlyMatchManager.Instance.CurrentApplyCount;
+            int max = FriendlyMatchManager.Instance.MaxMonthlyCount;
+            _txtFriendlyMatchCount.text = $"{current}";
+        }
     }
 
     private void OnSearchValueChanged(string keyword)
@@ -37,7 +53,6 @@ public class FriendlyMatchSelectPopup : UIBase
         foreach (var item in _spawnedItems) Destroy(item);
         _spawnedItems.Clear();
 
-        // 1. 친선전 목록 테이블과 학교 이름 테이블을 둘 다 불러옴
         var listTable = CachedSOData.Get<FriendlyMatchScheduleMsgListTableSO>();
         var nameTable = CachedSOData.Get<SchoolNameTableSO>();
 
@@ -45,24 +60,19 @@ public class FriendlyMatchSelectPopup : UIBase
 
         foreach (var row in listTable.Rows)
         {
-            // row.schoolName 에는 "school_001" 같은 ID가 들어음
             string schoolId = row.schoolName;
-            string realSchoolName = schoolId; // 기본값
+            string realSchoolName = schoolId;
 
-            // 2. SchoolNameTable에서 school_001에 해당하는 진짜 이름을 찾고
             var nameRow = nameTable.Rows.FirstOrDefault(r => r.id == schoolId);
             if (nameRow != null)
             {
                 realSchoolName = nameRow.name;
             }
 
-            // 3. ID가 아닌 "진짜 이름"을 기준으로 검색어를 필터링
             if (!string.IsNullOrEmpty(filter) && !realSchoolName.Contains(filter))
                 continue;
 
             Button btn = Instantiate(_btnSchoolPrefab, _contentRoot);
-
-            // 화면 버튼에는 진짜 한국어 이름 입력
             btn.GetComponentInChildren<TMP_Text>().text = realSchoolName;
             btn.gameObject.SetActive(true);
 
@@ -70,15 +80,18 @@ public class FriendlyMatchSelectPopup : UIBase
             string sId = schoolId;
 
             btn.onClick.AddListener(() => {
-                // 매니저에게 넘겨줄 때도 변환된 진짜 이름을 넘겨서 다이얼로그에 적용
+                // 1. 매니저에게 방 생성 명령
                 FriendlyMatchManager.Instance.StartFriendlyMatch(sId, sName);
 
+                // 2. 현재 열려있는 목록 창 닫기
                 Close();
 
-                MessengerManager.Instance.ReceiveMessage("temp", "temp", new ChatMessage(MessageSenderType.System, ""));
-
+                // 3. 인박스 목록을 갱신할 필요 없이, 즉시 해당 채팅방으로 진입
                 var inbox = FindFirstObjectByType<MessengerInboxPopup>();
-                if (inbox != null) inbox.RefreshFriendlyMatchUI();
+                if (inbox != null)
+                {
+                    inbox.OpenRoom($"friendly_{sId}");
+                }
             });
 
             _spawnedItems.Add(btn.gameObject);

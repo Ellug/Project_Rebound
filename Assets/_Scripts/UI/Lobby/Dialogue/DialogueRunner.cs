@@ -138,9 +138,6 @@ public class DialogueRunner : Singleton<DialogueRunner>
 
                 // 2) 내가 1번 선택지를 누른 것처럼 대화 내역에 자연스럽게 남겨주기
                 choiceMsg.SelectedChoiceIndex = 0;
-                string autoReplyText = choiceMsg.Choices.Count > 0 ? choiceMsg.Choices[0].Text : "선택";
-                ChatMessage autoReply = new ChatMessage(MessageSenderType.Me, autoReplyText);
-                MessengerManager.Instance.ReceiveMessage(roomId, roomName, autoReply);
 
                 // 3) 1번 선택지의 다음 노드로 즉시 스킵
                 StartCoroutine(ProcessNodeRoutine(roomId, roomName, diagId, row.choice1Next, textVars, systemMsgContent));
