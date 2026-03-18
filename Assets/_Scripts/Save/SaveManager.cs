@@ -15,6 +15,11 @@ public class SaveManager : Singleton<SaveManager>
 
     public int CurrentSlotIndex => _currentRuntimeSlotIndex;
 
+    private void Start()
+    {
+        CleanupIncompleteNewGameSlots(); // SaveSystem이 초기화된 이후 실행
+    }
+
     protected override void OnSingletonAwake()
     {
         LoadUserData();
@@ -151,7 +156,6 @@ public class SaveManager : Singleton<SaveManager>
         IsPendingNewGame = true;
 
         SaveUserData();
-        SaveSystem.Instance.Save(CurrentData);
         return true;
     }
 
@@ -767,5 +771,40 @@ public class SaveManager : Singleton<SaveManager>
 
         HeadCoachManager.Instance.RestoreUnlockedNodes(unlockedNodeIds);
         Debug.Log($"[SaveManager] 감독 노드 복원 완료. count={unlockedNodeIds.Count}");
+    }
+
+    // 새 게임 첫 영입 미완료 슬롯 삭제
+    // isRecruitmentInProgress == true && students.Count == 0 → 새 게임 영입 중 강제종료
+    // isRecruitmentInProgress == true && students.Count > 0  → 학기 중 영입 중 강제종료 → 플래그만 초기화, 슬롯 유지
+    private void CleanupIncompleteNewGameSlots()
+    {
+        Debug.Log("[SaveManager] CleanupIncompleteNewGameSlots 시작");
+        if (SaveSystem.Instance == null)
+        {
+            Debug.LogWarning("[SaveManager] SaveSystem.Instance가 null");
+            return;
+        }
+
+        int totalSlots = SaveSystem.Instance.GetTotalSlotCount();
+        for (int i = 1; i <= totalSlots; i++)
+        {
+            PlayData data = SaveSystem.Instance.Load(i);
+            if (data == null) continue;
+            if (!data.isRecruitmentInProgress) continue;
+
+            bool hasStudents = data.students != null && data.students.Count > 0;
+            if (hasStudents)
+            {
+                // 학기 중 영입 강제종료 → 플래그만 초기화 후 슬롯 유지
+                data.isRecruitmentInProgress = false;
+                SaveSystem.Instance.Save(data);
+                Debug.Log($"[SaveManager] 슬롯 {i}: 학기 영입 미완료 감지 → 플래그 초기화 후 유지");
+                continue;
+            }
+
+            // 새 게임 첫 영입 강제종료 → 슬롯 삭제
+            Debug.LogWarning($"[SaveManager] 슬롯 {i}: 새 게임 영입 미완료 감지 → 삭제");
+            SaveSystem.Instance.Delete(i);
+        }
     }
 }

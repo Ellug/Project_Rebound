@@ -20,6 +20,7 @@ public class PlayData
     public SavedTournamentData tournament = new();
     public SavedMatchSimData matchSim = new();                  // 경기 시뮬레이션 진행 상태
     public SavedMessengerData messenger = new();                // 메신저 상태
+    public bool isRecruitmentInProgress;                        // 새 게임 첫 영입 진행 중 여부
 }
 
 // GameFlowData 날짜/턴 관련 필드 대응
