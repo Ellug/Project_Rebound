@@ -62,6 +62,12 @@ public class FacilityPopup : UIBase
         _gymRow.upgradeButton.onClick.AddListener(() => TryUpgrade("gym"));
         _cafeteriaRow.upgradeButton.onClick.AddListener(() => TryUpgrade("cafeteria"));
         _counselingRow.upgradeButton.onClick.AddListener(() => TryUpgrade("counselingcenter"));
+
+        if (_btnClose != null)
+        {
+            _btnClose.onClick.RemoveAllListeners();
+            _btnClose.onClick.AddListener(OnClickClose);
+        }
     }
 
     private void TryUpgrade(string facility)
@@ -199,5 +205,10 @@ public class FacilityPopup : UIBase
         {
             HeadCoachManager.Instance.OnTreeChanged -= RefreshAll;
         }
+    }
+
+    private void OnClickClose()
+    {
+        Close();
     }
 }

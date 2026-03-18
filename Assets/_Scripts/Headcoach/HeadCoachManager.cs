@@ -87,6 +87,8 @@ public class HeadCoachManager : Singleton<HeadCoachManager>
 
         node.SetUnlocked(true);
 
+        Debug.Log($"[HeadCoachManager] {node.Name} 해금 | targetStat:{node.effectData.targetStat} | value:{node.effectData.effectValue}");
+
         // 해금된 노드의 스탯 증분을 전체 학생에게 즉시 적용
         ApplyNodeBonusToAll(node);
 
@@ -109,6 +111,10 @@ public class HeadCoachManager : Singleton<HeadCoachManager>
         if (gateNode == null || gateNode.IsUnlocked) return;
 
         gateNode.SetUnlocked(true);
+
+        // 티어 게이트 해금 시 보너스 스탯 즉시 적용
+        ApplyNodeBonusToAll(gateNode);
+
         OnTreeChanged?.Invoke();
     }
 

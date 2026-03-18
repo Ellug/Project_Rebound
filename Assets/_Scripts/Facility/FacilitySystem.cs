@@ -8,11 +8,19 @@ public class FacilitySystem : Singleton<FacilitySystem>
 
     protected override void OnSingletonAwake()
     {
-        // 초기 레벨
+        ResetLevelsToDefault();
+    }
+
+    // 시설 레벨을 기본값으로 초기화
+    public void ResetLevelsToDefault()
+    {
+        _levels.Clear();
         _levels["school"] = 1;
         _levels["gym"] = 1;
         _levels["cafeteria"] = 1;
         _levels["counselingcenter"] = 1;
+
+        Debug.Log("[FacilitySystem] 시설 레벨 기본값으로 초기화");
     }
 
     // 레벨 반환
@@ -68,6 +76,7 @@ public class FacilitySystem : Singleton<FacilitySystem>
                 return false;
             }
         }
+
         var current = GetCurrentData(facility);
         int cost = GetFinalUpgradeCost(facility);
         if (!MoneyManager.Instance.TrySpendGold(cost))
@@ -135,12 +144,19 @@ public class FacilitySystem : Singleton<FacilitySystem>
 
         int baseCost = current.upgradeCost;
 
-        float discountPercent = HeadCoachManager.Instance.GetStatBonusValue("Facility_Upgrade_Cost");
+        float discountPercent = 0f;
+        if (HeadCoachManager.Instance != null)
+        {
+            discountPercent = HeadCoachManager.Instance.GetStatBonusValue("Facility_Upgrade_Cost");
+        }
 
+        // 테이블에 -5로 들어오면 5% 할인으로 처리
         float multiplier = 1f + (discountPercent / 100f);
+        multiplier = Mathf.Max(0.01f, multiplier);
 
-        int finalCost = Mathf.RoundToInt(baseCost * multiplier);
+        int finalCost = Mathf.FloorToInt(baseCost * multiplier);
 
+        Debug.Log($"[FacilitySystem] {facility} 업그레이드 비용 계산 | 기본:{baseCost} | 할인:{discountPercent}% | 배율:{multiplier} | 최종:{finalCost}");
 
         return Mathf.Max(1, finalCost);
     }

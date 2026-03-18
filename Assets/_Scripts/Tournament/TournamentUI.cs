@@ -40,6 +40,13 @@ public class TournamentUI : MonoBehaviour
         RenderRounds(rounds, 0, mySchoolName);
     }
 
+    // 친선전 모드에서 토너먼트 전용 패널 숨김
+    public void HideTournamentPanels()
+    {
+        _roundListPanel.SetActive(false);
+        _focusedMatchPanel.SetActive(false);
+    }
+
     // 현재 라운드 상태에 맞춰 브래킷 패널 또는 결승 집중 패널을 갱신
     public void RenderRounds(IReadOnlyList<List<TournamentMatchViewData>> allRounds, int currentRoundIndex, string mySchoolName)
     {

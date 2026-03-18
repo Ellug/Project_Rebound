@@ -42,6 +42,18 @@ public class SaveManager : Singleton<SaveManager>
                 CurrentUserData != null ? CurrentUserData.reputation : data.reputation);
         }
 
+        // 슬롯 로드 시 시설 상태를 먼저 현재 슬롯 데이터 기준으로 맞춘다.
+        if (FacilitySystem.Instance != null)
+        {
+            ApplyFacilityData(data.facilities);
+        }
+
+        // 슬롯 로드 시 메신저 상태도 현재 슬롯 기준으로 먼저 맞춘다.
+        if (MessengerManager.Instance != null)
+        {
+            MessengerManager.Instance.RestoreSaveData(data.messenger);
+        }
+
         SceneManager.LoadScene(sceneName);
     }
 
@@ -58,6 +70,7 @@ public class SaveManager : Singleton<SaveManager>
         ApplyStudentData(CurrentData.students, CurrentData.slotAssignments);
         ApplyTournamentData(CurrentData.tournament);    // 토너먼트 씬 복원 (로비에선 자동 스킵)
         ApplyMatchSimData(CurrentData.matchSim);        // 경기 시뮬레이션 복원 (토너먼트 씬 외에선 자동 스킵)
+        ApplyMessengerData(CurrentData.messenger);      // 메신저 복원
         ApplyActiveEventEffects(CurrentData.flowData);  // 이벤트 activeEffectIds 복원
         RestoreHeadCoachNodesIfPossible();              // 감독 노드 복원 시도 (HeadCoachManager 초기화 여부에 따라 내부에서 처리)
 
@@ -108,7 +121,20 @@ public class SaveManager : Singleton<SaveManager>
             students = new List<SavedStudentData>(),
             slotAssignments = new List<SavedSlotAssignment>(),
             tournament = new SavedTournamentData(),
+            messenger = new SavedMessengerData(),
         };
+
+        // 새 게임 생성 시 런타임 시설 상태도 반드시 기본값으로 초기화
+        if (FacilitySystem.Instance != null)
+        {
+            FacilitySystem.Instance.ResetLevelsToDefault();
+        }
+
+        // 새 게임 생성 시 메신저 상태도 반드시 초기화
+        if (MessengerManager.Instance != null)
+        {
+            MessengerManager.Instance.ClearAll();
+        }
 
         IsPendingNewGame = true;
 
@@ -141,7 +167,6 @@ public class SaveManager : Singleton<SaveManager>
             Debug.Log($"[SaveManager] SaveCurrent | slot unlockedNodeIds.Count={CurrentData.unlockedNodeIds.Count}");
         }
 
-
         SaveUserData();
 
         CurrentData.facilities = CollectFacilityData();
@@ -171,6 +196,9 @@ public class SaveManager : Singleton<SaveManager>
 
         // 경기 시뮬레이션 상태 수집
         CurrentData.matchSim = CollectMatchSimData();
+
+        // 메신저 상태 수집
+        CurrentData.messenger = CollectMessengerData();
 
         // 슬롯 카드 표시용 메타 갱신
         CurrentData.saveTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm");
@@ -205,12 +233,23 @@ public class SaveManager : Singleton<SaveManager>
         }
 
         CurrentData = null;
+
+        if (MessengerManager.Instance != null)
+        {
+            MessengerManager.Instance.ClearAll();
+        }
+
         SceneManager.LoadScene("Title");
     }
 
     public void Clear()
     {
         CurrentData = null;
+
+        if (MessengerManager.Instance != null)
+        {
+            MessengerManager.Instance.ClearAll();
+        }
     }
 
     private void SaveUserData()
@@ -266,7 +305,6 @@ public class SaveManager : Singleton<SaveManager>
             activeEventIds = new List<string>(GameManager.Instance.ActiveEventIds),
             maxRecruitCount = GameManager.Instance.MaxRecruitCount,
             hasPendingFriendlyMatch = GameManager.Instance.HasPendingFriendlyMatch,
-            hasPlayedVn10001 = GameManager.Instance.HasPlayedVn10001,
             hasPlayedVn10002 = GameManager.Instance.HasPlayedVn10002,
             hasPlayedVn10003 = GameManager.Instance.HasPlayedVn10003,
 
@@ -284,7 +322,7 @@ public class SaveManager : Singleton<SaveManager>
         {
             return new List<SavedStudentData>();
         }
-           
+
         List<Student> students = StudentManager.Instance.Students;
         List<SavedStudentData> result = new(students.Count);
 
@@ -381,18 +419,32 @@ public class SaveManager : Singleton<SaveManager>
         return mgm.CollectSaveData();
     }
 
+    // 메신저 상태 수집
+    private static SavedMessengerData CollectMessengerData()
+    {
+        if (MessengerManager.Instance == null)
+            return new SavedMessengerData();
+
+        return MessengerManager.Instance.CollectSaveData();
+    }
+
     private static void ApplyFacilityData(SavedFacilityData data)
     {
-        if (data == null)
+        if (FacilitySystem.Instance == null)
             return;
 
-        if (FacilitySystem.Instance == null)
+        // 어떤 슬롯을 적용하든 먼저 기본값으로 초기화해서 이전 슬롯 잔존 상태를 제거
+        FacilitySystem.Instance.ResetLevelsToDefault();
+
+        if (data == null)
             return;
 
         FacilitySystem.Instance.SetLevel("school", data.schoolLevel);
         FacilitySystem.Instance.SetLevel("gym", data.gymLevel);
         FacilitySystem.Instance.SetLevel("cafeteria", data.cafeteriaLevel);
         FacilitySystem.Instance.SetLevel("counselingcenter", data.counselingCenterLevel);
+
+        Debug.Log($"[SaveManager] 시설 데이터 복원 완료 | school={data.schoolLevel}, gym={data.gymLevel}, cafeteria={data.cafeteriaLevel}, counseling={data.counselingCenterLevel}");
     }
 
     private static void ApplyStudentData(List<SavedStudentData> savedStudents, List<SavedSlotAssignment> savedSlots)
@@ -479,6 +531,15 @@ public class SaveManager : Singleton<SaveManager>
             return;
 
         mgm.RestoreSaveData(data);
+    }
+
+    // 메신저 데이터 복원
+    private static void ApplyMessengerData(SavedMessengerData data)
+    {
+        if (MessengerManager.Instance == null)
+            return;
+
+        MessengerManager.Instance.RestoreSaveData(data);
     }
 
     // 로드 시 activeEventIds 기준으로 학생의 activeEffectIds를 재동기화
@@ -586,7 +647,6 @@ public class SaveManager : Singleton<SaveManager>
         }
     }
 
-
     public void ConsumePendingNewGameFlag()
     {
         IsPendingNewGame = false;
@@ -599,7 +659,6 @@ public class SaveManager : Singleton<SaveManager>
 
         return storyId switch
         {
-            10001 => CurrentData.flowData.hasPlayedVn10001,
             10002 => CurrentData.flowData.hasPlayedVn10002,
             10003 => CurrentData.flowData.hasPlayedVn10003,
             _ => false
@@ -616,9 +675,6 @@ public class SaveManager : Singleton<SaveManager>
 
         switch (storyId)
         {
-            case 10001:
-                CurrentData.flowData.hasPlayedVn10001 = true;
-                break;
             case 10002:
                 CurrentData.flowData.hasPlayedVn10002 = true;
                 break;
@@ -648,6 +704,11 @@ public class SaveManager : Singleton<SaveManager>
 
         CurrentData = null;
         ShouldDeleteCurrentRunOnTitle = false;
+
+        if (MessengerManager.Instance != null)
+        {
+            MessengerManager.Instance.ClearAll();
+        }
     }
 
     public void SaveAfterChoice(string branchName, Action choiceAction)

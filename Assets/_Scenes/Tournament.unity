@@ -3670,9 +3670,11 @@ MonoBehaviour:
   _progressCompletedColor: {r: 0.17, g: 0.17, b: 0.17, a: 1}
   _progressCurrentColor: {r: 0, g: 0, b: 0, a: 1}
   _progressPendingColor: {r: 0.74, g: 0.74, b: 0.74, a: 1}
+  _matchContextImage: {fileID: 1374893853}
   _matchResultPanel: {fileID: 1822545139}
-  _matchResultWinImage: {fileID: 54898971}
-  _matchResultLoseImage: {fileID: 667119301}
+  _matchResultWinHeader: {fileID: 54898971}
+  _matchResultLoseHeader: {fileID: 667119301}
+  _matchResultImage: {fileID: 122689185}
 --- !u!114 &1230140056
 MonoBehaviour:
   m_ObjectHideFlags: 0
