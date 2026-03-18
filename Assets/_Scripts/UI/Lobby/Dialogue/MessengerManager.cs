@@ -25,6 +25,9 @@ public class MessengerManager : Singleton<MessengerManager>
         newMessage.Timestamp = currentDate;
 
         ChatRoom room = _activeRooms.Find(r => r.RoomId == roomId);
+
+        bool isViewing = (CurrentViewingRoomId == roomId);
+
         if (room == null)
         {
             room = new ChatRoom { RoomId = roomId, RoomName = roomName, HasUnread = true };

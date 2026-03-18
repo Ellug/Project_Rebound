@@ -1,13 +1,13 @@
 ID,speaker,dialogue
 string,enum,String
-text_diag_000001_000,student,쌤쌤
+text_diag_000001_000,student,감독님
 text_diag_000001_001,player,?
 text_diag_000001_002,player,운동장 돌고 싶냐
 text_diag_000001_003,student,아 왜요;;
-text_diag_000001_004,student,쌤 저 오늘 야자 못 할 거 같아요.
+text_diag_000001_004,student,저 오늘 야자 못 할 거 같아요.
 text_diag_000001_005,player,사유
 text_diag_000001_006,student,아 있어요 그런게...
-text_diag_000001_007,student,오늘만 좀 봐주시면 안돼요?
+text_diag_000001_007,student,오늘만 좀 봐주세요. 네?
 text_diag_000001_008,choice,잘 들어.
 text_diag_000001_009,player,"나는 선생이고, 너는 학생이야."
 text_diag_000001_010,student,넵...
@@ -24,40 +24,40 @@ text_diag_000001_020,student,꿈은 크게 가져야죠!
 text_diag_000001_021,player,음! 사내가 꿈을 크게 가져야지!
 text_diag_000001_022,player,체육관으로 뛰어 와라!
 text_diag_000001_023,player,10분 주마!
-text_diag_000001_024,student,...그럼 야자 하러 가보겠습니닷!
+text_diag_000001_024,student,...이만 야자 하러 가보겠습니닷!
 text_diag_000001_025,player,9
 text_diag_000001_026,student,넵지금당장뛰어가겠스빈다!
 text_diag_000001_027,choice,(대충 야자를 빠지면 안된다는 잔소리)
 text_diag_000001_028,student,흥.
 text_diag_000001_029,student,비스듬해질테다.
-text_diag_000001_030,player,(대충 잡히면 운동장 100바퀴라는 선언)
-text_diag_000002_000,student,쌤.. 저 오늘 훈련 못 가요
+text_diag_000001_030,player,(대충 너는 잡히면 운동장 100바퀴라는 선고)
+text_diag_000002_000,student,감독님.. 저 오늘 훈련 못 가요
 text_diag_000002_001,player,사유.
 text_diag_000002_002,student,영어 수행평가 미달이라 
 text_diag_000002_003,student,보충 수업 들어야 한대요ㅠ
 text_diag_000002_004,player,잘 좀 하지;;
-text_diag_000002_005,student,아 쌤!! 저 나름 열심히 했다고요!!
+text_diag_000002_005,student,저 나름 열심히 했다고요!
 text_diag_000002_006,player,그럼 사과 영어로 써봐
 text_diag_000002_007,student,ㅡㅡ
 text_diag_000002_008,student,Appole
 text_diag_000002_009,player,...그냥 보충 수업 열심히 들어라. 
 text_diag_000002_010,player,두 번 들어라.
-text_diag_000003_000,student,쌤 체단실 기구 제가 고쳤어요!!
+text_diag_000003_000,student,감독님 체단실 기구 제가 고쳤어요!!
 text_diag_000003_001,player,오 기특하네? 
-text_diag_000003_002,player,근데 왜 불길하지?
+text_diag_000003_002,player,근데 왜 불안하지?
 text_diag_000003_003,student,벤치프레스 바가 좀 휘어 있어서 
 text_diag_000003_004,player,있어서
-text_diag_000003_005,student,힘으로 폈어요
-text_diag_000003_006,choice,힘으로...뭐?
+text_diag_000003_005,student,폈어요
+text_diag_000003_006,choice,폈...뭐?
 text_diag_000003_007,player,그게 가능해?
 text_diag_000003_008,student,되던데요
 text_diag_000003_009,choice,아
 text_diag_000003_010,player,그거 손잡이야
 text_diag_000003_011,student,...네?
-text_diag_000003_012,student,일자 아니었어요?
+text_diag_000003_012,student,일자 아니요?
 text_diag_000003_013,player,내일까지 반성문 써서 제출해라.
-text_diag_000003_014,student,...네.
-text_diag_000004_000,student,쌤! 저 방금 림 잡았어요!!!
+text_diag_000003_014,student,으아아;;;
+text_diag_000004_000,student,감독님! 저 방금 림 잡았어요!!!
 text_diag_000004_001,player,오 드디어? 덩크 가냐?
 text_diag_000004_002,student,네!! 근데 림 잡고 내려오다가 골대 흔들렸음요ㅋㅋ
 text_diag_000004_003,player,아
@@ -68,12 +68,12 @@ text_diag_000004_007,student,높이가 낮아지긴 했어요.
 text_diag_000004_008,student,이거 원래 이래요?
 text_diag_000004_009,choice,...응
 text_diag_000004_010,player,림이 나처럼 많이 피곤한가보다
-text_diag_000004_011,player,근처 풀숲에 코 자게 두고 조용히 와라.
+text_diag_000004_011,player,근처 풀숲에 두고 조용히 와라.
 text_diag_000004_012,student,(넵)
 text_diag_000004_013,choice,겠냐
 text_diag_000004_014,player,너 나랑 반성문 한 장 쓰자
 text_diag_000004_015,student,ㅜㅜ
-text_diag_000005_000,student,코치님 !
+text_diag_000005_000,student,감독님 !
 text_diag_000005_001,student,옆 여고 애들이 농구 가르쳐달래요!
 text_diag_000005_002,choice,너가?
 text_diag_000005_003,student,쌤도 아시잖아요.
@@ -178,7 +178,7 @@ text_diag_000009_004,player,잠깐만... 어..
 text_diag_000009_005,choice,1111
 text_diag_000009_006,student,열렸어요
 text_diag_000009_007,student,쌤 진짜 그렇게 봤는데
-text_diag_000009_008,player,엄청 단순하네요
+text_diag_000009_008,student,엄청 단순하네요
 text_diag_000009_009,player,조용히 해
 text_diag_000009_010,choice,1234
 text_diag_000009_011,student,...5회 이상 틀려서 30분 기다리래요.
@@ -212,6 +212,5 @@ text_diag_000010_011,student,...네?
 text_diag_000010_012,player,기다려라. 내가 간다.
 text_diag_000010_013,student,(감동)
 text_diag_100000_000,student,"환영합니다, 코치님. 앞으로도 잘 부탁 드립니다."
-text_diag_100001_000,student,"$""{target1.grade} {target1.name} 학생이 금일 지각하였습니다. 계도 부탁 드립니다."""
+text_diag_100001_000,student,{target1.grade} {target1.name} 학생이 금일 지각하였습니다. 계도 부탁 드립니다.
 text_diag_200001_000,student,학생들에게 간식을 사주었다.
-text_diag_300000_000,student,♚♚경일☆아카데미♚♚가입시$$전원 과제☜☜100%증정※ ♜mLua♜유니티 C# 무료증정￥ 특정조건 §§포트폴리오§§★자소서★스펙업이벤트기회@@@ 즉시이동https://www.kiweb.or.kr/main/

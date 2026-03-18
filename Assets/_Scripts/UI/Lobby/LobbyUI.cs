@@ -175,6 +175,11 @@ public class LobbyUI : UIBase
                 // 취소 누르면 방금 창은 닫히고 다음 팝업 띄우기
                 if (SuddenEventManager.Instance != null)
                 {
+                    if (DialogueRunner.Instance != null)
+                    {
+                        DialogueRunner.Instance.SkipRoom(data.roomId);
+                    }
+
                     SuddenEventManager.Instance.ProcessNextPopup();
                 }
             }

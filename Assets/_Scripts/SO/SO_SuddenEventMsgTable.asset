@@ -102,11 +102,11 @@ MonoBehaviour:
     messageDialogue: text_diag_000001_007
     next: 
     isChoice: 1
-    choice1Dialogue: text_daig_000001_008
+    choice1Dialogue: text_diag_000001_008
     choice1Next: index_008
-    choice2Dialogue: text_daig_000001_018
+    choice2Dialogue: text_diag_000001_018
     choice2Next: index_017
-    choice3Dialogue: text_daig_000001_027
+    choice3Dialogue: text_diag_000001_027
     choice3Next: index_025
     suddenEvent: 
   - iD: diag_000001
@@ -546,9 +546,9 @@ MonoBehaviour:
     messageDialogue: text_diag_000003_005
     next: 
     isChoice: 1
-    choice1Dialogue: text_daig_000003_006
+    choice1Dialogue: text_diag_000003_006
     choice1Next: index_006
-    choice2Dialogue: text_daig_000003_009
+    choice2Dialogue: text_diag_000003_009
     choice2Next: index_008
     choice3Dialogue: 
     choice3Next: 
@@ -750,9 +750,9 @@ MonoBehaviour:
     messageDialogue: text_diag_000004_008
     next: 
     isChoice: 1
-    choice1Dialogue: text_daig_000004_009
+    choice1Dialogue: text_diag_000004_009
     choice1Next: index_009
-    choice2Dialogue: text_daig_000004_014
+    choice2Dialogue: text_diag_000004_014
     choice2Next: index_013
     choice3Dialogue: 
     choice3Next: 
@@ -846,11 +846,11 @@ MonoBehaviour:
     messageDialogue: text_diag_000005_001
     next: index_002
     isChoice: 1
-    choice1Dialogue: text_daig_000005_002
+    choice1Dialogue: text_diag_000005_002
     choice1Next: index_002
-    choice2Dialogue: text_daig_000005_011
+    choice2Dialogue: text_diag_000005_011
     choice2Next: index_010
-    choice3Dialogue: text_daig_000005_018
+    choice3Dialogue: text_diag_000005_018
     choice3Next: index_016
     suddenEvent: 
   - iD: diag_000005
@@ -1194,11 +1194,11 @@ MonoBehaviour:
     messageDialogue: text_diag_000006_004
     next: 
     isChoice: 1
-    choice1Dialogue: text_daig_000006_005
+    choice1Dialogue: text_diag_000006_005
     choice1Next: index_005
-    choice2Dialogue: text_daig_000006_011
+    choice2Dialogue: text_diag_000006_011
     choice2Next: index_010
-    choice3Dialogue: text_daig_000006_022
+    choice3Dialogue: text_diag_000006_022
     choice3Next: index_020
     suddenEvent: 
   - iD: diag_000006
@@ -1710,9 +1710,9 @@ MonoBehaviour:
     messageDialogue: text_diag_000008_003
     next: index_004
     isChoice: 1
-    choice1Dialogue: text_daig_000008_004
+    choice1Dialogue: text_diag_000008_004
     choice1Next: index_004
-    choice2Dialogue: text_daig_000008_011
+    choice2Dialogue: text_diag_000008_011
     choice2Next: index_010
     choice3Dialogue: 
     choice3Next: 
@@ -1950,11 +1950,11 @@ MonoBehaviour:
     messageDialogue: text_diag_000009_004
     next: index_005
     isChoice: 1
-    choice1Dialogue: text_daig_000009_005
+    choice1Dialogue: text_diag_000009_005
     choice1Next: index_005
-    choice2Dialogue: text_daig_000009_010
+    choice2Dialogue: text_diag_000009_010
     choice2Next: index_009
-    choice3Dialogue: text_daig_000009_013
+    choice3Dialogue: text_diag_000009_013
     choice3Next: index_011
     suddenEvent: 
   - iD: diag_000009
@@ -2214,9 +2214,9 @@ MonoBehaviour:
     messageDialogue: text_diag_000010_002
     next: index_003
     isChoice: 1
-    choice1Dialogue: text_daig_000010_003
+    choice1Dialogue: text_diag_000010_003
     choice1Next: index_003
-    choice2Dialogue: text_daig_000010_008
+    choice2Dialogue: text_diag_000010_008
     choice2Next: index_007
     choice3Dialogue: 
     choice3Next: 
@@ -2365,15 +2365,3 @@ MonoBehaviour:
     choice3Dialogue: 
     choice3Next: 
     suddenEvent: event_000021
-  - iD: diag_300000
-    messageIndex: index_000
-    messageDialogue: text_diag_300000_000
-    next: END
-    isChoice: 0
-    choice1Dialogue: 
-    choice1Next: 
-    choice2Dialogue: 
-    choice2Next: 
-    choice3Dialogue: 
-    choice3Next: 
-    suddenEvent: 

@@ -15,7 +15,7 @@ public class MessengerRoomPopup : UIBase
     [SerializeField] private ChatBubble _bubbleRightPrefab;
     [SerializeField] private ChatChoiceBox _choiceBoxPrefab;
     [SerializeField] private ChatBubble _bubbleSystemPrefab;
-
+    [SerializeField] private ScrollRect _scrollRect;
     private List<GameObject> _spawnedItems = new List<GameObject>();
 
     public string CurrentRoomId { get; private set; }
@@ -70,6 +70,11 @@ public class MessengerRoomPopup : UIBase
         if (MessengerManager.Instance != null)
         {
             MessengerManager.Instance.CurrentViewingRoomId = "";
+        }
+
+        if (DialogueRunner.Instance != null && !string.IsNullOrEmpty(CurrentRoomId))
+        {
+            DialogueRunner.Instance.SkipRoom(CurrentRoomId);
         }
 
         base.Close();
@@ -134,9 +139,18 @@ public class MessengerRoomPopup : UIBase
             }
         }
 
-        Canvas.ForceUpdateCanvases();
+        StartCoroutine(ScrollToBottomRoutine());
     }
+    private System.Collections.IEnumerator ScrollToBottomRoutine()
+    {
+        yield return null; // UI 레이아웃이 계산될 때까지 1프레임 대기
+        Canvas.ForceUpdateCanvases();
 
+        if (_scrollRect != null)
+        {
+            _scrollRect.verticalNormalizedPosition = 0f; // 0이 맨 아래, 1이 맨 위
+        }
+    }
     private void RefreshChat(ChatRoom room)
     {
         foreach (var item in _spawnedItems)
@@ -159,6 +173,16 @@ public class MessengerRoomPopup : UIBase
                 choiceBox.Setup(msg, this);
                 choiceBox.gameObject.SetActive(true);
                 _spawnedItems.Add(choiceBox.gameObject);
+            }
+            else if (msg.EventType == MessageEventType.System) // 시스템 메시지 분기 처리
+            {
+                if (_bubbleSystemPrefab != null)
+                {
+                    ChatBubble bubble = Instantiate(_bubbleSystemPrefab, _chatContentRoot);
+                    bubble.Setup(msg.Content);
+                    bubble.gameObject.SetActive(true);
+                    _spawnedItems.Add(bubble.gameObject);
+                }
             }
             else
             {
