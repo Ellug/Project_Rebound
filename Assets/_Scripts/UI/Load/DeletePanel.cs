@@ -15,10 +15,10 @@ public class DeletePanel : MonoBehaviour
     private bool _bound;
     private Coroutine _enableRoutine;
 
-    void Awake()
-    {
-        gameObject.SetActive(false);
-    }
+    //void Awake()
+    //{
+    //    gameObject.SetActive(false);
+    //}
 
     void OnEnable()
     {

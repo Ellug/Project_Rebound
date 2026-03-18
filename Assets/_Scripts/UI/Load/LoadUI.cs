@@ -78,6 +78,7 @@ public class LoadUI : MonoBehaviour
         {
             return;
         }
+        _openPanel.gameObject.SetActive(true);
         _openPanel.Open(slotIndex, data.playTime, this);
     }
 
