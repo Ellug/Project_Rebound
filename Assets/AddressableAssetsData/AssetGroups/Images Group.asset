@@ -746,7 +746,7 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: fb8da6ee5b0a6ca43bb13b5145939255
-    m_Address: Assets/_Images/Addressables/Popup/EventGame00_image01.png
+    m_Address: EventGame00_image01
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -762,6 +762,16 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: fe981d16a611c9e449615442fc49b468
     m_Address: EventPopup_memorial_img
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: abaa4802951849047b4a5c3c8612b196
+    m_Address: EventPopup_weekend_img
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cd7367313ea47f749aec0edffd98c348
+    m_Address: TrainingPopup03_img_01
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

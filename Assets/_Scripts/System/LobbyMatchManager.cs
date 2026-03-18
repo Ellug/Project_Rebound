@@ -92,6 +92,27 @@ public class LobbyMatchManager : MonoBehaviour
         return true;
     }
 
+    // 방학 확인 후 노출되는 토너먼트 진입 확인 팝업
+    public bool TryShowTournamentEntryPopup()
+    {
+        if (!CanEnterTournament()) return false;
+
+        var req = UIPopupRequest.Default(
+            title: "토너먼트",
+            message: "방학 토너먼트에 진입합니다.\n학생 배치를 완료하면 토너먼트가 시작됩니다.",
+            previewImageId: "EventPopup_tournament_img",
+            onPrimary: EnterTournament,
+            onCancel: null,
+            showCancel: false
+        );
+
+        UIPopup popup = UIManager.Instance.ShowPopup(req);
+        if (popup != null)
+            popup.DisableBackKey = true;
+
+        return true;
+    }
+
     // 로비 초기화 직후 대기 중인 토너먼트/친선 결과 출력
     public void HandlePendingResults()
     {
@@ -107,7 +128,7 @@ public class LobbyMatchManager : MonoBehaviour
         var req = UIPopupRequest.Default(
             title: "친선경기",
             message: "이번 주말 친선경기가 예정되어 있습니다.\n친선경기에 진입합니다.",
-            previewImageId: "EventPopup00_image01(임시)",
+            previewImageId: "EventPopup_tournament_img",
             onPrimary: EnterFriendlyMatch,
             onCancel: null,
             showCancel: false

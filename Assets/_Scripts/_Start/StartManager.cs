@@ -9,14 +9,15 @@ using UnityEngine.UI;
 
 public class StartManager : MonoBehaviour
 {
-    private const float CatalogCheckEnd = 0.08f;
-    private const float CatalogUpdateEnd = 0.18f;
-    private const float PrepareResourcesEnd = 0.26f;
-    private const float VerifyResourcesEnd = 0.34f;
-    private const float DownloadResourcesEnd = 0.80f;
-    private const float TableLoadEnd = 0.93f;
-    private const float ImagePreloadEnd = 0.96f;
-    private const float InitStart = 0.97f;
+    // 로딩 단계별 진행률 구간
+    private const float CatalogCheckEnd = 0.05f;
+    private const float CatalogUpdateEnd = 0.12f;
+    private const float PrepareResourcesEnd = 0.32f;
+    private const float VerifyResourcesEnd = 0.44f;
+    private const float DownloadResourcesEnd = 0.84f;
+    private const float TableLoadEnd = 0.95f;
+    private const float ImagePreloadEnd = 0.98f;
+    private const float InitStart = 0.985f;
 
     // 선다운로드 대상 1건의 메타 정보
     private sealed class PreloadAssetEntry
@@ -304,7 +305,8 @@ public class StartManager : MonoBehaviour
 
         int totalLibraryCount = validPreloadRefs.Count;
         int loadedLibraryCount = 0;
-        _statusText.text = BuildPrepareSummaryStatusText(loadedLibraryCount, totalLibraryCount, result.Count, 0f);
+        float displayedPrepareRatio = 0f;
+        _statusText.text = BuildPrepareSummaryStatusText(loadedLibraryCount, totalLibraryCount, result.Count, displayedPrepareRatio);
 
         if (totalLibraryCount == 0)
         {
@@ -320,9 +322,14 @@ public class StartManager : MonoBehaviour
             while (!loadHandle.IsDone)
             {
                 float currentLibraryProgress = Mathf.Clamp01(loadHandle.PercentComplete);
-                float prepareRatio = ((float)loadedLibraryCount + currentLibraryProgress) / totalLibraryCount;
-                _loadingSlider.value = CatalogUpdateEnd + prepareRatio * (PrepareResourcesEnd - CatalogUpdateEnd);
-                _statusText.text = BuildPrepareSummaryStatusText(loadedLibraryCount, totalLibraryCount, result.Count, currentLibraryProgress);
+                float targetPrepareRatio = ((float)loadedLibraryCount + currentLibraryProgress) / totalLibraryCount;
+
+                // 실제 진행률을 기준으로 하되, 미세 보간을 더해 정체처럼 보이는 구간을 완화한다.
+                displayedPrepareRatio = Mathf.Max(displayedPrepareRatio, targetPrepareRatio);
+                displayedPrepareRatio = Mathf.Min(0.985f, displayedPrepareRatio + Time.unscaledDeltaTime * 0.18f);
+
+                _loadingSlider.value = CatalogUpdateEnd + displayedPrepareRatio * (PrepareResourcesEnd - CatalogUpdateEnd);
+                _statusText.text = BuildPrepareSummaryStatusText(loadedLibraryCount, totalLibraryCount, result.Count, displayedPrepareRatio);
                 yield return null;
             }
 
@@ -351,8 +358,9 @@ public class StartManager : MonoBehaviour
 
             loadedLibraryCount++;
             float completedRatio = (float)loadedLibraryCount / totalLibraryCount;
-            _loadingSlider.value = CatalogUpdateEnd + completedRatio * (PrepareResourcesEnd - CatalogUpdateEnd);
-            _statusText.text = BuildPrepareSummaryStatusText(loadedLibraryCount, totalLibraryCount, result.Count, 0f);
+            displayedPrepareRatio = Mathf.Max(displayedPrepareRatio, completedRatio);
+            _loadingSlider.value = CatalogUpdateEnd + displayedPrepareRatio * (PrepareResourcesEnd - CatalogUpdateEnd);
+            _statusText.text = BuildPrepareSummaryStatusText(loadedLibraryCount, totalLibraryCount, result.Count, displayedPrepareRatio);
 
             if (loadHandle.IsValid())
                 Addressables.Release(loadHandle);
@@ -562,15 +570,12 @@ public class StartManager : MonoBehaviour
         int loadedLibraryCount,
         int totalLibraryCount,
         int collectedRefCount,
-        float currentLibraryProgress)
+        float prepareRatio)
     {
         if (totalLibraryCount <= 0)
             return $"Preparing resources... 100.0% | lib 0/0 | refs {collectedRefCount}";
 
-        float inFlightProgress = loadedLibraryCount < totalLibraryCount ? Mathf.Clamp01(currentLibraryProgress) : 0f;
-        float percent = ((loadedLibraryCount + inFlightProgress) / totalLibraryCount) * 100f;
-        if (percent > 100f)
-            percent = 100f;
+        float percent = Mathf.Clamp01(prepareRatio) * 100f;
 
         return $"Preparing resources... {percent:0.0}% | lib {loadedLibraryCount}/{totalLibraryCount} | refs {collectedRefCount}";
     }
