@@ -28,6 +28,7 @@ public class SuddenEventManager : Singleton<SuddenEventManager>
 
         foreach (var row in table.Rows)
         {
+            if (row.condition.ToString().Contains("School")) continue;
             if ((row.condition & condition) == 0) continue;
             if ((row.context & context) == 0) continue;
             if (row.isProbable && UnityEngine.Random.value > row.probability) continue;

@@ -139,7 +139,10 @@ public class MessengerRoomPopup : UIBase
             }
         }
 
-        StartCoroutine(ScrollToBottomRoutine());
+        if (gameObject.activeInHierarchy)
+        {
+            StartCoroutine(ScrollToBottomRoutine());
+        }
     }
     private System.Collections.IEnumerator ScrollToBottomRoutine()
     {
