@@ -375,7 +375,6 @@ public class TrainingSelectPopup : UIPopup
 
         // 시설 레벨 차이
         int schoolDiff = Mathf.Max(0, schoolLv - requiredLv);
-        int gymDiff = Mathf.Max(0, gymLv - requiredLv);
         int cafeteriaDiff = Mathf.Max(0, cafeteriaLv - requiredLv);
         int counselingDiff = Mathf.Max(0, counselingLv - requiredLv);
 
@@ -386,9 +385,15 @@ public class TrainingSelectPopup : UIPopup
         float counselingBonus = FacilitySystem.Instance.GetMentalBonus() * 0.01f;
 
         // 훈련시 보너스들
-        float statBonus = gymBonus * gymDiff;
         float conditionBonus = (schoolBonus * schoolDiff) + (cafeteriaBonus * cafeteriaDiff);
         float mentalBonus = (counselingBonus * counselingDiff) + (cafeteriaBonus * cafeteriaDiff);
+        float nodeTrainingBonus = 0f;
+
+        if (HeadCoachManager.Instance != null && HeadCoachManager.Instance.IsInitialized)
+        {
+            // 현재 테이블에는 키가 없으면 0%로 동작
+            nodeTrainingBonus = HeadCoachManager.Instance.GetStatBonusValue("Training_Exp_Bonus") * 0.01f;
+        }
 
         // 감독 노드 훈련 컨디션 소모 감소 보너스 적용
         float nodeConditionBonus = 0f;
@@ -468,21 +473,24 @@ public class TrainingSelectPopup : UIPopup
             }
             student.condition = Student.ClampCondition(student.condition);
 
-            // 스탯
-            student.shoot += Mathf.RoundToInt(data.shootDelta + data.shootDelta * statBonus);
-            student.speed += Mathf.RoundToInt(data.speedDelta + data.speedDelta * statBonus);
-            student.jump += Mathf.RoundToInt(data.jumpDelta + data.jumpDelta * statBonus);
-            student.stamina += Mathf.RoundToInt(data.staminaDelta + data.staminaDelta * statBonus);
+            // 스탯 경험치(훈련 공식 적용)
+            StudentStatExpSystem.AddTrainingExp(student, StudentCoreStat.Shoot, data.shootDelta, gymBonus, gymLv, requiredLv, nodeTrainingBonus);
+            StudentStatExpSystem.AddTrainingExp(student, StudentCoreStat.Speed, data.speedDelta, gymBonus, gymLv, requiredLv, nodeTrainingBonus);
+            StudentStatExpSystem.AddTrainingExp(student, StudentCoreStat.Jump, data.jumpDelta, gymBonus, gymLv, requiredLv, nodeTrainingBonus);
+            StudentStatExpSystem.AddTrainingExp(student, StudentCoreStat.Stamina, data.staminaDelta, gymBonus, gymLv, requiredLv, nodeTrainingBonus);
 
             // 멘탈
             if (data.mentalDelta >= 0)
             {
-                student.mental += Mathf.RoundToInt(data.mentalDelta + data.mentalDelta * mentalBonus);
+                StudentStatExpSystem.AddTrainingExpWithRate(student, StudentCoreStat.Mental, data.mentalDelta, mentalBonus, nodeTrainingBonus);
             }
             else
             {
-                student.mental += data.mentalDelta;
+                StudentStatExpSystem.AddRawExp(student, StudentCoreStat.Mental, data.mentalDelta);
             }
+
+            // 포텐셜 추가 경험치(매 훈련 실행마다 1회)
+            StudentStatExpSystem.ApplyPotentialTrainingBonusExp(student);
 
             if (StudentManager.Instance != null)
                 StudentManager.Instance.NotifyStudentModified(student);
