@@ -225,7 +225,7 @@ public class SelectStudentInfoPopup : UIBase
         _canvasGroup.interactable = allow;
     }
 
-    private void OnDestroy()
+    protected override void OnDestroy()
     {
         // 오브젝트 파괴 시 Tween 정리
         _slideTween?.Kill();

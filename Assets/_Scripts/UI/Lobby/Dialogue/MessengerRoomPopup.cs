@@ -44,7 +44,7 @@ public class MessengerRoomPopup : UIBase
             MessengerManager.Instance.OnMessageAdded += HandleNewMessage;
         }
     }
-    void OnDestroy()
+    protected override void OnDestroy()
     {
         if (MessengerManager.Instance != null)
         {
@@ -115,10 +115,6 @@ public class MessengerRoomPopup : UIBase
         if (UIManager.Instance != null)
         {
             UIManager.Instance.PopMessenger(this);
-        }
-        if (SuddenEventManager.Instance != null)
-        {
-            SuddenEventManager.Instance.ProcessNextPopup();
         }
     }
 

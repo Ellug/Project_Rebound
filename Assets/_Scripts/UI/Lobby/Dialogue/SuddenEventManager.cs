@@ -18,15 +18,11 @@ public class SuddenEventManager : Singleton<SuddenEventManager>
         {
             DayOfWeek currentDay = tm.DateManager.CurrentDate.DayOfWeek;
 
-            // 1. 이미 주말이라면 무조건 차단
-            if (currentDay == DayOfWeek.Saturday || currentDay == DayOfWeek.Sunday)
-                return;
-
-            // 2. 금요일일 경우, 턴이 끝나는 시점인지 조건문 이름으로 확인하여 차단
             if (currentDay == DayOfWeek.Friday)
             {
                 string condStr = condition.ToString().ToLower();
-                if (condStr.Contains("end") || condStr.Contains("complete") || condStr.Contains("result") || condStr.Contains("after"))
+
+                if (!condStr.Contains("start") && !condStr.Contains("begin") && !condStr.Contains("morning") && !condStr.Contains("enter") && !condStr.Contains("init"))
                 {
                     return;
                 }
