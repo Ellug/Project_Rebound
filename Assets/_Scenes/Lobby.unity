@@ -7777,22 +7777,15 @@ MonoBehaviour:
   _btnPositionGuide: {fileID: 1898204114}
   _btnClose: {fileID: 495393613}
   _positionGuideTitle: "\uD3EC\uC9C0\uC158 \uC548\uB0B4"
-  _positionGuidePages:
-  - title: "\uD3EC\uC9C0\uC158 \uC774\uB780?"
-    content: "\uC124\uBA85 1"
-    subMessage: 
+  _positionGuideTable: {fileID: 11400000, guid: e157323945af6ab40bfdb8fa3976c7c1, type: 2}
+  _positionGuideImageMaps:
+  - rowId: pif_001
     imageId: StudentPopup01_img_01
-  - title: "\uC13C\uD130 \uD3EC\uC9C0\uC158"
-    content: "\uC124\uBA85 2"
-    subMessage: 
+  - rowId: pif_002
     imageId: StudentPopup01_img_02
-  - title: "\uAC00\uB4DC \uD3EC\uC9C0\uC158"
-    content: "\uC124\uBA85 3"
-    subMessage: 
+  - rowId: pif_003
     imageId: StudentPopup01_img_03
-  - title: "\uD3EC\uC6CC\uB4DC \uD3EC\uC9C0\uC158"
-    content: "\uC124\uBA85 4"
-    subMessage: 
+  - rowId: pif_004
     imageId: StudentPopup01_img_04
   _btnPlacementComplete: {fileID: 627564503}
 --- !u!1 &815628211
