@@ -72,7 +72,6 @@ public class ChatChoiceBox : MonoBehaviour
             if (i >= _messageData.Choices.Count) continue;
 
             var btnUI = _choiceButtons[i];
-            btnUI.button.interactable = !isAnswered;
 
             // 스프라이트 본연의 색을 내기 위해 틴트를 흰색으로 고정
             btnUI.bgImage.color = Color.white;

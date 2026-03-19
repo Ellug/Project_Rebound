@@ -15,12 +15,22 @@ public class FriendlyMatchRunner : Singleton<FriendlyMatchRunner>
         if (!_skippedRooms.Contains(roomId)) _skippedRooms.Add(roomId);
     }
 
-    public void PlayDialogue(string roomId, string roomName, string diagId, string startNodeId = "index_001", Dictionary<string, string> textVars = null)
+    public void PlayDialogue(string roomId, string roomName, string diagId, string startNodeId = "index_001", Dictionary<string, string> textVars = null, int msgStartIndex = 0)
     {
-        StartCoroutine(ProcessNodeRoutine(roomId, roomName, diagId, startNodeId, textVars));
+        _skippedRooms.Remove(roomId);
+        StartCoroutine(ProcessNodeRoutine(roomId, roomName, diagId, startNodeId, textVars, msgStartIndex));
+    }
+    private IEnumerator WaitWithSkip(float delay, string roomId)
+    {
+        float timer = 0f;
+        while (timer < delay && !_skippedRooms.Contains(roomId))
+        {
+            timer += Time.deltaTime;
+            yield return null;
+        }
     }
 
-    private IEnumerator ProcessNodeRoutine(string roomId, string roomName, string diagId, string nodeId, Dictionary<string, string> textVars)
+    private IEnumerator ProcessNodeRoutine(string roomId, string roomName, string diagId, string nodeId, Dictionary<string, string> textVars, int msgStartIndex)
     {
         // =================================================================================
         // 1. 대화 종료 및 시스템 메시지 출력 로직
@@ -124,13 +134,12 @@ public class FriendlyMatchRunner : Singleton<FriendlyMatchRunner>
             {
                 ChatMessage preNormalMsg = new ChatMessage(senderType, messageText, eventType);
                 MessengerManager.Instance.ReceiveMessage(roomId, roomName, preNormalMsg);
-                if (!isSkipping) yield return new WaitForSeconds(_typingDelay);
+                yield return WaitWithSkip(_typingDelay, roomId);
             }
 
-            if (isSkipping)
+            if (_skippedRooms.Contains(roomId))
             {
-                if (textVars != null && textVars.ContainsKey("{date1}")) textVars["{date_choice}"] = textVars["{date1}"];
-                StartCoroutine(ProcessNodeRoutine(roomId, roomName, diagId, row.choice1Next, textVars));
+                AbortFriendlyMatch(roomId, msgStartIndex);
                 yield break;
             }
 
@@ -170,10 +179,13 @@ public class FriendlyMatchRunner : Singleton<FriendlyMatchRunner>
 
             if (_skippedRooms.Contains(roomId) && !choiceMade)
             {
-                if (textVars != null && textVars.ContainsKey("{date1}")) textVars["{date_choice}"] = textVars["{date1}"];
-                StartCoroutine(ProcessNodeRoutine(roomId, roomName, diagId, row.choice1Next, textVars));
+                AbortFriendlyMatch(roomId, msgStartIndex);
+                yield break;
             }
-            else StartCoroutine(ProcessNodeRoutine(roomId, roomName, diagId, nextNodeToPlay, textVars));
+            else
+            { 
+                StartCoroutine(ProcessNodeRoutine(roomId, roomName, diagId, nextNodeToPlay, textVars, msgStartIndex));
+            }
         }
         // =================================================================================
         // 분기 1: 확률 결과 판정 (수락/거절)
@@ -185,7 +197,8 @@ public class FriendlyMatchRunner : Singleton<FriendlyMatchRunner>
             {
                 ChatMessage normalMsg = new ChatMessage(senderType, messageText, eventType);
                 MessengerManager.Instance.ReceiveMessage(roomId, roomName, normalMsg);
-                if (!isSkipping) yield return new WaitForSeconds(_typingDelay);
+
+                yield return WaitWithSkip(_typingDelay, roomId);
             }
 
             // 2. 확률 판정 후 수락/거절 텍스트 무작위 가져오기
@@ -205,12 +218,12 @@ public class FriendlyMatchRunner : Singleton<FriendlyMatchRunner>
                 ChatMessage replyMsg = new ChatMessage(MessageSenderType.Them, replyText, MessageEventType.NormalText);
                 MessengerManager.Instance.ReceiveMessage(roomId, roomName, replyMsg);
 
-                if (!isSkipping) yield return new WaitForSeconds(_typingDelay);
+                yield return WaitWithSkip(_typingDelay, roomId);
             }
 
             // 4. 다음 노드로 넘어가기
             string nextNodeToPlay = isAccepted ? row.choice1Next : row.choice2Next;
-            StartCoroutine(ProcessNodeRoutine(roomId, roomName, diagId, nextNodeToPlay, textVars));
+            StartCoroutine(ProcessNodeRoutine(roomId, roomName, diagId, nextNodeToPlay, textVars, msgStartIndex));
         }
         // =================================================================================
         // 분기 0 또는 2: 일반 대화
@@ -221,10 +234,46 @@ public class FriendlyMatchRunner : Singleton<FriendlyMatchRunner>
             {
                 ChatMessage normalMsg = new ChatMessage(senderType, messageText, eventType);
                 MessengerManager.Instance.ReceiveMessage(roomId, roomName, normalMsg);
-                if (!isSkipping) yield return new WaitForSeconds(senderType == MessageSenderType.Them ? _typingDelay : _typingDelay * 0.5f);
+
+                float delay = senderType == MessageSenderType.Them ? _typingDelay : _typingDelay * 0.5f;
+                yield return WaitWithSkip(delay, roomId);
             }
 
-            StartCoroutine(ProcessNodeRoutine(roomId, roomName, diagId, row.next, textVars));
+            StartCoroutine(ProcessNodeRoutine(roomId, roomName, diagId, row.next, textVars, msgStartIndex));
         }
+    }
+    private void AbortFriendlyMatch(string roomId, int msgStartIndex)
+    {
+        if (FriendlyMatchManager.Instance != null)
+        {
+            FriendlyMatchManager.Instance.RollbackApplyCount();
+        }
+
+        if (MessengerManager.Instance != null)
+        {
+            var room = MessengerManager.Instance.GetRoom(roomId);
+            if (room != null && room.Messages.Count > msgStartIndex)
+            {
+                // 이번 시도에 생긴 대화만 삭제
+                room.Messages.RemoveRange(msgStartIndex, room.Messages.Count - msgStartIndex);
+
+                // UI 갱신을 위해 안읽음 강제 트리거
+                room.HasUnread = true;
+                MessengerManager.Instance.MarkAsRead(roomId);
+            }
+        }
+
+        var selectPopup = UnityEngine.Object.FindFirstObjectByType<FriendlyMatchSelectPopup>(FindObjectsInactive.Exclude);
+        if (selectPopup != null)
+        {
+            selectPopup.UpdateMatchCountUI();
+        }
+
+        if (_skippedRooms.Contains(roomId))
+        {
+            _skippedRooms.Remove(roomId);
+        }
+
+        Debug.Log("[FriendlyMatchRunner] 친선전 신청이 도중 취소되어 채팅방 로그 및 횟수가 롤백되었습니다.");
     }
 }

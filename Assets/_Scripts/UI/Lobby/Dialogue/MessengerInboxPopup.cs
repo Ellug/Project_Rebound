@@ -41,11 +41,23 @@ public class MessengerInboxPopup : UIBase
 
     public override void Open()
     {
-        base.Open(); 
+        base.Open();
+        if (UIManager.Instance != null) UIManager.Instance.PushMessenger(this);
+
         RefreshList();
         RefreshFriendlyMatchUI();
     }
+    public override void Close()
+    {
+        if (UIManager.Instance != null) UIManager.Instance.PopMessenger(this);
 
+        base.Close();
+
+        if (SuddenEventManager.Instance != null)
+        {
+            SuddenEventManager.Instance.ProcessNextPopup();
+        }
+    }
     public void RefreshList()
     {
         foreach (var item in _spawnedItems) Destroy(item);
@@ -114,7 +126,11 @@ public class MessengerInboxPopup : UIBase
 
         _btnFriendlyMatch.onClick.RemoveAllListeners();
         _btnFriendlyMatch.onClick.AddListener(() => {
-            if (_friendlyMatchSelectPopup != null) _friendlyMatchSelectPopup.Open();
+            if (_friendlyMatchSelectPopup != null)
+            {
+                _friendlyMatchSelectPopup.Init();
+                _friendlyMatchSelectPopup.Open();
+            }
         });
     }
 }

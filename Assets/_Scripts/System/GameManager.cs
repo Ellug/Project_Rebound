@@ -243,6 +243,12 @@ public class GameManager : Singleton<GameManager>
         return _lobbyMatchManager.TryEnterTournament();
     }
 
+    // 방학 팝업 확인 후 노출되는 토너먼트 확인 팝업 진입 API
+    public bool TryShowTournamentEntryPopup()
+    {
+        return _lobbyMatchManager.TryShowTournamentEntryPopup();
+    }
+
     // 다음 토너먼트까지 남은 일수 계산 — CachedSOData를 직접 읽어 AEM 의존 없음
     private int GetTournamentDday()
     {

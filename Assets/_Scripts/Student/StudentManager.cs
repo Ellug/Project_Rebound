@@ -200,11 +200,16 @@ public class StudentManager : Singleton<StudentManager>
             if (student == null) continue;
 
             student.condition = Student.ClampCondition(student.condition - row.conditionCost);
-            student.mental += row.mental;
-            student.shoot += Mathf.RoundToInt(row.shoot);
-            student.speed += Mathf.RoundToInt(row.speed);
-            student.jump += Mathf.RoundToInt(row.jump);
-            student.stamina += Mathf.RoundToInt(row.stamina);
+            StudentStatExpSystem.AddRawExp(student, StudentCoreStat.Mental, row.mental);
+            StudentStatExpSystem.AddRawExp(student, StudentCoreStat.Shoot, Mathf.RoundToInt(row.shoot));
+            StudentStatExpSystem.AddRawExp(student, StudentCoreStat.Speed, Mathf.RoundToInt(row.speed));
+            StudentStatExpSystem.AddRawExp(student, StudentCoreStat.Jump, Mathf.RoundToInt(row.jump));
+            StudentStatExpSystem.AddRawExp(student, StudentCoreStat.Stamina, Mathf.RoundToInt(row.stamina));
+
+            if (row.mental > 0 || row.shoot > 0f || row.speed > 0f || row.jump > 0f || row.stamina > 0f)
+            {
+                StudentStatExpSystem.ApplyPotentialTrainingBonusExp(student);
+            }
 
             OnStudentModified?.Invoke(student);
         }

@@ -18,7 +18,7 @@ diag_000001,index_014,text_diag_000001_015,index_015,FALSE,-,-,-,-,-,-,-
 diag_000001,index_015,text_diag_000001_016,index_016,FALSE,-,-,-,-,-,-,-
 diag_000001,index_016,text_diag_000001_017,END,FALSE,-,-,-,-,-,-,event_000009
 diag_000001,index_017,text_diag_000001_019,index_018,FALSE,-,-,-,-,-,-,-
-diag_000001,index_018,text_diag_000001_020,index_019,TRUE,-,-,-,-,-,-,-
+diag_000001,index_018,text_diag_000001_020,index_019,FALSE,-,-,-,-,-,-,-
 diag_000001,index_019,text_diag_000001_021,index_020,FALSE,-,-,-,-,-,-,-
 diag_000001,index_020,text_diag_000001_022,index_021,FALSE,-,-,-,-,-,-,-
 diag_000001,index_021,text_diag_000001_023,index_022,FALSE,-,-,-,-,-,-,-
@@ -51,8 +51,7 @@ diag_000003,index_008,text_diag_000003_010,index_009,FALSE,-,-,-,-,-,-,-
 diag_000003,index_009,text_diag_000003_011,index_010,FALSE,-,-,-,-,-,-,-
 diag_000003,index_010,text_diag_000003_012,index_011,FALSE,-,-,-,-,-,-,-
 diag_000003,index_011,text_diag_000003_013,index_012,FALSE,-,-,-,-,-,-,-
-diag_000003,index_012,text_diag_000003_014,index_013,FALSE,-,-,-,-,-,-,-
-diag_000003,index_013,text_diag_000003_015,END,FALSE,-,-,-,-,-,-,event_000020
+diag_000003,index_012,text_diag_000003_014,END,FALSE,-,-,-,-,-,-,event_000020
 diag_000004,index_000,text_diag_000004_000,index_001,FALSE,-,-,-,-,-,-,-
 diag_000004,index_001,text_diag_000004_001,index_002,FALSE,-,-,-,-,-,-,-
 diag_000004,index_002,text_diag_000004_002,index_003,FALSE,-,-,-,-,-,-,-
@@ -64,8 +63,7 @@ diag_000004,index_007,text_diag_000004_007,index_008,FALSE,-,-,-,-,-,-,-
 diag_000004,index_008,text_diag_000004_008,-,TRUE,text_diag_000004_009,index_009,text_diag_000004_014,index_013,-,-,-
 diag_000004,index_009,text_diag_000004_010,index_010,FALSE,-,-,-,-,-,-,-
 diag_000004,index_010,text_diag_000004_011,index_011,FALSE,-,-,-,-,-,-,-
-diag_000004,index_011,text_diag_000004_012,index_012,FALSE,-,-,-,-,-,-,-
-diag_000004,index_012,text_diag_000004_012,END,FALSE,-,-,-,-,-,-,event_000005
+diag_000004,index_011,text_diag_000004_012,END,FALSE,-,-,-,-,-,-,event_000005
 diag_000004,index_013,text_diag_000004_014,index_014,FALSE,-,-,-,-,-,-,-
 diag_000004,index_014,text_diag_000004_015,END,FALSE,-,-,-,-,-,-,event_000010
 diag_000005,index_000,text_diag_000005_000,index_001,FALSE,-,-,-,-,-,-,-
@@ -141,7 +139,7 @@ diag_000007,index_005,text_diag_000007_005,END,FALSE,-,-,-,-,-,-,event_000021
 diag_000008,index_000,text_diag_000008_000,index_001,FALSE,-,-,-,-,-,-,-
 diag_000008,index_001,text_diag_000008_001,index_002,FALSE,-,-,-,-,-,-,-
 diag_000008,index_002,text_diag_000008_002,index_003,FALSE,-,-,-,-,-,-,-
-diag_000008,index_003,text_diag_000008_003,index_004,TRUE,text_diag_000008_004,index_004,text_diag_000008_011,index_010,-,-,-
+diag_000008,index_003,text_diag_000008_003,-,TRUE,text_diag_000008_004,index_004,text_diag_000008_011,index_010,-,-,-
 diag_000008,index_004,text_diag_000008_005,index_005,FALSE,-,-,-,-,-,-,-
 diag_000008,index_005,text_diag_000008_006,index_006,FALSE,-,-,-,-,-,-,-
 diag_000008,index_006,text_diag_000008_007,index_007,FALSE,-,-,-,-,-,-,-
@@ -161,7 +159,7 @@ diag_000009,index_000,text_diag_000009_000,index_001,FALSE,-,-,-,-,-,-,-
 diag_000009,index_001,text_diag_000009_001,index_002,FALSE,-,-,-,-,-,-,-
 diag_000009,index_002,text_diag_000009_002,index_003,FALSE,-,-,-,-,-,-,-
 diag_000009,index_003,text_diag_000009_003,index_004,FALSE,-,-,-,-,-,-,-
-diag_000009,index_004,text_diag_000009_004,index_005,TRUE,text_diag_000009_005,index_005,text_diag_000009_010,index_009,text_diag_000009_013,index_011,-
+diag_000009,index_004,text_diag_000009_004,-,TRUE,text_diag_000009_005,index_005,text_diag_000009_010,index_009,text_diag_000009_013,index_011,-
 diag_000009,index_005,text_diag_000009_006,index_006,FALSE,-,-,-,-,-,-,-
 diag_000009,index_006,text_diag_000009_007,index_007,FALSE,-,-,-,-,-,-,-
 diag_000009,index_007,text_diag_000009_008,index_008,FALSE,-,-,-,-,-,-,-
@@ -183,7 +181,7 @@ diag_000009,index_022,text_diag_000009_025,index_023,FALSE,-,-,-,-,-,-,-
 diag_000009,index_023,text_diag_000009_026,END,FALSE,-,-,-,-,-,-,-
 diag_000010,index_000,text_diag_000010_000,index_001,FALSE,-,-,-,-,-,-,-
 diag_000010,index_001,text_diag_000010_001,index_002,FALSE,-,-,-,-,-,-,-
-diag_000010,index_002,text_diag_000010_002,index_003,TRUE,text_diag_000010_003,index_003,text_diag_000010_008,index_007,-,-,-
+diag_000010,index_002,text_diag_000010_002,-,TRUE,text_diag_000010_003,index_003,text_diag_000010_008,index_007,-,-,-
 diag_000010,index_003,text_diag_000010_004,index_004,FALSE,-,-,-,-,-,-,-
 diag_000010,index_004,text_diag_000010_005,index_005,FALSE,-,-,-,-,-,-,-
 diag_000010,index_005,text_diag_000010_006,index_006,FALSE,-,-,-,-,-,-,-
