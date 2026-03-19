@@ -195,24 +195,60 @@ public class StudentManager : Singleton<StudentManager>
     // 주말 훈련/휴식 row를 전체 학생에게 일괄 적용
     public void ApplyWeekendTrainingEffect(WeekendTrainingRow row)
     {
+        if (row == null) return;
+
+        const int weekendRequiredFacilityLv = 1;
+        FacilitySystem facilitySystem = FacilitySystem.Instance;
+
+        int schoolLv = facilitySystem.GetLevel("school");
+        int gymLv = facilitySystem.GetLevel("gym");
+        int cafeteriaLv = facilitySystem.GetLevel("cafeteria");
+        int counselingLv = facilitySystem.GetLevel("counselingcenter");
+
+        int schoolDiff = Mathf.Max(0, schoolLv - weekendRequiredFacilityLv);
+        int cafeteriaDiff = Mathf.Max(0, cafeteriaLv - weekendRequiredFacilityLv);
+        int counselingDiff = Mathf.Max(0, counselingLv - weekendRequiredFacilityLv);
+
+        float schoolBonus = facilitySystem.GetConditionDecayBonus() * 0.01f;
+        float gymBonus = facilitySystem.GetTrainingExpBonus() * 0.01f;
+        float cafeteriaBonus = facilitySystem.GetCafeteriaBonus() * 0.01f;
+        float counselingBonus = facilitySystem.GetMentalBonus() * 0.01f;
+
+        float conditionBonus = (schoolBonus * schoolDiff) + (cafeteriaBonus * cafeteriaDiff);
+        float mentalBonus = (counselingBonus * counselingDiff) + (cafeteriaBonus * cafeteriaDiff);
+        float nodeTrainingBonus = 0f;
+
+        if (HeadCoachManager.Instance != null && HeadCoachManager.Instance.IsInitialized)
+            nodeTrainingBonus = HeadCoachManager.Instance.GetStatBonusValue("Training_Exp_Bonus") * 0.01f;
+
         foreach (Student student in _students)
         {
             if (student == null) continue;
 
-            student.condition = Student.ClampCondition(student.condition - row.conditionCost);
-            int mentalExpDelta = StudentStatExpSystem.AddRawExp(student, StudentCoreStat.Mental, row.mental);
-            int shootExpDelta = StudentStatExpSystem.AddRawExp(student, StudentCoreStat.Shoot, Mathf.RoundToInt(row.shoot));
-            int speedExpDelta = StudentStatExpSystem.AddRawExp(student, StudentCoreStat.Speed, Mathf.RoundToInt(row.speed));
-            int jumpExpDelta = StudentStatExpSystem.AddRawExp(student, StudentCoreStat.Jump, Mathf.RoundToInt(row.jump));
-            int staminaExpDelta = StudentStatExpSystem.AddRawExp(student, StudentCoreStat.Stamina, Mathf.RoundToInt(row.stamina));
+            if (row.conditionCost >= 0)
+            {
+                student.condition -= row.conditionCost;
+            }
+            else
+            {
+                int recover = -row.conditionCost;
+                recover += Mathf.RoundToInt(recover * conditionBonus);
+                student.condition += recover;
+            }
+            student.condition = Student.ClampCondition(student.condition);
 
-            StudentStatExpSystem.ApplyPotentialTrainingBonusExpIfMatchingStatTrained(
-                student,
-                mentalExpDelta,
-                shootExpDelta,
-                speedExpDelta,
-                jumpExpDelta,
-                staminaExpDelta);
+            int shootExpDelta = StudentStatExpSystem.AddTrainingExp(student, StudentCoreStat.Shoot, row.shoot, gymBonus, gymLv, weekendRequiredFacilityLv, nodeTrainingBonus);
+            int speedExpDelta = StudentStatExpSystem.AddTrainingExp(student, StudentCoreStat.Speed, row.speed, gymBonus, gymLv, weekendRequiredFacilityLv, nodeTrainingBonus);
+            int jumpExpDelta = StudentStatExpSystem.AddTrainingExp(student, StudentCoreStat.Jump, row.jump, gymBonus, gymLv, weekendRequiredFacilityLv, nodeTrainingBonus);
+            int staminaExpDelta = StudentStatExpSystem.AddTrainingExp(student, StudentCoreStat.Stamina, row.stamina, gymBonus, gymLv, weekendRequiredFacilityLv, nodeTrainingBonus);
+
+            int mentalExpDelta;
+            if (row.mental >= 0)
+                mentalExpDelta = StudentStatExpSystem.AddTrainingExpWithRate(student, StudentCoreStat.Mental, row.mental, mentalBonus, nodeTrainingBonus);
+            else
+                mentalExpDelta = StudentStatExpSystem.AddRawExp(student, StudentCoreStat.Mental, row.mental);
+
+            StudentStatExpSystem.ApplyPotentialTrainingBonusExpIfMatchingStatTrained(student, mentalExpDelta, shootExpDelta, speedExpDelta, jumpExpDelta, staminaExpDelta);
 
             OnStudentModified?.Invoke(student);
         }
