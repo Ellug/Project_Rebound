@@ -475,23 +475,30 @@ public class TrainingSelectPopup : UIPopup
             student.condition = Student.ClampCondition(student.condition);
 
             // 스탯 경험치(훈련 공식 적용)
-            StudentStatExpSystem.AddTrainingExp(student, StudentCoreStat.Shoot, data.shootDelta, gymBonus, gymLv, requiredLv, nodeTrainingBonus);
-            StudentStatExpSystem.AddTrainingExp(student, StudentCoreStat.Speed, data.speedDelta, gymBonus, gymLv, requiredLv, nodeTrainingBonus);
-            StudentStatExpSystem.AddTrainingExp(student, StudentCoreStat.Jump, data.jumpDelta, gymBonus, gymLv, requiredLv, nodeTrainingBonus);
-            StudentStatExpSystem.AddTrainingExp(student, StudentCoreStat.Stamina, data.staminaDelta, gymBonus, gymLv, requiredLv, nodeTrainingBonus);
+            int shootExpDelta = StudentStatExpSystem.AddTrainingExp(student, StudentCoreStat.Shoot, data.shootDelta, gymBonus, gymLv, requiredLv, nodeTrainingBonus);
+            int speedExpDelta = StudentStatExpSystem.AddTrainingExp(student, StudentCoreStat.Speed, data.speedDelta, gymBonus, gymLv, requiredLv, nodeTrainingBonus);
+            int jumpExpDelta = StudentStatExpSystem.AddTrainingExp(student, StudentCoreStat.Jump, data.jumpDelta, gymBonus, gymLv, requiredLv, nodeTrainingBonus);
+            int staminaExpDelta = StudentStatExpSystem.AddTrainingExp(student, StudentCoreStat.Stamina, data.staminaDelta, gymBonus, gymLv, requiredLv, nodeTrainingBonus);
 
             // 멘탈
+            int mentalExpDelta;
             if (data.mentalDelta >= 0)
             {
-                StudentStatExpSystem.AddTrainingExpWithRate(student, StudentCoreStat.Mental, data.mentalDelta, mentalBonus, nodeTrainingBonus);
+                mentalExpDelta = StudentStatExpSystem.AddTrainingExpWithRate(student, StudentCoreStat.Mental, data.mentalDelta, mentalBonus, nodeTrainingBonus);
             }
             else
             {
-                StudentStatExpSystem.AddRawExp(student, StudentCoreStat.Mental, data.mentalDelta);
+                mentalExpDelta = StudentStatExpSystem.AddRawExp(student, StudentCoreStat.Mental, data.mentalDelta);
             }
 
-            // 포텐셜 추가 경험치(매 훈련 실행마다 1회)
-            StudentStatExpSystem.ApplyPotentialTrainingBonusExp(student);
+            // 포텐셜 스탯이 실제로 오른 훈련에서만 추가 경험치 지급
+            StudentStatExpSystem.ApplyPotentialTrainingBonusExpIfMatchingStatTrained(
+                student,
+                mentalExpDelta,
+                shootExpDelta,
+                speedExpDelta,
+                jumpExpDelta,
+                staminaExpDelta);
 
             if (StudentManager.Instance != null)
                 StudentManager.Instance.NotifyStudentModified(student);
