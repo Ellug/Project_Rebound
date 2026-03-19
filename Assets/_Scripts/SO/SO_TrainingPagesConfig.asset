@@ -37,9 +37,9 @@ MonoBehaviour:
     - TrainingPopup02_img_02
     - TrainingPopup02_img_03
     buttonBackgroundImageIds:
-    - TrainingPopup03_img
-    - TrainingPopup03_img
-    - TrainingPopup03_img
+    - TrainingPopup03_img_01
+    - TrainingPopup03_img_01
+    - TrainingPopup03_img_01
     buttonResultImageIds:
     - TrainingPopup04_img
     - TrainingPopup04_img
@@ -52,10 +52,10 @@ MonoBehaviour:
     - TrainingPopup02_img_06
     - TrainingPopup02_img_07
     buttonBackgroundImageIds:
-    - TrainingPopup03_img
-    - TrainingPopup03_img
-    - TrainingPopup03_img
-    - TrainingPopup03_img
+    - TrainingPopup03_img_01
+    - TrainingPopup03_img_01
+    - TrainingPopup03_img_01
+    - TrainingPopup03_img_01
     buttonResultImageIds:
     - TrainingPopup04_img
     - TrainingPopup04_img
