@@ -102,7 +102,7 @@ public class FriendlyMatchManager : Singleton<FriendlyMatchManager>
             var room = MessengerManager.Instance.ActiveRooms.FirstOrDefault(r => r.RoomId == roomId);
             if (room != null) msgStartIndex = room.Messages.Count;
         }
-        FriendlyMatchRunner.Instance.PlayDialogue(roomId, schoolName, "diag_schedule_001", "index_001", textVars);
+        FriendlyMatchRunner.Instance.PlayDialogue(roomId, schoolName, "diag_schedule_001", "index_001", textVars, msgStartIndex);
 
         return true;
     }

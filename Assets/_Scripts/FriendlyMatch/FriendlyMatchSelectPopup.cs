@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using TMPro;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 
 public class FriendlyMatchSelectPopup : UIBase
 {
@@ -63,6 +64,15 @@ public class FriendlyMatchSelectPopup : UIBase
 
         if (listTable == null || nameTable == null) return;
 
+        TurnManager tm = FindFirstObjectByType<TurnManager>();
+        int currentYear = -1;
+        int currentMonth = -1;
+        if (tm != null && tm.DateManager != null)
+        {
+            currentYear = tm.DateManager.CurrentDate.Year;
+            currentMonth = tm.DateManager.CurrentDate.Month;
+        }
+
         foreach (var row in listTable.Rows)
         {
             string schoolId = row.schoolName;
@@ -90,7 +100,8 @@ public class FriendlyMatchSelectPopup : UIBase
                 if (inbox == null) return;
 
                 bool hasHistory = false;
-                bool isCompleted = false;
+                bool isCompletedThisMonth = false;
+
                 if (MessengerManager.Instance != null)
                 {
                     var room = MessengerManager.Instance.ActiveRooms.FirstOrDefault(r => r.RoomId == roomId);
@@ -98,15 +109,19 @@ public class FriendlyMatchSelectPopup : UIBase
                     {
                         hasHistory = true;
 
-                        if (room.Messages.Any(m => m.EventType == MessageEventType.System && m.Content.Contains("친선전 신청 횟수")))
+                        // 시스템 메시지가 이번 연도, 이번 달에 찍힌 것인지까지 검사
+                        if (room.Messages.Any(m => m.EventType == MessageEventType.System
+                                                && m.Content.Contains("친선전 신청 횟수")
+                                                && m.Timestamp.Year == currentYear
+                                                && m.Timestamp.Month == currentMonth))
                         {
-                            isCompleted = true;
+                            isCompletedThisMonth = true;
                         }
                     }
                 }
 
                 // 1. 이미 수락/거절이 끝난 방이면 횟수 차감이나 롤백 없이 그냥 대화 내역만 보여줌
-                if (isCompleted)
+                if (isCompletedThisMonth)
                 {
                     inbox.OpenRoom(roomId);
                     return;
@@ -118,11 +133,11 @@ public class FriendlyMatchSelectPopup : UIBase
                 if (isSuccess)
                 {
                     inbox.OpenRoom(roomId);
-                    UpdateMatchCountUI(); 
+                    UpdateMatchCountUI();
                 }
                 else if (hasHistory)
                 {
-                    inbox.OpenRoom(roomId);
+                    inbox.OpenRoom(roomId); 
                 }
                 else
                 {
