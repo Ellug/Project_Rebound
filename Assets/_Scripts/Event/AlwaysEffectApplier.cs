@@ -131,6 +131,8 @@ public static class AlwaysEffectApplier
         // 훈련 불가 상태 — 만료 시 무조건 해제
         student.isTrainingBlocked = isRevert ? false : !effect.trainingState;
 
+        Debug.Log($"[ApplyEffectToStudent] {student.studentName} | isTrainingBlocked={student.isTrainingBlocked} | trainingState={effect.trainingState} | isRevert={isRevert}");
+
         StudentManager.Instance.NotifyStudentModified(student);
     }
 }
