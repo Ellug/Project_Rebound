@@ -256,6 +256,37 @@ public class TrainingSelectPopup : UIPopup
             return;
         }
 
+        // 훈련 불가 학생 체크
+        if (!data.requiresStudentSelection)
+        {
+            bool allBlocked = true;
+            if (StudentManager.Instance != null)
+            {
+                foreach (Student student in StudentManager.Instance.Students)
+                {
+                    if (student != null && !student.isTrainingBlocked)
+                    {
+                        allBlocked = false;
+                        break;
+                    }
+                }
+            }
+
+            if (allBlocked)
+            {
+                UIManager.Instance.ShowPopup(UIPopupRequest.Simple(
+                    title: "훈련 불가",
+                    message: "현재 훈련이 불가능한 상태입니다.",
+                    onPrimary: null,
+                    onCancel: null,
+                    showCancel: false
+                ));
+                return;
+            }
+        }
+
+
+
         var preview = TrainingStatsView(data);
         string conditionText = ConditionTextChange(preview);
 
@@ -299,6 +330,12 @@ public class TrainingSelectPopup : UIPopup
             req.OnPrimary = () =>
             {
                 List<Student> students = GetDefaultStudentsForNoSelect();
+
+                // isTrainingBlocked 학생 제거
+                students.RemoveAll(s => s == null || s.isTrainingBlocked);
+
+                if (students.Count == 0) return;
+
                 StartTrainingFlowFromConfirm(data, students);
             };
         }
@@ -457,6 +494,9 @@ public class TrainingSelectPopup : UIPopup
         foreach (Student student in students)
         {
             if (student == null) continue;
+
+            // 훈련 차단된 학생은 효과 적용 안함
+            if (student.isTrainingBlocked) continue;
 
             // 컨디션
             if (data.conditionDelta >= 0)
