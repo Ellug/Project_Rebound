@@ -143,6 +143,7 @@ public class LobbyUI : UIBase
         MoneyManager.Instance.ForceNotify();
     }
 
+
     private void ShowEventPopup(SuddenEventManager.EventPopupData data)
     {
         UIPopupRequest req = new UIPopupRequest
@@ -616,5 +617,14 @@ public class LobbyUI : UIBase
     public void OnClickStudentClose()
     {
         RefreshBottomNavTabSprites();
+    }
+    protected override void OnDestroy()
+    {
+        if (SuddenEventManager.Instance != null)
+        {
+            SuddenEventManager.Instance.OnPopupRequested -= ShowEventPopup;
+        }
+
+        base.OnDestroy();
     }
 }
