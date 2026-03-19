@@ -200,16 +200,19 @@ public class StudentManager : Singleton<StudentManager>
             if (student == null) continue;
 
             student.condition = Student.ClampCondition(student.condition - row.conditionCost);
-            StudentStatExpSystem.AddRawExp(student, StudentCoreStat.Mental, row.mental);
-            StudentStatExpSystem.AddRawExp(student, StudentCoreStat.Shoot, Mathf.RoundToInt(row.shoot));
-            StudentStatExpSystem.AddRawExp(student, StudentCoreStat.Speed, Mathf.RoundToInt(row.speed));
-            StudentStatExpSystem.AddRawExp(student, StudentCoreStat.Jump, Mathf.RoundToInt(row.jump));
-            StudentStatExpSystem.AddRawExp(student, StudentCoreStat.Stamina, Mathf.RoundToInt(row.stamina));
+            int mentalExpDelta = StudentStatExpSystem.AddRawExp(student, StudentCoreStat.Mental, row.mental);
+            int shootExpDelta = StudentStatExpSystem.AddRawExp(student, StudentCoreStat.Shoot, Mathf.RoundToInt(row.shoot));
+            int speedExpDelta = StudentStatExpSystem.AddRawExp(student, StudentCoreStat.Speed, Mathf.RoundToInt(row.speed));
+            int jumpExpDelta = StudentStatExpSystem.AddRawExp(student, StudentCoreStat.Jump, Mathf.RoundToInt(row.jump));
+            int staminaExpDelta = StudentStatExpSystem.AddRawExp(student, StudentCoreStat.Stamina, Mathf.RoundToInt(row.stamina));
 
-            if (row.mental > 0 || row.shoot > 0f || row.speed > 0f || row.jump > 0f || row.stamina > 0f)
-            {
-                StudentStatExpSystem.ApplyPotentialTrainingBonusExp(student);
-            }
+            StudentStatExpSystem.ApplyPotentialTrainingBonusExpIfMatchingStatTrained(
+                student,
+                mentalExpDelta,
+                shootExpDelta,
+                speedExpDelta,
+                jumpExpDelta,
+                staminaExpDelta);
 
             OnStudentModified?.Invoke(student);
         }

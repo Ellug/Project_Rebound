@@ -154,6 +154,111 @@ public static class StudentStatExpSystem
         return bonusExp;
     }
 
+    // 이번 훈련에서 잠재력 스탯 경험치가 실제로 증가한 경우에만 추가 경험치를 적용
+    public static int ApplyPotentialTrainingBonusExpIfMatchingStatTrained(
+        Student student,
+        int mentalExpDelta,
+        int shootExpDelta,
+        int speedExpDelta,
+        int jumpExpDelta,
+        int staminaExpDelta)
+    {
+        if (student == null)
+            return 0;
+
+        if (!TryParseStatKey(student.potential, out StudentCoreStat potentialStat))
+            return 0;
+
+        if (!IsPotentialStatTrained(
+                student,
+                mentalExpDelta,
+                shootExpDelta,
+                speedExpDelta,
+                jumpExpDelta,
+                staminaExpDelta))
+            return 0;
+
+        int matchedDelta = GetMatchedPotentialExpDelta(
+            potentialStat,
+            mentalExpDelta,
+            shootExpDelta,
+            speedExpDelta,
+            jumpExpDelta,
+            staminaExpDelta);
+
+#if UNITY_EDITOR
+        Debug.Log(
+            $"[PotentialBonus] MATCH student={student.studentName}(id={student.id}) " +
+            $"tier={student.potential_tier} potential={potentialStat} matchedExpDelta={matchedDelta}");
+#endif
+
+        int bonusExp = ApplyPotentialTrainingBonusExp(student);
+
+#if UNITY_EDITOR
+        Debug.Log(
+            $"[PotentialBonus] APPLIED student={student.studentName}(id={student.id}) " +
+            $"potential={potentialStat} bonusExp={bonusExp}");
+#endif
+
+        return bonusExp;
+    }
+
+    private static bool IsPotentialStatTrained(
+        Student student,
+        int mentalExpDelta,
+        int shootExpDelta,
+        int speedExpDelta,
+        int jumpExpDelta,
+        int staminaExpDelta)
+    {
+        if (student == null)
+            return false;
+
+        if (!TryParseStatKey(student.potential, out StudentCoreStat potentialStat))
+            return false;
+
+        switch (potentialStat)
+        {
+            case StudentCoreStat.Mental:
+                return mentalExpDelta > 0;
+            case StudentCoreStat.Shoot:
+                return shootExpDelta > 0;
+            case StudentCoreStat.Speed:
+                return speedExpDelta > 0;
+            case StudentCoreStat.Jump:
+                return jumpExpDelta > 0;
+            case StudentCoreStat.Stamina:
+                return staminaExpDelta > 0;
+            default:
+                return false;
+        }
+    }
+
+    private static int GetMatchedPotentialExpDelta(
+        StudentCoreStat potentialStat,
+        int mentalExpDelta,
+        int shootExpDelta,
+        int speedExpDelta,
+        int jumpExpDelta,
+        int staminaExpDelta)
+    {
+        switch (potentialStat)
+        {
+            case StudentCoreStat.Mental:
+                return mentalExpDelta;
+            case StudentCoreStat.Shoot:
+                return shootExpDelta;
+            case StudentCoreStat.Speed:
+                return speedExpDelta;
+            case StudentCoreStat.Jump:
+                return jumpExpDelta;
+            case StudentCoreStat.Stamina:
+                return staminaExpDelta;
+            default:
+                return 0;
+        }
+    }
+
     private static void ApplyFallbackStatDelta(Student student, StudentCoreStat stat, int delta)
     {
         int current = GetStatValue(student, stat);
