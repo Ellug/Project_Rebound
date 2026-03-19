@@ -55,7 +55,7 @@ public class StartManager : MonoBehaviour
         _legalConsentPopup.Show();
     }
 
-    private void OnDestroy()
+    void OnDestroy()
     {
         UnbindLegalPopupEvents();
     }
@@ -509,18 +509,13 @@ public class StartManager : MonoBehaviour
     }
 
     // 선다운로드 목록의 카테고리별 개수를 집계
-    private static void CountPreloadCategories(
-        List<PreloadAssetEntry> entries,
-        out int imageCount,
-        out int audioCount,
-        out int libraryCount)
+    private static void CountPreloadCategories(List<PreloadAssetEntry> entries, out int imageCount, out int audioCount, out int libraryCount)
     {
         imageCount = 0;
         audioCount = 0;
         libraryCount = 0;
 
-        if (entries == null)
-            return;
+        if (entries == null) return;
 
         for (int i = 0; i < entries.Count; i++)
         {
@@ -567,26 +562,17 @@ public class StartManager : MonoBehaviour
     // 카테고리 문자열을 고정 키로 정규화
     private static string NormalizePreloadCategory(string category)
     {
-        if (category == "image")
-            return "image";
-        if (category == "audio")
-            return "audio";
+        if (category == "image") return "image";
+        if (category == "audio") return "audio";
         return "library";
     }
 
     // 카테고리 카운트 증가
-    private static void IncrementCategoryCount(
-        string category,
-        ref int imageCount,
-        ref int audioCount,
-        ref int libraryCount)
+    private static void IncrementCategoryCount(string category, ref int imageCount, ref int audioCount, ref int libraryCount)
     {
-        if (category == "image")
-            imageCount++;
-        else if (category == "audio")
-            audioCount++;
-        else
-            libraryCount++;
+        if (category == "image")        imageCount++;
+        else if (category == "audio")   audioCount++;
+        else                            libraryCount++;
     }
 
     // 다운로드 상태의 바이트 값을 예상 용량 범위로 보정
@@ -600,11 +586,7 @@ public class StartManager : MonoBehaviour
     }
 
     // 묶음 검증 단계 상태 텍스트 구성
-    private static string BuildVerifyBatchStatusText(
-        int totalImageCount,
-        int totalAudioCount,
-        int totalLibraryCount,
-        float verifyRatio)
+    private static string BuildVerifyBatchStatusText(int totalImageCount, int totalAudioCount, int totalLibraryCount, float verifyRatio)
     {
         int totalCount = totalImageCount + totalAudioCount + totalLibraryCount;
         float percent = Mathf.Clamp01(verifyRatio) * 100f;
@@ -629,11 +611,7 @@ public class StartManager : MonoBehaviour
     }
 
     // 준비 단계 상태 텍스트 구성
-    private static string BuildPrepareSummaryStatusText(
-        int loadedLibraryCount,
-        int totalLibraryCount,
-        int collectedRefCount,
-        float prepareRatio)
+    private static string BuildPrepareSummaryStatusText(int loadedLibraryCount, int totalLibraryCount, int collectedRefCount, float prepareRatio)
     {
         if (totalLibraryCount <= 0)
             return $"Preparing resources... 100.0% | lib 0/0 | refs {collectedRefCount}";

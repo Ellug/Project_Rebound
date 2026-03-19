@@ -139,3 +139,9 @@ crashlytics-build.properties
 
 # Local .NET CLI cache
 .dotnet/
+
+# Android signing keys (never commit)
+*.keystore
+*.jks
+keystore.properties
+user.keystore
