@@ -44,7 +44,7 @@ public class MessengerRoomPopup : UIBase
             MessengerManager.Instance.OnMessageAdded += HandleNewMessage;
         }
     }
-    void OnDestroy()
+    protected override void OnDestroy()
     {
         if (MessengerManager.Instance != null)
         {

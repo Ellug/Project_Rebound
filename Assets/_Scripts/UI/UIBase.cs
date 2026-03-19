@@ -49,4 +49,9 @@ public abstract class UIBase : MonoBehaviour
     {
         SoundManager.Instance.PlayEffect(203);
     }
+
+    protected virtual void OnDestroy()
+    {
+
+    }
 }
