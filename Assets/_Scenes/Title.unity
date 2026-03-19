@@ -213,15 +213,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5353452424897617394, guid: b21b94a65b718244f9d1fa4a9edc2998, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 3
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5353452424897617394, guid: b21b94a65b718244f9d1fa4a9edc2998, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1324401003}
+      objectReference: {fileID: 0}
     - target: {fileID: 5353452424897617394, guid: b21b94a65b718244f9d1fa4a9edc2998, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: OnClickLoad
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 5353452424897617394, guid: b21b94a65b718244f9d1fa4a9edc2998, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
@@ -720,15 +720,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5353452424897617394, guid: b21b94a65b718244f9d1fa4a9edc2998, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 3
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5353452424897617394, guid: b21b94a65b718244f9d1fa4a9edc2998, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1324401003}
+      objectReference: {fileID: 0}
     - target: {fileID: 5353452424897617394, guid: b21b94a65b718244f9d1fa4a9edc2998, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: OnClickLoad
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 5353452424897617394, guid: b21b94a65b718244f9d1fa4a9edc2998, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
@@ -3771,15 +3771,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5353452424897617394, guid: b21b94a65b718244f9d1fa4a9edc2998, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 3
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5353452424897617394, guid: b21b94a65b718244f9d1fa4a9edc2998, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1324401003}
+      objectReference: {fileID: 0}
     - target: {fileID: 5353452424897617394, guid: b21b94a65b718244f9d1fa4a9edc2998, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: OnClickLoad
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 5353452424897617394, guid: b21b94a65b718244f9d1fa4a9edc2998, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
@@ -4954,15 +4954,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5353452424897617394, guid: b21b94a65b718244f9d1fa4a9edc2998, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 3
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5353452424897617394, guid: b21b94a65b718244f9d1fa4a9edc2998, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1324401003}
+      objectReference: {fileID: 0}
     - target: {fileID: 5353452424897617394, guid: b21b94a65b718244f9d1fa4a9edc2998, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: OnClickLoad
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 5353452424897617394, guid: b21b94a65b718244f9d1fa4a9edc2998, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
