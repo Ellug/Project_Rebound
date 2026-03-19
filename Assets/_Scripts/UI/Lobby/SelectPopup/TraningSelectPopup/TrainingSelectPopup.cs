@@ -607,7 +607,7 @@ public class TrainingSelectPopup : UIPopup
 
     private string StatTextChange(TrainingStat result)
     {
-        List<string> parts = new List<string>();
+        List<string> parts = new();
 
         if (result.shoot != 0)
             parts.Add($"슛 {(result.shoot > 0 ? "+" : "")}{result.shoot}");
@@ -616,7 +616,7 @@ public class TrainingSelectPopup : UIPopup
         if (result.jump != 0)
             parts.Add($"점프 {(result.jump > 0 ? "+" : "")}{result.jump}");
         if (result.stamina != 0)
-            parts.Add($"체력 {(result.stamina > 0 ? "+" : "")}{result.stamina}");
+            parts.Add($"지구력 {(result.stamina > 0 ? "+" : "")}{result.stamina}");
         //if (result.mental != 0)
         //    parts.Add($"멘탈 {(result.mental > 0 ? "+" : "")}{result.mental}");
 

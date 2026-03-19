@@ -135,11 +135,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 25b8c792ad1018441a60955cff928dfc
-    m_Address: TrainingPopup03_img
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 28831c1baef666f488831f8573151c98
     m_Address: StudentPopup01_img_03
     m_ReadOnly: 0
@@ -510,6 +505,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: abaa4802951849047b4a5c3c8612b196
+    m_Address: EventPopup_weekend_img
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: ae008ab19bcb33343b991c1d3e8cbfd3
     m_Address: Assets/_Images/Addressables/Popup/TrainingPopup02_img_04.png
     m_ReadOnly: 0
@@ -587,6 +587,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: cbcff5278ce53db4282051992a7cd7c3
     m_Address: char_red_17
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cd7367313ea47f749aec0edffd98c348
+    m_Address: TrainingPopup03_img_01
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -762,16 +767,6 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: fe981d16a611c9e449615442fc49b468
     m_Address: EventPopup_memorial_img
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: abaa4802951849047b4a5c3c8612b196
-    m_Address: EventPopup_weekend_img
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: cd7367313ea47f749aec0edffd98c348
-    m_Address: TrainingPopup03_img_01
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
