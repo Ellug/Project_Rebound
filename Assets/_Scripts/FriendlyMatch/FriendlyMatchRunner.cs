@@ -254,8 +254,10 @@ public class FriendlyMatchRunner : Singleton<FriendlyMatchRunner>
             var room = MessengerManager.Instance.GetRoom(roomId);
             if (room != null && room.Messages.Count > msgStartIndex)
             {
-                // 이번 시도에 생긴 대화만 삭제
-                room.Messages.RemoveRange(msgStartIndex, room.Messages.Count - msgStartIndex);
+                
+                // 방의 전체 메시지 개수에서 msgStartIndex 빼고 지움
+                int countToRemove = room.Messages.Count - msgStartIndex;
+                room.Messages.RemoveRange(msgStartIndex, countToRemove);
 
                 // UI 갱신을 위해 안읽음 강제 트리거
                 room.HasUnread = true;
@@ -274,6 +276,6 @@ public class FriendlyMatchRunner : Singleton<FriendlyMatchRunner>
             _skippedRooms.Remove(roomId);
         }
 
-        Debug.Log("[FriendlyMatchRunner] 친선전 신청이 도중 취소되어 채팅방 로그 및 횟수가 롤백되었습니다.");
+        Debug.Log("[FriendlyMatchRunner] 친선전 신청이 도중 취소되어 이번 달 채팅 로그만 롤백되었습니다.");
     }
 }
