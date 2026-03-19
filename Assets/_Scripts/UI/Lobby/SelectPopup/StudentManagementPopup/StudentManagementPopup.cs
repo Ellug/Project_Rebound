@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 // 학생 관리(배치) 팝업
-// "포지션 정보" 버튼 클릭 시: 인스펙터에 세팅한 페이지를 UIPopupRequest.Guide로 표시
+// "포지션 정보" 버튼 클릭 시: SO_PositionInfoPopupTable 데이터를 UIPopupRequest.Guide로 표시
 // 기존 PositionGuidePopup(씬 배치) 제거/통합된 구조에 맞춘 구현
 public class StudentManagementPopup : UIBase
 {
@@ -25,25 +25,20 @@ public class StudentManagementPopup : UIBase
     [Header("닫기")]
     [SerializeField] private Button _btnClose;
 
-    // 인스펙터에서 페이지 데이터 설정 후 UIPopupRequest.Guide로 표시
-    [Header("포지션 안내 (Guide Pages - Inspector)")]
+    // SO_PositionInfoPopupTable 참조
+    [Header("포지션 안내 (SO Table)")]
     [SerializeField] private string _positionGuideTitle = "포지션 안내";
-    [SerializeField] private List<PositionGuidePage> _positionGuidePages = new();
+    [SerializeField] private PositionInfoPopupTableSO _positionGuideTable;
 
-    // 포지션 안내 팝업에 표시할 페이지 데이터
     [Serializable]
-    public sealed class PositionGuidePage
+    private sealed class PositionGuideImageMap
     {
-        public string title;
-
-        [TextArea(3, 10)]
-        public string content;
-
-        [TextArea(1, 5)]
-        public string subMessage;
-
-        public string imageId;  // Addressable 파일명 ID
+        public string rowId;      // PositionInfoPopupRow.id
+        public string imageId;    // AddressableImageLibrarySO 의 fileName 키
     }
+
+    [Header("포지션 안내 이미지 매핑")]
+    [SerializeField] private List<PositionGuideImageMap> _positionGuideImageMaps = new();
 
     [Header("토너먼트 시작")]
     [SerializeField] private Button _btnPlacementComplete;              // 배치 완료 버튼
@@ -129,6 +124,12 @@ public class StudentManagementPopup : UIBase
     // "포지션 정보" 버튼 클릭 → Guide 팝업 오픈
     private void OpenPositionGuide()
     {
+        if (_positionGuideTable == null)
+        {
+            Debug.LogError("[StudentManagementPopup] _positionGuideTable 참조가 비어 있습니다.");
+            return;
+        }
+
         if (UIManager.Instance == null)
         {
             Debug.LogWarning("[StudentManagementPopup] UIManager.Instance가 없어 포지션 안내를 표시할 수 없습니다.");
@@ -138,7 +139,7 @@ public class StudentManagementPopup : UIBase
         List<UIPopupRequest.GuidePage> pages = BuildPositionGuidePages();
         if (pages == null || pages.Count == 0)
         {
-            Debug.LogWarning("[StudentManagementPopup] 포지션 안내 페이지가 비어있습니다. (Inspector 설정 필요)");
+            Debug.LogWarning("[StudentManagementPopup] 포지션 안내 페이지가 비어있습니다. SO_PositionInfoPopupTable 설정을 확인하세요.");
             return;
         }
 
@@ -146,39 +147,75 @@ public class StudentManagementPopup : UIBase
             title: string.IsNullOrWhiteSpace(_positionGuideTitle) ? "포지션 안내" : _positionGuideTitle,
             pages: pages,
             onClose: null,
-            onCancel: null
+            onCancel: null,
+            showCancel: false
         );
 
         // 버튼 위치 고정: Cancel 숨김, 마지막 페이지 Close로 종료
-        req.ShowCancel = false;
         req.AutoCloseOnPrimary = true;
         req.AutoCloseOnCancel = true;
 
         UIManager.Instance.ShowPopup(req);
     }
 
-    // 인스펙터 페이지 -> UIPopupRequest.GuidePage 변환
+    // SO -> UIPopupRequest.GuidePage 변환
     private List<UIPopupRequest.GuidePage> BuildPositionGuidePages()
     {
         List<UIPopupRequest.GuidePage> result = new();
 
-        if (_positionGuidePages == null || _positionGuidePages.Count == 0)
+        if (_positionGuideTable == null || _positionGuideTable.Rows == null || _positionGuideTable.Rows.Count == 0)
             return result;
 
-        foreach (PositionGuidePage p in _positionGuidePages)
+        foreach (PositionInfoPopupRow row in _positionGuideTable.Rows)
         {
-            if (p == null) continue;
+            if (row == null)
+                continue;
+
+            if (string.IsNullOrWhiteSpace(row.titleText) && string.IsNullOrWhiteSpace(row.desc))
+                continue;
 
             result.Add(new UIPopupRequest.GuidePage
             {
-                Title = p.title,
-                Message = p.content,
-                SubMessage = p.subMessage,
-                PreviewImageId = string.IsNullOrWhiteSpace(p.imageId) ? null : p.imageId.Trim()
+                Title = row.titleText,
+                Message = row.desc,
+                SubMessage = null,
+                PreviewImageId = ResolvePositionGuideImageId(row)
             });
         }
 
         return result;
+    }
+
+    // PositionInfoPopupRow는 수정하지 않고, 팝업 내부에서 row.id -> imageId 매핑 처리
+    private string ResolvePositionGuideImageId(PositionInfoPopupRow row)
+    {
+        if (row == null)
+            return null;
+
+        // 1순위: 팝업 내부 매핑 리스트에서 row.id 기준으로 찾기
+        if (_positionGuideImageMaps != null)
+        {
+            for (int i = 0; i < _positionGuideImageMaps.Count; i++)
+            {
+                PositionGuideImageMap map = _positionGuideImageMaps[i];
+                if (map == null)
+                    continue;
+
+                if (string.IsNullOrWhiteSpace(map.rowId))
+                    continue;
+
+                if (!string.Equals(map.rowId.Trim(), row.id?.Trim(), StringComparison.OrdinalIgnoreCase))
+                    continue;
+
+                if (!string.IsNullOrWhiteSpace(map.imageId))
+                    return map.imageId.Trim();
+
+                return null;
+            }
+        }
+
+        // 2순위: 별도 매핑이 없으면 row.id를 이미지 키로 그대로 사용
+        return string.IsNullOrWhiteSpace(row.id) ? null : row.id.Trim();
     }
 
     // 토너먼트 시작 버튼

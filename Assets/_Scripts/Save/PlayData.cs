@@ -47,6 +47,10 @@ public class SavedFlowData
     public string friendlyOpponentName;          // 상대 학교명
     public bool friendlyMatchConfirmed;          // 확정 여부
 
+    // 친선경기 월별 신청 횟수 저장
+    public int friendlyMatchApplyCount;
+    public int friendlyMatchLastMonth;
+
     // string → DateTime 변환 (파싱 실패 시 default 반환)
     public DateTime ParseCurrentDate()
     {
@@ -81,6 +85,7 @@ public class SavedStudentData
     // 기본 정보
     public int id;
     public string studentName;
+    public string positionId;
     public string positionName;
     public int grade;
 
@@ -98,6 +103,11 @@ public class SavedStudentData
     public int speed;
     public int jump;
     public int stamina;
+    public int shootExp;
+    public int speedExp;
+    public int jumpExp;
+    public int staminaExp;
+    public int mentalExp;
 
     // 잠재 능력
     public int potentialTier;
@@ -158,6 +168,7 @@ public class SavedMatchSimData
     public int progressStageIndex;                        // MatchGameStages.Default 배열 인덱스
     public List<SavedQuarterScore> quarterScores = new(); // 완료된 쿼터 점수 누적
     public List<string> logs = new();                     // 경기 로그
+    public List<SavedMatchStudentStatSnapshot> studentStatSnapshots = new(); // 경기 시작 시점 학생 스탯 스냅샷
 }
 
 [Serializable]
@@ -166,6 +177,17 @@ public class SavedQuarterScore
     public int quarter;
     public int myScore;
     public int opponentScore;
+}
+
+[Serializable]
+public class SavedMatchStudentStatSnapshot
+{
+    public int studentId;
+    public int mental;
+    public int shoot;
+    public int speed;
+    public int jump;
+    public int stamina;
 }
 
 [Serializable]

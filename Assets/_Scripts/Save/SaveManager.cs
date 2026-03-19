@@ -111,6 +111,15 @@ public class SaveManager : Singleton<SaveManager>
         {
             Debug.LogWarning("[SaveManager] HeadCoachManager 초기화 전에 ApplyLoadedData 호출됨. 감독 노드 복원 생략.");
         }
+
+        // 친선경기 매니저는 TurnManager의 날짜 변경 체크에서 Load된 flowData 기준으로 월별 신청 횟수 복원
+        if (FriendlyMatchManager.Instance != null && CurrentData.flowData != null)
+        {
+            FriendlyMatchManager.Instance.RestoreApplyCount(
+                CurrentData.flowData.friendlyMatchApplyCount,
+                CurrentData.flowData.friendlyMatchLastMonth
+            );
+        }
     }
 
     // GameManager가 _flowData 복원에 사용 (RestoreTurnManagerState 이전에 호출)
@@ -354,6 +363,12 @@ public class SaveManager : Singleton<SaveManager>
                 : string.Empty,
             friendlyOpponentName = GameManager.Instance.FriendlyOpponentName,
             friendlyMatchConfirmed = GameManager.Instance.IsFriendlyMatchConfirmed,
+            friendlyMatchApplyCount = FriendlyMatchManager.Instance != null
+                ? FriendlyMatchManager.Instance.CurrentApplyCount
+                : 0,
+            friendlyMatchLastMonth = FriendlyMatchManager.Instance != null
+                ? FriendlyMatchManager.Instance.LastMonth
+                : -1,
         };
     }
 
@@ -373,6 +388,7 @@ public class SaveManager : Singleton<SaveManager>
             {
                 id = s.id,
                 studentName = s.studentName,
+                positionId = s.positionId,
                 positionName = s.positionName,
                 grade = s.grade,
                 portraitColor = s.portraitColor,
@@ -384,6 +400,11 @@ public class SaveManager : Singleton<SaveManager>
                 speed = s.speed,
                 jump = s.jump,
                 stamina = s.stamina,
+                shootExp = s.shootExp,
+                speedExp = s.speedExp,
+                jumpExp = s.jumpExp,
+                staminaExp = s.staminaExp,
+                mentalExp = s.mentalExp,
                 potentialTier = s.potential_tier,
                 potential = s.potential,
                 condition = s.condition,
@@ -504,6 +525,7 @@ public class SaveManager : Singleton<SaveManager>
             {
                 id = data.id,
                 studentName = data.studentName,
+                positionId = data.positionId,
                 positionName = data.positionName,
                 grade = data.grade,
                 portraitColor = data.portraitColor,
@@ -515,6 +537,11 @@ public class SaveManager : Singleton<SaveManager>
                 speed = data.speed,
                 jump = data.jump,
                 stamina = data.stamina,
+                shootExp = data.shootExp,
+                speedExp = data.speedExp,
+                jumpExp = data.jumpExp,
+                staminaExp = data.staminaExp,
+                mentalExp = data.mentalExp,
                 potential_tier = data.potentialTier,
                 potential = data.potential,
                 condition = data.condition,

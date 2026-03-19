@@ -135,11 +135,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 25b8c792ad1018441a60955cff928dfc
-    m_Address: TrainingPopup03_img
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 28831c1baef666f488831f8573151c98
     m_Address: StudentPopup01_img_03
     m_ReadOnly: 0
@@ -295,6 +290,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6289ad2cfdf660a4b9c3b7cbb93c7b77
+    m_Address: Assets/_Images/Addressables/Popup/TrainingPopup02_img_05.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 62cb1eb1a2218ca4d86c4ac45cda8c58
     m_Address: char_red_02
     m_ReadOnly: 0
@@ -302,6 +302,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 6348cf4f6560f1247aaf8e1b98e3ba6e
     m_Address: StudentPopup01_img_04
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 63f5c286a4b246e45bdbc62b9d968ba2
+    m_Address: Assets/_Images/Addressables/Popup/TrainingPopup02_img_01.png
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -327,6 +332,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 725c5029cfebcf44293ee0f74e335199
     m_Address: Assets/_Images/Addressables/Story/Story01_char_Coach_imotion_02.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 72e87abdbd46aec40b0939eaa9865210
+    m_Address: Assets/_Images/Addressables/Popup/TrainingPopup01_img_02.png
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -395,6 +405,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8e2fd2b76469e66459ad392992a280fe
+    m_Address: Assets/_Images/Addressables/Popup/TrainingPopup01_img_01.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 8e48e2df20abd9c49a93f8d057960ec6
     m_Address: Assets/_Images/Addressables/Story/Story01_char_Manager_imotion_01.png
     m_ReadOnly: 0
@@ -402,6 +417,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 8e4fcb9fb2129cb439cd662ab378741f
     m_Address: char_green_09
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8e743afc2f1d2cb4c8a6ba01a82072c1
+    m_Address: Assets/_Images/Addressables/Popup/TrainingPopup02_img_02.png
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -485,6 +505,16 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: abaa4802951849047b4a5c3c8612b196
+    m_Address: EventPopup_weekend_img
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ae008ab19bcb33343b991c1d3e8cbfd3
+    m_Address: Assets/_Images/Addressables/Popup/TrainingPopup02_img_04.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: ae11a8c1fa765434888caa9652f8f431
     m_Address: char_red_25
     m_ReadOnly: 0
@@ -525,6 +555,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c2af696d3d252f642b267366ea4c2dc6
+    m_Address: Assets/_Images/Addressables/Popup/TrainingPopup02_img_07.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: c4d9417ea13230044a0f92022f8f9525
     m_Address: char_red_24
     m_ReadOnly: 0
@@ -552,6 +587,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: cbcff5278ce53db4282051992a7cd7c3
     m_Address: char_red_17
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cd7367313ea47f749aec0edffd98c348
+    m_Address: TrainingPopup03_img_01
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -597,6 +637,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: d763d86a48ffcee449535c1a7fac2c7e
     m_Address: EventGame00_img_attack_failed
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d825f0642245b0a4a915d5b02c524eaf
+    m_Address: Assets/_Images/Addressables/Popup/TrainingPopup02_img_06.png
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -685,6 +730,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ed0cf0ec493e413409107cfe18420094
+    m_Address: Assets/_Images/Addressables/Popup/TrainingPopup02_img_03.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: eeaa3aafcf726304bac52d45fc28faa2
     m_Address: Assets/_Images/Addressables/Story/Story01_char_Manager_imotion_02.png
     m_ReadOnly: 0
@@ -697,6 +747,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: f979115cb84cea143802a37a685c9ba3
     m_Address: EventPopup02_img
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fb8da6ee5b0a6ca43bb13b5145939255
+    m_Address: EventGame00_image01
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

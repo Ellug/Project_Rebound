@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -122,12 +123,11 @@ public class AlwaysEventManager : MonoBehaviour
         {
             AlwaysEffectApplier.ApplyEffect(capturedRow);
 
-            // 방학 이벤트 확인 시 토너먼트 씬 진입을 기존 GameManager 로직으로 처리
+            // 방학 이벤트는 "토너먼트 확인 팝업 -> 학생 배치 팝업 -> 진입" 순서로 진행
             if (!IsLeagueBreakEvent(capturedRow))
                 return;
 
-            if (!GameManager.Instance.TryEnterTournament())
-                Debug.Log("[AlwaysEvent] 토너먼트 진입 조건이 충족되지 않아 진입을 건너뜁니다.");
+            StartCoroutine(ShowTournamentEntryPopupNextFrame());
         };
 
         if (UIManager.Instance == null)
@@ -156,10 +156,16 @@ public class AlwaysEventManager : MonoBehaviour
             primaryKind: UIPopupRequest.PrimaryButtonKind.Confirm
         );
 
-        if (IsLeagueBreakEvent(row))
-            req.InvokePrimaryOnClose = true;
-
         UIManager.Instance.ShowPopup(req);
+    }
+
+    // 방학 팝업이 닫힌 뒤 다음 프레임에 토너먼트 확인 팝업을 띄운다.
+    private IEnumerator ShowTournamentEntryPopupNextFrame()
+    {
+        yield return null;
+
+        if (!GameManager.Instance.TryShowTournamentEntryPopup())
+            Debug.Log("[AlwaysEvent] 토너먼트 진입 조건이 충족되지 않아 진입을 건너뜁니다.");
     }
 
     private static string GetRowId(AlwaysEventRow row)

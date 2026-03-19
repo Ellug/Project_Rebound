@@ -748,9 +748,9 @@ MonoBehaviour:
       m_SubObjectType: 
       m_SubObjectGUID: 
       m_EditorAssetChanged: 0
-  - fileName: TrainingPopup03_img
+  - fileName: TrainingPopup03_img_01
     spriteReference:
-      m_AssetGUID: 25b8c792ad1018441a60955cff928dfc
+      m_AssetGUID: cd7367313ea47f749aec0edffd98c348
       m_SubObjectName: 
       m_SubObjectType: 
       m_SubObjectGUID: 
@@ -1045,6 +1045,20 @@ MonoBehaviour:
   - fileName: TrainingPopup02_img_07
     spriteReference:
       m_AssetGUID: c2af696d3d252f642b267366ea4c2dc6
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+  - fileName: EventGame00_image01
+    spriteReference:
+      m_AssetGUID: fb8da6ee5b0a6ca43bb13b5145939255
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+  - fileName: EventPopup_weekend_img
+    spriteReference:
+      m_AssetGUID: abaa4802951849047b4a5c3c8612b196
       m_SubObjectName: 
       m_SubObjectType: 
       m_SubObjectGUID: 

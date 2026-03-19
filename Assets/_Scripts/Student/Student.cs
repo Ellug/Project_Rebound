@@ -11,6 +11,7 @@ public class Student
     // 기본 정보
     public int id;
     public string studentName;
+    public string positionId;
     public string positionName;
     public int grade; // 학년 (1~3)
 
@@ -28,6 +29,11 @@ public class Student
     public int speed;
     public int jump;
     public int stamina;
+    public int shootExp;
+    public int speedExp;
+    public int jumpExp;
+    public int staminaExp;
+    public int mentalExp;
 
     // 잠재 능력
     public int potential_tier;

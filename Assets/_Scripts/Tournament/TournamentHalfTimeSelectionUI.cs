@@ -222,9 +222,10 @@ public class TournamentHalfTimeSelectionUI : MonoBehaviour
                 return;
             }
 
+            bool statIncreased = false;
             foreach (Student student in StudentManager.Instance.Students)
             {
-                ApplyStudentStat(student, stat, amount);
+                statIncreased |= ApplyStudentStat(student, stat, amount);
                 Debug.Log($"[TournamentHalfTimeSelectionUI] 학생 스탯 적용 — 학생: {student.studentName}, stat: {stat}, amount: {amount}");
             }
 
@@ -232,6 +233,9 @@ public class TournamentHalfTimeSelectionUI : MonoBehaviour
             {
                 StudentManager.Instance.NotifyStudentModified(StudentManager.Instance.Students[0]);
             }
+
+            if (statIncreased)
+                SoundManager.Instance?.PlayStatUpSfx();
         }
     }
 
@@ -268,17 +272,49 @@ public class TournamentHalfTimeSelectionUI : MonoBehaviour
         Debug.Log($"[TournamentHalfTimeSelectionUI] 플레이어 스탯 적용 — stat: {stat}, amount: {amount}");
     }
 
-    private static void ApplyStudentStat(Student student, PlayerStat stat, int amount)
+    private static bool ApplyStudentStat(Student student, PlayerStat stat, int amount)
     {
         switch (stat)
         {
-            case PlayerStat.Condition: student.condition = Student.ClampCondition(student.condition + amount); break;
-            case PlayerStat.Mental: student.mental += amount; break;
-            case PlayerStat.Shoot: student.shoot += amount; break;
-            case PlayerStat.Speed: student.speed += amount; break;
-            case PlayerStat.Jump: student.jump += amount; break;
-            case PlayerStat.Stamina: student.stamina += amount; break;
+            case PlayerStat.Condition:
+            {
+                int before = student.condition;
+                student.condition = Student.ClampCondition(student.condition + amount);
+                return student.condition > before;
+            }
+            case PlayerStat.Mental:
+            {
+                int before = student.mental;
+                student.mental += amount;
+                return student.mental > before;
+            }
+            case PlayerStat.Shoot:
+            {
+                int before = student.shoot;
+                student.shoot += amount;
+                return student.shoot > before;
+            }
+            case PlayerStat.Speed:
+            {
+                int before = student.speed;
+                student.speed += amount;
+                return student.speed > before;
+            }
+            case PlayerStat.Jump:
+            {
+                int before = student.jump;
+                student.jump += amount;
+                return student.jump > before;
+            }
+            case PlayerStat.Stamina:
+            {
+                int before = student.stamina;
+                student.stamina += amount;
+                return student.stamina > before;
+            }
         }
+
+        return false;
     }
 
     // 텍스트 테이블 id로 실제 문자열 조회. 조회 실패 시 id 원문 반환

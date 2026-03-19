@@ -120,11 +120,19 @@ public class StudentCard : MonoBehaviour
 
     private void RefreshStatDeltaTexts()
     {
-        ApplyDeltaText(_txtMentalDelta, _previewDelta.mental);
-        ApplyDeltaText(_txtShootDelta, _previewDelta.shoot);
-        ApplyDeltaText(_txtSpeedDelta, _previewDelta.speed);
-        ApplyDeltaText(_txtJumpDelta, _previewDelta.jump);
-        ApplyDeltaText(_txtStaminaDelta, _previewDelta.stamina);
+        ApplyDeltaText(_txtMentalDelta, ResolveStatDelta(StudentCoreStat.Mental, _previewDelta.mental));
+        ApplyDeltaText(_txtShootDelta, ResolveStatDelta(StudentCoreStat.Shoot, _previewDelta.shoot));
+        ApplyDeltaText(_txtSpeedDelta, ResolveStatDelta(StudentCoreStat.Speed, _previewDelta.speed));
+        ApplyDeltaText(_txtJumpDelta, ResolveStatDelta(StudentCoreStat.Jump, _previewDelta.jump));
+        ApplyDeltaText(_txtStaminaDelta, ResolveStatDelta(StudentCoreStat.Stamina, _previewDelta.stamina));
+    }
+
+    private int ResolveStatDelta(StudentCoreStat stat, int deltaOrExp)
+    {
+        if (!_previewDelta.treatStatFieldsAsExp || _studentData == null || deltaOrExp == 0)
+            return deltaOrExp;
+
+        return StudentStatExpSystem.PredictStatLevelDelta(_studentData, stat, deltaOrExp);
     }
 
     private void RefreshConditionGauge(Student student)
