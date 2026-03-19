@@ -26,13 +26,19 @@ public class FriendlyMatchSelectPopup : UIBase
     public override void Open()
     {
         base.Open(); // 뒤로가기 지원
+        if (UIManager.Instance != null) UIManager.Instance.PushMessenger(this);
         transform.SetAsLastSibling(); // 다른 UI에 가려지지 않게 맨 앞으로 땡겨오기
 
         if (_inputSearch != null) _inputSearch.text = "";
         UpdateMatchCountUI();
         PopulateSchools("");
     }
+    public override void Close()
+    {
+        if (UIManager.Instance != null) UIManager.Instance.PopMessenger(this);
 
+        base.Close();
+    }
     private void UpdateMatchCountUI()
     {
         if (_txtFriendlyMatchCount != null)
@@ -81,16 +87,20 @@ public class FriendlyMatchSelectPopup : UIBase
 
             btn.onClick.AddListener(() => {
                 // 1. 매니저에게 방 생성 명령
-                FriendlyMatchManager.Instance.StartFriendlyMatch(sId, sName);
+                bool isSuccess = FriendlyMatchManager.Instance.StartFriendlyMatch(sId, sName);
 
-                // 2. 현재 열려있는 목록 창 닫기
-                Close();
-
-                // 3. 인박스 목록을 갱신할 필요 없이, 즉시 해당 채팅방으로 진입
-                var inbox = FindFirstObjectByType<MessengerInboxPopup>();
-                if (inbox != null)
+                if (isSuccess)
                 {
-                    inbox.OpenRoom($"friendly_{sId}");
+                    var inbox = FindFirstObjectByType<MessengerInboxPopup>();
+                    if (inbox != null)
+                    {
+                        inbox.OpenRoom($"friendly_{sId}");
+                    }
+                }
+                else
+                {
+                    // 필요하다면 여기에 "이번 달 신청 횟수를 모두 소진했습니다." 안내 팝업을 띄워도 좋습니다.
+                    Debug.Log("신청 횟수 소진 등의 이유로 채팅방을 열지 않습니다.");
                 }
             });
 

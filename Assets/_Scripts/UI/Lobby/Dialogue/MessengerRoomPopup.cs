@@ -93,11 +93,23 @@ public class MessengerRoomPopup : UIBase
             MessengerManager.Instance.CurrentViewingRoomId = "";
         }
 
-        if (DialogueRunner.Instance != null && !string.IsNullOrEmpty(CurrentRoomId))
+        if (!string.IsNullOrEmpty(CurrentRoomId))
         {
-            DialogueRunner.Instance.SkipRoom(CurrentRoomId);
+            if (CurrentRoomId.StartsWith("friendly_"))
+            {
+                if (FriendlyMatchRunner.Instance != null)
+                {
+                    FriendlyMatchRunner.Instance.SkipRoom(CurrentRoomId);
+                }
+            }
+            else
+            {
+                if (DialogueRunner.Instance != null)
+                {
+                    DialogueRunner.Instance.SkipRoom(CurrentRoomId);
+                }
+            }
         }
-
         base.Close();
 
         if (UIManager.Instance != null)
