@@ -10,6 +10,8 @@ public class FriendlyMatchManager : Singleton<FriendlyMatchManager>
     private int _currentApplyCount = 0;
     private int _lastMonth = -1;
 
+    public int LastMonth => _lastMonth; // 세이브/로드용으로 현재 월 정보 제공
+
     public int CurrentApplyCount
     {
         get
@@ -105,5 +107,13 @@ public class FriendlyMatchManager : Singleton<FriendlyMatchManager>
         FriendlyMatchRunner.Instance.PlayDialogue(roomId, schoolName, "diag_schedule_001", "index_001", textVars, msgStartIndex);
 
         return true;
+    }
+
+    // 세이브 데이터에서 친선전 신청 횟수와 마지막 신청 월을 복원하는 메서드
+    public void RestoreApplyCount(int count, int lastMonth)
+    {
+        _currentApplyCount = count;
+        _lastMonth = lastMonth;
+        Debug.Log($"[FriendlyMatch] 세이브 복원 | applyCount={count}, lastMonth={lastMonth}");
     }
 }

@@ -47,6 +47,10 @@ public class SavedFlowData
     public string friendlyOpponentName;          // 상대 학교명
     public bool friendlyMatchConfirmed;          // 확정 여부
 
+    // 친선경기 월별 신청 횟수 저장
+    public int friendlyMatchApplyCount;
+    public int friendlyMatchLastMonth;
+
     // string → DateTime 변환 (파싱 실패 시 default 반환)
     public DateTime ParseCurrentDate()
     {
