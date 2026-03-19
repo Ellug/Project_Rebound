@@ -111,6 +111,15 @@ public class SaveManager : Singleton<SaveManager>
         {
             Debug.LogWarning("[SaveManager] HeadCoachManager 초기화 전에 ApplyLoadedData 호출됨. 감독 노드 복원 생략.");
         }
+
+        // 친선경기 매니저는 TurnManager의 날짜 변경 체크에서 Load된 flowData 기준으로 월별 신청 횟수 복원
+        if (FriendlyMatchManager.Instance != null && CurrentData.flowData != null)
+        {
+            FriendlyMatchManager.Instance.RestoreApplyCount(
+                CurrentData.flowData.friendlyMatchApplyCount,
+                CurrentData.flowData.friendlyMatchLastMonth
+            );
+        }
     }
 
     // GameManager가 _flowData 복원에 사용 (RestoreTurnManagerState 이전에 호출)
@@ -354,6 +363,12 @@ public class SaveManager : Singleton<SaveManager>
                 : string.Empty,
             friendlyOpponentName = GameManager.Instance.FriendlyOpponentName,
             friendlyMatchConfirmed = GameManager.Instance.IsFriendlyMatchConfirmed,
+            friendlyMatchApplyCount = FriendlyMatchManager.Instance != null
+                ? FriendlyMatchManager.Instance.CurrentApplyCount
+                : 0,
+            friendlyMatchLastMonth = FriendlyMatchManager.Instance != null
+                ? FriendlyMatchManager.Instance.LastMonth
+                : -1,
         };
     }
 
