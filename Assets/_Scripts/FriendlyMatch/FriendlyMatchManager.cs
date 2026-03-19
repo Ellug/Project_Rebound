@@ -9,7 +9,6 @@ public class FriendlyMatchManager : Singleton<FriendlyMatchManager>
     private int _currentApplyCount = 0;
     private int _lastMonth = -1;
 
-    // [핵심] 횟수를 확인할 때마다 달이 바뀌었는지 무조건 먼저 체크합니다!
     public int CurrentApplyCount
     {
         get
@@ -41,13 +40,22 @@ public class FriendlyMatchManager : Singleton<FriendlyMatchManager>
         }
     }
 
-    public void StartFriendlyMatch(string schoolId, string schoolName)
+    public void RollbackApplyCount()
+    {
+        if (_currentApplyCount > 0)
+        {
+            _currentApplyCount--;
+            Debug.Log("[FriendlyMatch] 신청 취소로 인해 횟수가 복구되었습니다.");
+        }
+    }
+
+    public bool StartFriendlyMatch(string schoolId, string schoolName)
     {
         TurnManager tm = FindFirstObjectByType<TurnManager>();
         if (tm == null || tm.DateManager == null)
         {
             Debug.LogError("DateManager를 찾을 수 없습니다!");
-            return;
+            return false;
         }
 
         DateTime currentDate = tm.DateManager.CurrentDate;
@@ -56,7 +64,7 @@ public class FriendlyMatchManager : Singleton<FriendlyMatchManager>
         if (CurrentApplyCount >= MaxMonthlyCount)
         {
             Debug.Log("이번 달 친선전 신청 횟수를 모두 소진했습니다.");
-            return;
+            return false;
         }
 
         // 2. 횟수 차감 
@@ -70,7 +78,10 @@ public class FriendlyMatchManager : Singleton<FriendlyMatchManager>
         {
             if (tempDate.DayOfWeek == DayOfWeek.Saturday)
             {
-                saturdays.Add(tempDate);
+                if (GameManager.Instance == null || !GameManager.Instance.IsFriendlyMatchConfirmed || GameManager.Instance.FriendlyMatchDate.Date != tempDate.Date)
+                {
+                    saturdays.Add(tempDate);
+                }
             }
             tempDate = tempDate.AddDays(1);
         }
@@ -87,6 +98,15 @@ public class FriendlyMatchManager : Singleton<FriendlyMatchManager>
 
         // 5. 친선전 전용 대화 러너 실행
         string roomId = $"friendly_{schoolId}";
+
+        int msgStartIndex = 0;
+        if (MessengerManager.Instance != null)
+        {
+            var room = MessengerManager.Instance.GetRoom(roomId);
+            if (room != null) msgStartIndex = room.Messages.Count;
+        }
         FriendlyMatchRunner.Instance.PlayDialogue(roomId, schoolName, "diag_schedule_001", "index_001", textVars);
+
+        return true;
     }
 }
