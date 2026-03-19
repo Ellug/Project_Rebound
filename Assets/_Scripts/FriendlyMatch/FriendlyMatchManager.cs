@@ -1,5 +1,6 @@
 ﻿﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class FriendlyMatchManager : Singleton<FriendlyMatchManager>
@@ -52,11 +53,7 @@ public class FriendlyMatchManager : Singleton<FriendlyMatchManager>
     public bool StartFriendlyMatch(string schoolId, string schoolName)
     {
         TurnManager tm = FindFirstObjectByType<TurnManager>();
-        if (tm == null || tm.DateManager == null)
-        {
-            Debug.LogError("DateManager를 찾을 수 없습니다!");
-            return false;
-        }
+        if (tm == null || tm.DateManager == null) return false;
 
         DateTime currentDate = tm.DateManager.CurrentDate;
 
@@ -102,7 +99,7 @@ public class FriendlyMatchManager : Singleton<FriendlyMatchManager>
         int msgStartIndex = 0;
         if (MessengerManager.Instance != null)
         {
-            var room = MessengerManager.Instance.GetRoom(roomId);
+            var room = MessengerManager.Instance.ActiveRooms.FirstOrDefault(r => r.RoomId == roomId);
             if (room != null) msgStartIndex = room.Messages.Count;
         }
         FriendlyMatchRunner.Instance.PlayDialogue(roomId, schoolName, "diag_schedule_001", "index_001", textVars);

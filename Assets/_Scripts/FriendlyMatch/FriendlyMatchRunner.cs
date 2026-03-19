@@ -17,6 +17,7 @@ public class FriendlyMatchRunner : Singleton<FriendlyMatchRunner>
 
     public void PlayDialogue(string roomId, string roomName, string diagId, string startNodeId = "index_001", Dictionary<string, string> textVars = null, int msgStartIndex = 0)
     {
+        _skippedRooms.Remove(roomId);
         StartCoroutine(ProcessNodeRoutine(roomId, roomName, diagId, startNodeId, textVars, msgStartIndex));
     }
     private IEnumerator WaitWithSkip(float delay, string roomId)
@@ -133,7 +134,7 @@ public class FriendlyMatchRunner : Singleton<FriendlyMatchRunner>
             {
                 ChatMessage preNormalMsg = new ChatMessage(senderType, messageText, eventType);
                 MessengerManager.Instance.ReceiveMessage(roomId, roomName, preNormalMsg);
-                if (!isSkipping) yield return new WaitForSeconds(_typingDelay);
+                yield return WaitWithSkip(_typingDelay, roomId);
             }
 
             if (_skippedRooms.Contains(roomId))
@@ -196,7 +197,8 @@ public class FriendlyMatchRunner : Singleton<FriendlyMatchRunner>
             {
                 ChatMessage normalMsg = new ChatMessage(senderType, messageText, eventType);
                 MessengerManager.Instance.ReceiveMessage(roomId, roomName, normalMsg);
-                if (!isSkipping) yield return new WaitForSeconds(_typingDelay);
+
+                yield return WaitWithSkip(_typingDelay, roomId);
             }
 
             // 2. 확률 판정 후 수락/거절 텍스트 무작위 가져오기
@@ -216,7 +218,7 @@ public class FriendlyMatchRunner : Singleton<FriendlyMatchRunner>
                 ChatMessage replyMsg = new ChatMessage(MessageSenderType.Them, replyText, MessageEventType.NormalText);
                 MessengerManager.Instance.ReceiveMessage(roomId, roomName, replyMsg);
 
-                if (!isSkipping) yield return new WaitForSeconds(_typingDelay);
+                yield return WaitWithSkip(_typingDelay, roomId);
             }
 
             // 4. 다음 노드로 넘어가기
@@ -232,7 +234,9 @@ public class FriendlyMatchRunner : Singleton<FriendlyMatchRunner>
             {
                 ChatMessage normalMsg = new ChatMessage(senderType, messageText, eventType);
                 MessengerManager.Instance.ReceiveMessage(roomId, roomName, normalMsg);
-                if (!isSkipping) yield return new WaitForSeconds(senderType == MessageSenderType.Them ? _typingDelay : _typingDelay * 0.5f);
+
+                float delay = senderType == MessageSenderType.Them ? _typingDelay : _typingDelay * 0.5f;
+                yield return WaitWithSkip(delay, roomId);
             }
 
             StartCoroutine(ProcessNodeRoutine(roomId, roomName, diagId, row.next, textVars, msgStartIndex));
@@ -259,11 +263,10 @@ public class FriendlyMatchRunner : Singleton<FriendlyMatchRunner>
             }
         }
 
-        var inbox = UnityEngine.Object.FindFirstObjectByType<MessengerInboxPopup>(FindObjectsInactive.Exclude);
-        if (inbox != null)
+        var selectPopup = UnityEngine.Object.FindFirstObjectByType<FriendlyMatchSelectPopup>(FindObjectsInactive.Exclude);
+        if (selectPopup != null)
         {
-            inbox.RefreshFriendlyMatchUI();
-            inbox.RefreshList();
+            selectPopup.UpdateMatchCountUI();
         }
 
         if (_skippedRooms.Contains(roomId))

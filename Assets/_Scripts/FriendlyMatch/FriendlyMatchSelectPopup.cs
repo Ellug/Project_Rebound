@@ -11,7 +11,6 @@ public class FriendlyMatchSelectPopup : UIBase
     [SerializeField] private Button _btnSchoolPrefab;
     [SerializeField] private Button _btnClose;
 
-    // 상단에 표시될 남은 횟수 텍스트
     [SerializeField] private TMP_Text _txtFriendlyMatchCount;
 
     private List<GameObject> _spawnedItems = new List<GameObject>();
@@ -25,9 +24,9 @@ public class FriendlyMatchSelectPopup : UIBase
 
     public override void Open()
     {
-        base.Open(); // 뒤로가기 지원
+        base.Open();
         if (UIManager.Instance != null) UIManager.Instance.PushMessenger(this);
-        transform.SetAsLastSibling(); // 다른 UI에 가려지지 않게 맨 앞으로 땡겨오기
+        transform.SetAsLastSibling();
 
         if (_inputSearch != null) _inputSearch.text = "";
         UpdateMatchCountUI();
@@ -36,10 +35,10 @@ public class FriendlyMatchSelectPopup : UIBase
     public override void Close()
     {
         if (UIManager.Instance != null) UIManager.Instance.PopMessenger(this);
-
         base.Close();
     }
-    private void UpdateMatchCountUI()
+
+    public void UpdateMatchCountUI()
     {
         if (_txtFriendlyMatchCount != null)
         {
@@ -86,21 +85,48 @@ public class FriendlyMatchSelectPopup : UIBase
             string sId = schoolId;
 
             btn.onClick.AddListener(() => {
-                // 1. 매니저에게 방 생성 명령
+                string roomId = $"friendly_{sId}";
+                var inbox = FindFirstObjectByType<MessengerInboxPopup>();
+                if (inbox == null) return;
+
+                bool hasHistory = false;
+                bool isCompleted = false;
+                if (MessengerManager.Instance != null)
+                {
+                    var room = MessengerManager.Instance.ActiveRooms.FirstOrDefault(r => r.RoomId == roomId);
+                    if (room != null && room.Messages.Count > 0)
+                    {
+                        hasHistory = true;
+
+                        if (room.Messages.Any(m => m.EventType == MessageEventType.System && m.Content.Contains("친선전 신청 횟수")))
+                        {
+                            isCompleted = true;
+                        }
+                    }
+                }
+
+                // 1. 이미 수락/거절이 끝난 방이면 횟수 차감이나 롤백 없이 그냥 대화 내역만 보여줌
+                if (isCompleted)
+                {
+                    inbox.OpenRoom(roomId);
+                    return;
+                }
+
+                // 2. 아직 안 끝났거나 새로운 매치 신청
                 bool isSuccess = FriendlyMatchManager.Instance.StartFriendlyMatch(sId, sName);
 
                 if (isSuccess)
                 {
-                    var inbox = FindFirstObjectByType<MessengerInboxPopup>();
-                    if (inbox != null)
-                    {
-                        inbox.OpenRoom($"friendly_{sId}");
-                    }
+                    inbox.OpenRoom(roomId);
+                    UpdateMatchCountUI(); 
+                }
+                else if (hasHistory)
+                {
+                    inbox.OpenRoom(roomId);
                 }
                 else
                 {
-                    // 필요하다면 여기에 "이번 달 신청 횟수를 모두 소진했습니다." 안내 팝업을 띄워도 좋습니다.
-                    Debug.Log("신청 횟수 소진 등의 이유로 채팅방을 열지 않습니다.");
+                    Debug.Log("신청 횟수 소진으로 새로운 채팅방을 열 수 없습니다.");
                 }
             });
 
