@@ -10,6 +10,8 @@ public class TournamentResultUI : MonoBehaviour
     private const string Rank3ImageId = "EventGamePopup01_img_3";
     private const string Rank4ImageId = "EventGamePopup01_img_4";
     private const string FailedImageId = "EventGamePopup02_img";
+    private const string LobbySceneName = "Lobby";
+    private const int LobbyBgmClipId = 102;
 
     [Header("Scene References")]
     [SerializeField] private GameObject _panelRoot;
@@ -172,6 +174,7 @@ public class TournamentResultUI : MonoBehaviour
         _friendlyRewardFame = 0;
         _isFriendlyResultMode = false;
         Hide();
+        RestoreLobbyBgmIfLobby();
     }
 
     // 승리(입상) 확인
@@ -181,6 +184,7 @@ public class TournamentResultUI : MonoBehaviour
         RewardPopupRow row = GetRewardRow(_currentRewardId);
         MoneyManager.Instance.ApplyReward(row.money, row.fame);
         Hide();
+        RestoreLobbyBgmIfLobby();
     }
 
     // 패배(탈락) 확인 -> 타이틀로 이동
@@ -307,5 +311,11 @@ public class TournamentResultUI : MonoBehaviour
             _resultImage.sprite = null;
             _resultImage.enabled = false;
         }
+    }
+
+    private static void RestoreLobbyBgmIfLobby()
+    {
+        if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name != LobbySceneName) return;
+        SoundManager.Instance.PlayBGM(LobbyBgmClipId);
     }
 }
