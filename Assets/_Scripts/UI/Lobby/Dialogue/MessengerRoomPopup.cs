@@ -116,10 +116,6 @@ public class MessengerRoomPopup : UIBase
         {
             UIManager.Instance.PopMessenger(this);
         }
-        if (SuddenEventManager.Instance != null)
-        {
-            SuddenEventManager.Instance.ProcessNextPopup();
-        }
     }
 
     private void HandleNewMessage(ChatRoom room)
