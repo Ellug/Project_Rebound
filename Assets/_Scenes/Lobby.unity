@@ -12003,6 +12003,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 0}
     - target: {fileID: 8913316296741631172, guid: df1df13b385a43645b5902ed830013aa, type: 3}
+      propertyPath: _gaugeSpeed
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8913316296741631172, guid: df1df13b385a43645b5902ed830013aa, type: 3}
       propertyPath: _imgBackground
       value: 
       objectReference: {fileID: 1296495326}

@@ -88,12 +88,18 @@ public class TrainingFlowController : MonoBehaviour
     private IEnumerator ProgressRoutine(float targetFill01, Action<float> onTick, Action onDone)
     {
         float elapsed = 0f;
+        float gaugeSpeed = 1f;
 
-        while (elapsed < _fillDuration)
+        if (_progressUI != null)
+            gaugeSpeed = Mathf.Max(0.01f, _progressUI.GaugeSpeed);
+
+        float adjustedFillDuration = _fillDuration / gaugeSpeed;
+
+        while (elapsed < adjustedFillDuration)
         {
             elapsed += Time.deltaTime;
 
-            float t = Mathf.Clamp01(elapsed / _fillDuration);
+            float t = Mathf.Clamp01(elapsed / adjustedFillDuration);
             float eased = 1f - Mathf.Pow(1f - t, 3f);
             float fill = eased * Mathf.Clamp01(targetFill01);
 

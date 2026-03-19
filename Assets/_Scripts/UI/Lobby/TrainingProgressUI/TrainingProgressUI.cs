@@ -12,6 +12,10 @@ public class TrainingProgressUI : UIBase
     [SerializeField] private TMP_Text _txtPercent;   // 퍼센트 표시
     [SerializeField] private TMP_Text _txtStatus;    // 상태 텍스트
 
+    [Header("Gauge")]
+    [SerializeField] private float _gaugeSpeed = 1f; // 1 = 1배속, 2 = 2배속, 1.5 = 1.5배속
+    public float GaugeSpeed => _gaugeSpeed;
+
     private string _currentBackgroundImageId;        // 현재 로드된 배경 이미지 ID (해제용)
 
     // UI 표시 및 초기화
@@ -24,6 +28,11 @@ public class TrainingProgressUI : UIBase
 
         // 배경 이미지 ID가 있으면 Addressable로 비동기 로드
         LoadBackgroundImage(backgroundImageId);
+    }
+
+    public void SetGaugeSpeed(float gaugeSpeed)
+    {
+        _gaugeSpeed = Mathf.Max(0f, gaugeSpeed);
     }
 
     // 진행률 설정 (0~1)
@@ -55,7 +64,6 @@ public class TrainingProgressUI : UIBase
     // 이미지 ID 기준으로 Addressable 비동기 로드
     private void LoadBackgroundImage(string imageId)
     {
-        // 기존 이미지 해제
         ReleaseBackgroundImage();
 
         if (_imgBackground == null) return;
