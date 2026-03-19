@@ -106,7 +106,7 @@ public class StudentManagementPopup : UIBase
         RefreshCloseButton();
     }
 
-    private void OnDestroy()
+    protected override void OnDestroy()
     {
         UnbindStudentManagerEvents();
     }
