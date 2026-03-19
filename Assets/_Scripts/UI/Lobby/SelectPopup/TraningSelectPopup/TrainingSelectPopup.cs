@@ -277,12 +277,13 @@ public class TrainingSelectPopup : UIPopup
         req.MaxSelectCount = data.maxSelectCount;
         req.StudentCardPreviewDelta = new StudentCardPreviewDelta
         {
-            condition = -data.conditionDelta,
-            mental = data.mentalDelta,
-            shoot = Mathf.RoundToInt(data.shootDelta),
-            speed = Mathf.RoundToInt(data.speedDelta),
-            jump = Mathf.RoundToInt(data.jumpDelta),
-            stamina = Mathf.RoundToInt(data.staminaDelta)
+            condition = preview.condition,
+            treatStatFieldsAsExp = true, // 나중에 복구 위해서 카드 델타 stat / exp 불로 관리
+            mental = preview.mental,
+            shoot = preview.shoot,
+            speed = preview.speed,
+            jump = preview.jump,
+            stamina = preview.stamina
         };
 
         if (req.RequiresStudentSelection)
