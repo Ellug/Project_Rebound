@@ -19349,7 +19349,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8313116447302640032, guid: 2872640eb66560844bb5942b4e01d542, type: 3}
       propertyPath: _weekendTrainingConfirmBgImageId
-      value: TrainingPopup03_img
+      value: TrainingPopup03_img_01
       objectReference: {fileID: 0}
     - target: {fileID: 8313116447302640032, guid: 2872640eb66560844bb5942b4e01d542, type: 3}
       propertyPath: _weekendTrainingCancelResultImageId
