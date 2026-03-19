@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -12,6 +13,25 @@ public class SuddenEventManager : Singleton<SuddenEventManager>
     {
         TurnManager tm = FindFirstObjectByType<TurnManager>();
         int currentTurn = tm != null ? tm.TurnIndex : -1;
+
+        if (tm != null && tm.DateManager != null)
+        {
+            DayOfWeek currentDay = tm.DateManager.CurrentDate.DayOfWeek;
+
+            // 1. 이미 주말이라면 무조건 차단
+            if (currentDay == DayOfWeek.Saturday || currentDay == DayOfWeek.Sunday)
+                return;
+
+            // 2. 금요일일 경우, 턴이 끝나는 시점인지 조건문 이름으로 확인하여 차단
+            if (currentDay == DayOfWeek.Friday)
+            {
+                string condStr = condition.ToString().ToLower();
+                if (condStr.Contains("end") || condStr.Contains("complete") || condStr.Contains("result") || condStr.Contains("after"))
+                {
+                    return;
+                }
+            }
+        }
 
         if (_lastTurnIndex != currentTurn)
         {
@@ -55,7 +75,6 @@ public class SuddenEventManager : Singleton<SuddenEventManager>
         }
     }
 
-    // [추가] originRoomId 매개변수를 추가하여 방 번호를 전달받습니다.
     public void ExecuteEventById(string eventId, string specificTargetName = "", bool fromDialogue = false, Dictionary<string, string> passedVars = null, string originRoomId = "")
     {
         var table = CachedSOData.Get<SuddenEventTableSO>();

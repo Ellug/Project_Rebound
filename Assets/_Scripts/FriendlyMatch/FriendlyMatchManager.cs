@@ -50,6 +50,44 @@ public class FriendlyMatchManager : Singleton<FriendlyMatchManager>
         }
     }
 
+    public Dictionary<DateTime, string> GetBookedMatchSchedule(int currentYear)
+    {
+        Dictionary<DateTime, string> schedule = new Dictionary<DateTime, string>();
+        if (MessengerManager.Instance == null) return schedule;
+
+        foreach (var room in MessengerManager.Instance.ActiveRooms)
+        {
+            if (room.RoomId.StartsWith("friendly_"))
+            {
+                foreach (var msg in room.Messages)
+                {
+                    if (msg.EventType == MessageEventType.System && msg.Content.Contains("친선전 일정이 잡혔습니다"))
+                    {
+                        int index = msg.Content.IndexOf("에 친선전 일정이");
+                        if (index > 0)
+                        {
+                            string dateStr = msg.Content.Substring(0, index).Trim();
+                            string[] parts = dateStr.Split(new char[] { '월', '일' }, StringSplitOptions.RemoveEmptyEntries);
+                            if (parts.Length >= 2 && int.TryParse(parts[0], out int m) && int.TryParse(parts[1], out int d))
+                            {
+                                try
+                                {
+                                    DateTime dt = new DateTime(currentYear, m, d).Date;
+                                    if (!schedule.ContainsKey(dt))
+                                    {
+                                        schedule.Add(dt, room.RoomName);
+                                    }
+                                }
+                                catch { }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return schedule;
+    }
+
     public bool StartFriendlyMatch(string schoolId, string schoolName)
     {
         TurnManager tm = FindFirstObjectByType<TurnManager>();
@@ -70,12 +108,16 @@ public class FriendlyMatchManager : Singleton<FriendlyMatchManager>
         // 3. 현재 인게임 날짜 기준으로 가장 가까운 토요일 3개
         List<DateTime> saturdays = new List<DateTime>();
         DateTime tempDate = currentDate.AddDays(1); // 내일부터 탐색 시작
+        Dictionary<DateTime, string> schedule = GetBookedMatchSchedule(currentDate.Year);
 
         while (saturdays.Count < 3)
         {
             if (tempDate.DayOfWeek == DayOfWeek.Saturday)
             {
-                if (GameManager.Instance == null || !GameManager.Instance.IsFriendlyMatchConfirmed || GameManager.Instance.FriendlyMatchDate.Date != tempDate.Date)
+                bool isBookedInGameManager = GameManager.Instance != null && GameManager.Instance.IsFriendlyMatchConfirmed && GameManager.Instance.FriendlyMatchDate.Date == tempDate.Date;
+                bool isBookedInChat = schedule.ContainsKey(tempDate.Date);
+
+                if (!isBookedInGameManager && !isBookedInChat)
                 {
                     saturdays.Add(tempDate);
                 }
