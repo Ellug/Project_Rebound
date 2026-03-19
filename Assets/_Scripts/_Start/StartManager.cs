@@ -18,6 +18,7 @@ public class StartManager : MonoBehaviour
     private const float TableLoadEnd = 0.95f;
     private const float ImagePreloadEnd = 0.98f;
     private const float InitStart = 0.985f;
+    private const float PrepareUiLerpSpeed = 0.08f; // Preparing resources 구간의 페이크 진행 보간 속도
 
     // 선다운로드 대상 1건의 메타 정보
     private sealed class PreloadAssetEntry
@@ -326,7 +327,7 @@ public class StartManager : MonoBehaviour
 
                 // 실제 진행률을 기준으로 하되, 미세 보간을 더해 정체처럼 보이는 구간을 완화한다.
                 displayedPrepareRatio = Mathf.Max(displayedPrepareRatio, targetPrepareRatio);
-                displayedPrepareRatio = Mathf.Min(0.985f, displayedPrepareRatio + Time.unscaledDeltaTime * 0.18f);
+                displayedPrepareRatio = Mathf.Min(0.985f, displayedPrepareRatio + Time.unscaledDeltaTime * PrepareUiLerpSpeed);
 
                 _loadingSlider.value = CatalogUpdateEnd + displayedPrepareRatio * (PrepareResourcesEnd - CatalogUpdateEnd);
                 _statusText.text = BuildPrepareSummaryStatusText(loadedLibraryCount, totalLibraryCount, result.Count, displayedPrepareRatio);
