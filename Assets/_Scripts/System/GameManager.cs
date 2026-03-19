@@ -474,11 +474,33 @@ public class GameManager : Singleton<GameManager>
         {
             DateTime tomorrow = context.CurrentDate.AddDays(1).Date;
 
+            bool hasMatchTomorrow = false;
+            string oppName = string.Empty;
 
             if (IsFriendlyMatchConfirmed && FriendlyMatchDate.Date == tomorrow)
             {
-                _flowData.HasPendingFriendlyMatch = true;
+                hasMatchTomorrow = true;
+                oppName = FriendlyOpponentName;
                 Debug.Log("내일 친선전이 진행됩니다");
+            }
+            else if (FriendlyMatchManager.Instance != null)
+            {
+                var schedule = FriendlyMatchManager.Instance.GetBookedMatchSchedule(tomorrow.Year);
+                if (schedule.TryGetValue(tomorrow, out string foundOpponent))
+                {
+                    hasMatchTomorrow = true;
+                    oppName = foundOpponent;
+
+                    FriendlyMatchDate = tomorrow;
+                    FriendlyOpponentName = oppName;
+                    IsFriendlyMatchConfirmed = true;
+                }
+            }
+
+            if (hasMatchTomorrow)
+            {
+                _flowData.HasPendingFriendlyMatch = true;
+                Debug.Log($"내일 {oppName}와의 친선전이 진행됩니다");
             }
             else
             {
@@ -488,8 +510,8 @@ public class GameManager : Singleton<GameManager>
 
             _lobbyWeekendManager.HandleFridayEnd();
         }
-            
     }
+           
 
     // AlwaysEventManager가 이벤트 활성화를 알릴 때 호출 — row.type / row.id 기반으로 분기
     private void HandleAlwaysEventActivated(AlwaysEventRow row)
