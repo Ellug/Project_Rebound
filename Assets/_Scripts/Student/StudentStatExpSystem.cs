@@ -83,7 +83,7 @@ public static class StudentStatExpSystem
             ApplyFallbackStatDelta(student, stat, expDelta);
             int afterFallbackStat = GetStatValue(student, stat);
             if (afterFallbackStat > beforeFallbackStat)
-                SoundManager.Instance?.PlayStatUpSfx();
+                SoundManager.Instance.PlayStatUpSfx();
             return expDelta;
         }
 
@@ -93,66 +93,7 @@ public static class StudentStatExpSystem
         int beforeLevel = level;
         int beforeExp = exp;
 
-        if (expDelta > 0)
-        {
-            int remain = expDelta;
-
-            while (remain > 0 && level < maxLevel)
-            {
-                int expNext = GetExpNext(table, level);
-                if (expNext <= 0) break;
-
-                int need = expNext - exp;
-                if (need <= 0)
-                {
-                    level++;
-                    exp = 0;
-                    continue;
-                }
-
-                if (remain >= need)
-                {
-                    remain -= need;
-                    level++;
-                    exp = 0;
-                }
-                else
-                {
-                    exp += remain;
-                    remain = 0;
-                }
-            }
-
-            if (level >= maxLevel)
-                exp = 0;
-        }
-        else
-        {
-            int remain = -expDelta;
-
-            while (remain > 0)
-            {
-                if (exp >= remain)
-                {
-                    exp -= remain;
-                    remain = 0;
-                    break;
-                }
-
-                remain -= exp;
-
-                if (level <= 1)
-                {
-                    level = 1;
-                    exp = 0;
-                    remain = 0;
-                    break;
-                }
-
-                level--;
-                exp = Mathf.Max(0, GetExpNext(table, level));
-            }
-        }
+        SimulateExpDelta(table, ref level, ref exp, expDelta, maxLevel);
 
         SetStatValue(student, stat, level);
         SetStatExp(student, stat, exp);
@@ -161,12 +102,29 @@ public static class StudentStatExpSystem
         bool expIncreased = expDelta > 0 && (statIncreased || exp > beforeExp);
 
         if (expIncreased)
-            SoundManager.Instance?.PlayStatExpUpSfx();
+            SoundManager.Instance.PlayStatExpUpSfx();
 
         if (statIncreased)
-            SoundManager.Instance?.PlayStatUpSfx();
+            SoundManager.Instance.PlayStatUpSfx();
 
         return expDelta;
+    }
+
+    // 경험치 변화량이 실제 레벨(스탯)에 얼마나 반영되는지 계산
+    public static int PredictStatLevelDelta(Student student, StudentCoreStat stat, int expDelta)
+    {
+        if (student == null || expDelta == 0)
+            return 0;
+
+        StudentStatExpTableSO table = CachedSOData.Get<StudentStatExpTableSO>();
+
+        int maxLevel = GetMaxLevel(table);
+        int level = Mathf.Clamp(GetStatValue(student, stat), 1, maxLevel);
+        int exp = Mathf.Max(0, GetStatExp(student, stat));
+        int beforeLevel = level;
+
+        SimulateExpDelta(table, ref level, ref exp, expDelta, maxLevel);
+        return level - beforeLevel;
     }
 
     // 매 훈련 실행 시, 포지션/티어 기반 랜덤 추가 경험치를 잠재력 스탯에 적용
@@ -248,6 +206,68 @@ public static class StudentStatExpSystem
         StudentStatExpRow row = table.GetOrNull(level);
         if (row == null) return 0;
         return Mathf.Max(0, row.expNext);
+    }
+
+    private static void SimulateExpDelta(StudentStatExpTableSO table, ref int level, ref int exp, int expDelta, int maxLevel)
+    {
+        if (expDelta > 0)
+        {
+            int remain = expDelta;
+
+            while (remain > 0 && level < maxLevel)
+            {
+                int expNext = GetExpNext(table, level);
+                if (expNext <= 0) break;
+
+                int need = expNext - exp;
+                if (need <= 0)
+                {
+                    level++;
+                    exp = 0;
+                    continue;
+                }
+
+                if (remain >= need)
+                {
+                    remain -= need;
+                    level++;
+                    exp = 0;
+                }
+                else
+                {
+                    exp += remain;
+                    remain = 0;
+                }
+            }
+
+            if (level >= maxLevel)
+                exp = 0;
+
+            return;
+        }
+
+        int remainDown = -expDelta;
+
+        while (remainDown > 0)
+        {
+            if (exp >= remainDown)
+            {
+                exp -= remainDown;
+                break;
+            }
+
+            remainDown -= exp;
+
+            if (level <= 1)
+            {
+                level = 1;
+                exp = 0;
+                break;
+            }
+
+            level--;
+            exp = Mathf.Max(0, GetExpNext(table, level));
+        }
     }
 
     private static int GetStatValue(Student student, StudentCoreStat stat)
