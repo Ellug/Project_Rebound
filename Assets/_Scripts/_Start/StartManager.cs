@@ -31,9 +31,12 @@ public class StartManager : MonoBehaviour
     [SerializeField] private TMP_Text _statusText;
     [SerializeField] private TableLoadConfigSO _tableLoadConfig; // 자동 동기화된 테이블 참조 목록
     [SerializeField] private List<AssetReference> _additionalPreloadRefs = new(); // 테이블 외 선다운로드 대상(AddressableImageLibrary SO, AddressableAudioLibrary SO)
+    [SerializeField] private StartLegalConsentPopup _legalConsentPopup;
 
     private readonly WaitForSeconds _waitOneSecond = new(1f);
     private readonly List<string> _preloadImageFileNames = new(); // 프리로드할 이미지 파일명 목록
+    private bool _loadingStarted;
+    private bool _legalPopupEventsBound;
 
     void Awake()
     {
@@ -42,6 +45,65 @@ public class StartManager : MonoBehaviour
 
     void Start()
     {
+        if (StartLegalConsentPopup.HasConsent())
+        {
+            StartLoading();
+            return;
+        }
+
+        BindLegalPopupEvents();
+        _legalConsentPopup.Show();
+    }
+
+    private void OnDestroy()
+    {
+        UnbindLegalPopupEvents();
+    }
+
+    private void BindLegalPopupEvents()
+    {
+        if (_legalPopupEventsBound)
+            return;
+
+        _legalConsentPopup.OnCancel += HandleLegalConsentCancel;
+        _legalConsentPopup.OnAgree += HandleLegalConsentAgree;
+        _legalPopupEventsBound = true;
+    }
+
+    private void UnbindLegalPopupEvents()
+    {
+        if (!_legalPopupEventsBound)
+            return;
+
+        _legalConsentPopup.OnCancel -= HandleLegalConsentCancel;
+        _legalConsentPopup.OnAgree -= HandleLegalConsentAgree;
+        _legalPopupEventsBound = false;
+    }
+
+    private void HandleLegalConsentCancel()
+    {
+        StartLegalConsentPopup.SaveConsent(false);
+
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+        Application.Quit();
+#endif
+    }
+
+    private void HandleLegalConsentAgree()
+    {
+        StartLegalConsentPopup.SaveConsent(true);
+        _legalConsentPopup.Hide();
+        StartLoading();
+    }
+
+    private void StartLoading()
+    {
+        if (_loadingStarted)
+            return;
+
+        _loadingStarted = true;
         StartCoroutine(LoadingProcess());
     }
 
