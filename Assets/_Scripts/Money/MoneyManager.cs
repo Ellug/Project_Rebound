@@ -1,9 +1,8 @@
-using System;
+ï»¿using System;
 using UnityEngine;
 
-// Áö±İ ÀçÈ­ Ãß°¡, »ç¿ë ÀÖÀ½
-// ÀçÈ­ ÃÊ±â°ª º¯°æ
-// ¼¼ÀÌºê ·Îµå ³ªÁß¿¡ Ãß°¡
+// ì§€ê¸ˆ ì¬í™” ì¶”ê°€, ì‚¬ìš© ìˆìŒ
+// ì¬í™” ì´ˆê¸°ê°’ ë³€ê²½
 public class MoneyManager : Singleton<MoneyManager>
 {
     private const int DEFAULT_GOLD = 2000;
@@ -16,7 +15,7 @@ public class MoneyManager : Singleton<MoneyManager>
     public event Action<int> OnGoldChanged;
     public event Action<int> OnReputationChanged;
 
-    // ÀÚ±İ Ãß°¡
+    // ìê¸ˆ ì¶”ê°€
     public void AddGold(int amount)
     {
         if (amount <= 0)
@@ -28,7 +27,7 @@ public class MoneyManager : Singleton<MoneyManager>
         OnGoldChanged?.Invoke(_gold);
     }
 
-    // ÀÚ±İ »ç¿ë
+    // ìê¸ˆ ì‚¬ìš©
     public bool TrySpendGold(int amount)
     {
         if (amount <= 0)
@@ -46,7 +45,27 @@ public class MoneyManager : Singleton<MoneyManager>
         return true;
     }
 
-    // ¸í¼ºÄ¡ Ãß°¡
+    // ëª…ì„±ì¹˜ ë³´ë„ˆìŠ¤ ì ìš© í›„ ìµœì¢… ì§€ê¸‰ëŸ‰ ê³„ì‚°
+    public int GetAdjustedReputationAmount(int amount)
+    {
+        if (amount <= 0)
+        {
+            return 0;
+        }
+
+        if (HeadCoachManager.Instance != null && HeadCoachManager.Instance.IsInitialized)
+        {
+            float bonusRate = HeadCoachManager.Instance.GetStatBonusValue("Fame_Gain_Rate");
+            if (bonusRate != 0f)
+            {
+                amount = Mathf.RoundToInt(amount * (1f + bonusRate * 0.01f));
+            }
+        }
+
+        return amount;
+    }
+
+    // ëª…ì„±ì¹˜ ì¶”ê°€
     public void AddReputation(int amount)
     {
         if (amount <= 0)
@@ -54,11 +73,24 @@ public class MoneyManager : Singleton<MoneyManager>
             return;
         }
 
+        int originalAmount = amount;
+        amount = GetAdjustedReputationAmount(amount);
+
+        if (originalAmount != amount)
+        {
+            float appliedBonusRate = HeadCoachManager.Instance != null && HeadCoachManager.Instance.IsInitialized
+                ? HeadCoachManager.Instance.GetStatBonusValue("Fame_Gain_Rate")
+                : 0f;
+
+            Debug.Log($"[MoneyManager] ëª…ì„±ì¹˜ ë³´ë„ˆìŠ¤ ì ìš©: ê¸°ë³¸ {originalAmount}, ë³´ë„ˆìŠ¤ {appliedBonusRate}%, ìµœì¢… {amount}");
+        }
+        Debug.Log($"[MoneyManager] ëª…ì„±ì¹˜ ì¦ê°€: í˜„ì¬ {_reputation + amount}");
+
         _reputation += amount;
         OnReputationChanged?.Invoke(_reputation);
     }
 
-    // ¸í¼ºÄ¡ »ç¿ë
+    // ëª…ì„±ì¹˜ ì‚¬ìš©
     public bool TrySpendReputation(int amount)
     {
         if (amount <= 0)
@@ -76,7 +108,7 @@ public class MoneyManager : Singleton<MoneyManager>
         return true;
     }
 
-    // ÀÚ±İ ÃÊ±âÈ­
+    // ìê¸ˆ ì´ˆê¸°í™”
     public void ResetGold()
     {
         _gold = DEFAULT_GOLD;
@@ -90,5 +122,26 @@ public class MoneyManager : Singleton<MoneyManager>
 
         OnGoldChanged?.Invoke(_gold);
         OnReputationChanged?.Invoke(_reputation);
+    }
+
+    // UI ê°±ì‹ ìš©
+    public void ForceNotify()
+    {
+        OnGoldChanged?.Invoke(_gold);
+        OnReputationChanged?.Invoke(_reputation);
+    }
+
+    // ê³¨ë“œ/ëª…ì„±ì¹˜ë¥¼ í•œ ë²ˆì— ì§€ê¸‰
+    public void ApplyReward(int money, int fame)
+    {
+        if (money > 0)
+        {
+            AddGold(money);
+        }
+
+        if (fame > 0)
+        {
+            AddReputation(fame);
+        }
     }
 }

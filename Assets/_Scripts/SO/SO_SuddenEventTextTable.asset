@@ -13,48 +13,100 @@ MonoBehaviour:
   m_Name: SO_SuddenEventTextTable
   m_EditorClassIdentifier: Assembly-CSharp::SuddenEventTextTableSO
   _rows:
-  - id: id_Text_SuddenEvent_000001
+  - id: text_SuddenEvent_000001
     condition: 1
     target: 1
     speaker: '[SYSTEM]'
-    description: "{event_effect.target_name} {event_event_effect.amount} \uAC10\uC18C"
-  - id: id_Text_SuddenEvent_000001
+    description: "{effect1.target_name} {effect1.amount} \uC99D\uAC00"
+  - id: text_SuddenEvent_000001
     condition: 1
     target: 2
     speaker: '[SYSTEM]'
-    description: "{event_effect.target_name} {event_event_effect.amount} \uAC10\uC18C"
-  - id: id_Text_SuddenEvent_000001
+    description: "{effect1.target_name} {effect1.amount} \uC99D\uAC00"
+  - id: text_SuddenEvent_000001
     condition: 1
     target: 3
     speaker: '[SYSTEM]'
-    description: "{event_effect.target_name} {event_event_effect.amount} \uAC10\uC18C"
-  - id: id_Text_SuddenEvent_000002
+    description: "{effect1.target_name} {effect1.amount} \uC99D\uAC00"
+  - id: text_SuddenEvent_000002
+    condition: 1
+    target: 1
+    speaker: '[SYSTEM]'
+    description: "{effect1.target_name} {effect1.amount} \uAC10\uC18C"
+  - id: text_SuddenEvent_000002
+    condition: 1
+    target: 2
+    speaker: '[SYSTEM]'
+    description: "{effect1.target_name} {effect1.amount} \uAC10\uC18C"
+  - id: text_SuddenEvent_000002
+    condition: 1
+    target: 3
+    speaker: '[SYSTEM]'
+    description: "{effect1.target_name} {effect1.amount} \uAC10\uC18C"
+  - id: text_SuddenEvent_000003
+    condition: 1
+    target: 1
+    speaker: '[SYSTEM]'
+    description: "{effect1.amount} {effect1.target_name} \uD68D\uB4DD"
+  - id: text_SuddenEvent_000004
+    condition: 1
+    target: 1
+    speaker: '[SYSTEM]'
+    description: "{effect1.amount} {effect1.target_name} \uC0AC\uC6A9"
+  - id: text_SuddenEvent_000005
     condition: 8
     target: 1
     speaker: '[SYSTEM]'
-    description: "$\"{target1.name}\uC774(\uAC00) \uBD80\uB2F4\uAC10\uC744 \uB290\uB080\uB2E4...\\n<color=grey>{target1.name}
-      {event_effect.target_name} {event_event_effect.amount}<\\color>\""
-  - id: id_Text_SuddenEvent_000002
+    description: "{target1.name}\uC774(\uAC00) \uBD80\uB2F4\uAC10\uC744 \uB290\uB080\uB2E4...\\n<color=grey>{target1.name}
+      {effect1.target_name} {effect1.amount}<\\color>"
+  - id: text_SuddenEvent_000005
     condition: 8
     target: 2
     speaker: '[SYSTEM]'
-    description: "$\"\uD559\uC0DD\uB4E4\uC774(\uAC00) \uBD80\uB2F4\uAC10\uC744 \uB290\uB080\uB2E4...\\n<color=grey>{target1.name},
-      {target2.name} {event_effect.target_name} {event_event_effect.amount}<\\color>\""
-  - id: id_Text_SuddenEvent_000002
+    description: "\uD559\uC0DD\uB4E4\uC774(\uAC00) \uBD80\uB2F4\uAC10\uC744 \uB290\uB080\uB2E4...\\n<color=grey>{target1.name},
+      {target2.name} {effect1.target_name} {effect1.amount}<\\color>"
+  - id: text_SuddenEvent_000005
     condition: 8
     target: 3
     speaker: '[SYSTEM]'
-    description: "$\"\uD559\uC0DD\uB4E4\uC774(\uAC00) \uBD80\uB2F4\uAC10\uC744 \uB290\uB080\uB2E4...\\n<color=grey>{target1.name},
-      {target2.name}, {target3.name} {event_effect.target_name} {event_effect.amount}<\\color>\""
-  - id: id_Text_SuddenEvent_000002
+    description: "\uD559\uC0DD\uB4E4\uC774(\uAC00) \uBD80\uB2F4\uAC10\uC744 \uB290\uB080\uB2E4...\\n<color=grey>{target1.name},
+      {target2.name}, {target3.name} {effect1.target_name} {effect1.amount}<\\color>"
+  - id: text_SuddenEvent_000005
     condition: 8
     target: 4
     speaker: '[SYSTEM]'
-    description: "$\"\uD559\uC0DD\uB4E4\uC774(\uAC00) \uBD80\uB2F4\uAC10\uC744 \uB290\uB080\uB2E4...\\n<color=grey>{target1.name},
-      {target2.name}, {target3.name}, {target4.name} {event_effect.target_name} {event_effect.amount}<\\color>\""
-  - id: id_Text_SuddenEvent_000002
+    description: "\uD559\uC0DD\uB4E4\uC774(\uAC00) \uBD80\uB2F4\uAC10\uC744 \uB290\uB080\uB2E4...\\n<color=grey>{target1.name},
+      {target2.name}, {target3.name}, {target4.name} {effect1.target_name} {effect1.amount}<\\color>"
+  - id: text_SuddenEvent_000005
     condition: 8
     target: 5
     speaker: '[SYSTEM]'
-    description: "$\"\uD559\uC0DD\uB4E4\uC774(\uAC00) \uBD80\uB2F4\uAC10\uC744 \uB290\uB080\uB2E4...\\n<color=grey>
-      \uBAA8\uB4E0 \uD559\uC0DD {event_effect.target_name}  {event_effect.amount}<\\color>\""
+    description: "\uD559\uC0DD\uB4E4\uC774(\uAC00) \uBD80\uB2F4\uAC10\uC744 \uB290\uB080\uB2E4...\\n<color=grey>
+      \uC804\uC6D0 {effect1.target_name} {effect1.amount}<\\color>"
+  - id: text_SuddenEvent_000006
+    condition: 8
+    target: 1
+    speaker: '[SYSTEM]'
+    description: "{target1.name} {term} \uC77C \uC785\uC6D0\""
+  - id: text_SuddenEvent_000006
+    condition: 8
+    target: 2
+    speaker: '[SYSTEM]'
+    description: "{target1.name}, {target2.name} {term} \uC77C \uC785\uC6D0"
+  - id: text_SuddenEvent_000007
+    condition: 1
+    target: 1
+    speaker: '[SYSTEM]'
+    description: "\uB300\uD654\uAC00 \uC885\uB8CC\uB418\uC5C8\uC2B5\uB2C8\uB2E4."
+  - id: text_SuddenEvent_000008
+    condition: 1
+    target: 20
+    speaker: '[SYSTEM]'
+    description: "\uD300 {effect1.target_name} {effect1.amount} \uC99D\uAC00, \uD6C8\uB828
+      \uD6A8\uC728 {effect2.amount} \uC99D\uAC00"
+  - id: text_SuddenEvent_000009
+    condition: 1
+    target: 1
+    speaker: '[SYSTEM]'
+    description: "{effect1.target_name} {effect1.amount} \uC99D\uAC00, {effect2.target_name}
+      {effect2.amount} \uC99D\uAC00,  {effect3.target_name} {effect3.amount} \uAC10\uC18C"

@@ -15,6 +15,8 @@ public struct GameFlowData
     public bool IsLeagueHandled;               // 토너먼트 씬 진입 완료 여부
     public DateTime LeagueTermEnd;             // 토너먼트 진입 시점의 리그 term_end 날짜
     public bool HasPendingFriendlyMatch;       // 주말 친선경기 예약 여부
+    public bool HasPlayedVn10002;              // 10002 시청 완료 여부
+    public bool HasPlayedVn10003;              // 10003 시청 완료 여부
     public HashSet<string> ActiveEventIds;     // 현재 term 범위 내 활성 이벤트 id 집합
 
     // 초기값
@@ -28,6 +30,8 @@ public struct GameFlowData
         Phase = GamePhase.Init,
         IsLeagueOpened = false,
         IsLeagueHandled = false,
+        HasPlayedVn10002 = false,
+        HasPlayedVn10003 = false,
         ActiveEventIds = new HashSet<string>(StringComparer.Ordinal)
     };
 
@@ -43,6 +47,8 @@ public struct GameFlowData
         IsLeagueHandled = false;
         LeagueTermEnd = default;
         HasPendingFriendlyMatch = false;
+        HasPlayedVn10002 = false;
+        HasPlayedVn10003 = false;
         ActiveEventIds?.Clear();
     }
 

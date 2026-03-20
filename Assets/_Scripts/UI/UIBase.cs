@@ -19,12 +19,14 @@ public abstract class UIBase : MonoBehaviour
     public virtual void Open()
     {
         this.gameObject.SetActive(true);
+        PlayPopupOpenSfx();
         // 등장 애니메이션 등을 여기서 재생 가능
     }
 
     // UI가 닫힐 때 호출
     public virtual void Close()
     {
+        PlayPopupCloseSfx();
         this.gameObject.SetActive(false);
         // 퇴장 애니메이션 처리 후 비활성화 가능
     }
@@ -36,5 +38,20 @@ public abstract class UIBase : MonoBehaviour
         // 모달이면 매니저를 통해 자신을 닫음
         if (_isModal)
             UIManager.Instance.CloseTop();
+    }
+
+    protected static void PlayPopupOpenSfx()
+    {
+        SoundManager.Instance.PlayEffect(202);
+    }
+
+    protected static void PlayPopupCloseSfx()
+    {
+        SoundManager.Instance.PlayEffect(203);
+    }
+
+    protected virtual void OnDestroy()
+    {
+
     }
 }

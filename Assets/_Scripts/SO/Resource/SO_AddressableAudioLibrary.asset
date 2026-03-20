@@ -1,0 +1,167 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b83474c2706a654398bd088f235aad6, type: 3}
+  m_Name: SO_AddressableAudioLibrary
+  m_EditorClassIdentifier: Assembly-CSharp::AddressableAudioLibrarySO
+  _entries:
+  - id: 101
+    name: bgm_start_lp
+    clipReference:
+      m_AssetGUID: 3636ed4b8ac9da341926364092616b5f
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+  - id: 102
+    name: bgm_lobby_lp
+    clipReference:
+      m_AssetGUID: 2abc5ae852d1f9b4d8898c92d41685a7
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+  - id: 103
+    name: bgm_tournament_lp
+    clipReference:
+      m_AssetGUID: d578679a5a012994b83dd6697d7bd15d
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+  - id: 104
+    name: bgm_tournament_failed_lp
+    clipReference:
+      m_AssetGUID: 08dbc54237d250746a36e411f7340c6f
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+  - id: 105
+    name: bgm_tournament_result_lp
+    clipReference:
+      m_AssetGUID: 2782ae37acedfee4e91ef1ea1f930d91
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+  - id: 108
+    name: bgm_tournament_victory_lp
+    clipReference:
+      m_AssetGUID: 6d50f22e9d66b1647a7643b9dc67036b
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+  - id: 201
+    name: sfx_ui_touch_os
+    clipReference:
+      m_AssetGUID: 1e663698cb23b944aa82c2b56b6d3307
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+  - id: 202
+    name: sfx_ui_popup_open_os
+    clipReference:
+      m_AssetGUID: c444e422a0a0a5d42b56d31356fe5bc3
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+  - id: 203
+    name: sfx_ui_popup_close_os
+    clipReference:
+      m_AssetGUID: f2f03b3991d92fb408004904205466f9
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+  - id: 204
+    name: sfx_ui_start_click_os
+    clipReference:
+      m_AssetGUID: b5a524452a9bda142a6eaac14fcc5d42
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+  - id: 205
+    name: sfx_ui_popup_alert_denied_os
+    clipReference:
+      m_AssetGUID: 36fb7b1c0f51c314ca775b912189d794
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+  - id: 206
+    name: sfx_ui_stat_up_os
+    clipReference:
+      m_AssetGUID: 0217b85172aead24492ab89dc7fd02f9
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+  - id: 207
+    name: sfx_ui_stat_exp_up_os
+    clipReference:
+      m_AssetGUID: 6e7e1d2266104374fb844b119cfed5b6
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+  - id: 209
+    name: sfx_ui_char_assign_os
+    clipReference:
+      m_AssetGUID: 0fc46a80267b67b46977b78984c7230b
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+  - id: 211
+    name: sfx_ui_facility_levelup_os
+    clipReference:
+      m_AssetGUID: d116c828454bbdd499e824a03abaea99
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+  - id: 212
+    name: sfx_ui_director_unlock_os
+    clipReference:
+      m_AssetGUID: fdb99296fb793504f831e1a494347ca8
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+  - id: 301
+    name: sfx_match_whistle_os
+    clipReference:
+      m_AssetGUID: ecd34bf4c98a47f45a0a23116be1f611
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+  - id: 302
+    name: sfx_match_buzzer_os
+    clipReference:
+      m_AssetGUID: c2504b5b513e2d64a8bd0041b5d7c3f0
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+  - id: 305
+    name: sfx_match_final_os
+    clipReference:
+      m_AssetGUID: 8b6d978181a371543a50bdda72437b48
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0

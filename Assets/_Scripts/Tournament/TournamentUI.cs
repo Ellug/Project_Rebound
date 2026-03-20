@@ -32,12 +32,21 @@ public class TournamentUI : MonoBehaviour
     [SerializeField] private float _roundColumnSpacing = 160f;
     [SerializeField] private float _connectorXOffset = 64f;
 
+    private bool _hasPlayedFinalBracketSfx;
+
     // 단일 라운드 입력을 다중 라운드 렌더러 포맷으로 감싸 전달
     public void RenderRound(IReadOnlyList<TournamentMatchViewData> matchups, string mySchoolName)
     {
         List<List<TournamentMatchViewData>> rounds = new(1) { new(matchups) };
 
         RenderRounds(rounds, 0, mySchoolName);
+    }
+
+    // 친선전 모드에서 토너먼트 전용 패널 숨김
+    public void HideTournamentPanels()
+    {
+        _roundListPanel.SetActive(false);
+        _focusedMatchPanel.SetActive(false);
     }
 
     // 현재 라운드 상태에 맞춰 브래킷 패널 또는 결승 집중 패널을 갱신
@@ -51,6 +60,19 @@ public class TournamentUI : MonoBehaviour
 
         _roundListPanel.SetActive(!isFinalRound);
         _focusedMatchPanel.SetActive(isFinalRound);
+
+        if (isFinalRound)
+        {
+            if (!_hasPlayedFinalBracketSfx)
+            {
+                SoundManager.Instance.PlayEffect(305);
+                _hasPlayedFinalBracketSfx = true;
+            }
+        }
+        else
+        {
+            _hasPlayedFinalBracketSfx = false;
+        }
 
         if (isFinalRound)
         {
@@ -224,29 +246,8 @@ public class TournamentUI : MonoBehaviour
             if (!matchup.IsHighlighted)
                 continue;
 
-            if (string.IsNullOrWhiteSpace(mySchoolName))
-            {
-                myTeam = matchup.UpTeam;
-                opponentTeam = matchup.DownTeam;
-                break;
-            }
-
-            if (matchup.UpTeam == mySchoolName)
-            {
-                myTeam = matchup.UpTeam;
-                opponentTeam = matchup.DownTeam;
-            }
-            else if (matchup.DownTeam == mySchoolName)
-            {
-                myTeam = matchup.DownTeam;
-                opponentTeam = matchup.UpTeam;
-            }
-            else
-            {
-                myTeam = matchup.UpTeam;
-                opponentTeam = matchup.DownTeam;
-            }
-
+            myTeam = string.IsNullOrWhiteSpace(mySchoolName) ? matchup.UpTeam : mySchoolName;
+            opponentTeam = matchup.DownTeam;
             break;
         }
 

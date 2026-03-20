@@ -1,0 +1,216 @@
+ID,speaker,dialogue
+string,enum,String
+text_diag_000001_000,student,감독님
+text_diag_000001_001,player,?
+text_diag_000001_002,player,왜
+text_diag_000001_003,student,그게...
+text_diag_000001_004,student,저 오늘 야자 못 할 거 같아요.
+text_diag_000001_005,player,사유
+text_diag_000001_006,student,아 있어요 그런게...
+text_diag_000001_007,student,오늘만 좀 봐주세요. 네?
+text_diag_000001_008,choice,잘 들어.
+text_diag_000001_009,player,"나는 선생이고, 너는 학생이야."
+text_diag_000001_010,student,넵...
+text_diag_000001_011,player,그리고 우린 깐부지.
+text_diag_000001_012,student,...예?
+text_diag_000001_013,player,ㅋㅋㅋㅋㅋㅋ
+text_diag_000001_014,student,아ㅋㅋㅋㅋㅋㅋ
+text_diag_000001_015,player,적당히 놀다 들어가라.
+text_diag_000001_016,player,사고치지 말고
+text_diag_000001_017,student,넵!
+text_diag_000001_018,choice,우리 친구가 꿈이 아주 크구나!
+text_diag_000001_019,student,그럼요!
+text_diag_000001_020,student,꿈은 크게 가져야죠!
+text_diag_000001_021,player,음! 사내가 꿈을 크게 가져야지!
+text_diag_000001_022,player,체육관으로 뛰어 와라!
+text_diag_000001_023,player,10분 주마!
+text_diag_000001_024,student,...이만 야자 하러 가보겠습니닷!
+text_diag_000001_025,player,9
+text_diag_000001_026,student,넵지금당장뛰어가겠스빈다!
+text_diag_000001_027,choice,(대충 야자를 빠지면 안된다는 잔소리)
+text_diag_000001_028,student,흥.
+text_diag_000001_029,student,비스듬해질테다.
+text_diag_000001_030,player,(대충 너는 잡히면 운동장 100바퀴라는 선고)
+text_diag_000002_000,student,감독님.. 저 오늘 훈련 못 가요.
+text_diag_000002_001,player,사유.
+text_diag_000002_002,student,영어 수행평가 미달이라 
+text_diag_000002_003,student,보충 수업 들어야 한대요ㅠ
+text_diag_000002_004,player,잘 좀 하지;;
+text_diag_000002_005,student,저 나름 열심히 했다고요!
+text_diag_000002_006,player,그럼 사과 영어로 써봐
+text_diag_000002_007,student,ㅡㅡ
+text_diag_000002_008,student,Appole
+text_diag_000002_009,player,...그냥 보충 수업 열심히 들어라. 
+text_diag_000002_010,player,두 번 들어라.
+text_diag_000003_000,student,감독님 체단실 기구 제가 고쳤어요!!
+text_diag_000003_001,player,오 대단한데? 
+text_diag_000003_002,player,근데 왜 불안하지?
+text_diag_000003_003,student,벤치프레스 바가\n좀 휘어 있어서 
+text_diag_000003_004,player,있어서
+text_diag_000003_005,student,폈어요
+text_diag_000003_006,choice,폈...뭐?
+text_diag_000003_007,player,그게 가능해?
+text_diag_000003_008,student,되던데요
+text_diag_000003_009,choice,아
+text_diag_000003_010,player,그거 손잡이야
+text_diag_000003_011,student,...네?
+text_diag_000003_012,student,일자 아니에요?
+text_diag_000003_013,player,내일까지 반성문 써서 제출해라.
+text_diag_000003_014,student,으아아;;;
+text_diag_000004_000,student,감독님! 저 방금 림 잡았어요!!!
+text_diag_000004_001,player,오 드디어? 덩크 가냐?
+text_diag_000004_002,student,네!! 근데 림 잡고 내려오다가\n골대 흔들렸음요ㅋㅋ
+text_diag_000004_003,player,아
+text_diag_000004_004,player,설마 부순 건 아니지?
+text_diag_000004_005,student,부서지진 않았는데
+text_diag_000004_006,student,좀 뭐랄까
+text_diag_000004_007,student,높이가 낮아지긴 했어요.
+text_diag_000004_008,student,이거 원래 이래요?
+text_diag_000004_009,choice,...응
+text_diag_000004_010,player,림이 나처럼 많이 피곤한가보다
+text_diag_000004_011,player,근처 풀숲에 두고 조용히 와라.
+text_diag_000004_012,student,(넵)
+text_diag_000004_013,choice,겠냐
+text_diag_000004_014,player,너 나랑 반성문 한 장 쓰자
+text_diag_000004_015,student,ㅜㅜ
+text_diag_000005_000,student,감독님 !
+text_diag_000005_001,student,옆 여고 애들이 농구 가르쳐달래요!
+text_diag_000005_002,choice,너가?
+text_diag_000005_003,student,감독님도 아시잖아요.
+text_diag_000005_004,student,저 요즘 컨디션 최고에요!
+text_diag_000005_005,student,게다가 여친한테 보여줄거라
+text_diag_000005_006,student,엄청 연습했
+text_diag_000005_007,player,여친?
+text_diag_000005_008,student,아
+text_diag_000005_009,player,요즘 폼 올랐으니까 봐준다.
+text_diag_000005_010,student,감독님 짱
+text_diag_000005_011,choice,왜?
+text_diag_000005_012,student,"에이, 팬 서비스죠~ 가도 되죠?"
+text_diag_000005_013,player,"가도 되는데, 실수 하지 마라."
+text_diag_000005_014,player,실수하면 그거 만큼 쪽팔린게 어딨냐?
+text_diag_000005_015,player,항상 실전같이. 알지?
+text_diag_000005_016,student,"에이, 걱정 마세요!"
+text_diag_000005_017,student,저 연습 엄청 했어요!
+text_diag_000005_018,choice,그래
+text_diag_000005_019,player,우리 에이스
+text_diag_000005_020,player,가서 레이업 한 번이라도 놓치면
+text_diag_000005_021,player,내일 슛 100개 추가다^^
+text_diag_000005_022,student,헐.. 데이트 비용이 너무 비싼데;;
+text_diag_000005_023,player,...데이트?
+text_diag_000005_024,student,아
+text_diag_000005_025,player,저번에 훈련 도망친거
+text_diag_000005_026,player,그거 때문이었냐?
+text_diag_000005_027,player,왜 답이 없냐?
+text_diag_000005_028,player,대답
+text_diag_000006_000,student,감독님... 주무세요?
+text_diag_000006_001,player,지금 새벽 1시다. 왜.
+text_diag_000006_002,student,저 아무리 해도 안 느는 것 같아요.. 농구 접을까요?
+text_diag_000006_003,player,갑자기 웬 감성 터지는 소리야
+text_diag_000006_004,student,벤치만 달구는 것도 지쳐요...
+text_diag_000006_005,choice,"야, 슬램덩크 안 봤냐? "
+text_diag_000006_006,student,그 만화 90년대 거잖아요;;
+text_diag_000006_007,player,...그게 중요한게 아니고.
+text_diag_000006_008,player,"단념하면, 전부 끝나는 거다."
+text_diag_000006_009,player,내일 일찍 와라. 특훈이다.
+text_diag_000006_010,student,...넵!
+text_diag_000006_011,choice,"솔직히, 니 피지컬은 평범하다."
+text_diag_000006_012,student,...그렇죠?
+text_diag_000006_013,student,역시 저는...
+text_diag_000006_014,player,하지만
+text_diag_000006_015,player,농구는 혼자하는 스포츠가 아니다.
+text_diag_000006_016,player,너는 경기 전체를 보는 눈이 있어.
+text_diag_000006_017,player,포기하지 마라.
+text_diag_000006_018,student,...감사합니다.
+text_diag_000006_019,player,"감사는 무슨, "
+text_diag_000006_020,player,빨리 자라. 내일 졸려서 비몽사몽하지 말고.
+text_diag_000006_021,student,네!
+text_diag_000006_022,choice,즐겁니?
+text_diag_000006_023,student,네?
+text_diag_000006_024,player,즐겁냐고. 농구할 때.
+text_diag_000006_025,student,네. 즐거워요.
+text_diag_000006_026,student,엄청
+text_diag_000006_027,player,"그렇다면, 충분하지 않을까?"
+text_diag_000006_028,player,주전으로 나서지 못하더라도
+text_diag_000006_029,player,더 이상 시합에 나가지 못하더라도
+text_diag_000006_030,player,친구들과 즐겁게 농구한 그 추억이
+text_diag_000006_031,player,마음속에 남아 있으니까.
+text_diag_000006_032,student,....코치님
+text_diag_000006_033,player,왜. 멋있었냐?
+text_diag_000006_034,student,꼰대같아요.
+text_diag_000006_035,player,우씨
+text_diag_000006_036,student,ㅋㅋ 장난이에요.
+text_diag_000006_037,player,혹시 모르지? 
+text_diag_000006_038,player,즐겁게 농구 하다보면\n실력이 확 늘지도?
+text_diag_000006_039,student,감사합니다. 선생님.
+text_diag_000006_040,student,"저, 계속 해볼께요."
+text_diag_000007_000,student,"감독님, 오늘 간식 뭐예요?\n피자? 치킨?"
+text_diag_000007_001,player,오늘 내 예전 제자 중 한명이 피자 사 들고 온대.
+text_diag_000007_002,student,와!! 대박!! 누구예요? 프로 선수?
+text_diag_000007_003,player,아니. 그건 아니고.
+text_diag_000007_004,player,이번에 개업했다더라.
+text_diag_000007_005,student,...맛있으면 됐죠.
+text_diag_000008_000,student,감독님! 미르고 애들이 단톡방에서 시비 걸어요!
+text_diag_000008_001,player,뭐라고 하는데?
+text_diag_000008_002,student,우리 팀 그물은 절대 안 흔들릴 거래요ㅜㅜ
+text_diag_000008_003,player,오.. 
+text_diag_000008_004,choice,멘트 좀 치는데?
+text_diag_000008_005,student,저 너무 화나서 잠이 안 와요;;
+text_diag_000008_006,player,화내지 말고 실력으로 보여라.
+text_diag_000008_007,player,내일 3점 슛 꽂자.
+text_diag_000008_008,student,...네.
+text_diag_000008_009,student,진짜 가만 안 둔다...
+text_diag_000008_010,player,그래. 화이팅이다.
+text_diag_000008_011,choice,그래서? 
+text_diag_000008_012,student,그래서라뇨;;
+text_diag_000008_013,student,너무해. 
+text_diag_000008_014,student,제자 편을 들어주세요.
+text_diag_000008_015,player,말은 끝까지 들어라.
+text_diag_000008_016,player,우리팀 그물이 안 흔들린다는건
+text_diag_000008_017,player,상대 팀이 우리 수비를 못 뚫었다는거 아니냐?
+text_diag_000008_018,student,...어
+text_diag_000008_019,student,그렇네요?
+text_diag_000008_020,player,...에휴.
+text_diag_000009_000,student,감독님\n체육관 비번 바꿨어요?
+text_diag_000009_001,player,아닌데? 그대로 0423 아냐?
+text_diag_000009_002,student,안 열려요.
+text_diag_000009_003,student,어제 바꾸고 까먹으신 거 아니에요?
+text_diag_000009_004,player,잠깐만... 어.. 
+text_diag_000009_005,choice,1111
+text_diag_000009_006,student,열렸어요
+text_diag_000009_007,student,감독님 진짜 그렇게 봤는데
+text_diag_000009_008,student,엄청 단순하네요
+text_diag_000009_009,player,조용히 해
+text_diag_000009_010,choice,1234
+text_diag_000009_011,student,...5회 이상 틀려서 30분 기다리래요.
+text_diag_000009_012,player,이런;;
+text_diag_000009_013,choice,0423
+text_diag_000009_014,student,아니 감독님;;
+text_diag_000009_015,student,안됐다니까요?
+text_diag_000009_016,player,다시 해봐.
+text_diag_000009_017,player,....어?
+text_diag_000009_018,player,'어?'가 거기서 왜 나오냐?
+text_diag_000009_019,player,자물쇠 부서진건 아니지?
+text_diag_000009_020,student,열렸어요.
+text_diag_000009_021,player,자물쇠 거꾸로 들고 돌렸냐?
+text_diag_000009_022,student,앗 아아;;
+text_diag_000009_023,student,역시 감독님
+text_diag_000009_024,student,짜릿해 새로워
+text_diag_000009_025,student,동경하게 돼
+text_diag_000009_026,player,에휴.
+text_diag_000010_000,student,"감독님, 오늘 영어쌤이 농구부 다 남으래요!"
+text_diag_000010_001,player,왜? 또 사고 쳤냐?
+text_diag_000010_002,student,수업 시간에 경기 분석하다 결려서\nNBA 영상 보고 독해 해오래요;;
+text_diag_000010_003,choice,ㅋㅋㅋㅋㅋ
+text_diag_000010_004,player,전술 공부도 하고 좋네.
+text_diag_000010_005,student,해석이 안 되는데 무슨 전술이에요ㅠㅠ\n다 할 때 까지 집에 못간단 말이에요;;
+text_diag_000010_006,player,모르면 'Pass'라고 해. 농구 용어잖아.
+text_diag_000010_007,student,감독님 진짜 도움 1도 안 돼;;
+text_diag_000010_008,choice,어디냐
+text_diag_000010_009,student,네?
+text_diag_000010_010,player,감히 내 제자들 연습시간을 뺏어?
+text_diag_000010_011,student,...네?
+text_diag_000010_012,player,기다려라. 내가 간다.
+text_diag_000010_013,student,(감동)
+text_diag_100000_000,student,"환영합니다, 코치님. 앞으로도 잘 부탁 드립니다."
+text_diag_100001_000,student,{target1.grade} {target1.name} 학생이 금일 지각하였습니다. 계도 부탁 드립니다.
+text_diag_200001_000,student,학생들에게 간식을 사주었다.

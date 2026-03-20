@@ -19,11 +19,6 @@ MonoBehaviour:
     effectValue: 1
     functionId: 0
   - id: 1002
-    targetStat: Adv_Atk_Shoot
-    applyMethod: Add
-    effectValue: 2
-    functionId: 0
-  - id: 1003
     targetStat: Condition_Drain_ShootingDrill
     applyMethod: Add
     effectValue: -5
@@ -34,9 +29,9 @@ MonoBehaviour:
     effectValue: 1
     functionId: 0
   - id: 2002
-    targetStat: Adv_Def_Jump
+    targetStat: Condition_Drain_DefenceWork
     applyMethod: Add
-    effectValue: 3
+    effectValue: -5
     functionId: 0
   - id: 3001
     targetStat: Facility_Upgrade_Cost
@@ -49,9 +44,9 @@ MonoBehaviour:
     effectValue: 10
     functionId: 0
   - id: 3003
-    targetStat: Management_Cost_Rate
+    targetStat: Condition_Drain_TeamPractice
     applyMethod: Add
-    effectValue: -10
+    effectValue: -3
     functionId: 0
   - id: 4001
     targetStat: Content_Unlock

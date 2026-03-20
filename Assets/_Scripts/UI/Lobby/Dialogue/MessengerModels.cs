@@ -1,16 +1,18 @@
-using System;
+ï»¿using System;
 using System.Collections.Generic;
 
 public enum MessageSenderType
 {
-    Them,       // »ó´ë¹æ (ÁÂÃø Á¤·Ä)
-    Me          // ³ª (¿ìÃø Á¤·Ä)
+    Them,       // ìƒëŒ€ë°© (ì¢Œì¸¡ ì •ë ¬)
+    Me,          // ë‚˜ (ìš°ì¸¡ ì •ë ¬)
+    System
 }
 
 public enum MessageEventType
 {
     NormalText,
-    Choice
+    Choice,
+    System
 }
 
 [Serializable]

@@ -63,7 +63,7 @@ public struct HeadCoachTierConfigData
 {
     public int tierId;
     public int tierLevel;
-    public string tierName;
+    public int tierName;
     public int unlockConditionCount;     // 다음 티어 진입에 필요한 현재 티어 해금 수
     public int maxNodeCount;
     public int tierBonusEffectId;        // 티어 승급 보너스 효과 id (없으면 0)

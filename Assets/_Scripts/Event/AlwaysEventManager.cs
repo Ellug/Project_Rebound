@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -122,12 +123,11 @@ public class AlwaysEventManager : MonoBehaviour
         {
             AlwaysEffectApplier.ApplyEffect(capturedRow);
 
-            // 방학 이벤트 확인 시 토너먼트 씬 진입을 기존 GameManager 로직으로 처리
+            // 방학 이벤트는 "토너먼트 확인 팝업 -> 학생 배치 팝업 -> 진입" 순서로 진행
             if (!IsLeagueBreakEvent(capturedRow))
                 return;
 
-            if (!GameManager.Instance.TryEnterTournament())
-                Debug.Log("[AlwaysEvent] 토너먼트 진입 조건이 충족되지 않아 진입을 건너뜁니다.");
+            StartCoroutine(ShowTournamentEntryPopupNextFrame());
         };
 
         if (UIManager.Instance == null)
@@ -151,15 +151,21 @@ public class AlwaysEventManager : MonoBehaviour
             onPrimary: onConfirm,
             onCancel: null,
             subMessage: GetEventSubMessage(row),
-            previewSprite: null,
+            previewImageId: GetEventPreviewImageId(row),
             showCancel: false,
             primaryKind: UIPopupRequest.PrimaryButtonKind.Confirm
         );
 
-        if (IsLeagueBreakEvent(row))
-            req.InvokePrimaryOnClose = true;
-
         UIManager.Instance.ShowPopup(req);
+    }
+
+    // 방학 팝업이 닫힌 뒤 다음 프레임에 토너먼트 확인 팝업을 띄운다.
+    private IEnumerator ShowTournamentEntryPopupNextFrame()
+    {
+        yield return null;
+
+        if (!GameManager.Instance.TryShowTournamentEntryPopup())
+            Debug.Log("[AlwaysEvent] 토너먼트 진입 조건이 충족되지 않아 진입을 건너뜁니다.");
     }
 
     private static string GetRowId(AlwaysEventRow row)
@@ -262,5 +268,55 @@ public class AlwaysEventManager : MonoBehaviour
             "holiday" => "컨디션 회복량 +5  /  훈련 효율 x1.5",
             _ => string.Empty
         };
+    }
+
+    // type/name 기준으로 이벤트 팝업 이미지 ID 반환
+    private static string GetEventPreviewImageId(AlwaysEventRow row)
+    {
+        switch (row.name)
+        {
+            // 시험 기간
+            case "first_midterm_exam":
+            case "first_final_exam":
+            case "second_midterm_exam":
+            case "second_final_exam":
+                return "EventPopup_exam_img";
+
+            // 학교 행사
+            case "festival_sports_day":
+                return "EventPopup_tournament_img";
+            case "festival_school":
+                return "EventPopup_festival_img";
+
+            // 방학
+            case "vacation_summer":
+                return "EventPopup_summer_img";
+            case "vacation_winter":
+                return "EventPopup_winter_img";
+
+            // 공휴일
+            case "holiday_children_day":
+                return "EventPopup_children_img";
+            case "holiday_buddha":
+                return "EventPopup_buddha_img";
+            case "holiday_memorial_day":
+                return "EventPopup_memorial_img";
+            case "holiday_liberation_Day":
+            case "holiday_liberation_day":
+                return "EventPopup_liberation_img";
+            case "holiday_chuseok":
+                return "EventPopup_chuseok_img";
+            case "holiday_foundation_day":
+                return "EventPopup_national_img";
+            case "holiday_hangul_day":
+                return "EventPopup_hangul_img";
+            case "holiday_christmas":
+                return "EventPopup_christmas_img";
+            case "holiday_independence":
+                return "EventPopup_independence_img";
+
+            default:
+                return null;
+        }
     }
 }

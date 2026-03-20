@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using AYellowpaper.SerializedCollections;
 using UnityEngine;
 using UnityEngine.UI;
 
 // 학생 관리(배치) 팝업
-// "포지션 정보" 버튼 클릭 시: 인스펙터에 세팅한 페이지를 UIPopupRequest.Guide로 표시
+// "포지션 정보" 버튼 클릭 시: SO_PositionInfoPopupTable 데이터를 UIPopupRequest.Guide로 표시
 // 기존 PositionGuidePopup(씬 배치) 제거/통합된 구조에 맞춘 구현
 public class StudentManagementPopup : UIBase
 {
@@ -24,25 +25,20 @@ public class StudentManagementPopup : UIBase
     [Header("닫기")]
     [SerializeField] private Button _btnClose;
 
-    // 포지션 안내는 원래 "인스펙터 페이지" 기반이었음 → 그대로 유지
-    // PositionGuidePopup 삭제(통합) 이후: UIPopupRequest.Guide로 띄우는 데이터 소스로 흡수
-    [Header("포지션 안내 (Guide Pages - Inspector)")]
+    // SO_PositionInfoPopupTable 참조
+    [Header("포지션 안내 (SO Table)")]
     [SerializeField] private string _positionGuideTitle = "포지션 안내";
-    [SerializeField] private List<PositionGuidePage> _positionGuidePages = new();
+    [SerializeField] private PositionInfoPopupTableSO _positionGuideTable;
 
     [Serializable]
-    public sealed class PositionGuidePage
+    private sealed class PositionGuideImageMap
     {
-        public string title;
-
-        [TextArea(3, 10)]
-        public string content;
-
-        [TextArea(1, 5)]
-        public string subMessage;
-
-        public Sprite image;
+        public string rowId;      // PositionInfoPopupRow.id
+        public string imageId;    // AddressableImageLibrarySO 의 fileName 키
     }
+
+    [Header("포지션 안내 이미지 매핑")]
+    [SerializeField] private List<PositionGuideImageMap> _positionGuideImageMaps = new();
 
     [Header("토너먼트 시작")]
     [SerializeField] private Button _btnPlacementComplete;              // 배치 완료 버튼
@@ -78,11 +74,15 @@ public class StudentManagementPopup : UIBase
         BindPositionGuideButton();
         BindCloseButton();
         BindTournamentStartButton();
+        BindStudentManagerEvents();
 
         SpawnStudentCards();
         BindSlotEvents();
+        RestoreSlotAssignments();
         RefreshCardStates();
         RefreshRecommendHighlights();
+        RefreshTournamentStartButton();
+        RefreshCloseButton();
     }
 
     public override void Open()
@@ -92,14 +92,7 @@ public class StudentManagementPopup : UIBase
         if (!_isInited)
             Init();
 
-        SpawnStudentCards();
-        RestoreSlotAssignments();
-        RefreshCardStates();
-        RefreshRecommendHighlights();
-
-        // 토너먼트 모드일 때만 배치 완료 버튼 표시
-        RefreshTournamentStartButton();
-        RefreshCloseButton();
+        RefreshAllViews();
     }
 
     public override void Close()
@@ -113,10 +106,12 @@ public class StudentManagementPopup : UIBase
         RefreshCloseButton();
     }
 
-    // ───────────────────────────────────────────────────────────────
-    // 포지션 안내 (Guide)
-    // ───────────────────────────────────────────────────────────────
+    protected override void OnDestroy()
+    {
+        UnbindStudentManagerEvents();
+    }
 
+    // 포지션 안내 (Guide)
     private void BindPositionGuideButton()
     {
         if (_btnPositionGuide == null)
@@ -129,6 +124,12 @@ public class StudentManagementPopup : UIBase
     // "포지션 정보" 버튼 클릭 → Guide 팝업 오픈
     private void OpenPositionGuide()
     {
+        if (_positionGuideTable == null)
+        {
+            Debug.LogError("[StudentManagementPopup] _positionGuideTable 참조가 비어 있습니다.");
+            return;
+        }
+
         if (UIManager.Instance == null)
         {
             Debug.LogWarning("[StudentManagementPopup] UIManager.Instance가 없어 포지션 안내를 표시할 수 없습니다.");
@@ -138,7 +139,7 @@ public class StudentManagementPopup : UIBase
         List<UIPopupRequest.GuidePage> pages = BuildPositionGuidePages();
         if (pages == null || pages.Count == 0)
         {
-            Debug.LogWarning("[StudentManagementPopup] 포지션 안내 페이지가 비어있습니다. (Inspector 설정 필요)");
+            Debug.LogWarning("[StudentManagementPopup] 포지션 안내 페이지가 비어있습니다. SO_PositionInfoPopupTable 설정을 확인하세요.");
             return;
         }
 
@@ -146,46 +147,78 @@ public class StudentManagementPopup : UIBase
             title: string.IsNullOrWhiteSpace(_positionGuideTitle) ? "포지션 안내" : _positionGuideTitle,
             pages: pages,
             onClose: null,
-            onCancel: null
+            onCancel: null,
+            showCancel: false
         );
 
         // 버튼 위치 고정: Cancel 숨김, 마지막 페이지 Close로 종료
-        req.ShowCancel = false;
         req.AutoCloseOnPrimary = true;
         req.AutoCloseOnCancel = true;
 
         UIManager.Instance.ShowPopup(req);
     }
 
-    // 인스펙터 페이지 -> UIPopupRequest.GuidePage 변환
+    // SO -> UIPopupRequest.GuidePage 변환
     private List<UIPopupRequest.GuidePage> BuildPositionGuidePages()
     {
         List<UIPopupRequest.GuidePage> result = new();
 
-        if (_positionGuidePages == null || _positionGuidePages.Count == 0)
+        if (_positionGuideTable == null || _positionGuideTable.Rows == null || _positionGuideTable.Rows.Count == 0)
             return result;
 
-        for (int i = 0; i < _positionGuidePages.Count; i++)
+        foreach (PositionInfoPopupRow row in _positionGuideTable.Rows)
         {
-            PositionGuidePage p = _positionGuidePages[i];
-            if (p == null) continue;
+            if (row == null)
+                continue;
+
+            if (string.IsNullOrWhiteSpace(row.titleText) && string.IsNullOrWhiteSpace(row.desc))
+                continue;
 
             result.Add(new UIPopupRequest.GuidePage
             {
-                Title = p.title,
-                Message = p.content,
-                SubMessage = p.subMessage,
-                PreviewSprite = p.image
+                Title = row.titleText,
+                Message = row.desc,
+                SubMessage = null,
+                PreviewImageId = ResolvePositionGuideImageId(row)
             });
         }
 
         return result;
     }
 
-    // ───────────────────────────────────────────────────────────────
-    // 토너먼트 시작 버튼
-    // ───────────────────────────────────────────────────────────────
+    // PositionInfoPopupRow는 수정하지 않고, 팝업 내부에서 row.id -> imageId 매핑 처리
+    private string ResolvePositionGuideImageId(PositionInfoPopupRow row)
+    {
+        if (row == null)
+            return null;
 
+        // 1순위: 팝업 내부 매핑 리스트에서 row.id 기준으로 찾기
+        if (_positionGuideImageMaps != null)
+        {
+            for (int i = 0; i < _positionGuideImageMaps.Count; i++)
+            {
+                PositionGuideImageMap map = _positionGuideImageMaps[i];
+                if (map == null)
+                    continue;
+
+                if (string.IsNullOrWhiteSpace(map.rowId))
+                    continue;
+
+                if (!string.Equals(map.rowId.Trim(), row.id?.Trim(), StringComparison.OrdinalIgnoreCase))
+                    continue;
+
+                if (!string.IsNullOrWhiteSpace(map.imageId))
+                    return map.imageId.Trim();
+
+                return null;
+            }
+        }
+
+        // 2순위: 별도 매핑이 없으면 row.id를 이미지 키로 그대로 사용
+        return string.IsNullOrWhiteSpace(row.id) ? null : row.id.Trim();
+    }
+
+    // 토너먼트 시작 버튼
     private void BindTournamentStartButton()
     {
         if (_btnPlacementComplete == null)
@@ -204,12 +237,12 @@ public class StudentManagementPopup : UIBase
 
         Action callback = _onTournamentStart;
 
-        // 콜백 실행 전 팝업 닫기 및 상태 초기화
+        // 콜백 실행 전 팝업을 먼저 닫아 상태 초기화
         Close();
-
         callback.Invoke();
     }
 
+    // 토너먼트 모드이고 모든 슬롯이 채워졌을 때만 배치 완료 버튼 활성화
     private void RefreshTournamentStartButton()
     {
         if (_btnPlacementComplete == null) return;
@@ -218,6 +251,7 @@ public class StudentManagementPopup : UIBase
         _btnPlacementComplete.gameObject.SetActive(allSlotsFilled);
     }
 
+    // 모든 필드 슬롯에 학생이 배치되어 있는지 확인
     private bool AreAllSlotsFilled()
     {
         if (_fieldSlots == null || _fieldSlots.Count == 0)
@@ -232,20 +266,64 @@ public class StudentManagementPopup : UIBase
         return true;
     }
 
-    // ───────────────────────────────────────────────────────────────
-    // 이하: 기존 StudentManagementPopup 로직 (너가 이미 쓰던 코드 그대로)
-    // - 학생 카드 생성/선택/슬롯 배치/추천 강조/복원 등
-    // ───────────────────────────────────────────────────────────────
+    // StudentManager 이벤트 구독
+    private void BindStudentManagerEvents()
+    {
+        if (StudentManager.Instance == null)
+            return;
 
+        StudentManager.Instance.OnStudentsChanged -= HandleStudentsChanged;
+        StudentManager.Instance.OnStudentsChanged += HandleStudentsChanged;
+
+        StudentManager.Instance.OnSlotAssignmentsChanged -= HandleSlotAssignmentsChanged;
+        StudentManager.Instance.OnSlotAssignmentsChanged += HandleSlotAssignmentsChanged;
+    }
+
+    private void UnbindStudentManagerEvents()
+    {
+        if (StudentManager.Instance == null)
+            return;
+
+        StudentManager.Instance.OnStudentsChanged -= HandleStudentsChanged;
+        StudentManager.Instance.OnSlotAssignmentsChanged -= HandleSlotAssignmentsChanged;
+    }
+
+    private void HandleStudentsChanged(List<Student> students)
+    {
+        if (!gameObject.activeInHierarchy)
+            return;
+
+        RefreshAllViews();
+    }
+
+    private void HandleSlotAssignmentsChanged(SerializedDictionary<int, Student> _)
+    {
+        if (!gameObject.activeInHierarchy)
+            return;
+
+        RestoreSlotAssignments();
+        RefreshCardStates();
+        RefreshRecommendHighlights();
+        RefreshTournamentStartButton();
+    }
+
+    private void RefreshAllViews()
+    {
+        SpawnStudentCards();
+        RestoreSlotAssignments();
+        RefreshCardStates();
+        RefreshRecommendHighlights();
+        RefreshTournamentStartButton();
+        RefreshCloseButton();
+    }
+
+    // StudentManager의 학생 목록을 기반으로 카드 프리팹을 인스턴스화
     private void SpawnStudentCards()
     {
         ClearCards();
 
-        if (StudentManager.Instance == null)
-            return;
-
-        if (_cardPrefab == null || _cardRoot == null)
-            return;
+        if (StudentManager.Instance == null) return;
+        if (_cardPrefab == null || _cardRoot == null) return;
 
         foreach (Student student in StudentManager.Instance.Students)
         {
@@ -257,6 +335,7 @@ public class StudentManagementPopup : UIBase
                 card.SetStudentData(student);
                 card.SetViewState(StudentCard.CardViewState.Normal);
 
+                // 중복 등록 방지 후 클릭 이벤트 구독
                 card.OnCardClicked -= HandleCardClicked;
                 card.OnCardClicked += HandleCardClicked;
 
@@ -268,6 +347,7 @@ public class StudentManagementPopup : UIBase
         }
     }
 
+    // 카드 클릭 → 선택 학생 갱신 후 상세 정보 표시
     private void HandleCardClicked(StudentCard card)
     {
         if (card == null) return;
@@ -283,10 +363,10 @@ public class StudentManagementPopup : UIBase
         ShowStudentInfo(student);
     }
 
+    // 학생 상세 정보 팝업 열기
     private void ShowStudentInfo(Student student)
     {
-        if (_studentInfoPopup == null)
-            return;
+        if (_studentInfoPopup == null) return;
 
         _studentInfoPopup.Init();
         _studentInfoPopup.Setup("선택한 학생", student, _selectedStudentPortrait);
@@ -302,49 +382,82 @@ public class StudentManagementPopup : UIBase
         {
             if (slot == null) continue;
 
+            // 중복 등록 방지 후 슬롯 클릭 이벤트 구독
             slot.OnSlotClicked -= HandleSlotClicked;
             slot.OnSlotClicked += HandleSlotClicked;
         }
     }
 
+    // 슬롯 클릭 처리
+    // 빈 슬롯이면 선택 학생 배치, 이미 배치된 슬롯이면 제거/교체 확인 팝업 표시
     private void HandleSlotClicked(StudentSlot slot)
     {
         if (slot == null) return;
 
         if (!slot.IsEmpty)
         {
-            ShowRemoveConfirmPopup(slot);
+            // 클릭한 슬롯에 배치된 학생이 현재 선택된 학생 본인이면 → 제거 확인 팝업
+            // 다른 학생이 선택되어 있으면 → 교체 확인 팝업
+            if (_selectedStudent == null || slot.AssignedStudent == _selectedStudent)
+                ShowRemoveConfirmPopup(slot);
+            else
+                ShowReplaceConfirmPopup(slot);
             return;
         }
 
-        if (_selectedStudent == null)
-            return;
+        if (_selectedStudent == null) return;
 
+        // 기존 슬롯에서 먼저 제거
         StudentSlot existing = FindSlotByStudent(_selectedStudent);
         if (existing != null && existing != slot)
         {
             int existingIndex = _fieldSlots.IndexOf(existing);
             existing.ClearSlot();
-            if (StudentManager.Instance != null)
-                StudentManager.Instance.ClearSlot(existingIndex);
+            StudentManager.Instance?.ClearSlot(existingIndex);
         }
 
+        // 새 슬롯에 배치
         slot.AssignStudent(_selectedStudent, _selectedStudentPortrait);
-        if (StudentManager.Instance != null)
-            StudentManager.Instance.AssignSlot(_fieldSlots.IndexOf(slot), _selectedStudent);
+        StudentManager.Instance.AssignSlot(_fieldSlots.IndexOf(slot), _selectedStudent);
+
+        SoundManager.Instance.PlayEffect(209);
 
         CloseStudentInfoPopup();
-
         ClearSelection();
         RefreshCardStates();
         RefreshRecommendHighlights();
         RefreshTournamentStartButton();
     }
 
+    // 선택된 학생 없이 배치된 슬롯 클릭 시 → 슬롯에서 빼기 확인 팝업
     private void ShowRemoveConfirmPopup(StudentSlot slot)
     {
-        if (UIManager.Instance == null)
-            return;
+        if (UIManager.Instance == null) return;
+
+        UIManager.Instance.ShowPopup(new PopupData(
+            title: "배치 제외 안내",
+            content: "이미 같은 학생이 배치되어 있습니다.\n슬롯에서 제외하시겠습니까?",
+            buttons: new List<PopupButtonInfo>
+            {
+                new PopupButtonInfo(() => { }),
+                new PopupButtonInfo(() =>
+                {
+                    int slotIndex = _fieldSlots.IndexOf(slot);
+                    slot.ClearSlot();
+                    StudentManager.Instance?.ClearSlot(slotIndex);
+
+                    RefreshCardStates();
+                    RefreshRecommendHighlights();
+                    RefreshTournamentStartButton();
+                })
+            }
+        ));
+    }
+
+    // 선택된 학생이 있을 때 배치된 슬롯 클릭 시 → 교체 확인 팝업
+    private void ShowReplaceConfirmPopup(StudentSlot slot)
+    {
+        if (UIManager.Instance == null) return;
 
         UIManager.Instance.ShowPopup(new PopupData(
             title: "배치 변경 안내",
@@ -357,23 +470,23 @@ public class StudentManagementPopup : UIBase
                     int slotIndex = _fieldSlots.IndexOf(slot);
 
                     slot.ClearSlot();
-                    if (StudentManager.Instance != null)
-                        StudentManager.Instance.ClearSlot(slotIndex);
+                    StudentManager.Instance?.ClearSlot(slotIndex);
 
                     if (_selectedStudent != null)
                     {
+                        // 선택 학생이 다른 슬롯에 있으면 먼저 제거
                         StudentSlot existing = FindSlotByStudent(_selectedStudent);
                         if (existing != null && existing != slot)
                         {
                             int existingIndex = _fieldSlots.IndexOf(existing);
                             existing.ClearSlot();
-                            if (StudentManager.Instance != null)
-                                StudentManager.Instance.ClearSlot(existingIndex);
+                            StudentManager.Instance.ClearSlot(existingIndex);
                         }
 
                         slot.AssignStudent(_selectedStudent, _selectedStudentPortrait);
-                        if (StudentManager.Instance != null)
-                            StudentManager.Instance.AssignSlot(slotIndex, _selectedStudent);
+                        StudentManager.Instance.AssignSlot(slotIndex, _selectedStudent);
+
+                        SoundManager.Instance.PlayEffect(209);
 
                         CloseStudentInfoPopup();
                     }
@@ -387,10 +500,12 @@ public class StudentManagementPopup : UIBase
         ));
     }
 
+    // StudentManager에 저장된 슬롯 배치 정보를 UI에 복원
     private void RestoreSlotAssignments()
     {
-        if (StudentManager.Instance == null)
-            return;
+        Debug.Log($"[StudentManagementPopup] RestoreSlotAssignments | slotAssignments={(StudentManager.Instance != null ? StudentManager.Instance.SlotAssignments.Count : -1)}");
+
+        if (StudentManager.Instance == null) return;
 
         for (int i = 0; i < _fieldSlots.Count; i++)
         {
@@ -404,34 +519,36 @@ public class StudentManagementPopup : UIBase
                 continue;
             }
 
+            // _cardMap에서 portrait 조회
+            // null이어도 StudentSlot.AssignStudent() 내부에서 PortraitLibrary로 자동 조회(fallback)
             Sprite portrait = null;
             if (_cardMap.TryGetValue(student, out StudentCard card) && card != null)
                 portrait = card.GetPortraitSprite();
 
             slot.AssignStudent(student, portrait);
-            RefreshTournamentStartButton();
         }
+
+        RefreshTournamentStartButton();
     }
 
+    // 특정 학생이 배치된 슬롯을 반환. 없으면 null
     private StudentSlot FindSlotByStudent(Student student)
     {
         if (student == null) return null;
 
         foreach (StudentSlot slot in _fieldSlots)
         {
-            if (slot == null) continue;
-            if (slot.AssignedStudent == student)
+            if (slot != null && slot.AssignedStudent == student)
                 return slot;
         }
 
         return null;
     }
 
-    private bool IsStudentAssigned(Student student)
-    {
-        return FindSlotByStudent(student) != null;
-    }
+    // 슬롯에 배치된 학생인지 여부 확인
+    private bool IsStudentAssigned(Student student) => FindSlotByStudent(student) != null;
 
+    // 선택 학생 초기화 후 추천 강조 갱신
     private void ClearSelection()
     {
         _selectedStudent = null;
@@ -439,22 +556,21 @@ public class StudentManagementPopup : UIBase
         RefreshRecommendHighlights();
     }
 
+    // 배치 여부에 따라 카드 뷰 상태(Normal / Managing) 갱신
     private void RefreshCardStates()
     {
         foreach (var pair in _cardMap)
         {
-            Student student = pair.Key;
-            StudentCard card = pair.Value;
+            if (pair.Value == null) continue;
 
-            if (card == null) continue;
-
-            bool isAssigned = IsStudentAssigned(student);
-            card.SetViewState(isAssigned
+            bool isAssigned = IsStudentAssigned(pair.Key);
+            pair.Value.SetViewState(isAssigned
                 ? StudentCard.CardViewState.Managing
                 : StudentCard.CardViewState.Normal);
         }
     }
 
+    // 선택된 학생에게 추천되는 슬롯에만 하이라이트 표시
     private void RefreshRecommendHighlights()
     {
         foreach (StudentSlot slot in _fieldSlots)
@@ -466,6 +582,7 @@ public class StudentManagementPopup : UIBase
         }
     }
 
+    // 생성된 카드 오브젝트 및 매핑 정보 전체 삭제
     private void ClearCards()
     {
         foreach (GameObject obj in _spawnedCards)
@@ -480,17 +597,13 @@ public class StudentManagementPopup : UIBase
 
     private void CloseStudentInfoPopup()
     {
-        if (_studentInfoPopup == null)
-            return;
-
-        _studentInfoPopup.Close();
+        _studentInfoPopup?.Close();
     }
 
-    //팝업 닫기 버튼 바인딩
+    // 팝업 닫기 버튼 바인딩
     private void BindCloseButton()
     {
-        if (_btnClose == null)
-            return;
+        if (_btnClose == null) return;
 
         _btnClose.onClick.RemoveAllListeners();
         _btnClose.onClick.AddListener(() =>
@@ -499,11 +612,11 @@ public class StudentManagementPopup : UIBase
 
             // LobbyUI 탭 스프라이트도 갱신
             LobbyUI lobbyUI = GetComponentInParent<LobbyUI>();
-            if (lobbyUI != null)
-                lobbyUI.OnClickStudentClose();
+            lobbyUI?.OnClickStudentClose();
         });
     }
 
+    // 토너먼트 모드에서는 닫기 버튼 숨김 (배치 완료만 허용)
     private void RefreshCloseButton()
     {
         if (_btnClose == null) return;

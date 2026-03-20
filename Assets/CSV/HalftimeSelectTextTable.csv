@@ -1,0 +1,32 @@
+id,description
+string,string
+name_match_choice_001,삭발 어택
+name_match_choice_002,스팀팩
+name_match_choice_003,응원단 고용
+name_match_choice_004,실전 위주 교육
+name_match_choice_005,스트레칭
+name_match_choice_006,격려
+name_match_choice_007,이온 음료
+name_match_choice_008,긴급 공수
+name_match_choice_009,과감한 결정
+name_match_choice_010,따봉도치
+description_match_choice_001,"삭발을 각오한 투지를 불태운다.\n슈팅, 속도, 점프력이 10 증가한다."
+description_match_choice_002,오늘을 바쳐 내일을 쟁취한다.\n임의의 스탯이 10% 증가한다.
+description_match_choice_003,"선수들을 응원할 응원단을 고용한다.\n자금이 5 감소하고, 임의의 스탯이 15% 증가한다."
+description_match_choice_004,"실시간으로 선수에게 필요한 내용을 가르친다.\n 슈팅, 속도, 점프력이 15 증가한다."
+description_match_choice_005,"경기 시작 전 스트레칭으로 몸을 풀어준다.\n 슈팅, 속도, 점프력이 5 증가한다."
+description_match_choice_006,학생들을 격려하여 사기를 높힌다.\n지구력과 컨디션이 5 증가한다.
+description_match_choice_007,이온음료로 컨디션을 회복한다.\n컨디션이 10 증가한다.
+description_match_choice_008,"갓 수확한 시원한 이온음료로 컨디션과 지구력을 회북한다.\n자금이 10 감소하고, 지구력과 컨디션이 10 증가한다."
+description_match_choice_009,"급진적인 전략 전술로 상대의 빈 틈을 노린다.\n컨디션이 5감소하고, 슈팅과 점프력이 10 증가한다."
+description_match_choice_010,따봉도치야 고마워!\n 임의의 스탯이 20% 증가한다.
+effect_description_match_choice_001,"슈팅 +10, 속도 +10, 점프력 +10"
+effect_description_match_choice_002,랜덤 1개 스탯 +10%
+effect_description_match_choice_003,"자금 -5, 랜덤 1개 스탯 +15%"
+effect_description_match_choice_004,"슈팅 +15, 속도 +15, 점프력 +15"
+effect_description_match_choice_005,"슈팅 +5, 속도 +5, 점프력 +5"
+effect_description_match_choice_006,"지구력 +5, 컨디션 +5"
+effect_description_match_choice_007,컨디션 +10
+effect_description_match_choice_008,"자금 -10, 지구력 +10, 컨디션 +10"
+effect_description_match_choice_009,"컨디션 -5, 슈팅 +10, 점프력 +10"
+effect_description_match_choice_010,랜덤 1개 스탯 +20%

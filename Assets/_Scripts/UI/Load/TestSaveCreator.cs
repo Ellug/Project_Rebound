@@ -1,6 +1,6 @@
 using UnityEngine;
 
-// Å×½ºÆ®¿ë ÀÓ½Ã °ªµé ³ªÁß¿¡ ½ÇÁ¦ °ª ¿¬°á ÈÄ »èÁ¦ ¿¹Á¤
+// í…ŒìŠ¤íŠ¸ìš© ì„ì‹œ ê°’ë“¤ ë‚˜ì¤‘ì— ì‹¤ì œ ê°’ ì—°ê²° í›„ ì‚­ì œ ì˜ˆì •
 public class TestSaveCreator : MonoBehaviour
 {
     public void CreateTestSave(int slot)
@@ -8,14 +8,14 @@ public class TestSaveCreator : MonoBehaviour
         PlayData data = new PlayData
         {
             slotIndex = slot,
-            school = "ÇÑ¿ï °íµîÇĞ±³",
-            playTime = "2000³â00¿ù00ÀÏ",
+            school = "í•œìš¸ ê³ ë“±í•™êµ",
+            playTime = "2000ë…„00ì›”00ì¼",
             saveTime = System.DateTime.Now.ToString("2000.00.00"),
             gold = MoneyManager.Instance.Gold,
             reputation = MoneyManager.Instance.Reputation
         };
 
         SaveSystem.Instance.Save(data);
-        Debug.Log("ÀúÀå ¿Ï·á");
+        Debug.Log("ì €ì¥ ì™„ë£Œ");
     }
 }

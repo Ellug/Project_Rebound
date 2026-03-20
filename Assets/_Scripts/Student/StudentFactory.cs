@@ -1,6 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Drawing;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public static class StudentFactory
@@ -32,6 +30,7 @@ public static class StudentFactory
         {
             id = _nextStudentId++,
             studentName = studentName,
+            positionId = position.id,
             positionName = position.positionName,
             grade = grade,
             height = bodyInfo.height,
@@ -39,7 +38,7 @@ public static class StudentFactory
             potential = "",
             potential_tier = 0,
             condition = 0,
-            trust = 0,
+            // trust = 0,
             portraitColor = color,
             portraitIndex = portraitIndex,
         };
@@ -126,6 +125,29 @@ public static class StudentFactory
     public static void ResetStudentIdCounter()
     {
         _nextStudentId = 1;
+    }
+
+    // 세이브 로드 후 기존 id와 충돌하지 않도록 카운터 복원
+    public static void RestoreStudentIdCounter(int nextId)
+    {
+        _nextStudentId = Mathf.Max(1, nextId);
+    }
+
+    // 로드 후 이름/초상화 중복 캐시 재구성
+    public static void RebuildRuntimeCaches(IEnumerable<Student> students)
+    {
+        _usedNames.Clear();
+        _usedPortraits.Clear();
+
+        foreach (Student student in students)
+        {
+            if (student == null) continue;
+
+            if (!string.IsNullOrEmpty(student.studentName))
+                _usedNames.Add(student.studentName);
+
+            _usedPortraits.Add((student.portraitColor, student.portraitIndex));
+        }
     }
 
     // 포지션 선택 : 가중치 기반 랜덤 선택
@@ -246,10 +268,7 @@ public static class StudentFactory
     // 팀 색 결정 _isColorInitialized = false 로 바꾸면 새로운 회차 시작할 때 색 랜덤
     private static void InitializeColorIfNeeded()
     {
-        if (_isColorInitialized)
-        {
-            return;
-        }
+        if (_isColorInitialized) return;
 
         _fixedColor = _random.Next(0, 2) == 0
             ? CharacterColor.Red

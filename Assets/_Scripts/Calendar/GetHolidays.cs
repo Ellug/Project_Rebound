@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 
-// 2050³â ±îÁö¸¸ »ı¼º °¡´É
+// 2050ë…„ ê¹Œì§€ë§Œ ìƒì„± ê°€ëŠ¥
 public class GetHoliday
 {
     static KoreanLunisolarCalendar lunar = new KoreanLunisolarCalendar();
@@ -26,27 +26,27 @@ public class GetHoliday
         list.Sort((a, b) => a.date.CompareTo(b.date));
         Save(list);
 
-        Debug.Log("°øÈŞÀÏ »ı¼º ¿Ï·á");
+        Debug.Log("ê³µíœ´ì¼ ìƒì„± ì™„ë£Œ");
     }
 
     static void AddYear(int year, List<HolidayEntry> list)
     {
-        AddHoliday(list, new DateTime(year, 1, 1), "»õÇØ");
-        AddHoliday(list, new DateTime(year, 3, 1), "»ïÀÏÀı");
-        AddHoliday(list, new DateTime(year, 5, 5), "¾î¸°ÀÌ³¯");
-        AddHoliday(list, new DateTime(year, 6, 6), "ÇöÃæÀÏ");
-        AddHoliday(list, new DateTime(year, 7, 17), "Á¦ÇåÀı");
-        AddHoliday(list, new DateTime(year, 8, 15), "±¤º¹Àı");
-        AddHoliday(list, new DateTime(year, 10, 3), "°³ÃµÀı");
-        AddHoliday(list, new DateTime(year, 10, 9), "ÇÑ±Û³¯");
-        AddHoliday(list, new DateTime(year, 12, 25), "¼ºÅºÀı");
+        AddHoliday(list, new DateTime(year, 1, 1), "ìƒˆí•´");
+        AddHoliday(list, new DateTime(year, 3, 1), "ì‚¼ì¼ì ˆ");
+        AddHoliday(list, new DateTime(year, 5, 5), "ì–´ë¦°ì´ë‚ ");
+        AddHoliday(list, new DateTime(year, 6, 6), "í˜„ì¶©ì¼");
+        AddHoliday(list, new DateTime(year, 7, 17), "ì œí—Œì ˆ");
+        AddHoliday(list, new DateTime(year, 8, 15), "ê´‘ë³µì ˆ");
+        AddHoliday(list, new DateTime(year, 10, 3), "ê°œì²œì ˆ");
+        AddHoliday(list, new DateTime(year, 10, 9), "í•œê¸€ë‚ ");
+        AddHoliday(list, new DateTime(year, 12, 25), "ì„±íƒ„ì ˆ");
 
         AddSeollal(year, list);
 
         AddChuseok(year, list);
 
         DateTime buddha = LunarToSolar(year, 4, 8);
-        AddHoliday(list, buddha, "¼®°¡Åº½ÅÀÏ");
+        AddHoliday(list, buddha, "ì„ê°€íƒ„ì‹ ì¼");
     }
 
     static void AddSeollal(int year, List<HolidayEntry> list)
@@ -68,7 +68,7 @@ public class GetHoliday
 
             if (!IsWeekend(d))
             {
-                AddRaw(list, d, d == d2 ? "¼³³¯" : "¼³³¯ ¿¬ÈŞ");
+                AddRaw(list, d, d == d2 ? "ì„¤ë‚ " : "ì„¤ë‚  ì—°íœ´");
             }
         }
 
@@ -78,7 +78,7 @@ public class GetHoliday
             while (IsWeekend(sub))
                 sub = sub.AddDays(1);
 
-            AddRaw(list, sub, "´ëÃ¼°øÈŞÀÏ(¼³³¯)");
+            AddRaw(list, sub, "ëŒ€ì²´ê³µíœ´ì¼(ì„¤ë‚ )");
         }
     }
 
@@ -101,7 +101,7 @@ public class GetHoliday
 
             if (!IsWeekend(d))
             {
-                AddRaw(list, d, d == d2 ? "Ãß¼®" : "Ãß¼® ¿¬ÈŞ");
+                AddRaw(list, d, d == d2 ? "ì¶”ì„" : "ì¶”ì„ ì—°íœ´");
             }
         }
 
@@ -111,7 +111,7 @@ public class GetHoliday
             while (IsWeekend(sub))
                 sub = sub.AddDays(1);
 
-            AddRaw(list, sub, "´ëÃ¼°øÈŞÀÏ(Ãß¼®)");
+            AddRaw(list, sub, "ëŒ€ì²´ê³µíœ´ì¼(ì¶”ì„)");
         }
     }
 
@@ -123,7 +123,7 @@ public class GetHoliday
             while (IsWeekend(sub))
                 sub = sub.AddDays(1);
 
-            AddRaw(list, sub, $"´ëÃ¼°øÈŞÀÏ({name})");
+            AddRaw(list, sub, $"ëŒ€ì²´ê³µíœ´ì¼({name})");
             return;
         }
 

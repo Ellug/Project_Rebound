@@ -19,7 +19,12 @@ public enum PlayerStat
     Condition = 5,
     Stamina = 6,
     Money = 10,
-    Fame = 11
+    Fame = 11,
+    Trust = 12,
+    Experience = 13,
+    Unable = 21,
+    UnableTraining = 22,
+    UnableMatch = 23
 }
 
 [Serializable]

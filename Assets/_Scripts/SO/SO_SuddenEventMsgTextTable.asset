@@ -1,0 +1,679 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 50903dafff1199746bd1aa3cdb1f6972, type: 3}
+  m_Name: SO_SuddenEventMsgTextTable
+  m_EditorClassIdentifier: Assembly-CSharp::SuddenEventMsgTextTableSO
+  _rows:
+  - iD: text_diag_000001_000
+    speaker: student
+    dialogue: "\uAC10\uB3C5\uB2D8"
+  - iD: text_diag_000001_001
+    speaker: player
+    dialogue: '?'
+  - iD: text_diag_000001_002
+    speaker: player
+    dialogue: "\uC65C"
+  - iD: text_diag_000001_003
+    speaker: student
+    dialogue: "\uADF8\uAC8C..."
+  - iD: text_diag_000001_004
+    speaker: student
+    dialogue: "\uC800 \uC624\uB298 \uC57C\uC790 \uBABB \uD560 \uAC70 \uAC19\uC544\uC694."
+  - iD: text_diag_000001_005
+    speaker: player
+    dialogue: "\uC0AC\uC720"
+  - iD: text_diag_000001_006
+    speaker: student
+    dialogue: "\uC544 \uC788\uC5B4\uC694 \uADF8\uB7F0\uAC8C..."
+  - iD: text_diag_000001_007
+    speaker: student
+    dialogue: "\uC624\uB298\uB9CC \uC880 \uBD10\uC8FC\uC138\uC694. \uB124?"
+  - iD: text_diag_000001_008
+    speaker: choice
+    dialogue: "\uC798 \uB4E4\uC5B4."
+  - iD: text_diag_000001_009
+    speaker: player
+    dialogue: "\uB098\uB294 \uC120\uC0DD\uC774\uACE0, \uB108\uB294 \uD559\uC0DD\uC774\uC57C."
+  - iD: text_diag_000001_010
+    speaker: student
+    dialogue: "\uB135..."
+  - iD: text_diag_000001_011
+    speaker: player
+    dialogue: "\uADF8\uB9AC\uACE0 \uC6B0\uB9B0 \uAE50\uBD80\uC9C0."
+  - iD: text_diag_000001_012
+    speaker: student
+    dialogue: "...\uC608?"
+  - iD: text_diag_000001_013
+    speaker: player
+    dialogue: "\u314B\u314B\u314B\u314B\u314B\u314B"
+  - iD: text_diag_000001_014
+    speaker: student
+    dialogue: "\uC544\u314B\u314B\u314B\u314B\u314B\u314B"
+  - iD: text_diag_000001_015
+    speaker: player
+    dialogue: "\uC801\uB2F9\uD788 \uB180\uB2E4 \uB4E4\uC5B4\uAC00\uB77C."
+  - iD: text_diag_000001_016
+    speaker: player
+    dialogue: "\uC0AC\uACE0\uCE58\uC9C0 \uB9D0\uACE0"
+  - iD: text_diag_000001_017
+    speaker: student
+    dialogue: "\uB135!"
+  - iD: text_diag_000001_018
+    speaker: choice
+    dialogue: "\uC6B0\uB9AC \uCE5C\uAD6C\uAC00 \uAFC8\uC774 \uC544\uC8FC \uD06C\uAD6C\uB098!"
+  - iD: text_diag_000001_019
+    speaker: student
+    dialogue: "\uADF8\uB7FC\uC694!"
+  - iD: text_diag_000001_020
+    speaker: student
+    dialogue: "\uAFC8\uC740 \uD06C\uAC8C \uAC00\uC838\uC57C\uC8E0!"
+  - iD: text_diag_000001_021
+    speaker: player
+    dialogue: "\uC74C! \uC0AC\uB0B4\uAC00 \uAFC8\uC744 \uD06C\uAC8C \uAC00\uC838\uC57C\uC9C0!"
+  - iD: text_diag_000001_022
+    speaker: player
+    dialogue: "\uCCB4\uC721\uAD00\uC73C\uB85C \uB6F0\uC5B4 \uC640\uB77C!"
+  - iD: text_diag_000001_023
+    speaker: player
+    dialogue: "10\uBD84 \uC8FC\uB9C8!"
+  - iD: text_diag_000001_024
+    speaker: student
+    dialogue: "...\uC774\uB9CC \uC57C\uC790 \uD558\uB7EC \uAC00\uBCF4\uACA0\uC2B5\uB2C8\uB2F7!"
+  - iD: text_diag_000001_025
+    speaker: player
+    dialogue: 9
+  - iD: text_diag_000001_026
+    speaker: student
+    dialogue: "\uB135\uC9C0\uAE08\uB2F9\uC7A5\uB6F0\uC5B4\uAC00\uACA0\uC2A4\uBE48\uB2E4!"
+  - iD: text_diag_000001_027
+    speaker: choice
+    dialogue: "(\uB300\uCDA9 \uC57C\uC790\uB97C \uBE60\uC9C0\uBA74 \uC548\uB41C\uB2E4\uB294
+      \uC794\uC18C\uB9AC)"
+  - iD: text_diag_000001_028
+    speaker: student
+    dialogue: "\uD765."
+  - iD: text_diag_000001_029
+    speaker: student
+    dialogue: "\uBE44\uC2A4\uB4EC\uD574\uC9C8\uD14C\uB2E4."
+  - iD: text_diag_000001_030
+    speaker: player
+    dialogue: "(\uB300\uCDA9 \uB108\uB294 \uC7A1\uD788\uBA74 \uC6B4\uB3D9\uC7A5 100\uBC14\uD034\uB77C\uB294
+      \uC120\uACE0)"
+  - iD: text_diag_000002_000
+    speaker: student
+    dialogue: "\uAC10\uB3C5\uB2D8.. \uC800 \uC624\uB298 \uD6C8\uB828 \uBABB \uAC00\uC694."
+  - iD: text_diag_000002_001
+    speaker: player
+    dialogue: "\uC0AC\uC720."
+  - iD: text_diag_000002_002
+    speaker: student
+    dialogue: "\uC601\uC5B4 \uC218\uD589\uD3C9\uAC00 \uBBF8\uB2EC\uC774\uB77C"
+  - iD: text_diag_000002_003
+    speaker: student
+    dialogue: "\uBCF4\uCDA9 \uC218\uC5C5 \uB4E4\uC5B4\uC57C \uD55C\uB300\uC694\u3160"
+  - iD: text_diag_000002_004
+    speaker: player
+    dialogue: "\uC798 \uC880 \uD558\uC9C0;;"
+  - iD: text_diag_000002_005
+    speaker: student
+    dialogue: "\uC800 \uB098\uB984 \uC5F4\uC2EC\uD788 \uD588\uB2E4\uACE0\uC694!"
+  - iD: text_diag_000002_006
+    speaker: player
+    dialogue: "\uADF8\uB7FC \uC0AC\uACFC \uC601\uC5B4\uB85C \uC368\uBD10"
+  - iD: text_diag_000002_007
+    speaker: student
+    dialogue: "\u3161\u3161"
+  - iD: text_diag_000002_008
+    speaker: student
+    dialogue: Appole
+  - iD: text_diag_000002_009
+    speaker: player
+    dialogue: "...\uADF8\uB0E5 \uBCF4\uCDA9 \uC218\uC5C5 \uC5F4\uC2EC\uD788 \uB4E4\uC5B4\uB77C."
+  - iD: text_diag_000002_010
+    speaker: player
+    dialogue: "\uB450 \uBC88 \uB4E4\uC5B4\uB77C."
+  - iD: text_diag_000003_000
+    speaker: student
+    dialogue: "\uAC10\uB3C5\uB2D8 \uCCB4\uB2E8\uC2E4 \uAE30\uAD6C \uC81C\uAC00 \uACE0\uCCE4\uC5B4\uC694!!"
+  - iD: text_diag_000003_001
+    speaker: player
+    dialogue: "\uC624 \uB300\uB2E8\uD55C\uB370?"
+  - iD: text_diag_000003_002
+    speaker: player
+    dialogue: "\uADFC\uB370 \uC65C \uBD88\uC548\uD558\uC9C0?"
+  - iD: text_diag_000003_003
+    speaker: student
+    dialogue: "\uBCA4\uCE58\uD504\uB808\uC2A4 \uBC14\uAC00\\n\uC880 \uD718\uC5B4
+      \uC788\uC5B4\uC11C"
+  - iD: text_diag_000003_004
+    speaker: player
+    dialogue: "\uC788\uC5B4\uC11C"
+  - iD: text_diag_000003_005
+    speaker: student
+    dialogue: "\uD3C8\uC5B4\uC694"
+  - iD: text_diag_000003_006
+    speaker: choice
+    dialogue: "\uD3C8...\uBB50?"
+  - iD: text_diag_000003_007
+    speaker: player
+    dialogue: "\uADF8\uAC8C \uAC00\uB2A5\uD574?"
+  - iD: text_diag_000003_008
+    speaker: student
+    dialogue: "\uB418\uB358\uB370\uC694"
+  - iD: text_diag_000003_009
+    speaker: choice
+    dialogue: "\uC544"
+  - iD: text_diag_000003_010
+    speaker: player
+    dialogue: "\uADF8\uAC70 \uC190\uC7A1\uC774\uC57C"
+  - iD: text_diag_000003_011
+    speaker: student
+    dialogue: "...\uB124?"
+  - iD: text_diag_000003_012
+    speaker: student
+    dialogue: "\uC77C\uC790 \uC544\uB2C8\uC5D0\uC694?"
+  - iD: text_diag_000003_013
+    speaker: player
+    dialogue: "\uB0B4\uC77C\uAE4C\uC9C0 \uBC18\uC131\uBB38 \uC368\uC11C \uC81C\uCD9C\uD574\uB77C."
+  - iD: text_diag_000003_014
+    speaker: student
+    dialogue: "\uC73C\uC544\uC544;;;"
+  - iD: text_diag_000004_000
+    speaker: student
+    dialogue: "\uAC10\uB3C5\uB2D8! \uC800 \uBC29\uAE08 \uB9BC \uC7A1\uC558\uC5B4\uC694!!!"
+  - iD: text_diag_000004_001
+    speaker: player
+    dialogue: "\uC624 \uB4DC\uB514\uC5B4? \uB369\uD06C \uAC00\uB0D0?"
+  - iD: text_diag_000004_002
+    speaker: student
+    dialogue: "\uB124!! \uADFC\uB370 \uB9BC \uC7A1\uACE0 \uB0B4\uB824\uC624\uB2E4\uAC00\\n\uACE8\uB300
+      \uD754\uB4E4\uB838\uC74C\uC694\u314B\u314B"
+  - iD: text_diag_000004_003
+    speaker: player
+    dialogue: "\uC544"
+  - iD: text_diag_000004_004
+    speaker: player
+    dialogue: "\uC124\uB9C8 \uBD80\uC21C \uAC74 \uC544\uB2C8\uC9C0?"
+  - iD: text_diag_000004_005
+    speaker: student
+    dialogue: "\uBD80\uC11C\uC9C0\uC9C4 \uC54A\uC558\uB294\uB370"
+  - iD: text_diag_000004_006
+    speaker: student
+    dialogue: "\uC880 \uBB50\uB784\uAE4C"
+  - iD: text_diag_000004_007
+    speaker: student
+    dialogue: "\uB192\uC774\uAC00 \uB0AE\uC544\uC9C0\uAE34 \uD588\uC5B4\uC694."
+  - iD: text_diag_000004_008
+    speaker: student
+    dialogue: "\uC774\uAC70 \uC6D0\uB798 \uC774\uB798\uC694?"
+  - iD: text_diag_000004_009
+    speaker: choice
+    dialogue: "...\uC751"
+  - iD: text_diag_000004_010
+    speaker: player
+    dialogue: "\uB9BC\uC774 \uB098\uCC98\uB7FC \uB9CE\uC774 \uD53C\uACE4\uD55C\uAC00\uBCF4\uB2E4"
+  - iD: text_diag_000004_011
+    speaker: player
+    dialogue: "\uADFC\uCC98 \uD480\uC232\uC5D0 \uB450\uACE0 \uC870\uC6A9\uD788 \uC640\uB77C."
+  - iD: text_diag_000004_012
+    speaker: student
+    dialogue: "(\uB135)"
+  - iD: text_diag_000004_013
+    speaker: choice
+    dialogue: "\uACA0\uB0D0"
+  - iD: text_diag_000004_014
+    speaker: player
+    dialogue: "\uB108 \uB098\uB791 \uBC18\uC131\uBB38 \uD55C \uC7A5 \uC4F0\uC790"
+  - iD: text_diag_000004_015
+    speaker: student
+    dialogue: "\u315C\u315C"
+  - iD: text_diag_000005_000
+    speaker: student
+    dialogue: "\uAC10\uB3C5\uB2D8 !"
+  - iD: text_diag_000005_001
+    speaker: student
+    dialogue: "\uC606 \uC5EC\uACE0 \uC560\uB4E4\uC774 \uB18D\uAD6C \uAC00\uB974\uCCD0\uB2EC\uB798\uC694!"
+  - iD: text_diag_000005_002
+    speaker: choice
+    dialogue: "\uB108\uAC00?"
+  - iD: text_diag_000005_003
+    speaker: student
+    dialogue: "\uAC10\uB3C5\uB2D8\uB3C4 \uC544\uC2DC\uC796\uC544\uC694."
+  - iD: text_diag_000005_004
+    speaker: student
+    dialogue: "\uC800 \uC694\uC998 \uCEE8\uB514\uC158 \uCD5C\uACE0\uC5D0\uC694!"
+  - iD: text_diag_000005_005
+    speaker: student
+    dialogue: "\uAC8C\uB2E4\uAC00 \uC5EC\uCE5C\uD55C\uD14C \uBCF4\uC5EC\uC904\uAC70\uB77C"
+  - iD: text_diag_000005_006
+    speaker: student
+    dialogue: "\uC5C4\uCCAD \uC5F0\uC2B5\uD588"
+  - iD: text_diag_000005_007
+    speaker: player
+    dialogue: "\uC5EC\uCE5C?"
+  - iD: text_diag_000005_008
+    speaker: student
+    dialogue: "\uC544"
+  - iD: text_diag_000005_009
+    speaker: player
+    dialogue: "\uC694\uC998 \uD3FC \uC62C\uB790\uC73C\uB2C8\uAE4C \uBD10\uC900\uB2E4."
+  - iD: text_diag_000005_010
+    speaker: student
+    dialogue: "\uAC10\uB3C5\uB2D8 \uC9F1"
+  - iD: text_diag_000005_011
+    speaker: choice
+    dialogue: "\uC65C?"
+  - iD: text_diag_000005_012
+    speaker: student
+    dialogue: "\uC5D0\uC774, \uD32C \uC11C\uBE44\uC2A4\uC8E0~ \uAC00\uB3C4 \uB418\uC8E0?"
+  - iD: text_diag_000005_013
+    speaker: player
+    dialogue: "\uAC00\uB3C4 \uB418\uB294\uB370, \uC2E4\uC218 \uD558\uC9C0 \uB9C8\uB77C."
+  - iD: text_diag_000005_014
+    speaker: player
+    dialogue: "\uC2E4\uC218\uD558\uBA74 \uADF8\uAC70 \uB9CC\uD07C \uCABD\uD314\uB9B0\uAC8C
+      \uC5B4\uB528\uB0D0?"
+  - iD: text_diag_000005_015
+    speaker: player
+    dialogue: "\uD56D\uC0C1 \uC2E4\uC804\uAC19\uC774. \uC54C\uC9C0?"
+  - iD: text_diag_000005_016
+    speaker: student
+    dialogue: "\uC5D0\uC774, \uAC71\uC815 \uB9C8\uC138\uC694!"
+  - iD: text_diag_000005_017
+    speaker: student
+    dialogue: "\uC800 \uC5F0\uC2B5 \uC5C4\uCCAD \uD588\uC5B4\uC694!"
+  - iD: text_diag_000005_018
+    speaker: choice
+    dialogue: "\uADF8\uB798"
+  - iD: text_diag_000005_019
+    speaker: player
+    dialogue: "\uC6B0\uB9AC \uC5D0\uC774\uC2A4"
+  - iD: text_diag_000005_020
+    speaker: player
+    dialogue: "\uAC00\uC11C \uB808\uC774\uC5C5 \uD55C \uBC88\uC774\uB77C\uB3C4 \uB193\uCE58\uBA74"
+  - iD: text_diag_000005_021
+    speaker: player
+    dialogue: "\uB0B4\uC77C \uC29B 100\uAC1C \uCD94\uAC00\uB2E4^^"
+  - iD: text_diag_000005_022
+    speaker: student
+    dialogue: "\uD5D0.. \uB370\uC774\uD2B8 \uBE44\uC6A9\uC774 \uB108\uBB34 \uBE44\uC2FC\uB370;;"
+  - iD: text_diag_000005_023
+    speaker: player
+    dialogue: "...\uB370\uC774\uD2B8?"
+  - iD: text_diag_000005_024
+    speaker: student
+    dialogue: "\uC544"
+  - iD: text_diag_000005_025
+    speaker: player
+    dialogue: "\uC800\uBC88\uC5D0 \uD6C8\uB828 \uB3C4\uB9DD\uCE5C\uAC70"
+  - iD: text_diag_000005_026
+    speaker: player
+    dialogue: "\uADF8\uAC70 \uB54C\uBB38\uC774\uC5C8\uB0D0?"
+  - iD: text_diag_000005_027
+    speaker: player
+    dialogue: "\uC65C \uB2F5\uC774 \uC5C6\uB0D0?"
+  - iD: text_diag_000005_028
+    speaker: player
+    dialogue: "\uB300\uB2F5"
+  - iD: text_diag_000006_000
+    speaker: student
+    dialogue: "\uAC10\uB3C5\uB2D8... \uC8FC\uBB34\uC138\uC694?"
+  - iD: text_diag_000006_001
+    speaker: player
+    dialogue: "\uC9C0\uAE08 \uC0C8\uBCBD 1\uC2DC\uB2E4. \uC65C."
+  - iD: text_diag_000006_002
+    speaker: student
+    dialogue: "\uC800 \uC544\uBB34\uB9AC \uD574\uB3C4 \uC548 \uB290\uB294 \uAC83
+      \uAC19\uC544\uC694.. \uB18D\uAD6C \uC811\uC744\uAE4C\uC694?"
+  - iD: text_diag_000006_003
+    speaker: player
+    dialogue: "\uAC11\uC790\uAE30 \uC6EC \uAC10\uC131 \uD130\uC9C0\uB294 \uC18C\uB9AC\uC57C"
+  - iD: text_diag_000006_004
+    speaker: student
+    dialogue: "\uBCA4\uCE58\uB9CC \uB2EC\uAD6C\uB294 \uAC83\uB3C4 \uC9C0\uCCD0\uC694..."
+  - iD: text_diag_000006_005
+    speaker: choice
+    dialogue: "\uC57C, \uC2AC\uB7A8\uB369\uD06C \uC548 \uBD24\uB0D0?"
+  - iD: text_diag_000006_006
+    speaker: student
+    dialogue: "\uADF8 \uB9CC\uD654 90\uB144\uB300 \uAC70\uC796\uC544\uC694;;"
+  - iD: text_diag_000006_007
+    speaker: player
+    dialogue: "...\uADF8\uAC8C \uC911\uC694\uD55C\uAC8C \uC544\uB2C8\uACE0."
+  - iD: text_diag_000006_008
+    speaker: player
+    dialogue: "\uB2E8\uB150\uD558\uBA74, \uC804\uBD80 \uB05D\uB098\uB294 \uAC70\uB2E4."
+  - iD: text_diag_000006_009
+    speaker: player
+    dialogue: "\uB0B4\uC77C \uC77C\uCC0D \uC640\uB77C. \uD2B9\uD6C8\uC774\uB2E4."
+  - iD: text_diag_000006_010
+    speaker: student
+    dialogue: "...\uB135!"
+  - iD: text_diag_000006_011
+    speaker: choice
+    dialogue: "\uC194\uC9C1\uD788, \uB2C8 \uD53C\uC9C0\uCEEC\uC740 \uD3C9\uBC94\uD558\uB2E4."
+  - iD: text_diag_000006_012
+    speaker: student
+    dialogue: "...\uADF8\uB807\uC8E0?"
+  - iD: text_diag_000006_013
+    speaker: student
+    dialogue: "\uC5ED\uC2DC \uC800\uB294..."
+  - iD: text_diag_000006_014
+    speaker: player
+    dialogue: "\uD558\uC9C0\uB9CC"
+  - iD: text_diag_000006_015
+    speaker: player
+    dialogue: "\uB18D\uAD6C\uB294 \uD63C\uC790\uD558\uB294 \uC2A4\uD3EC\uCE20\uAC00
+      \uC544\uB2C8\uB2E4."
+  - iD: text_diag_000006_016
+    speaker: player
+    dialogue: "\uB108\uB294 \uACBD\uAE30 \uC804\uCCB4\uB97C \uBCF4\uB294 \uB208\uC774
+      \uC788\uC5B4."
+  - iD: text_diag_000006_017
+    speaker: player
+    dialogue: "\uD3EC\uAE30\uD558\uC9C0 \uB9C8\uB77C."
+  - iD: text_diag_000006_018
+    speaker: student
+    dialogue: "...\uAC10\uC0AC\uD569\uB2C8\uB2E4."
+  - iD: text_diag_000006_019
+    speaker: player
+    dialogue: "\uAC10\uC0AC\uB294 \uBB34\uC2A8,"
+  - iD: text_diag_000006_020
+    speaker: player
+    dialogue: "\uBE68\uB9AC \uC790\uB77C. \uB0B4\uC77C \uC878\uB824\uC11C \uBE44\uBABD\uC0AC\uBABD\uD558\uC9C0
+      \uB9D0\uACE0."
+  - iD: text_diag_000006_021
+    speaker: student
+    dialogue: "\uB124!"
+  - iD: text_diag_000006_022
+    speaker: choice
+    dialogue: "\uC990\uAC81\uB2C8?"
+  - iD: text_diag_000006_023
+    speaker: student
+    dialogue: "\uB124?"
+  - iD: text_diag_000006_024
+    speaker: player
+    dialogue: "\uC990\uAC81\uB0D0\uACE0. \uB18D\uAD6C\uD560 \uB54C."
+  - iD: text_diag_000006_025
+    speaker: student
+    dialogue: "\uB124. \uC990\uAC70\uC6CC\uC694."
+  - iD: text_diag_000006_026
+    speaker: student
+    dialogue: "\uC5C4\uCCAD"
+  - iD: text_diag_000006_027
+    speaker: player
+    dialogue: "\uADF8\uB807\uB2E4\uBA74, \uCDA9\uBD84\uD558\uC9C0 \uC54A\uC744\uAE4C?"
+  - iD: text_diag_000006_028
+    speaker: player
+    dialogue: "\uC8FC\uC804\uC73C\uB85C \uB098\uC11C\uC9C0 \uBABB\uD558\uB354\uB77C\uB3C4"
+  - iD: text_diag_000006_029
+    speaker: player
+    dialogue: "\uB354 \uC774\uC0C1 \uC2DC\uD569\uC5D0 \uB098\uAC00\uC9C0 \uBABB\uD558\uB354\uB77C\uB3C4"
+  - iD: text_diag_000006_030
+    speaker: player
+    dialogue: "\uCE5C\uAD6C\uB4E4\uACFC \uC990\uAC81\uAC8C \uB18D\uAD6C\uD55C \uADF8
+      \uCD94\uC5B5\uC774"
+  - iD: text_diag_000006_031
+    speaker: player
+    dialogue: "\uB9C8\uC74C\uC18D\uC5D0 \uB0A8\uC544 \uC788\uC73C\uB2C8\uAE4C."
+  - iD: text_diag_000006_032
+    speaker: student
+    dialogue: "....\uCF54\uCE58\uB2D8"
+  - iD: text_diag_000006_033
+    speaker: player
+    dialogue: "\uC65C. \uBA4B\uC788\uC5C8\uB0D0?"
+  - iD: text_diag_000006_034
+    speaker: student
+    dialogue: "\uAF30\uB300\uAC19\uC544\uC694."
+  - iD: text_diag_000006_035
+    speaker: player
+    dialogue: "\uC6B0\uC528"
+  - iD: text_diag_000006_036
+    speaker: student
+    dialogue: "\u314B\u314B \uC7A5\uB09C\uC774\uC5D0\uC694."
+  - iD: text_diag_000006_037
+    speaker: player
+    dialogue: "\uD639\uC2DC \uBAA8\uB974\uC9C0?"
+  - iD: text_diag_000006_038
+    speaker: player
+    dialogue: "\uC990\uAC81\uAC8C \uB18D\uAD6C \uD558\uB2E4\uBCF4\uBA74\\n\uC2E4\uB825\uC774
+      \uD655 \uB298\uC9C0\uB3C4?"
+  - iD: text_diag_000006_039
+    speaker: student
+    dialogue: "\uAC10\uC0AC\uD569\uB2C8\uB2E4. \uC120\uC0DD\uB2D8."
+  - iD: text_diag_000006_040
+    speaker: student
+    dialogue: "\uC800, \uACC4\uC18D \uD574\uBCFC\uAED8\uC694."
+  - iD: text_diag_000007_000
+    speaker: student
+    dialogue: "\uAC10\uB3C5\uB2D8, \uC624\uB298 \uAC04\uC2DD \uBB50\uC608\uC694?\\n\uD53C\uC790?
+      \uCE58\uD0A8?"
+  - iD: text_diag_000007_001
+    speaker: player
+    dialogue: "\uC624\uB298 \uB0B4 \uC608\uC804 \uC81C\uC790 \uC911 \uD55C\uBA85\uC774
+      \uD53C\uC790 \uC0AC \uB4E4\uACE0 \uC628\uB300."
+  - iD: text_diag_000007_002
+    speaker: student
+    dialogue: "\uC640!! \uB300\uBC15!! \uB204\uAD6C\uC608\uC694? \uD504\uB85C \uC120\uC218?"
+  - iD: text_diag_000007_003
+    speaker: player
+    dialogue: "\uC544\uB2C8. \uADF8\uAC74 \uC544\uB2C8\uACE0."
+  - iD: text_diag_000007_004
+    speaker: player
+    dialogue: "\uC774\uBC88\uC5D0 \uAC1C\uC5C5\uD588\uB2E4\uB354\uB77C."
+  - iD: text_diag_000007_005
+    speaker: student
+    dialogue: "...\uB9DB\uC788\uC73C\uBA74 \uB410\uC8E0."
+  - iD: text_diag_000008_000
+    speaker: student
+    dialogue: "\uAC10\uB3C5\uB2D8! \uBBF8\uB974\uACE0 \uC560\uB4E4\uC774 \uB2E8\uD1A1\uBC29\uC5D0\uC11C
+      \uC2DC\uBE44 \uAC78\uC5B4\uC694!"
+  - iD: text_diag_000008_001
+    speaker: player
+    dialogue: "\uBB50\uB77C\uACE0 \uD558\uB294\uB370?"
+  - iD: text_diag_000008_002
+    speaker: student
+    dialogue: "\uC6B0\uB9AC \uD300 \uADF8\uBB3C\uC740 \uC808\uB300 \uC548 \uD754\uB4E4\uB9B4
+      \uAC70\uB798\uC694\u315C\u315C"
+  - iD: text_diag_000008_003
+    speaker: player
+    dialogue: "\uC624.."
+  - iD: text_diag_000008_004
+    speaker: choice
+    dialogue: "\uBA58\uD2B8 \uC880 \uCE58\uB294\uB370?"
+  - iD: text_diag_000008_005
+    speaker: student
+    dialogue: "\uC800 \uB108\uBB34 \uD654\uB098\uC11C \uC7A0\uC774 \uC548 \uC640\uC694;;"
+  - iD: text_diag_000008_006
+    speaker: player
+    dialogue: "\uD654\uB0B4\uC9C0 \uB9D0\uACE0 \uC2E4\uB825\uC73C\uB85C \uBCF4\uC5EC\uB77C."
+  - iD: text_diag_000008_007
+    speaker: player
+    dialogue: "\uB0B4\uC77C 3\uC810 \uC29B \uAF42\uC790."
+  - iD: text_diag_000008_008
+    speaker: student
+    dialogue: "...\uB124."
+  - iD: text_diag_000008_009
+    speaker: student
+    dialogue: "\uC9C4\uC9DC \uAC00\uB9CC \uC548 \uB454\uB2E4..."
+  - iD: text_diag_000008_010
+    speaker: player
+    dialogue: "\uADF8\uB798. \uD654\uC774\uD305\uC774\uB2E4."
+  - iD: text_diag_000008_011
+    speaker: choice
+    dialogue: "\uADF8\uB798\uC11C?"
+  - iD: text_diag_000008_012
+    speaker: student
+    dialogue: "\uADF8\uB798\uC11C\uB77C\uB1E8;;"
+  - iD: text_diag_000008_013
+    speaker: student
+    dialogue: "\uB108\uBB34\uD574."
+  - iD: text_diag_000008_014
+    speaker: student
+    dialogue: "\uC81C\uC790 \uD3B8\uC744 \uB4E4\uC5B4\uC8FC\uC138\uC694."
+  - iD: text_diag_000008_015
+    speaker: player
+    dialogue: "\uB9D0\uC740 \uB05D\uAE4C\uC9C0 \uB4E4\uC5B4\uB77C."
+  - iD: text_diag_000008_016
+    speaker: player
+    dialogue: "\uC6B0\uB9AC\uD300 \uADF8\uBB3C\uC774 \uC548 \uD754\uB4E4\uB9B0\uB2E4\uB294\uAC74"
+  - iD: text_diag_000008_017
+    speaker: player
+    dialogue: "\uC0C1\uB300 \uD300\uC774 \uC6B0\uB9AC \uC218\uBE44\uB97C \uBABB \uB6AB\uC5C8\uB2E4\uB294\uAC70
+      \uC544\uB2C8\uB0D0?"
+  - iD: text_diag_000008_018
+    speaker: student
+    dialogue: "...\uC5B4"
+  - iD: text_diag_000008_019
+    speaker: student
+    dialogue: "\uADF8\uB807\uB124\uC694?"
+  - iD: text_diag_000008_020
+    speaker: player
+    dialogue: "...\uC5D0\uD734."
+  - iD: text_diag_000009_000
+    speaker: student
+    dialogue: "\uAC10\uB3C5\uB2D8\\n\uCCB4\uC721\uAD00 \uBE44\uBC88 \uBC14\uAFE8\uC5B4\uC694?"
+  - iD: text_diag_000009_001
+    speaker: player
+    dialogue: "\uC544\uB2CC\uB370? \uADF8\uB300\uB85C 0423 \uC544\uB0D0?"
+  - iD: text_diag_000009_002
+    speaker: student
+    dialogue: "\uC548 \uC5F4\uB824\uC694."
+  - iD: text_diag_000009_003
+    speaker: student
+    dialogue: "\uC5B4\uC81C \uBC14\uAFB8\uACE0 \uAE4C\uBA39\uC73C\uC2E0 \uAC70 \uC544\uB2C8\uC5D0\uC694?"
+  - iD: text_diag_000009_004
+    speaker: player
+    dialogue: "\uC7A0\uAE50\uB9CC... \uC5B4.."
+  - iD: text_diag_000009_005
+    speaker: choice
+    dialogue: 1111
+  - iD: text_diag_000009_006
+    speaker: student
+    dialogue: "\uC5F4\uB838\uC5B4\uC694"
+  - iD: text_diag_000009_007
+    speaker: student
+    dialogue: "\uAC10\uB3C5\uB2D8 \uC9C4\uC9DC \uADF8\uB807\uAC8C \uBD24\uB294\uB370"
+  - iD: text_diag_000009_008
+    speaker: student
+    dialogue: "\uC5C4\uCCAD \uB2E8\uC21C\uD558\uB124\uC694"
+  - iD: text_diag_000009_009
+    speaker: player
+    dialogue: "\uC870\uC6A9\uD788 \uD574"
+  - iD: text_diag_000009_010
+    speaker: choice
+    dialogue: 1234
+  - iD: text_diag_000009_011
+    speaker: student
+    dialogue: "...5\uD68C \uC774\uC0C1 \uD2C0\uB824\uC11C 30\uBD84 \uAE30\uB2E4\uB9AC\uB798\uC694."
+  - iD: text_diag_000009_012
+    speaker: player
+    dialogue: "\uC774\uB7F0;;"
+  - iD: text_diag_000009_013
+    speaker: choice
+    dialogue: 0423
+  - iD: text_diag_000009_014
+    speaker: student
+    dialogue: "\uC544\uB2C8 \uAC10\uB3C5\uB2D8;;"
+  - iD: text_diag_000009_015
+    speaker: student
+    dialogue: "\uC548\uB410\uB2E4\uB2C8\uAE4C\uC694?"
+  - iD: text_diag_000009_016
+    speaker: player
+    dialogue: "\uB2E4\uC2DC \uD574\uBD10."
+  - iD: text_diag_000009_017
+    speaker: player
+    dialogue: "....\uC5B4?"
+  - iD: text_diag_000009_018
+    speaker: player
+    dialogue: "'\uC5B4?'\uAC00 \uAC70\uAE30\uC11C \uC65C \uB098\uC624\uB0D0?"
+  - iD: text_diag_000009_019
+    speaker: player
+    dialogue: "\uC790\uBB3C\uC1E0 \uBD80\uC11C\uC9C4\uAC74 \uC544\uB2C8\uC9C0?"
+  - iD: text_diag_000009_020
+    speaker: student
+    dialogue: "\uC5F4\uB838\uC5B4\uC694."
+  - iD: text_diag_000009_021
+    speaker: player
+    dialogue: "\uC790\uBB3C\uC1E0 \uAC70\uAFB8\uB85C \uB4E4\uACE0 \uB3CC\uB838\uB0D0?"
+  - iD: text_diag_000009_022
+    speaker: student
+    dialogue: "\uC557 \uC544\uC544;;"
+  - iD: text_diag_000009_023
+    speaker: student
+    dialogue: "\uC5ED\uC2DC \uAC10\uB3C5\uB2D8"
+  - iD: text_diag_000009_024
+    speaker: student
+    dialogue: "\uC9DC\uB9BF\uD574 \uC0C8\uB85C\uC6CC"
+  - iD: text_diag_000009_025
+    speaker: student
+    dialogue: "\uB3D9\uACBD\uD558\uAC8C \uB3FC"
+  - iD: text_diag_000009_026
+    speaker: player
+    dialogue: "\uC5D0\uD734."
+  - iD: text_diag_000010_000
+    speaker: student
+    dialogue: "\uAC10\uB3C5\uB2D8, \uC624\uB298 \uC601\uC5B4\uC324\uC774 \uB18D\uAD6C\uBD80
+      \uB2E4 \uB0A8\uC73C\uB798\uC694!"
+  - iD: text_diag_000010_001
+    speaker: player
+    dialogue: "\uC65C? \uB610 \uC0AC\uACE0 \uCCE4\uB0D0?"
+  - iD: text_diag_000010_002
+    speaker: student
+    dialogue: "\uC218\uC5C5 \uC2DC\uAC04\uC5D0 \uACBD\uAE30 \uBD84\uC11D\uD558\uB2E4
+      \uACB0\uB824\uC11C\\nNBA \uC601\uC0C1 \uBCF4\uACE0 \uB3C5\uD574 \uD574\uC624\uB798\uC694;;"
+  - iD: text_diag_000010_003
+    speaker: choice
+    dialogue: "\u314B\u314B\u314B\u314B\u314B"
+  - iD: text_diag_000010_004
+    speaker: player
+    dialogue: "\uC804\uC220 \uACF5\uBD80\uB3C4 \uD558\uACE0 \uC88B\uB124."
+  - iD: text_diag_000010_005
+    speaker: student
+    dialogue: "\uD574\uC11D\uC774 \uC548 \uB418\uB294\uB370 \uBB34\uC2A8 \uC804\uC220\uC774\uC5D0\uC694\u3160\u3160\\n\uB2E4
+      \uD560 \uB54C \uAE4C\uC9C0 \uC9D1\uC5D0 \uBABB\uAC04\uB2E8 \uB9D0\uC774\uC5D0\uC694;;"
+  - iD: text_diag_000010_006
+    speaker: player
+    dialogue: "\uBAA8\uB974\uBA74 'Pass'\uB77C\uACE0 \uD574. \uB18D\uAD6C \uC6A9\uC5B4\uC796\uC544."
+  - iD: text_diag_000010_007
+    speaker: student
+    dialogue: "\uAC10\uB3C5\uB2D8 \uC9C4\uC9DC \uB3C4\uC6C0 1\uB3C4 \uC548 \uB3FC;;"
+  - iD: text_diag_000010_008
+    speaker: choice
+    dialogue: "\uC5B4\uB514\uB0D0"
+  - iD: text_diag_000010_009
+    speaker: student
+    dialogue: "\uB124?"
+  - iD: text_diag_000010_010
+    speaker: player
+    dialogue: "\uAC10\uD788 \uB0B4 \uC81C\uC790\uB4E4 \uC5F0\uC2B5\uC2DC\uAC04\uC744
+      \uBE8F\uC5B4?"
+  - iD: text_diag_000010_011
+    speaker: student
+    dialogue: "...\uB124?"
+  - iD: text_diag_000010_012
+    speaker: player
+    dialogue: "\uAE30\uB2E4\uB824\uB77C. \uB0B4\uAC00 \uAC04\uB2E4."
+  - iD: text_diag_000010_013
+    speaker: student
+    dialogue: "(\uAC10\uB3D9)"
+  - iD: text_diag_100000_000
+    speaker: student
+    dialogue: "\uD658\uC601\uD569\uB2C8\uB2E4, \uCF54\uCE58\uB2D8. \uC55E\uC73C\uB85C\uB3C4
+      \uC798 \uBD80\uD0C1 \uB4DC\uB9BD\uB2C8\uB2E4."
+  - iD: text_diag_100001_000
+    speaker: student
+    dialogue: "{target1.grade} {target1.name} \uD559\uC0DD\uC774 \uAE08\uC77C \uC9C0\uAC01\uD558\uC600\uC2B5\uB2C8\uB2E4.
+      \uACC4\uB3C4 \uBD80\uD0C1 \uB4DC\uB9BD\uB2C8\uB2E4."
+  - iD: text_diag_200001_000
+    speaker: student
+    dialogue: "\uD559\uC0DD\uB4E4\uC5D0\uAC8C \uAC04\uC2DD\uC744 \uC0AC\uC8FC\uC5C8\uB2E4."

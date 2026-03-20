@@ -12,6 +12,15 @@ public class TrainingPageInfo
     // SO에서 직접 지정하고 싶은 경우 사용 (비워두면 Builder가 자동으로 채운다)
     public List<int> commandIndices = new List<int>();
 
+    // 버튼 인덱스 순서대로 이미지 ID 입력 (비워두면 이미지 없음)
+    public List<string> buttonPreviewImageIds = new List<string>();
+
+    // ProgressUI 배경 이미지
+    public List<string> buttonBackgroundImageIds = new List<string>();
+
+    // 훈련 결과 팝업 이미지
+    public List<string> buttonResultImageIds = new List<string>();
+
     // 런타임 전용 — Builder가 채워주는 버튼 데이터 (SO에 저장되지 않음)
     [NonSerialized]
     public List<TrainingButtonData> buttons = new List<TrainingButtonData>();

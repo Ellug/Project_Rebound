@@ -11,6 +11,7 @@ public class Student
     // 기본 정보
     public int id;
     public string studentName;
+    public string positionId;
     public string positionName;
     public int grade; // 학년 (1~3)
 
@@ -28,6 +29,11 @@ public class Student
     public int speed;
     public int jump;
     public int stamina;
+    public int shootExp;
+    public int speedExp;
+    public int jumpExp;
+    public int staminaExp;
+    public int mentalExp;
 
     // 잠재 능력
     public int potential_tier;
@@ -35,13 +41,18 @@ public class Student
 
     // 컨디션 및 상태
     public int condition;
-    public int trust;
+    // public int trust;
 
     // 이벤트 효과 추적용
     public List<string> activeEffectIds = new();
     public int conditionRecoveryBonus;
     public float trainingEfficiencyBonus;
     public bool isTrainingBlocked;
+
+    // 현재 적용된 노드 보너스
+    public int appliedShootBonus;     // 슈팅
+    public int appliedJumpBonus;      // 점프력
+    public int appliedAllStatBonus;   // 올스텟
 
     public static int ClampCondition(int value)
     {

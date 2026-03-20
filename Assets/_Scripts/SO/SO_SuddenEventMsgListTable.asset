@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f99bb96c3412544f97befeff7ef7275, type: 3}
+  m_Name: SO_SuddenEventMsgListTable
+  m_EditorClassIdentifier: Assembly-CSharp::SuddenEventMsgListTableSO
+  _rows:
+  - iDIndex: index_000001
+    iDSpeaker: student_1
+    iDDialogue: diag_000001
+    senderCategory: event_student
+    date: 260301
+  - iDIndex: index_000002
+    iDSpeaker: student_2
+    iDDialogue: diag_000007
+    senderCategory: event_student
+    date: 260305
+  - iDIndex: index_000003
+    iDSpeaker: student_3
+    iDDialogue: diag_000003
+    senderCategory: event_student
+    date: 260312
+  - iDIndex: index_000004
+    iDSpeaker: student_3
+    iDDialogue: diag_000002
+    senderCategory: event_student
+    date: 251223
+  - iDIndex: index_000005
+    iDSpeaker: system
+    iDDialogue: diag_100001
+    senderCategory: notice
+    date: 260301
+  - iDIndex: index_000006
+    iDSpeaker: npc_1
+    iDDialogue: diag_200001
+    senderCategory: event_advertise
+    date: 260301

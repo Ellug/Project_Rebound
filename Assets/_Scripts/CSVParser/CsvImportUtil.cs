@@ -38,23 +38,66 @@ public static class CsvImportUtil
         return assetPath;
     }
 
-    // 개행과 BOM을 정리해서 줄 리스트로 변환
+    // BOM을 제거하고, 따옴표 밖 개행만 행 구분자로 처리
     public static List<string> SplitLines(string csv)
     {
         if (string.IsNullOrEmpty(csv)) return new List<string>(0);
 
-        var raw = csv.Replace("\r\n", "\n").Replace("\r", "\n").Split('\n');
-        var lines = new List<string>(raw.Length);
+        var lines = new List<string>(64);
+        var builder = new StringBuilder(csv.Length);
+        bool inQuotes = false;
+        bool lastWasLineBreak = false;
 
-        for (int i = 0; i < raw.Length; i++)
+        for (int i = 0; i < csv.Length; i++)
         {
-            var line = raw[i];
+            char c = csv[i];
 
-            if (i == 0 && line.Length > 0 && line[0] == '\uFEFF')
-                line = line.Substring(1);
-                
-            lines.Add(line);
+            if (i == 0 && c == '\uFEFF')
+                continue;
+
+            if (c == '"')
+            {
+                if (inQuotes && i + 1 < csv.Length && csv[i + 1] == '"')
+                {
+                    builder.Append(c);
+                    builder.Append(csv[i + 1]);
+                    i++;
+                    lastWasLineBreak = false;
+                    continue;
+                }
+
+                inQuotes = !inQuotes;
+                builder.Append(c);
+                lastWasLineBreak = false;
+                continue;
+            }
+
+            if (c == '\r' || c == '\n')
+            {
+                if (c == '\r' && i + 1 < csv.Length && csv[i + 1] == '\n')
+                    i++;
+
+                if (inQuotes)
+                {
+                    builder.Append('\n');
+                    lastWasLineBreak = false;
+                }
+                else
+                {
+                    lines.Add(builder.ToString());
+                    builder.Clear();
+                    lastWasLineBreak = true;
+                }
+
+                continue;
+            }
+
+            builder.Append(c);
+            lastWasLineBreak = false;
         }
+
+        if (!lastWasLineBreak || builder.Length > 0)
+            lines.Add(builder.ToString());
 
         return lines;
     }

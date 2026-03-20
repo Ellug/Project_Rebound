@@ -16,6 +16,9 @@ public class RecruitmentManager : MonoBehaviour
 
     private AlwaysEventManager _alwaysEventManager;
 
+    // SaveManager.CollectFlowData() → GameManager.MaxRecruitCount 경유로 참조
+    public int MaxRecruitCount => _maxRecruitCount;
+
     // UIManager 기준 Canvas 루트 참조
     private Transform CanvasRoot => UIManager.Instance != null
         ? UIManager.Instance.GetCanvasRoot()
@@ -111,6 +114,12 @@ public class RecruitmentManager : MonoBehaviour
             return;
         }
 
+        // 게임 시작 첫 영입이면 팝업 열리는 즉시 플래그 저장
+        if (context == RecruitmentContext.GameStart)
+        {
+            MarkRecruitmentInProgress(true);
+        }
+
         int capacity = _maxRecruitCount; // 팀 정원
         int ownedCount = StudentManager.Instance != null ? StudentManager.Instance.GetStudentCount() : 0;
         bool isFull = ownedCount >= capacity;
@@ -119,9 +128,11 @@ public class RecruitmentManager : MonoBehaviour
         bool canSkip = context != RecruitmentContext.GameStart;
         string messageBody = BuildEventMessage(context);
 
-
-        // 정원 가득 찼을 때는 확인 버튼이 팝업 닫기만 수행하도록 처리
-        Action onPrimary = isFull ? () => { } : () => OpenRecruitmentPopup(isForced);
+        Action onPrimary = isFull ? () => { }
+        : () =>
+        {
+            OpenRecruitmentPopup(isForced); // MarkRecruitmentInProgress 제거됨
+        };
         Action onCancel = canSkip ? HandleRecruitmentSkipped : null;
 
         var req = UIPopupRequest.Default(
@@ -130,7 +141,7 @@ public class RecruitmentManager : MonoBehaviour
             onPrimary: onPrimary,
             onCancel: onCancel,
             subMessage: isFull ? "현재 보유 학생이 정원에 도달해 영입을 진행할 수 없습니다." : null,
-            previewSprite: null,
+            previewImageId: "EventPopup_recruit_img",
             showCancel: canSkip,
             primaryKind: UIPopupRequest.PrimaryButtonKind.Confirm
         );
@@ -150,7 +161,6 @@ public class RecruitmentManager : MonoBehaviour
             ChatMessage logMsg = new ChatMessage(MessageSenderType.Them, messageBody, MessageEventType.NormalText);
             MessengerManager.Instance.ReceiveMessage("sys_scout", "공지", logMsg);
         }
-
     }
 
     // 2단계: 카드 선택 팝업
@@ -218,11 +228,24 @@ public class RecruitmentManager : MonoBehaviour
             foreach (Student student in recruits)
             {
                 StudentManager.Instance.AddStudent(student);
+
+                // 현재 해금된 노드 보너스를 신규 학생에게 적용
+                HeadCoachManager.Instance.ApplyAllUnlockedBonusTo(student);
             }
         }
 
         Debug.Log($"[RecruitmentManager] 영입 완료: {recruits.Count}명");
         OnRecruitmentCompleted?.Invoke(recruits);
+
+        // 영입 완료 시 진행 중 플래그 해제 후 저장
+        if (SaveManager.Instance?.CurrentData != null)
+            SaveManager.Instance.CurrentData.isRecruitmentInProgress = false;
+
+        if (SaveManager.Instance != null)
+        {
+            Debug.Log($"[RecruitmentManager] 영입 완료 저장 | totalStudents={(StudentManager.Instance != null ? StudentManager.Instance.GetStudentCount() : -1)}");
+            SaveManager.Instance.SaveCurrent();
+        }
 
         // 후보는 한 번 쓰고 버리는 성격이므로 정리
         _candidateStudents.Clear();
@@ -234,6 +257,15 @@ public class RecruitmentManager : MonoBehaviour
         // 포기 시에도 StudentManager(보유 학생) 건드리지 않음
         // 후보만 폐기
         _candidateStudents.Clear();
+
+        // 새 게임 첫 영입 포기 시 진행 중 플래그 해제 후 저장
+        if (SaveManager.Instance?.CurrentData != null)
+        {
+            SaveManager.Instance.CurrentData.isRecruitmentInProgress = false;
+        }
+
+        SaveManager.Instance?.SaveCurrent();
+
         Debug.Log("[RecruitmentManager] 영입 포기");
     }
 
@@ -275,5 +307,14 @@ public class RecruitmentManager : MonoBehaviour
         GameStart,      // 게임 시작 시 최초 영입
         FirstSemester,  // 1학기 시작 영입 (3월)
         SecondSemester  // 2학기 시작 영입 (8월)
+    }
+
+    // 새 게임 첫 영입 진행 중 플래그 설정 후 저장
+    private static void MarkRecruitmentInProgress(bool inProgress)
+    {
+        if (SaveManager.Instance?.CurrentData == null) return;
+
+        SaveManager.Instance.CurrentData.isRecruitmentInProgress = inProgress;
+        SaveManager.Instance.SaveCurrent();
     }
 }

@@ -34,7 +34,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 1.696, y: -216.20033}
+  m_AnchoredPosition: {x: 1.696, y: -160}
   m_SizeDelta: {x: 681.95, y: 269.0601}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5649277978584434392
@@ -391,7 +391,7 @@ MonoBehaviour:
   _dotPrefab: {fileID: 2156187913003689421, guid: 993377c5905f91a45bc2bf7b2ad79e4c, type: 3}
   _dotNormalScale: 1
   _dotActiveScale: 1.4
-  _dotNormalColor: {r: 0.75, g: 0.75, b: 0.75, a: 1}
+  _dotNormalColor: {r: 0.36862746, g: 0.36862746, b: 0.36862746, a: 1}
   _dotActiveColor: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &1516581348506518040
 GameObject:
@@ -1319,7 +1319,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 2950245154952111801, guid: 058cae949a46fac47b05312457e9351e, type: 3}
+  m_Sprite: {fileID: 9052500261874166356, guid: 74409016a706e9840b856e9b9159b293, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -2135,7 +2135,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &3576466657739616054
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2239,7 +2239,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
   m_AnchoredPosition: {x: -386, y: 55}
-  m_SizeDelta: {x: 213.31, y: 71.293884}
+  m_SizeDelta: {x: 0, y: 71.293884}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!222 &1769776515266105115
 CanvasRenderer:
@@ -2604,7 +2604,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &8387718430961555310
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3799,7 +3799,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
   m_AnchoredPosition: {x: -386, y: 55}
-  m_SizeDelta: {x: 0, y: 71.2939}
+  m_SizeDelta: {x: 213.31, y: 71.2939}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!222 &4758286491199593679
 CanvasRenderer:

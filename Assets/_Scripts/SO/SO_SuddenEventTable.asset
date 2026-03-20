@@ -14,16 +14,232 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SuddenEventTableSO
   _rows:
   - id: event_000001
-    name: "\uBC24\uC0D8"
-    context: 1
-    condition: 1
+    name: "\uBA58\uD0C8 \uAC15\uD654"
+    context: 3
+    condition: 2
+    category: 9
+    scope: 2
+    targetMin: 1
+    targetMax: 1
+    termMin: 0
+    termMax: 0
+    termScale: 0
+    isTrigger: 0
+    triggerStatus1: 0
+    triggerCondition1: 0
+    triggerThreshold1: -1
+    triggerStatus2: 0
+    triggerCondition2: 0
+    triggerThreshold2: -1
+    effect1: event_effect_1_mental_p5
+    effect2: 
+    effect3: 
+    isProbable: 0
+    probability: 1
+    description: text_SuddenEvent_000001
+  - id: event_000002
+    name: "\uBA58\uD0C8 \uC57D\uD654"
+    context: 3
+    condition: 2
     category: 10
     scope: 2
     targetMin: 1
-    targetMax: 3
-    termMin: 1
-    termMax: 1
-    termScale: 1
+    targetMax: 1
+    termMin: 0
+    termMax: 0
+    termScale: 0
+    isTrigger: 0
+    triggerStatus1: 0
+    triggerCondition1: 0
+    triggerThreshold1: -1
+    triggerStatus2: 0
+    triggerCondition2: 0
+    triggerThreshold2: -1
+    effect1: event_effect_1_mental_m5
+    effect2: 
+    effect3: 
+    isProbable: 0
+    probability: 1
+    description: text_SuddenEvent_000002
+  - id: event_000003
+    name: "\uC288\uD305 \uAC15\uD654"
+    context: 3
+    condition: 2
+    category: 5
+    scope: 2
+    targetMin: 1
+    targetMax: 1
+    termMin: 0
+    termMax: 0
+    termScale: 0
+    isTrigger: 0
+    triggerStatus1: 0
+    triggerCondition1: 0
+    triggerThreshold1: -1
+    triggerStatus2: 0
+    triggerCondition2: 0
+    triggerThreshold2: -1
+    effect1: event_effect_1_shoot_p5
+    effect2: 
+    effect3: 
+    isProbable: 0
+    probability: 1
+    description: text_SuddenEvent_000001
+  - id: event_000004
+    name: "\uC288\uD305 \uC57D\uD654"
+    context: 3
+    condition: 2
+    category: 6
+    scope: 2
+    targetMin: 1
+    targetMax: 1
+    termMin: 0
+    termMax: 0
+    termScale: 0
+    isTrigger: 0
+    triggerStatus1: 0
+    triggerCondition1: 0
+    triggerThreshold1: -1
+    triggerStatus2: 0
+    triggerCondition2: 0
+    triggerThreshold2: -1
+    effect1: event_effect_1_shoot_m5
+    effect2: 
+    effect3: 
+    isProbable: 0
+    probability: 1
+    description: text_SuddenEvent_000002
+  - id: event_000005
+    name: "\uC2A4\uD53C\uB4DC \uAC15\uD654"
+    context: 3
+    condition: 2
+    category: 5
+    scope: 2
+    targetMin: 1
+    targetMax: 1
+    termMin: 0
+    termMax: 0
+    termScale: 0
+    isTrigger: 0
+    triggerStatus1: 0
+    triggerCondition1: 0
+    triggerThreshold1: -1
+    triggerStatus2: 0
+    triggerCondition2: 0
+    triggerThreshold2: -1
+    effect1: event_effect_1_speed_p5
+    effect2: 
+    effect3: 
+    isProbable: 0
+    probability: 1
+    description: text_SuddenEvent_000001
+  - id: event_000006
+    name: "\uC2A4\uD53C\uB4DC \uC57D\uD654"
+    context: 3
+    condition: 2
+    category: 6
+    scope: 2
+    targetMin: 1
+    targetMax: 1
+    termMin: 0
+    termMax: 0
+    termScale: 0
+    isTrigger: 0
+    triggerStatus1: 0
+    triggerCondition1: 0
+    triggerThreshold1: -1
+    triggerStatus2: 0
+    triggerCondition2: 0
+    triggerThreshold2: -1
+    effect1: event_effect_1_speed_m5
+    effect2: 
+    effect3: 
+    isProbable: 0
+    probability: 1
+    description: text_SuddenEvent_000002
+  - id: event_000007
+    name: "\uC810\uD504 \uC131\uC7A5"
+    context: 3
+    condition: 2
+    category: 5
+    scope: 2
+    targetMin: 1
+    targetMax: 1
+    termMin: 0
+    termMax: 0
+    termScale: 0
+    isTrigger: 0
+    triggerStatus1: 0
+    triggerCondition1: 0
+    triggerThreshold1: -1
+    triggerStatus2: 0
+    triggerCondition2: 0
+    triggerThreshold2: -1
+    effect1: event_effect_1_jump_p5
+    effect2: 
+    effect3: 
+    isProbable: 0
+    probability: 1
+    description: text_SuddenEvent_000001
+  - id: event_000008
+    name: "\uC810\uD504 \uC57D\uD654"
+    context: 3
+    condition: 2
+    category: 6
+    scope: 2
+    targetMin: 1
+    targetMax: 1
+    termMin: 0
+    termMax: 0
+    termScale: 0
+    isTrigger: 0
+    triggerStatus1: 0
+    triggerCondition1: 0
+    triggerThreshold1: -1
+    triggerStatus2: 0
+    triggerCondition2: 0
+    triggerThreshold2: -1
+    effect1: event_effect_1_jump_m5
+    effect2: 
+    effect3: 
+    isProbable: 0
+    probability: 1
+    description: text_SuddenEvent_000002
+  - id: event_000009
+    name: "\uCEE8\uB514\uC158 \uC99D\uAC00"
+    context: 3
+    condition: 2
+    category: 13
+    scope: 2
+    targetMin: 1
+    targetMax: 1
+    termMin: 0
+    termMax: 0
+    termScale: 0
+    isTrigger: 0
+    triggerStatus1: 0
+    triggerCondition1: 0
+    triggerThreshold1: -1
+    triggerStatus2: 0
+    triggerCondition2: 0
+    triggerThreshold2: -1
+    effect1: event_effect_1_condition_p5
+    effect2: 
+    effect3: 
+    isProbable: 0
+    probability: 1
+    description: text_SuddenEvent_000001
+  - id: event_000010
+    name: "\uCEE8\uB514\uC158 \uAC10\uC18C"
+    context: 3
+    condition: 2
+    category: 14
+    scope: 2
+    targetMin: 1
+    targetMax: 1
+    termMin: 0
+    termMax: 0
+    termScale: 0
     isTrigger: 0
     triggerStatus1: 0
     triggerCondition1: 0
@@ -34,16 +250,304 @@ MonoBehaviour:
     effect1: event_effect_1_condition_m5
     effect2: 
     effect3: 
-    isProbable: 1
-    probability: 0.4
-    description: id_Text_SuddenEvent_000001
-  - id: event_000002
+    isProbable: 0
+    probability: 1
+    description: text_SuddenEvent_000002
+  - id: event_000011
+    name: "\uC9C0\uAD6C\uB825 \uC131\uC7A5"
+    context: 3
+    condition: 2
+    category: 5
+    scope: 2
+    targetMin: 1
+    targetMax: 1
+    termMin: 0
+    termMax: 0
+    termScale: 0
+    isTrigger: 0
+    triggerStatus1: 0
+    triggerCondition1: 0
+    triggerThreshold1: -1
+    triggerStatus2: 0
+    triggerCondition2: 0
+    triggerThreshold2: -1
+    effect1: event_effect_1_stamina_p5
+    effect2: 
+    effect3: 
+    isProbable: 0
+    probability: 1
+    description: text_SuddenEvent_000001
+  - id: event_000012
+    name: "\uC9C0\uAD6C\uB825 \uC57D\uD654"
+    context: 3
+    condition: 2
+    category: 6
+    scope: 2
+    targetMin: 1
+    targetMax: 1
+    termMin: 0
+    termMax: 0
+    termScale: 0
+    isTrigger: 0
+    triggerStatus1: 0
+    triggerCondition1: 0
+    triggerThreshold1: -1
+    triggerStatus2: 0
+    triggerCondition2: 0
+    triggerThreshold2: -1
+    effect1: event_effect_1_stamina_m5
+    effect2: 
+    effect3: 
+    isProbable: 0
+    probability: 1
+    description: text_SuddenEvent_000002
+  - id: event_000013
+    name: "\uC790\uAE08 \uD68D\uB4DD"
+    context: 3
+    condition: 2
+    category: 1
+    scope: 7
+    targetMin: 1
+    targetMax: 1
+    termMin: 0
+    termMax: 0
+    termScale: 0
+    isTrigger: 0
+    triggerStatus1: 0
+    triggerCondition1: 0
+    triggerThreshold1: -1
+    triggerStatus2: 0
+    triggerCondition2: 0
+    triggerThreshold2: -1
+    effect1: event_effect_1_money_p5
+    effect2: 
+    effect3: 
+    isProbable: 0
+    probability: 1
+    description: text_SuddenEvent_000001
+  - id: event_000014
+    name: "\uC790\uAE08 \uC190\uC2E4"
+    context: 3
+    condition: 2
+    category: 2
+    scope: 7
+    targetMin: 1
+    targetMax: 1
+    termMin: 0
+    termMax: 0
+    termScale: 0
+    isTrigger: 0
+    triggerStatus1: 0
+    triggerCondition1: 0
+    triggerThreshold1: -1
+    triggerStatus2: 0
+    triggerCondition2: 0
+    triggerThreshold2: -1
+    effect1: event_effect_1_money_m5
+    effect2: 
+    effect3: 
+    isProbable: 0
+    probability: 1
+    description: text_SuddenEvent_000002
+  - id: event_000015
+    name: "\uBA85\uC131\uCE58 \uC99D\uAC00"
+    context: 3
+    condition: 2
+    category: 1
+    scope: 7
+    targetMin: 1
+    targetMax: 1
+    termMin: 0
+    termMax: 0
+    termScale: 0
+    isTrigger: 0
+    triggerStatus1: 0
+    triggerCondition1: 0
+    triggerThreshold1: -1
+    triggerStatus2: 0
+    triggerCondition2: 0
+    triggerThreshold2: -1
+    effect1: event_effect_1_fame_p5
+    effect2: 
+    effect3: 
+    isProbable: 0
+    probability: 1
+    description: text_SuddenEvent_000001
+  - id: event_000016
+    name: "\uBA85\uC131\uCE58 \uAC10\uC18C"
+    context: 3
+    condition: 2
+    category: 2
+    scope: 7
+    targetMin: 1
+    targetMax: 1
+    termMin: 0
+    termMax: 0
+    termScale: 0
+    isTrigger: 0
+    triggerStatus1: 0
+    triggerCondition1: 0
+    triggerThreshold1: -1
+    triggerStatus2: 0
+    triggerCondition2: 0
+    triggerThreshold2: -1
+    effect1: event_effect_1_fame_m5
+    effect2: 
+    effect3: 
+    isProbable: 0
+    probability: 1
+    description: text_SuddenEvent_000002
+  - id: event_000017
+    name: "\uB79C\uB364 \uC2A4\uD0EF \uC99D\uAC00"
+    context: 3
+    condition: 2
+    category: 13
+    scope: 7
+    targetMin: 1
+    targetMax: 1
+    termMin: 0
+    termMax: 0
+    termScale: 0
+    isTrigger: 0
+    triggerStatus1: 0
+    triggerCondition1: 0
+    triggerThreshold1: -1
+    triggerStatus2: 0
+    triggerCondition2: 0
+    triggerThreshold2: -1
+    effect1: event_effect_1_randomPlayerStat_p5
+    effect2: 
+    effect3: 
+    isProbable: 0
+    probability: 1
+    description: text_SuddenEvent_000001
+  - id: event_000018
+    name: "\uB79C\uB364 \uC2A4\uD0EF \uAC10\uC18C"
+    context: 3
+    condition: 2
+    category: 14
+    scope: 7
+    targetMin: 1
+    targetMax: 1
+    termMin: 0
+    termMax: 0
+    termScale: 0
+    isTrigger: 0
+    triggerStatus1: 0
+    triggerCondition1: 0
+    triggerThreshold1: -1
+    triggerStatus2: 0
+    triggerCondition2: 0
+    triggerThreshold2: -1
+    effect1: event_effect_1_randomPlayerStat_m5
+    effect2: 
+    effect3: 
+    isProbable: 0
+    probability: 1
+    description: text_SuddenEvent_000002
+  - id: event_000019
+    name: "\uB118\uCE58\uB294 \uD798"
+    context: 3
+    condition: 2
+    category: 15
+    scope: 2
+    targetMin: 1
+    targetMax: 1
+    termMin: 0
+    termMax: 0
+    termScale: 0
+    isTrigger: 0
+    triggerStatus1: 0
+    triggerCondition1: 0
+    triggerThreshold1: -1
+    triggerStatus2: 0
+    triggerCondition2: 0
+    triggerThreshold2: -1
+    effect1: event_effect_1_speed_p5
+    effect2: event_effect_1_stamina_p5
+    effect3: event_effect_1_condition_m5
+    isProbable: 0
+    probability: 1
+    description: text_SuddenEvent_000009
+  - id: event_000020
+    name: "\uC6B4\uB3D9\uAE30\uAD6C \uD30C\uC190"
+    context: 3
+    condition: 2
+    category: 2
+    scope: 7
+    targetMin: 1
+    targetMax: 1
+    termMin: 0
+    termMax: 0
+    termScale: 0
+    isTrigger: 0
+    triggerStatus1: 0
+    triggerCondition1: 0
+    triggerThreshold1: -1
+    triggerStatus2: 0
+    triggerCondition2: 0
+    triggerThreshold2: -1
+    effect1: event_effect_1_money_m10
+    effect2: 
+    effect3: 
+    isProbable: 0
+    probability: 1
+    description: text_SuddenEvent_000004
+  - id: event_000021
+    name: "\uB18D\uAD6C\uBD80 \uD68C\uC2DD"
+    context: 2
+    condition: 2
+    category: 13
+    scope: 2
+    targetMin: 20
+    targetMax: 20
+    termMin: 0
+    termMax: 0
+    termScale: 0
+    isTrigger: 0
+    triggerStatus1: 0
+    triggerCondition1: 0
+    triggerThreshold1: -1
+    triggerStatus2: 0
+    triggerCondition2: 0
+    triggerThreshold2: -1
+    effect1: event_effect_1_condition_p10
+    effect2: event_effect_1_experience_p10
+    effect3: 
+    isProbable: 0
+    probability: 1
+    description: text_SuddenEvent_000008
+  - id: event_000022
+    name: "\uD2B9\uBCC4 \uD6C8\uB828"
+    context: 3
+    condition: 2
+    category: 15
+    scope: 2
+    targetMin: 1
+    targetMax: 1
+    termMin: 0
+    termMax: 0
+    termScale: 0
+    isTrigger: 0
+    triggerStatus1: 0
+    triggerCondition1: 0
+    triggerThreshold1: -1
+    triggerStatus2: 0
+    triggerCondition2: 0
+    triggerThreshold2: -1
+    effect1: event_effect_1_randomPlayerStat_p5
+    effect2: event_effect_1_stamina_p3
+    effect3: event_effect_1_condition_m5
+    isProbable: 0
+    probability: 1
+    description: text_SuddenEvent_000009
+  - id: event_001001
     name: "\uBD80\uB2F4\uAC10"
     context: 1
     condition: 8
     category: 14
     scope: 3
-    targetMin: 5
+    targetMin: 1
     targetMax: 5
     termMin: 1
     termMax: 4
@@ -60,14 +564,14 @@ MonoBehaviour:
     effect3: 
     isProbable: 1
     probability: 0.2
-    description: id_Text_SuddenEvent_000002
-  - id: event_000002
+    description: text_SuddenEvent_000004
+  - id: event_001001
     name: "\uBD80\uB2F4\uAC10"
     context: 1
     condition: 8
     category: 14
     scope: 3
-    targetMin: 5
+    targetMin: 1
     targetMax: 5
     termMin: 1
     termMax: 4
@@ -84,14 +588,14 @@ MonoBehaviour:
     effect3: 
     isProbable: 1
     probability: 0.6
-    description: id_Text_SuddenEvent_000002
-  - id: event_000002
+    description: text_SuddenEvent_000004
+  - id: event_001001
     name: "\uBD80\uB2F4\uAC10"
     context: 1
     condition: 8
     category: 14
     scope: 3
-    targetMin: 5
+    targetMin: 1
     targetMax: 5
     termMin: 1
     termMax: 4
@@ -108,76 +612,484 @@ MonoBehaviour:
     effect3: 
     isProbable: 1
     probability: 0.8
-    description: id_Text_SuddenEvent_000002
-  - id: event_000003
-    name: "\uBD80\uB2F4\uAC10"
-    context: 1
-    condition: 8
-    category: 14
-    scope: 3
+    description: text_SuddenEvent_000004
+  - id: event_001002
+    name: "\uBD80\uC0C1"
+    context: 3
+    condition: 4
+    category: 6
+    scope: 2
     targetMin: 1
-    targetMax: 5
+    targetMax: 2
     termMin: 1
-    termMax: 4
-    termScale: 2
+    termMax: 7
+    termScale: 1
     isTrigger: 1
     triggerStatus1: 5
     triggerCondition1: 7
-    triggerThreshold1: 90
+    triggerThreshold1: 80
     triggerStatus2: 5
     triggerCondition2: 6
-    triggerThreshold2: 80
-    effect1: event_effect_1_randomPlayerStat_m3
-    effect2: 
+    triggerThreshold2: 60
+    effect1: event_effect_1_unable_match_p1
+    effect2: event_effect_1_experience_m50
     effect3: 
     isProbable: 1
     probability: 0.2
-    description: id_Text_SuddenEvent_000002
-  - id: event_000003
-    name: "\uBD80\uB2F4\uAC10"
-    context: 1
+    description: text_SuddenEvent_000005
+  - id: event_001002
+    name: "\uBD80\uC0C1"
+    context: 3
+    condition: 4
+    category: 6
+    scope: 2
+    targetMin: 1
+    targetMax: 2
+    termMin: 1
+    termMax: 7
+    termScale: 1
+    isTrigger: 1
+    triggerStatus1: 5
+    triggerCondition1: 7
+    triggerThreshold1: 60
+    triggerStatus2: 5
+    triggerCondition2: 6
+    triggerThreshold2: 40
+    effect1: event_effect_1_unable_match_p1
+    effect2: event_effect_1_experience_m50
+    effect3: 
+    isProbable: 1
+    probability: 0.5
+    description: text_SuddenEvent_000005
+  - id: event_001002
+    name: "\uBD80\uC0C1"
+    context: 3
+    condition: 4
+    category: 6
+    scope: 2
+    targetMin: 1
+    targetMax: 2
+    termMin: 1
+    termMax: 7
+    termScale: 1
+    isTrigger: 1
+    triggerStatus1: 5
+    triggerCondition1: 7
+    triggerThreshold1: 40
+    triggerStatus2: 5
+    triggerCondition2: 6
+    triggerThreshold2: 20
+    effect1: event_effect_1_unable_match_p1
+    effect2: event_effect_1_experience_m50
+    effect3: 
+    isProbable: 1
+    probability: 0.7
+    description: text_SuddenEvent_000005
+  - id: event_001002
+    name: "\uBD80\uC0C1"
+    context: 3
+    condition: 4
+    category: 6
+    scope: 2
+    targetMin: 1
+    targetMax: 2
+    termMin: 1
+    termMax: 7
+    termScale: 1
+    isTrigger: 0
+    triggerStatus1: 5
+    triggerCondition1: 7
+    triggerThreshold1: 20
+    triggerStatus2: 0
+    triggerCondition2: 0
+    triggerThreshold2: -1
+    effect1: event_effect_1_unable_match_p1
+    effect2: event_effect_1_experience_m50
+    effect3: 
+    isProbable: 0
+    probability: 1
+    description: text_SuddenEvent_000005
+  - id: event_001002
+    name: "\uBD80\uC0C1"
+    context: 3
     condition: 8
-    category: 14
+    category: 6
     scope: 3
     targetMin: 1
-    targetMax: 5
+    targetMax: 2
     termMin: 1
-    termMax: 4
-    termScale: 2
+    termMax: 3
+    termScale: 1
     isTrigger: 1
     triggerStatus1: 5
     triggerCondition1: 7
     triggerThreshold1: 80
     triggerStatus2: 5
     triggerCondition2: 6
-    triggerThreshold2: 70
-    effect1: event_effect_1_randomPlayerStat_m3
-    effect2: 
+    triggerThreshold2: 60
+    effect1: event_effect_1_unable_match_p1
+    effect2: event_effect_1_experience_m50
     effect3: 
     isProbable: 1
-    probability: 0.6
-    description: id_Text_SuddenEvent_000002
-  - id: event_000003
-    name: "\uBD80\uB2F4\uAC10"
-    context: 1
+    probability: 0.2
+    description: text_SuddenEvent_000005
+  - id: event_001002
+    name: "\uBD80\uC0C1"
+    context: 3
     condition: 8
-    category: 14
+    category: 6
     scope: 3
     targetMin: 1
-    targetMax: 5
+    targetMax: 2
     termMin: 1
-    termMax: 4
-    termScale: 2
+    termMax: 7
+    termScale: 1
     isTrigger: 1
     triggerStatus1: 5
     triggerCondition1: 7
-    triggerThreshold1: 70
+    triggerThreshold1: 60
+    triggerStatus2: 5
+    triggerCondition2: 6
+    triggerThreshold2: 40
+    effect1: event_effect_1_unable_match_p1
+    effect2: event_effect_1_experience_m50
+    effect3: 
+    isProbable: 1
+    probability: 0.5
+    description: text_SuddenEvent_000005
+  - id: event_001002
+    name: "\uBD80\uC0C1"
+    context: 3
+    condition: 8
+    category: 6
+    scope: 3
+    targetMin: 1
+    targetMax: 2
+    termMin: 3
+    termMax: 7
+    termScale: 1
+    isTrigger: 1
+    triggerStatus1: 5
+    triggerCondition1: 7
+    triggerThreshold1: 40
+    triggerStatus2: 5
+    triggerCondition2: 6
+    triggerThreshold2: 20
+    effect1: event_effect_1_unable_match_p1
+    effect2: event_effect_1_experience_m50
+    effect3: 
+    isProbable: 1
+    probability: 0.7
+    description: text_SuddenEvent_000005
+  - id: event_001002
+    name: "\uBD80\uC0C1"
+    context: 3
+    condition: 8
+    category: 6
+    scope: 3
+    targetMin: 1
+    targetMax: 2
+    termMin: 7
+    termMax: 28
+    termScale: 1
+    isTrigger: 0
+    triggerStatus1: 5
+    triggerCondition1: 7
+    triggerThreshold1: 20
     triggerStatus2: 0
     triggerCondition2: 0
     triggerThreshold2: -1
-    effect1: event_effect_1_randomPlayerStat_m3
+    effect1: event_effect_1_unable_match_p1
+    effect2: event_effect_1_experience_m50
+    effect3: 
+    isProbable: 0
+    probability: 1
+    description: text_SuddenEvent_000005
+  - id: event_100001
+    name: "\uC0C8\uB85C\uC6B4 \uBA54\uC2DC\uC9C0."
+    context: 1
+    condition: 1
+    category: 3
+    scope: 7
+    targetMin: 1
+    targetMax: 1
+    termMin: 0
+    termMax: 0
+    termScale: 0
+    isTrigger: 0
+    triggerStatus1: 0
+    triggerCondition1: 0
+    triggerThreshold1: -1
+    triggerStatus2: 0
+    triggerCondition2: 0
+    triggerThreshold2: -1
+    effect1: 
     effect2: 
     effect3: 
     isProbable: 1
-    probability: 0.8
-    description: id_Text_SuddenEvent_000002
+    probability: 0.1
+    description: text_diag_000001_000
+  - id: event_100002
+    name: "\uC0C8\uB85C\uC6B4 \uBA54\uC2DC\uC9C0."
+    context: 1
+    condition: 1
+    category: 3
+    scope: 7
+    targetMin: 1
+    targetMax: 1
+    termMin: 0
+    termMax: 0
+    termScale: 0
+    isTrigger: 0
+    triggerStatus1: 0
+    triggerCondition1: 0
+    triggerThreshold1: -1
+    triggerStatus2: 0
+    triggerCondition2: 0
+    triggerThreshold2: -1
+    effect1: 
+    effect2: 
+    effect3: 
+    isProbable: 1
+    probability: 0.1
+    description: text_diag_000002_000
+  - id: event_100003
+    name: "\uC0C8\uB85C\uC6B4 \uBA54\uC2DC\uC9C0."
+    context: 1
+    condition: 1
+    category: 3
+    scope: 7
+    targetMin: 1
+    targetMax: 1
+    termMin: 0
+    termMax: 0
+    termScale: 0
+    isTrigger: 0
+    triggerStatus1: 0
+    triggerCondition1: 0
+    triggerThreshold1: -1
+    triggerStatus2: 0
+    triggerCondition2: 0
+    triggerThreshold2: -1
+    effect1: 
+    effect2: 
+    effect3: 
+    isProbable: 1
+    probability: 0.1
+    description: text_diag_000003_000
+  - id: event_100004
+    name: "\uC0C8\uB85C\uC6B4 \uBA54\uC2DC\uC9C0."
+    context: 1
+    condition: 1
+    category: 3
+    scope: 7
+    targetMin: 1
+    targetMax: 1
+    termMin: 0
+    termMax: 0
+    termScale: 0
+    isTrigger: 0
+    triggerStatus1: 0
+    triggerCondition1: 0
+    triggerThreshold1: -1
+    triggerStatus2: 0
+    triggerCondition2: 0
+    triggerThreshold2: -1
+    effect1: 
+    effect2: 
+    effect3: 
+    isProbable: 1
+    probability: 0.1
+    description: text_diag_000004_000
+  - id: event_100005
+    name: "\uC0C8\uB85C\uC6B4 \uBA54\uC2DC\uC9C0."
+    context: 1
+    condition: 1
+    category: 3
+    scope: 7
+    targetMin: 1
+    targetMax: 1
+    termMin: 0
+    termMax: 0
+    termScale: 0
+    isTrigger: 0
+    triggerStatus1: 0
+    triggerCondition1: 0
+    triggerThreshold1: -1
+    triggerStatus2: 0
+    triggerCondition2: 0
+    triggerThreshold2: -1
+    effect1: 
+    effect2: 
+    effect3: 
+    isProbable: 1
+    probability: 0.1
+    description: text_diag_000005_000
+  - id: event_100006
+    name: "\uC0C8\uB85C\uC6B4 \uBA54\uC2DC\uC9C0."
+    context: 1
+    condition: 1
+    category: 3
+    scope: 7
+    targetMin: 1
+    targetMax: 1
+    termMin: 0
+    termMax: 0
+    termScale: 0
+    isTrigger: 0
+    triggerStatus1: 0
+    triggerCondition1: 0
+    triggerThreshold1: -1
+    triggerStatus2: 0
+    triggerCondition2: 0
+    triggerThreshold2: -1
+    effect1: 
+    effect2: 
+    effect3: 
+    isProbable: 1
+    probability: 0.1
+    description: text_diag_000006_000
+  - id: event_100007
+    name: "\uC0C8\uB85C\uC6B4 \uBA54\uC2DC\uC9C0."
+    context: 1
+    condition: 1
+    category: 3
+    scope: 7
+    targetMin: 1
+    targetMax: 1
+    termMin: 0
+    termMax: 0
+    termScale: 0
+    isTrigger: 0
+    triggerStatus1: 0
+    triggerCondition1: 0
+    triggerThreshold1: -1
+    triggerStatus2: 0
+    triggerCondition2: 0
+    triggerThreshold2: -1
+    effect1: 
+    effect2: 
+    effect3: 
+    isProbable: 1
+    probability: 0.1
+    description: text_diag_000007_000
+  - id: event_100008
+    name: "\uC0C8\uB85C\uC6B4 \uBA54\uC2DC\uC9C0."
+    context: 1
+    condition: 1
+    category: 3
+    scope: 7
+    targetMin: 1
+    targetMax: 1
+    termMin: 0
+    termMax: 0
+    termScale: 0
+    isTrigger: 0
+    triggerStatus1: 0
+    triggerCondition1: 0
+    triggerThreshold1: -1
+    triggerStatus2: 0
+    triggerCondition2: 0
+    triggerThreshold2: -1
+    effect1: 
+    effect2: 
+    effect3: 
+    isProbable: 1
+    probability: 0.1
+    description: text_diag_000008_000
+  - id: event_100009
+    name: "\uC0C8\uB85C\uC6B4 \uBA54\uC2DC\uC9C0."
+    context: 1
+    condition: 1
+    category: 3
+    scope: 7
+    targetMin: 1
+    targetMax: 1
+    termMin: 0
+    termMax: 0
+    termScale: 0
+    isTrigger: 0
+    triggerStatus1: 0
+    triggerCondition1: 0
+    triggerThreshold1: -1
+    triggerStatus2: 0
+    triggerCondition2: 0
+    triggerThreshold2: -1
+    effect1: 
+    effect2: 
+    effect3: 
+    isProbable: 1
+    probability: 0.1
+    description: text_diag_000009_000
+  - id: event_100010
+    name: "\uC0C8\uB85C\uC6B4 \uBA54\uC2DC\uC9C0."
+    context: 1
+    condition: 1
+    category: 3
+    scope: 7
+    targetMin: 1
+    targetMax: 1
+    termMin: 0
+    termMax: 0
+    termScale: 0
+    isTrigger: 0
+    triggerStatus1: 0
+    triggerCondition1: 0
+    triggerThreshold1: -1
+    triggerStatus2: 0
+    triggerCondition2: 0
+    triggerThreshold2: -1
+    effect1: 
+    effect2: 
+    effect3: 
+    isProbable: 1
+    probability: 0.1
+    description: text_diag_000010_000
+  - id: event_110001
+    name: "[\uACF5\uC9C0] \uAE08\uC77C \uC9C0\uAC01\uC790"
+    context: 1
+    condition: 1
+    category: 2
+    scope: 2
+    targetMin: 1
+    targetMax: 1
+    termMin: 0
+    termMax: 0
+    termScale: 0
+    isTrigger: 0
+    triggerStatus1: 0
+    triggerCondition1: 0
+    triggerThreshold1: -1
+    triggerStatus2: 0
+    triggerCondition2: 0
+    triggerThreshold2: -1
+    effect1: 
+    effect2: 
+    effect3: 
+    isProbable: 1
+    probability: 0.15
+    description: text_diag_100001_000
+  - id: event_120001
+    name: "[\uACF5\uC9C0] \uC878\uC5C5\uC0DD \uBC29\uBB38"
+    context: 1
+    condition: 1
+    category: 2
+    scope: 2
+    targetMin: 1
+    targetMax: 1
+    termMin: 0
+    termMax: 0
+    termScale: 0
+    isTrigger: 0
+    triggerStatus1: 0
+    triggerCondition1: 0
+    triggerThreshold1: -1
+    triggerStatus2: 0
+    triggerCondition2: 0
+    triggerThreshold2: -1
+    effect1: 
+    effect2: 
+    effect3: 
+    isProbable: 1
+    probability: 0.1
+    description: text_diag_200001_000

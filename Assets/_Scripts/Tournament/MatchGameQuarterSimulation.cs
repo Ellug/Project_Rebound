@@ -1,10 +1,10 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 // 쿼터 1개 책임: 쿼터 시작, 공방 루프 진행, 쿼터 종료 결과 조합
 public sealed class QuarterPodSimulator
 {
-    private const string Divider = "---------------------------------------------";
+    private const string Divider = "-------------------------------------";
     private readonly int _maxPlayTurns;
     private readonly int _scorePerPlayTurnWin;
     private readonly int _benchRecoverAmount;
@@ -32,8 +32,8 @@ public sealed class QuarterPodSimulator
         List<QuarterLogEntry> logs = new(8)
         {
             CreateNormalLog(Divider),
-            CreateNormalLog($"{quarter}쿼터 시작"),
-            CreateNormalLog($"{context.MySchoolName} {context.MySchoolScore} - {context.OpponentScore} {context.OpponentTeamName} ({BuildFlowText(context.MySchoolScore - context.OpponentScore)})"),
+            CreateNormalLog(ApplyAnnouncementBold($"{quarter}쿼터 시작")),
+            CreateNormalLog(BuildQuarterStartScoreLog(context, quarter)),
             CreateNormalLog(Divider),
         };
 
@@ -90,10 +90,11 @@ public sealed class QuarterPodSimulator
         {
             QuarterSimulationResult quarterResult = BuildQuarterResult(context, session, logs);
             session.Complete();
-            return new QuarterPodStepResult(true, quarterResult, logs);
+            // 쿼터 종료 시 마지막 공방 이미지 유지
+            return new QuarterPodStepResult(true, quarterResult, logs, playTurnResult.contextImageId);
         }
 
-        return new QuarterPodStepResult(false, default, logs);
+        return new QuarterPodStepResult(false, default, logs, playTurnResult.contextImageId);
     }
 
     // 세션의 최종 득점을 집계하고 벤치 컨디션 회복 후 QuarterSimulationResult를 생성
@@ -104,7 +105,7 @@ public sealed class QuarterPodSimulator
         int scoreDiff = expectedMyScore - expectedOpponentScore;
 
         logs.Add(CreateNormalLog(Divider));
-        logs.Add(CreateNormalLog($"{session.Quarter}쿼터 종료"));
+        logs.Add(CreateNormalLog(ApplyAnnouncementBold($"{session.Quarter}쿼터 종료")));
         logs.Add(CreateNormalLog($"{context.MySchoolName} {expectedMyScore} - {expectedOpponentScore} {context.OpponentTeamName} ({BuildFlowText(scoreDiff)})"));
         logs.Add(CreateNormalLog(Divider));
 
@@ -116,6 +117,19 @@ public sealed class QuarterPodSimulator
         }
 
         return new QuarterSimulationResult(expectedMyScore - context.MySchoolScore, expectedOpponentScore - context.OpponentScore, logs);
+    }
+
+    // 쿼터 시작 시점 스코어 로그를 생성 (1쿼터 0:0은 흐름 문구 생략)
+    private static string BuildQuarterStartScoreLog(MatchContext context, int quarter)
+    {
+        int myScore = context.MySchoolScore;
+        int opponentScore = context.OpponentScore;
+
+        // 1쿼터 시작 직후 0:0은 접전 문구 생략
+        if (quarter == 1 && myScore == 0 && opponentScore == 0)
+            return $"{context.MySchoolName} {myScore} - {opponentScore} {context.OpponentTeamName}";
+
+        return $"{context.MySchoolName} {myScore} - {opponentScore} {context.OpponentTeamName} ({BuildFlowText(myScore - opponentScore)})";
     }
 
     // 점수 차이를 텍스트 흐름 표현으로 변환 (±4점 기준으로 우세/열세/경합/접전)
@@ -135,6 +149,11 @@ public sealed class QuarterPodSimulator
     {
         for (int i = 0; i < source.Count; i++)
             target.Add(source[i]);
+    }
+
+    private static string ApplyAnnouncementBold(string message)
+    {
+        return $"<b>{message}</b>";
     }
 
     // 일반 로그 엔트리를 생성한다.

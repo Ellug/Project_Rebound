@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,7 +8,6 @@ public sealed class CoachNodePrerequisiteRow
     public int col1;
     public int nodeId;
     public int targetPrerequisiteId;
-    public string 비고;
 }
 
 [CreateAssetMenu(menuName = "Game/Data/Coach Node Prerequisite Table", fileName = "SO_CoachNodePrerequisiteTable")]

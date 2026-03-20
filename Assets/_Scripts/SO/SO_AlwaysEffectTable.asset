@@ -20,11 +20,9 @@ MonoBehaviour:
     conditionRecoveryUp: 0
     conditionRecoveryDown: 4
     trainingIncrease: 0
-    trainingDecline: 1.5
+    trainingDecline: 6
     mentalIncrease: 0
     mentalDecline: 1
-    trustIncrease: 0
-    trustDecline: 1
   - id: vacation_effect
     trainingState: 0
     conditionIncrease: 0
@@ -35,80 +33,66 @@ MonoBehaviour:
     trainingDecline: 0
     mentalIncrease: 0
     mentalDecline: 0
-    trustIncrease: 0
-    trustDecline: 0
   - id: holiday_effect
     trainingState: 1
     conditionIncrease: 0
     conditionDecline: 4
     conditionRecoveryUp: 5
     conditionRecoveryDown: 0
-    trainingIncrease: 1.5
+    trainingIncrease: 9
     trainingDecline: 0
     mentalIncrease: 0
     mentalDecline: 0
-    trustIncrease: 0
-    trustDecline: 0
   - id: samiljeol_effect
     trainingState: 1
     conditionIncrease: 0
     conditionDecline: 0
     conditionRecoveryUp: 4
     conditionRecoveryDown: 0
-    trainingIncrease: 1
+    trainingIncrease: 7
     trainingDecline: 0
     mentalIncrease: 0
     mentalDecline: 0
-    trustIncrease: 0
-    trustDecline: 0
   - id: children_effect
     trainingState: 1
     conditionIncrease: 0
     conditionDecline: 0
     conditionRecoveryUp: 0
     conditionRecoveryDown: 3
-    trainingIncrease: 1
+    trainingIncrease: 7
     trainingDecline: 0
-    mentalIncrease: 3
+    mentalIncrease: 6
     mentalDecline: 0
-    trustIncrease: 0
-    trustDecline: 0
   - id: buddha_effect
     trainingState: 1
     conditionIncrease: 0
     conditionDecline: 3
     conditionRecoveryUp: 3
     conditionRecoveryDown: 0
-    trainingIncrease: 1
+    trainingIncrease: 7
     trainingDecline: 0
     mentalIncrease: 0
     mentalDecline: 0
-    trustIncrease: 0
-    trustDecline: 0
   - id: memorial_effect
     trainingState: 1
     conditionIncrease: 0
     conditionDecline: 3
     conditionRecoveryUp: 3
     conditionRecoveryDown: 0
-    trainingIncrease: 1.5
+    trainingIncrease: 9
     trainingDecline: 0
     mentalIncrease: 0
     mentalDecline: 0
-    trustIncrease: 0
-    trustDecline: 0
   - id: liberation_effect
     trainingState: 1
     conditionIncrease: 0
     conditionDecline: 3
     conditionRecoveryUp: 3
     conditionRecoveryDown: 0
-    trainingIncrease: 1
+    trainingIncrease: 7
     trainingDecline: 0
-    mentalIncrease: 3
+    mentalIncrease: 6
     mentalDecline: 0
-    trustIncrease: 2
-    trustDecline: 0
   - id: chuseok_effect
     trainingState: 1
     conditionIncrease: 0
@@ -119,44 +103,36 @@ MonoBehaviour:
     trainingDecline: 0
     mentalIncrease: 0
     mentalDecline: 0
-    trustIncrease: 3
-    trustDecline: 0
   - id: national_effect
     trainingState: 1
     conditionIncrease: 0
     conditionDecline: 2
     conditionRecoveryUp: 0
     conditionRecoveryDown: 3
-    trainingIncrease: 1.5
+    trainingIncrease: 9
     trainingDecline: 0
     mentalIncrease: 0
     mentalDecline: 0
-    trustIncrease: 2
-    trustDecline: 0
   - id: hangul_effect
     trainingState: 1
     conditionIncrease: 0
     conditionDecline: 3
     conditionRecoveryUp: 3
     conditionRecoveryDown: 0
-    trainingIncrease: 1
+    trainingIncrease: 7
     trainingDecline: 0
     mentalIncrease: 0
     mentalDecline: 0
-    trustIncrease: 3
-    trustDecline: 0
   - id: christmas_effect
     trainingState: 1
     conditionIncrease: 0
     conditionDecline: 3
     conditionRecoveryUp: 4
     conditionRecoveryDown: 0
-    trainingIncrease: 2
+    trainingIncrease: 10
     trainingDecline: 0
     mentalIncrease: 0
     mentalDecline: 0
-    trustIncrease: 3
-    trustDecline: 0
   - id: festival_effect
     trainingState: 0
     conditionIncrease: 0
@@ -165,7 +141,15 @@ MonoBehaviour:
     conditionRecoveryDown: 0
     trainingIncrease: 0
     trainingDecline: 0
-    mentalIncrease: 2
+    mentalIncrease: 8
     mentalDecline: 0
-    trustIncrease: 4
-    trustDecline: 0
+  - id: sportsday_effect
+    trainingState: 0
+    conditionIncrease: 0
+    conditionDecline: 0
+    conditionRecoveryUp: 5
+    conditionRecoveryDown: 0
+    trainingIncrease: 0
+    trainingDecline: 0
+    mentalIncrease: 0
+    mentalDecline: 0

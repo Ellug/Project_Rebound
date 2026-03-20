@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -35,6 +36,8 @@ public class LobbyUI : UIBase
     [SerializeField] private TrainingSelectPopup _trainingSelectPopup; // 씬에 배치된 훈련 선택 팝업 (직접 참조)
     [SerializeField] private StudentManagementPopup _studentManagementPopup; // 씬에 배치된 학생 관리 팝업(비활성화 상태)
     [SerializeField] private HeadCoachPopup _headCoachPopup; // 씬에 배치된 감독 노드 팝업 (비활성화 상태)
+    [SerializeField] private FacilityPopup _facilityPopup; // 씬에 배치된 감독 노드 팝업 (비활성화 상태)
+    [SerializeField] private AlwaysEffectPopup _alwaysEffectPopup; // 씬에 배치된 상시 효과 확인 팝업 (비활성화 상태)
 
     [Header("Center Message")]
     [SerializeField] private TMP_Text _txtMessage;
@@ -48,10 +51,8 @@ public class LobbyUI : UIBase
     [SerializeField] private Button _btnFacility; // 시설 (MVP 개발 X)
     [SerializeField] private Button _btnCoach;    // 감독 노드 (MVP 개발 X)
     [SerializeField] private Button _btnShop;     // 상점 (MVP 개발 X)
+    [SerializeField] private Button _btnEffectIcon; // 현재 적용 중인 상시 효과 확인
     [SerializeField] private BottomTabActiveSpriteSet _activeTabSprites; // 탭 활성 시 교체할 스프라이트
-
-    [Header("Test")]
-    [SerializeField] private Sprite _testSprite;
 
     [SerializeField] private RecruitmentManager _recruitmentManager;
 
@@ -64,6 +65,8 @@ public class LobbyUI : UIBase
     private Sprite _shopDefaultSprite;
     private bool _lastTrainingPopupActive;
     private bool _lastStudentPopupActive;
+    private bool _lastCoachPopupActive;
+    private bool _lastFacilityPopupActive;
 
     // 씬에 미리 배치된 경우 Start에서 초기화
     void Start()
@@ -79,7 +82,13 @@ public class LobbyUI : UIBase
 
         bool trainingActive = IsPopupActive(_trainingSelectPopup);
         bool studentActive = IsPopupActive(_studentManagementPopup);
-        if (trainingActive == _lastTrainingPopupActive && studentActive == _lastStudentPopupActive)
+        bool coachActive = IsPopupActive(_headCoachPopup);
+        bool facilityActive = IsPopupActive(_facilityPopup);
+
+        if (trainingActive == _lastTrainingPopupActive
+            && studentActive == _lastStudentPopupActive
+            && coachActive == _lastCoachPopupActive
+            && facilityActive == _lastFacilityPopupActive)
             return;
 
         RefreshBottomNavTabSprites();
@@ -109,14 +118,76 @@ public class LobbyUI : UIBase
             MessengerManager.Instance.OnLatestMessageReceived += UpdateMessagePreview;
         }
 
+        // MoneyManager 구독
+        if (MoneyManager.Instance != null)
+        {
+            MoneyManager.Instance.OnGoldChanged -= UpdateGoldUI;
+            MoneyManager.Instance.OnGoldChanged += UpdateGoldUI;
+
+            MoneyManager.Instance.OnReputationChanged -= UpdateReputationUI;
+            MoneyManager.Instance.OnReputationChanged += UpdateReputationUI;
+        }
+
+        if (SuddenEventManager.Instance != null)
+        {
+            SuddenEventManager.Instance.OnPopupRequested -= ShowEventPopup;
+            SuddenEventManager.Instance.OnPopupRequested += ShowEventPopup;
+        }
+
+
+        // AlwaysEffectPopup 초기화
+        if (_alwaysEffectPopup != null)
+            _alwaysEffectPopup.Init();
+
         RefreshBottomNavTabSprites();
+        MoneyManager.Instance.ForceNotify();
+    }
+
+
+    private void ShowEventPopup(SuddenEventManager.EventPopupData data)
+    {
+        UIPopupRequest req = new UIPopupRequest
+        {
+            Type = UIPopupRequest.PanelType.Simple, // 안내 위주이므로 Simple 패널 사용
+            Title = data.title,
+            Message = data.previewText,
+            ShowCancel = true, // 취소 버튼 표시
+            AutoCloseOnPrimary = true, 
+            AutoCloseOnCancel = true,
+            OnPrimary = () =>
+            {
+                // 1. 인박스 팝업을 열고
+                OpenMessengerInbox();
+
+                // 2. 해당 채팅방으로 다이렉트 이동
+                if (_messengerInboxPopup != null)
+                {
+                    _messengerInboxPopup.OpenRoom(data.roomId);
+                }
+            },
+            OnCancel = () =>
+            {
+                // 취소 누르면 방금 창은 닫히고 다음 팝업 띄우기
+                if (SuddenEventManager.Instance != null)
+                {
+                    if (DialogueRunner.Instance != null)
+                    {
+                        DialogueRunner.Instance.SkipRoom(data.roomId);
+                    }
+
+                    SuddenEventManager.Instance.ProcessNextPopup();
+                }
+            }
+        };
+
+        UIManager.Instance.ShowPopup(req); // UIManager를 통해 안전하게 팝업 호출
     }
 
     private void UpdateMessagePreview(ChatMessage latestMessage)
     {
         if (_txtMessage != null && latestMessage != null)
         {
-            _txtMessage.text = $"[{latestMessage.SenderType}] {latestMessage.Content}";
+            _txtMessage.text = latestMessage.Content;
         }
     }
 
@@ -144,7 +215,7 @@ public class LobbyUI : UIBase
                     Title = "특수 훈련",
                     Message = "이 훈련은 부상 위험이 높지만\n성장 속도가 매우 빠릅니다.",
                     SubMessage = "체력 소모 -30 / 부상 확률 10%",
-                    PreviewSprite = _testSprite,
+                    PreviewImageId = null,
                     ShowCancel = true,
                     OnPrimary = () => Debug.Log("이미지 팝업 확인됨"),
                     OnCancel = null,
@@ -173,11 +244,17 @@ public class LobbyUI : UIBase
         if (_btnCoach != null)
             _btnCoach.onClick.AddListener(OnClickCoach);
 
-        // MVP 미구현 기능들은 '준비중' 알림
+        // 시설
         if (_btnFacility != null)
-            _btnFacility.onClick.AddListener(() => ShowNotImplemented("시설"));
+            _btnFacility.onClick.AddListener(OnClickFacility);
+
+        // MVP 미구현 기능들은 '준비중' 알림
         if (_btnShop != null)
             _btnShop.onClick.AddListener(() => ShowNotImplemented("상점"));
+
+        // 현재 적용 중인 상시 효과 확인 팝업 오픈
+        if (_btnEffectIcon != null)
+            _btnEffectIcon.onClick.AddListener(OnClickEffectIcon);
     }
 
     private void OnClickTraining()
@@ -267,6 +344,43 @@ public class LobbyUI : UIBase
         _headCoachPopup.Open();
         RefreshBottomNavTabSprites();
     }
+    private void OnClickFacility()
+    {
+        if (_facilityPopup == null)
+            return;
+
+        bool wasActive = _facilityPopup.gameObject.activeSelf;
+
+        CloseAllLobbyPopups();
+
+        // 이미 열려있던 경우 → 토글로 닫기만 하고 종료
+        if (wasActive)
+        {
+            RefreshBottomNavTabSprites();
+            return;
+        }
+
+        _facilityPopup.Init();
+        //_headCoachPopup.transform.SetAsLastSibling();
+        _facilityPopup.Open();
+        RefreshBottomNavTabSprites();
+    }
+
+    // 상시 효과 확인 팝업 — 다른 로비 팝업과 독립적으로 토글
+    private void OnClickEffectIcon()
+    {
+        if (_alwaysEffectPopup == null)
+            return;
+
+        if (_alwaysEffectPopup.gameObject.activeSelf)
+        {
+            _alwaysEffectPopup.Close();
+            return;
+        }
+
+        _alwaysEffectPopup.transform.SetAsLastSibling();
+        _alwaysEffectPopup.Open();
+    }
 
     // 데이터 매니저 등에서 정보를 받아와 UI 갱신
     private void ShowNotImplemented(string featureName)
@@ -286,9 +400,31 @@ public class LobbyUI : UIBase
     {
         // 예시 데이터 바인딩
         if (_txtSchoolName) _txtSchoolName.text = FormatSchoolNameWithHighlightedPrefix("한울고등학교");
-        if (_txtMoney) _txtMoney.text = "5000 G";
-        if (_txtFame) _txtFame.text = "150";
-        if (_txtMessage) _txtMessage.text = "감독님, 신입생들이 입학했습니다. 훈련 일정을 잡아주세요.";
+        if (_txtMoney) _txtMoney.text = MoneyManager.Instance.Gold.ToString();
+        if (_txtFame) _txtFame.text = MoneyManager.Instance.Reputation.ToString();
+        if (_txtMessage)
+        {
+            var rooms = MessengerManager.Instance?.ActiveRooms;
+            if (rooms != null && rooms.Count > 0 && rooms[0].Messages.Count > 0)
+            {
+                var lastRoom = rooms[0];
+                var lastMsg = lastRoom.Messages[lastRoom.Messages.Count - 1];
+
+                string content = lastMsg.Content.Replace("\n", " ");
+
+                if (content.Length > 18)
+                {
+                    content = content.Substring(0, 18) + "...";
+                }
+
+                _txtMessage.text = $"<b>{lastRoom.RoomName}</b>\n{content}";
+            }
+            else
+            {
+                // 기존 기본 대사 유지
+                _txtMessage.text = "감독님, 신입생들이 입학했습니다. 훈련 일정을 잡아주세요.";
+            }
+        }
     }
 
     // 학교명 접두부(고등학교 앞)를 강조 색상으로 감싼 TMP RichText 문자열 생성
@@ -397,6 +533,12 @@ public class LobbyUI : UIBase
         {
             _headCoachPopup.Close();
         }
+
+        if (_facilityPopup != null && _facilityPopup.gameObject.activeSelf)
+        {
+            _facilityPopup.Close();
+        }
+
         RefreshBottomNavTabSprites();
     }
 
@@ -416,15 +558,18 @@ public class LobbyUI : UIBase
         bool trainingActive = IsPopupActive(_trainingSelectPopup);
         bool studentActive = IsPopupActive(_studentManagementPopup);
         bool coachActive = IsPopupActive(_headCoachPopup);
+        bool facilityActive = IsPopupActive(_facilityPopup);
 
         ApplyTabSprite(_btnTraining, _trainingDefaultSprite, _activeTabSprites != null ? _activeTabSprites.training : null, trainingActive);
         ApplyTabSprite(_btnStudent, _studentDefaultSprite, _activeTabSprites != null ? _activeTabSprites.student : null, studentActive);
-        ApplyTabSprite(_btnFacility, _facilityDefaultSprite, _activeTabSprites != null ? _activeTabSprites.facility : null, false);
+        ApplyTabSprite(_btnFacility, _facilityDefaultSprite, _activeTabSprites != null ? _activeTabSprites.facility : null, facilityActive);
         ApplyTabSprite(_btnCoach, _coachDefaultSprite, _activeTabSprites != null ? _activeTabSprites.coach : null, coachActive);
         ApplyTabSprite(_btnShop, _shopDefaultSprite, _activeTabSprites != null ? _activeTabSprites.shop : null, false);
 
         _lastTrainingPopupActive = trainingActive;
         _lastStudentPopupActive = studentActive;
+        _lastCoachPopupActive = coachActive;
+        _lastFacilityPopupActive = facilityActive;
     }
 
     // 탭 활성 여부에 따라 버튼 타겟 이미지 스프라이트를 변경
@@ -439,6 +584,18 @@ public class LobbyUI : UIBase
         Sprite nextSprite = isActive ? (activeSprite != null ? activeSprite : defaultSprite) : defaultSprite;
         if (nextSprite != null)
             targetImage.sprite = nextSprite;
+    }
+
+    private void UpdateGoldUI(int gold)
+    {
+        if (_txtMoney != null)
+            _txtMoney.text = gold.ToString();
+    }
+
+    private void UpdateReputationUI(int reputation)
+    {
+        if (_txtFame != null)
+            _txtFame.text = reputation.ToString();
     }
 
     // 버튼 타겟 이미지에서 현재 스프라이트를 읽는다
@@ -460,5 +617,14 @@ public class LobbyUI : UIBase
     public void OnClickStudentClose()
     {
         RefreshBottomNavTabSprites();
+    }
+    protected override void OnDestroy()
+    {
+        if (SuddenEventManager.Instance != null)
+        {
+            SuddenEventManager.Instance.OnPopupRequested -= ShowEventPopup;
+        }
+
+        base.OnDestroy();
     }
 }

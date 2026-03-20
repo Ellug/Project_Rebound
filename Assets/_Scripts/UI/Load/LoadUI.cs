@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+ï»¿using System.Collections.Generic;
 using UnityEngine;
 
 public class LoadUI : MonoBehaviour
@@ -11,7 +11,7 @@ public class LoadUI : MonoBehaviour
 
     void OnEnable()
     {
-        Debug.Log("LoadUI OnEnable ½ÇÇà");
+        Debug.Log("LoadUI OnEnable ì‹¤í–‰");
         LoadList();
         if (SaveSystem.Instance != null)
         {
@@ -29,15 +29,17 @@ public class LoadUI : MonoBehaviour
     public void LoadList()
     {
         foreach (Transform child in _loadListpanel)
-            Destroy(child.gameObject);
+        {
+            if (child.GetComponent<LoadPrefab>() != null)
+                Destroy(child.gameObject);
+        }
 
-        for (int i = 0; i < 3; i++)
+        for (int i = 1; i <= 4; i++)
         {
             if (!SaveSystem.Instance.Exists(i))
             {
                 continue;
             }
-
 
             PlayData data = SaveSystem.Instance.Load(i);
 
@@ -76,6 +78,7 @@ public class LoadUI : MonoBehaviour
         {
             return;
         }
+        _openPanel.gameObject.SetActive(true);
         _openPanel.Open(slotIndex, data.playTime, this);
     }
 
@@ -95,13 +98,18 @@ public class LoadUI : MonoBehaviour
 
     public void OnClickLoad(int slotIndex)
     {
-        Debug.Log($"·Îµå ¿äÃ»: {slotIndex}");
+        Debug.Log($"ë¡œë“œ ìš”ì²­: {slotIndex}");
         SaveManager.Instance.LoadSlot(slotIndex, "Lobby");
     }
 
     public void OnClickDelete(int slotIndex)
     {
-        Debug.Log($"»èÁ¦ ¿äÃ»: {slotIndex}");
+        Debug.Log($"ì‚­ì œ ìš”ì²­: {slotIndex}");
         SaveSystem.Instance.Delete(slotIndex);
+
+        if (SaveManager.Instance != null && SaveManager.Instance.CurrentSlotIndex == slotIndex)
+        {
+            SaveManager.Instance.Clear();
+        }
     }
 }

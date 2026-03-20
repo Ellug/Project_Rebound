@@ -12,6 +12,9 @@ public class MessengerInboxPopup : UIBase
     [SerializeField] private Button _btnInboxClose;
     [SerializeField] private MessengerRoomPopup _roomPopupPrefab;
 
+    [Header("Friendly Match")]
+    [SerializeField] private Button _btnFriendlyMatch;
+    [SerializeField] private FriendlyMatchSelectPopup _friendlyMatchSelectPopup;
 
     private MessengerRoomPopup _currentRoomPopup;
     private List<GameObject> _spawnedItems = new List<GameObject>();
@@ -38,43 +41,36 @@ public class MessengerInboxPopup : UIBase
 
     public override void Open()
     {
-        Init();
-        RefreshList();
         base.Open();
+        if (UIManager.Instance != null) UIManager.Instance.PushMessenger(this);
 
-        if (UIManager.Instance != null)
-        {
-            UIManager.Instance.PushMessenger(this);
-        }
+        RefreshList();
+        RefreshFriendlyMatchUI();
     }
-
     public override void Close()
     {
-        gameObject.SetActive(false);
-        
-        if (UIManager.Instance != null)
-        {
-            UIManager.Instance.PopMessenger(this);
-        }
+        if (UIManager.Instance != null) UIManager.Instance.PopMessenger(this);
 
         base.Close();
 
-        if (UIManager.Instance != null) UIManager.Instance.PopMessenger(this);
+        if (SuddenEventManager.Instance != null)
+        {
+            SuddenEventManager.Instance.ProcessNextPopup();
+        }
     }
-
-    private void RefreshList()
+    public void RefreshList()
     {
-        foreach (var item in _spawnedItems)
-            if (item != null) Destroy(item);
+        foreach (var item in _spawnedItems) Destroy(item);
         _spawnedItems.Clear();
-
-        if (MessengerManager.Instance == null) return;
 
         var rooms = MessengerManager.Instance.ActiveRooms;
         DateTime? currentDateGroup = null;
 
         foreach (var room in rooms)
         {
+            // 친선 경기 채팅방은 목록에 절대 나타나지 않도록 차단
+            if (room.RoomId.StartsWith("friendly_")) continue;
+
             if (currentDateGroup == null || currentDateGroup.Value.Date != room.LastUpdatedDate.Date)
             {
                 currentDateGroup = room.LastUpdatedDate.Date;
@@ -88,6 +84,30 @@ public class MessengerInboxPopup : UIBase
         }
     }
 
+    public void OpenRoom(string roomId)
+    {
+        if (_roomPopupPrefab == null)
+        {
+            return;
+        }
+
+        ChatRoom room = MessengerManager.Instance.GetRoom(roomId);
+        if (room == null)
+        {
+            Debug.LogError($"[MessengerInboxPopup] '{roomId}' 채팅방을 찾을 수 없습니다!");
+            return;
+        }
+
+        if (_currentRoomPopup == null)
+        {
+            _currentRoomPopup = Instantiate(_roomPopupPrefab, transform.parent);
+        }
+        _currentRoomPopup.transform.SetAsLastSibling();
+
+        _currentRoomPopup.OpenRoom(room);
+        _currentRoomPopup.gameObject.SetActive(true);
+    }
+
     private void SpawnDateDivider(DateTime date)
     {
         if (_dateDividerPrefab == null) return;
@@ -96,25 +116,21 @@ public class MessengerInboxPopup : UIBase
         divider.SetActive(true);
 
         TMP_Text txtDate = divider.GetComponentInChildren<TMP_Text>();
-        if (txtDate != null)
-            txtDate.text = date.ToString("yyyy. M. d");
-
+        if (txtDate != null) txtDate.text = date.ToString("yyyy. M. d");
         _spawnedItems.Add(divider);
     }
 
-    public void OpenRoom(string roomId)
+    public void RefreshFriendlyMatchUI()
     {
-        if (_roomPopupPrefab == null) return;
+        if (_btnFriendlyMatch == null) return;
 
-        ChatRoom room = MessengerManager.Instance.GetRoom(roomId);
-        if (room == null) return;
-
-        if (_currentRoomPopup == null)
-        {
-            _currentRoomPopup = Instantiate(_roomPopupPrefab, transform.parent);
-            _currentRoomPopup.Init();
-        }
-
-        _currentRoomPopup.OpenRoom(room);
+        _btnFriendlyMatch.onClick.RemoveAllListeners();
+        _btnFriendlyMatch.onClick.AddListener(() => {
+            if (_friendlyMatchSelectPopup != null)
+            {
+                _friendlyMatchSelectPopup.Init();
+                _friendlyMatchSelectPopup.Open();
+            }
+        });
     }
 }

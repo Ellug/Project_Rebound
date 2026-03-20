@@ -24,6 +24,9 @@ public class StudentSlot : MonoBehaviour, IPointerClickHandler
     [Header("Assigned Student Icon")]
     [SerializeField] private Image _imgAssignedIcon;             // 배치된 학생 아이콘
 
+    [Header("Portrait")]
+    [SerializeField] private PortraitLibrary _portraitLibrary;   // iconSprite null 시 자동 조회용
+
     private Student _assignedStudent;                            // 현재 배치된 학생
     private Sprite _assignedIconSprite;                          // 아이콘 캐싱
 
@@ -70,11 +73,16 @@ public class StudentSlot : MonoBehaviour, IPointerClickHandler
     }
 
     // 학생 배치
+    // iconSprite가 null이면 PortraitLibrary에서 자동 조회
+    // — RestoreSlotAssignments()에서 portrait을 못 가져오는 경우 대응
     public void AssignStudent(Student student, Sprite iconSprite)
     {
         _assignedStudent = student;
-        _assignedIconSprite = iconSprite;
 
+        if (iconSprite == null && student != null && _portraitLibrary != null)
+            iconSprite = _portraitLibrary.Get(student.portraitColor, student.portraitIndex);
+
+        _assignedIconSprite = iconSprite;
         ApplyAssignedIcon(iconSprite);
 
         Debug.Log($"[StudentSlot] {_slotPositionName} 슬롯에 {student.studentName} 배치됨.");

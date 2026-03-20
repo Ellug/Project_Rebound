@@ -1,7 +1,0 @@
-trust_level,level_name,min_level,max_level
-int,string,int,int
-1,어색함,0,30
-2,친근함,31,45
-3,신뢰,46,70
-4,유대,71,92
-5,맹신,93,100

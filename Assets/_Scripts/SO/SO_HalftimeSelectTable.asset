@@ -1,0 +1,105 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc0344cfb776154478bd4997a23333af, type: 3}
+  m_Name: SO_HalftimeSelectTable
+  m_EditorClassIdentifier: Assembly-CSharp::HalftimeSelectTableSO
+  _rows:
+  - id: match_choice_001
+    choiceName: name_match_choice_001
+    target: 1
+    targetNum: 5
+    description: description_match_choice_001
+    effectDescription: effect_description_match_choice_001
+    effect1: event_effect_1_shoot_p10
+    effect2: event_effect_1_speed_p10
+    effect3: event_effect_1_jump_p10
+  - id: match_choice_002
+    choiceName: name_match_choice_002
+    target: 1
+    targetNum: 5
+    description: description_match_choice_002
+    effectDescription: effect_description_match_choice_002
+    effect1: event_effect_2_randomPlayerStat_p10
+    effect2: 
+    effect3: 
+  - id: match_choice_003
+    choiceName: name_match_choice_003
+    target: 3
+    targetNum: 5
+    description: description_match_choice_003
+    effectDescription: effect_description_match_choice_003
+    effect1: event_effect_1_money_m5
+    effect2: event_effect_2_randomplayerStat_p15
+    effect3: 
+  - id: match_choice_004
+    choiceName: name_match_choice_004
+    target: 1
+    targetNum: 5
+    description: description_match_choice_004
+    effectDescription: effect_description_match_choice_004
+    effect1: event_effect_1_shoot_p15
+    effect2: event_effect_1_speed_p15
+    effect3: event_effect_1_jump_p15
+  - id: match_choice_005
+    choiceName: name_match_choice_005
+    target: 1
+    targetNum: 5
+    description: description_match_choice_005
+    effectDescription: effect_description_match_choice_005
+    effect1: event_effect_1_shoot_p5
+    effect2: event_effect_1_speed_p5
+    effect3: event_effect_1_jump_p5
+  - id: match_choice_006
+    choiceName: name_match_choice_006
+    target: 1
+    targetNum: 5
+    description: description_match_choice_006
+    effectDescription: effect_description_match_choice_006
+    effect1: event_effect_1_stamina_p5
+    effect2: event_effect_1_condition_p5
+    effect3: 
+  - id: match_choice_007
+    choiceName: name_match_choice_007
+    target: 1
+    targetNum: 5
+    description: description_match_choice_007
+    effectDescription: effect_description_match_choice_007
+    effect1: event_effect_1_condition_p10
+    effect2: 
+    effect3: 
+  - id: match_choice_008
+    choiceName: name_match_choice_008
+    target: 3
+    targetNum: 5
+    description: description_match_choice_008
+    effectDescription: effect_description_match_choice_008
+    effect1: event_effect_1_money_m10
+    effect2: event_effect_1_stamina_p10
+    effect3: event_effect_1_condition_p10
+  - id: match_choice_009
+    choiceName: name_match_choice_009
+    target: 1
+    targetNum: 5
+    description: description_match_choice_009
+    effectDescription: effect_description_match_choice_009
+    effect1: event_effect_1_condition_m5
+    effect2: event_effect_1_shoot_p5
+    effect3: event_effect_1_speed_p5
+  - id: match_choice_010
+    choiceName: name_match_choice_010
+    target: 1
+    targetNum: 5
+    description: description_match_choice_010
+    effectDescription: effect_description_match_choice_010
+    effect1: event_effect_2_randomPlayerStat_p20
+    effect2: 
+    effect3: 

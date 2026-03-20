@@ -27,16 +27,28 @@ MonoBehaviour:
     text: "\uC810\uD504\uB825"
   - id: text_status_05
     index: 5
-    text: "\uCEE8\uB514\uC158"
+    text: "\uC9C0\uAD6C\uB825"
   - id: text_status_06
     index: 6
-    text: "\uC9C0\uAD6C\uB825"
+    text: "\uCEE8\uB514\uC158"
   - id: text_status_10
     index: 10
-    text: "\uB3C8"
+    text: "\uACE8\uB4DC"
   - id: text_status_11
     index: 11
     text: "\uBA85\uC131\uCE58"
+  - id: text_status_13
+    index: 12
+    text: "\uD6C8\uB828 \uD6A8\uC728"
+  - id: text_status_21
+    index: 21
+    text: "\uD589\uB3D9 \uBD88\uAC00"
+  - id: text_status_22
+    index: 22
+    text: "\uD6C8\uB828 \uBD88\uAC00"
+  - id: text_status_23
+    index: 23
+    text: "\uACBD\uAE30 \uBD88\uAC00"
   - id: text_status_random
     index: 1
     text: "\uBA58\uD0C8"
@@ -51,13 +63,13 @@ MonoBehaviour:
     text: "\uC810\uD504\uB825"
   - id: text_status_random
     index: 5
-    text: "\uCEE8\uB514\uC158"
-  - id: text_status_random
-    index: 6
     text: "\uC9C0\uAD6C\uB825"
   - id: text_status_random
+    index: 6
+    text: "\uCEE8\uB514\uC158"
+  - id: text_status_random
     index: 10
-    text: "\uB3C8"
+    text: "\uACE8\uB4DC"
   - id: text_status_random
     index: 11
     text: "\uBA85\uC131\uCE58"

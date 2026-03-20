@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
 public class UIManager : Singleton<UIManager>
@@ -16,11 +15,15 @@ public class UIManager : Singleton<UIManager>
     [SerializeField] private UIPopup _uiPopupPrefab;
 
     [Header("Popup Defaults")]
-    [SerializeField] private Sprite _defaultPopupPreviewSprite;
+    [SerializeField] private string _defaultPopupPreviewImageId; // 기본 이미지 파일명 ID (Addressable)
 
     [Header("Student Select Prefab")]
     [SerializeField] private StudentSelectPopup _studentSelectPopupPrefab;
 
+    [Header("Quit Poupup Prefab")]
+    [SerializeField]private QuitPopup _quitPopupPrefab;
+
+    private QuitPopup _quitPopupInstance;
     private InputSystem_Actions _input;
 
     protected override void OnSingletonAwake()
@@ -56,6 +59,7 @@ public class UIManager : Singleton<UIManager>
     // 외부에서 캔버스 루트 참조 시 사용 (RecruitmentManager 등)
     public Transform GetCanvasRoot() => _canvasRoot;
 
+    // 백스페이스 키 처리
     private void HandleBackKey()
     {
         if (_messengerStack.Count > 0)
@@ -64,27 +68,60 @@ public class UIManager : Singleton<UIManager>
             return;
         }
 
+        // QuitPopup이 열려있으면 닫기
+        if (_quitPopupInstance != null
+            && _quitPopupInstance.gameObject != null
+            && _quitPopupInstance.gameObject.activeSelf)
+        {
+            _quitPopupInstance.Hide();
+            return;
+        }
+
         if (_uiStack.Count > 0)
         {
-            if (_uiStack.Peek().DisableBackKey) 
+            while (_uiStack.Count > 0 && _uiStack.Peek() == null)
+                _uiStack.Pop();
+
+            if (_uiStack.Count == 0)
+            {
+                ShowQuitPopup();
                 return;
-            // 스택 최상단 팝업의 뒤로가기 로직 수행
+            }
+
+            if (_uiStack.Peek().DisableBackKey)
+                return;
+
+            // 안내팝업(UIPopup)이 열려있으면 QuitPopup 대신 닫기
+            if (_uiStack.Peek() is UIPopup)
+            {
+                CloseTop();
+                return;
+            }
+
             _uiStack.Peek().OnBackKey();
             return;
         }
 
-        ShowPopup(new UIPopupRequest
-        {
-            Type = UIPopupRequest.PanelType.Default,
-            Title = "게임 종료",
-            Message = "게임을 종료하시겠습니까?",
-            ShowCancel = true,
-            OnPrimary = () => Application.Quit(),
-            OnCancel = null,
-            AutoCloseOnPrimary = true,
-            AutoCloseOnCancel = true
-        });
+        ShowQuitPopup();
     }
+
+    // 타이틀에서 게임 종료할 때 확인 팝업
+    public void ShowQuitPopup()
+    {
+        if (_quitPopupPrefab == null) return;
+
+        if (_quitPopupInstance == null || _quitPopupInstance.gameObject == null)
+        {
+            if (!EnsureCanvasRoot()) return;
+            _quitPopupInstance = Instantiate(_quitPopupPrefab, _canvasRoot, false);
+        }
+
+        if (_quitPopupInstance.gameObject.activeSelf) return;
+
+        _quitPopupInstance.transform.SetAsLastSibling();
+        _quitPopupInstance.Show();
+    }
+
 
     // UIPopupRequest 경로
     public UIPopup ShowPopup(UIPopupRequest request)
@@ -121,9 +158,9 @@ public class UIManager : Singleton<UIManager>
     {
         if (request == null) return;
         if (request.Type != UIPopupRequest.PanelType.Default) return;
-        if (request.PreviewSprite != null) return;
+        if (!string.IsNullOrEmpty(request.PreviewImageId)) return;
 
-        request.PreviewSprite = _defaultPopupPreviewSprite;
+        request.PreviewImageId = _defaultPopupPreviewImageId;
     }
 
     // PopupData 경로 (기존 호출 유지용 어댑터)
@@ -303,6 +340,7 @@ public class UIManager : Singleton<UIManager>
     private void HandleSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         RebindCanvasRoot();
+        _quitPopupInstance = null;
     }
 
     private bool EnsureCanvasRoot()
@@ -353,4 +391,5 @@ public class UIManager : Singleton<UIManager>
             _uiStack.Push(ui);
         }
     }
+
 }

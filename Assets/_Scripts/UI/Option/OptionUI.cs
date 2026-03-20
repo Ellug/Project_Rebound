@@ -9,11 +9,21 @@ public class OptionUI : MonoBehaviour
     [SerializeField] private Slider _bgmSlider;
     [SerializeField] private Slider _effectSlider;
 
-    [SerializeField] private Toggle _bgmMuteToggle;
-    [SerializeField] private Toggle _effectMuteToggle;
-
     [SerializeField] private TMP_Text _bgmValueText;
     [SerializeField] private TMP_Text _effectValueText;
+
+    [SerializeField] private Image _bgmIcon;
+    [SerializeField] private Image _effectIcon;
+
+    [SerializeField] private Button _bgmIconButton;
+    [SerializeField] private Button _effectIconButton;
+
+    [SerializeField] private Sprite _muteSprite;
+    [SerializeField] private Sprite _volume1Sprite;
+    [SerializeField] private Sprite _volume2Sprite;
+
+    private bool _bgmMuted;
+    private bool _effectMuted;
 
     void Start()
     {
@@ -24,11 +34,13 @@ public class OptionUI : MonoBehaviour
     public void OptinonPanelOpen()
     {
         InitUI();
+        SoundManager.Instance.PlayEffect(202);
         _optinonPanel.SetActive(true);
     }
 
     public void OptinonPanelClose()
     {
+        SoundManager.Instance.PlayEffect(203);
         _optinonPanel.SetActive(false);
     }
     private void InitUI()
@@ -36,21 +48,18 @@ public class OptionUI : MonoBehaviour
         float bgm = PlayerPrefs.GetFloat("BGM_VOL", 1f);
         float effect = PlayerPrefs.GetFloat("EFFECT_VOL", 1f);
 
-        bool bgmMute = PlayerPrefs.GetInt("BGM_MUTE", 0) == 1;
-        bool effectMute = PlayerPrefs.GetInt("EFFECT_MUTE", 0) == 1;
-
         _bgmSlider.value = bgm;
         _effectSlider.value = effect;
 
-        _bgmMuteToggle.isOn = bgmMute;
-        _effectMuteToggle.isOn = effectMute;
+        _bgmMuted = PlayerPrefs.GetInt("BGM_MUTE", 0) == 1;
+        _effectMuted = PlayerPrefs.GetInt("EFFECT_MUTE", 0) == 1;
 
-        // mute ªÛ≈¬∏È ΩΩ∂Û¿Ã¥ı ∫Ò»∞º∫»≠
-        _bgmSlider.interactable = !bgmMute;
-        _effectSlider.interactable = !effectMute;
+        _bgmSlider.interactable = !_bgmMuted;
+        _effectSlider.interactable = !_effectMuted;
 
         UpdateVolumeText();
-
+        UpdateVolumeIcon(_bgmSlider.value, _bgmIcon, _bgmMuted);
+        UpdateVolumeIcon(_effectSlider.value, _effectIcon, _effectMuted);
     }
 
     private void BindEvents()
@@ -58,55 +67,74 @@ public class OptionUI : MonoBehaviour
         _bgmSlider.onValueChanged.AddListener(OnBgmVolumeChanged);
         _effectSlider.onValueChanged.AddListener(OnEffectVolumeChanged);
 
-        _bgmMuteToggle.onValueChanged.AddListener(OnBgmMuteChanged);
-        _effectMuteToggle.onValueChanged.AddListener(OnEffectMuteChanged);
+        _bgmIconButton.onClick.AddListener(OnBgmIconClicked);
+        _effectIconButton.onClick.AddListener(OnEffectIconClicked);
     }
 
     private void OnBgmVolumeChanged(float value)
     {
         SoundManager.Instance.SetVolume(SoundType.BGM, value);
+
         UpdateVolumeText();
+        UpdateVolumeIcon(value, _bgmIcon, _bgmMuted);
     }
 
     private void OnEffectVolumeChanged(float value)
     {
         SoundManager.Instance.SetVolume(SoundType.EFFECT, value);
+
         UpdateVolumeText();
+        UpdateVolumeIcon(value, _effectIcon, _effectMuted);
     }
 
-    private void OnBgmMuteChanged(bool isMute)
+    private void OnBgmIconClicked()
     {
-        _bgmSlider.interactable = !isMute;
-        SoundManager.Instance.SetBGMMute(isMute);
+        _bgmMuted = !_bgmMuted;
 
-        if (isMute)
-        {
+        SoundManager.Instance.SetBGMMute(_bgmMuted);
+        _bgmSlider.interactable = !_bgmMuted;
+
+        if (_bgmMuted)
             _bgmValueText.text = "0";
-        }
-
         else
-        {
             UpdateVolumeText();
-        }
+
+        UpdateVolumeIcon(_bgmSlider.value, _bgmIcon, _bgmMuted);
     }
 
-    private void OnEffectMuteChanged(bool isMute)
+
+    private void OnEffectIconClicked()
     {
-        _effectSlider.interactable = !isMute;
-        SoundManager.Instance.SetEffectMute(isMute);
+        _effectMuted = !_effectMuted;
 
-        if (isMute)
-        {
+        SoundManager.Instance.SetEffectMute(_effectMuted);
+        _effectSlider.interactable = !_effectMuted;
+
+        if (_effectMuted)
             _effectValueText.text = "0";
-        }
-
         else
-        {
             UpdateVolumeText();
-        }
+
+        UpdateVolumeIcon(_effectSlider.value, _effectIcon, _effectMuted);
     }
 
-    // ∫º∑˝ ≈ÿΩ∫∆Æ æ˜µ•¿Ã∆Æ
+    private void UpdateVolumeIcon(float value, Image icon, bool isMuted)
+    {
+        if (isMuted || value == 0)
+        {
+            icon.sprite = _muteSprite;
+            return;
+        }
+
+        int volume = Mathf.RoundToInt(value * 100f);
+
+        if (volume <= 50)
+            icon.sprite = _volume1Sprite;
+        else
+            icon.sprite = _volume2Sprite;
+    }
+
+    // Î≥ºÎ•® ÌÖçÏä§Ìä∏ ÏóÖÎç∞Ïù¥Ìä∏
     private void UpdateVolumeText()
     {
         int bgm = Mathf.RoundToInt(_bgmSlider.value * 100f);
@@ -115,4 +143,5 @@ public class OptionUI : MonoBehaviour
         _bgmValueText.text = bgm.ToString();
         _effectValueText.text = effect.ToString();
     }
+
 }

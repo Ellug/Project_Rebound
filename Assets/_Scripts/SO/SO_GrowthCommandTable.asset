@@ -47,14 +47,14 @@ MonoBehaviour:
     desc: 
   - index: 1003
     name: "\uC0C1\uB2F4"
-    icon: 
+    icon: TrainingPopup01_img_01
     parentIndex: 0
     btnType: 1
     facilityReq: 4
     facilityLv: 1
     target: 2
     conditionCost: -15
-    mental: 15
+    mental: 75
     shoot: 0
     speed: 0
     jump: 0
@@ -63,14 +63,14 @@ MonoBehaviour:
     desc: "\uD574\uB2F9 \uC120\uC218\uC640 \uC0C1\uB2F4\uC744 \uC9C4\uD589\uD569\uB2C8\uB2E4."
   - index: 1004
     name: "\uD734\uC2DD"
-    icon: 
+    icon: TrainingPopup01_img_02
     parentIndex: 0
     btnType: 1
     facilityReq: 3
     facilityLv: 1
     target: 1
     conditionCost: -10
-    mental: 5
+    mental: 25
     shoot: 0
     speed: 0
     jump: 0
@@ -78,8 +78,8 @@ MonoBehaviour:
     linkedEventId: 
     desc: "\uBAA8\uB4E0 \uC120\uC218\uC758 \uCCB4\uB825\uC744 \uD68C\uBCF5\uD569\uB2C8\uB2E4."
   - index: 1101
-    name: "\uC6E8\uC774\uD2B8 \uD2B8\uB808\uC774\uB2DD"
-    icon: 
+    name: "\uADFC\uB825 \uC6B4\uB3D9"
+    icon: TrainingPopup02_img_01
     parentIndex: 1001
     btnType: 1
     facilityReq: 2
@@ -89,31 +89,31 @@ MonoBehaviour:
     mental: 0
     shoot: 0
     speed: 0
-    jump: 2
-    stamina: 1
+    jump: 20
+    stamina: 10
     linkedEventId: 
     desc: "\uBAA8\uB4E0 \uC120\uC218\uC758 \uC810\uD504\uB825\uACFC \uC9C0\uAD6C\uB825\uC774
       \uC99D\uAC00\uD569\uB2C8\uB2E4."
   - index: 1102
     name: "\uC154\uD2C0\uB7F0"
-    icon: 
+    icon: TrainingPopup02_img_02
     parentIndex: 1001
     btnType: 1
     facilityReq: 2
     facilityLv: 1
     target: 1
     conditionCost: 6
-    mental: -5
+    mental: 0
     shoot: 0
-    speed: 2
+    speed: 20
     jump: 0
-    stamina: 5
+    stamina: 50
     linkedEventId: 
     desc: "\uBAA8\uB4E0 \uC120\uC218\uC758 \uC18D\uB3C4\uC640 \uC9C0\uAD6C\uB825\uC774
       \uB300\uD3ED \uC99D\uAC00\uD569\uB2C8\uB2E4."
   - index: 1103
     name: "\uC804\uC220\uD6C8\uB828"
-    icon: 
+    icon: TrainingPopup02_img_03
     parentIndex: 1001
     btnType: 1
     facilityReq: 2
@@ -121,16 +121,16 @@ MonoBehaviour:
     target: 1
     conditionCost: 2
     mental: 0
-    shoot: 1
+    shoot: 10
     speed: 0
-    jump: 1
+    jump: 10
     stamina: 0
     linkedEventId: 
     desc: "\uBAA8\uB4E0 \uC120\uC218\uC758 \uC288\uD305\uACFC \uC810\uD504\uB825\uC774
       \uC99D\uAC00\uD569\uB2C8\uB2E4."
   - index: 1201
     name: "\uC288\uD305 \uB4DC\uB9B4"
-    icon: 
+    icon: TrainingPopup02_img_04
     parentIndex: 1002
     btnType: 1
     facilityReq: 2
@@ -138,15 +138,15 @@ MonoBehaviour:
     target: 2
     conditionCost: 5
     mental: 0
-    shoot: 4
+    shoot: 40
     speed: 0
     jump: 0
     stamina: 0
     linkedEventId: 
     desc: "\uC288\uD305 \uB2A5\uB825\uCE58\uB97C \uC9D1\uC911 \uC131\uC7A5\uC2DC\uD0B5\uB2C8\uB2E4."
   - index: 1202
-    name: "\uD3EC\uC2A4\uD2B8\uC5C5/\uB9AC\uBC14\uC6B4\uB4DC"
-    icon: 
+    name: "\uC18D\uACF5 \uD6C8\uB828"
+    icon: TrainingPopup02_img_05
     parentIndex: 1002
     btnType: 1
     facilityReq: 2
@@ -154,15 +154,15 @@ MonoBehaviour:
     target: 2
     conditionCost: 5
     mental: 0
-    shoot: 2
+    shoot: 20
     speed: 0
-    jump: 2
+    jump: 20
     stamina: 0
     linkedEventId: 
     desc: "\uC288\uD305\uACFC \uC810\uD504\uB825\uC744 \uC131\uC7A5\uC2DC\uD0B5\uB2C8\uB2E4."
   - index: 1203
     name: "\uB514\uD39C\uC2A4 \uC6CC\uD06C"
-    icon: 
+    icon: TrainingPopup02_img_06
     parentIndex: 1002
     btnType: 1
     facilityReq: 2
@@ -172,13 +172,13 @@ MonoBehaviour:
     mental: 0
     shoot: 0
     speed: 0
-    jump: 4
+    jump: 40
     stamina: 0
     linkedEventId: 
     desc: "\uC810\uD504\uB825 \uB2A5\uB825\uCE58\uB97C \uC9D1\uC911 \uC131\uC7A5\uC2DC\uD0B5\uB2C8\uB2E4."
   - index: 1204
     name: "\uD578\uB4E4\uB9C1/\uAC1C\uC778\uAE30"
-    icon: 
+    icon: TrainingPopup02_img_07
     parentIndex: 1002
     btnType: 1
     facilityReq: 2
@@ -187,8 +187,8 @@ MonoBehaviour:
     conditionCost: 5
     mental: 0
     shoot: 0
-    speed: 2
-    jump: 2
+    speed: 20
+    jump: 20
     stamina: 0
     linkedEventId: 
     desc: "\uC18D\uB3C4\uC640 \uC810\uD504\uB825\uC744 \uC131\uC7A5\uC2DC\uD0B5\uB2C8\uB2E4."

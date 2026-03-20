@@ -12,7 +12,8 @@ public class RecruitmentPopup : UIPopup
     [SerializeField] private ScrollRect _scrollRect;          // 스크롤 영역
 
     [Header("Header")]
-    [SerializeField] private TMP_Text _txtSelectCount;        // 선택 인원 표시 (현재/최대)
+    [SerializeField] private TMP_Text _txtSelectCount;   // 현재 인원
+    [SerializeField] private TMP_Text _txtCapacity;      // 정원
 
     [Header("Close")]
     [SerializeField] private Button _btnRecuitmentClose;                // 닫기 버튼
@@ -321,7 +322,7 @@ public class RecruitmentPopup : UIPopup
             },
             onCancel: () => { },
             subMessage: null,
-            previewSprite: null,
+            previewImageId: null,
             showCancel: true,
             primaryKind: UIPopupRequest.PrimaryButtonKind.Confirm
         );
@@ -340,7 +341,11 @@ public class RecruitmentPopup : UIPopup
     // 상단 선택 인원 표시 갱신
     private void RefreshHeader()
     {
-        _txtSelectCount.text = $"{_ownedCount + _selectedStudents.Count}";
+        if (_txtSelectCount != null)
+            _txtSelectCount.text = $"{_ownedCount + _selectedStudents.Count}";
+
+        if (_txtCapacity != null)
+            _txtCapacity.text = $"{_capacity}";
     }
 
     // 완료 버튼 표시 상태 갱신 (선택이 있을 때만 노출)

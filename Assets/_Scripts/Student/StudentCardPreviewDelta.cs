@@ -4,6 +4,7 @@ using System;
 public struct StudentCardPreviewDelta
 {
     public int condition;
+    public bool treatStatFieldsAsExp;
     public int mental;
     public int shoot;
     public int speed;
