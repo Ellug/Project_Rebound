@@ -215,10 +215,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 3247186471715963041}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 1}
-  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: -19.18, y: -279.48}
-  m_SizeDelta: {x: 980.92, y: 312.36}
+  m_SizeDelta: {x: -99.08, y: 312.36}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3061064909812935175
 CanvasRenderer:
@@ -678,10 +678,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 3247186471715963041}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 1}
-  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: -630.5}
-  m_SizeDelta: {x: 885.02, y: 2.4}
+  m_SizeDelta: {x: -194.98, y: 2.4}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8291099995408156218
 CanvasRenderer:
@@ -1137,10 +1137,10 @@ RectTransform:
   - {fileID: 7046744658235720132}
   m_Father: {fileID: 6363589287631380154}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0.5}
+  m_AnchorMax: {x: 1, y: 0.5}
   m_AnchoredPosition: {x: -41.063065, y: 0.000014782}
-  m_SizeDelta: {x: 728.8704, y: 58.3154}
+  m_SizeDelta: {x: -156.1496, y: 58.3154}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7621967035652544325
 CanvasRenderer:
@@ -2081,7 +2081,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8688547752672783326, guid: 4ab248f23207fe94187a59e756a7d550, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8688547752672783326, guid: 4ab248f23207fe94187a59e756a7d550, type: 3}
       propertyPath: m_AnchorMax.y
@@ -2089,7 +2089,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8688547752672783326, guid: 4ab248f23207fe94187a59e756a7d550, type: 3}
       propertyPath: m_AnchorMin.x
-      value: 0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8688547752672783326, guid: 4ab248f23207fe94187a59e756a7d550, type: 3}
       propertyPath: m_AnchorMin.y
@@ -2097,7 +2097,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8688547752672783326, guid: 4ab248f23207fe94187a59e756a7d550, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 885.02
+      value: -194.98
       objectReference: {fileID: 0}
     - target: {fileID: 8688547752672783326, guid: 4ab248f23207fe94187a59e756a7d550, type: 3}
       propertyPath: m_SizeDelta.y
