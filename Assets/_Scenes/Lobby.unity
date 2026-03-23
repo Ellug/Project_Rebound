@@ -18489,7 +18489,7 @@ MonoBehaviour:
   _txtFame: {fileID: 1535102306}
   _btnLog: {fileID: 571121498}
   _btnSetting: {fileID: 572142185}
-  _settingsPanelPrefab: {fileID: 5066029214980474217, guid: 25b11f13f14146a47a365edff7eef984, type: 3}
+  _settingsPanelPrefab: {fileID: 61520114468423791, guid: 25b11f13f14146a47a365edff7eef984, type: 3}
   _trainingSelectPopup: {fileID: 1345795867}
   _studentManagementPopup: {fileID: 810482937}
   _headCoachPopup: {fileID: 1946009346}
