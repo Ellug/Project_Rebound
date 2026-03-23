@@ -134,9 +134,46 @@ public sealed class RandomPlayTurnSimulator
         if (attackSuccess)
         {
             myWin = myOffense;
+
+            float threePointFieldGoal = 30f;
+
+            if (myOffense)
+            {
+                threePointFieldGoal = 30f;
+
+                switch (myPlayer.positionId)
+                {
+                    case "guard":
+                        threePointFieldGoal += (myPlayer.shoot * 3 + myPlayer.speed * 2 + myPlayer.jump) / 40f;
+                        break;
+
+                    case "forward":
+                        threePointFieldGoal += (myPlayer.shoot + myPlayer.speed * 3 + myPlayer.jump * 2) / 40f;
+                        break;
+
+                    case "center":
+                        threePointFieldGoal += (myPlayer.shoot * 2 + myPlayer.speed + myPlayer.jump * 3) / 40f;
+                        break;
+                }
+            }
+            else
+            {
+                threePointFieldGoal = 35f;
+            }
+
+
+                // 0~100 사이의 값을 랜덤 뽑아서 그 값보다 3점슛 확률이 높으면 3점슛
+            bool isThree = Random.Range(0f, 100f) < threePointFieldGoal;
+            int score = isThree ? 3 : 2;
+
+            if (myWin)
+                session.AddMyScore(score);
+            else
+                session.AddOpponentScore(score);
+
             logs.Add(Normal(myWin
-                ? $"[{myTeam}] 득점에 성공했다."
-                : $"[{opponentTeam}] 상대가 득점했다."));
+                ? $"[{myTeam}] {(isThree ? "3점" : "2점")} 득점에 성공했다."
+                : $"[{opponentTeam}] 상대가 {(isThree ? "3점" : "2점")} 득점했다."));
         }
         else
         {
@@ -149,15 +186,51 @@ public sealed class RandomPlayTurnSimulator
                 : $"{attackerTag} {attackerName}이(가) 리바운드를 놓쳤다."));
 
             myWin = myOffense == reboundSuccess;
-            logs.Add(Normal(myWin
-                ? $"[{myTeam}] 득점에 성공했다."
-                : $"[{opponentTeam}] 상대가 득점했다."));
-        }
 
-        if (myWin)
-            session.AddMyScore(session.ScorePerPlayTurnWin);
-        else
-            session.AddOpponentScore(session.ScorePerPlayTurnWin);
+            float threePointFieldGoal = 30f;
+
+            if (myOffense)
+            {
+                threePointFieldGoal = 30f;
+
+                // 리바운드 성공시 10% 추가
+                if (reboundSuccess)
+                    threePointFieldGoal += 10f;
+
+                switch (myPlayer.positionId)
+                {
+                    case "guard":
+                        threePointFieldGoal += (myPlayer.shoot * 3 + myPlayer.speed * 2 + myPlayer.jump) / 40f;
+                        break;
+
+                    case "forward":
+                        threePointFieldGoal += (myPlayer.shoot + myPlayer.speed * 3 + myPlayer.jump * 2) / 40f;
+                        break;
+
+                    case "center":
+                        threePointFieldGoal += (myPlayer.shoot * 2 + myPlayer.speed + myPlayer.jump * 3) / 40f;
+                        break;
+                }
+            }
+
+            else
+            {
+                threePointFieldGoal = 35f;
+            }
+
+            // 0~100 사이의 값을 랜덤 뽑아서 그 값보다 3점슛 확률이 높으면 3점슛
+            bool isThree = Random.Range(0f, 100f) < threePointFieldGoal;
+            int score = isThree ? 3 : 2;
+
+            if (myWin)
+                session.AddMyScore(score);
+            else
+                session.AddOpponentScore(score);
+
+            logs.Add(Normal(myWin
+                ? $"[{myTeam}] {(isThree ? "3점" : "2점")} 득점에 성공했다."
+                : $"[{opponentTeam}] 상대가 {(isThree ? "3점" : "2점")} 득점했다."));
+        }
 
         // 최종 공방 결과 기준 이미지 결정
         if (myOffense)
