@@ -299,7 +299,7 @@ public class GameManager : Singleton<GameManager>
         if (SaveManager.Instance != null && SaveManager.Instance.ConsumePendingTournamentRestore())
         {
             TournamentSceneBridge.RequestTournament();
-            SceneManager.LoadScene("Tournament");
+            SceneTransitionManager.Instance.LoadScene("Tournament");
             return;
         }
 

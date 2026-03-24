@@ -27,6 +27,9 @@ public class HeadCoachPopup : UIBase
     [Header("닫기 버튼")]
     [SerializeField] private Button _btnClose;
 
+    [Header("애니메이션")]
+    [SerializeField] private PopupAnimator _animator;
+
     private bool _isInited;
     private HeadCoachNodeSlot _selectedSlot;
     private int _selectedNodeId = -1;
@@ -43,7 +46,15 @@ public class HeadCoachPopup : UIBase
 
     public override void Open()
     {
-        base.Open();
+        if (!_isInited) Init();
+
+        // SetActive(true) 전에 Initialize로 위치/스케일 초기화 보장
+        _animator.Initialize();
+
+        gameObject.SetActive(true);
+        PlayPopupOpenSfx();
+
+        _animator.PlayIn();
 
         HeadCoachManager.Instance.OnTreeChanged -= RefreshAll;
         HeadCoachManager.Instance.OnTreeChanged += RefreshAll;
@@ -57,13 +68,17 @@ public class HeadCoachPopup : UIBase
 
     public override void Close()
     {
+        if (!gameObject.activeSelf) return;
+
         HeadCoachManager.Instance.OnTreeChanged -= RefreshAll;
         MoneyManager.Instance.OnReputationChanged -= RefreshFameArea;
 
         ClearSelection();
         _nodeInfoPopup?.Hide();
 
-        base.Close();
+        PlayPopupCloseSfx();
+
+        _animator.PlayOut(() => gameObject.SetActive(false));
     }
 
     private void RefreshAll()
@@ -154,7 +169,6 @@ public class HeadCoachPopup : UIBase
         if (success)
         {
             SoundManager.Instance.PlayEffect(212);
-
             SaveManager.Instance.SaveCurrent();
 
             RestoreHighlight();
@@ -195,8 +209,7 @@ public class HeadCoachPopup : UIBase
 
     private void RestoreHighlight()
     {
-        if (_selectedNodeId < 0)
-            return;
+        if (_selectedNodeId < 0) return;
 
         _selectedSlot?.SetHighlight(false);
         _selectedSlot = FindSlot(_selectedNodeId);

@@ -198,7 +198,7 @@ public class TournamentManager : MonoBehaviour
                 return;
         }
 
-        SceneManager.LoadScene(LobbyScene);
+        SceneTransitionManager.Instance.LoadScene(LobbyScene);
     }
 
     private void RefreshUI()
@@ -414,15 +414,15 @@ public class TournamentManager : MonoBehaviour
         // 친선전 결과 확인 후 즉시 로비로 복귀
         if (_isFriendlyMatchMode)
         {
-            SceneManager.LoadScene(LobbyScene);
-            return;
+            SceneTransitionManager.Instance.LoadScene(LobbyScene);
+            return; 
         }
 
         // 우리 학교가 직전 경기에서 패배한 경우에만 토너먼트 종료
         if (_mySchoolDefeatedThisMatch)
         {
             GameManager.Instance.SetPendingTournamentResult(_mySchoolReachedRoundTeamCount);
-            SceneManager.LoadScene(LobbyScene);
+            SceneTransitionManager.Instance.LoadScene(LobbyScene);
             return;
         }
 

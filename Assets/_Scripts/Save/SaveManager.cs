@@ -62,7 +62,7 @@ public class SaveManager : Singleton<SaveManager>
         // 토너먼트 진행 중이면 로비를 경유해 토너먼트로 이동
         // (UIManager가 로비에 있으므로 로비를 반드시 거쳐야 함)
         _pendingTournamentRestore = IsTournamentInProgress(data);
-        SceneManager.LoadScene(sceneName); // 항상 로비로 먼저 이동
+        LoadSceneSafe(sceneName);
     }
 
     // 로비 씬 초기화 완료 시점(GameManager 등)에서 호출
@@ -288,7 +288,7 @@ public class SaveManager : Singleton<SaveManager>
             MessengerManager.Instance.ClearAll();
         }
 
-        SceneManager.LoadScene("Title");
+        LoadSceneSafe("Title");
     }
 
     public void Clear()
@@ -845,5 +845,14 @@ public class SaveManager : Singleton<SaveManager>
             Debug.LogWarning($"[SaveManager] 슬롯 {i}: 새 게임 영입 미완료 감지 → 삭제");
             SaveSystem.Instance.Delete(i);
         }
+    }
+
+    // SceneTransitionManager가 없으면 기본 씬 전환으로 폴백
+    private static void LoadSceneSafe(string sceneName)
+    {
+        if (SceneTransitionManager.Instance != null)
+            SceneTransitionManager.Instance.LoadScene(sceneName);
+        else
+            SceneManager.LoadScene(sceneName);
     }
 }

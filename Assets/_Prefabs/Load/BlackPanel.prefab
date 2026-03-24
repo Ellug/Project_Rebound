@@ -485,6 +485,7 @@ MonoBehaviour:
   _fileNumText: {fileID: 8886561355746586601}
   _checkButton: {fileID: 4799830324829427760}
   _cancelButton: {fileID: 5657662243109102978}
+  _animator: {fileID: 0}
 --- !u!1 &3866539750606304527
 GameObject:
   m_ObjectHideFlags: 0

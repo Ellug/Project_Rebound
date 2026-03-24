@@ -294,9 +294,9 @@ RectTransform:
   m_Father: {fileID: 155647299354270384}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -19, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8701011647512852544
 CanvasRenderer:
@@ -376,6 +376,7 @@ GameObject:
   - component: {fileID: 6874214867475930565}
   - component: {fileID: 6627535710702061664}
   - component: {fileID: 2075804560883749229}
+  - component: {fileID: 5331843717709321585}
   m_Layer: 5
   m_Name: MessagePanel
   m_TagString: Untagged
@@ -479,8 +480,34 @@ MonoBehaviour:
   _btnInboxClose: {fileID: 6558175982106187534}
   _roomPopupPrefab: {fileID: 4209417971778694554, guid: a52764fe4888dca4aa346f27019804c8, type: 3}
   _btnFriendlyMatch: {fileID: 7446506074305206603}
-  _txtFriendlyMatchCount: {fileID: 0}
-  _friendlyMatchSelectPopup: {fileID: 2202546081727926960, guid: 6f5e864bea8c88f4896019e3c6e7307c, type: 3}
+  _friendlyMatchSelectPopup: {fileID: 0}
+  _animator: {fileID: 5331843717709321585}
+--- !u!114 &5331843717709321585
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3737535520451996905}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54caaa4d7717c834b9150a5328b13bfe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PopupAnimator
+  _type: 1
+  _panelRoot: {fileID: 3247186471715963041}
+  _hiddenOffsetX: 0
+  _hiddenOffsetY: -400
+  _slideInDuration: 0.2
+  _slideOutDuration: 0.28
+  _slideInEase: 9
+  _slideOutEase: 8
+  _popInDuration: 0.18
+  _popOutDuration: 0.14
+  _popInEase: 27
+  _popOutEase: 26
+  _popOvershoot: 2
+  _disableRaycastWhileTween: 1
 --- !u!1 &5675523358803857748
 GameObject:
   m_ObjectHideFlags: 0

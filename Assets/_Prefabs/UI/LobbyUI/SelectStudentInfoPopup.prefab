@@ -34,8 +34,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -24, y: -292}
-  m_SizeDelta: {x: 200, y: 50}
+  m_AnchoredPosition: {x: -40, y: -292}
+  m_SizeDelta: {x: 120, y: 50}
   m_Pivot: {x: 1, y: 1}
 --- !u!222 &8706447137168821546
 CanvasRenderer:
@@ -130,7 +130,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: -268.34814, y: 0, z: 57.617737, w: -33.23816}
+  m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -600,11 +600,11 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 6122635836873046996}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 1, y: 1}
+  m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -188.77014, y: -292}
-  m_SizeDelta: {x: 300, y: 50}
-  m_Pivot: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 24, y: -292}
+  m_SizeDelta: {x: -168, y: 50}
+  m_Pivot: {x: 0, y: 1}
 --- !u!222 &9152139960966399422
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -971,10 +971,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 31548690638046995}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0.000030517578}
-  m_SizeDelta: {x: 408.299, y: 89.1693}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3287301206199517713
 CanvasRenderer:
@@ -1314,10 +1314,10 @@ RectTransform:
   - {fileID: 1226976022260573304}
   m_Father: {fileID: 6122635836873046996}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -38, y: 230}
-  m_SizeDelta: {x: 408.299, y: 89.16931}
+  m_AnchorMin: {x: 0, y: 0.5}
+  m_AnchorMax: {x: 1, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 230}
+  m_SizeDelta: {x: -80, y: 89.16931}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4374219874230449655
 CanvasRenderer:
@@ -1518,6 +1518,7 @@ GameObject:
   - component: {fileID: 6022435161541324770}
   - component: {fileID: 4924742539292066257}
   - component: {fileID: 899374202623956800}
+  - component: {fileID: 1473124053470972917}
   m_Layer: 0
   m_Name: SelectStudentInfoPopup
   m_TagString: Untagged
@@ -1559,7 +1560,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SelectStudentInfoPopup
   _isModal: 1
   _txtTitle: {fileID: 4375469886810579460}
-  _btnInfoClose: {fileID: 0}
+  _btnInfoClose: {fileID: 8807305109758135944}
   _imgPortrait: {fileID: 1758983488372631439}
   _txtName: {fileID: 4919230226482448923}
   _txtGrade: {fileID: 5603988737122401500}
@@ -1569,13 +1570,7 @@ MonoBehaviour:
   _statRowPrefab: {fileID: 6221017286530398922, guid: 66ceca9f093850146b3879ce2727e94d, type: 3}
   _btnSelect: {fileID: 7507922325611362939}
   _txtSelectButton: {fileID: 1419128958090077788}
-  _panelRoot: {fileID: 9088389593430848923}
-  _hiddenOffsetY: -600
-  _disableRaycastWhileTween: 1
-  _slideInDuration: 0.2
-  _slideOutDuration: 0.28
-  _slideInEase: 9
-  _slideOutEase: 8
+  _animator: {fileID: 1473124053470972917}
 --- !u!225 &899374202623956800
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -1588,6 +1583,32 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
+--- !u!114 &1473124053470972917
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8874106030044933249}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54caaa4d7717c834b9150a5328b13bfe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PopupAnimator
+  _type: 0
+  _panelRoot: {fileID: 9088389593430848923}
+  _hiddenOffsetX: 0
+  _hiddenOffsetY: -400
+  _slideInDuration: 0.2
+  _slideOutDuration: 0.28
+  _slideInEase: 9
+  _slideOutEase: 8
+  _popInDuration: 0.18
+  _popOutDuration: 0.14
+  _popInEase: 27
+  _popOutEase: 26
+  _popOvershoot: 2
+  _disableRaycastWhileTween: 1
 --- !u!1 &8883858322980670629
 GameObject:
   m_ObjectHideFlags: 0

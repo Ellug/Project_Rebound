@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using DG.Tweening;
 
 // 노드 선택 시 하단에서 슬라이드업으로 표시되는 상세 정보 팝업
 public class HeadCoachNodeInfoPopup : MonoBehaviour
@@ -47,8 +45,6 @@ public class HeadCoachNodeInfoPopup : MonoBehaviour
     [SerializeField] private Sprite _sprBtnMaxDefense;
     [SerializeField] private Sprite _sprBtnMaxSupport;
 
-
-
     [Header("닫기 버튼")]
     [SerializeField] private Button _btnClose;
 
@@ -58,22 +54,12 @@ public class HeadCoachNodeInfoPopup : MonoBehaviour
     [SerializeField] private Color _descColorUnlocked = Color.white;
     [SerializeField] private Color _blockReasonColor = new(1f, 0.45f, 0f, 1f);
 
-    [Header("슬라이드 애니메이션")]
-    [SerializeField] private RectTransform _panelRoot;
-    [SerializeField] private float _hiddenOffsetY = -400f;
-    [SerializeField] private bool _disableRaycastWhileTween = true;
-    [SerializeField] private float _slideInDuration = 0.2f;
-    [SerializeField] private float _slideOutDuration = 0.28f;
-    [SerializeField] private Ease _slideInEase = Ease.OutCubic;
-    [SerializeField] private Ease _slideOutEase = Ease.InCubic;
+    [Header("애니메이션")]
+    [SerializeField] private PopupAnimator _animator;
 
     private HeadCoachNode _selectedNode;
     private Action<int> _onUnlockRequested;
     private Action _onHide; // 닫힐 때 호출 (하이라이트 해제 등)
-    private Vector2 _shownPos;
-    private Vector2 _hiddenPos;
-    private Tweener _slideTween;
-    private CanvasGroup _canvasGroup;
     private bool _isInited;
 
     void Awake()
@@ -86,18 +72,6 @@ public class HeadCoachNodeInfoPopup : MonoBehaviour
         if (_isInited) return;
         _isInited = true;
 
-        if (_panelRoot == null)
-            _panelRoot = GetComponent<RectTransform>();
-
-        // 에디터에서 잡힌 위치를 표시 위치로, 그 아래를 숨김 위치로 설정
-        _shownPos = _panelRoot.anchoredPosition;
-        _hiddenPos = _shownPos + new Vector2(0f, _hiddenOffsetY);
-        _panelRoot.anchoredPosition = _hiddenPos;
-        gameObject.SetActive(false);
-
-        if (_disableRaycastWhileTween)
-            _canvasGroup = GetComponent<CanvasGroup>() ?? gameObject.AddComponent<CanvasGroup>();
-
         _btnClose?.onClick.AddListener(Hide);
     }
 
@@ -107,20 +81,21 @@ public class HeadCoachNodeInfoPopup : MonoBehaviour
         _selectedNode = node;
         _onUnlockRequested = onUnlockRequested;
         _onHide = onHide;
-        RefreshPopup();
+
+        _animator.Initialize();
 
         gameObject.SetActive(true);
         transform.SetAsLastSibling();
-        StartCoroutine(SlideInRoutine());
+        RefreshPopup();
+        _animator.PlayIn();
     }
 
     public void Hide()
     {
         if (!gameObject.activeSelf) return;
 
-        StartSlide(_hiddenPos, _slideOutDuration, _slideOutEase, () =>
+        _animator.PlayOut(() =>
         {
-            _panelRoot.anchoredPosition = _hiddenPos;
             gameObject.SetActive(false);
             _onHide?.Invoke();
             _selectedNode = null;
@@ -272,44 +247,6 @@ public class HeadCoachNodeInfoPopup : MonoBehaviour
             NodeCategory.Support => _sprBackPanelSupport,
             _ => null,
         };
-    }
-
-    private IEnumerator SlideInRoutine()
-    {
-        // 레이아웃 확정 후 슬라이드 시작
-        yield return null;
-        Canvas.ForceUpdateCanvases();
-        _panelRoot.anchoredPosition = _hiddenPos;
-        StartSlide(_shownPos, _slideInDuration, _slideInEase, null);
-    }
-
-    private void StartSlide(Vector2 targetPos, float duration, Ease ease, Action onComplete)
-    {
-        _slideTween?.Kill();
-        SetRaycastEnabled(false);
-
-        _slideTween = _panelRoot
-            .DOAnchorPos(targetPos, duration)
-            .SetEase(ease)
-            .SetUpdate(true)
-            .OnComplete(() =>
-            {
-                SetRaycastEnabled(true);
-                _slideTween = null;
-                onComplete?.Invoke();
-            });
-    }
-
-    private void SetRaycastEnabled(bool enabled)
-    {
-        if (_canvasGroup == null) return;
-        _canvasGroup.blocksRaycasts = enabled;
-        _canvasGroup.interactable = enabled;
-    }
-
-    private void OnDestroy()
-    {
-        _slideTween?.Kill();
     }
 
     private static void SetActive(GameObject target, bool active)

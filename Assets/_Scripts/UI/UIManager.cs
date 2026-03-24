@@ -26,6 +26,10 @@ public class UIManager : Singleton<UIManager>
     private QuitPopup _quitPopupInstance;
     private InputSystem_Actions _input;
 
+    // 타이틀 씬 등 외부에서 BackKey를 먼저 소비할 때 호출
+    // HandleBackKey()가 같은 프레임에 실행되지 않도록 플래그로 차단
+    private bool _backKeyConsumed;
+
     protected override void OnSingletonAwake()
     {
         // 1. 인풋 클래스 생성
@@ -62,6 +66,12 @@ public class UIManager : Singleton<UIManager>
     // 백스페이스 키 처리
     private void HandleBackKey()
     {
+        if (_backKeyConsumed)
+        {
+            _backKeyConsumed = false;
+            return;
+        }
+
         if (_messengerStack.Count > 0)
         {
             _messengerStack.Peek().Close();
@@ -392,4 +402,8 @@ public class UIManager : Singleton<UIManager>
         }
     }
 
+    public void ConsumeBackKey()
+    {
+        _backKeyConsumed = true;
+    }
 }
