@@ -2,6 +2,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public sealed class VNManager : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public sealed class VNManager : MonoBehaviour
     [SerializeField] private VNUI _vnUI;
     [SerializeField] private int _fallbackStoryId = 10001;
     [SerializeField] private float _inputLockDuration = 0.1f;
+    [SerializeField] private Button _skipButton;
 
     private readonly List<StoryRow> _activeRows = new();
 
@@ -82,6 +84,9 @@ public sealed class VNManager : MonoBehaviour
         _isCompleted = false;
         _inputUnlockTime = Time.unscaledTime + _inputLockDuration;
 
+        if (_skipButton != null)
+            _skipButton.gameObject.SetActive(true);
+
         if (_activeRows.Count == 0)
             FinishScenario();
     }
@@ -136,13 +141,24 @@ public sealed class VNManager : MonoBehaviour
     {
     }
 
+    // 스킵 버튼 클릭 시 현재 VN을 완료 처리하고 복귀 씬으로 이동
+    public void HandleSkipButtonClicked()
+    {
+        FinishScenario();
+    }
+
     // 현재 VN을 종료하고 복귀 씬으로 이동
     private void FinishScenario()
     {
         if (_isCompleted) return;
 
         _isCompleted = true;
-        SceneManager.LoadScene(_returnSceneName);
+
+        // SceneTransitionManager 경유 시 SceneRoot 스케일 전환 연출이 적용됨
+        if (SceneTransitionManager.Instance != null)
+            SceneTransitionManager.Instance.LoadScene(_returnSceneName);
+        else
+            SceneManager.LoadScene(_returnSceneName);
     }
 
     // 다음 줄 진행용 입력(마우스/터치 시작)을 감지
@@ -160,5 +176,3 @@ public sealed class VNManager : MonoBehaviour
         return false;
     }
 }
-
-
