@@ -2329,6 +2329,42 @@ MonoBehaviour:
     choice3Dialogue: 
     choice3Next: 
     suddenEvent: event_000010
+  - iD: diag_100002
+    messageIndex: index_000
+    messageDialogue: text_diag_100002_000
+    next: END
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: event_001003
+  - iD: diag_100003
+    messageIndex: index_000
+    messageDialogue: text_diag_100003_000
+    next: END
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: event_001004
+  - iD: diag_100004
+    messageIndex: index_000
+    messageDialogue: text_diag_100004_000
+    next: END
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: event_001005
   - iD: diag_200001
     messageIndex: index_000
     messageDialogue: text_diag_200001_000

@@ -87,7 +87,7 @@ MonoBehaviour:
     condition: 8
     target: 1
     speaker: '[SYSTEM]'
-    description: "{target1.name} {term} \uC77C \uC785\uC6D0\""
+    description: "{target1.name} {term} \uC77C \uC785\uC6D0"
   - id: text_SuddenEvent_000006
     condition: 8
     target: 2
@@ -109,4 +109,14 @@ MonoBehaviour:
     target: 1
     speaker: '[SYSTEM]'
     description: "{effect1.target_name} {effect1.amount} \uC99D\uAC00, {effect2.target_name}
-      {effect2.amount} \uC99D\uAC00,  {effect3.target_name} {effect3.amount} \uAC10\uC18C"
+      {effect2.amount} \uC99D\uAC00, {effect3.target_name} {effect3.amount} \uAC10\uC18C"
+  - id: text_SuddenEvent_000010
+    condition: 1
+    target: 1
+    speaker: '[SYSTEM]'
+    description: "\uC0C1\uD0DC\uC774\uC0C1 \uD68C\uBCF5"
+  - id: text_SuddenEvent_100001
+    condition: 1
+    target: 1
+    speaker: '[SYSTEM]'
+    description: "{term} \uC77C \uC785\uC6D0(\uD6C8\uB828 \uBC0F \uCD9C\uC804 \uBD88\uAC00)"
