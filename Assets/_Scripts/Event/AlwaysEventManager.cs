@@ -280,41 +280,40 @@ public class AlwaysEventManager : MonoBehaviour
             case "first_final_exam":
             case "second_midterm_exam":
             case "second_final_exam":
-                return "EventPopup_exam_img";
+                return AlwaysEventImageIds.Exam;
 
             // 학교 행사
             case "festival_sports_day":
-                return "EventPopup_tournament_img";
+                return AlwaysEventImageIds.Tournament;
             case "festival_school":
-                return "EventPopup_festival_img";
+                return AlwaysEventImageIds.Festival;
 
             // 방학
             case "vacation_summer":
-                return "EventPopup_summer_img";
+                return AlwaysEventImageIds.Summer;
             case "vacation_winter":
-                return "EventPopup_winter_img";
+                return AlwaysEventImageIds.Winter;
 
             // 공휴일
             case "holiday_children_day":
-                return "EventPopup_children_img";
+                return AlwaysEventImageIds.Children;
             case "holiday_buddha":
-                return "EventPopup_buddha_img";
+                return AlwaysEventImageIds.Buddha;
             case "holiday_memorial_day":
-                return "EventPopup_memorial_img";
+                return AlwaysEventImageIds.Memorial;
             case "holiday_liberation_Day":
             case "holiday_liberation_day":
-                return "EventPopup_liberation_img";
+                return AlwaysEventImageIds.Liberation;
             case "holiday_chuseok":
-                return "EventPopup_chuseok_img";
+                return AlwaysEventImageIds.Chuseok;
             case "holiday_foundation_day":
-                return "EventPopup_national_img";
+                return AlwaysEventImageIds.National;
             case "holiday_hangul_day":
-                return "EventPopup_hangul_img";
+                return AlwaysEventImageIds.Hangul;
             case "holiday_christmas":
-                return "EventPopup_christmas_img";
+                return AlwaysEventImageIds.Christmas;
             case "holiday_independence":
-                return "EventPopup_independence_img";
-
+                return AlwaysEventImageIds.Independence;
             default:
                 return null;
         }

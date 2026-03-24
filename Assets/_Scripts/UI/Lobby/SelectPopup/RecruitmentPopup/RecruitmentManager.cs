@@ -141,7 +141,7 @@ public class RecruitmentManager : MonoBehaviour
             onPrimary: onPrimary,
             onCancel: onCancel,
             subMessage: isFull ? "현재 보유 학생이 정원에 도달해 영입을 진행할 수 없습니다." : null,
-            previewImageId: "EventPopup_recruit_img",
+            previewImageId: AlwaysEventImageIds.Recruit,
             showCancel: canSkip,
             primaryKind: UIPopupRequest.PrimaryButtonKind.Confirm
         );
