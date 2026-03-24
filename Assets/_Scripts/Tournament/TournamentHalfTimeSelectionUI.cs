@@ -110,7 +110,7 @@ public class TournamentHalfTimeSelectionUI : MonoBehaviour
                 }
             },
             subMessage: ResolveText(row.effectDescription),
-            previewImageId: "EventGame00_img_halftime",
+            previewImageId: AlwaysEventImageIds.Halftime,
             showCancel: true,
             primaryKind: UIPopupRequest.PrimaryButtonKind.Confirm
         );
