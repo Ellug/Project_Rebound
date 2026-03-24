@@ -198,7 +198,7 @@ public class TournamentResultUI : MonoBehaviour
         if (SaveManager.Instance != null)
             SaveManager.Instance.MarkCurrentRunForDeleteOnTitle();
 
-        UnityEngine.SceneManagement.SceneManager.LoadScene("Title");
+        SceneTransitionManager.Instance.LoadScene("Title");
     }
 
     // BodyText 길이에 맞춰 RewardRow를 스크롤 하단에 붙인다.

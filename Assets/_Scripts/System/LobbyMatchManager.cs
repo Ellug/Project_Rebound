@@ -172,7 +172,7 @@ public class LobbyMatchManager : MonoBehaviour
         _gameManager.SyncFlowStateFromLobby();
 
         _isLoadingTournament = true;
-        SceneManager.LoadScene(TournamentScene);
+        SceneTransitionManager.Instance.LoadScene(TournamentScene);
     }
 
     // 친선전 예약이 있으면 단일 경기 모드로 토너먼트 씬 진입
@@ -185,7 +185,7 @@ public class LobbyMatchManager : MonoBehaviour
         _gameManager.SyncFlowStateFromLobby();
 
         _isLoadingTournament = true;
-        SceneManager.LoadScene(TournamentScene);
+        SceneTransitionManager.Instance.LoadScene(TournamentScene);
     }
 
     // 토너먼트 결과를 소비하고 결과 UI 출력

@@ -26,6 +26,9 @@ public class StudentSelectPopup : UIPopup
     [Header("View Settings")]
     [SerializeField] private bool _showStatsOnOpen = false;
 
+    [Header("애니메이션")]
+    [SerializeField] private PopupAnimator _selfAnimator; // UIPopup._animator와 중복 방지
+
     // 최대 선택 가능 인원 (0이면 무제한)
     private int _maxSelectCount = 0;
     private StudentCardPreviewDelta _previewDelta;
@@ -69,6 +72,35 @@ public class StudentSelectPopup : UIPopup
 
         // 생성 직후 레이아웃 반영 전이라 코루틴으로 2프레임 보정
         StartCoroutine(ForceScrollTopRoutine());
+    }
+
+    public override void Open()
+    {
+        if (_selfAnimator == null)
+        {
+            Debug.LogWarning($"[{GetType().Name}] _selfAnimator가 연결되지 않았습니다.");
+            OpenBase();
+            return;
+        }
+
+        // SetActive(true) 전에 Initialize로 위치/스케일 초기화 보장
+        _selfAnimator.Initialize();
+
+        OpenBase();
+
+        _selfAnimator.PlayIn();
+    }
+
+    public override void Close()
+    {
+        if (!gameObject.activeSelf) return;
+
+        PlayPopupCloseSfx();
+
+        _selfAnimator.PlayOut(() =>
+        {
+            gameObject.SetActive(false);
+        });
     }
 
     private void BindButtons()
@@ -217,18 +249,22 @@ public class StudentSelectPopup : UIPopup
         CloseAndDestroy();
     }
 
+    // PlayOut 완료 후 정리해야 애니메이션이 끝까지 재생됨
     private void CloseAndDestroy()
     {
         // 이벤트 핸들러 참조 해제(메모리/중복 호출 방지)
         OnSelectionConfirmed = null;
         OnCancelled = null;
 
-        _selectedStudents.Clear();
-        _cardMap.Clear();
-        ClearCards();
+        _selfAnimator.PlayOut(() =>
+        {
+            _selectedStudents.Clear();
+            _cardMap.Clear();
+            ClearCards();
 
-        Close();
-        Destroy(gameObject);
+            gameObject.SetActive(false);
+            Destroy(gameObject);
+        });
     }
 
     private void ClearCards()

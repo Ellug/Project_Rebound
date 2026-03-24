@@ -29,6 +29,9 @@ public class RecruitmentPopup : UIPopup
     [Header("Overlays")]
     [SerializeField] private SelectStudentInfoPopup _studentInfoPopup; // 학생 상세 정보 오버레이
 
+    [Header("애니메이션")]
+    [SerializeField] private PopupAnimator _selfAnimator; // UIPopup._animator와 중복 방지
+
     private readonly List<GameObject> _spawnedCards = new();             // 생성된 카드 인스턴스 목록
     private readonly List<Student> _selectedStudents = new();            // 현재 선택된 학생 목록
     private readonly Dictionary<Student, StudentCard> _cardMap = new();  // 학생 -> 카드 매핑 (상태 갱신용)
@@ -83,8 +86,32 @@ public class RecruitmentPopup : UIPopup
 
     public override void Open()
     {
-        base.Open();
+        if (_selfAnimator == null)
+        {
+            Debug.LogWarning($"[{GetType().Name}] _selfAnimator가 연결되지 않았습니다.");
+            OpenBase();
+            return;
+        }
+
+        // SetActive(true) 전에 Initialize로 위치/스케일 초기화 보장
+        _selfAnimator.Initialize();
+
+        OpenBase();
+
+        _selfAnimator.PlayIn();
         StartCoroutine(ForceScrollTopRoutineSafe()); // 레이아웃 갱신 후 스크롤 최상단 고정
+    }
+
+    public override void Close()
+    {
+        if (!gameObject.activeSelf) return;
+
+        PlayPopupCloseSfx();
+
+        _selfAnimator.PlayOut(() =>
+        {
+            gameObject.SetActive(false);
+        });
     }
 
     // 후보 학생 카드 생성
@@ -188,10 +215,10 @@ public class RecruitmentPopup : UIPopup
         {
             // 미선택 학생 → 선택 버튼 클릭 시 선택 처리 + 팝업 닫기
             _studentInfoPopup.SetSelectAction(() =>
-                {
-                    SelectStudent(student, card);
-                    CloseStudentInfoPopup();
-                },
+            {
+                SelectStudent(student, card);
+                CloseStudentInfoPopup();
+            },
                 buttonText: "학생 선택"
             );
         }
@@ -284,7 +311,6 @@ public class RecruitmentPopup : UIPopup
         // 콜백 전달용 스냅샷 (리스트 변경 방지)
         List<Student> snapshot = new(_selectedStudents);
 
-        // 영입 완료 팝업
         ShowJoinCompletePopup(snapshot);
     }
 
@@ -361,45 +387,38 @@ public class RecruitmentPopup : UIPopup
         bool showButton = hasSelection && meetsMinimum && !rosterFull;
 
         if (_btnComplete != null)
-        {
             _btnComplete.gameObject.SetActive(showButton);
-        }
 
         if (_txtComplete != null && showButton)
         {
-            if (_maxRecruitCount > 0)
-            {
-                _txtComplete.text = $"선택 완료 ({_selectedStudents.Count}/{_maxRecruitCount})";
-            }
-            else
-            {
-                _txtComplete.text = $"선택 완료 ({_selectedStudents.Count}명)";
-            }
+            _txtComplete.text = _maxRecruitCount > 0
+                ? $"선택 완료 ({_selectedStudents.Count}/{_maxRecruitCount})"
+                : $"선택 완료 ({_selectedStudents.Count}명)";
         }
     }
 
     // 팝업 종료 및 정리
+    // PlayOut 완료 후 정리해야 애니메이션이 끝까지 재생됨
     private void CloseAndDestroy()
     {
         // 외부 구독 해제 (재사용/중복 호출 방지)
         OnRecruitmentConfirmed = null;
         OnCancelled = null;
 
-        // 내부 상태 초기화
-        _selectedStudents.Clear();
-        _cardMap.Clear();
-
-        ClearCards();
-
-        if (UIManager.Instance != null)
+        _selfAnimator.PlayOut(() =>
         {
-            UIManager.Instance.Close(this);
-        }
-        else
-        {
-            Close();
-            Destroy(gameObject);
-        }
+            // 내부 상태 초기화
+            _selectedStudents.Clear();
+            _cardMap.Clear();
+            ClearCards();
+
+            gameObject.SetActive(false);
+
+            if (UIManager.Instance != null)
+                UIManager.Instance.Close(this);
+            else
+                Destroy(gameObject);
+        });
     }
 
     // 생성된 카드 제거
@@ -457,10 +476,9 @@ public class RecruitmentPopup : UIPopup
         return (_ownedCount + _selectedStudents.Count) < _capacity;
     }
 
-
     // 강제 영입 모드 설정
     public void SetForceRecruitMode()
     {
-        DisableBackKey = true; 
+        DisableBackKey = true;
     }
 }

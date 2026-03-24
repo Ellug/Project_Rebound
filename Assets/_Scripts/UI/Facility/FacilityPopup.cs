@@ -37,6 +37,10 @@ public class FacilityPopup : UIBase
     
     // 중복 방지
     private bool _inited;
+
+    [Header("애니메이션")]
+    [SerializeField] private PopupAnimator _animator;
+
     public override void Init()
     {
         if (_inited)
@@ -50,6 +54,32 @@ public class FacilityPopup : UIBase
         BindButtons();
         RefreshAll();
     }
+
+    public override void Open()
+    {
+        if (!_inited)
+        {
+            Init();
+        }
+
+        // SetActive(true) 전에 Initialize로 위치/스케일 초기화 보장
+        _animator.Initialize();
+
+        gameObject.SetActive(true);
+        PlayPopupOpenSfx();
+
+        _animator.PlayIn();
+    }
+
+    public override void Close()
+    {
+        if (!gameObject.activeSelf) return;
+
+        PlayPopupCloseSfx();
+
+        _animator.PlayOut(() => gameObject.SetActive(false));
+    }
+
     // 업그레이드 클릭 시 업그레이드
     private void BindButtons()
     {
