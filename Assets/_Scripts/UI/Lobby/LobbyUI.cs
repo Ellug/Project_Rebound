@@ -259,16 +259,26 @@ public class LobbyUI : UIBase
 
     private void OnClickTraining()
     {
+        if (IsAnyLobbyPopupAnimating())
+            return;
+
         if (_trainingSelectPopup == null)
             return;
 
         bool wasActive = _trainingSelectPopup.gameObject.activeSelf;
 
-        CloseAllLobbyPopups();
-
         // 이미 열려있던 경우 → 토글로 닫기만 하고 종료
         if (wasActive)
         {
+            CloseAllLobbyPopups();
+            RefreshBottomNavTabSprites();
+            return;
+        }
+
+        // 다른 로비 팝업이 열려있으면 이번 클릭에서는 닫기만 처리
+        if (IsOtherLobbyPopupOpen(_trainingSelectPopup))
+        {
+            CloseAllLobbyPopups();
             RefreshBottomNavTabSprites();
             return;
         }
@@ -300,6 +310,9 @@ public class LobbyUI : UIBase
 
     private void OnClickStudent()
     {
+        if (IsAnyLobbyPopupAnimating())
+            return;
+
         if (_studentManagementPopup == null)
         {
             Debug.LogWarning("[LobbyUI] _studentManagementPopup이 null입니다.");
@@ -308,11 +321,18 @@ public class LobbyUI : UIBase
 
         bool wasActive = _studentManagementPopup.gameObject.activeSelf;
 
-        CloseAllLobbyPopups();
-
         // 이미 열려있던 경우 → 토글로 닫기만 하고 종료
         if (wasActive)
         {
+            CloseAllLobbyPopups();
+            RefreshBottomNavTabSprites();
+            return;
+        }
+
+        // 다른 로비 팝업이 열려있으면 이번 클릭에서는 닫기만 처리
+        if (IsOtherLobbyPopupOpen(_studentManagementPopup))
+        {
+            CloseAllLobbyPopups();
             RefreshBottomNavTabSprites();
             return;
         }
@@ -325,16 +345,26 @@ public class LobbyUI : UIBase
 
     private void OnClickCoach()
     {
+        if (IsAnyLobbyPopupAnimating())
+            return;
+
         if (_headCoachPopup == null)
             return;
 
         bool wasActive = _headCoachPopup.gameObject.activeSelf;
 
-        CloseAllLobbyPopups();
-
         // 이미 열려있던 경우 → 토글로 닫기만 하고 종료
         if (wasActive)
         {
+            CloseAllLobbyPopups();
+            RefreshBottomNavTabSprites();
+            return;
+        }
+
+        // 다른 로비 팝업이 열려있으면 이번 클릭에서는 닫기만 처리
+        if (IsOtherLobbyPopupOpen(_headCoachPopup))
+        {
+            CloseAllLobbyPopups();
             RefreshBottomNavTabSprites();
             return;
         }
@@ -344,18 +374,29 @@ public class LobbyUI : UIBase
         _headCoachPopup.Open();
         RefreshBottomNavTabSprites();
     }
+
     private void OnClickFacility()
     {
+        if (IsAnyLobbyPopupAnimating())
+            return;
+
         if (_facilityPopup == null)
             return;
 
         bool wasActive = _facilityPopup.gameObject.activeSelf;
 
-        CloseAllLobbyPopups();
-
         // 이미 열려있던 경우 → 토글로 닫기만 하고 종료
         if (wasActive)
         {
+            CloseAllLobbyPopups();
+            RefreshBottomNavTabSprites();
+            return;
+        }
+
+        // 다른 로비 팝업이 열려있으면 이번 클릭에서는 닫기만 처리
+        if (IsOtherLobbyPopupOpen(_facilityPopup))
+        {
+            CloseAllLobbyPopups();
             RefreshBottomNavTabSprites();
             return;
         }
@@ -473,21 +514,35 @@ public class LobbyUI : UIBase
     // 일반 학생 관리 팝업 오픈 (GameManager 자동 배치 복원 후 호출 등)
     public void OpenStudentManagementPopup()
     {
+        if (IsAnyLobbyPopupAnimating())
+            return;
+
         if (_studentManagementPopup == null) return;
 
         bool wasActive = _studentManagementPopup.gameObject.activeSelf;
 
-        CloseAllLobbyPopups();
-
         // 이미 열려있던 경우 → 토글로 닫기만 하고 종료
         if (wasActive)
+        {
+            CloseAllLobbyPopups();
+            RefreshBottomNavTabSprites();
             return;
+        }
+
+        // 다른 로비 팝업이 열려있으면 이번 호출에서는 닫기만 처리
+        if (IsOtherLobbyPopupOpen(_studentManagementPopup))
+        {
+            CloseAllLobbyPopups();
+            RefreshBottomNavTabSprites();
+            return;
+        }
 
         _studentManagementPopup.Init();
         //_studentManagementPopup.transform.SetAsLastSibling();
         _studentManagementPopup.Open();
         RefreshBottomNavTabSprites();
     }
+
 
     // 토너먼트 진입 흐름용 — 학생 관리 팝업을 열고 토너먼트 시작 콜백 주입
     public void OpenStudentManagementPopupForTournament(Action onTournamentStart)
@@ -626,5 +681,33 @@ public class LobbyUI : UIBase
         }
 
         base.OnDestroy();
+    }
+
+    // 특정 팝업을 제외한 다른 로비 팝업이 열려있는지 확인
+    private bool IsOtherLobbyPopupOpen(UIBase currentPopup)
+    {
+        return (_trainingSelectPopup != null && _trainingSelectPopup != currentPopup && _trainingSelectPopup.gameObject.activeSelf)
+            || (_studentManagementPopup != null && _studentManagementPopup != currentPopup && _studentManagementPopup.gameObject.activeSelf)
+            || (_headCoachPopup != null && _headCoachPopup != currentPopup && _headCoachPopup.gameObject.activeSelf)
+            || (_facilityPopup != null && _facilityPopup != currentPopup && _facilityPopup.gameObject.activeSelf);
+    }
+
+    // 특정 팝업이 애니메이션 중인지 확인
+    private static bool IsPopupAnimating(UIBase popup)
+    {
+        if (popup == null)
+            return false;
+
+        PopupAnimator animator = popup.GetComponent<PopupAnimator>();
+        return animator != null && animator.IsAnimating;
+    }
+
+    // 현재 로비 팝업들 중 애니메이션이 진행 중인 팝업이 있는지 확인 (팝업이 완전히 열린 후 다른 팝업이 열리는 것을 방지)
+    private bool IsAnyLobbyPopupAnimating()
+    {
+        return IsPopupAnimating(_trainingSelectPopup)
+            || IsPopupAnimating(_studentManagementPopup)
+            || IsPopupAnimating(_headCoachPopup)
+            || IsPopupAnimating(_facilityPopup);
     }
 }
