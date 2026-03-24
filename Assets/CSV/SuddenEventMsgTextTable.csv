@@ -213,4 +213,11 @@ text_diag_000010_012,player,기다려라. 내가 간다.
 text_diag_000010_013,student,(감동)
 text_diag_100000_000,student,"환영합니다, 코치님. 앞으로도 잘 부탁 드립니다."
 text_diag_100001_000,student,{target1.grade} {target1.name} 학생이 금일 지각하였습니다. 계도 부탁 드립니다.
-text_diag_200001_000,student,한울고등학교 농구부 3기 주장 김인엽 입니다.\n기 공지된 바와 같이 금일 오후 농구부 부실에서 후배들을 위해 간식을 제공하고자 합니다.\n부담없이 많이 참석하여 주시기 바랍니다.
+text_diag_100002_000,student,소속 학생의 병결 신고 내역을 다음과 같이 안내드립니다.\n\n대상: 농구부 {target1.grade} {target1.name} 학생\n사유: 인플루엔자
+text_diag_100003_000,student,소속 학생의 병결 신고 내역을 다음과 같이 안내드립니다.\n\n대상: 농구부 {target1.grade} {target1.name} 학생\n사유: 급성 장염
+text_diag_100004_000,student,소속 학생의 병결 신고 내역을 다음과 같이 안내드립니다.\n\n대상: 농구부 {target1.grade} {target1.name} 학생\n사유: 우울증
+text_diag_110001_000,student,소속 학생의 치료 신고 내역을 다음과 같이 안내드립니다.\n\n대상: 농구부 {target1.grade} {target1.name} 학생\n사유: 타박상
+text_diag_110002_000,student,소속 학생의 치료 신고 내역을 다음과 같이 안내드립니다.\n\n대상: 농구부 {target1.grade} {target1.name} 학생\n사유: 운동 중 발목 염좌
+text_diag_110003_000,student,소속 학생의 치료 신고 내역을 다음과 같이 안내드립니다.\n\n대상: 농구부 {target1.grade} {target1.name} 학생\n사유: 손가락 인대 부상
+text_diag_110004_000,student,소속 학생의 치료 신고 내역을 다음과 같이 안내드립니다.\n\n대상: 농구부 {target1.grade} {target1.name} 학생\n사유: 십자인대 부상
+text_diag_200001_000,student,오늘 오후 부실에서 간식을 제공하니 후배들은 부담 없이 참석 바랍니다.\n- 한울고등학교 3기 농구부 주장 김 바스켓볼
