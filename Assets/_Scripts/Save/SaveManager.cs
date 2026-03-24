@@ -139,6 +139,9 @@ public class SaveManager : Singleton<SaveManager>
             return false;
         }
 
+        // 명성치를 변수로 고정 (이후 SaveUserData에서 덮어쓰기 방지)
+        int inheritedReputation = CurrentUserData != null ? CurrentUserData.reputation : 0;
+
         CurrentData = new PlayData
         {
             slotIndex = slotIndex,
@@ -146,7 +149,7 @@ public class SaveManager : Singleton<SaveManager>
             playTime = "게임 시작",
             saveTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm"),
             gold = 0,
-            reputation = CurrentUserData != null ? CurrentUserData.reputation : 0,
+            reputation = inheritedReputation,
             unlockedNodeIds = CurrentUserData != null
                 ? new List<int>(CurrentUserData.unlockedNodeIds)
                 : new List<int>(),
@@ -158,17 +161,20 @@ public class SaveManager : Singleton<SaveManager>
             messenger = new SavedMessengerData(),
         };
 
-        // 새로 만든 슬롯을 현재 런타임 슬롯으로 고정
         _currentRuntimeSlotIndex = slotIndex;
         CurrentData.slotIndex = slotIndex;
 
-        // 새 게임 생성 시 런타임 시설 상태도 반드시 기본값으로 초기화
+        // 이전 슬롯 값이 MoneyManager에 잔존하지 않도록 새 게임 기준값으로 초기화
+        if (MoneyManager.Instance != null)
+        {
+            MoneyManager.Instance.ApplySaveData(0, inheritedReputation);
+        }
+
         if (FacilitySystem.Instance != null)
         {
             FacilitySystem.Instance.ResetLevelsToDefault();
         }
 
-        // 새 게임 생성 시 메신저 상태도 반드시 초기화
         if (MessengerManager.Instance != null)
         {
             MessengerManager.Instance.ClearAll();
@@ -176,10 +182,10 @@ public class SaveManager : Singleton<SaveManager>
 
         IsPendingNewGame = true;
 
+        // MoneyManager 초기화 이후에 SaveUserData 호출
         SaveUserData();
         return true;
     }
-
     public void SaveCurrent()
     {
         if (CurrentData == null)
