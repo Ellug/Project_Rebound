@@ -301,6 +301,9 @@ public class StartManager : MonoBehaviour
         _statusText.text = "Ready";
 
         yield return _waitOneSecond;
+
+        // Start → Title 씬 전환은 SceneTransitionManager 없이 직접 처리
+        // (SceneTransitionManager는 Title 씬부터 애니메이션 담당)
         SceneManager.LoadScene("Title");
     }
 
@@ -570,9 +573,9 @@ public class StartManager : MonoBehaviour
     // 카테고리 카운트 증가
     private static void IncrementCategoryCount(string category, ref int imageCount, ref int audioCount, ref int libraryCount)
     {
-        if (category == "image")        imageCount++;
-        else if (category == "audio")   audioCount++;
-        else                            libraryCount++;
+        if (category == "image") imageCount++;
+        else if (category == "audio") audioCount++;
+        else libraryCount++;
     }
 
     // 다운로드 상태의 바이트 값을 예상 용량 범위로 보정

@@ -25,6 +25,9 @@ public class GraduationStudentsPopup : UIBase
     [SerializeField] private Button _btnConfirm;
     [SerializeField] private TMP_Text _txtConfirm;
 
+    [Header("애니메이션")]
+    [SerializeField] private PopupAnimator _animator;
+
     // 생성된 카드 캐싱
     private readonly List<GameObject> _spawnedCards = new();
 
@@ -70,17 +73,30 @@ public class GraduationStudentsPopup : UIBase
 
     public override void Open()
     {
-        base.Open();
+        // SetActive(true) 전에 Initialize로 위치/스케일 초기화 보장
+        _animator.Initialize();
+
+        gameObject.SetActive(true);
+        PlayPopupOpenSfx();
+        transform.SetAsLastSibling();
+
+        _animator.PlayIn();
         StartCoroutine(ForceScrollTopRoutineSafe()); // 스크롤 최상단 고정
     }
 
     public override void Close()
     {
-        base.Close();
+        if (!gameObject.activeSelf) return;
 
-        ClearCards();
-        _graduates.Clear();
-        _onConfirmed = null;
+        PlayPopupCloseSfx();
+
+        _animator.PlayOut(() =>
+        {
+            gameObject.SetActive(false);
+            ClearCards();
+            _graduates.Clear();
+            _onConfirmed = null;
+        });
     }
 
     // 확인 버튼 클릭

@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
@@ -8,14 +8,12 @@ public class CheckPanel : MonoBehaviour
     [SerializeField] private Button _checkButton;
     [SerializeField] private Button _cancelButton;
 
+    [Header("애니메이션")]
+    [SerializeField] private PopupAnimator _animator;
+
     private int _slotIndex;
     private LoadUI _parent;
     private bool _bound;
-
-    //void Awake()
-    //{
-    //    gameObject.SetActive(false);
-    //}
 
     public void Open(int slotIndex, string playTime, LoadUI parent)
     {
@@ -27,7 +25,18 @@ public class CheckPanel : MonoBehaviour
             _fileNumText.text = $"FILE {slotIndex}: {playTime}";
         }
 
+        // Initialize는 SetActive(true) 전에 호출해야 anchoredPosition을 올바르게 읽음
+        if (_animator != null)
+            _animator.Initialize();
+
+        gameObject.SetActive(true);
+
         Bind();
+
+        if (_animator == null)
+            return;
+
+        _animator.PlayIn();
     }
 
     private void Bind()
@@ -68,9 +77,15 @@ public class CheckPanel : MonoBehaviour
     private void Close()
     {
         Unbind();
-        gameObject.SetActive(false);
-    }
 
+        if (_animator == null)
+        {
+            gameObject.SetActive(false);
+            return;
+        }
+
+        _animator.PlayOut(() => gameObject.SetActive(false));
+    }
 
     private void OnConfirm()
     {

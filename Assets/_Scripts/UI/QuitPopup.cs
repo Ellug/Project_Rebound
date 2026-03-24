@@ -6,6 +6,9 @@ public class QuitPopup : MonoBehaviour
     [SerializeField] private Button _confirmButton;
     [SerializeField] private Button _cancelButton;
 
+    [Header("애니메이션")]
+    [SerializeField] private PopupAnimator _animator;
+
     private void Awake()
     {
         _confirmButton.onClick.AddListener(OnConfirm);
@@ -14,12 +17,26 @@ public class QuitPopup : MonoBehaviour
 
     public void Show()
     {
+        if (_animator == null)
+        {
+            gameObject.SetActive(true);
+            return;
+        }
+
+        _animator.Initialize();
         gameObject.SetActive(true);
+        _animator.PlayIn();
     }
 
     public void Hide()
     {
-        gameObject.SetActive(false);
+        if (_animator == null)
+        {
+            gameObject.SetActive(false);
+            return;
+        }
+
+        _animator.PlayOut(() => gameObject.SetActive(false));
     }
 
     private void OnConfirm()

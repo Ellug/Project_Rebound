@@ -32,6 +32,9 @@ public class TrainingSelectPopup : UIPopup
     [SerializeField] private Button _btnBack;
     [SerializeField] private Button _btnTrainingClose;
 
+    [Header("애니메이션")]
+    [SerializeField] private PopupAnimator _selfAnimator; // UIPopup._animator와 중복 방지
+
     private TrainingFlowController _trainingFlow;
 
     private int _currentPageIndex = 0;
@@ -67,7 +70,41 @@ public class TrainingSelectPopup : UIPopup
     public override void Open()
     {
         if (!TryBuildPageDataFromCache()) return;
-        base.Open();
+
+        if (_selfAnimator == null)
+        {
+            Debug.LogWarning("[TrainingSelectPopup] _selfAnimator가 연결되지 않았습니다. 인스펙터에서 PopupAnimator를 연결해주세요.");
+            OpenBase();
+            return;
+        }
+
+        // SetActive(true) 전에 Initialize로 위치/스케일 초기화 보장
+        _selfAnimator.Initialize();
+
+        OpenBase();
+
+        _selfAnimator.PlayIn();
+    }
+
+    public override void Close()
+    {
+        if (!gameObject.activeSelf) return;
+
+        PlayPopupCloseSfx();
+
+        if (_selfAnimator == null)
+        {
+            gameObject.SetActive(false);
+            return;
+        }
+
+        _selfAnimator.PlayOut(() => gameObject.SetActive(false));
+    }
+
+    // 훈련 플로우 진입 시 전용 — 로딩 UI로 즉시 전환하므로 애니메이션 없이 꺼짐
+    private void CloseImmediate()
+    {
+        gameObject.SetActive(false);
     }
 
     private bool TryBuildPageDataFromCache()
@@ -351,7 +388,9 @@ public class TrainingSelectPopup : UIPopup
 
         ClearPageHistory();
         ClearButtons();
-        Close();
+
+        // 훈련 로딩 UI로 즉시 전환하므로 애니메이션 없이 꺼짐
+        CloseImmediate();
 
         string key = data.trainingKey;
         string name = data.trainingName;
@@ -442,9 +481,9 @@ public class TrainingSelectPopup : UIPopup
             // 슈팅 드릴 (index: 1201)
             if (trainingKey == "cmd_1201")
             {
-                nodeConditionBonus += 
+                nodeConditionBonus +=
                     HeadCoachManager.Instance.GetStatBonusValue("Condition_Drain_ShootingDrill") * 0.01f;
-                
+
                 int previewCost =
                     Mathf.Max(
                         0, Mathf.FloorToInt(
@@ -461,7 +500,7 @@ public class TrainingSelectPopup : UIPopup
             {
                 nodeConditionBonus +=
                     HeadCoachManager.Instance.GetStatBonusValue("Condition_Drain_DefenceWork") * 0.01f;
-                
+
                 int previewCost =
                     Mathf.Max(
                         0, Mathf.FloorToInt(
@@ -479,7 +518,7 @@ public class TrainingSelectPopup : UIPopup
                 nodeConditionBonus +=
                     HeadCoachManager.Instance.GetStatBonusValue("Condition_Drain_TeamPractice") * 0.01f;
 
-                int previewCost = 
+                int previewCost =
                     Mathf.Max(
                         0, Mathf.FloorToInt(
                             data.conditionDelta *

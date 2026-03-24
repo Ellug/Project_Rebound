@@ -10,15 +10,13 @@ public class DeletePanel : MonoBehaviour
     [SerializeField] private Button _cancelButton;
     [SerializeField] private float _confirmEnableDelay = 3f;
 
+    [Header("애니메이션")]
+    [SerializeField] private PopupAnimator _animator;
+
     private int _slotIndex;
     private LoadUI _parent;
     private bool _bound;
     private Coroutine _enableRoutine;
-
-    //void Awake()
-    //{
-    //    gameObject.SetActive(false);
-    //}
 
     void OnEnable()
     {
@@ -37,12 +35,21 @@ public class DeletePanel : MonoBehaviour
         _parent = parent;
 
         if (_fileNumText != null)
-        {
             _fileNumText.text = $"FILE {slotIndex}: {playTime}";
-        }
+
+        // Initialize는 SetActive(true) 전에 호출해야 anchoredPosition을 올바르게 읽음
+        // SetActive(true) 시점에 OnEnable이 실행되므로 그 전에 초기화 완료
+        if (_animator != null)
+            _animator.Initialize();
 
         gameObject.SetActive(true);
+
         Bind();
+
+        if (_animator == null)
+            return;
+
+        _animator.PlayIn();
     }
 
     private void Bind()
@@ -77,6 +84,7 @@ public class DeletePanel : MonoBehaviour
             _cancelButton.onClick.RemoveListener(OnCancel);
         }
 
+
         _bound = false;
     }
 
@@ -89,7 +97,14 @@ public class DeletePanel : MonoBehaviour
         }
 
         Unbind();
-        gameObject.SetActive(false);
+
+        if (_animator == null)
+        {
+            gameObject.SetActive(false);
+            return;
+        }
+
+        _animator.PlayOut(() => gameObject.SetActive(false));
     }
 
     private void OnConfirmDelete()

@@ -1453,6 +1453,7 @@ GameObject:
   - component: {fileID: 2983799874633799763}
   - component: {fileID: 7036290290518573310}
   - component: {fileID: 61520114468423791}
+  - component: {fileID: 2640585235803832921}
   m_Layer: 5
   m_Name: OptinonPanel
   m_TagString: Untagged
@@ -1542,6 +1543,7 @@ MonoBehaviour:
   _muteSprite: {fileID: 21300000, guid: 8ed2f9816ab84ff4ca92ada20a644c2d, type: 3}
   _volume1Sprite: {fileID: 21300000, guid: 4aac4675ad54afa4cb24e02df8759fe2, type: 3}
   _volume2Sprite: {fileID: 21300000, guid: 2ed3becdca207c44b89e4fbe81e9c64f, type: 3}
+  _animator: {fileID: 2640585235803832921}
 --- !u!114 &61520114468423791
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1558,6 +1560,34 @@ MonoBehaviour:
   _btnClose: {fileID: 5422257203595376043}
   _btnRestartTutorial: {fileID: 2787331884873345710}
   _btnGoTitle: {fileID: 4052139181094528456}
+  _animator: {fileID: 2640585235803832921}
+  _optionUI: {fileID: 7036290290518573310}
+--- !u!114 &2640585235803832921
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4753218689491637132}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54caaa4d7717c834b9150a5328b13bfe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PopupAnimator
+  _type: 1
+  _panelRoot: {fileID: 5369192824165879788}
+  _hiddenOffsetX: 0
+  _hiddenOffsetY: -400
+  _slideInDuration: 0.2
+  _slideOutDuration: 0.28
+  _slideInEase: 9
+  _slideOutEase: 8
+  _popInDuration: 0.18
+  _popOutDuration: 0.14
+  _popInEase: 27
+  _popOutEase: 26
+  _popOvershoot: 2
+  _disableRaycastWhileTween: 1
 --- !u!1 &5569271876635383836
 GameObject:
   m_ObjectHideFlags: 0

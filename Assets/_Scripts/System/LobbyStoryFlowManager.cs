@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using UnityEngine.SceneManagement;
 
 // 로비 스토리(10002/10003) 트리거 흐름을 담당
@@ -68,7 +68,7 @@ public class LobbyStoryFlowManager
             return false;
 
         VNBridge.RequestStory(PreWinterStoryId, LobbyScene);
-        SceneManager.LoadScene(VNBridge.VNSceneName);
+        SceneTransitionManager.Instance.LoadScene(VNBridge.VNSceneName);
         return true;
     }
 
@@ -86,7 +86,7 @@ public class LobbyStoryFlowManager
             return false;
 
         VNBridge.RequestStory(WinterChampionStoryId, LobbyScene);
-        SceneManager.LoadScene(VNBridge.VNSceneName);
+        SceneTransitionManager.Instance.LoadScene(VNBridge.VNSceneName);
         return true;
     }
 

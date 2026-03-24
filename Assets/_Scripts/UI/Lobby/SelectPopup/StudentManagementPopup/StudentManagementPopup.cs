@@ -43,6 +43,9 @@ public class StudentManagementPopup : UIBase
     [Header("토너먼트 시작")]
     [SerializeField] private Button _btnPlacementComplete;              // 배치 완료 버튼
 
+    [Header("애니메이션")]
+    [SerializeField] private PopupAnimator _animator;
+
     private readonly List<GameObject> _spawnedCards = new();            // 생성된 카드
     private readonly Dictionary<Student, StudentCard> _cardMap = new(); // 학생-카드 매핑
 
@@ -87,23 +90,36 @@ public class StudentManagementPopup : UIBase
 
     public override void Open()
     {
-        base.Open();
-
         if (!_isInited)
             Init();
+
+        // SetActive(true) 전에 Initialize로 위치/스케일 초기화 보장
+        _animator.Initialize();
+
+        gameObject.SetActive(true);
+        PlayPopupOpenSfx();
+
+        _animator.PlayIn();
 
         RefreshAllViews();
     }
 
     public override void Close()
     {
-        base.Close();
+        if (!gameObject.activeSelf) return;
 
-        // 닫힐 때 토너먼트 모드 초기화 (일반 열기 시 버튼 잔존 방지)
-        _onTournamentStart = null;
-        _isTournamentMode = false;
-        RefreshTournamentStartButton();
-        RefreshCloseButton();
+        PlayPopupCloseSfx();
+
+        _animator.PlayOut(() =>
+        {
+            gameObject.SetActive(false);
+
+            // 닫힐 때 토너먼트 모드 초기화 (일반 열기 시 버튼 잔존 방지)
+            _onTournamentStart = null;
+            _isTournamentMode = false;
+            RefreshTournamentStartButton();
+            RefreshCloseButton();
+        });
     }
 
     protected override void OnDestroy()
