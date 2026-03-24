@@ -187,7 +187,7 @@ text_diag_000009_013,choice,0423
 text_diag_000009_014,student,아니 감독님;;
 text_diag_000009_015,student,안됐다니까요?
 text_diag_000009_016,player,다시 해봐.
-text_diag_000009_017,player,....어?
+text_diag_000009_017,student,....어?
 text_diag_000009_018,player,'어?'가 거기서 왜 나오냐?
 text_diag_000009_019,player,자물쇠 부서진건 아니지?
 text_diag_000009_020,student,열렸어요.
@@ -213,4 +213,4 @@ text_diag_000010_012,player,기다려라. 내가 간다.
 text_diag_000010_013,student,(감동)
 text_diag_100000_000,student,"환영합니다, 코치님. 앞으로도 잘 부탁 드립니다."
 text_diag_100001_000,student,{target1.grade} {target1.name} 학생이 금일 지각하였습니다. 계도 부탁 드립니다.
-text_diag_200001_000,student,학생들에게 간식을 사주었다.
+text_diag_200001_000,student,한울고등학교 농구부 3기 주장 김인엽 입니다.\n기 공지된 바와 같이 금일 오후 농구부 부실에서 후배들을 위해 간식을 제공하고자 합니다.\n부담없이 많이 참석하여 주시기 바랍니다.

@@ -182,8 +182,7 @@ public class DialogueRunner : Singleton<DialogueRunner>
             {
                 if (MessengerManager.Instance != null)
                 {
-                    var room = MessengerManager.Instance.GetRoom(roomId);
-                    if (room != null) room.HasUnread = false;
+                    MessengerManager.Instance.MarkAsRead(roomId);
                 }
 
                 choiceMsg.SelectedChoiceIndex = 0; // 1번 선택지로 강제 세팅 
@@ -211,8 +210,7 @@ public class DialogueRunner : Singleton<DialogueRunner>
 
             if (isSkipping && MessengerManager.Instance != null)
             {
-                var room = MessengerManager.Instance.GetRoom(roomId);
-                if (room != null) room.HasUnread = false;
+                MessengerManager.Instance.MarkAsRead(roomId);
             }
 
             if (!isSkipping)
