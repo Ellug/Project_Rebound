@@ -15,6 +15,7 @@ public class GameManager : Singleton<GameManager>
     private LobbyWeekendManager _lobbyWeekendManager; // Lobby 씬의 주말 흐름 전담 매니저
     private LobbyStoryFlowManager _lobbyStoryFlowManager; // 로비 스토리 트리거 전담 매니저
     private RecruitmentManager _recruitmentManager; // Lobby 씬의 RecruitmentManager
+    private MonthlySubsidyModule _monthlySubsidyModule; // 매 턴 월급 지급 모듈 (TurnManager에 등록)
     private bool _initialRecruitmentTriggered;      // 게임 시작 시 최초 영입 트리거 여부 (중복 방지)
     private bool _lobbyInitialized;                 // 로비 씬 초기화 완료 여부 (이중 호출 방지)
     private bool _isNewGame;                        // 새 게임 여부 (SyncFlowState 실행 전에 판단해야 하므로 별도 보관)
@@ -112,6 +113,9 @@ public class GameManager : Singleton<GameManager>
             StudentManager.Instance.ClearAllStudents();
 
         _initialRecruitmentTriggered = false;
+
+        // 지급 이력 초기화
+        _monthlySubsidyModule?.Reset();
     }
 
     // 로비에서 턴 실행 요청
@@ -355,6 +359,10 @@ public class GameManager : Singleton<GameManager>
         AlwaysEffectTickModule tickModule = FindFirstObjectByType<AlwaysEffectTickModule>();
         if (tickModule != null)
             _turnManager.RegisterModule(tickModule);
+
+        // 월별 지원금 모듈 등록
+        _monthlySubsidyModule = new MonthlySubsidyModule();
+        _turnManager.RegisterModule(_monthlySubsidyModule);
     }
 
     // AlwaysEventManager 이벤트 구독 해제 및 Unbind
