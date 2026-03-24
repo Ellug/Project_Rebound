@@ -36,6 +36,7 @@ public class PopupAnimator : AnimatorBase
     [Header("공통")]
     [SerializeField] private bool _disableRaycastWhileTween = true;
 
+    private bool _playingIn;
     private Vector2 _shownPos;
     private Vector2 _hiddenPos;
     private Tweener _slideTween;
@@ -79,6 +80,10 @@ public class PopupAnimator : AnimatorBase
 
     public override void PlayIn(Action onComplete = null)
     {
+        // 이미 등장 애니메이션 진행 중이면 무시 (광클 대비)
+        if (IsAnimating && _playingIn) return;
+
+        _playingIn = true;
         switch (_type)
         {
             case AnimationType.Slide: StartCoroutine(SlideInRoutine(onComplete)); break;
@@ -88,6 +93,10 @@ public class PopupAnimator : AnimatorBase
 
     public override void PlayOut(Action onComplete = null)
     {
+        // 이미 퇴장 애니메이션 진행 중이면 무시 (광클 대비)
+        if (IsAnimating && !_playingIn) return;
+
+        _playingIn = false;
         switch (_type)
         {
             case AnimationType.Slide: PlayOutSlide(onComplete); break;
