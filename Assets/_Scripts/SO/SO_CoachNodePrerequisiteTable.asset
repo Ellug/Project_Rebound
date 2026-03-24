@@ -14,9 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CoachNodePrerequisiteTableSO
   _rows:
   - col1: 0
-    nodeId: 102
-    targetPrerequisiteId: 101
-  - col1: 0
     nodeId: 103
     targetPrerequisiteId: 101
   - col1: 0

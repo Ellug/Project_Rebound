@@ -591,7 +591,7 @@ MonoBehaviour:
     speaker: player
     dialogue: "\uB2E4\uC2DC \uD574\uBD10."
   - iD: text_diag_000009_017
-    speaker: player
+    speaker: student
     dialogue: "....\uC5B4?"
   - iD: text_diag_000009_018
     speaker: player
@@ -676,4 +676,9 @@ MonoBehaviour:
       \uACC4\uB3C4 \uBD80\uD0C1 \uB4DC\uB9BD\uB2C8\uB2E4."
   - iD: text_diag_200001_000
     speaker: student
-    dialogue: "\uD559\uC0DD\uB4E4\uC5D0\uAC8C \uAC04\uC2DD\uC744 \uC0AC\uC8FC\uC5C8\uB2E4."
+    dialogue: "\uD55C\uC6B8\uACE0\uB4F1\uD559\uAD50 \uB18D\uAD6C\uBD80 3\uAE30 \uC8FC\uC7A5
+      \uAE40\uC778\uC5FD \uC785\uB2C8\uB2E4.\\n\uAE30 \uACF5\uC9C0\uB41C \uBC14\uC640
+      \uAC19\uC774 \uAE08\uC77C \uC624\uD6C4 \uB18D\uAD6C\uBD80 \uBD80\uC2E4\uC5D0\uC11C
+      \uD6C4\uBC30\uB4E4\uC744 \uC704\uD574 \uAC04\uC2DD\uC744 \uC81C\uACF5\uD558\uACE0\uC790
+      \uD569\uB2C8\uB2E4.\\n\uBD80\uB2F4\uC5C6\uC774 \uB9CE\uC774 \uCC38\uC11D\uD558\uC5EC
+      \uC8FC\uC2DC\uAE30 \uBC14\uB78D\uB2C8\uB2E4."
