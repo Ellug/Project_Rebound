@@ -98,10 +98,7 @@ public class TurnManager : MonoBehaviour
         {
             if (SuddenEventManager.Instance != null)
             {
-                SuddenEventManager.Instance.EvaluateEvents(
-                    SuddenEventConditionFlags.Daily,
-                    SuddenEventContextFlags.PreProcess
-                );
+                SuddenEventManager.Instance.ResetDailyEventCount();
             }
 
             SetState(TurnState.PreTurn);
@@ -129,6 +126,14 @@ public class TurnManager : MonoBehaviour
             }
                 _dateManager.AdvanceDay();
             _turnIndex++;
+
+            if (SuddenEventManager.Instance != null)
+            {
+                SuddenEventManager.Instance.EvaluateEvents(
+                    SuddenEventConditionFlags.Daily,
+                    SuddenEventContextFlags.PreProcess
+                );
+            }
 
             SetState(TurnState.WaitingForInput);
             OnTurnCompleted?.Invoke(_currentContext);

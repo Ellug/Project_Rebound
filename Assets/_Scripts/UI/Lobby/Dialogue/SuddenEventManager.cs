@@ -6,7 +6,6 @@ using UnityEngine;
 public class SuddenEventManager : Singleton<SuddenEventManager>
 {
     private int _dailyEventCount = 0;
-    private int _lastTurnIndex = -1;
     private const int MAX_EVENTS_PER_TURN = 3;
 
     public void EvaluateEvents(SuddenEventConditionFlags condition, SuddenEventContextFlags context)
@@ -27,12 +26,6 @@ public class SuddenEventManager : Singleton<SuddenEventManager>
                     return;
                 }
             }
-        }
-
-        if (_lastTurnIndex != currentTurn)
-        {
-            _lastTurnIndex = currentTurn;
-            _dailyEventCount = 0;
         }
 
         if (_dailyEventCount >= MAX_EVENTS_PER_TURN) return;
@@ -421,5 +414,10 @@ public class SuddenEventManager : Singleton<SuddenEventManager>
             var actualData = _popupQueue.Dequeue();
             OnPopupRequested?.Invoke(actualData);
         }
+    }
+
+    public void ResetDailyEventCount()
+    {
+        _dailyEventCount = 0;
     }
 }
