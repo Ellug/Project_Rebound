@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 [Serializable]
@@ -121,6 +121,10 @@ public class SavedStudentData
     public int conditionRecoveryBonus;
     public float trainingEfficiencyBonus;
     public bool isTrainingBlocked;
+
+    public int abnormalState;           // 상태이상 종류
+    public int abnormalRemainTurn;      // 상태이상 남은 턴
+    public string abnormalReasonTextId; // 상태이상 사유
 }
 
 // 슬롯 인덱스와 학생 ID 쌍으로 배치 정보 저장
@@ -166,9 +170,11 @@ public class SavedMatchSimData
     public string downTeam;
     public string mySchoolName;
     public int progressStageIndex;                        // MatchGameStages.Default 배열 인덱스
+    public bool rollQuarterInjury;
     public List<SavedQuarterScore> quarterScores = new(); // 완료된 쿼터 점수 누적
     public List<string> logs = new();                     // 경기 로그
     public List<SavedMatchStudentStatSnapshot> studentStatSnapshots = new(); // 경기 시작 시점 학생 스탯 스냅샷
+    public List<SavedPendingAbnormalData> pendingAbnormals = new(); // 끝나고 적용시킬 부상
 }
 
 [Serializable]
@@ -188,6 +194,15 @@ public class SavedMatchStudentStatSnapshot
     public int speed;
     public int jump;
     public int stamina;
+}
+
+[Serializable]
+public class SavedPendingAbnormalData
+{
+    public int studentId;               // 누구 부상인지
+    public int abnormalState;           // 상태이상 종류
+    public int abnormalRemainTurn;      // 턴 수
+    public string abnormalReasonTextId; // 상세 사유
 }
 
 [Serializable]

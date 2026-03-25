@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 // 훈련 선택 팝업 (페이지 전환 방식)
 public class TrainingSelectPopup : UIPopup
 {
+    private readonly SuddenEvent _suddenEvent = new SuddenEvent();
+
     private enum TrainingPageKind
     {
         Default = 0,
@@ -580,6 +582,9 @@ public class TrainingSelectPopup : UIPopup
                 staminaExpDelta);
 
             if (StudentManager.Instance != null)
+                StudentManager.Instance.NotifyStudentModified(student);
+
+            if (_suddenEvent.TryApplyTrainingInjury(student) && StudentManager.Instance != null)
                 StudentManager.Instance.NotifyStudentModified(student);
         }
 
