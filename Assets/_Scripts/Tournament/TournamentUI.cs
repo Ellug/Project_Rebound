@@ -20,27 +20,11 @@ public class TournamentUI : MonoBehaviour
     [Header("Round List")]
     [SerializeField] private ScrollRect _scrollRect;
     [SerializeField] private RectTransform _contentRoot;
-    [SerializeField] private GameObject _matchupContainerPrefab;
-    [SerializeField] private RectTransform _connectorPrefab;
 
-    [Header("Bracket Layout")]
-    [SerializeField] private float _layoutLeftPadding = 24f;
-    [SerializeField] private float _layoutTopPadding = 24f;
-    [SerializeField] private float _layoutRightPadding = 24f;
-    [SerializeField] private float _layoutBottomPadding = 24f;
-    [SerializeField] private float _firstRoundMatchSpacing = 82f;
-    [SerializeField] private float _roundColumnSpacing = 160f;
-    [SerializeField] private float _connectorXOffset = 64f;
+    [Header("Bracket Template")]
+    [SerializeField] private RectTransform _bracketTemplatePrefab;
 
     private bool _hasPlayedFinalBracketSfx;
-
-    // 단일 라운드 입력을 다중 라운드 렌더러 포맷으로 감싸 전달
-    public void RenderRound(IReadOnlyList<TournamentMatchViewData> matchups, string mySchoolName)
-    {
-        List<List<TournamentMatchViewData>> rounds = new(1) { new(matchups) };
-
-        RenderRounds(rounds, 0, mySchoolName);
-    }
 
     // 친선전 모드에서 토너먼트 전용 패널 숨김
     public void HideTournamentPanels()
@@ -81,143 +65,71 @@ public class TournamentUI : MonoBehaviour
         }
 
         ClearRoundItems(_contentRoot);
-
-        Vector2 matchupSize = ((RectTransform)_matchupContainerPrefab.transform).sizeDelta;
-        RenderBracket(allRounds, currentRoundIndex, matchupSize.x, matchupSize.y);
+        RenderBracketFromTemplate(allRounds, currentRoundIndex);
 
         LayoutRebuilder.ForceRebuildLayoutImmediate(_contentRoot);
         _scrollRect.horizontalNormalizedPosition = 1f;
         _scrollRect.verticalNormalizedPosition = 1f;
     }
 
-    // 누적된 라운드 데이터를 기준으로 매치업과 연결선을 배치
-    private void RenderBracket(
-        IReadOnlyList<List<TournamentMatchViewData>> allRounds,
-        int currentRoundIndex,
-        float matchupWidth,
-        float matchupHeight)
+    // 사전 배치된 브래킷 템플릿 프리팹에 현재 라운드 데이터를 바인딩
+    private void RenderBracketFromTemplate(IReadOnlyList<List<TournamentMatchViewData>> allRounds, int currentRoundIndex)
     {
+        if (_bracketTemplatePrefab == null)
+        {
+            _contentRoot.sizeDelta = Vector2.zero;
+            return;
+        }
+
         int roundCount = currentRoundIndex + 1;
-        List<float[]> roundCenters = BuildRoundCenters(allRounds, roundCount, matchupHeight);
+        RectTransform templateRoot = Instantiate(_bracketTemplatePrefab, _contentRoot);
 
-        float maxCenterY = 0f;
-
-        for (int roundIndex = 0; roundIndex < roundCount; roundIndex++)
+        MatchupContainerUI[] matchupItems = templateRoot.GetComponentsInChildren<MatchupContainerUI>(true);
+        for (int i = 0; i < matchupItems.Length; i++)
         {
-            IReadOnlyList<TournamentMatchViewData> roundMatchups = allRounds[roundIndex];
-            float[] centers = roundCenters[roundIndex];
-            float columnX = _layoutLeftPadding + roundIndex * (matchupWidth + _roundColumnSpacing);
-
-            for (int matchupIndex = 0; matchupIndex < roundMatchups.Count; matchupIndex++)
+            MatchupContainerUI matchupUi = matchupItems[i];
+            if (!TryParseBracketSlotName(matchupUi.name, "TournamentUI", out int roundOrder, out int matchupOrder))
             {
-                TournamentMatchViewData matchup = roundMatchups[matchupIndex];
-                float centerY = centers[matchupIndex];
-                maxCenterY = Mathf.Max(maxCenterY, centerY);
-
-                float topY = centerY - matchupHeight * 0.5f;
-                CreateMatchupItem(matchup, roundIndex + 1, matchupIndex + 1, columnX, topY);
-            }
-        }
-
-        for (int roundIndex = 0; roundIndex < roundCount - 1; roundIndex++)
-        {
-            float[] currentRoundCenters = roundCenters[roundIndex];
-            float[] nextRoundCenters = roundCenters[roundIndex + 1];
-            float columnX = _layoutLeftPadding + roundIndex * (matchupWidth + _roundColumnSpacing);
-            float connectorOffset = Mathf.Clamp(_connectorXOffset, 0f, _roundColumnSpacing);
-            float connectorX = columnX + matchupWidth + connectorOffset;
-
-            for (int pairIndex = 0; pairIndex < nextRoundCenters.Length; pairIndex++)
-            {
-                int topIndex = pairIndex * 2;
-                int bottomIndex = topIndex + 1;
-
-                float topCenterY = currentRoundCenters[topIndex];
-                float bottomCenterY = currentRoundCenters[bottomIndex];
-                float connectorCenterY = (topCenterY + bottomCenterY) * 0.5f;
-                float connectorHeight = bottomCenterY - topCenterY;
-                maxCenterY = Mathf.Max(maxCenterY, bottomCenterY);
-
-                CreateConnectorItem(roundIndex + 1, pairIndex + 1, connectorX, connectorCenterY, connectorHeight);
-            }
-        }
-
-        float totalWidth = _layoutLeftPadding
-            + roundCount * matchupWidth
-            + Mathf.Max(roundCount - 1, 0) * _roundColumnSpacing
-            + _layoutRightPadding;
-        float totalHeight = Mathf.Max(
-            _layoutTopPadding + matchupHeight + _layoutBottomPadding,
-            maxCenterY + matchupHeight * 0.5f + _layoutBottomPadding);
-
-        _contentRoot.sizeDelta = new Vector2(totalWidth, totalHeight);
-    }
-
-    // 각 라운드 매치업의 수직 중심 좌표를 계산해 브래킷 정렬 기준으로 사용
-    private List<float[]> BuildRoundCenters(IReadOnlyList<List<TournamentMatchViewData>> allRounds, int roundCount, float matchupHeight)
-    {
-        List<float[]> centers = new(roundCount);
-
-        int firstRoundMatchCount = allRounds[0].Count;
-        float[] firstRoundCenters = new float[firstRoundMatchCount];
-        for (int i = 0; i < firstRoundMatchCount; i++)
-        {
-            firstRoundCenters[i] = _layoutTopPadding + matchupHeight * 0.5f + i * (matchupHeight + _firstRoundMatchSpacing);
-        }
-        centers.Add(firstRoundCenters);
-
-        for (int roundIndex = 1; roundIndex < roundCount; roundIndex++)
-        {
-            int currentMatchCount = allRounds[roundIndex].Count;
-            float[] currentCenters = new float[currentMatchCount];
-            float[] previousCenters = centers[roundIndex - 1];
-
-            for (int i = 0; i < currentMatchCount; i++)
-            {
-                int upperIndex = i * 2;
-                int lowerIndex = upperIndex + 1;
-                currentCenters[i] = (previousCenters[upperIndex] + previousCenters[lowerIndex]) * 0.5f;
+                matchupUi.gameObject.SetActive(false);
+                continue;
             }
 
-            centers.Add(currentCenters);
+            if (roundOrder <= 0 || roundOrder > roundCount)
+            {
+                matchupUi.gameObject.SetActive(false);
+                continue;
+            }
+
+            IReadOnlyList<TournamentMatchViewData> roundMatchups = allRounds[roundOrder - 1];
+            int matchupIndex = matchupOrder - 1;
+            if (matchupIndex < 0 || matchupIndex >= roundMatchups.Count)
+            {
+                matchupUi.gameObject.SetActive(false);
+                continue;
+            }
+
+            TournamentMatchViewData matchup = roundMatchups[matchupIndex];
+            matchupUi.gameObject.SetActive(true);
+            matchupUi.SetData(matchup.UpTeam, matchup.DownTeam, matchup.IsHighlighted, matchup.IsResolved, matchup.IsUpTeamWinner);
         }
 
-        return centers;
-    }
+        RectTransform[] rects = templateRoot.GetComponentsInChildren<RectTransform>(true);
+        for (int i = 0; i < rects.Length; i++)
+        {
+            RectTransform rect = rects[i];
+            if (rect == templateRoot)
+                continue;
 
-    // 매치업 프리팹을 생성하고 위치/팀 데이터/강조 상태를 적용
-    private void CreateMatchupItem(
-        TournamentMatchViewData matchup,
-        int roundOrder,
-        int matchupOrder,
-        float x,
-        float topY)
-    {
-        RectTransform matchupRect = (RectTransform)Instantiate(_matchupContainerPrefab, _contentRoot).transform;
-        matchupRect.name = $"TournamentUI (R{roundOrder}-{matchupOrder})";
+            if (!TryParseBracketSlotName(rect.name, "TournamentConnector", out int fromRoundOrder, out int pairOrder))
+                continue;
 
-        matchupRect.anchoredPosition = new Vector2(x, -topY);
-
-        MatchupContainerUI matchupUi = matchupRect.GetComponent<MatchupContainerUI>();
-        matchupUi.SetData(
-            matchup.UpTeam,
-            matchup.DownTeam,
-            matchup.IsHighlighted,
-            matchup.IsResolved,
-            matchup.IsUpTeamWinner);
-    }
-
-    // 두 매치업 사이를 잇는 세로 커넥터를 생성하고 높이 적용
-    private void CreateConnectorItem(int fromRoundOrder, int pairOrder, float x, float centerY, float height)
-    {
-        RectTransform connectorRect = Instantiate(_connectorPrefab, _contentRoot);
-        connectorRect.name = $"TournamentConnector (R{fromRoundOrder}-{pairOrder})";
-
-        connectorRect.anchoredPosition = new Vector2(x, -centerY);
-
-        Vector2 size = connectorRect.sizeDelta;
-        size.y = height;
-        connectorRect.sizeDelta = size;
+            bool isVisible = fromRoundOrder > 0 &&
+                             fromRoundOrder < roundCount &&
+                             pairOrder > 0 &&
+                             pairOrder <= allRounds[fromRoundOrder].Count;
+            rect.gameObject.SetActive(isVisible);
+        }
+        _contentRoot.sizeDelta = CalculateTemplateContentSize(templateRoot);
     }
 
     // 라운드 팀 수에 대응되는 타이틀 스프라이트로 상단 이미지 교체
@@ -232,6 +144,39 @@ public class TournamentUI : MonoBehaviour
             _roundTitleImage.sprite = _roundTitleSprites[i];
             return;
         }
+    }
+
+    // 활성 슬롯의 실제 Rect 경계를 기준으로 content 크기를 산출
+    private static Vector2 CalculateTemplateContentSize(RectTransform templateRoot)
+    {
+        float maxX = 0f;
+        float minY = 0f;
+        bool hasActiveChild = false;
+        Vector3[] corners = new Vector3[4];
+
+        for (int i = 0; i < templateRoot.childCount; i++)
+        {
+            RectTransform child = templateRoot.GetChild(i) as RectTransform;
+            if (child == null || !child.gameObject.activeInHierarchy)
+                continue;
+
+            child.GetWorldCorners(corners);
+            for (int c = 0; c < corners.Length; c++)
+            {
+                Vector3 local = templateRoot.InverseTransformPoint(corners[c]);
+                if (local.x > maxX)
+                    maxX = local.x;
+                if (local.y < minY)
+                    minY = local.y;
+            }
+
+            hasActiveChild = true;
+        }
+
+        if (!hasActiveChild)
+            return Vector2.zero;
+
+        return new Vector2(maxX, -minY);
     }
 
     // 결승 집중 패널에 표시할 내 팀/상대 팀 이름을 반영
@@ -261,6 +206,34 @@ public class TournamentUI : MonoBehaviour
         for (int i = root.childCount - 1; i >= 0; i--)
             Destroy(root.GetChild(i).gameObject);
     }
+
+    private static bool TryParseBracketSlotName(string objectName, string prefix, out int roundOrder, out int indexOrder)
+    {
+        roundOrder = 0;
+        indexOrder = 0;
+
+        if (string.IsNullOrEmpty(objectName) || string.IsNullOrEmpty(prefix))
+            return false;
+
+        string startToken = $"{prefix} (R";
+        if (!objectName.StartsWith(startToken, System.StringComparison.Ordinal))
+            return false;
+
+        int roundStart = startToken.Length;
+        int dashIndex = objectName.IndexOf('-', roundStart);
+        int endIndex = objectName.IndexOf(')', dashIndex + 1);
+
+        if (dashIndex <= roundStart || endIndex <= dashIndex + 1)
+            return false;
+
+        if (!int.TryParse(objectName.Substring(roundStart, dashIndex - roundStart), out roundOrder))
+            return false;
+
+        if (!int.TryParse(objectName.Substring(dashIndex + 1, endIndex - dashIndex - 1), out indexOrder))
+            return false;
+
+        return true;
+    }
 }
 
 // 브래킷 UI에 전달되는 단일 매치업 표시용 데이터 구조체.
@@ -271,11 +244,6 @@ public readonly struct TournamentMatchViewData
     public readonly bool IsHighlighted;
     public readonly bool IsResolved;
     public readonly bool IsUpTeamWinner;
-
-    public TournamentMatchViewData(string upTeam, string downTeam, bool isHighlighted)
-        : this(upTeam, downTeam, isHighlighted, isResolved: false, isUpTeamWinner: false)
-    {
-    }
 
     public TournamentMatchViewData(string upTeam, string downTeam, bool isHighlighted, bool isResolved, bool isUpTeamWinner)
     {
