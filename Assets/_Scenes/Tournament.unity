@@ -5366,15 +5366,7 @@ MonoBehaviour:
   - {fileID: 6457515206517543537, guid: 60a3f6c37d303ff479ff1c603b8a80d3, type: 3}
   _scrollRect: {fileID: 1405683095}
   _contentRoot: {fileID: 1142517121}
-  _matchupContainerPrefab: {fileID: 5675338778479033557, guid: fbfe6e48f9bb18d4ca817fa5aeca14cf, type: 3}
-  _connectorPrefab: {fileID: 589910000000000002, guid: 5a3ea234ecbb4d7a8d5d4428bd98712f, type: 3}
-  _layoutLeftPadding: 24
-  _layoutTopPadding: 24
-  _layoutRightPadding: 24
-  _layoutBottomPadding: 24
-  _firstRoundMatchSpacing: 82
-  _roundColumnSpacing: 160
-  _connectorXOffset: 64
+  _bracketTemplatePrefab: {fileID: 1000000000000002, guid: 3b2be4222bf548f1a62213d2f89ce45e, type: 3}
 --- !u!1 &1599329624
 GameObject:
   m_ObjectHideFlags: 0
