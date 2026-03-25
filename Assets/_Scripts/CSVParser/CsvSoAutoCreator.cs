@@ -282,6 +282,8 @@ public static class CsvImportCompileBridge
 {
     // 스크립트 생성 후 컴파일 완료 시 ImportAll을 자동 재개하기 위한 세션 키
     private const string PendingImportAllKey = "CsvImportCompileBridge.PendingImportAll";
+    // 컴파일 후 ImportAll 재개가 끝나면 클라우드 업로드를 이어서 실행할지 여부
+    private const string PendingCloudUploadKey = "CsvImportCompileBridge.PendingCloudUpload";
 
     // SO 스크립트 생성이 필요한 경우 ImportAll을 컴파일 이후로 자동 이연
     public static bool EnsureSoScriptsReadyAndMaybeDefer(string reason)
@@ -298,6 +300,7 @@ public static class CsvImportCompileBridge
     public static void QueueImportAllAfterCompile(int createdCount, string reason)
     {
         SessionState.SetBool(PendingImportAllKey, true);
+        SessionState.EraseBool(PendingCloudUploadKey);
 
         string safeReason = string.IsNullOrWhiteSpace(reason) ? "CSV Import" : reason;
         EditorUtility.DisplayDialog(
@@ -305,6 +308,12 @@ public static class CsvImportCompileBridge
             $"{safeReason}\n\n{createdCount} new SO scripts were generated.\nAfter script compile, CSV import will resume automatically.",
             "OK"
         );
+    }
+
+    // pending import 재개 후 클라우드 업로드까지 이어서 실행
+    public static void QueueCloudUploadAfterPendingImport()
+    {
+        SessionState.SetBool(PendingCloudUploadKey, true);
     }
 
     // 도메인 리로드 이후 대기 중인 ImportAll 작업을 자동 실행
@@ -317,7 +326,29 @@ public static class CsvImportCompileBridge
                 return;
 
             SessionState.EraseBool(PendingImportAllKey);
-            CsvBatchImporter.ImportAllTables();
+            bool runCloudUpload = SessionState.GetBool(PendingCloudUploadKey, false);
+            SessionState.EraseBool(PendingCloudUploadKey);
+
+            bool imported = CsvBatchImporter.ImportAllTables(showDialog: false, out bool deferredByCompile, allowCompileDefer: false);
+
+            if (!runCloudUpload)
+                return;
+
+            if (deferredByCompile)
+            {
+                Debug.LogWarning("[CsvImportCompileBridge] Deferred import persisted after compile. Skipping cloud upload.");
+                return;
+            }
+
+            if (!imported)
+            {
+                Debug.LogWarning("[CsvImportCompileBridge] Import failed after compile. Skipping cloud upload.");
+                return;
+            }
+
+            var cloudResult = GoogleSheetCloudUploader.BuildAndUploadAddressables();
+            if (!cloudResult.Success && !cloudResult.Skipped)
+                Debug.LogError($"[CsvImportCompileBridge] Auto cloud upload failed.\n{cloudResult.Message}");
         };
     }
 }

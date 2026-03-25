@@ -7,14 +7,22 @@ using UnityEngine;
 public static class CsvBatchImporter
 {
     // CSV 폴더 전체를 순회하며 임포트
-    public static void ImportAllTables() => ImportAllTables(showDialog: true);
+    public static void ImportAllTables() => ImportAllTables(showDialog: true, out _, allowCompileDefer: true);
 
     // 자동 파이프라인에서 호출할 수 있는 전체 임포트 엔트리
-    public static bool ImportAllTables(bool showDialog)
+    public static bool ImportAllTables(bool showDialog) => ImportAllTables(showDialog, out _, allowCompileDefer: true);
+
+    // 자동 파이프라인에서 defer 여부까지 구분할 수 있는 엔트리
+    public static bool ImportAllTables(bool showDialog, out bool deferredByCompile, bool allowCompileDefer)
     {
+        deferredByCompile = false;
+
         // 누락된 SO 스크립트가 있으면 생성 후 컴파일 완료 시 자동 재개
-        if (!CsvImportCompileBridge.EnsureSoScriptsReadyAndMaybeDefer("Import All CSV Tables"))
+        if (allowCompileDefer && !CsvImportCompileBridge.EnsureSoScriptsReadyAndMaybeDefer("Import All CSV Tables"))
+        {
+            deferredByCompile = true;
             return false;
+        }
 
         var csvPaths = CsvImportUtil.FindCsvPaths();
         int successCount = 0;
@@ -51,8 +59,8 @@ public static class CsvBatchImporter
 
         if (showDialog)
             EditorUtility.DisplayDialog("Import Complete", $"Success: {successCount}\nFailed: {failCount}", "OK");
-            
-        return true;
+
+        return failCount == 0;
     }
 }
 #endif
