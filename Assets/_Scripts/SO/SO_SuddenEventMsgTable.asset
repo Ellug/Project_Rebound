@@ -2329,9 +2329,9 @@ MonoBehaviour:
     choice3Dialogue: 
     choice3Next: 
     suddenEvent: event_000010
-  - iD: diag_100002
+  - iD: diag_110000
     messageIndex: index_000
-    messageDialogue: text_diag_100002_000
+    messageDialogue: text_diag_110000_000
     next: END
     isChoice: 0
     choice1Dialogue: 
@@ -2341,9 +2341,9 @@ MonoBehaviour:
     choice3Dialogue: 
     choice3Next: 
     suddenEvent: event_001003
-  - iD: diag_100003
+  - iD: diag_110001
     messageIndex: index_000
-    messageDialogue: text_diag_100003_000
+    messageDialogue: text_diag_110001_000
     next: END
     isChoice: 0
     choice1Dialogue: 
@@ -2353,9 +2353,9 @@ MonoBehaviour:
     choice3Dialogue: 
     choice3Next: 
     suddenEvent: event_001004
-  - iD: diag_100004
+  - iD: diag_110002
     messageIndex: index_000
-    messageDialogue: text_diag_100004_000
+    messageDialogue: text_diag_110002_000
     next: END
     isChoice: 0
     choice1Dialogue: 

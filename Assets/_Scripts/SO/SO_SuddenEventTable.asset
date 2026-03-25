@@ -1260,7 +1260,7 @@ MonoBehaviour:
     effect3: 
     isProbable: 1
     probability: 0.1
-    description: text_diag_100002_000
+    description: text_diag_110000_000
   - id: event_110003
     name: "[\uACF5\uC9C0] \uD559\uC0DD \uC785\uC6D0"
     context: 2
@@ -1284,7 +1284,7 @@ MonoBehaviour:
     effect3: 
     isProbable: 1
     probability: 0.2
-    description: text_diag_100003_000
+    description: text_diag_110001_000
   - id: event_110004
     name: "[\uACF5\uC9C0] \uD559\uC0DD \uC785\uC6D0"
     context: 2
@@ -1308,7 +1308,7 @@ MonoBehaviour:
     effect3: 
     isProbable: 0
     probability: 1
-    description: text_diag_100004_000
+    description: text_diag_110002_000
   - id: event_001002
     name: "[\uACF5\uC9C0] \uD559\uC0DD \uC785\uC6D0"
     context: 2
@@ -1332,7 +1332,7 @@ MonoBehaviour:
     effect3: 
     isProbable: 1
     probability: 0.2
-    description: text_diag_110001_000
+    description: text_diag_111001_000
   - id: event_001002
     name: "[\uACF5\uC9C0] \uD559\uC0DD \uC785\uC6D0"
     context: 2
@@ -1356,7 +1356,7 @@ MonoBehaviour:
     effect3: 
     isProbable: 1
     probability: 0.5
-    description: text_diag_110002_000
+    description: text_diag_111002_000
   - id: event_001002
     name: "[\uACF5\uC9C0] \uD559\uC0DD \uC785\uC6D0"
     context: 2
@@ -1380,7 +1380,7 @@ MonoBehaviour:
     effect3: 
     isProbable: 1
     probability: 0.7
-    description: text_diag_110003_000
+    description: text_diag_111003_000
   - id: event_001002
     name: "[\uACF5\uC9C0] \uD559\uC0DD \uC785\uC6D0"
     context: 2
@@ -1404,7 +1404,7 @@ MonoBehaviour:
     effect3: 
     isProbable: 0
     probability: 1
-    description: text_diag_110004_000
+    description: text_diag_111004_000
   - id: event_120001
     name: "[\uACF5\uC9C0] \uAC04\uC2DD \uC81C\uACF5 \uD589\uC0AC \uC548\uB0B4"
     context: 2
