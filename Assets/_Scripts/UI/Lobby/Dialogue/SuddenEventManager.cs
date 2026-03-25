@@ -323,11 +323,22 @@ public class SuddenEventManager : Singleton<SuddenEventManager>
             }
         }
 
+        DateTime? firstMsgDate = null;
+        TurnManager tm = FindFirstObjectByType<TurnManager>();
+        if (tm != null && tm.DateManager != null)
+        {
+            string contextStr = eventRow.context.ToString().ToLower();
+            if (contextStr.Contains("post"))
+            {
+                firstMsgDate = tm.DateManager.CurrentDate.AddDays(1);
+            }
+        }
+
         if (desc.StartsWith("diag_"))
         {
             if (DialogueRunner.Instance != null)
             {
-                DialogueRunner.Instance.PlayDialogue(roomId, roomName, desc, "index_000", textVars, systemMsgContent);
+                DialogueRunner.Instance.PlayDialogue(roomId, roomName, desc, "index_000", textVars, systemMsgContent, firstMsgDate);
                 previewText = $"{roomName}의 새로운 메시지가 도착했습니다.";
             }
         }
