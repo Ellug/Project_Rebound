@@ -90,7 +90,11 @@ public class StudentManager : Singleton<StudentManager>
     // 아니면 팩토리에서 생성하면서 Add 같이 해버리던? => 안될듯. 드래그앤드롭해서 영입 확정하는 순간 Add 하는 게 맞는듯.
     public void AddStudent(Student student)
     {
+        if (student == null) return;
         _students.Add(student);
+
+        GameManager.Instance?.ApplyTrainingEfficiencyPermBonusToStudent(student);
+        
         OnStudentAdded?.Invoke(student);
         OnStudentsChanged?.Invoke(_students);
 

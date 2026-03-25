@@ -15,7 +15,7 @@ public class GraduationManager : MonoBehaviour
 
     private AlwaysEventManager _alwaysEventManager;
 
-#if UNITY_EDITOR || 테스트용
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
     [Header("Dev Test (F12)")]
     [SerializeField] private bool _enableF12Test = true;        // F12 테스트 활성화
     [SerializeField] private bool _f12ClearBeforeCreate = false;// 기존 학생 삭제 여부
@@ -134,7 +134,7 @@ public class GraduationManager : MonoBehaviour
             content: "졸업을 축하합니다!\n졸업 처리가 완료되었습니다.",
             buttons: new List<PopupButtonInfo>
             {
-                // 수정: 버튼 텍스트 제거, 액션 기반으로만 구성
+                // 버튼 텍스트 제거, 액션 기반으로만 구성
                 new PopupButtonInfo(FinalizeGraduation)
             }
         ));
@@ -150,50 +150,104 @@ public class GraduationManager : MonoBehaviour
         if (_turnManager == null)
             _turnManager = FindFirstObjectByType<TurnManager>();
 
-        SaveGraduationRecord(_pendingGraduates);
+        TournamentData tournamentData = GameManager.Instance != null
+            ? GameManager.Instance.GetLastTournamentData()
+            : TournamentData.Default;
 
-        if (StudentManager.Instance != null)
+        bool reachedSemiFinalThisSeason =
+            tournamentData.HasPendingResult &&
+            tournamentData.PendingMySchoolReachedRoundTeamCount <= 4 &&
+            tournamentData.PendingMySchoolReachedRoundTeamCount > 0;
+
+        if (reachedSemiFinalThisSeason)
         {
-            StudentManager.Instance.GraduateSeniors(); // 3학년 삭제 + 슬롯 자동 비우기
-            StudentManager.Instance.PromoteStudents(); // 남은 재학생 진급
+            GameManager.Instance?.AddSemiFinalReachedCount(1);
         }
 
+        int cumulativeSemiFinalCount = GameManager.Instance != null
+            ? GameManager.Instance.GetSemiFinalReachedCount()
+            : 0;
 
+        // 졸업 선물 팝업 표시 → 완료 후 기록 저장 및 졸업/진급 처리
+        GraduateGiftSystem.ProcessGraduates(
+            _pendingGraduates,
+            cumulativeSemiFinalCount,
+            onAllDone: rewardResults =>
+            {
+                // 졸업 기록 저장 (등급, 보상 종류, 날짜)
+                SaveGraduationRecord(_pendingGraduates, rewardResults);
 
-        // 페이즈 전환
-        if (_turnManager != null)
-            _turnManager.SetPhase(GamePhase.Graduation);
+                if (StudentManager.Instance != null)
+                {
+                    StudentManager.Instance.GraduateSeniors();
+                    StudentManager.Instance.PromoteStudents();
+                }
 
-        // 하루 진행 (입학/학기 전환 트리거 목적)
-        if (_turnManager != null && !_turnManager.IsTurnRunning)
-            _turnManager.ExecuteTurn(TurnActionType.Rest);
+                // 페이즈 전환
+                if (_turnManager != null)
+                    _turnManager.SetPhase(GamePhase.Graduation);
 
-        // 로비 상태 복귀
-        if (_turnManager != null)
-            _turnManager.SetPhase(GamePhase.DailyTraining);
+                // 하루 진행 (입학/학기 전환 트리거 목적)
+                if (_turnManager != null && !_turnManager.IsTurnRunning)
+                    _turnManager.ExecuteTurn(TurnActionType.Rest);
 
-        if (_graduationPopup != null)
-            _graduationPopup.Close();
+                // 로비 상태 복귀
+                if (_turnManager != null)
+                    _turnManager.SetPhase(GamePhase.DailyTraining);
 
-        _pendingGraduates.Clear();
+                if (_graduationPopup != null)
+                    _graduationPopup.Close();
 
-        Debug.Log("[GraduationManager] Graduation finalized.");
+                _pendingGraduates.Clear();
+
+                // 보상 예약 완료 후 저장
+                SaveManager.Instance?.SaveCurrent();
+                Debug.Log("[GraduationManager] Graduation finalized.");
+            });
     }
 
-
-    // 졸업 기록 로그 출력
-    // (추후 SaveData 연동 지점)
-    private void SaveGraduationRecord(List<Student> graduates)
+    // 졸업 기록 저장 (등급/보상 종류/날짜 보관)
+    private void SaveGraduationRecord(
+        List<Student> graduates,
+        List<(Student student, string rewardType)> rewardResults)
     {
-        if (_turnManager == null)
-            return;
+        if (graduates == null || graduates.Count == 0) return;
+        if (SaveManager.Instance?.CurrentData == null) return;
+        if (_turnManager == null) return;
 
-        Debug.Log($"[Graduation] Date: {_turnManager.DateManager.FormattedDate}");
+        string today = _turnManager.DateManager.CurrentDate.ToString("yyyy-MM-dd");
 
-        foreach (var s in graduates)
+        foreach (var student in graduates)
         {
-            Debug.Log($"졸업생: {s.studentName} / {s.positionName}");
+            if (student == null) continue;
+
+            // 해당 학생의 보상 타입 조회
+            string rewardType = string.Empty;
+            foreach (var r in rewardResults)
+            {
+                if (r.student == student)
+                {
+                    rewardType = r.rewardType;
+                    break;
+                }
+            }
+
+            // 등급 판정
+            var evalResult = GraduateGradeEvaluator.Evaluate(student, 0);
+
+            SaveManager.Instance.CurrentData.graduationRecords.Add(new SavedGraduationRecord
+            {
+                graduationDate = today,
+                gradeIndex = evalResult.GradeIndex,
+                gradeLabel = evalResult.GradeLabel,
+                rewardType = rewardType,
+            });
+
+            Debug.Log($"[GraduationManager] 졸업 기록 저장: {student.studentName} | {evalResult.GradeLabel} | 보상: {rewardType} | {today}");
         }
+
+        // 기록 저장
+        SaveManager.Instance.SaveCurrent();
     }
 
 

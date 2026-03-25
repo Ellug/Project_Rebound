@@ -21,6 +21,9 @@ public class PlayData
     public SavedMatchSimData matchSim = new();                  // 경기 시뮬레이션 진행 상태
     public SavedMessengerData messenger = new();                // 메신저 상태
     public bool isRecruitmentInProgress;                        // 새 게임 첫 영입 진행 중 여부
+    public List<SavedGraduationRecord> graduationRecords = new(); // 졸업 기록 목록 (졸업 날짜, 등급, 보상)
+    public List<PendingGraduateGift> pendingGraduateGifts = new(); // 대기 중인 졸업 선물 목록 (랜덤 날짜에 지급 예약된 보상)
+
 }
 
 // GameFlowData 날짜/턴 관련 필드 대응
@@ -50,6 +53,22 @@ public class SavedFlowData
     // 친선경기 월별 신청 횟수 저장
     public int friendlyMatchApplyCount;
     public int friendlyMatchLastMonth;
+
+    // itemeffect_01 영구 보너스 누적값
+    public float subsidyPermBonusRate = 0f;
+
+    // itemeffect_06 일시적 훈련 효과 상승 저장
+    public string trainingBoostExpireDate = ""; // yyyy-MM-dd, 없으면 빈 문자열
+    public string trainingBoostStatKey = "";    // 대상 스탯 키
+
+    // 토너먼트 관련 저장
+    public int semiFinalReachedCount;
+    public float trainingEfficiencyPermBonusRate;
+
+    public DateTime ParseTrainingBoostExpireDate()
+    {
+        return DateTime.TryParse(trainingBoostExpireDate, out DateTime result) ? result : default;
+    }
 
     // string → DateTime 변환 (파싱 실패 시 default 반환)
     public DateTime ParseCurrentDate()
@@ -254,4 +273,30 @@ public class SavedChatMessageData
 public class SavedChoiceOptionData
 {
     public string text;
+}
+
+// 졸업생 1명의 기록
+[Serializable]
+public class SavedGraduationRecord
+{
+    public string graduationDate; // 졸업 날짜 (yyyy-MM-dd)
+    public int gradeIndex;        // 등급 (1~4)
+    public string gradeLabel;     // 등급 텍스트 ("1등급" 등)
+    public string rewardType;     // 받은 보상 종류 (없으면 빈 문자열)
+}
+
+// 졸업 선물 대기 항목 1개
+[Serializable]
+public sealed class PendingGraduateGift
+{
+    public string studentId;
+    public string studentName;
+    public string gradeLabel;
+
+    // 실제 실행/저장용 키 (ex. itemeffect_01)
+    public string rewardId;
+
+    public string rewardName;
+
+    public string triggerDate; // yyyy-MM-dd
 }
