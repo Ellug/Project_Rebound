@@ -3,7 +3,6 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using System.Collections;
 
 public sealed class VNManager : MonoBehaviour
 {
@@ -23,11 +22,13 @@ public sealed class VNManager : MonoBehaviour
     private bool _isCompleted;
     private bool _isTypingLine;
     private float _inputUnlockTime;
-    private Coroutine _typingCoroutine;
+    private TextTypewriter _typingPlayer;
 
     // 시나리오를 초기화하고 첫 줄 출력
     void Start()
     {
+        // 공용 타이핑 실행기 연결
+        _typingPlayer = new TextTypewriter(this);
         InitializeScenario();
         ShowNextLineOrFinish();
     }
@@ -160,58 +161,38 @@ public sealed class VNManager : MonoBehaviour
         FinishScenario();
     }
 
-    // 대사를 한 글자씩 노출하는 코루틴 시작
+    // 현재 대사 타이핑 시작
     private void StartTyping(int characterCount)
     {
         StopTypingRoutine();
 
-        if (characterCount <= 0 || _typingCharactersPerSecond <= 0f)
-        {
-            _vnUI.RevealCurrentDialogueInstantly();
-            _isTypingLine = false;
-            return;
-        }
+        _isTypingLine = characterCount > 0 && _typingCharactersPerSecond > 0f;
 
-        _typingCoroutine = StartCoroutine(TypeDialogueRoutine(characterCount));
+        _typingPlayer.StartTyping(
+            0,
+            characterCount,
+            _typingCharactersPerSecond,
+            _vnUI.SetCurrentDialogueVisibleCharacters,
+            _vnUI.RevealCurrentDialogueInstantly,
+            () => _isTypingLine = false);
+
+        if (!_typingPlayer.IsTyping)
+            _isTypingLine = false;
     }
 
-    // 클릭 시 현재 타이핑을 즉시 완료
+    // 입력 시 현재 타이핑 즉시 완료
     private void CompleteCurrentTyping()
     {
         if (!_isTypingLine) return;
 
-        StopTypingRoutine();
-        _vnUI.RevealCurrentDialogueInstantly();
-        _isTypingLine = false;
+        _typingPlayer.CompleteTyping(_vnUI.RevealCurrentDialogueInstantly, () => _isTypingLine = false);
     }
 
-    // 실행 중인 타이핑 코루틴 정리
+    // 타이핑 중단 + 상태 리셋
     private void StopTypingRoutine()
     {
-        if (_typingCoroutine == null) return;
-
-        StopCoroutine(_typingCoroutine);
-        _typingCoroutine = null;
-    }
-
-    // 현재 대사의 글자를 시간에 따라 점진적으로 노출
-    private IEnumerator TypeDialogueRoutine(int characterCount)
-    {
-        _isTypingLine = true;
-
-        float visibleCharacters = 0f;
-        float charsPerSecond = Mathf.Max(1f, _typingCharactersPerSecond);
-
-        while (visibleCharacters < characterCount)
-        {
-            visibleCharacters += charsPerSecond * Time.unscaledDeltaTime;
-            _vnUI.SetCurrentDialogueVisibleCharacters(Mathf.FloorToInt(visibleCharacters));
-            yield return null;
-        }
-
-        _vnUI.RevealCurrentDialogueInstantly();
+        _typingPlayer?.StopTyping();
         _isTypingLine = false;
-        _typingCoroutine = null;
     }
 
     // 현재 VN을 종료하고 복귀 씬으로 이동
