@@ -405,11 +405,9 @@ public class TournamentManager : MonoBehaviour
     // 결과 패널의 다음 버튼에 연결
     public void OnClickNextAfterMatchResult()
     {
-        if (!_isWaitingForResultNext)
-            return;
+        if (!_isWaitingForResultNext) return;
 
         _isWaitingForResultNext = false;
-        _matchGameUi.HideMatchResultPanel();
 
         // 친선전 결과 확인 후 즉시 로비로 복귀
         if (_isFriendlyMatchMode)
@@ -427,7 +425,10 @@ public class TournamentManager : MonoBehaviour
         }
 
         if (IsCurrentRoundComplete())
-            AdvanceToNextRound();
+        {            
+            _matchGameUi.HideMatchResultPanel();
+            AdvanceToNextRound();            
+        }
     }
 
     private void ResolveMySchoolMatchAndShowResult(bool didWin)
