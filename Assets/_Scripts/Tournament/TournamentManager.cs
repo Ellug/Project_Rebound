@@ -132,7 +132,8 @@ public class TournamentManager : MonoBehaviour
         _matchGameUi.HideMatchResultPanel();
         _matchGameManager.AbortCurrentMatch();
         // 우리 학교 vs 상대 학교 단일 매치를 바로 시작한다.
-        _matchGameManager.StartMatch(_mySchoolName, _friendlyOpponentName, _mySchoolName);
+        _matchGameManager.StartMatch(_mySchoolName, _friendlyOpponentName, _mySchoolName, rollQuarterInjury: false);
+        _matchGameManager.QueueFriendlyStartInjury();
     }
 
     // 매치 승자 처리 (외부에서 호출 가능)
@@ -190,6 +191,7 @@ public class TournamentManager : MonoBehaviour
     private void OnTournamentComplete()
     {
         // 우승 결과 캐싱 후 로비로 복귀
+        _matchGameManager.ApplyPendingAbnormals();
         GameManager.Instance.SetPendingTournamentResult(_mySchoolReachedRoundTeamCount);
 
         if (_mySchoolReachedRoundTeamCount == 1)
@@ -329,7 +331,7 @@ public class TournamentManager : MonoBehaviour
 
         // 내 학교 매치가 있으면 매치 시뮬레이션 시작
         if (TryGetPendingMySchoolMatch(out Matchup mySchoolMatchup))
-            _matchGameManager.StartMatch(mySchoolMatchup.UpTeam, mySchoolMatchup.DownTeam, _mySchoolName);
+            _matchGameManager.StartMatch(mySchoolMatchup.UpTeam, mySchoolMatchup.DownTeam, _mySchoolName, rollQuarterInjury: true);
         else
             Debug.Log("[TournamentManager] 내 학교 매치가 없어서 자동 진행");
     }
@@ -412,6 +414,7 @@ public class TournamentManager : MonoBehaviour
         // 친선전 결과 확인 후 즉시 로비로 복귀
         if (_isFriendlyMatchMode)
         {
+            _matchGameManager.ApplyPendingAbnormals();
             SceneTransitionManager.Instance.LoadScene(LobbyScene);
             return; 
         }
@@ -419,6 +422,7 @@ public class TournamentManager : MonoBehaviour
         // 우리 학교가 직전 경기에서 패배한 경우에만 토너먼트 종료
         if (_mySchoolDefeatedThisMatch)
         {
+            _matchGameManager.ApplyPendingAbnormals();
             GameManager.Instance.SetPendingTournamentResult(_mySchoolReachedRoundTeamCount);
             SceneTransitionManager.Instance.LoadScene(LobbyScene);
             return;
@@ -482,6 +486,7 @@ public class TournamentManager : MonoBehaviour
 
     private void ShowFriendlyMatchResult(bool didWin)
     {
+        _matchGameManager.ApplyPendingAbnormals();
         _matchGameManager.AbortCurrentMatch();
         _mySchoolDefeatedThisMatch = !didWin;
         _isWaitingForResultNext = true;

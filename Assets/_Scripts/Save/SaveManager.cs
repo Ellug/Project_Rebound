@@ -436,6 +436,9 @@ public class SaveManager : Singleton<SaveManager>
                 conditionRecoveryBonus = s.conditionRecoveryBonus,
                 trainingEfficiencyBonus = s.trainingEfficiencyBonus,
                 isTrainingBlocked = s.isTrainingBlocked,
+                abnormalState = (int)s.abnormalState,
+                abnormalRemainTurn = s.abnormalRemainTurn,
+                abnormalReasonTextId = s.abnormalReasonTextId,
             });
         }
 
@@ -573,6 +576,9 @@ public class SaveManager : Singleton<SaveManager>
                 conditionRecoveryBonus = data.conditionRecoveryBonus,
                 trainingEfficiencyBonus = data.trainingEfficiencyBonus,
                 isTrainingBlocked = data.isTrainingBlocked,
+                abnormalState = (Student.AbnormalType)data.abnormalState,
+                abnormalRemainTurn = data.abnormalRemainTurn,
+                abnormalReasonTextId = data.abnormalReasonTextId,
             };
 
             if (student.id > maxId)
