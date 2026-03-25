@@ -23,8 +23,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: 
     bgmIndex: 0
-    sfxName: "\uB18D\uAD6C\uACF5 \uD280\uB294 \uC18C\uB9AC, \uACBD\uAE30\uC7A5 \uBC14\uB2E5\uC5D0
-      \uC2E0\uBC1C \uB044\uB294 \uC18C\uB9AC"
+    sfxName: sfx_scene_court_lp
   - id: 10001
     line: 1
     name: "\uB098\uB808\uC774\uC158"
@@ -35,7 +34,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: 
     bgmIndex: 0
-    sfxName: "\uBC15\uC218"
+    sfxName: sfx_scene_clap_os
   - id: 10001
     line: 2
     name: "\uB098\uB808\uC774\uC158"
@@ -44,7 +43,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: 
     bgmIndex: 0
-    sfxName: "\uACBD\uAE30 \uC911\uB2E8 \uD718\uC2AC"
+    sfxName: sfx_match_buzzer_os
   - id: 10001
     line: 3
     name: "\uB098\uB808\uC774\uC158"
@@ -73,7 +72,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: Story01_char_Announcer_idle
     bgmIndex: 0
-    sfxName: "\uC0AC\uC9C4\uCC0D\uB294 \uC18C\uB9AC\uB4E4"
+    sfxName: sfx_scene_press_shutter_os
   - id: 10001
     line: 6
     name: "\uAC10\uB3C5"
@@ -133,8 +132,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: 
     bgmIndex: 0
-    sfxName: "\uC190\uB05D\uC73C\uB85C \uD578\uB4DC\uD3F0\uC744 \uC2A4\uCE58\uB294
-      \uC18C\uB9AC"
+    sfxName: 
   - id: 10001
     line: 12
     name: "\uB098\uB808\uC774\uC158"
@@ -144,8 +142,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: 
     bgmIndex: 0
-    sfxName: "\uC190\uB05D\uC73C\uB85C \uD578\uB4DC\uD3F0\uC744 \uC2A4\uCE58\uB294
-      \uC18C\uB9AC"
+    sfxName: 
   - id: 10001
     line: 13
     name: "\uB098\uB808\uC774\uC158"
@@ -154,8 +151,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: 
     bgmIndex: 0
-    sfxName: "\uC190\uB05D\uC73C\uB85C \uD578\uB4DC\uD3F0\uC744 \uC2A4\uCE58\uB294
-      \uC18C\uB9AC"
+    sfxName: 
   - id: 10001
     line: 14
     name: "\uB098\uB808\uC774\uC158"
@@ -166,8 +162,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: 
     bgmIndex: 0
-    sfxName: "\uC190\uB05D\uC73C\uB85C \uD578\uB4DC\uD3F0\uC744 \uC2A4\uCE58\uB294
-      \uC18C\uB9AC"
+    sfxName: 
   - id: 10001
     line: 15
     name: "\uB098\uB808\uC774\uC158"
@@ -177,8 +172,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: 
     bgmIndex: 0
-    sfxName: "\uC190\uB05D\uC73C\uB85C \uD578\uB4DC\uD3F0\uC744 \uC2A4\uCE58\uB294
-      \uC18C\uB9AC"
+    sfxName: 
   - id: 10001
     line: 16
     name: "\uAC10\uB3C5"
@@ -197,7 +191,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: 
     bgmIndex: 0
-    sfxName: "\uD734\uB300\uD3F0 \uC54C\uB78C\uC74C"
+    sfxName: sfx_scene_msg_notif_os
   - id: 10001
     line: 18
     name: "\uAC10\uB3C5"
@@ -235,8 +229,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: 
     bgmIndex: 0
-    sfxName: "\uC190\uB05D\uC73C\uB85C \uD578\uB4DC\uD3F0\uC744 \uC2A4\uCE58\uB294
-      \uC18C\uB9AC"
+    sfxName: 
   - id: 10001
     line: 22
     name: "\uAC10\uB3C5"
@@ -255,8 +248,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: 
     bgmIndex: 0
-    sfxName: "\uB18D\uAD6C\uACF5 \uD280\uB294 \uC18C\uB9AC, \uACBD\uAE30\uC7A5 \uBC14\uB2E5\uC5D0
-      \uC2E0\uBC1C \uB044\uB294 \uC18C\uB9AC"
+    sfxName: sfx_scene_court_lp
   - id: 10001
     line: 24
     name: "\uAC10\uB3C5"
@@ -342,7 +334,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: 
     bgmIndex: 0
-    sfxName: "\uD559\uC0DD\uB4E4 \uB5A0\uB4DC\uB294 \uC18C\uB9AC"
+    sfxName: sfx_scene_student_chatter_lp
   - id: 10001
     line: 33
     name: "\uAC10\uB3C5"
@@ -393,7 +385,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: 
     bgmIndex: 0
-    sfxName: "\uBAA8\uB7AB\uBC14\uB2E5 \uAC77\uB294 \uC18C\uB9AC"
+    sfxName: sfx_scene_walk_dirt_os
   - id: 10001
     line: 38
     name: "\uAC10\uB3C5"
@@ -457,7 +449,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: 
     bgmIndex: 0
-    sfxName: "\uC885\uC774 \uC9D1\uB294 \uC18C\uB9AC"
+    sfxName: sfx_scene_paper_pick_os
   - id: 10001
     line: 44
     name: "\uAC10\uB3C5"
@@ -575,7 +567,7 @@ MonoBehaviour:
     imgLeft: Story01_char_coach_idle
     imgRight: 
     bgmIndex: 0
-    sfxName: "\uBC14\uB2E5\uC744 \uAD6C\uB974\uB294 \uC18C\uB9AC"
+    sfxName: sfx_scene_floor_wood_creak_os
   - id: 10001
     line: 55
     name: "\uAC10\uB3C5"
@@ -759,8 +751,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: Story01_char_Chairman_idle
     bgmIndex: 0
-    sfxName: "\uBCFC\uD39C\uC744 \uD14C\uC774\uBE14\uC5D0 \uB450 \uBC88 \uB450\uB4DC\uB9AC\uB294
-      \uC18C\uB9AC"
+    sfxName: sfx_scene_pen_tap_os
   - id: 10002
     line: 12
     name: "\uAD50\uC7A5 \uC120\uC0DD\uB2D8"
@@ -1161,7 +1152,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: 
     bgmIndex: 0
-    sfxName: "\uBB38 \uB2EB\uB294 \uC18C\uB9AC"
+    sfxName: sfx_scene_door_close_os
   - id: 10003
     line: 16
     name: "\uAC10\uB3C5"
@@ -1170,7 +1161,7 @@ MonoBehaviour:
     imgLeft: Story01_char_Coach_imotion_03
     imgRight: 
     bgmIndex: 0
-    sfxName: "\uCCA0\uACFC \uC8FC\uBA39\uC774 \uBD80\uB52A\uD788\uB294 \uC18C\uB9AC"
+    sfxName: sfx_scene_punch_os
   - id: 10003
     line: 17
     name: "\uB098\uB808\uC774\uC158"
@@ -1180,7 +1171,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: 
     bgmIndex: 0
-    sfxName: "\uC804\uD654 \uC6B8\uB9AC\uB294 \uC18C\uB9AC"
+    sfxName: sfx_scene_phone_ring_os
   - id: 10003
     line: 18
     name: "\uAC10\uB3C5"
@@ -1189,7 +1180,7 @@ MonoBehaviour:
     imgLeft: Story01_char_coach_idle
     imgRight: 
     bgmIndex: 0
-    sfxName: "\uC804\uD654 \uBC1B\uB294 \uC18C\uB9AC"
+    sfxName: sfx_scene_phone_accept_os
   - id: 10003
     line: 19
     name: "\uB9E4\uB2C8\uC800"

@@ -193,4 +193,7 @@ diag_000010,index_010,text_diag_000010_012,index_011,FALSE,-,-,-,-,-,-,-
 diag_000010,index_011,text_diag_000010_013,END,FALSE,-,-,-,-,-,-,-
 diag_100000,index_000,text_diag_100000_000,END,FALSE,-,-,-,-,-,-,-
 diag_100001,index_000,text_diag_100001_000,END,FALSE,-,-,-,-,-,-,event_000010
+diag_110000,index_000,text_diag_110000_000,END,FALSE,-,-,-,-,-,-,event_001003
+diag_110001,index_000,text_diag_110001_000,END,FALSE,-,-,-,-,-,-,event_001004
+diag_110002,index_000,text_diag_110002_000,END,FALSE,-,-,-,-,-,-,event_001005
 diag_200001,index_000,text_diag_200001_000,END,FALSE,-,-,-,-,-,-,event_000021

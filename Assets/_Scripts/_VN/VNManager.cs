@@ -2,6 +2,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public sealed class VNManager : MonoBehaviour
 {
@@ -10,6 +11,8 @@ public sealed class VNManager : MonoBehaviour
     [SerializeField] private VNUI _vnUI;
     [SerializeField] private int _fallbackStoryId = 10001;
     [SerializeField] private float _inputLockDuration = 0.1f;
+    [SerializeField] private float _typingCharactersPerSecond = 45f;
+    [SerializeField] private Button _skipButton;
 
     private readonly List<StoryRow> _activeRows = new();
 
@@ -17,11 +20,15 @@ public sealed class VNManager : MonoBehaviour
     private int _nextRowIndex;
     private bool _isWaitingForFinishTap;
     private bool _isCompleted;
+    private bool _isTypingLine;
     private float _inputUnlockTime;
+    private TextTypewriter _typingPlayer;
 
     // 시나리오를 초기화하고 첫 줄 출력
     void Start()
     {
+        // 공용 타이핑 실행기 연결
+        _typingPlayer = new TextTypewriter(this);
         InitializeScenario();
         ShowNextLineOrFinish();
     }
@@ -80,7 +87,12 @@ public sealed class VNManager : MonoBehaviour
         _nextRowIndex = 0;
         _isWaitingForFinishTap = false;
         _isCompleted = false;
+        _isTypingLine = false;
+        StopTypingRoutine();
         _inputUnlockTime = Time.unscaledTime + _inputLockDuration;
+
+        if (_skipButton != null)
+            _skipButton.gameObject.SetActive(true);
 
         if (_activeRows.Count == 0)
             FinishScenario();
@@ -90,6 +102,13 @@ public sealed class VNManager : MonoBehaviour
     private void ShowNextLineOrFinish()
     {
         if (_isCompleted) return;
+        if (_vnUI == null) return;
+
+        if (_isTypingLine)
+        {
+            CompleteCurrentTyping();
+            return;
+        }
 
         if (_isWaitingForFinishTap)
         {
@@ -106,9 +125,9 @@ public sealed class VNManager : MonoBehaviour
         StoryRow row = _activeRows[_nextRowIndex];
         _nextRowIndex++;
 
-        _vnUI.RenderLine(row);
-
+        int characterCount = _vnUI.RenderLineForTyping(row);
         HandleLineAudio(row);
+        StartTyping(characterCount);
 
         if (_nextRowIndex >= _activeRows.Count)
             _isWaitingForFinishTap = true;
@@ -136,13 +155,60 @@ public sealed class VNManager : MonoBehaviour
     {
     }
 
+    // 스킵 버튼 클릭 시 현재 VN을 완료 처리하고 복귀 씬으로 이동
+    public void HandleSkipButtonClicked()
+    {
+        FinishScenario();
+    }
+
+    // 현재 대사 타이핑 시작
+    private void StartTyping(int characterCount)
+    {
+        StopTypingRoutine();
+
+        _isTypingLine = characterCount > 0 && _typingCharactersPerSecond > 0f;
+
+        _typingPlayer.StartTyping(
+            0,
+            characterCount,
+            _typingCharactersPerSecond,
+            _vnUI.SetCurrentDialogueVisibleCharacters,
+            _vnUI.RevealCurrentDialogueInstantly,
+            () => _isTypingLine = false);
+
+        if (!_typingPlayer.IsTyping)
+            _isTypingLine = false;
+    }
+
+    // 입력 시 현재 타이핑 즉시 완료
+    private void CompleteCurrentTyping()
+    {
+        if (!_isTypingLine) return;
+
+        _typingPlayer.CompleteTyping(_vnUI.RevealCurrentDialogueInstantly, () => _isTypingLine = false);
+    }
+
+    // 타이핑 중단 + 상태 리셋
+    private void StopTypingRoutine()
+    {
+        _typingPlayer?.StopTyping();
+        _isTypingLine = false;
+    }
+
     // 현재 VN을 종료하고 복귀 씬으로 이동
     private void FinishScenario()
     {
         if (_isCompleted) return;
 
+        StopTypingRoutine();
+        _isTypingLine = false;
         _isCompleted = true;
-        SceneManager.LoadScene(_returnSceneName);
+
+        // SceneTransitionManager 경유 시 SceneRoot 스케일 전환 연출이 적용됨
+        if (SceneTransitionManager.Instance != null)
+            SceneTransitionManager.Instance.LoadScene(_returnSceneName);
+        else
+            SceneManager.LoadScene(_returnSceneName);
     }
 
     // 다음 줄 진행용 입력(마우스/터치 시작)을 감지
@@ -160,5 +226,3 @@ public sealed class VNManager : MonoBehaviour
         return false;
     }
 }
-
-

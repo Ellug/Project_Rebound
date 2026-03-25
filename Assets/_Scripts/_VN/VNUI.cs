@@ -21,6 +21,7 @@ public sealed class VNUI : MonoBehaviour
     private int _bgImageRequestToken;
     private int _leftImageRequestToken;
     private int _rightImageRequestToken;
+    private TMP_Text _activeDialogueText;
 
     private enum CharacterImageSlot
     {
@@ -42,22 +43,50 @@ public sealed class VNUI : MonoBehaviour
     // 전달받은 대사 행을 화자 타입에 맞게 화면에 렌더링
     public void RenderLine(StoryRow row)
     {
+        RenderLineForTyping(row);
+        RevealCurrentDialogueInstantly();
+    }
+
+    // 전달받은 대사 행을 렌더링하고, 타입라이팅용으로 현재 대사 텍스트를 준비
+    public int RenderLineForTyping(StoryRow row)
+    {
         string speaker = NormalizeSpeaker(row.name);
         string dialogue = row.context ?? string.Empty;
         bool hasLeftImage = HasImageKey(row.imgLeft);
         bool hasRightImage = HasImageKey(row.imgRight);
+        TMP_Text dialogueText;
 
-        if (hasLeftImage)           ShowLeftDialogue(speaker, dialogue);
-        else if (hasRightImage)     ShowRightDialogue(speaker, dialogue);
-        else                        ShowNarration(dialogue);
+        if (hasLeftImage)           dialogueText = ShowLeftDialogue(speaker, dialogue);
+        else if (hasRightImage)     dialogueText = ShowRightDialogue(speaker, dialogue);
+        else                        dialogueText = ShowNarration(dialogue);
 
         ApplyBackgroundImage(row.bgImg);
         ApplyLeftCharacterImage(row.imgLeft);
         ApplyRightCharacterImage(row.imgRight);
+
+        PrepareDialogueTyping(dialogueText);
+        return GetCurrentDialogueCharacterCount();
+    }
+
+    // 현재 활성 대사의 보이는 글자 수를 지정
+    public void SetCurrentDialogueVisibleCharacters(int count)
+    {
+        if (_activeDialogueText == null) return;
+
+        int maxCharacters = _activeDialogueText.textInfo.characterCount;
+        _activeDialogueText.maxVisibleCharacters = Mathf.Clamp(count, 0, maxCharacters);
+    }
+
+    // 현재 활성 대사를 즉시 끝까지 표시
+    public void RevealCurrentDialogueInstantly()
+    {
+        if (_activeDialogueText == null) return;
+
+        _activeDialogueText.maxVisibleCharacters = int.MaxValue;
     }
 
     // 나레이션 UI만 표시하고 관련 텍스트 갱신
-    private void ShowNarration(string dialogue)
+    private TMP_Text ShowNarration(string dialogue)
     {
         SetContainerStates(false, false, true);
 
@@ -66,10 +95,12 @@ public sealed class VNUI : MonoBehaviour
         SetText(_leftText, string.Empty);
         SetText(_rightText, string.Empty);
         SetText(_narText, dialogue);
+
+        return _narText;
     }
 
     // 좌측 화자 UI를 표시하고 텍스트 갱신
-    private void ShowLeftDialogue(string speaker, string dialogue)
+    private TMP_Text ShowLeftDialogue(string speaker, string dialogue)
     {
         SetContainerStates(true, false, false);
 
@@ -79,10 +110,12 @@ public sealed class VNUI : MonoBehaviour
         SetText(_rightName, string.Empty);
         SetText(_rightText, string.Empty);
         SetText(_narText, string.Empty);
+
+        return _leftText;
     }
 
     // 우측 화자 UI를 표시하고 텍스트 갱신
-    private void ShowRightDialogue(string speaker, string dialogue)
+    private TMP_Text ShowRightDialogue(string speaker, string dialogue)
     {
         SetContainerStates(false, true, false);
 
@@ -92,6 +125,27 @@ public sealed class VNUI : MonoBehaviour
         SetText(_leftName, string.Empty);
         SetText(_leftText, string.Empty);
         SetText(_narText, string.Empty);
+
+        return _rightText;
+    }
+
+    // 타입라이팅을 위해 현재 대사 텍스트를 설정하고 초기 노출 상태를 0자로 맞춤
+    private void PrepareDialogueTyping(TMP_Text dialogueText)
+    {
+        _activeDialogueText = dialogueText;
+        if (_activeDialogueText == null) return;
+
+        _activeDialogueText.maxVisibleCharacters = 0;
+        _activeDialogueText.ForceMeshUpdate();
+    }
+
+    // 현재 활성 대사의 실제 문자 수를 반환
+    private int GetCurrentDialogueCharacterCount()
+    {
+        if (_activeDialogueText == null) return 0;
+
+        _activeDialogueText.ForceMeshUpdate();
+        return _activeDialogueText.textInfo.characterCount;
     }
 
     // 좌측 캐릭터 이미지 요청 토큰을 갱신하고 로드
@@ -224,4 +278,3 @@ public sealed class VNUI : MonoBehaviour
         return !string.IsNullOrEmpty(normalized) && normalized.ToLowerInvariant() != "none";
     }
 }
-

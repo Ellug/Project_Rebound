@@ -7,12 +7,7 @@ using GameData = CachedSOData;
 // 경기 전체 흐름을 조율하는 컨트롤러 : 쿼터 > 공방 > 하프타임 > 경기 종료 순서를 관리
 public class MatchGameManager : MonoBehaviour
 {
-    private const string Divider = "-------------------------------------";
-    private const string MyTeamLogColorHex = "#1E90FF";
-    private const string OpponentTeamLogColorHex = "#E80000";
-    private const string SystemLogColorHex = "#A3A3A3";
     private const string SystemLogPrefix = "[SYSTEM]";
-    private const string HighSchoolSuffix = "고등학교";
     private const string DefaultMatchImageId = "EventGame00_image01";
     private const string QuarterWhistleImageId = "EventGame00_img_whistle";
     private const string HalfTimeImageId = "EventGame00_img_halftime";
@@ -29,13 +24,14 @@ public class MatchGameManager : MonoBehaviour
     [SerializeField][Min(0)] private int _maxPlayTurnsPerQuarter = 5;
     [FormerlySerializedAs("_scorePerPossessionWin")]
     [SerializeField][Min(1)] private int _scorePerPlayTurnWin = 2;
-    [SerializeField][Min(0)] private int _benchRecoverCondition = 3;
+    [SerializeField][Min(0)] private int _benchRecoverCondition = 3;    
+    [SerializeField][Min(0f)] private float _logTypingCharactersPerSecond = 45f; // 로그 타이핑 속도
 
     private readonly List<QuarterScore> _quarterScores = new(4);
-    private readonly List<string> _logs = new(64);  // 경기 종료 후 MatchResult.logs로 복사됨
     private readonly Dictionary<int, StudentStatSnapshot> _studentStatSnapshots = new();
 
     private QuarterPodSimulator _quarterSimulator;
+    private MatchGameLogPresenter _matchLogPresenter;
     private MatchContext _context;
     private QuarterPodSession _activeQuarterSession;     // null이면 현재 쿼터 공방 진행 없음
     private int _activeQuarterNumber;
@@ -60,12 +56,15 @@ public class MatchGameManager : MonoBehaviour
     void Awake()
     {
         _quarterSimulator = CreateDefaultQuarterSimulator();
+        // 매치 로그 모듈 초기화
+        _matchLogPresenter = new MatchGameLogPresenter(this, _matchGameUi, _logTypingCharactersPerSecond, SystemLogPrefix, PlayQuarterEndCue);
         if (_halfTimeSelectionUi != null)
             _halfTimeSelectionUi.OnSelectionMade += HandleHalfTimeSelection;
     }
 
     void OnDestroy()
     {
+        _matchLogPresenter?.ResetUiLogTypingState();
         RestoreStudentStatsFromSnapshot();
 
         if (_halfTimeSelectionUi != null)
@@ -76,7 +75,7 @@ public class MatchGameManager : MonoBehaviour
     {
         if (string.IsNullOrWhiteSpace(upTeam) || string.IsNullOrWhiteSpace(downTeam) || string.IsNullOrWhiteSpace(mySchoolName))
         {
-            WriteSystemLog("StartMatch 입력이 유효하지 않습니다.");
+            _matchLogPresenter.WriteSystemLog("StartMatch 입력이 유효하지 않습니다.");
             return;
         }
 
@@ -95,7 +94,8 @@ public class MatchGameManager : MonoBehaviour
         _activeQuarterSession = null;
         _activeQuarterNumber = 0;
         _quarterScores.Clear();
-        _logs.Clear();
+        _matchLogPresenter.ClearAll();
+        _matchLogPresenter.SetTeamNames(_context.MySchoolName, _context.OpponentTeamName);
 
         _matchGameUi.PrepareMatchGameUi(FormatTeamNameForDisplay(upTeam), FormatTeamNameForDisplay(downTeam), ProgressStages);
         UpdateProgressUi();
@@ -105,31 +105,31 @@ public class MatchGameManager : MonoBehaviour
         _matchGameUi.SetMatchContextImage(DefaultMatchImageId);
         
         SoundManager.Instance.PlayBGM(103);
-        SoundManager.Instance.PlayEffect(301);
 
-        WriteLog(Divider);
-        WriteLog($"{upTeam} VS {downTeam}");
-        WriteLog(Divider);
+        _matchLogPresenter.WriteLog(MatchGameLogTokens.Divider, MatchLogStyle.Divider);
+        _matchLogPresenter.WriteLog($"{upTeam} VS {downTeam}");
+        _matchLogPresenter.WriteLog(MatchGameLogTokens.Divider, MatchLogStyle.Divider);
 
         // 경기 시뮬레이션 시작 세이브
         if (SaveManager.Instance != null)
-        {
             SaveManager.Instance.AutoSaveByBranch("경기 시뮬레이션 시작");
-        }
     }
 
     // UI 버튼 1회 = 공방 1회 또는 다음 스테이지로 이동 (TournamentManager.OnClickProgressMySchoolMatch에서 호출)
     public void ProgressMatchStep()
     {
+        // 진행 버튼 1회 입력으로 현재 로그 타이핑 우선 완료
+        if (_matchLogPresenter.TryCompletePendingUiLogs()) return;
+        if (_matchLogPresenter.TryRunPendingFlowActionsAfterUiLogs()) return;
+
         if (!_isMatchRunning)
         {
-            WriteSystemLog("진행 중인 경기가 없습니다.");
+            _matchLogPresenter.WriteSystemLog("진행 중인 경기가 없습니다.");
             return;
         }
 
         // 하프타임 선택 대기 중이면 진행 차단
-        if (_isWaitingHalfTime)
-            return;
+        if (_isWaitingHalfTime) return;
 
         // 공방 세션이 활성화 중이면 쿼터 내부 스텝만 진행
         if (_activeQuarterSession != null)
@@ -170,20 +170,32 @@ public class MatchGameManager : MonoBehaviour
     private void ProgressActiveQuarterPlayTurn()
     {
         QuarterPodStepResult stepResult = _quarterSimulator.ProgressPlayTurn(_context, _activeQuarterSession);
-        WriteQuarterLogs(stepResult.logs);
+        int completedQuarter = _activeQuarterNumber;
+        _matchLogPresenter.WriteQuarterLogs(stepResult.logs);
         RefreshLiveScoreUi();
 
         // 공방 결과 상황 이미지 교체
-        if (!string.IsNullOrEmpty(stepResult.contextImageId))
+        if (TryResolvePlayTurnContextImageId(stepResult.contextVisualCue, out string contextImageId))
         {
-            _matchGameUi.SetMatchContextImage(stepResult.contextImageId);
+            _matchGameUi.SetMatchContextImage(contextImageId);
         }
 
         if (!stepResult.isQuarterCompleted)
             return;
 
-        ApplyQuarterResult(_activeQuarterNumber, stepResult.quarterResult);
-        CompleteQuarter(_activeQuarterNumber);
+        QuarterSimulationResult completedQuarterResult = stepResult.quarterResult;
+
+        // 쿼터 종료 대기 중 동일 세션 재진입 차단
+        _activeQuarterSession = null;
+        _activeQuarterNumber = 0;
+
+        _matchLogPresenter.EnqueueFlowActionAfterUiLogs(() =>
+        {
+            if (!_isMatchRunning) return;
+
+            ApplyQuarterResult(completedQuarter, completedQuarterResult);
+            CompleteQuarter(completedQuarter);
+        });
     }
 
     public void AbortCurrentMatch()
@@ -197,21 +209,21 @@ public class MatchGameManager : MonoBehaviour
         _activeQuarterSession = null;
         _activeQuarterNumber = 0;
         _quarterScores.Clear();
-        _logs.Clear();
+        _matchLogPresenter.ClearAll();
     }
 
     private void BeginQuarter(int quarter)
     {
         SoundManager.Instance.PlayBGM(103);
-        if (quarter > 1) SoundManager.Instance.PlayEffect(301);
 
         QuarterPodBeginResult beginResult = _quarterSimulator.BeginQuarter(_context, quarter);
         _activeQuarterSession = beginResult.session;
         _activeQuarterNumber = quarter;
-        WriteQuarterLogs(beginResult.logs);
+        _matchLogPresenter.WriteQuarterLogs(beginResult.logs);
 
         // 쿼터 시작 이미지
         _matchGameUi.SetMatchContextImage(QuarterWhistleImageId);
+        SoundManager.Instance.PlayEffect(301);
     }
 
     private void ApplyQuarterResult(int quarter, QuarterSimulationResult quarterResult)
@@ -223,17 +235,9 @@ public class MatchGameManager : MonoBehaviour
         _quarterScores.Add(new QuarterScore(quarter, myQuarterScore, opponentQuarterScore));
         _matchGameUi.SetMatchScore(_context.GetLeftTeamScore(), _context.GetRightTeamScore());
 
-        // 쿼터 종료 이미지
-        _matchGameUi.SetMatchContextImage(QuarterWhistleImageId);
-
-        SoundManager.Instance.PlayEffect(302);
-        SoundManager.Instance.FadeOutBGM(0.2f);
-
         // 쿼터별 결과 세이브
         if (SaveManager.Instance != null)
-        {
             SaveManager.Instance.AutoSaveByBranch($"{quarter}쿼터 결과");
-        }
     }
 
     // 공방 진행 중에도 현재 쿼터 점수를 누적 합산해 실시간으로 스코어보드에 반영
@@ -269,15 +273,13 @@ public class MatchGameManager : MonoBehaviour
     {
         _isWaitingHalfTime = true;
         _halfTimeNextStage = nextStage;
-        WriteLog(Divider);
-        WriteLog(ApplyAnnouncementBold($"{afterQuarter}쿼터 종료 후 작전타임"));
-        WriteLog(Divider);
+        _matchLogPresenter.WriteLog(MatchGameLogTokens.Divider, MatchLogStyle.Divider);
+        _matchLogPresenter.WriteLog($"{afterQuarter}쿼터 종료 후 작전타임", MatchLogStyle.Announcement);
+        _matchLogPresenter.WriteLog(MatchGameLogTokens.Divider, MatchLogStyle.Divider);
 
         // 하프타임 선택지 노출 전 세이브
         if (SaveManager.Instance != null)
-        {
             SaveManager.Instance.AutoSaveByBranch("하프타임 선택 전");
-        }
 
         // 하프타임 이미지
         _matchGameUi.SetMatchContextImage(HalfTimeImageId);
@@ -290,16 +292,16 @@ public class MatchGameManager : MonoBehaviour
     // 여기서 하프타임 데이터 테이블 id 받으면 브릿지 연결해야할듯
     private void HandleHalfTimeSelection(string selectionText)
     {
-        WriteLog(selectionText);
-        WriteLog(ApplyAnnouncementBold("작전타임 종료"));
+        _matchLogPresenter.WriteLog(selectionText);
+        _matchLogPresenter.WriteLog(MatchGameLogTokens.Divider, MatchLogStyle.Divider);
+        _matchLogPresenter.WriteLog("작전타임 종료", MatchLogStyle.Announcement);
+        _matchLogPresenter.WriteLog(MatchGameLogTokens.Divider, MatchLogStyle.Divider);
         _isWaitingHalfTime = false;
 
         MoveToStage(_halfTimeNextStage); // 먼저 스테이지 이동 후 세이브
 
         if (SaveManager.Instance != null)
-        {
             SaveManager.Instance.AutoSaveByBranch("하프타임 선택 후");
-        }
     }
 
     private void MoveToStage(int stageIndex)
@@ -316,32 +318,29 @@ public class MatchGameManager : MonoBehaviour
 
     private void FinishMatch()
     {
-        if (!_isMatchRunning)
-            return;
+        if (!_isMatchRunning) return;
 
         RestoreStudentStatsFromSnapshot();
         _isMatchRunning = false;
 
         string winnerTeamName = ResolveWinnerTeamName();
-        WriteLog(Divider);
-        WriteLog("경기 종료");
-        WriteLog($"최종 스코어: {_context.MySchoolName} {_context.MySchoolScore} - {_context.OpponentScore} {_context.OpponentTeamName}");
-        WriteLog($"승자: {winnerTeamName}");
-        WriteLog(Divider);
+        _matchLogPresenter.WriteLog(MatchGameLogTokens.Divider, MatchLogStyle.Divider);
+        _matchLogPresenter.WriteLog("경기 종료");
+        _matchLogPresenter.WriteLog($"최종 스코어: {_context.MySchoolName} {_context.MySchoolScore} - {_context.OpponentScore} {_context.OpponentTeamName}");
+        _matchLogPresenter.WriteLog($"승자: {winnerTeamName}");
+        _matchLogPresenter.WriteLog(MatchGameLogTokens.Divider, MatchLogStyle.Divider);
 
         MatchResult result = new()
         {
             winnerTeamName = winnerTeamName,
             finalScore = new MatchScore(_context.MySchoolScore, _context.OpponentScore),
             quarterScores = new List<QuarterScore>(_quarterScores),
-            logs = new List<string>(_logs)
+            logs = new List<string>(_matchLogPresenter.Logs)
         };
 
         // 경기 시뮬레이션 종료 세이브
         if (SaveManager.Instance != null)
-        {
             SaveManager.Instance.AutoSaveByBranch("경기 시뮬레이션 종료");
-        }
 
         OnMatchFinished?.Invoke(result);
     }
@@ -356,104 +355,46 @@ public class MatchGameManager : MonoBehaviour
             return _context.OpponentTeamName;
 
         string tieWinner = UnityEngine.Random.value < 0.5f ? _context.MySchoolName : _context.OpponentTeamName;
-        WriteSystemLog($"동점 판정(Stub 랜덤): {tieWinner}");
+        _matchLogPresenter.WriteSystemLog($"동점 판정(Stub 랜덤): {tieWinner}");
         return tieWinner;
     }
 
-    private void WriteQuarterLogs(IReadOnlyList<QuarterLogEntry> logs)
+    private static bool TryResolvePlayTurnContextImageId(MatchContextVisualCue cue, out string imageId)
     {
-        for (int i = 0; i < logs.Count; i++)
+        switch (cue)
         {
-            QuarterLogEntry logEntry = logs[i];
-            if (logEntry.isSystem)
-                WriteSystemLog(logEntry.message);
-            else
-                WriteLog(logEntry.message);
+            case MatchContextVisualCue.PlayTurnDefault:
+                imageId = "EventGameTable04_img";
+                return true;
+            case MatchContextVisualCue.PlayTurnAttackFirst:
+                imageId = "EventGame00_img_attack_first";
+                return true;
+            case MatchContextVisualCue.PlayTurnAttackSecond:
+                imageId = "EventGame00_img_attack_second";
+                return true;
+            case MatchContextVisualCue.PlayTurnAttackSuccess:
+                imageId = "EventGame00_img_attack_success";
+                return true;
+            case MatchContextVisualCue.PlayTurnAttackFailed:
+                imageId = "EventGame00_img_attack_failed";
+                return true;
+            case MatchContextVisualCue.PlayTurnDefenseSuccess:
+                imageId = "EventGame00_img_defense_success";
+                return true;
+            case MatchContextVisualCue.PlayTurnDefenseFailed:
+                imageId = "EventGame00_img_defense_failed";
+                return true;
+            default:
+                imageId = null;
+                return false;
         }
     }
 
-    private void WriteLog(string message)
+    private void PlayQuarterEndCue()
     {
-        _logs.Add(message);
-        Debug.Log(message);
-        AppendLogToUi(message, isSystem: false);
-    }
-
-    private void WriteSystemLog(string message)
-    {
-        string formatted = $"{SystemLogPrefix} {message}";
-        _logs.Add(formatted);
-        Debug.Log(formatted);
-        AppendLogToUi(formatted, isSystem: true);
-    }
-
-    private void AppendLogToUi(string rawMessage, bool isSystem)
-    {
-        _matchGameUi.AppendMatchLog(FormatLogForUi(rawMessage, isSystem));
-    }
-
-    private string FormatLogForUi(string rawMessage, bool isSystem)
-    {
-        if (string.IsNullOrEmpty(rawMessage))
-            return rawMessage;
-
-        string formatted = rawMessage;
-        formatted = ReplaceTeamNameToken(formatted, _context != null ? _context.MySchoolName : null, isSystem ? null : MyTeamLogColorHex);
-        formatted = ReplaceTeamNameToken(formatted, _context != null ? _context.OpponentTeamName : null, isSystem ? null : OpponentTeamLogColorHex);
-
-        if (isSystem)
-            formatted = WrapColor(formatted, SystemLogColorHex);
-
-        return formatted;
-    }
-
-    private static string ReplaceTeamNameToken(string message, string fullTeamName, string colorHex)
-    {
-        if (string.IsNullOrEmpty(message) || string.IsNullOrWhiteSpace(fullTeamName))
-            return message;
-
-        string shortTeamName = ShortenSchoolName(fullTeamName);
-        string plainTag = $"[{shortTeamName}]";
-        string replacement = string.IsNullOrEmpty(colorHex) ? plainTag : WrapColor(plainTag, colorHex);
-
-        message = message.Replace($"[{fullTeamName}]", replacement);
-        message = message.Replace(fullTeamName, replacement);
-
-        if (!string.IsNullOrEmpty(colorHex))
-            message = message.Replace(plainTag, replacement);
-
-        return message;
-    }
-
-    private static string ShortenSchoolName(string schoolName)
-    {
-        if (string.IsNullOrWhiteSpace(schoolName))
-            return string.Empty;
-
-        string trimmed = schoolName.Trim();
-        if (trimmed.EndsWith(HighSchoolSuffix, StringComparison.Ordinal))
-        {
-            string withoutSuffix = trimmed[..^HighSchoolSuffix.Length].Trim();
-            if (!string.IsNullOrEmpty(withoutSuffix))
-                return withoutSuffix;
-        }
-
-        return trimmed;
-    }
-
-    private static string WrapColor(string message, string colorHex)
-    {
-        return $"<color={colorHex}>{message}</color>";
-    }
-
-    private static string ApplyAnnouncementBold(string message)
-    {
-        return $"<b>{message}</b>";
-    }
-
-    private static bool IsSystemLog(string message)
-    {
-        return !string.IsNullOrEmpty(message) && message.StartsWith(SystemLogPrefix, StringComparison.Ordinal);
+        _matchGameUi.SetMatchContextImage(QuarterWhistleImageId);
+        SoundManager.Instance.PlayEffect(302);
+        SoundManager.Instance.FadeOutBGM(0.2f);
     }
 
     // 슬롯에 배치된 학생을 출전 선수로 반환
@@ -517,7 +458,7 @@ public class MatchGameManager : MonoBehaviour
             downTeam = _context.OpponentTeamName,
             mySchoolName = _context.MySchoolName,
             progressStageIndex = _progressStageIndex,
-            logs = new List<string>(_logs),
+            logs = new List<string>(_matchLogPresenter.Logs),
         };
 
         if (!_hasStudentSnapshot)
@@ -565,11 +506,6 @@ public class MatchGameManager : MonoBehaviour
         _activeQuarterNumber = 0;
         _progressStageIndex = data.progressStageIndex;
 
-        // 로그 복원
-        _logs.Clear();
-        if (data.logs != null)
-            _logs.AddRange(data.logs);
-
         // 쿼터 점수 복원
         _quarterScores.Clear();
         int myTotal = 0;
@@ -591,6 +527,7 @@ public class MatchGameManager : MonoBehaviour
         EnemyStatRow enemyStat = enemyTable.GetOrNull(currentDay) ?? new EnemyStatRow();
         _context = new MatchContext(data.upTeam, data.downTeam, data.mySchoolName, field, bench, enemyStat);
         _context.RestoreScore(myTotal, opponentTotal);
+        _matchLogPresenter.SetTeamNames(_context.MySchoolName, _context.OpponentTeamName);
 
         // UI 갱신
         _matchGameUi.PrepareMatchGameUi(
@@ -598,8 +535,7 @@ public class MatchGameManager : MonoBehaviour
             FormatTeamNameForDisplay(_context.DownTeam),
             ProgressStages);
 
-        foreach (string log in _logs)
-            AppendLogToUi(log, IsSystemLog(log));
+        _matchLogPresenter.RestoreLogsAndRender(data.logs);
 
         UpdateProgressUi();
         _matchGameUi.SetMatchScore(_context.GetLeftTeamScore(), _context.GetRightTeamScore());

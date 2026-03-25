@@ -1,6 +1,36 @@
 ﻿using System;
 using System.Collections.Generic;
 
+public static class MatchGameLogTokens
+{
+    public const string Divider = "-------------------------------------";
+}
+
+public enum MatchLogStyle
+{
+    Normal = 0,
+    Divider = 1,
+    Announcement = 2
+}
+
+public enum MatchLogCue
+{
+    None = 0,
+    QuarterEndScoreLine = 1
+}
+
+public enum MatchContextVisualCue
+{
+    None = 0,
+    PlayTurnDefault = 1,
+    PlayTurnAttackFirst = 2,
+    PlayTurnAttackSecond = 3,
+    PlayTurnAttackSuccess = 4,
+    PlayTurnAttackFailed = 5,
+    PlayTurnDefenseSuccess = 6,
+    PlayTurnDefenseFailed = 7
+}
+
 // 한 경기의 최종 스코어 (우리 팀 / 상대 팀)
 [Serializable]
 public struct MatchScore
@@ -119,11 +149,15 @@ public readonly struct QuarterLogEntry
 {
     public readonly string message;
     public readonly bool isSystem;
+    public readonly MatchLogStyle style;
+    public readonly MatchLogCue cue;
 
-    public QuarterLogEntry(string message, bool isSystem)
+    public QuarterLogEntry(string message, bool isSystem, MatchLogStyle style = MatchLogStyle.Normal, MatchLogCue cue = MatchLogCue.None)
     {
         this.message = message;
         this.isSystem = isSystem;
+        this.style = style;
+        this.cue = cue;
     }
 }
 
@@ -146,15 +180,15 @@ public readonly struct QuarterPodStepResult
     public readonly bool isQuarterCompleted;
     public readonly QuarterSimulationResult quarterResult;
     public readonly IReadOnlyList<QuarterLogEntry> logs;
-    public readonly string contextImageId; // 공방 결과 상황 이미지 ID
+    public readonly MatchContextVisualCue contextVisualCue; // 공방 결과 상황 연출 타입
 
     public QuarterPodStepResult(bool isQuarterCompleted, QuarterSimulationResult quarterResult,
-        IReadOnlyList<QuarterLogEntry> logs, string contextImageId = null)
+        IReadOnlyList<QuarterLogEntry> logs, MatchContextVisualCue contextVisualCue = MatchContextVisualCue.None)
     {
         this.isQuarterCompleted = isQuarterCompleted;
         this.quarterResult = quarterResult;
         this.logs = logs;
-        this.contextImageId = contextImageId;
+        this.contextVisualCue = contextVisualCue;
     }
 }
 
