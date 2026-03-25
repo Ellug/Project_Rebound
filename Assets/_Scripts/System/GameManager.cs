@@ -22,6 +22,8 @@ public class GameManager : Singleton<GameManager>
     private bool _hasPendingFriendlyMatchResult;    // 로비 복귀 후 친선전 결과 팝업 대기 여부
     private bool _pendingFriendlyMatchDidWin;       // 대기 중인 친선전 승패
     private string _pendingFriendlyOpponentName = string.Empty; // 대기 중인 친선전 상대 학교명
+    private readonly TemporaryTrainingBoostSystem _trainingBoostSystem = new(); // itemeffect_06: 30일간 랜덤 스탯 경험치 1.3배 상승 효과
+    private readonly GraduateGiftBonusTracker _graduateGiftBonusTracker = new();
 
     private GameFlowData _flowData = GameFlowData.Default;
     private TournamentData _tournamentData = TournamentData.Default;
@@ -288,16 +290,17 @@ public class GameManager : Singleton<GameManager>
         CacheSceneReferences();         // 1. 씬 오브젝트 참조 캐싱
         SubscribeTurnManager();         // 2. TurnManager 이벤트 구독
         RegisterTurnModules();          // 3. TurnModule 등록 (AlwaysEffectTickModule 등)
-        RestoreTurnManagerState();      // 4. TurnManager 상태 복원 (씬 복귀 시)
-        InitializeEventManager();       // 5. EventManager 초기화
-        _lobbyStoryFlowManager.CacheFirstWinterSchedule(); // 6. 첫 겨울방학 일정 캐싱
-        SetInitialPhase();              // 7. 초기 페이즈 설정
+        RestoreSubsidyBonusFromSave();  // 4. itemeffect_01 지원금 영구 보너스 복원 (_monthlySubsidyModule 생성 직후)
+        RestoreTurnManagerState();      // 5. TurnManager 상태 복원 (씬 복귀 시)
+        InitializeEventManager();       // 6. EventManager 초기화
+        _lobbyStoryFlowManager.CacheFirstWinterSchedule(); // 7. 첫 겨울방학 일정 캐싱
+        SetInitialPhase();              // 8. 초기 페이즈 설정
 
         // 로비 기본 BGM은 결과 처리 전에 먼저 세팅하고,
         // 결과창 BGM(104/105)이 필요한 경우 해당 흐름에서 덮어쓴다.
         SoundManager.Instance.PlayBGM(102);
 
-        _lobbyMatchManager.HandlePendingResults(); // 8. 토너먼트/친선 결과 처리
+        _lobbyMatchManager.HandlePendingResults(); // 9. 토너먼트/친선 결과 처리
 
         // 토너먼트 진행 중이면 로비 초기화 완료 후 바로 토너먼트 씬으로 이동
         if (SaveManager.Instance != null && SaveManager.Instance.ConsumePendingTournamentRestore())
@@ -480,6 +483,12 @@ public class GameManager : Singleton<GameManager>
         SyncFlowStateFromLobby();
         RefreshLobbyTopInfo();
 
+        // itemeffect_06 만료 체크
+        TickTrainingBoost();
+
+        // 대기 중인 졸업 선물 처리 — 오늘 날짜에 해당하는 항목 팝업 표시
+        GraduateGiftSystem.ProcessPendingGifts(_turnManager.DateManager.CurrentDate);
+
         if (_lobbyStoryFlowManager.TryTriggerPreWinterStory())
             return;
 
@@ -525,7 +534,6 @@ public class GameManager : Singleton<GameManager>
             _lobbyWeekendManager.HandleFridayEnd();
         }
     }
-           
 
     // AlwaysEventManager가 이벤트 활성화를 알릴 때 호출 — row.type / row.id 기반으로 분기
     private void HandleAlwaysEventActivated(AlwaysEventRow row)
@@ -651,8 +659,69 @@ public class GameManager : Singleton<GameManager>
         FriendlyOpponentName = saved.friendlyOpponentName ?? string.Empty;
         IsFriendlyMatchConfirmed = saved.friendlyMatchConfirmed;
 
+        // itemeffect_06 일시적 훈련 효과 복원
+        DateTime boostExpire = saved.ParseTrainingBoostExpireDate();
+        if (boostExpire != default &&
+            StudentStatExpSystem.TryParseStatKey(saved.trainingBoostStatKey, out StudentCoreStat boostStat))
+        {
+            RestoreTrainingBoost(boostStat, boostExpire);
+        }
+
+        // 토너먼트 관련 데이터 복원
+        _graduateGiftBonusTracker.RestoreFromSave(saved.semiFinalReachedCount, saved.trainingEfficiencyPermBonusRate);
+
         Debug.Log($"[GameManager] flowData 복원: {parsedDate:yyyy-MM-dd}, phase={saved.phase}, events={_flowData.ActiveEventIds.Count}");
 
         SaveManager.Instance.ApplyLoadedData();
     }
+
+    // itemeffect_01: 지원금 영구 보너스 배율 조회
+    public float GetSubsidyPermBonusRate() => _monthlySubsidyModule?.GetPermanentBonusRate() ?? 0f;
+
+    // itemeffect_01: 배율 누적
+    public void AddSubsidyPermBonus(float rate) => _monthlySubsidyModule?.AddPermanentBonusRate(rate);
+
+    // itemeffect_01: 세이브 데이터에서 복원
+    private void RestoreSubsidyBonusFromSave()
+    {
+        SavedFlowData saved = SaveManager.Instance?.GetSavedFlowData();
+        if (saved == null) return;
+        _monthlySubsidyModule?.SetPermanentBonusRate(saved.subsidyPermBonusRate);
+    }
+
+    // itemeffect_04: 현재 지원금 금액 조회
+    public int GetCurrentSubsidyAmount() => _monthlySubsidyModule?.GetCurrentSubsidyAmount() ?? 0;
+
+    // itemeffect_06: 일시적 훈련 효과 적용
+    public void SetTemporaryTrainingBoost(StudentCoreStat stat, DateTime expireDate) => _trainingBoostSystem.Apply(stat, expireDate);
+
+    // itemeffect_06: 세이브용 데이터 반환
+    public (StudentCoreStat stat, DateTime expireDate, bool hasBoost) GetTrainingBoostSaveData() => _trainingBoostSystem.GetSaveData();
+
+    // itemeffect_06: 세이브 데이터에서 복원
+    public void RestoreTrainingBoost(StudentCoreStat stat, DateTime expireDate) => _trainingBoostSystem.Restore(stat, expireDate, CurrentDate);
+
+    // itemeffect_06: 배율 조회
+    public float GetTrainingBoostMultiplier(StudentCoreStat stat) => _trainingBoostSystem.GetMultiplier(stat, CurrentDate);
+
+    // itemeffect_06: 매 턴 만료 체크
+    private void TickTrainingBoost() => _trainingBoostSystem.Tick(CurrentDate);
+
+    // 토너먼트 결과 읽기 전용 참조
+    public TournamentData GetLastTournamentData() => _tournamentData;
+
+    // 4강 이상 진출 횟수 조회
+    public int GetSemiFinalReachedCount() => _graduateGiftBonusTracker.SemiFinalReachedCount;
+
+    // 4강 이상 진출 횟수 누적
+    public void AddSemiFinalReachedCount(int amount) => _graduateGiftBonusTracker.AddSemiFinalReachedCount(amount);
+
+    // itemeffect_07: 훈련 효율 영구 보너스 배율 조회
+    public float GetTrainingEfficiencyPermBonusRate() => _graduateGiftBonusTracker.GetTrainingEfficiencyPermBonusRate();
+
+    // itemeffect_07: 배율 누적 및 재학생 전체 적용
+    public void AddTrainingEfficiencyPermBonus(float rate) => _graduateGiftBonusTracker.AddTrainingEfficiencyPermBonus(rate);
+
+    // itemeffect_07: 신규 영입 학생에게 누적 배율 적용
+    public void ApplyTrainingEfficiencyPermBonusToStudent(Student student) => _graduateGiftBonusTracker.ApplyToStudent(student);
 }
