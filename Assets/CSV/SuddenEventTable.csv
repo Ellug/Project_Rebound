@@ -51,11 +51,11 @@ event_100008,새로운 메시지.,PostProcess,Daily,Neutral,Player,1,1,0,0,FALSE
 event_100009,새로운 메시지.,PostProcess,Daily,Neutral,Player,1,1,0,0,FALSE,none,none,-1,none,none,-1,none,-,-,-,TRUE,0.1,text_diag_000009_000
 event_100010,새로운 메시지.,PostProcess,Daily,Neutral,Player,1,1,0,0,FALSE,none,none,-1,none,none,-1,none,-,-,-,TRUE,0.1,text_diag_000010_000
 event_110001,[공지] 금일 지각자,PostProcess,Daily,Negative,Member,1,1,0,0,FALSE,none,none,-1,none,none,-1,none,-,-,-,TRUE,0.075,text_diag_100001_000
-event_110002,[공지] 학생 입원,PostProcess,Daily,Negative,Member,1,1,0,0,TRUE,condition,less ,60,condition,or_more,40,Day,-,-,-,TRUE,0.1,text_diag_100002_000
-event_110003,[공지] 학생 입원,PostProcess,Daily,Negative,Member,1,1,0,0,TRUE,condition,less ,40,condition,or_more,20,Day,-,-,-,TRUE,0.2,text_diag_100003_000
-event_110004,[공지] 학생 입원,PostProcess,Daily,Negative,Member,1,1,0,0,TRUE,condition,less ,20,none,none,-1,Day,-,-,-,FALSE,1,text_diag_100004_000
-event_001002,[공지] 학생 입원,PostProcess,Exercise,Negative | Body,Member,1,2,1,3,TRUE,condition,less ,70,condition,or_more,50,Day,-,-,-,TRUE,0.2,text_diag_110001_000
-event_001002,[공지] 학생 입원,PostProcess,Exercise,Negative | Body,Member,1,2,1,7,TRUE,condition,less ,50,condition,or_more,30,Day,-,-,-,TRUE,0.5,text_diag_110002_000
-event_001002,[공지] 학생 입원,PostProcess,Exercise,Negative | Body,Member,1,2,3,7,TRUE,condition,less ,30,condition,or_more,10,Day,-,-,-,TRUE,0.7,text_diag_110003_000
-event_001002,[공지] 학생 입원,PostProcess,Exercise,Negative | Body,Member,1,2,7,28,TRUE,condition,less ,10,none,none,-1,Day,-,-,-,FALSE,1,text_diag_110004_000
+event_110002,[공지] 학생 입원,PostProcess,Daily,Negative,Member,1,1,0,0,TRUE,condition,less ,60,condition,or_more,40,Day,-,-,-,TRUE,0.1,text_diag_110000_000
+event_110003,[공지] 학생 입원,PostProcess,Daily,Negative,Member,1,1,0,0,TRUE,condition,less ,40,condition,or_more,20,Day,-,-,-,TRUE,0.2,text_diag_110001_000
+event_110004,[공지] 학생 입원,PostProcess,Daily,Negative,Member,1,1,0,0,TRUE,condition,less ,20,none,none,-1,Day,-,-,-,FALSE,1,text_diag_110002_000
+event_001002,[공지] 학생 입원,PostProcess,Exercise,Negative | Body,Member,1,2,1,3,TRUE,condition,less ,70,condition,or_more,50,Day,-,-,-,TRUE,0.2,text_diag_111001_000
+event_001002,[공지] 학생 입원,PostProcess,Exercise,Negative | Body,Member,1,2,1,7,TRUE,condition,less ,50,condition,or_more,30,Day,-,-,-,TRUE,0.5,text_diag_111002_000
+event_001002,[공지] 학생 입원,PostProcess,Exercise,Negative | Body,Member,1,2,3,7,TRUE,condition,less ,30,condition,or_more,10,Day,-,-,-,TRUE,0.7,text_diag_111003_000
+event_001002,[공지] 학생 입원,PostProcess,Exercise,Negative | Body,Member,1,2,7,28,TRUE,condition,less ,10,none,none,-1,Day,-,-,-,FALSE,1,text_diag_111004_000
 event_120001,[공지] 간식 제공 행사 안내,PostProcess,Daily,Positive,Member,1,1,0,0,FALSE,none,none,-1,none,none,-1,none,-,-,-,TRUE,0.1,text_diag_200001_000

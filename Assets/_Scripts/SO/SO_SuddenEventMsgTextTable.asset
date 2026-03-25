@@ -674,43 +674,43 @@ MonoBehaviour:
     speaker: student
     dialogue: "{target1.grade} {target1.name} \uD559\uC0DD\uC774 \uAE08\uC77C \uC9C0\uAC01\uD558\uC600\uC2B5\uB2C8\uB2E4.
       \uACC4\uB3C4 \uBD80\uD0C1 \uB4DC\uB9BD\uB2C8\uB2E4."
-  - iD: text_diag_100002_000
+  - iD: text_diag_110000_000
     speaker: student
     dialogue: "\uC18C\uC18D \uD559\uC0DD\uC758 \uBCD1\uACB0 \uC2E0\uACE0 \uB0B4\uC5ED\uC744
       \uB2E4\uC74C\uACFC \uAC19\uC774 \uC548\uB0B4\uB4DC\uB9BD\uB2C8\uB2E4.\\n\\n\uB300\uC0C1:
       \uB18D\uAD6C\uBD80 {target1.grade} {target1.name} \uD559\uC0DD\\n\uC0AC\uC720:
       \uC778\uD50C\uB8E8\uC5D4\uC790"
-  - iD: text_diag_100003_000
+  - iD: text_diag_110001_000
     speaker: student
     dialogue: "\uC18C\uC18D \uD559\uC0DD\uC758 \uBCD1\uACB0 \uC2E0\uACE0 \uB0B4\uC5ED\uC744
       \uB2E4\uC74C\uACFC \uAC19\uC774 \uC548\uB0B4\uB4DC\uB9BD\uB2C8\uB2E4.\\n\\n\uB300\uC0C1:
       \uB18D\uAD6C\uBD80 {target1.grade} {target1.name} \uD559\uC0DD\\n\uC0AC\uC720:
       \uAE09\uC131 \uC7A5\uC5FC"
-  - iD: text_diag_100004_000
+  - iD: text_diag_110002_000
     speaker: student
     dialogue: "\uC18C\uC18D \uD559\uC0DD\uC758 \uBCD1\uACB0 \uC2E0\uACE0 \uB0B4\uC5ED\uC744
       \uB2E4\uC74C\uACFC \uAC19\uC774 \uC548\uB0B4\uB4DC\uB9BD\uB2C8\uB2E4.\\n\\n\uB300\uC0C1:
       \uB18D\uAD6C\uBD80 {target1.grade} {target1.name} \uD559\uC0DD\\n\uC0AC\uC720:
       \uC6B0\uC6B8\uC99D"
-  - iD: text_diag_110001_000
+  - iD: text_diag_111001_000
     speaker: student
     dialogue: "\uC18C\uC18D \uD559\uC0DD\uC758 \uCE58\uB8CC \uC2E0\uACE0 \uB0B4\uC5ED\uC744
       \uB2E4\uC74C\uACFC \uAC19\uC774 \uC548\uB0B4\uB4DC\uB9BD\uB2C8\uB2E4.\\n\\n\uB300\uC0C1:
       \uB18D\uAD6C\uBD80 {target1.grade} {target1.name} \uD559\uC0DD\\n\uC0AC\uC720:
       \uD0C0\uBC15\uC0C1"
-  - iD: text_diag_110002_000
+  - iD: text_diag_111002_000
     speaker: student
     dialogue: "\uC18C\uC18D \uD559\uC0DD\uC758 \uCE58\uB8CC \uC2E0\uACE0 \uB0B4\uC5ED\uC744
       \uB2E4\uC74C\uACFC \uAC19\uC774 \uC548\uB0B4\uB4DC\uB9BD\uB2C8\uB2E4.\\n\\n\uB300\uC0C1:
       \uB18D\uAD6C\uBD80 {target1.grade} {target1.name} \uD559\uC0DD\\n\uC0AC\uC720:
       \uC6B4\uB3D9 \uC911 \uBC1C\uBAA9 \uC5FC\uC88C"
-  - iD: text_diag_110003_000
+  - iD: text_diag_111003_000
     speaker: student
     dialogue: "\uC18C\uC18D \uD559\uC0DD\uC758 \uCE58\uB8CC \uC2E0\uACE0 \uB0B4\uC5ED\uC744
       \uB2E4\uC74C\uACFC \uAC19\uC774 \uC548\uB0B4\uB4DC\uB9BD\uB2C8\uB2E4.\\n\\n\uB300\uC0C1:
       \uB18D\uAD6C\uBD80 {target1.grade} {target1.name} \uD559\uC0DD\\n\uC0AC\uC720:
       \uC190\uAC00\uB77D \uC778\uB300 \uBD80\uC0C1"
-  - iD: text_diag_110004_000
+  - iD: text_diag_111004_000
     speaker: student
     dialogue: "\uC18C\uC18D \uD559\uC0DD\uC758 \uCE58\uB8CC \uC2E0\uACE0 \uB0B4\uC5ED\uC744
       \uB2E4\uC74C\uACFC \uAC19\uC774 \uC548\uB0B4\uB4DC\uB9BD\uB2C8\uB2E4.\\n\\n\uB300\uC0C1:
