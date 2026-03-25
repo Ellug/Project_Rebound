@@ -19,6 +19,7 @@ public class TurnManager : MonoBehaviour
     private bool _isTurnRunning;
     private TurnState _turnState = TurnState.WaitingForInput;
     private GamePhase _currentPhase = GamePhase.Init;
+    private readonly SuddenEvent _abnormalEvent = new SuddenEvent();
 
     public DateManager DateManager => _dateManager;
     public TurnContext CurrentContext => _currentContext;
@@ -124,8 +125,9 @@ public class TurnManager : MonoBehaviour
                     SuddenEventContextFlags.PostProcess
                 );
             }
-                _dateManager.AdvanceDay();
+            _dateManager.AdvanceDay();
             _turnIndex++;
+            ProcessDayStartAbnormal();
 
             if (SuddenEventManager.Instance != null)
             {
@@ -176,6 +178,64 @@ public class TurnManager : MonoBehaviour
     {
         _turnState = newState;
         OnTurnStateChanged?.Invoke(newState);
+    }
+    // 상태이상 처리
+    private void ProcessDayStartAbnormal()
+    {
+        if (StudentManager.Instance == null)
+            return;
+
+        List<Student> students = StudentManager.Instance.Students;
+        if (students == null || students.Count == 0)
+            return;
+
+        bool anyChanged = false;
+        List<string> activeAbnormals = new List<string>();
+
+        foreach (Student student in students)
+        {
+            if (student == null) continue;
+
+            Student.AbnormalType beforeState = student.abnormalState;
+            int beforeRemainTurn = student.abnormalRemainTurn;
+
+            if (student.abnormalState != Student.AbnormalType.None)
+            {
+                _abnormalEvent.TickAbnormal(student);
+            }
+            else
+            {
+                _abnormalEvent.TryApplyDiseaseAtDayStart(student);
+            }
+
+            if (beforeState != student.abnormalState || beforeRemainTurn != student.abnormalRemainTurn)
+            {
+                anyChanged = true;
+                StudentManager.Instance.NotifyStudentModified(student);
+            }
+
+            if (student.abnormalState != Student.AbnormalType.None)
+            {
+                string reason = string.IsNullOrEmpty(student.abnormalReasonTextId)
+                    ? "-"
+                    : student.abnormalReasonTextId;
+                activeAbnormals.Add($"{student.studentName}({GetAbnormalTypeLabel(student.abnormalState)}, {student.abnormalRemainTurn}턴, reason={reason})");
+            }
+        }
+
+        Debug.Log(activeAbnormals.Count > 0
+            ? $"[TurnManager] 날짜 시작 상태이상 현황 | {string.Join(", ", activeAbnormals)}"
+            : "[TurnManager] 날짜 시작 상태이상 현황 | 없음");
+    }
+
+    private string GetAbnormalTypeLabel(Student.AbnormalType abnormalType)
+    {
+        return abnormalType switch
+        {
+            Student.AbnormalType.Disease => "질병",
+            Student.AbnormalType.Injury => "부상",
+            _ => "없음"
+        };
     }
 
     // 로비로 복구시 턴, 데이트 데이터 복구
