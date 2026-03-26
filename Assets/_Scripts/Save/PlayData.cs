@@ -143,7 +143,6 @@ public class SavedStudentData
 
     public int abnormalState;           // 상태이상 종류
     public int abnormalRemainTurn;      // 상태이상 남은 턴
-    public string abnormalReasonTextId; // 상태이상 사유
 }
 
 // 슬롯 인덱스와 학생 ID 쌍으로 배치 정보 저장
@@ -221,7 +220,6 @@ public class SavedPendingAbnormalData
     public int studentId;               // 누구 부상인지
     public int abnormalState;           // 상태이상 종류
     public int abnormalRemainTurn;      // 턴 수
-    public string abnormalReasonTextId; // 상세 사유
 }
 
 [Serializable]

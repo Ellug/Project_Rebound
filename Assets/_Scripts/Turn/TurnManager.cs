@@ -189,7 +189,6 @@ public class TurnManager : MonoBehaviour
         if (students == null || students.Count == 0)
             return;
 
-        bool anyChanged = false;
         List<string> activeAbnormals = new List<string>();
 
         foreach (Student student in students)
@@ -210,16 +209,12 @@ public class TurnManager : MonoBehaviour
 
             if (beforeState != student.abnormalState || beforeRemainTurn != student.abnormalRemainTurn)
             {
-                anyChanged = true;
                 StudentManager.Instance.NotifyStudentModified(student);
             }
 
             if (student.abnormalState != Student.AbnormalType.None)
             {
-                string reason = string.IsNullOrEmpty(student.abnormalReasonTextId)
-                    ? "-"
-                    : student.abnormalReasonTextId;
-                activeAbnormals.Add($"{student.studentName}({GetAbnormalTypeLabel(student.abnormalState)}, {student.abnormalRemainTurn}턴, reason={reason})");
+                activeAbnormals.Add($"{student.studentName}({GetAbnormalTypeLabel(student.abnormalState)}, {student.abnormalRemainTurn}턴)");
             }
         }
 
