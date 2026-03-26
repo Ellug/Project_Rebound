@@ -178,8 +178,9 @@ public class LobbyUI : UIBase
                     SuddenEventManager.Instance.ProcessNextPopup();
                 }
             }
-        };
 
+        };
+        req.DisableBackKey = true;
         UIManager.Instance.ShowPopup(req); // UIManager를 통해 안전하게 팝업 호출
     }
 

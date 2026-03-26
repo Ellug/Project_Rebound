@@ -109,6 +109,8 @@ public class UIPopup : UIPopupBase
         if (_request == null)
             return;
 
+        this.DisableBackKey = _request.DisableBackKey;
+
         switch (_request.Type)
         {
             case UIPopupRequest.PanelType.Simple:

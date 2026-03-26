@@ -15,51 +15,64 @@ public class SuddenEventManager : Singleton<SuddenEventManager>
 
         if (tm != null && tm.DateManager != null)
         {
-            DayOfWeek currentDay = tm.DateManager.CurrentDate.DayOfWeek;
-
-            if (currentDay == DayOfWeek.Friday)
+            if (tm.CurrentPhase == GamePhase.MatchDay)
             {
-                string condStr = condition.ToString().ToLower();
+                return;
+            }
 
-                if (!condStr.Contains("start") && !condStr.Contains("begin") && !condStr.Contains("morning") && !condStr.Contains("enter") && !condStr.Contains("init"))
+            if (tm.DateManager != null)
+            {
+                DayOfWeek currentDay = tm.DateManager.CurrentDate.DayOfWeek;
+
+                if (currentDay == DayOfWeek.Saturday || currentDay == DayOfWeek.Sunday)
                 {
                     return;
                 }
-            }
-        }
 
-        if (_dailyEventCount >= MAX_EVENTS_PER_TURN) return;
+                if (currentDay == DayOfWeek.Friday)
+                {
+                    string condStr = condition.ToString().ToLower();
 
-        var table = CachedSOData.Get<SuddenEventTableSO>();
-        if (table == null) return;
-
-        List<SuddenEventRow> triggeredEvents = new List<SuddenEventRow>();
-
-        foreach (var row in table.Rows)
-        {
-            if (row.condition.ToString().Contains("School")) continue;
-            if ((row.condition & condition) == 0) continue;
-            if ((row.context & context) == 0) continue;
-            if (row.isProbable && UnityEngine.Random.value > row.probability) continue;
-
-            triggeredEvents.Add(row);
-        }
-
-        if (triggeredEvents.Count > 0)
-        {
-            for (int i = 0; i < triggeredEvents.Count; i++)
-            {
-                int rnd = UnityEngine.Random.Range(0, triggeredEvents.Count);
-                var temp = triggeredEvents[i];
-                triggeredEvents[i] = triggeredEvents[rnd];
-                triggeredEvents[rnd] = temp;
+                    if (!condStr.Contains("start") && !condStr.Contains("begin") && !condStr.Contains("morning") && !condStr.Contains("enter") && !condStr.Contains("init"))
+                    {
+                        return;
+                    }
+                }
             }
 
-            foreach (var evt in triggeredEvents)
+            if (_dailyEventCount >= MAX_EVENTS_PER_TURN) return;
+
+            var table = CachedSOData.Get<SuddenEventTableSO>();
+            if (table == null) return;
+
+            List<SuddenEventRow> triggeredEvents = new List<SuddenEventRow>();
+
+            foreach (var row in table.Rows)
             {
-                if (_dailyEventCount >= MAX_EVENTS_PER_TURN) break;
-                ExecuteEvent(evt);
-                _dailyEventCount++;
+                if (row.condition.ToString().Contains("School")) continue;
+                if ((row.condition & condition) == 0) continue;
+                if ((row.context & context) == 0) continue;
+                if (row.isProbable && UnityEngine.Random.value > row.probability) continue;
+
+                triggeredEvents.Add(row);
+            }
+
+            if (triggeredEvents.Count > 0)
+            {
+                for (int i = 0; i < triggeredEvents.Count; i++)
+                {
+                    int rnd = UnityEngine.Random.Range(0, triggeredEvents.Count);
+                    var temp = triggeredEvents[i];
+                    triggeredEvents[i] = triggeredEvents[rnd];
+                    triggeredEvents[rnd] = temp;
+                }
+
+                foreach (var evt in triggeredEvents)
+                {
+                    if (_dailyEventCount >= MAX_EVENTS_PER_TURN) break;
+                    ExecuteEvent(evt);
+                    _dailyEventCount++;
+                }
             }
         }
     }
