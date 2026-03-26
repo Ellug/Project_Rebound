@@ -90,6 +90,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 45f1d6a7e3c121b46807a6de72f9bf75
+    m_Address: Assets/_Images/GraduateGift/Gift_popup_img.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 501f9521696e812429fa667dda4613f9
     m_Address: RewardPopupTable
     m_ReadOnly: 0
