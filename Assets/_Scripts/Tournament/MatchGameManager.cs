@@ -29,6 +29,8 @@ public class MatchGameManager : MonoBehaviour
 
     private readonly List<QuarterScore> _quarterScores = new(4);
     private readonly Dictionary<int, StudentStatSnapshot> _studentStatSnapshots = new();
+    private readonly Dictionary<int, PendingAbnormalInfo> _pendingAbnormals = new();
+    private readonly SuddenEvent _suddenEvent = new SuddenEvent();
 
     private QuarterPodSimulator _quarterSimulator;
     private MatchGameLogPresenter _matchLogPresenter;
@@ -40,6 +42,7 @@ public class MatchGameManager : MonoBehaviour
     private int _halfTimeNextStage;                      // 하프타임 완료 후 이동할 스테이지
     private int _progressStageIndex;                     // MatchGameStages.Default 배열 인덱스
     private bool _hasStudentSnapshot;
+    private bool _rollQuarterInjury;
 
     private struct StudentStatSnapshot
     {
@@ -48,6 +51,20 @@ public class MatchGameManager : MonoBehaviour
         public int speed;
         public int jump;
         public int stamina;
+    }
+
+    private struct PendingAbnormalInfo
+    {
+        public Student.AbnormalType abnormalType;
+        public int remainTurn;
+        public string reasonTextId;
+
+        public PendingAbnormalInfo(Student.AbnormalType abnormalType, int remainTurn, string reasonTextId)
+        {
+            this.abnormalType = abnormalType;
+            this.remainTurn = remainTurn;
+            this.reasonTextId = reasonTextId;
+        }
     }
 
     // MatchGameStages.Default의 래퍼: 스테이지 배열을 읽기 전용으로 노출
@@ -71,7 +88,7 @@ public class MatchGameManager : MonoBehaviour
             _halfTimeSelectionUi.OnSelectionMade -= HandleHalfTimeSelection;
     }
 
-    public void StartMatch(string upTeam, string downTeam, string mySchoolName)
+    public void StartMatch(string upTeam, string downTeam, string mySchoolName, bool rollQuarterInjury = false)
     {
         if (string.IsNullOrWhiteSpace(upTeam) || string.IsNullOrWhiteSpace(downTeam) || string.IsNullOrWhiteSpace(mySchoolName))
         {
@@ -91,6 +108,8 @@ public class MatchGameManager : MonoBehaviour
         _isWaitingHalfTime = false;
         _halfTimeNextStage = 0;
         _progressStageIndex = 0;
+        _rollQuarterInjury = rollQuarterInjury;
+        _pendingAbnormals.Clear();
         _activeQuarterSession = null;
         _activeQuarterNumber = 0;
         _quarterScores.Clear();
@@ -208,13 +227,48 @@ public class MatchGameManager : MonoBehaviour
         _progressStageIndex = 0;
         _activeQuarterSession = null;
         _activeQuarterNumber = 0;
+        _rollQuarterInjury = false;
+        _pendingAbnormals.Clear();
         _quarterScores.Clear();
         _matchLogPresenter.ClearAll();
+    }
+
+    // 친선전 부상 판정
+    public void QueueFriendlyStartInjury()
+    {
+        if (_context == null)
+            return;
+
+        QueueInjuryForStudents(_context.FieldPlayers, isFriendlyStart: true);
+    }
+
+    // 경기 종료 후 부상 반영
+    public void ApplyPendingAbnormals()
+    {
+        if (StudentManager.Instance == null || StudentManager.Instance.Students == null)
+            return;
+
+        foreach (Student student in StudentManager.Instance.Students)
+        {
+            if (student == null)
+                continue;
+
+            if (!_pendingAbnormals.TryGetValue(student.id, out PendingAbnormalInfo pending))
+                continue;
+
+            _suddenEvent.ApplyAbnormal(student, pending.abnormalType, pending.remainTurn, pending.reasonTextId);
+            StudentManager.Instance.NotifyStudentModified(student);
+        }
+
+        _pendingAbnormals.Clear();
     }
 
     private void BeginQuarter(int quarter)
     {
         SoundManager.Instance.PlayBGM(103);
+
+        if (_rollQuarterInjury)
+            QueueInjuryForStudents(_context.FieldPlayers, isFriendlyStart: false);
 
         QuarterPodBeginResult beginResult = _quarterSimulator.BeginQuarter(_context, quarter);
         _activeQuarterSession = beginResult.session;
@@ -458,8 +512,21 @@ public class MatchGameManager : MonoBehaviour
             downTeam = _context.OpponentTeamName,
             mySchoolName = _context.MySchoolName,
             progressStageIndex = _progressStageIndex,
+            rollQuarterInjury = _rollQuarterInjury,
             logs = new List<string>(_matchLogPresenter.Logs),
         };
+
+        // 저장
+        foreach (KeyValuePair<int, PendingAbnormalInfo> pair in _pendingAbnormals)
+        {
+            data.pendingAbnormals.Add(new SavedPendingAbnormalData
+            {
+                studentId = pair.Key,
+                abnormalState = (int)pair.Value.abnormalType,
+                abnormalRemainTurn = pair.Value.remainTurn,
+                abnormalReasonTextId = pair.Value.reasonTextId
+            });
+        }
 
         if (!_hasStudentSnapshot)
             CaptureStudentStatSnapshot();
@@ -505,6 +572,23 @@ public class MatchGameManager : MonoBehaviour
         _activeQuarterSession = null;
         _activeQuarterNumber = 0;
         _progressStageIndex = data.progressStageIndex;
+        _rollQuarterInjury = data.rollQuarterInjury;
+        _pendingAbnormals.Clear();
+
+        if (data.pendingAbnormals != null)
+        {
+            foreach (SavedPendingAbnormalData pending in data.pendingAbnormals)
+            {
+                if (pending == null)
+                    continue;
+
+                _pendingAbnormals[pending.studentId] = new PendingAbnormalInfo(
+                    (Student.AbnormalType)pending.abnormalState,
+                    pending.abnormalRemainTurn,
+                    pending.abnormalReasonTextId
+                );
+            }
+        }
 
         // 쿼터 점수 복원
         _quarterScores.Clear();
@@ -639,5 +723,33 @@ public class MatchGameManager : MonoBehaviour
 
         _studentStatSnapshots.Clear();
         _hasStudentSnapshot = false;
+    }
+
+    // 경기 중 부상 판정
+    private void QueueInjuryForStudents(List<Student> students, bool isFriendlyStart)
+    {
+        if (students == null || students.Count == 0)
+            return;
+
+        for (int i = 0; i < students.Count; i++)
+        {
+            Student student = students[i];
+            if (student == null)
+                continue;
+
+            bool rolled;
+            int duration;
+            string reasonTextId;
+
+            if (isFriendlyStart)
+                rolled = _suddenEvent.TryRollFriendlyStartInjury(student, out duration, out reasonTextId);
+            else
+                rolled = _suddenEvent.TryRollQuarterStartInjury(student, out duration, out reasonTextId);
+
+            if (!rolled)
+                continue;
+
+            _pendingAbnormals[student.id] = new PendingAbnormalInfo(Student.AbnormalType.Injury, duration, reasonTextId);
+        }
     }
 }

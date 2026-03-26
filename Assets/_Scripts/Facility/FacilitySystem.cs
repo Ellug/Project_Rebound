@@ -203,4 +203,25 @@ public class FacilitySystem : Singleton<FacilitySystem>
                 break;
         }
     }
+
+    // 비용 없이 강제 업그레이드 (졸업 선물 전용)
+    public void ForceUpgrade(string facility)
+    {
+        var next = GetNextData(facility);
+        if (next == null)
+        {
+            Debug.LogWarning($"[FacilitySystem] {facility} 이미 최대 레벨입니다.");
+            return;
+        }
+
+        _levels[facility] = next.facilityLv;
+        Debug.Log($"[FacilitySystem] {facility} 강제 업그레이드 완료 → Lv{next.facilityLv}");
+
+        LogAccumulatedBonus(facility);
+
+        if (SaveManager.Instance != null)
+        {
+            SaveManager.Instance.SaveCurrent();
+        }
+    }
 }

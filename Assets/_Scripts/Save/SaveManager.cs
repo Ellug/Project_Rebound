@@ -346,6 +346,9 @@ public class SaveManager : Singleton<SaveManager>
         if (GameManager.Instance == null)
             return new SavedFlowData();
 
+        // itemeffect_06 세이브 데이터 수집
+        var boostData = GameManager.Instance.GetTrainingBoostSaveData();
+
         return new SavedFlowData
         {
             currentDate = GameManager.Instance.CurrentDate.ToString("yyyy-MM-dd"),
@@ -375,6 +378,21 @@ public class SaveManager : Singleton<SaveManager>
             friendlyMatchLastMonth = FriendlyMatchManager.Instance != null
                 ? FriendlyMatchManager.Instance.LastMonth
                 : -1,
+
+            // itemeffect_01 영구 지원금 보너스 저장
+            subsidyPermBonusRate = GameManager.Instance.GetSubsidyPermBonusRate(),
+
+            // itemeffect_06 일시적 훈련 효과 저장
+            trainingBoostExpireDate = boostData.hasBoost && boostData.expireDate != default
+                ? boostData.expireDate.ToString("yyyy-MM-dd")
+                : string.Empty,
+            trainingBoostStatKey = boostData.hasBoost
+                ? boostData.stat.ToString().ToLowerInvariant()
+                : string.Empty,
+
+            // 토너먼트 관련 저장
+            semiFinalReachedCount = GameManager.Instance.GetSemiFinalReachedCount(),
+            trainingEfficiencyPermBonusRate = GameManager.Instance.GetTrainingEfficiencyPermBonusRate(),
         };
     }
 
@@ -418,6 +436,9 @@ public class SaveManager : Singleton<SaveManager>
                 conditionRecoveryBonus = s.conditionRecoveryBonus,
                 trainingEfficiencyBonus = s.trainingEfficiencyBonus,
                 isTrainingBlocked = s.isTrainingBlocked,
+                abnormalState = (int)s.abnormalState,
+                abnormalRemainTurn = s.abnormalRemainTurn,
+                abnormalReasonTextId = s.abnormalReasonTextId,
             });
         }
 
@@ -555,6 +576,9 @@ public class SaveManager : Singleton<SaveManager>
                 conditionRecoveryBonus = data.conditionRecoveryBonus,
                 trainingEfficiencyBonus = data.trainingEfficiencyBonus,
                 isTrainingBlocked = data.isTrainingBlocked,
+                abnormalState = (Student.AbnormalType)data.abnormalState,
+                abnormalRemainTurn = data.abnormalRemainTurn,
+                abnormalReasonTextId = data.abnormalReasonTextId,
             };
 
             if (student.id > maxId)
