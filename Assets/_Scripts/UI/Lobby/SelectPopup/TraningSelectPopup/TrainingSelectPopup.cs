@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -6,7 +6,6 @@ using UnityEngine.UI;
 public class TrainingSelectPopup : UIPopup
 {
     private readonly SuddenEvent _suddenEvent = new SuddenEvent();
-    private static readonly AbnormalStatusEffect _abnormalStatusEffect = new AbnormalStatusEffect();
 
     private enum TrainingPageKind
     {
@@ -304,7 +303,7 @@ public class TrainingSelectPopup : UIPopup
             {
                 foreach (Student student in StudentManager.Instance.Students)
                 {
-                    if (student != null && !_abnormalStatusEffect.IsTrainingBlocked(student))
+                    if (student != null && !student.isTrainingBlocked)
                     {
                         allBlocked = false;
                         break;
@@ -361,11 +360,6 @@ public class TrainingSelectPopup : UIPopup
         {
             req.OnStudentsSelected = (students) =>
             {
-                students.RemoveAll(student => student == null || _abnormalStatusEffect.IsTrainingBlocked(student));
-
-                if (students.Count == 0)
-                    return;
-
                 StartTrainingFlowFromConfirm(data, students);
             };
             req.OnPrimary = () => { };
@@ -376,8 +370,8 @@ public class TrainingSelectPopup : UIPopup
             {
                 List<Student> students = GetDefaultStudentsForNoSelect();
 
-                // 훈련 불가 학생 제거
-                students.RemoveAll(student => student == null || _abnormalStatusEffect.IsTrainingBlocked(student));
+                // isTrainingBlocked 학생 제거
+                students.RemoveAll(s => s == null || s.isTrainingBlocked);
 
                 if (students.Count == 0) return;
 
@@ -538,26 +532,27 @@ public class TrainingSelectPopup : UIPopup
             }
         }
 
+        // 농구공 장비 보너스 적용 (훈련 경험치 효율 증가)
+        float basketballRate = EquipmentSystem.Instance != null
+            ? EquipmentSystem.Instance.GetBasketballBonusRate()
+            : 1f;
+
         foreach (Student student in students)
         {
             if (student == null) continue;
 
             // 훈련 차단된 학생은 효과 적용 안함
-            if (_abnormalStatusEffect.IsTrainingBlocked(student)) continue;
-
-            float trainingExpMultiplier = _abnormalStatusEffect.GetTrainingExpMultiplier(student);
-            float shootDelta = data.shootDelta * trainingExpMultiplier;
-            float speedDelta = data.speedDelta * trainingExpMultiplier;
-            float jumpDelta = data.jumpDelta * trainingExpMultiplier;
-            float staminaDelta = data.staminaDelta * trainingExpMultiplier;
-            float mentalDelta = data.mentalDelta * trainingExpMultiplier;
+            if (student.isTrainingBlocked) continue;
 
             // 컨디션
             if (data.conditionDelta >= 0)
             {
-                // 소모량에 노드 감소 보너스 적용 (Floor로 내림 처리해 소량 보너스도 반영)
+                float shoesDecayRate = EquipmentSystem.Instance != null
+                    ? EquipmentSystem.Instance.GetShoesConditionDecayRate()
+                    : 1f;
                 int cost = Mathf.FloorToInt(data.conditionDelta * (1f + nodeConditionBonus));
                 cost = Mathf.Max(0, cost);
+                cost = Mathf.RoundToInt(cost * shoesDecayRate);
                 student.condition -= cost;
             }
             else
@@ -569,20 +564,20 @@ public class TrainingSelectPopup : UIPopup
             student.condition = Student.ClampCondition(student.condition);
 
             // 스탯 경험치(훈련 공식 적용)
-            int shootExpDelta = StudentStatExpSystem.AddTrainingExp(student, StudentCoreStat.Shoot, shootDelta, gymBonus, gymLv, requiredLv, nodeTrainingBonus);
-            int speedExpDelta = StudentStatExpSystem.AddTrainingExp(student, StudentCoreStat.Speed, speedDelta, gymBonus, gymLv, requiredLv, nodeTrainingBonus);
-            int jumpExpDelta = StudentStatExpSystem.AddTrainingExp(student, StudentCoreStat.Jump, jumpDelta, gymBonus, gymLv, requiredLv, nodeTrainingBonus);
-            int staminaExpDelta = StudentStatExpSystem.AddTrainingExp(student, StudentCoreStat.Stamina, staminaDelta, gymBonus, gymLv, requiredLv, nodeTrainingBonus);
+            int shootExpDelta = StudentStatExpSystem.AddTrainingExp(student, StudentCoreStat.Shoot, data.shootDelta * basketballRate, gymBonus, gymLv, requiredLv, nodeTrainingBonus);
+            int speedExpDelta = StudentStatExpSystem.AddTrainingExp(student, StudentCoreStat.Speed, data.speedDelta * basketballRate, gymBonus, gymLv, requiredLv, nodeTrainingBonus);
+            int jumpExpDelta = StudentStatExpSystem.AddTrainingExp(student, StudentCoreStat.Jump, data.jumpDelta * basketballRate, gymBonus, gymLv, requiredLv, nodeTrainingBonus);
+            int staminaExpDelta = StudentStatExpSystem.AddTrainingExp(student, StudentCoreStat.Stamina, data.staminaDelta * basketballRate, gymBonus, gymLv, requiredLv, nodeTrainingBonus);
 
             // 멘탈
             int mentalExpDelta;
-            if (mentalDelta >= 0)
+            if (data.mentalDelta >= 0)
             {
-                mentalExpDelta = StudentStatExpSystem.AddTrainingExpWithRate(student, StudentCoreStat.Mental, mentalDelta, mentalBonus, nodeTrainingBonus);
+                mentalExpDelta = StudentStatExpSystem.AddTrainingExpWithRate(student, StudentCoreStat.Mental, data.mentalDelta * basketballRate, mentalBonus, nodeTrainingBonus);
             }
             else
             {
-                mentalExpDelta = StudentStatExpSystem.AddRawExp(student, StudentCoreStat.Mental, Mathf.RoundToInt(mentalDelta));
+                mentalExpDelta = StudentStatExpSystem.AddRawExp(student, StudentCoreStat.Mental, data.mentalDelta);
             }
 
             // 포텐셜 스탯이 실제로 오른 훈련에서만 추가 경험치 지급
