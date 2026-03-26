@@ -5,6 +5,7 @@ using UnityEngine.UI;
 // 훈련 선택 팝업 (페이지 전환 방식)
 public class TrainingSelectPopup : UIPopup
 {
+    private static readonly AbnormalStatusEffect _abnormalStatusEffect = new AbnormalStatusEffect();
     private readonly SuddenEvent _suddenEvent = new SuddenEvent();
 
     private enum TrainingPageKind
@@ -303,7 +304,7 @@ public class TrainingSelectPopup : UIPopup
             {
                 foreach (Student student in StudentManager.Instance.Students)
                 {
-                    if (student != null && !student.isTrainingBlocked)
+                    if (!_abnormalStatusEffect.IsTrainingBlocked(student, isIndividualTraining: false))
                     {
                         allBlocked = false;
                         break;
@@ -360,6 +361,12 @@ public class TrainingSelectPopup : UIPopup
         {
             req.OnStudentsSelected = (students) =>
             {
+                students.RemoveAll(student => _abnormalStatusEffect.IsTrainingBlocked(student, isIndividualTraining: true));
+                if (students.Count == 0)
+                {
+                    return;
+                }
+
                 StartTrainingFlowFromConfirm(data, students);
             };
             req.OnPrimary = () => { };
@@ -370,8 +377,7 @@ public class TrainingSelectPopup : UIPopup
             {
                 List<Student> students = GetDefaultStudentsForNoSelect();
 
-                // isTrainingBlocked 학생 제거
-                students.RemoveAll(s => s == null || s.isTrainingBlocked);
+                students.RemoveAll(student => _abnormalStatusEffect.IsTrainingBlocked(student, isIndividualTraining: false));
 
                 if (students.Count == 0) return;
 
@@ -541,8 +547,15 @@ public class TrainingSelectPopup : UIPopup
         {
             if (student == null) continue;
 
-            // 훈련 차단된 학생은 효과 적용 안함
-            if (student.isTrainingBlocked) continue;
+            if (_abnormalStatusEffect.IsTrainingBlocked(student, data.requiresStudentSelection))
+                continue;
+
+            float trainingExpMultiplier = _abnormalStatusEffect.GetTrainingExpMultiplier(student);
+            float shootDelta = data.shootDelta * basketballRate * trainingExpMultiplier;
+            float speedDelta = data.speedDelta * basketballRate * trainingExpMultiplier;
+            float jumpDelta = data.jumpDelta * basketballRate * trainingExpMultiplier;
+            float staminaDelta = data.staminaDelta * basketballRate * trainingExpMultiplier;
+            float mentalDelta = data.mentalDelta * basketballRate * trainingExpMultiplier;
 
             // 컨디션
             if (data.conditionDelta >= 0)
@@ -564,16 +577,16 @@ public class TrainingSelectPopup : UIPopup
             student.condition = Student.ClampCondition(student.condition);
 
             // 스탯 경험치(훈련 공식 적용)
-            int shootExpDelta = StudentStatExpSystem.AddTrainingExp(student, StudentCoreStat.Shoot, data.shootDelta * basketballRate, gymBonus, gymLv, requiredLv, nodeTrainingBonus);
-            int speedExpDelta = StudentStatExpSystem.AddTrainingExp(student, StudentCoreStat.Speed, data.speedDelta * basketballRate, gymBonus, gymLv, requiredLv, nodeTrainingBonus);
-            int jumpExpDelta = StudentStatExpSystem.AddTrainingExp(student, StudentCoreStat.Jump, data.jumpDelta * basketballRate, gymBonus, gymLv, requiredLv, nodeTrainingBonus);
-            int staminaExpDelta = StudentStatExpSystem.AddTrainingExp(student, StudentCoreStat.Stamina, data.staminaDelta * basketballRate, gymBonus, gymLv, requiredLv, nodeTrainingBonus);
+            int shootExpDelta = StudentStatExpSystem.AddTrainingExp(student, StudentCoreStat.Shoot, shootDelta, gymBonus, gymLv, requiredLv, nodeTrainingBonus);
+            int speedExpDelta = StudentStatExpSystem.AddTrainingExp(student, StudentCoreStat.Speed, speedDelta, gymBonus, gymLv, requiredLv, nodeTrainingBonus);
+            int jumpExpDelta = StudentStatExpSystem.AddTrainingExp(student, StudentCoreStat.Jump, jumpDelta, gymBonus, gymLv, requiredLv, nodeTrainingBonus);
+            int staminaExpDelta = StudentStatExpSystem.AddTrainingExp(student, StudentCoreStat.Stamina, staminaDelta, gymBonus, gymLv, requiredLv, nodeTrainingBonus);
 
             // 멘탈
             int mentalExpDelta;
             if (data.mentalDelta >= 0)
             {
-                mentalExpDelta = StudentStatExpSystem.AddTrainingExpWithRate(student, StudentCoreStat.Mental, data.mentalDelta * basketballRate, mentalBonus, nodeTrainingBonus);
+                mentalExpDelta = StudentStatExpSystem.AddTrainingExpWithRate(student, StudentCoreStat.Mental, mentalDelta, mentalBonus, nodeTrainingBonus);
             }
             else
             {

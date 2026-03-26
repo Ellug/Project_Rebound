@@ -202,10 +202,6 @@ public class TurnManager : MonoBehaviour
             {
                 _abnormalEvent.TickAbnormal(student);
             }
-            else
-            {
-                _abnormalEvent.TryApplyDiseaseAtDayStart(student);
-            }
 
             if (beforeState != student.abnormalState || beforeRemainTurn != student.abnormalRemainTurn)
             {
