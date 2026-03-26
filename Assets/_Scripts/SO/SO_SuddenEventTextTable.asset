@@ -115,6 +115,34 @@ MonoBehaviour:
     target: 1
     speaker: '[SYSTEM]'
     description: "\uC0C1\uD0DC\uC774\uC0C1 \uD68C\uBCF5"
+  - id: text_SuddenEvent_000011
+    condition: 1
+    target: 1
+    speaker: '[SYSTEM]'
+    description: "{effect1.target_name} {effect1.amount} \uC99D\uAC00, {effect2.target_name}
+      {effect2.amount} \uC99D\uAC00"
+  - id: text_SuddenEvent_000012
+    condition: 1
+    target: 20
+    speaker: '[SYSTEM]'
+    description: "\uD300 {effect1.target_name} {effect1.amount} \uC99D\uAC00"
+  - id: text_SuddenEvent_000013
+    condition: 1
+    target: 20
+    speaker: '[SYSTEM]'
+    description: "\uD300 {effect1.target_name} {effect1.amount} \uAC10\uC18C"
+  - id: text_SuddenEvent_000014
+    condition: 1
+    target: 20
+    speaker: '[SYSTEM]'
+    description: "\uD300 {effect1.target_name} {effect1.amount} \uC99D\uAC00, {effect2.target_name}
+      {effect2.amount} \uC99D\uAC00"
+  - id: text_SuddenEvent_000015
+    condition: 1
+    target: 20
+    speaker: '[SYSTEM]'
+    description: "\uD300 {effect1.target_name} {effect1.amount} \uC99D\uAC00, {effect2.target_name}
+      {effect2.amount} \uC99D\uAC00, {effect3.target_name} {effect3.amount} \uAC10\uC18C"
   - id: text_SuddenEvent_100001
     condition: 1
     target: 1
