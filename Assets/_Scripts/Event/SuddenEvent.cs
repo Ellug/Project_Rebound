@@ -1,23 +1,7 @@
 using UnityEngine;
 
 public class SuddenEvent
-{   
-    // 임시 나중에 참조 변경 예정
-    private static readonly string[] DISEASE_REASON_TEXT_IDS =
-    {
-        "text_diag_100002_000",
-        "text_diag_100003_000",
-        "text_diag_100004_000"
-    };
-
-    private static readonly string[] INJURY_REASON_TEXT_IDS =
-    {
-        "text_diag_110001_000",
-        "text_diag_110002_000",
-        "text_diag_110003_000",
-        "text_diag_110004_000"
-    };
-
+{
     private struct DurationRange
     {
         public int min;
@@ -43,34 +27,31 @@ public class SuddenEvent
             return false;
 
         DurationRange durationRange = GetDiseaseDurationRange(student.condition);
-        // 날짜 시작 질병은 즉시  반영
         SetAbnormal(
             student,
             Student.AbnormalType.Disease,
-            Random.Range(durationRange.min, durationRange.max + 1),
-            PickReasonTextId(DISEASE_REASON_TEXT_IDS)
+            Random.Range(durationRange.min, durationRange.max + 1)
         );
         return true;
     }
 
     public bool TryApplyTrainingInjury(Student student)
     {
-        if (!TryRollInjury(student, MatchInjuryTrigger.Training, out int duration, out string reasonTextId))
+        if (!TryRollInjury(student, MatchInjuryTrigger.Training, out int duration))
             return false;
 
-        // 훈련 부상은 훈련 직후 바로 적용
-        ApplyAbnormal(student, Student.AbnormalType.Injury, duration, reasonTextId);
+        ApplyAbnormal(student, Student.AbnormalType.Injury, duration);
         return true;
     }
 
-    public bool TryRollQuarterStartInjury(Student student, out int duration, out string reasonTextId)
+    public bool TryRollQuarterStartInjury(Student student, out int duration)
     {
-        return TryRollInjury(student, MatchInjuryTrigger.QuarterStart, out duration, out reasonTextId);
+        return TryRollInjury(student, MatchInjuryTrigger.QuarterStart, out duration);
     }
 
-    public bool TryRollFriendlyStartInjury(Student student, out int duration, out string reasonTextId)
+    public bool TryRollFriendlyStartInjury(Student student, out int duration)
     {
-        return TryRollInjury(student, MatchInjuryTrigger.FriendlyStart, out duration, out reasonTextId);
+        return TryRollInjury(student, MatchInjuryTrigger.FriendlyStart, out duration);
     }
 
     public void TickAbnormal(Student student)
@@ -87,15 +68,14 @@ public class SuddenEvent
             ClearAbnormal(student);
     }
 
-    public void ApplyAbnormal(Student student, Student.AbnormalType type, int duration, string reasonTextId = null)
+    public void ApplyAbnormal(Student student, Student.AbnormalType type, int duration)
     {
-        SetAbnormal(student, type, duration, reasonTextId);
+        SetAbnormal(student, type, duration);
     }
 
-    private bool TryRollInjury(Student student, MatchInjuryTrigger trigger, out int duration, out string reasonTextId)
+    private bool TryRollInjury(Student student, MatchInjuryTrigger trigger, out int duration)
     {
         duration = 0;
-        reasonTextId = null;
 
         if (!CanRollAbnormal(student))
             return false;
@@ -109,7 +89,6 @@ public class SuddenEvent
 
         DurationRange durationRange = GetInjuryDurationRange(student.condition, trigger);
         duration = Random.Range(durationRange.min, durationRange.max + 1);
-        reasonTextId = PickReasonTextId(INJURY_REASON_TEXT_IDS);
         return true;
     }
 
@@ -130,8 +109,6 @@ public class SuddenEvent
         return table.GetByCondition(isInsane: false, conditionValue: student.condition);
     }
 
-
-    // 그냥 하드 코딩
     private DurationRange GetInjuryDurationRange(int condition, MatchInjuryTrigger trigger)
     {
         switch (trigger)
@@ -169,7 +146,7 @@ public class SuddenEvent
         return student != null && student.abnormalState != Student.AbnormalType.None;
     }
 
-    private void SetAbnormal(Student student, Student.AbnormalType type, int duration, string reasonTextId)
+    private void SetAbnormal(Student student, Student.AbnormalType type, int duration)
     {
         if (student == null)
             return;
@@ -180,10 +157,8 @@ public class SuddenEvent
             return;
         }
 
-        // 전부 갱신
         student.abnormalState = type;
         student.abnormalRemainTurn = duration;
-        student.abnormalReasonTextId = reasonTextId;
     }
 
     private void ClearAbnormal(Student student)
@@ -193,16 +168,6 @@ public class SuddenEvent
 
         student.abnormalState = Student.AbnormalType.None;
         student.abnormalRemainTurn = 0;
-        student.abnormalReasonTextId = null;
-    }
-
-    private string PickReasonTextId(string[] candidateIds)
-    {
-        if (candidateIds == null || candidateIds.Length == 0)
-            return null;
-
-        // 사유 랜덤으로
-        return candidateIds[Random.Range(0, candidateIds.Length)];
     }
 
     private enum MatchInjuryTrigger

@@ -57,13 +57,11 @@ public class MatchGameManager : MonoBehaviour
     {
         public Student.AbnormalType abnormalType;
         public int remainTurn;
-        public string reasonTextId;
 
-        public PendingAbnormalInfo(Student.AbnormalType abnormalType, int remainTurn, string reasonTextId)
+        public PendingAbnormalInfo(Student.AbnormalType abnormalType, int remainTurn)
         {
             this.abnormalType = abnormalType;
             this.remainTurn = remainTurn;
-            this.reasonTextId = reasonTextId;
         }
     }
 
@@ -256,7 +254,7 @@ public class MatchGameManager : MonoBehaviour
             if (!_pendingAbnormals.TryGetValue(student.id, out PendingAbnormalInfo pending))
                 continue;
 
-            _suddenEvent.ApplyAbnormal(student, pending.abnormalType, pending.remainTurn, pending.reasonTextId);
+            _suddenEvent.ApplyAbnormal(student, pending.abnormalType, pending.remainTurn);
             StudentManager.Instance.NotifyStudentModified(student);
         }
 
@@ -523,8 +521,7 @@ public class MatchGameManager : MonoBehaviour
             {
                 studentId = pair.Key,
                 abnormalState = (int)pair.Value.abnormalType,
-                abnormalRemainTurn = pair.Value.remainTurn,
-                abnormalReasonTextId = pair.Value.reasonTextId
+                abnormalRemainTurn = pair.Value.remainTurn
             });
         }
 
@@ -584,8 +581,7 @@ public class MatchGameManager : MonoBehaviour
 
                 _pendingAbnormals[pending.studentId] = new PendingAbnormalInfo(
                     (Student.AbnormalType)pending.abnormalState,
-                    pending.abnormalRemainTurn,
-                    pending.abnormalReasonTextId
+                    pending.abnormalRemainTurn
                 );
             }
         }
@@ -739,17 +735,15 @@ public class MatchGameManager : MonoBehaviour
 
             bool rolled;
             int duration;
-            string reasonTextId;
-
             if (isFriendlyStart)
-                rolled = _suddenEvent.TryRollFriendlyStartInjury(student, out duration, out reasonTextId);
+                rolled = _suddenEvent.TryRollFriendlyStartInjury(student, out duration);
             else
-                rolled = _suddenEvent.TryRollQuarterStartInjury(student, out duration, out reasonTextId);
+                rolled = _suddenEvent.TryRollQuarterStartInjury(student, out duration);
 
             if (!rolled)
                 continue;
 
-            _pendingAbnormals[student.id] = new PendingAbnormalInfo(Student.AbnormalType.Injury, duration, reasonTextId);
+            _pendingAbnormals[student.id] = new PendingAbnormalInfo(Student.AbnormalType.Injury, duration);
         }
     }
 }
