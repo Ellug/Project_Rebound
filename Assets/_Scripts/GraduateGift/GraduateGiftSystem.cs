@@ -154,6 +154,7 @@ public static class GraduateGiftSystem
         UIManager.Instance.ShowPopup(UIPopupRequest.Default(
             title: popupRow.rewardHeader,
             message: popupRow.rewardBody,
+            previewImageId: "Gift_popup_img",
             onPrimary: onNext,
             onCancel: null,
             showCancel: false,
