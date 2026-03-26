@@ -7,6 +7,7 @@ public class SuddenEventManager : Singleton<SuddenEventManager>
 {
     private int _dailyEventCount = 0;
     private const int MAX_EVENTS_PER_TURN = 3;
+    private readonly SuddenEvent _abnormalEvent = new SuddenEvent();
 
     // 지속 기간이 있는 상태 이상/버프를 추적하기 위한 데이터
     [Serializable]
@@ -129,6 +130,15 @@ public class SuddenEventManager : Singleton<SuddenEventManager>
             if (targets.Count == 0 && row.targetMin > 0) return false;
         }
 
+        if (IsDiseaseAbnormalEvent(row))
+        {
+            targets = targets.Where(student => student != null && student.abnormalState == Student.AbnormalType.None).ToList();
+            if (targets.Count == 0)
+            {
+                return false;
+            }
+        }
+
         Dictionary<string, string> textVars = new Dictionary<string, string>();
 
         for (int i = 0; i < targets.Count; i++)
@@ -174,9 +184,37 @@ public class SuddenEventManager : Singleton<SuddenEventManager>
         ProcessEffect(row.effect1, 1);
         ProcessEffect(row.effect2, 2);
         ProcessEffect(row.effect3, 3);
+        ApplyDiseaseAbnormal(row, targets, termDays);
 
         ShowEventTextOrDialogue(row, targets, textVars, fromDialogue, originRoomId);
         return true;
+    }
+
+    private bool IsDiseaseAbnormalEvent(SuddenEventRow row)
+    {
+        return row != null
+            && (row.id == "event_001003"
+            || row.id == "event_001004"
+            || row.id == "event_001005");
+    }
+
+    private void ApplyDiseaseAbnormal(SuddenEventRow row, List<Student> targets, int termDays)
+    {
+        if (!IsDiseaseAbnormalEvent(row) || termDays <= 0 || targets == null || StudentManager.Instance == null)
+        {
+            return;
+        }
+
+        foreach (Student student in targets)
+        {
+            if (student == null || student.abnormalState != Student.AbnormalType.None)
+            {
+                continue;
+            }
+
+            _abnormalEvent.ApplyAbnormal(student, Student.AbnormalType.Disease, termDays);
+            StudentManager.Instance.NotifyStudentModified(student);
+        }
     }
 
     // ==========================================
