@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 [Serializable]
@@ -23,7 +23,7 @@ public class PlayData
     public bool isRecruitmentInProgress;                        // 새 게임 첫 영입 진행 중 여부
     public List<SavedGraduationRecord> graduationRecords = new(); // 졸업 기록 목록 (졸업 날짜, 등급, 보상)
     public List<PendingGraduateGift> pendingGraduateGifts = new(); // 대기 중인 졸업 선물 목록 (랜덤 날짜에 지급 예약된 보상)
-
+    public EquipmentSaveData equipment = new();                 // 장비 강화 상태
 }
 
 // GameFlowData 날짜/턴 관련 필드 대응

@@ -1,4 +1,4 @@
-#if UNITY_EDITOR
+﻿#if UNITY_EDITOR
 using System.Collections.Generic;
 
 // 구글 시트 → CSV 동기화에 사용할 시트 ID와 각 테이블의 export URL을 정의하는 설정 클래스
@@ -56,6 +56,7 @@ public static class GoogleSheetSyncConfig
     private const string GID_HALFTIME_SELECT_TEXT               = "2038993277";     // 작전타임 선택지 텍스트 테이블
     private const string GID_HALFTIME_SELECT                    = "930760343";      // 작전타임 선택지 테이블
 
+    private const string GID_ENHANCING_GRADUATE_GIFTS           = "134128496";      // 졸업생의 선물 강화 테이블
 
     public static readonly IReadOnlyList<SheetTableEntry> Tables = new List<SheetTableEntry>
     {
@@ -104,6 +105,7 @@ public static class GoogleSheetSyncConfig
         new("RewardPopupTable.csv",                     Url(GID_REWARD_POPUP)),                             // 보상 팝업창
         new("HalftimeSelectTextTable.csv",              Url(GID_HALFTIME_SELECT_TEXT)),                     // 작전타임 선택지 텍스트 테이블
         new("HalftimeSelectTable.csv",                  Url(GID_HALFTIME_SELECT)),                          // 작전타임 선택지 테이블
+        new("EquipmentUpgradeTable.csv",                Url(GID_ENHANCING_GRADUATE_GIFTS)),                 // 졸업생의 선물 강화 테이블
     };
 }
 
