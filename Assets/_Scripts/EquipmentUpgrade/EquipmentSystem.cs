@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class EquipmentSystem : Singleton<EquipmentSystem>
 {
@@ -16,6 +17,48 @@ public class EquipmentSystem : Singleton<EquipmentSystem>
     public int ShoesLevel => _shoesLevel;
 
     protected override void OnSingletonAwake() { }
+
+    // 개발 편의용 단축키 (F1~F4: 강화, F5: 초기화)
+#if UNITY_EDITOR
+    void Update()
+    {
+        var kb = Keyboard.current;
+        if (kb == null) return;
+
+        if (kb.f1Key.wasPressedThisFrame)
+        {
+            Upgrade("uniform");
+            RefreshPopup();
+        }
+        if (kb.f2Key.wasPressedThisFrame)
+        {
+            Upgrade("basketball");
+            RefreshPopup();
+        }
+        if (kb.f3Key.wasPressedThisFrame)
+        {
+            Upgrade("shoes");
+            RefreshPopup();
+        }
+        if (kb.f4Key.wasPressedThisFrame)
+        {
+            UpgradeRandom();
+            RefreshPopup();
+        }
+        if (kb.f5Key.wasPressedThisFrame)
+        {
+            ResetToDefault();
+            RefreshPopup();
+        }
+    }
+
+    private void RefreshPopup()
+    {
+        var popup = FindFirstObjectByType<EquipmentStatusPopup>();
+        if (popup != null && popup.gameObject.activeSelf)
+            popup.Refresh();
+    }
+#endif
 
     // 강화
 

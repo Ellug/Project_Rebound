@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,7 +14,7 @@ public class LobbyUI : UIBase
         public Sprite student;
         public Sprite facility;
         public Sprite coach;
-        public Sprite shop;
+        public Sprite gift;
     }
 
     [Header("Top Info")]
@@ -38,6 +37,7 @@ public class LobbyUI : UIBase
     [SerializeField] private HeadCoachPopup _headCoachPopup; // 씬에 배치된 감독 노드 팝업 (비활성화 상태)
     [SerializeField] private FacilityPopup _facilityPopup; // 씬에 배치된 감독 노드 팝업 (비활성화 상태)
     [SerializeField] private AlwaysEffectPopup _alwaysEffectPopup; // 씬에 배치된 상시 효과 확인 팝업 (비활성화 상태)
+    [SerializeField] private EquipmentStatusPopup _equipmentPopup;
 
     [Header("Center Message")]
     [SerializeField] private TMP_Text _txtMessage;
@@ -52,6 +52,7 @@ public class LobbyUI : UIBase
     [SerializeField] private Button _btnCoach;    // 감독 노드 (MVP 개발 X)
     [SerializeField] private Button _btnShop;     // 상점 (MVP 개발 X)
     [SerializeField] private Button _btnEffectIcon; // 현재 적용 중인 상시 효과 확인
+    [SerializeField] private Button _btnGift; // 하단 탭 졸업선물 버튼
     [SerializeField] private BottomTabActiveSpriteSet _activeTabSprites; // 탭 활성 시 교체할 스프라이트
 
     [SerializeField] private RecruitmentManager _recruitmentManager;
@@ -63,10 +64,12 @@ public class LobbyUI : UIBase
     private Sprite _facilityDefaultSprite;
     private Sprite _coachDefaultSprite;
     private Sprite _shopDefaultSprite;
+    private Sprite _giftDefaultSprite;
     private bool _lastTrainingPopupActive;
     private bool _lastStudentPopupActive;
     private bool _lastCoachPopupActive;
     private bool _lastFacilityPopupActive;
+    private bool _lastEquipmentPopupActive;
 
     // 씬에 미리 배치된 경우 Start에서 초기화
     void Start()
@@ -84,11 +87,13 @@ public class LobbyUI : UIBase
         bool studentActive = IsPopupActive(_studentManagementPopup);
         bool coachActive = IsPopupActive(_headCoachPopup);
         bool facilityActive = IsPopupActive(_facilityPopup);
+        bool equipmentActive = IsPopupActive(_equipmentPopup);
 
         if (trainingActive == _lastTrainingPopupActive
             && studentActive == _lastStudentPopupActive
             && coachActive == _lastCoachPopupActive
-            && facilityActive == _lastFacilityPopupActive)
+            && facilityActive == _lastFacilityPopupActive
+            && equipmentActive == _lastEquipmentPopupActive)
             return;
 
         RefreshBottomNavTabSprites();
@@ -256,6 +261,10 @@ public class LobbyUI : UIBase
         // 현재 적용 중인 상시 효과 확인 팝업 오픈
         if (_btnEffectIcon != null)
             _btnEffectIcon.onClick.AddListener(OnClickEffectIcon);
+
+        // 졸업 선물 버튼
+        if (_btnGift != null)
+            _btnGift.onClick.AddListener(OnClickGraduateGift);
     }
 
     private void OnClickTraining()
@@ -422,6 +431,32 @@ public class LobbyUI : UIBase
 
         _alwaysEffectPopup.transform.SetAsLastSibling();
         _alwaysEffectPopup.Open();
+    }
+
+    // 졸업 선물 팝업
+    private void OnClickGraduateGift()
+    {
+        if (IsAnyLobbyPopupAnimating()) return;
+        if (_equipmentPopup == null) return;
+
+        bool wasActive = _equipmentPopup.gameObject.activeSelf;
+
+        if (wasActive)
+        {
+            _equipmentPopup.Close();
+            RefreshBottomNavTabSprites();
+            return;
+        }
+
+        if (IsOtherLobbyPopupOpen(_equipmentPopup))
+        {
+            CloseAllLobbyPopups();
+            RefreshBottomNavTabSprites();
+            return;
+        }
+
+        _equipmentPopup.Open();
+        RefreshBottomNavTabSprites();
     }
 
     // 데이터 매니저 등에서 정보를 받아와 UI 갱신
@@ -595,6 +630,10 @@ public class LobbyUI : UIBase
             _facilityPopup.Close();
         }
 
+        if (_equipmentPopup != null && _equipmentPopup.gameObject.activeSelf)
+        {
+            _equipmentPopup.Close();
+        }
         RefreshBottomNavTabSprites();
     }
 
@@ -606,6 +645,7 @@ public class LobbyUI : UIBase
         _facilityDefaultSprite = GetButtonSprite(_btnFacility);
         _coachDefaultSprite = GetButtonSprite(_btnCoach);
         _shopDefaultSprite = GetButtonSprite(_btnShop);
+        _giftDefaultSprite = GetButtonSprite(_btnGift);
     }
 
     // 현재 팝업 상태에 맞춰 하단 탭 버튼 이미지를 갱신
@@ -615,17 +655,20 @@ public class LobbyUI : UIBase
         bool studentActive = IsPopupActive(_studentManagementPopup);
         bool coachActive = IsPopupActive(_headCoachPopup);
         bool facilityActive = IsPopupActive(_facilityPopup);
+        bool equipmentActive = IsPopupActive(_equipmentPopup);
 
         ApplyTabSprite(_btnTraining, _trainingDefaultSprite, _activeTabSprites != null ? _activeTabSprites.training : null, trainingActive);
         ApplyTabSprite(_btnStudent, _studentDefaultSprite, _activeTabSprites != null ? _activeTabSprites.student : null, studentActive);
         ApplyTabSprite(_btnFacility, _facilityDefaultSprite, _activeTabSprites != null ? _activeTabSprites.facility : null, facilityActive);
         ApplyTabSprite(_btnCoach, _coachDefaultSprite, _activeTabSprites != null ? _activeTabSprites.coach : null, coachActive);
-        ApplyTabSprite(_btnShop, _shopDefaultSprite, _activeTabSprites != null ? _activeTabSprites.shop : null, false);
+        ApplyTabSprite(_btnGift, _giftDefaultSprite, _activeTabSprites != null ? _activeTabSprites.gift : null, equipmentActive);
+
 
         _lastTrainingPopupActive = trainingActive;
         _lastStudentPopupActive = studentActive;
         _lastCoachPopupActive = coachActive;
         _lastFacilityPopupActive = facilityActive;
+        _lastEquipmentPopupActive = equipmentActive;
     }
 
     // 탭 활성 여부에 따라 버튼 타겟 이미지 스프라이트를 변경
@@ -690,7 +733,8 @@ public class LobbyUI : UIBase
         return (_trainingSelectPopup != null && _trainingSelectPopup != currentPopup && _trainingSelectPopup.gameObject.activeSelf)
             || (_studentManagementPopup != null && _studentManagementPopup != currentPopup && _studentManagementPopup.gameObject.activeSelf)
             || (_headCoachPopup != null && _headCoachPopup != currentPopup && _headCoachPopup.gameObject.activeSelf)
-            || (_facilityPopup != null && _facilityPopup != currentPopup && _facilityPopup.gameObject.activeSelf);
+            || (_facilityPopup != null && _facilityPopup != currentPopup && _facilityPopup.gameObject.activeSelf)
+            || (_equipmentPopup != null && _equipmentPopup != currentPopup && _equipmentPopup.gameObject.activeSelf);
     }
 
     // 특정 팝업이 애니메이션 중인지 확인
@@ -709,6 +753,7 @@ public class LobbyUI : UIBase
         return IsPopupAnimating(_trainingSelectPopup)
             || IsPopupAnimating(_studentManagementPopup)
             || IsPopupAnimating(_headCoachPopup)
-            || IsPopupAnimating(_facilityPopup);
+            || IsPopupAnimating(_facilityPopup)
+            || IsPopupAnimating(_equipmentPopup);
     }
 }
