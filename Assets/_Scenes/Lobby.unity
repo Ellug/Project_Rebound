@@ -20163,6 +20163,7 @@ GameObject:
   - component: {fileID: 1940678554}
   - component: {fileID: 1940678556}
   - component: {fileID: 1940678555}
+  - component: {fileID: 1940678557}
   m_Layer: 5
   m_Name: BG Image
   m_TagString: Untagged
@@ -20227,6 +20228,24 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1940678553}
   m_CullTransparentMesh: 1
+--- !u!114 &1940678557
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1940678553}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e1c334f7a7582042a9ad6f84c1e8205, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LobbyRandomBackground
+  _backgroundImage: {fileID: 1940678555}
+  _backgroundFileNames:
+  - Lobby00_bg_counseling
+  - Lobby00_bg_gym
+  - Lobby00_bg_restaurant
+  - Lobby00_bg_school
 --- !u!224 &1941883454 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5378121372708596083, guid: 39d947343ebf33e488aa08dbd106c785, type: 3}
