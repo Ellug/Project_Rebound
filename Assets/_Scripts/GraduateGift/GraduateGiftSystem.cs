@@ -243,7 +243,7 @@ public static class GraduateGiftSystem
                 break;
 
             case "itemeffect_03":
-                Debug.LogWarning("[GraduateGiftSystem] itemeffect_03 장비 업그레이드는 아직 미구현입니다.");
+                ExecuteEquipmentUpgrade();
                 break;
 
             case "itemeffect_04":
@@ -308,6 +308,19 @@ public static class GraduateGiftSystem
         string target = upgradable[UnityEngine.Random.Range(0, upgradable.Count)];
         facilitySystem.ForceUpgrade(target);
         Debug.Log($"[GraduateGiftSystem] 시설 무료 업그레이드: {target}");
+    }
+
+    // itemeffect_03: 랜덤 장비 1개를 1단계 업그레이드
+    private static void ExecuteEquipmentUpgrade()
+    {
+        if (EquipmentSystem.Instance == null)
+        {
+            Debug.LogWarning("[GraduateGiftSystem] EquipmentSystem이 없어 장비 업그레이드를 적용할 수 없습니다.");
+            return;
+        }
+
+        EquipmentSystem.Instance.UpgradeRandom();
+        Debug.Log("[GraduateGiftSystem] 랜덤 장비 1단계 업그레이드 적용");
     }
 
     // itemeffect_04: 현재 지원금의 20%를 즉시 골드로 지급

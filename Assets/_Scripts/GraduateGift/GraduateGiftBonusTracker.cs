@@ -1,6 +1,4 @@
-﻿// GraduateGiftBonusTracker.cs
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 // 졸업 선물 관련 영구 보너스 상태 관리
 // itemeffect_07: 훈련 효율 영구 보너스
