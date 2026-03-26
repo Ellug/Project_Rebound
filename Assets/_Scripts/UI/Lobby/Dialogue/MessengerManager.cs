@@ -23,12 +23,15 @@ public class MessengerManager : Singleton<MessengerManager>
 
     public void ReceiveMessage(string roomId, string roomName, ChatMessage newMessage)
     {
-        DateTime currentDate = DateTime.Now;
-        TurnManager turnManager = FindFirstObjectByType<TurnManager>();
-        if (turnManager != null && turnManager.DateManager != null)
-            currentDate = turnManager.DateManager.CurrentDate;
+        if (newMessage.Timestamp == default(DateTime) || newMessage.Timestamp.Date == DateTime.Now.Date)
+        {
+            DateTime currentDate = DateTime.Now;
+            TurnManager turnManager = FindFirstObjectByType<TurnManager>();
+            if (turnManager != null && turnManager.DateManager != null)
+                currentDate = turnManager.DateManager.CurrentDate;
 
-        newMessage.Timestamp = currentDate;
+            newMessage.Timestamp = currentDate;
+        }
 
         ChatRoom room = _activeRooms.Find(r => r.RoomId == roomId);
 
@@ -45,13 +48,13 @@ public class MessengerManager : Singleton<MessengerManager>
         }
 
         room.Messages.Add(newMessage);
-        room.LastUpdatedDate = currentDate;
+
+        room.LastUpdatedDate = newMessage.Timestamp;
 
         OnRoomListUpdated?.Invoke();
         OnMessageAdded?.Invoke(room);
         OnLatestMessageReceived?.Invoke(newMessage);
 
-        // 메시지 수신 저장
         if (SaveManager.Instance != null && SaveManager.Instance.CurrentData != null)
         {
             Debug.Log("[MessengerManager] 메시지 수신 저장");

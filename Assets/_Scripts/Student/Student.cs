@@ -56,7 +56,6 @@ public class Student
 
     public AbnormalType abnormalState = AbnormalType.None;  // 상태이상 종류
     public int abnormalRemainTurn = 0;                      // 상태이상 남은턴
-    public string abnormalReasonTextId;                     // 상세 사유
 
     public static int ClampCondition(int value)
     {

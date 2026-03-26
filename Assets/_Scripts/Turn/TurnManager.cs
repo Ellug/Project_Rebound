@@ -189,7 +189,6 @@ public class TurnManager : MonoBehaviour
         if (students == null || students.Count == 0)
             return;
 
-        bool anyChanged = false;
         List<string> activeAbnormals = new List<string>();
 
         foreach (Student student in students)
@@ -210,16 +209,12 @@ public class TurnManager : MonoBehaviour
 
             if (beforeState != student.abnormalState || beforeRemainTurn != student.abnormalRemainTurn)
             {
-                anyChanged = true;
                 StudentManager.Instance.NotifyStudentModified(student);
             }
 
             if (student.abnormalState != Student.AbnormalType.None)
             {
-                string reason = string.IsNullOrEmpty(student.abnormalReasonTextId)
-                    ? "-"
-                    : student.abnormalReasonTextId;
-                activeAbnormals.Add($"{student.studentName}({GetAbnormalTypeLabel(student.abnormalState)}, {student.abnormalRemainTurn}턴, reason={reason})");
+                activeAbnormals.Add($"{student.studentName}({GetAbnormalTypeLabel(student.abnormalState)}, {student.abnormalRemainTurn}턴)");
             }
         }
 
@@ -270,6 +265,10 @@ public class TurnManager : MonoBehaviour
         {
             _dateManager.AdvanceDay();
             _turnIndex++;
+        }
+        if (SuddenEventManager.Instance != null)
+        {
+            SuddenEventManager.Instance.TickTermEffects();
         }
         // 이게 갱신 시키는거 같음
         InitTurnContext(TurnActionType.Rest);
