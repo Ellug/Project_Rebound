@@ -200,6 +200,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d7ce51f313b96d1428741c22b8b13ede
+    m_Address: EquipmentUpgradeTable
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: dc266deca0543554daec8fa475f08eea
     m_Address: StoryTable
     m_ReadOnly: 0
