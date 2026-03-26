@@ -271,6 +271,10 @@ public class TurnManager : MonoBehaviour
             _dateManager.AdvanceDay();
             _turnIndex++;
         }
+        if (SuddenEventManager.Instance != null)
+        {
+            SuddenEventManager.Instance.TickTermEffects();
+        }
         // 이게 갱신 시키는거 같음
         InitTurnContext(TurnActionType.Rest);
 
