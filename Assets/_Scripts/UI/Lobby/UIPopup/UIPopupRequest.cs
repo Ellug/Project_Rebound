@@ -46,6 +46,8 @@ public sealed class UIPopupRequest
 
     public bool PrimaryInteractable = true;                 // Primary 버튼 인터랙션 가능 여부
 
+    public bool DisableBackKey = false;
+
     // 학생 선택이 필요한 팝업(훈련/이벤트 등) 옵션
     public bool RequiresStudentSelection = false;           // 학생 선택 필요 여부
     public int MaxSelectCount = 0;                          // 선택 최대 인원(0=무제한)
@@ -57,6 +59,7 @@ public sealed class UIPopupRequest
     public Action OnCancel;  // Cancel 버튼 클릭 시
 
     public List<GuidePage> Pages = new List<GuidePage>(); // Guide 모드 페이지 목록
+
 
     // Simple 프리셋 생성(최소 필드만 세팅)
     public static UIPopupRequest Simple(

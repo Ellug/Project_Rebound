@@ -8,22 +8,42 @@ public class SuddenEventManager : Singleton<SuddenEventManager>
     private int _dailyEventCount = 0;
     private const int MAX_EVENTS_PER_TURN = 3;
 
+    // 지속 기간이 있는 상태 이상/버프를 추적하기 위한 데이터
+    [Serializable]
+    public class ActiveTermEffect
+    {
+        public string StudentName;
+        public PlayerStat StatType;
+        public int Amount;
+        public int RemainingDays;
+    }
+
+    // 현재 적용 중인 기간제 효과 목록
+    [SerializeField] private List<ActiveTermEffect> _activeTermEffects = new List<ActiveTermEffect>();
+
     public void EvaluateEvents(SuddenEventConditionFlags condition, SuddenEventContextFlags context)
     {
         TurnManager tm = FindFirstObjectByType<TurnManager>();
         int currentTurn = tm != null ? tm.TurnIndex : -1;
 
-        if (tm != null && tm.DateManager != null)
+        if (tm != null)
         {
-            DayOfWeek currentDay = tm.DateManager.CurrentDate.DayOfWeek;
+            // 시합 당일 차단
+            if (tm.CurrentPhase == GamePhase.MatchDay) return;
 
-            if (currentDay == DayOfWeek.Friday)
+            if (tm.DateManager != null)
             {
-                string condStr = condition.ToString().ToLower();
+                DayOfWeek currentDay = tm.DateManager.CurrentDate.DayOfWeek;
 
-                if (!condStr.Contains("start") && !condStr.Contains("begin") && !condStr.Contains("morning") && !condStr.Contains("enter") && !condStr.Contains("init"))
+                // 주말(토, 일) 차단
+                if (currentDay == DayOfWeek.Saturday || currentDay == DayOfWeek.Sunday) return;
+
+                // 금요일 제약 조건
+                if (currentDay == DayOfWeek.Friday)
                 {
-                    return;
+                    string condStr = condition.ToString().ToLower();
+                    if (!condStr.Contains("start") && !condStr.Contains("begin") && !condStr.Contains("morning") && !condStr.Contains("enter") && !condStr.Contains("init"))
+                        return;
                 }
             }
         }
@@ -40,6 +60,8 @@ public class SuddenEventManager : Singleton<SuddenEventManager>
             if (row.condition.ToString().Contains("School")) continue;
             if ((row.condition & condition) == 0) continue;
             if ((row.context & context) == 0) continue;
+
+            // isProbable 플래그 확인 및 발동 확률 연산
             if (row.isProbable && UnityEngine.Random.value > row.probability) continue;
 
             triggeredEvents.Add(row);
@@ -47,6 +69,7 @@ public class SuddenEventManager : Singleton<SuddenEventManager>
 
         if (triggeredEvents.Count > 0)
         {
+            // 셔플
             for (int i = 0; i < triggeredEvents.Count; i++)
             {
                 int rnd = UnityEngine.Random.Range(0, triggeredEvents.Count);
@@ -58,8 +81,10 @@ public class SuddenEventManager : Singleton<SuddenEventManager>
             foreach (var evt in triggeredEvents)
             {
                 if (_dailyEventCount >= MAX_EVENTS_PER_TURN) break;
-                ExecuteEvent(evt);
-                _dailyEventCount++;
+
+                // 타겟 대상이 없거나 Trigger 조건을 만족하는 대상이 없으면 이벤트 무시
+                bool executed = ExecuteEvent(evt);
+                if (executed) _dailyEventCount++;
             }
         }
     }
@@ -73,7 +98,7 @@ public class SuddenEventManager : Singleton<SuddenEventManager>
         }
     }
 
-    private void ExecuteEvent(SuddenEventRow row, string specificTargetName = "", bool fromDialogue = false, Dictionary<string, string> passedVars = null, string originRoomId = "")
+    private bool ExecuteEvent(SuddenEventRow row, string specificTargetName = "", bool fromDialogue = false, Dictionary<string, string> passedVars = null, string originRoomId = "")
     {
         List<Student> targets = new List<Student>();
 
@@ -95,32 +120,29 @@ public class SuddenEventManager : Singleton<SuddenEventManager>
             }
         }
 
+        // 특정 대상이 지정되지 않은 경우, Scope 및 Trigger 조건에 맞춰 타겟 추출
         if (targets.Count == 0 && !fromDialogue)
         {
-            targets = PickTargets(row.scope, row.targetMin, row.targetMax);
+            targets = PickTargets(row);
+
+            // 추출할 타겟이 없다면 이벤트 실행 취소
+            if (targets.Count == 0 && row.targetMin > 0) return false;
         }
 
         Dictionary<string, string> textVars = new Dictionary<string, string>();
 
-        if (targets.Count > 0)
+        for (int i = 0; i < targets.Count; i++)
         {
-            textVars["{target1.name}"] = targets[0].studentName;
-            textVars["{target1.grade}"] = targets[0].grade.ToString() + "학년";
+            textVars[$"{{target{i + 1}.name}}"] = targets[i].studentName;
+            textVars[$"{{target{i + 1}.grade}}"] = targets[i].grade.ToString() + "학년";
         }
-        if (targets.Count > 1)
+
+        //기간제 연산
+        int termDays = 0;
+        if (row.termMax > 0)
         {
-            textVars["{target2.name}"] = targets[1].studentName;
-            textVars["{target2.grade}"] = targets[1].grade.ToString() + "학년";
-        }
-        if (targets.Count > 2)
-        {
-            textVars["{target3.name}"] = targets[2].studentName;
-            textVars["{target3.grade}"] = targets[2].grade.ToString() + "학년";
-        }
-        if (targets.Count > 3)
-        {
-            textVars["{target4.name}"] = targets[3].studentName;
-            textVars["{target4.grade}"] = targets[3].grade.ToString() + "학년";
+            termDays = UnityEngine.Random.Range(row.termMin, row.termMax + 1);
+            textVars["{term}"] = termDays.ToString();
         }
 
         void ProcessEffect(string effectId, int effectIndex)
@@ -131,48 +153,71 @@ public class SuddenEventManager : Singleton<SuddenEventManager>
             if (effectTable != null && effectTable.TryGet(effectId.Trim(), out var effectRow))
             {
                 int amount = UnityEngine.Random.Range(effectRow.amountMin, effectRow.amountMax + 1);
-                ApplyEffectWithCalculatedAmount(effectRow.targetMin, targets, amount);
+
+                bool isPercentage = ((int)effectRow.type == 2);
+
+                ApplyEffectWithCalculatedAmount(effectRow.targetMin, targets, amount, isPercentage, termDays);
 
                 string statName = GetStatNameKorean(effectRow.targetMin);
 
                 textVars[$"{{effect{effectIndex}.target_name}}"] = statName;
-                textVars[$"{{effect{effectIndex}.amount}}"] = Mathf.Abs(amount).ToString();
+                textVars[$"{{effect{effectIndex}.amount}}"] = isPercentage ? $"{Mathf.Abs(amount)}%" : Mathf.Abs(amount).ToString();
 
                 if (effectIndex == 1)
                 {
                     textVars["{event_effect.target_name}"] = statName;
-                    textVars["{event_effect.amount}"] = Mathf.Abs(amount).ToString();
+                    textVars["{event_effect.amount}"] = isPercentage ? $"{Mathf.Abs(amount)}%" : Mathf.Abs(amount).ToString();
                 }
             }
         }
+
         ProcessEffect(row.effect1, 1);
         ProcessEffect(row.effect2, 2);
         ProcessEffect(row.effect3, 3);
 
         ShowEventTextOrDialogue(row, targets, textVars, fromDialogue, originRoomId);
+        return true;
     }
 
-    private List<Student> PickTargets(SuddenEventScope scope, int min, int max)
+    // ==========================================
+    // Scope 및 Trigger 연산
+    // ==========================================
+    private List<Student> PickTargets(SuddenEventRow row)
     {
         List<Student> pool = new List<Student>();
 
         if (StudentManager.Instance != null && StudentManager.Instance.Students != null)
         {
-            if (scope == SuddenEventScope.TeamKeyMember)
+            // Scope (enum int 변환 기준: 2=Member, 3=Team_Member, 4=Bench_Member)
+            int scopeVal = (int)row.scope;
+
+            if (scopeVal == 3) // Team_Member
             {
                 foreach (var pair in StudentManager.Instance.SlotAssignments)
-                {
                     if (pair.Value != null) pool.Add(pair.Value);
-                }
             }
-            else
+            else if (scopeVal == 4) // Bench_Member (벤치 명단 - 예시 로직)
+            {
+                var starters = StudentManager.Instance.SlotAssignments.Values.Where(s => s != null).ToList();
+                pool.AddRange(StudentManager.Instance.Students.Where(s => !starters.Contains(s)));
+            }
+            else // Member 등 기본
             {
                 pool.AddRange(StudentManager.Instance.Students);
             }
         }
 
+        if (row.isTrigger && pool.Count > 0)
+        {
+            pool = pool.Where(student =>
+                CheckTriggerCondition(student, (int)row.triggerStatus1, (int)row.triggerCondition1, row.triggerThreshold1) &&
+                ((int)row.triggerCondition2 == 0 || CheckTriggerCondition(student, (int)row.triggerStatus2, (int)row.triggerCondition2, row.triggerThreshold2))
+            ).ToList();
+        }
+
         if (pool.Count == 0) return pool;
 
+        // 셔플
         for (int i = 0; i < pool.Count; i++)
         {
             int rnd = UnityEngine.Random.Range(0, pool.Count);
@@ -181,26 +226,86 @@ public class SuddenEventManager : Singleton<SuddenEventManager>
             pool[rnd] = temp;
         }
 
-        int count = UnityEngine.Random.Range(min, max + 1);
+        int count = UnityEngine.Random.Range(row.targetMin, row.targetMax + 1);
         count = Mathf.Clamp(count, 0, pool.Count);
 
         return pool.Take(count).ToList();
     }
 
-    private void ApplyEffectWithCalculatedAmount(PlayerStat targetStat, List<Student> targets, int amount)
+    // 트리거 충족 여부 연산
+    private bool CheckTriggerCondition(Student student, int statusType, int conditionType, int threshold)
+    {
+        if (conditionType == 0) return true; // none
+
+        int statValue = GetStudentStatValue(student, (PlayerStat)statusType);
+
+        return conditionType switch
+        {
+            2 => statValue == threshold, // equal
+            3 => statValue != threshold, // not equal
+            4 => statValue > threshold,  // more
+            5 => statValue <= threshold, // or_less
+            6 => statValue >= threshold, // or_more
+            7 => statValue < threshold,  // less
+            _ => true
+        };
+    }
+
+    private int GetStudentStatValue(Student student, PlayerStat statType)
+    {
+        return statType switch
+        {
+            PlayerStat.Condition => student.condition,
+            PlayerStat.Mental => student.mental,
+            PlayerStat.Shoot => student.shoot,
+            PlayerStat.Speed => student.speed,
+            PlayerStat.Jump => student.jump,
+            PlayerStat.Stamina => student.stamina,
+            _ => 0
+        };
+    }
+
+    // ==========================================
+    // Effect Type(비율/고정) 및 Term(기간) 적용
+    // ==========================================
+    private void ApplyEffectWithCalculatedAmount(PlayerStat targetStat, List<Student> targets, int amount, bool isPercentage, int termDays)
     {
         bool isPlayerStat = targetStat == PlayerStat.Money || targetStat == PlayerStat.Fame;
-        if (isPlayerStat) ApplyPlayerStat(targetStat, amount);
-        else
-        {
-            bool statIncreased = false;
-            foreach (var student in targets)
-                statIncreased |= ApplyStudentStat(student, targetStat, amount);
 
-            if (targets.Count > 0 && StudentManager.Instance != null) StudentManager.Instance.NotifyStudentModified(targets[0]);
-            if (statIncreased)
-                SoundManager.Instance?.PlayStatUpSfx();
+        if (isPlayerStat)
+        {
+            ApplyPlayerStat(targetStat, amount);
+            return;
         }
+
+        bool statIncreased = false;
+        foreach (var student in targets)
+        {
+            // 실제 반영할 수치 계산 (비율일 경우 현재 스탯 기반 퍼센트 연산)
+            int finalAmount = amount;
+            if (isPercentage)
+            {
+                int currentStat = GetStudentStatValue(student, targetStat);
+                finalAmount = Mathf.RoundToInt(currentStat * (amount / 100f));
+            }
+
+            statIncreased |= ApplyStudentStat(student, targetStat, finalAmount);
+
+            // 기간제 스탯 증감일 경우, 롤백을 위해 리스트에 등록
+            if (termDays > 0)
+            {
+                _activeTermEffects.Add(new ActiveTermEffect
+                {
+                    StudentName = student.studentName,
+                    StatType = targetStat,
+                    Amount = finalAmount, // 나중에 회복할 땐 반대로 뺌
+                    RemainingDays = termDays
+                });
+            }
+        }
+
+        if (targets.Count > 0 && StudentManager.Instance != null) StudentManager.Instance.NotifyStudentModified(targets[0]);
+        if (statIncreased) SoundManager.Instance?.PlayStatUpSfx();
     }
 
     private void ApplyPlayerStat(PlayerStat statType, int amount)
@@ -215,44 +320,56 @@ public class SuddenEventManager : Singleton<SuddenEventManager>
         switch (statType)
         {
             case PlayerStat.Condition:
-            {
-                int before = student.condition;
+                int beforeC = student.condition;
                 student.condition = Student.ClampCondition(student.condition + amount);
-                return student.condition > before;
-            }
+                return student.condition > beforeC;
             case PlayerStat.Mental:
-            {
-                int before = student.mental;
+                int beforeM = student.mental;
                 student.mental += amount;
-                return student.mental > before;
-            }
+                return student.mental > beforeM;
             case PlayerStat.Shoot:
-            {
-                int before = student.shoot;
+                int beforeSh = student.shoot;
                 student.shoot += amount;
-                return student.shoot > before;
-            }
+                return student.shoot > beforeSh;
             case PlayerStat.Speed:
-            {
-                int before = student.speed;
+                int beforeSp = student.speed;
                 student.speed += amount;
-                return student.speed > before;
-            }
+                return student.speed > beforeSp;
             case PlayerStat.Jump:
-            {
-                int before = student.jump;
+                int beforeJ = student.jump;
                 student.jump += amount;
-                return student.jump > before;
-            }
+                return student.jump > beforeJ;
             case PlayerStat.Stamina:
-            {
-                int before = student.stamina;
+                int beforeSt = student.stamina;
                 student.stamina += amount;
-                return student.stamina > before;
+                return student.stamina > beforeSt;
+        }
+        return false;
+    }
+
+    // ==========================================
+    // 턴 매니저 호출용: 기간제 효과 타이머 감소 및 원상복구 로직
+    // ==========================================
+    public void TickTermEffects()
+    {
+        for (int i = _activeTermEffects.Count - 1; i >= 0; i--)
+        {
+            var effect = _activeTermEffects[i];
+            effect.RemainingDays--;
+
+            // 기간 만료 시 스탯 롤백 
+            if (effect.RemainingDays <= 0)
+            {
+                var student = StudentManager.Instance?.Students.FirstOrDefault(s => s.studentName == effect.StudentName);
+                if (student != null)
+                {
+                    // 깎였던 수치만큼 다시 더해줌 (반전술식)
+                    ApplyStudentStat(student, effect.StatType, -effect.Amount);
+                    StudentManager.Instance.NotifyStudentModified(student);
+                }
+                _activeTermEffects.RemoveAt(i);
             }
         }
-
-        return false;
     }
 
     private void ShowEventTextOrDialogue(SuddenEventRow eventRow, List<Student> targets, Dictionary<string, string> textVars, bool fromDialogue, string originRoomId)
@@ -323,11 +440,22 @@ public class SuddenEventManager : Singleton<SuddenEventManager>
             }
         }
 
+        DateTime? firstMsgDate = null;
+        TurnManager tm = FindFirstObjectByType<TurnManager>();
+        if (tm != null && tm.DateManager != null)
+        {
+            string contextStr = eventRow.context.ToString().ToLower();
+            if (contextStr.Contains("post"))
+            {
+                firstMsgDate = tm.DateManager.CurrentDate.AddDays(1);
+            }
+        }
+
         if (desc.StartsWith("diag_"))
         {
             if (DialogueRunner.Instance != null)
             {
-                DialogueRunner.Instance.PlayDialogue(roomId, roomName, desc, "index_000", textVars, systemMsgContent);
+                DialogueRunner.Instance.PlayDialogue(roomId, roomName, desc, "index_000", textVars, systemMsgContent, firstMsgDate);
                 previewText = $"{roomName}의 새로운 메시지가 도착했습니다.";
             }
         }
@@ -336,6 +464,7 @@ public class SuddenEventManager : Singleton<SuddenEventManager>
             if (!string.IsNullOrEmpty(systemMsgContent) && MessengerManager.Instance != null)
             {
                 ChatMessage msg = new ChatMessage(MessageSenderType.Them, systemMsgContent, MessageEventType.System);
+                if (firstMsgDate.HasValue) msg.Timestamp = firstMsgDate.Value;
                 MessengerManager.Instance.ReceiveMessage(roomId, roomName, msg);
                 previewText = systemMsgContent;
             }
@@ -382,7 +511,6 @@ public class SuddenEventManager : Singleton<SuddenEventManager>
     {
         _popupQueue.Enqueue(new EventPopupData { title = title, roomId = roomId, roomName = roomName, previewText = preview });
 
-        // 현재 떠 있는 팝업이 없다면 즉시 실행
         if (!_isPopupShowing)
         {
             ProcessNextPopup();
@@ -391,13 +519,12 @@ public class SuddenEventManager : Singleton<SuddenEventManager>
 
     public void ProcessNextPopup()
     {
-        _isPopupShowing = false; // 이전 팝업이 닫혔음을 선언
+        _isPopupShowing = false;
 
         if (_popupQueue.Count > 0)
         {
             var data = _popupQueue.Peek();
 
-            // 이미 읽은 메시지라면 큐에서 빼고 바로 다음 것 검사
             if (MessengerManager.Instance != null)
             {
                 var room = MessengerManager.Instance.GetRoom(data.roomId);
@@ -409,10 +536,8 @@ public class SuddenEventManager : Singleton<SuddenEventManager>
                 }
             }
 
-            // 조건 통과 시 즉시 팝업 실앵
             _isPopupShowing = true;
-            var actualData = _popupQueue.Dequeue();
-            OnPopupRequested?.Invoke(actualData);
+            OnPopupRequested?.Invoke(_popupQueue.Dequeue());
         }
     }
 
