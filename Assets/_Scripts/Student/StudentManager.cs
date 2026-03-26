@@ -94,10 +94,10 @@ public class StudentManager : Singleton<StudentManager>
         _students.Add(student);
 
         GameManager.Instance?.ApplyTrainingEfficiencyPermBonusToStudent(student);
-        
+        EquipmentSystem.Instance?.ApplyShoesJumpBonusToStudent(student);
+
         OnStudentAdded?.Invoke(student);
         OnStudentsChanged?.Invoke(_students);
-
         Debug.Log($"[StudentManager] Added student: {student.studentName} (ID: {student.id})");
     }
 
@@ -225,13 +225,22 @@ public class StudentManager : Singleton<StudentManager>
         if (HeadCoachManager.Instance != null && HeadCoachManager.Instance.IsInitialized)
             nodeTrainingBonus = HeadCoachManager.Instance.GetStatBonusValue("Training_Exp_Bonus") * 0.01f;
 
+        // 농구공 경험치 효율 배율 적용
+        float basketballRate = EquipmentSystem.Instance != null
+            ? EquipmentSystem.Instance.GetBasketballBonusRate()
+            : 1f;
+
         foreach (Student student in _students)
         {
             if (student == null) continue;
 
             if (row.conditionCost >= 0)
             {
-                student.condition -= row.conditionCost;
+                float decayRate = EquipmentSystem.Instance != null
+                    ? EquipmentSystem.Instance.GetShoesConditionDecayRate()
+                    : 1f;
+                int cost = Mathf.RoundToInt(row.conditionCost * decayRate);
+                student.condition -= cost;
             }
             else
             {
@@ -241,14 +250,19 @@ public class StudentManager : Singleton<StudentManager>
             }
             student.condition = Student.ClampCondition(student.condition);
 
-            int shootExpDelta = StudentStatExpSystem.AddTrainingExp(student, StudentCoreStat.Shoot, row.shoot, gymBonus, gymLv, weekendRequiredFacilityLv, nodeTrainingBonus);
-            int speedExpDelta = StudentStatExpSystem.AddTrainingExp(student, StudentCoreStat.Speed, row.speed, gymBonus, gymLv, weekendRequiredFacilityLv, nodeTrainingBonus);
-            int jumpExpDelta = StudentStatExpSystem.AddTrainingExp(student, StudentCoreStat.Jump, row.jump, gymBonus, gymLv, weekendRequiredFacilityLv, nodeTrainingBonus);
-            int staminaExpDelta = StudentStatExpSystem.AddTrainingExp(student, StudentCoreStat.Stamina, row.stamina, gymBonus, gymLv, weekendRequiredFacilityLv, nodeTrainingBonus);
+            int shootExpDelta = StudentStatExpSystem.AddTrainingExp(student, StudentCoreStat.Shoot,
+                row.shoot * basketballRate, gymBonus, gymLv, weekendRequiredFacilityLv, nodeTrainingBonus);
+            int speedExpDelta = StudentStatExpSystem.AddTrainingExp(student, StudentCoreStat.Speed,
+                row.speed * basketballRate, gymBonus, gymLv, weekendRequiredFacilityLv, nodeTrainingBonus);
+            int jumpExpDelta = StudentStatExpSystem.AddTrainingExp(student, StudentCoreStat.Jump,
+                row.jump * basketballRate, gymBonus, gymLv, weekendRequiredFacilityLv, nodeTrainingBonus);
+            int staminaExpDelta = StudentStatExpSystem.AddTrainingExp(student, StudentCoreStat.Stamina,
+                row.stamina * basketballRate, gymBonus, gymLv, weekendRequiredFacilityLv, nodeTrainingBonus);
 
             int mentalExpDelta;
             if (row.mental >= 0)
-                mentalExpDelta = StudentStatExpSystem.AddTrainingExpWithRate(student, StudentCoreStat.Mental, row.mental, mentalBonus, nodeTrainingBonus);
+                mentalExpDelta = StudentStatExpSystem.AddTrainingExpWithRate(student, StudentCoreStat.Mental,
+                    row.mental * basketballRate, mentalBonus, nodeTrainingBonus);
             else
                 mentalExpDelta = StudentStatExpSystem.AddRawExp(student, StudentCoreStat.Mental, row.mental);
 
