@@ -19,4 +19,9 @@ text_SuddenEvent_000007,Daily,1,[SYSTEM],대화가 종료되었습니다.
 text_SuddenEvent_000008,Daily,20,[SYSTEM],"팀 {effect1.target_name} {effect1.amount} 증가, 훈련 효율 {effect2.amount} 증가"
 text_SuddenEvent_000009,Daily,1,[SYSTEM],"{effect1.target_name} {effect1.amount} 증가, {effect2.target_name} {effect2.amount} 증가, {effect3.target_name} {effect3.amount} 감소"
 text_SuddenEvent_000010,Daily,1,[SYSTEM],상태이상 회복
+text_SuddenEvent_000011,Daily,1,[SYSTEM],"{effect1.target_name} {effect1.amount} 증가, {effect2.target_name} {effect2.amount} 증가"
+text_SuddenEvent_000012,Daily,20,[SYSTEM],팀 {effect1.target_name} {effect1.amount} 증가
+text_SuddenEvent_000013,Daily,20,[SYSTEM],팀 {effect1.target_name} {effect1.amount} 감소
+text_SuddenEvent_000014,Daily,20,[SYSTEM],"팀 {effect1.target_name} {effect1.amount} 증가, {effect2.target_name} {effect2.amount} 증가"
+text_SuddenEvent_000015,Daily,20,[SYSTEM],"팀 {effect1.target_name} {effect1.amount} 증가, {effect2.target_name} {effect2.amount} 증가, {effect3.target_name} {effect3.amount} 감소"
 text_SuddenEvent_100001,Daily,1,[SYSTEM],{term} 일 입원(훈련 및 출전 불가)
