@@ -31,6 +31,7 @@ public class MatchGameManager : MonoBehaviour
     private readonly Dictionary<int, StudentStatSnapshot> _studentStatSnapshots = new();
     private readonly Dictionary<int, PendingAbnormalInfo> _pendingAbnormals = new();
     private readonly SuddenEvent _suddenEvent = new SuddenEvent();
+    private static readonly AbnormalStatusEffect _abnormalStatusEffect = new AbnormalStatusEffect();
 
     private QuarterPodSimulator _quarterSimulator;
     private MatchGameLogPresenter _matchLogPresenter;
@@ -457,7 +458,7 @@ public class MatchGameManager : MonoBehaviour
 
         foreach (var pair in StudentManager.Instance.SlotAssignments)
         {
-            if (pair.Value != null)
+            if (pair.Value != null && !_abnormalStatusEffect.IsMatchBlocked(pair.Value))
                 result.Add(pair.Value);
         }
         return result;
@@ -471,6 +472,9 @@ public class MatchGameManager : MonoBehaviour
 
         foreach (Student s in StudentManager.Instance.Students)
         {
+            if (_abnormalStatusEffect.IsMatchBlocked(s))
+                continue;
+
             if (!fieldPlayers.Contains(s))
                 result.Add(s);
         }

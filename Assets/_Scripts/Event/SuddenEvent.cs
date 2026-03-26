@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class SuddenEvent
 {
+    // 상태이상에 최소, 최대 턴
     private struct DurationRange
     {
         public int min;
@@ -14,27 +15,7 @@ public class SuddenEvent
         }
     }
 
-    public bool TryApplyDiseaseAtDayStart(Student student)
-    {
-        if (!CanRollAbnormal(student))
-            return false;
-
-        StudentStatusProbRow probabilityRow = GetProbabilityRow(student);
-        if (probabilityRow == null || probabilityRow.probDisease <= 0)
-            return false;
-
-        if (!RollPercent(probabilityRow.probDisease))
-            return false;
-
-        DurationRange durationRange = GetDiseaseDurationRange(student.condition);
-        SetAbnormal(
-            student,
-            Student.AbnormalType.Disease,
-            Random.Range(durationRange.min, durationRange.max + 1)
-        );
-        return true;
-    }
-
+    // 훈련 부상 판정
     public bool TryApplyTrainingInjury(Student student)
     {
         if (!TryRollInjury(student, MatchInjuryTrigger.Training, out int duration))
@@ -44,16 +25,19 @@ public class SuddenEvent
         return true;
     }
 
+    // 쿼터 부상 판정
     public bool TryRollQuarterStartInjury(Student student, out int duration)
     {
         return TryRollInjury(student, MatchInjuryTrigger.QuarterStart, out duration);
     }
 
+    // 친선전 부상 판정
     public bool TryRollFriendlyStartInjury(Student student, out int duration)
     {
         return TryRollInjury(student, MatchInjuryTrigger.FriendlyStart, out duration);
     }
 
+    // 날짜가 지나갈 때 상태이상의 남은 턴을 감소
     public void TickAbnormal(Student student)
     {
         if (student == null)
@@ -73,6 +57,7 @@ public class SuddenEvent
         SetAbnormal(student, type, duration);
     }
 
+    // 이미 상태이상이 있는 학생은 다시 부상 판정 X
     private bool TryRollInjury(Student student, MatchInjuryTrigger trigger, out int duration)
     {
         duration = 0;
@@ -97,6 +82,7 @@ public class SuddenEvent
         return student != null && !HasAbnormal(student);
     }
 
+    // 컨디션 구간에 맞는 부상 확률
     private StudentStatusProbRow GetProbabilityRow(Student student)
     {
         StudentStatusProbTableSO table = CachedSOData.Get<StudentStatusProbTableSO>();
@@ -129,23 +115,18 @@ public class SuddenEvent
         }
     }
 
-    private DurationRange GetDiseaseDurationRange(int condition)
-    {
-        if (condition < 20) return new DurationRange(7, 28);
-        if (condition < 40) return new DurationRange(3, 7);
-        return new DurationRange(1, 7);
-    }
-
     private bool RollPercent(int probabilityPercent)
     {
         return Random.Range(0, 100) < probabilityPercent;
     }
 
+    // 학생이 현재 상태이상 중인지 확인
     private bool HasAbnormal(Student student)
     {
         return student != null && student.abnormalState != Student.AbnormalType.None;
     }
 
+    // 실제 학생 데이터에 상태이상 종류와 남은 턴을 기록
     private void SetAbnormal(Student student, Student.AbnormalType type, int duration)
     {
         if (student == null)
@@ -161,6 +142,7 @@ public class SuddenEvent
         student.abnormalRemainTurn = duration;
     }
 
+    // 상태이상 해제 시 초기화
     private void ClearAbnormal(Student student)
     {
         if (student == null)
