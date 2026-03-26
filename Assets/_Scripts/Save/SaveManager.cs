@@ -122,10 +122,10 @@ public class SaveManager : Singleton<SaveManager>
         }
 
         //  졸업 선물 보너스 트래커는 TurnManager의 날짜 변경 체크에서 Load된 flowData 기준으로 4강 진출 횟수 및 훈련 효율 영구 보너스 복원
-        if (EquipmentSystem.Instance != null)
-        {
-            EquipmentSystem.Instance.RestoreFromSave(CurrentData.equipment);
-        }
+        // if (EquipmentSystem.Instance != null)
+        // {
+        //     EquipmentSystem.Instance.RestoreFromSave(CurrentData.equipment);
+        // }
     }
 
     // GameManager가 _flowData 복원에 사용 (RestoreTurnManagerState 이전에 호출)
@@ -186,10 +186,10 @@ public class SaveManager : Singleton<SaveManager>
             MessengerManager.Instance.ClearAll();
         }
 
-        if (EquipmentSystem.Instance != null)
-        {
-            EquipmentSystem.Instance.ResetToDefault();
-        }
+        // if (EquipmentSystem.Instance != null)
+        // {
+        //     EquipmentSystem.Instance.ResetToDefault();
+        // }
 
         IsPendingNewGame = true;
 
@@ -268,9 +268,9 @@ public class SaveManager : Singleton<SaveManager>
             : string.Empty;
 
         // 장비 강화 상태 수집
-        CurrentData.equipment = EquipmentSystem.Instance != null
-            ? EquipmentSystem.Instance.CollectSaveData()
-            : new EquipmentSaveData();
+        // CurrentData.equipment = EquipmentSystem.Instance != null
+        //     ? EquipmentSystem.Instance.CollectSaveData()
+        //     : new EquipmentSaveData();
 
         // 저장 직전 현재 플레이 중인 슬롯 번호를 강제로 유지
         CurrentData.slotIndex = _currentRuntimeSlotIndex;

@@ -242,9 +242,9 @@ public static class GraduateGiftSystem
                 ExecuteFacilityUpgrade();
                 break;
 
-            case "itemeffect_03":
-                ExecuteEquipmentUpgrade();
-                break;
+            // case "itemeffect_03":
+            //     ExecuteEquipmentUpgrade();
+            //     break;
 
             case "itemeffect_04":
                 ExecuteInstantSubsidyBonus();
@@ -311,17 +311,17 @@ public static class GraduateGiftSystem
     }
 
     // itemeffect_03: 랜덤 장비 1개를 1단계 업그레이드
-    private static void ExecuteEquipmentUpgrade()
-    {
-        if (EquipmentSystem.Instance == null)
-        {
-            Debug.LogWarning("[GraduateGiftSystem] EquipmentSystem이 없어 장비 업그레이드를 적용할 수 없습니다.");
-            return;
-        }
+    // private static void ExecuteEquipmentUpgrade()
+    // {
+    //     if (EquipmentSystem.Instance == null)
+    //     {
+    //         Debug.LogWarning("[GraduateGiftSystem] EquipmentSystem이 없어 장비 업그레이드를 적용할 수 없습니다.");
+    //         return;
+    //     }
 
-        EquipmentSystem.Instance.UpgradeRandom();
-        Debug.Log("[GraduateGiftSystem] 랜덤 장비 1단계 업그레이드 적용");
-    }
+    //     EquipmentSystem.Instance.UpgradeRandom();
+    //     Debug.Log("[GraduateGiftSystem] 랜덤 장비 1단계 업그레이드 적용");
+    // }
 
     // itemeffect_04: 현재 지원금의 20%를 즉시 골드로 지급
     private static void ExecuteInstantSubsidyBonus()
