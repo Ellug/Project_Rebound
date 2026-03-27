@@ -103,85 +103,85 @@ MonoBehaviour:
     target: 7
     speaker: '[SYSTEM]'
     description: "\uD300 {effect1.target_name} {effect1.amount} \uC99D\uAC00, \uD6C8\uB828
-      \uD6A8\uC728 {effect2.amount} \uC99D\uAC00"
+      \uD6A8\uC728 {effect2.amount}% \uC99D\uAC00"
   - id: text_SuddenEvent_000008
     condition: 1
     target: 8
     speaker: '[SYSTEM]'
     description: "\uD300 {effect1.target_name} {effect1.amount} \uC99D\uAC00, \uD6C8\uB828
-      \uD6A8\uC728 {effect2.amount} \uC99D\uAC00"
+      \uD6A8\uC728 {effect2.amount}% \uC99D\uAC00"
   - id: text_SuddenEvent_000008
     condition: 1
     target: 9
     speaker: '[SYSTEM]'
     description: "\uD300 {effect1.target_name} {effect1.amount} \uC99D\uAC00, \uD6C8\uB828
-      \uD6A8\uC728 {effect2.amount} \uC99D\uAC00"
+      \uD6A8\uC728 {effect2.amount}% \uC99D\uAC00"
   - id: text_SuddenEvent_000008
     condition: 1
     target: 10
     speaker: '[SYSTEM]'
     description: "\uD300 {effect1.target_name} {effect1.amount} \uC99D\uAC00, \uD6C8\uB828
-      \uD6A8\uC728 {effect2.amount} \uC99D\uAC00"
+      \uD6A8\uC728 {effect2.amount}% \uC99D\uAC00"
   - id: text_SuddenEvent_000008
     condition: 1
     target: 11
     speaker: '[SYSTEM]'
     description: "\uD300 {effect1.target_name} {effect1.amount} \uC99D\uAC00, \uD6C8\uB828
-      \uD6A8\uC728 {effect2.amount} \uC99D\uAC00"
+      \uD6A8\uC728 {effect2.amount}% \uC99D\uAC00"
   - id: text_SuddenEvent_000008
     condition: 1
     target: 12
     speaker: '[SYSTEM]'
     description: "\uD300 {effect1.target_name} {effect1.amount} \uC99D\uAC00, \uD6C8\uB828
-      \uD6A8\uC728 {effect2.amount} \uC99D\uAC00"
+      \uD6A8\uC728 {effect2.amount}% \uC99D\uAC00"
   - id: text_SuddenEvent_000008
     condition: 1
     target: 13
     speaker: '[SYSTEM]'
     description: "\uD300 {effect1.target_name} {effect1.amount} \uC99D\uAC00, \uD6C8\uB828
-      \uD6A8\uC728 {effect2.amount} \uC99D\uAC00"
+      \uD6A8\uC728 {effect2.amount}% \uC99D\uAC00"
   - id: text_SuddenEvent_000008
     condition: 1
     target: 14
     speaker: '[SYSTEM]'
     description: "\uD300 {effect1.target_name} {effect1.amount} \uC99D\uAC00, \uD6C8\uB828
-      \uD6A8\uC728 {effect2.amount} \uC99D\uAC00"
+      \uD6A8\uC728 {effect2.amount}% \uC99D\uAC00"
   - id: text_SuddenEvent_000008
     condition: 1
     target: 15
     speaker: '[SYSTEM]'
     description: "\uD300 {effect1.target_name} {effect1.amount} \uC99D\uAC00, \uD6C8\uB828
-      \uD6A8\uC728 {effect2.amount} \uC99D\uAC00"
+      \uD6A8\uC728 {effect2.amount}% \uC99D\uAC00"
   - id: text_SuddenEvent_000008
     condition: 1
     target: 16
     speaker: '[SYSTEM]'
     description: "\uD300 {effect1.target_name} {effect1.amount} \uC99D\uAC00, \uD6C8\uB828
-      \uD6A8\uC728 {effect2.amount} \uC99D\uAC00"
+      \uD6A8\uC728 {effect2.amount}% \uC99D\uAC00"
   - id: text_SuddenEvent_000008
     condition: 1
     target: 17
     speaker: '[SYSTEM]'
     description: "\uD300 {effect1.target_name} {effect1.amount} \uC99D\uAC00, \uD6C8\uB828
-      \uD6A8\uC728 {effect2.amount} \uC99D\uAC00"
+      \uD6A8\uC728 {effect2.amount}% \uC99D\uAC00"
   - id: text_SuddenEvent_000008
     condition: 1
     target: 18
     speaker: '[SYSTEM]'
     description: "\uD300 {effect1.target_name} {effect1.amount} \uC99D\uAC00, \uD6C8\uB828
-      \uD6A8\uC728 {effect2.amount} \uC99D\uAC00"
+      \uD6A8\uC728 {effect2.amount}% \uC99D\uAC00"
   - id: text_SuddenEvent_000008
     condition: 1
     target: 19
     speaker: '[SYSTEM]'
     description: "\uD300 {effect1.target_name} {effect1.amount} \uC99D\uAC00, \uD6C8\uB828
-      \uD6A8\uC728 {effect2.amount} \uC99D\uAC00"
+      \uD6A8\uC728 {effect2.amount}% \uC99D\uAC00"
   - id: text_SuddenEvent_000008
     condition: 1
     target: 20
     speaker: '[SYSTEM]'
     description: "\uD300 {effect1.target_name} {effect1.amount} \uC99D\uAC00, \uD6C8\uB828
-      \uD6A8\uC728 {effect2.amount} \uC99D\uAC00"
+      \uD6A8\uC728 {effect2.amount}% \uC99D\uAC00"
   - id: text_SuddenEvent_000009
     condition: 1
     target: 1

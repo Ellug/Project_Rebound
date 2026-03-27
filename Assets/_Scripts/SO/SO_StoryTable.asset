@@ -1,4 +1,4 @@
-﻿%YAML 1.1
+%YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
 --- !u!114 &11400000
 MonoBehaviour:
@@ -53,7 +53,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: 
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10001
     line: 4
     name: "\uB098\uB808\uC774\uC158"
@@ -62,7 +62,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: 
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10001
     line: 5
     name: "\uC575\uCEE4"
@@ -82,7 +82,7 @@ MonoBehaviour:
     imgLeft: Story01_char_Coach_imotion_03
     imgRight: 
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10001
     line: 7
     name: "\uB9E4\uB2C8\uC800"
@@ -92,7 +92,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: Story01_char_Manager_idle
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10001
     line: 8
     name: "\uB9E4\uB2C8\uC800"
@@ -102,7 +102,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: Story01_char_Manager_imotion_02
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10001
     line: 9
     name: "\uB098\uB808\uC774\uC158"
@@ -112,7 +112,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: 
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10001
     line: 10
     name: "\uB098\uB808\uC774\uC158"
@@ -122,7 +122,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: 
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10001
     line: 11
     name: "\uB098\uB808\uC774\uC158"
@@ -132,7 +132,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: 
     bgmIndex: 102
-    sfxName: 
+    sfxName: -1
   - id: 10001
     line: 12
     name: "\uB098\uB808\uC774\uC158"
@@ -142,7 +142,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: 
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10001
     line: 13
     name: "\uB098\uB808\uC774\uC158"
@@ -151,7 +151,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: 
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10001
     line: 14
     name: "\uB098\uB808\uC774\uC158"
@@ -162,7 +162,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: 
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10001
     line: 15
     name: "\uB098\uB808\uC774\uC158"
@@ -172,7 +172,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: 
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10001
     line: 16
     name: "\uAC10\uB3C5"
@@ -181,7 +181,7 @@ MonoBehaviour:
     imgLeft: Story01_char_coach_idle
     imgRight: 
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10001
     line: 17
     name: "\uB098\uB808\uC774\uC158"
@@ -200,7 +200,7 @@ MonoBehaviour:
     imgLeft: Story01_char_coach_idle
     imgRight: 
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10001
     line: 19
     name: "\uAC10\uB3C5"
@@ -209,7 +209,7 @@ MonoBehaviour:
     imgLeft: Story01_char_coach_idle
     imgRight: 
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10001
     line: 20
     name: "\uB098\uB808\uC774\uC158"
@@ -219,7 +219,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: 
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10001
     line: 21
     name: "\uB098\uB808\uC774\uC158"
@@ -229,7 +229,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: 
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10001
     line: 22
     name: "\uAC10\uB3C5"
@@ -238,7 +238,7 @@ MonoBehaviour:
     imgLeft: Story01_char_coach_idle
     imgRight: 
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10001
     line: 23
     name: "\uB098\uB808\uC774\uC158"
@@ -257,7 +257,7 @@ MonoBehaviour:
     imgLeft: Story01_char_coach_idle
     imgRight: 
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10001
     line: 25
     name: "\uB098\uB808\uC774\uC158"
@@ -267,7 +267,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: 
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10001
     line: 26
     name: "\uAC10\uB3C5"
@@ -276,7 +276,7 @@ MonoBehaviour:
     imgLeft: Story01_char_coach_idle
     imgRight: 
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10001
     line: 27
     name: "\uAC10\uB3C5"
@@ -286,7 +286,7 @@ MonoBehaviour:
     imgLeft: Story01_char_Coach_imotion_01
     imgRight: 
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10001
     line: 28
     name: "\uAC10\uB3C5"
@@ -295,7 +295,7 @@ MonoBehaviour:
     imgLeft: Story01_char_Coach_imotion_01
     imgRight: 
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10001
     line: 29
     name: "\uAC10\uB3C5"
@@ -304,7 +304,7 @@ MonoBehaviour:
     imgLeft: Story01_char_coach_idle
     imgRight: 
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10001
     line: 30
     name: "\uAC10\uB3C5"
@@ -313,7 +313,7 @@ MonoBehaviour:
     imgLeft: Story01_char_coach_idle
     imgRight: 
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10001
     line: 31
     name: "\uAC10\uB3C5"
@@ -322,7 +322,7 @@ MonoBehaviour:
     imgLeft: Story01_char_coach_idle
     imgRight: 
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10001
     line: 32
     name: "\uB098\uB808\uC774\uC158"
@@ -344,7 +344,7 @@ MonoBehaviour:
     imgLeft: Story01_char_Coach_imotion_02
     imgRight: 
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10001
     line: 34
     name: "\uB098\uB808\uC774\uC158"
@@ -354,7 +354,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: 
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10001
     line: 35
     name: "\uB098\uB808\uC774\uC158"
@@ -365,7 +365,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: 
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10001
     line: 36
     name: "\uAC10\uB3C5"
@@ -374,7 +374,7 @@ MonoBehaviour:
     imgLeft: Story01_char_coach_idle
     imgRight: 
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10001
     line: 37
     name: "\uB098\uB808\uC774\uC158"
@@ -395,7 +395,7 @@ MonoBehaviour:
     imgLeft: Story01_char_Coach_imotion_01
     imgRight: 
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10001
     line: 39
     name: "\uB098\uB808\uC774\uC158"
@@ -406,7 +406,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: 
     bgmIndex: 108
-    sfxName: 
+    sfxName: -1
   - id: 10001
     line: 40
     name: "\uB098\uB808\uC774\uC158"
@@ -416,7 +416,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: 
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10001
     line: 41
     name: "\uB098\uB808\uC774\uC158"
@@ -427,7 +427,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: 
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10001
     line: 42
     name: "\uAD50\uC7A5 \uC120\uC0DD\uB2D8"
@@ -439,7 +439,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: Story01_char_Principal_idle
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10001
     line: 43
     name: "\uB098\uB808\uC774\uC158"
@@ -461,7 +461,7 @@ MonoBehaviour:
     imgLeft: Story01_char_coach_idle
     imgRight: 
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10001
     line: 45
     name: "\uAD50\uC7A5 \uC120\uC0DD\uB2D8"
@@ -472,7 +472,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: Story01_char_Principal_imotion_03
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10001
     line: 46
     name: "\uAD50\uC7A5 \uC120\uC0DD\uB2D8"
@@ -483,7 +483,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: Story01_char_Principal_idle
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10001
     line: 47
     name: "\uAD50\uC7A5 \uC120\uC0DD\uB2D8"
@@ -493,7 +493,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: Story01_char_Principal_imotion_02
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10001
     line: 48
     name: "\uAD50\uC7A5 \uC120\uC0DD\uB2D8"
@@ -503,7 +503,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: Story01_char_Principal_imotion_03
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10001
     line: 49
     name: "\uAD50\uC7A5 \uC120\uC0DD\uB2D8"
@@ -513,7 +513,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: Story01_char_Principal_idle
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10001
     line: 50
     name: "\uAD50\uC7A5 \uC120\uC0DD\uB2D8"
@@ -525,7 +525,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: Story01_char_Principal_idle
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10001
     line: 51
     name: "\uD559\uC0DD 1"
@@ -535,7 +535,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: Story01_char_Player_idle
     bgmIndex: 102
-    sfxName: 
+    sfxName: -1
   - id: 10001
     line: 52
     name: "\uD559\uC0DD 2"
@@ -546,7 +546,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: Story01_char_Player_idle
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10001
     line: 53
     name: "\uB098\uB808\uC774\uC158"
@@ -557,7 +557,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: 
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10001
     line: 54
     name: "\uAC10\uB3C5"
@@ -578,7 +578,7 @@ MonoBehaviour:
     imgLeft: Story01_char_Coach_imotion_02
     imgRight: 
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10001
     line: 56
     name: "\uD559\uC0DD 1"
@@ -587,7 +587,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: Story01_char_Player_idle
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10001
     line: 57
     name: "\uAC10\uB3C5"
@@ -597,7 +597,7 @@ MonoBehaviour:
     imgLeft: Story01_char_coach_idle
     imgRight: 
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10001
     line: 58
     name: "\uAC10\uB3C5"
@@ -608,7 +608,7 @@ MonoBehaviour:
     imgLeft: Story01_char_coach_idle
     imgRight: 
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10001
     line: 59
     name: "\uAC10\uB3C5"
@@ -617,7 +617,7 @@ MonoBehaviour:
     imgLeft: Story01_char_coach_idle
     imgRight: 
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10001
     line: 60
     name: "\uD559\uC0DD 2"
@@ -626,7 +626,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: Story01_char_Player_idle
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10002
     line: 0
     name: "\uD559\uBD80\uBAA8 1"
@@ -635,7 +635,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: Story01_char_Mom_idle
     bgmIndex: 107
-    sfxName: 
+    sfxName: -1
   - id: 10002
     line: 1
     name: "\uD559\uBD80\uBAA8 2"
@@ -646,7 +646,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: Story01_char_Mom_idle
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10002
     line: 2
     name: "\uAC10\uB3C5"
@@ -658,7 +658,7 @@ MonoBehaviour:
     imgLeft: Story01_char_Coach_imotion_04
     imgRight: 
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10002
     line: 3
     name: "\uD559\uBD80\uBAA8 1"
@@ -670,7 +670,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: Story01_char_Mom_idle
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10002
     line: 4
     name: "\uD559\uC0DD 1"
@@ -680,7 +680,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: Story01_char_Player_idle
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10002
     line: 5
     name: "\uD559\uBD80\uBAA8 2"
@@ -691,7 +691,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: Story01_char_Mom_idle
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10002
     line: 6
     name: "\uAC10\uB3C5"
@@ -700,7 +700,7 @@ MonoBehaviour:
     imgLeft: Story01_char_Coach_imotion_02
     imgRight: 
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10002
     line: 7
     name: "\uC774\uC0AC\uC7A5"
@@ -710,7 +710,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: Story01_char_Chairman_idle
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10002
     line: 8
     name: "\uC774\uC0AC\uC7A5"
@@ -721,7 +721,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: Story01_char_Chairman_imotion_01
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10002
     line: 9
     name: "\uC774\uC0AC\uC7A5"
@@ -731,7 +731,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: Story01_char_Chairman_imotion_01
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10002
     line: 10
     name: "\uAD50\uC7A5 \uC120\uC0DD\uB2D8"
@@ -742,7 +742,7 @@ MonoBehaviour:
     imgLeft: Story01_char_Principal_imotion_03
     imgRight: 
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10002
     line: 11
     name: "\uC774\uC0AC\uC7A5"
@@ -762,7 +762,7 @@ MonoBehaviour:
     imgLeft: Story01_char_Principal_imotion_03
     imgRight: 
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10002
     line: 13
     name: "\uC774\uC0AC\uC7A5"
@@ -773,7 +773,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: Story01_char_Chairman_imotion_01
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10002
     line: 14
     name: "\uAD50\uC7A5 \uC120\uC0DD\uB2D8"
@@ -782,7 +782,7 @@ MonoBehaviour:
     imgLeft: Story01_char_Principal_imotion_02
     imgRight: 
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10002
     line: 15
     name: "\uC774\uC0AC\uC7A5"
@@ -791,7 +791,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: Story01_char_Chairman_imotion_01
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10002
     line: 16
     name: "\uAD50\uC7A5 \uC120\uC0DD\uB2D8"
@@ -801,7 +801,7 @@ MonoBehaviour:
     imgLeft: Story01_char_Principal_imotion_02
     imgRight: 
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10002
     line: 17
     name: "\uAD50\uC7A5 \uC120\uC0DD\uB2D8"
@@ -810,7 +810,7 @@ MonoBehaviour:
     imgLeft: Story01_char_Principal_idle
     imgRight: 
     bgmIndex: 108
-    sfxName: 
+    sfxName: -1
   - id: 10002
     line: 18
     name: "\uAC10\uB3C5"
@@ -819,7 +819,7 @@ MonoBehaviour:
     imgLeft: Story01_char_Coach_imotion_03
     imgRight: 
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10002
     line: 19
     name: "\uAD50\uC7A5 \uC120\uC0DD\uB2D8"
@@ -828,7 +828,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: Story01_char_Principal_imotion_03
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10002
     line: 20
     name: "\uAC10\uB3C5"
@@ -838,7 +838,7 @@ MonoBehaviour:
     imgLeft: Story01_char_Coach_imotion_03
     imgRight: 
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10002
     line: 21
     name: "\uAD50\uC7A5 \uC120\uC0DD\uB2D8"
@@ -847,7 +847,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: Story01_char_Principal_idle
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10002
     line: 22
     name: "\uAC10\uB3C5"
@@ -860,7 +860,7 @@ MonoBehaviour:
     imgLeft: Story01_char_Coach_imotion_03
     imgRight: 
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10002
     line: 23
     name: "\uAD50\uC7A5 \uC120\uC0DD\uB2D8"
@@ -869,7 +869,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: Story01_char_Principal_imotion_03
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10002
     line: 24
     name: "\uAC10\uB3C5"
@@ -882,7 +882,7 @@ MonoBehaviour:
     imgLeft: Story01_char_Coach_imotion_03
     imgRight: 
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10002
     line: 25
     name: "\uAD50\uC7A5 \uC120\uC0DD\uB2D8"
@@ -893,7 +893,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: Story01_char_Principal_imotion_03
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10002
     line: 26
     name: "\uAC10\uB3C5"
@@ -902,7 +902,7 @@ MonoBehaviour:
     imgLeft: Story01_char_coach_idle
     imgRight: 
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10002
     line: 27
     name: "\uAD50\uC7A5 \uC120\uC0DD\uB2D8"
@@ -913,7 +913,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: Story01_char_Principal_imotion_03
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10002
     line: 28
     name: "\uAD50\uC7A5 \uC120\uC0DD\uB2D8"
@@ -924,7 +924,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: Story01_char_Principal_idle
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10002
     line: 29
     name: "\uAD50\uC7A5 \uC120\uC0DD\uB2D8"
@@ -935,7 +935,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: Story01_char_Principal_idle
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10002
     line: 30
     name: "\uAC10\uB3C5"
@@ -945,7 +945,7 @@ MonoBehaviour:
     imgLeft: Story01_char_Coach_imotion_02
     imgRight: 
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10002
     line: 31
     name: "\uAD50\uC7A5 \uC120\uC0DD\uB2D8"
@@ -954,7 +954,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: Story01_char_Principal_idle
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10002
     line: 32
     name: "\uAC10\uB3C5"
@@ -964,7 +964,7 @@ MonoBehaviour:
     imgLeft: Story01_char_coach_idle
     imgRight: 
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10002
     line: 33
     name: "\uAD50\uC7A5 \uC120\uC0DD\uB2D8"
@@ -974,7 +974,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: Story01_char_Principal_imotion_03
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10002
     line: 34
     name: "\uAC10\uB3C5"
@@ -984,7 +984,7 @@ MonoBehaviour:
     imgLeft: Story01_char_Coach_imotion_03
     imgRight: 
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10002
     line: 35
     name: "\uAD50\uC7A5 \uC120\uC0DD\uB2D8"
@@ -994,7 +994,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: Story01_char_Principal_imotion_03
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10003
     line: 0
     name: "\uB098\uB808\uC774\uC158"
@@ -1004,7 +1004,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: 
     bgmIndex: 102
-    sfxName: 
+    sfxName: -1
   - id: 10003
     line: 1
     name: "\uB098\uB808\uC774\uC158"
@@ -1015,7 +1015,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: 
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10003
     line: 2
     name: "\uD559\uBD80\uBAA8 1"
@@ -1024,7 +1024,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: Story01_char_Mom_idle
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10003
     line: 3
     name: "\uD559\uBD80\uBAA8 2"
@@ -1034,7 +1034,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: Story01_char_Mom_idle
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10003
     line: 4
     name: "\uB098\uB808\uC774\uC158"
@@ -1046,7 +1046,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: 
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10003
     line: 5
     name: "\uAC10\uB3C5"
@@ -1055,7 +1055,7 @@ MonoBehaviour:
     imgLeft: Story01_char_Coach_imotion_01
     imgRight: 
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10003
     line: 6
     name: "\uD559\uC0DD"
@@ -1065,7 +1065,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: Story01_char_Player_idle
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10003
     line: 7
     name: "\uB098\uB808\uC774\uC158"
@@ -1075,7 +1075,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: 
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10003
     line: 8
     name: "\uAC10\uB3C5"
@@ -1084,7 +1084,7 @@ MonoBehaviour:
     imgLeft: Story01_char_coach_idle
     imgRight: 
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10003
     line: 9
     name: "\uB098\uB808\uC774\uC158"
@@ -1093,7 +1093,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: 
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10003
     line: 10
     name: "\uAC10\uB3C5"
@@ -1102,7 +1102,7 @@ MonoBehaviour:
     imgLeft: Story01_char_Coach_imotion_03
     imgRight: 
     bgmIndex: 107
-    sfxName: 
+    sfxName: -1
   - id: 10003
     line: 11
     name: "\uAC10\uB3C5"
@@ -1111,7 +1111,7 @@ MonoBehaviour:
     imgLeft: Story01_char_Coach_imotion_03
     imgRight: 
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10003
     line: 12
     name: "\uC774\uC0AC\uC7A5"
@@ -1121,7 +1121,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: Story01_char_Chairman_imotion_01
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10003
     line: 13
     name: "\uC774\uC0AC\uC7A5"
@@ -1131,7 +1131,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: Story01_char_Chairman_idle
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10003
     line: 14
     name: "\uC774\uC0AC\uC7A5"
@@ -1142,7 +1142,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: Story01_char_Chairman_idle
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10003
     line: 15
     name: "\uB098\uB808\uC774\uC158"
@@ -1190,7 +1190,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: Story01_char_Manager_idle
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10003
     line: 20
     name: "\uAC10\uB3C5"
@@ -1199,7 +1199,7 @@ MonoBehaviour:
     imgLeft: Story01_char_coach_idle
     imgRight: 
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10003
     line: 21
     name: "\uB9E4\uB2C8\uC800"
@@ -1210,7 +1210,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: Story01_char_Manager_idle
     bgmIndex: 102
-    sfxName: 
+    sfxName: -1
   - id: 10003
     line: 22
     name: "\uB9E4\uB2C8\uC800"
@@ -1221,7 +1221,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: Story01_char_Manager_idle
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10003
     line: 23
     name: "\uB9E4\uB2C8\uC800"
@@ -1232,7 +1232,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: Story01_char_Manager_imotion_01
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10003
     line: 24
     name: "\uB9E4\uB2C8\uC800"
@@ -1241,7 +1241,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: Story01_char_Manager_imotion_01
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10003
     line: 25
     name: "\uB098\uB808\uC774\uC158"
@@ -1252,7 +1252,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: 
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10003
     line: 26
     name: "\uAC10\uB3C5"
@@ -1261,7 +1261,7 @@ MonoBehaviour:
     imgLeft: Story01_char_coach_idle
     imgRight: 
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10003
     line: 27
     name: "\uB9E4\uB2C8\uC800"
@@ -1273,7 +1273,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: Story01_char_Manager_imotion_01
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10003
     line: 28
     name: "\uAC10\uB3C5"
@@ -1282,7 +1282,7 @@ MonoBehaviour:
     imgLeft: Story01_char_Coach_imotion_02
     imgRight: 
     bgmIndex: 0
-    sfxName: 
+    sfxName: -1
   - id: 10003
     line: 29
     name: "\uB9E4\uB2C8\uC800"
@@ -1292,7 +1292,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: Story01_char_Manager_idle
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10003
     line: 30
     name: "\uAC10\uB3C5"
@@ -1301,7 +1301,7 @@ MonoBehaviour:
     imgLeft: Story01_char_Coach_imotion_02
     imgRight: 
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10003
     line: 31
     name: "\uD559\uC0DD \uD68C\uC7A5"
@@ -1311,7 +1311,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: Story01_char_Player_idle
     bgmIndex: 109
-    sfxName: 
+    sfxName: -1
   - id: 10003
     line: 32
     name: "\uD559\uC0DD\uD68C\uC7A5"
@@ -1321,7 +1321,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: Story01_char_Player_idle
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10003
     line: 33
     name: "\uB098\uB808\uC774\uC158"
@@ -1331,7 +1331,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: 
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10003
     line: 34
     name: "\uB098\uB808\uC774\uC158"
@@ -1341,7 +1341,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: 
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10003
     line: 35
     name: "\uAD50\uC7A5\uC120\uC0DD\uB2D8"
@@ -1352,7 +1352,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: Story01_char_Principal_idle
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10003
     line: 36
     name: "\uAD50\uC7A5\uC120\uC0DD\uB2D8"
@@ -1363,7 +1363,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: Story01_char_Principal_idle
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10003
     line: 37
     name: "\uAC10\uB3C5"
@@ -1374,7 +1374,7 @@ MonoBehaviour:
     imgLeft: Story01_char_coach_idle
     imgRight: 
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10003
     line: 38
     name: "\uAC10\uB3C5"
@@ -1384,7 +1384,7 @@ MonoBehaviour:
     imgLeft: Story01_char_coach_idle
     imgRight: 
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10003
     line: 39
     name: "\uAC10\uB3C5"
@@ -1394,7 +1394,7 @@ MonoBehaviour:
     imgLeft: Story01_char_coach_idle
     imgRight: 
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10003
     line: 40
     name: "\uAC10\uB3C5"
@@ -1403,7 +1403,7 @@ MonoBehaviour:
     imgLeft: Story01_char_Coach_imotion_00
     imgRight: 
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10003
     line: 41
     name: "\uAC10\uB3C5"
@@ -1413,7 +1413,7 @@ MonoBehaviour:
     imgLeft: Story01_char_Coach_imotion_01
     imgRight: 
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10003
     line: 42
     name: "\uAD50\uC7A5\uC120\uC0DD\uB2D8"
@@ -1426,7 +1426,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: Story01_char_Principal_idle
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10003
     line: 43
     name: "\uAD50\uC7A5\uC120\uC0DD\uB2D8"
@@ -1438,7 +1438,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: Story01_char_Principal_imotion_01
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10003
     line: 44
     name: "\uD559\uC0DD \uD68C\uC7A5"
@@ -1448,7 +1448,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: Story01_char_Player_idle
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10003
     line: 45
     name: "\uB098\uB808\uC774\uC158"
@@ -1459,7 +1459,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: 
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10003
     line: 46
     name: "\uB098\uB808\uC774\uC158"
@@ -1468,7 +1468,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: 
     bgmIndex: 0
-    sfxName: 
+    sfxName: -1
   - id: 10003
     line: 47
     name: "\uB098\uB808\uC774\uC158"
@@ -1478,7 +1478,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: 
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10003
     line: 48
     name: "\uB098\uB808\uC774\uC158"
@@ -1489,7 +1489,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: 
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10003
     line: 49
     name: "\uB098\uB808\uC774\uC158"
@@ -1498,7 +1498,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: 
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
   - id: 10003
     line: 50
     name: "\uB098\uB808\uC774\uC158"
@@ -1507,4 +1507,4 @@ MonoBehaviour:
     imgLeft: 
     imgRight: 
     bgmIndex: -1
-    sfxName: 
+    sfxName: -1
