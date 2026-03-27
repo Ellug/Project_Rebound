@@ -33,6 +33,7 @@ public class TrainingProgressUI : UIBase
 
         // 배경 이미지 ID가 있으면 Addressable로 비동기 로드
         LoadBackgroundImage(backgroundImageId);
+        SoundManager.Instance.PlayEffect(208);
 
         _animator.PlayIn();
     }

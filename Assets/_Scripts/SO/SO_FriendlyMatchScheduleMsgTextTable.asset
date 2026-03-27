@@ -71,27 +71,48 @@ MonoBehaviour:
     speaker: left
     dialogue: "\uC724\uD5C8\uD558\uB178\uB77C."
   - id: text_diag_schedule_015
+    type: accept
+    speaker: left
+    dialogue: "\uB07C\uC58F\uD638\uC6B0"
+  - id: text_diag_schedule_016
+    type: accept
+    speaker: left
+    dialogue: "\uB18D\uAD6C\uD558\uACA0\uC218\uC0B0\uC2DC\uC7A5\\n\uC694\uC998 \uC81C\uAC00
+      \uBBF8\uB294 \uC720\uD589\uC5B4 \uC785\uB2C8\uB2E4."
+  - id: text_diag_schedule_017
     type: decline
     speaker: left
     dialogue: "\uC77C\uC2E0 \uC0C1\uC758 \uC0AC\uC815\uC73C\uB85C {date_choice}\uC77C\uC740
       \uC548\uB429\uB2C8\uB2E4."
-  - id: text_diag_schedule_016
-    type: decline
-    speaker: left
-    dialogue: "\uAC1C\uAD50\uAE30\uB150\uC77C\uC774\uB77C \uC27D\uB2C8\uB2E4."
-  - id: text_diag_schedule_017
-    type: decline
-    speaker: left
-    dialogue: "\uADF8 \uB0A0\uC740 \uC27D\uC9C0 \uC54A\uC2B5\uB2C8\uB2E4."
   - id: text_diag_schedule_018
     type: decline
     speaker: left
-    dialogue: "\uADF8 \uB0A0\uC740 \uACF5\uB300 \uB6F0\uC5B4\uC57C \uD574\uC11C \uC5B4\uB835\uC2B5\uB2C8\uB2E4."
+    dialogue: "\uAC1C\uAD50\uAE30\uB150\uC77C\uC774\uB77C \uC27D\uB2C8\uB2E4."
   - id: text_diag_schedule_019
     type: decline
     speaker: left
-    dialogue: "\uAC70\uC808\uD55C\uB2E4."
+    dialogue: "\uADF8 \uB0A0\uC740 \uC27D\uC9C0 \uC54A\uC2B5\uB2C8\uB2E4."
   - id: text_diag_schedule_020
     type: decline
     speaker: left
+    dialogue: "\uADF8 \uB0A0\uC740 \uACF5\uB300 \uB6F0\uC5B4\uC57C \uD574\uC11C \uC5B4\uB835\uC2B5\uB2C8\uB2E4."
+  - id: text_diag_schedule_021
+    type: decline
+    speaker: left
+    dialogue: "\uAC70\uC808\uD55C\uB2E4."
+  - id: text_diag_schedule_022
+    type: decline
+    speaker: left
     dialogue: "{date_choice}\uC77C \uC774\uB77C\uB2C8, \uC774\uBE10\uD558\uC9C0 \uC54A\uAD70\uC694"
+  - id: text_diag_schedule_023
+    type: decline
+    speaker: left
+    dialogue: "\uADF8\uAC8C \uAD8C\uC720\uD558\uB294 \uD0DC\uB3C4\uC785\uB2C8\uAE4C?"
+  - id: text_diag_schedule_024
+    type: decline
+    speaker: left
+    dialogue: "\uC2EB\uC2B5\uB2C8\uB2E4."
+  - id: text_diag_schedule_025
+    type: decline
+    speaker: left
+    dialogue: "\uB2F9\uC2E0\uC740 \uC815\uB9D0 \uB098\uC05C\uC0AC\uB78C\uC774\uC5D0\uC694"

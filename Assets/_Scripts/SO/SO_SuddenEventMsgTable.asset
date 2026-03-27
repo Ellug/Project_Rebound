@@ -3821,7 +3821,7 @@ MonoBehaviour:
     messageIndex: index_002
     messageDialogue: text_diag_000017_002
     next: 
-    isChoice: 1
+    isChoice: 0
     choice1Dialogue: text_diag_000017_003
     choice1Next: index_003
     choice2Dialogue: text_diag_000017_010
