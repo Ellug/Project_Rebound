@@ -23,7 +23,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: 
     bgmIndex: 0
-    sfxName: sfx_scene_court_lp
+    sfxName: 401
   - id: 10001
     line: 1
     name: "\uB098\uB808\uC774\uC158"
@@ -34,7 +34,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: 
     bgmIndex: 0
-    sfxName: sfx_scene_clap_os
+    sfxName: 402
   - id: 10001
     line: 2
     name: "\uB098\uB808\uC774\uC158"
@@ -43,7 +43,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: 
     bgmIndex: 0
-    sfxName: sfx_match_buzzer_os
+    sfxName: 302
   - id: 10001
     line: 3
     name: "\uB098\uB808\uC774\uC158"
@@ -71,8 +71,8 @@ MonoBehaviour:
     bgImg: Story01_bg_WatingRoom
     imgLeft: 
     imgRight: Story01_char_Announcer_idle
-    bgmIndex: 0
-    sfxName: sfx_scene_press_shutter_os
+    bgmIndex: 107
+    sfxName: 404
   - id: 10001
     line: 6
     name: "\uAC10\uB3C5"
@@ -131,7 +131,7 @@ MonoBehaviour:
     bgImg: Story02_bg_Room
     imgLeft: 
     imgRight: 
-    bgmIndex: 0
+    bgmIndex: 102
     sfxName: 
   - id: 10001
     line: 12
@@ -191,7 +191,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: 
     bgmIndex: 0
-    sfxName: sfx_scene_msg_notif_os
+    sfxName: 406
   - id: 10001
     line: 18
     name: "\uAC10\uB3C5"
@@ -248,7 +248,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: 
     bgmIndex: 0
-    sfxName: sfx_scene_court_lp
+    sfxName: 401
   - id: 10001
     line: 24
     name: "\uAC10\uB3C5"
@@ -334,7 +334,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: 
     bgmIndex: 0
-    sfxName: sfx_scene_student_chatter_lp
+    sfxName: 408
   - id: 10001
     line: 33
     name: "\uAC10\uB3C5"
@@ -385,7 +385,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: 
     bgmIndex: 0
-    sfxName: sfx_scene_walk_dirt_os
+    sfxName: 409
   - id: 10001
     line: 38
     name: "\uAC10\uB3C5"
@@ -405,7 +405,7 @@ MonoBehaviour:
     bgImg: Story04_bg_PrincipalOffice
     imgLeft: 
     imgRight: 
-    bgmIndex: 0
+    bgmIndex: 108
     sfxName: 
   - id: 10001
     line: 40
@@ -449,7 +449,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: 
     bgmIndex: 0
-    sfxName: sfx_scene_paper_pick_os
+    sfxName: 410
   - id: 10001
     line: 44
     name: "\uAC10\uB3C5"
@@ -534,7 +534,7 @@ MonoBehaviour:
     bgImg: Story05_bg_Gym
     imgLeft: 
     imgRight: Story01_char_Player_idle
-    bgmIndex: 0
+    bgmIndex: 102
     sfxName: 
   - id: 10001
     line: 52
@@ -567,7 +567,7 @@ MonoBehaviour:
     imgLeft: Story01_char_coach_idle
     imgRight: 
     bgmIndex: 0
-    sfxName: sfx_scene_floor_wood_creak_os
+    sfxName: 411
   - id: 10001
     line: 55
     name: "\uAC10\uB3C5"
@@ -634,7 +634,7 @@ MonoBehaviour:
     bgImg: Story05_bg_Gym
     imgLeft: 
     imgRight: Story01_char_Mom_idle
-    bgmIndex: 0
+    bgmIndex: 107
     sfxName: 
   - id: 10002
     line: 1
@@ -751,7 +751,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: Story01_char_Chairman_idle
     bgmIndex: 0
-    sfxName: sfx_scene_pen_tap_os
+    sfxName: 412
   - id: 10002
     line: 12
     name: "\uAD50\uC7A5 \uC120\uC0DD\uB2D8"
@@ -809,7 +809,7 @@ MonoBehaviour:
     bgImg: Story04_bg_PrincipalOffice
     imgLeft: Story01_char_Principal_idle
     imgRight: 
-    bgmIndex: 0
+    bgmIndex: 108
     sfxName: 
   - id: 10002
     line: 18
@@ -1003,7 +1003,7 @@ MonoBehaviour:
     bgImg: Story07_bg_Stadium
     imgLeft: 
     imgRight: 
-    bgmIndex: 0
+    bgmIndex: 102
     sfxName: 
   - id: 10003
     line: 1
@@ -1101,7 +1101,7 @@ MonoBehaviour:
     bgImg: Story06_bg_ChairmanOffice
     imgLeft: Story01_char_Coach_imotion_03
     imgRight: 
-    bgmIndex: 0
+    bgmIndex: 107
     sfxName: 
   - id: 10003
     line: 11
@@ -1152,7 +1152,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: 
     bgmIndex: 0
-    sfxName: sfx_scene_door_close_os
+    sfxName: 413
   - id: 10003
     line: 16
     name: "\uAC10\uB3C5"
@@ -1161,7 +1161,7 @@ MonoBehaviour:
     imgLeft: Story01_char_Coach_imotion_03
     imgRight: 
     bgmIndex: 0
-    sfxName: sfx_scene_punch_os
+    sfxName: 414
   - id: 10003
     line: 17
     name: "\uB098\uB808\uC774\uC158"
@@ -1171,7 +1171,7 @@ MonoBehaviour:
     imgLeft: 
     imgRight: 
     bgmIndex: 0
-    sfxName: sfx_scene_phone_ring_os
+    sfxName: 415
   - id: 10003
     line: 18
     name: "\uAC10\uB3C5"
@@ -1180,7 +1180,7 @@ MonoBehaviour:
     imgLeft: Story01_char_coach_idle
     imgRight: 
     bgmIndex: 0
-    sfxName: sfx_scene_phone_accept_os
+    sfxName: 416
   - id: 10003
     line: 19
     name: "\uB9E4\uB2C8\uC800"
@@ -1209,7 +1209,7 @@ MonoBehaviour:
     bgImg: Story08_bg_Hallway
     imgLeft: 
     imgRight: Story01_char_Manager_idle
-    bgmIndex: 0
+    bgmIndex: 102
     sfxName: 
   - id: 10003
     line: 22
@@ -1310,7 +1310,7 @@ MonoBehaviour:
     bgImg: Story05_bg_Gym
     imgLeft: 
     imgRight: Story01_char_Player_idle
-    bgmIndex: 0
+    bgmIndex: 109
     sfxName: 
   - id: 10003
     line: 32

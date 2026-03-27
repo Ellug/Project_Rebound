@@ -259,8 +259,8 @@ text_diag_000013_010,player,...나 교원자격증 있거든?
 text_diag_000013_011,student,오 인텔리.
 text_diag_000013_012,player,"헛소리하지말고, 에어팟이나 가져가라."
 text_diag_000013_013,student,네! 찾아주셔서 감사합니다!\n바로 갈께요!
-text_diag_000013_014,choice,아 그거
-text_diag_000013_015,player,"부실 책상 위에 뒀으니까, 가져가라."
+text_diag_000013_014,choice,"응, 맞아."
+text_diag_000013_015,player,"잘못하면 누가 밟을 것 같아서, 내가 잽싸게 주웠지."
 text_diag_000013_016,student,역시 감독님!
 text_diag_000013_017,student,사랑합니다!
 text_diag_000013_018,player,오냐.
@@ -350,7 +350,7 @@ text_diag_000016_028,player,이렇게라도 하지 않으면...
 text_diag_000016_029,player,내가 지금 니 뒤에 있는지도 모르는걸.
 text_diag_000016_030,student,엑
 text_diag_000016_031,student,살ㄹ
-text_diag_000017_000,student,"감독님,\n갑자기 궁금한 게 생겼는데요. "
+text_diag_000017_000,student,"감독님, 질문 있습니다."
 text_diag_000017_001,player,뭔데?
 text_diag_000017_002,student,감독님은 '재능'이랑 '노력' 중에\n뭐가 더 중요하다고 생각하세요?
 text_diag_000017_003,choice,당연히 노력이지.

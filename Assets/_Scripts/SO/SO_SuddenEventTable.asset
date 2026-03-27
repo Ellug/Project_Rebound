@@ -15,7 +15,7 @@ MonoBehaviour:
   _rows:
   - id: event_000001
     name: "\uBA58\uD0C8 \uAC15\uD654"
-    context: 2
+    context: 1
     condition: 2
     category: 9
     scope: 2
@@ -39,7 +39,7 @@ MonoBehaviour:
     description: text_SuddenEvent_000001
   - id: event_000002
     name: "\uBA58\uD0C8 \uC57D\uD654"
-    context: 2
+    context: 1
     condition: 2
     category: 10
     scope: 2
@@ -63,7 +63,7 @@ MonoBehaviour:
     description: text_SuddenEvent_000002
   - id: event_000003
     name: "\uC288\uD305 \uAC15\uD654"
-    context: 2
+    context: 1
     condition: 2
     category: 5
     scope: 2
@@ -87,7 +87,7 @@ MonoBehaviour:
     description: text_SuddenEvent_000001
   - id: event_000004
     name: "\uC288\uD305 \uC57D\uD654"
-    context: 2
+    context: 1
     condition: 2
     category: 6
     scope: 2
@@ -111,7 +111,7 @@ MonoBehaviour:
     description: text_SuddenEvent_000002
   - id: event_000005
     name: "\uC2A4\uD53C\uB4DC \uAC15\uD654"
-    context: 2
+    context: 1
     condition: 2
     category: 5
     scope: 2
@@ -135,7 +135,7 @@ MonoBehaviour:
     description: text_SuddenEvent_000001
   - id: event_000006
     name: "\uC2A4\uD53C\uB4DC \uC57D\uD654"
-    context: 2
+    context: 1
     condition: 2
     category: 6
     scope: 2
@@ -159,7 +159,7 @@ MonoBehaviour:
     description: text_SuddenEvent_000002
   - id: event_000007
     name: "\uC810\uD504 \uC131\uC7A5"
-    context: 2
+    context: 1
     condition: 2
     category: 5
     scope: 2
@@ -183,7 +183,7 @@ MonoBehaviour:
     description: text_SuddenEvent_000001
   - id: event_000008
     name: "\uC810\uD504 \uC57D\uD654"
-    context: 2
+    context: 1
     condition: 2
     category: 6
     scope: 2
@@ -207,7 +207,7 @@ MonoBehaviour:
     description: text_SuddenEvent_000002
   - id: event_000009
     name: "\uCEE8\uB514\uC158 \uC99D\uAC00"
-    context: 2
+    context: 1
     condition: 2
     category: 13
     scope: 2
@@ -231,7 +231,7 @@ MonoBehaviour:
     description: text_SuddenEvent_000001
   - id: event_000010
     name: "\uCEE8\uB514\uC158 \uAC10\uC18C"
-    context: 2
+    context: 1
     condition: 2
     category: 14
     scope: 2
@@ -255,7 +255,7 @@ MonoBehaviour:
     description: text_SuddenEvent_000002
   - id: event_000011
     name: "\uC9C0\uAD6C\uB825 \uC131\uC7A5"
-    context: 2
+    context: 1
     condition: 2
     category: 5
     scope: 2
@@ -279,7 +279,7 @@ MonoBehaviour:
     description: text_SuddenEvent_000001
   - id: event_000012
     name: "\uC9C0\uAD6C\uB825 \uC57D\uD654"
-    context: 2
+    context: 1
     condition: 2
     category: 6
     scope: 2
@@ -303,7 +303,7 @@ MonoBehaviour:
     description: text_SuddenEvent_000002
   - id: event_000013
     name: "\uC790\uAE08 \uD68D\uB4DD"
-    context: 2
+    context: 1
     condition: 2
     category: 1
     scope: 7
@@ -327,7 +327,7 @@ MonoBehaviour:
     description: text_SuddenEvent_000003
   - id: event_000014
     name: "\uC790\uAE08 \uC190\uC2E4"
-    context: 2
+    context: 1
     condition: 2
     category: 2
     scope: 7
@@ -351,7 +351,7 @@ MonoBehaviour:
     description: text_SuddenEvent_000004
   - id: event_000015
     name: "\uBA85\uC131\uCE58 \uC99D\uAC00"
-    context: 2
+    context: 1
     condition: 2
     category: 1
     scope: 7
@@ -375,7 +375,7 @@ MonoBehaviour:
     description: text_SuddenEvent_000001
   - id: event_000016
     name: "\uBA85\uC131\uCE58 \uAC10\uC18C"
-    context: 2
+    context: 1
     condition: 2
     category: 2
     scope: 7
@@ -399,10 +399,10 @@ MonoBehaviour:
     description: text_SuddenEvent_000002
   - id: event_000017
     name: "\uB79C\uB364 \uC2A4\uD0EF \uC99D\uAC00"
-    context: 2
+    context: 1
     condition: 2
     category: 13
-    scope: 7
+    scope: 2
     targetMin: 1
     targetMax: 1
     termMin: 0
@@ -423,10 +423,10 @@ MonoBehaviour:
     description: text_SuddenEvent_000001
   - id: event_000018
     name: "\uB79C\uB364 \uC2A4\uD0EF \uAC10\uC18C"
-    context: 2
+    context: 1
     condition: 2
     category: 14
-    scope: 7
+    scope: 2
     targetMin: 1
     targetMax: 1
     termMin: 0
@@ -447,7 +447,7 @@ MonoBehaviour:
     description: text_SuddenEvent_000002
   - id: event_000019
     name: "\uB118\uCE58\uB294 \uD798"
-    context: 2
+    context: 1
     condition: 2
     category: 15
     scope: 2
@@ -471,7 +471,7 @@ MonoBehaviour:
     description: text_SuddenEvent_000009
   - id: event_000020
     name: "\uC6B4\uB3D9\uAE30\uAD6C \uD30C\uC190"
-    context: 2
+    context: 1
     condition: 2
     category: 2
     scope: 7
@@ -495,11 +495,11 @@ MonoBehaviour:
     description: text_SuddenEvent_000004
   - id: event_000021
     name: "\uB18D\uAD6C\uBD80 \uD68C\uC2DD"
-    context: 2
+    context: 1
     condition: 2
     category: 13
     scope: 2
-    targetMin: 20
+    targetMin: 7
     targetMax: 21
     termMin: 0
     termMax: 0
@@ -519,7 +519,7 @@ MonoBehaviour:
     description: text_SuddenEvent_000008
   - id: event_000022
     name: "\uAC1C\uC778 \uD2B9\uBCC4 \uD6C8\uB828"
-    context: 2
+    context: 1
     condition: 2
     category: 15
     scope: 2
@@ -543,11 +543,11 @@ MonoBehaviour:
     description: text_SuddenEvent_000009
   - id: event_000023
     name: "\uB2E8\uCCB4 \uD2B9\uBCC4 \uD734\uC2DD"
-    context: 2
+    context: 1
     condition: 2
     category: 13
     scope: 2
-    targetMin: 20
+    targetMin: 7
     targetMax: 21
     termMin: 0
     termMax: 0
@@ -567,11 +567,11 @@ MonoBehaviour:
     description: text_SuddenEvent_000012
   - id: event_000024
     name: "\uC804\uC220 \uBD84\uC11D"
-    context: 2
+    context: 1
     condition: 2
     category: 5
     scope: 2
-    targetMin: 20
+    targetMin: 7
     targetMax: 21
     termMin: 0
     termMax: 0
@@ -591,11 +591,11 @@ MonoBehaviour:
     description: text_SuddenEvent_000014
   - id: event_000025
     name: "\uB2E8\uCCB4 \uD2B9\uBCC4 \uD6C8\uB828"
-    context: 2
+    context: 1
     condition: 2
     category: 5
     scope: 2
-    targetMin: 20
+    targetMin: 7
     targetMax: 21
     termMin: 0
     termMax: 0
@@ -615,7 +615,7 @@ MonoBehaviour:
     description: text_SuddenEvent_000015
   - id: event_000026
     name: "\uD559\uBD80\uBAA8 \uAE30\uAE08"
-    context: 2
+    context: 1
     condition: 2
     category: 1
     scope: 7
@@ -644,7 +644,7 @@ MonoBehaviour:
     category: 14
     scope: 3
     targetMin: 1
-    targetMax: 5
+    targetMax: 6
     termMin: 1
     termMax: 4
     termScale: 2
@@ -668,7 +668,7 @@ MonoBehaviour:
     category: 14
     scope: 3
     targetMin: 1
-    targetMax: 5
+    targetMax: 6
     termMin: 1
     termMax: 4
     termScale: 2
@@ -692,7 +692,7 @@ MonoBehaviour:
     category: 14
     scope: 3
     targetMin: 1
-    targetMax: 5
+    targetMax: 6
     termMin: 1
     termMax: 4
     termScale: 2
@@ -716,7 +716,7 @@ MonoBehaviour:
     category: 6
     scope: 2
     targetMin: 1
-    targetMax: 2
+    targetMax: 3
     termMin: 1
     termMax: 7
     termScale: 1
@@ -740,7 +740,7 @@ MonoBehaviour:
     category: 6
     scope: 2
     targetMin: 1
-    targetMax: 2
+    targetMax: 3
     termMin: 1
     termMax: 7
     termScale: 1
@@ -764,7 +764,7 @@ MonoBehaviour:
     category: 6
     scope: 2
     targetMin: 1
-    targetMax: 2
+    targetMax: 3
     termMin: 1
     termMax: 7
     termScale: 1
@@ -788,7 +788,7 @@ MonoBehaviour:
     category: 6
     scope: 2
     targetMin: 1
-    targetMax: 2
+    targetMax: 3
     termMin: 1
     termMax: 7
     termScale: 1
@@ -812,7 +812,7 @@ MonoBehaviour:
     category: 6
     scope: 3
     targetMin: 1
-    targetMax: 2
+    targetMax: 3
     termMin: 1
     termMax: 3
     termScale: 1
@@ -836,7 +836,7 @@ MonoBehaviour:
     category: 6
     scope: 3
     targetMin: 1
-    targetMax: 2
+    targetMax: 3
     termMin: 1
     termMax: 7
     termScale: 1
@@ -860,7 +860,7 @@ MonoBehaviour:
     category: 6
     scope: 3
     targetMin: 1
-    targetMax: 2
+    targetMax: 3
     termMin: 3
     termMax: 7
     termScale: 1
@@ -884,7 +884,7 @@ MonoBehaviour:
     category: 6
     scope: 3
     targetMin: 1
-    targetMax: 2
+    targetMax: 3
     termMin: 7
     termMax: 28
     termScale: 1
@@ -908,7 +908,7 @@ MonoBehaviour:
     category: 6
     scope: 2
     targetMin: 1
-    targetMax: 2
+    targetMax: 3
     termMin: 1
     termMax: 7
     termScale: 0
@@ -932,7 +932,7 @@ MonoBehaviour:
     category: 6
     scope: 2
     targetMin: 1
-    targetMax: 2
+    targetMax: 3
     termMin: 3
     termMax: 7
     termScale: 0
@@ -956,7 +956,7 @@ MonoBehaviour:
     category: 6
     scope: 2
     targetMin: 1
-    targetMax: 2
+    targetMax: 3
     termMin: 7
     termMax: 28
     termScale: 0
@@ -980,7 +980,7 @@ MonoBehaviour:
     category: 13
     scope: 2
     targetMin: 1
-    targetMax: 2
+    targetMax: 3
     termMin: 0
     termMax: 0
     termScale: 0
@@ -1004,13 +1004,13 @@ MonoBehaviour:
     category: 6
     scope: 2
     targetMin: 1
-    targetMax: 2
+    targetMax: 3
     termMin: 1
     termMax: 7
     termScale: 1
     isTrigger: 1
     triggerStatus1: 5
-    triggerCondition1: 7
+    triggerCondition1: -1
     triggerThreshold1: 80
     triggerStatus2: 5
     triggerCondition2: 6
@@ -1028,13 +1028,13 @@ MonoBehaviour:
     category: 6
     scope: 2
     targetMin: 1
-    targetMax: 2
+    targetMax: 3
     termMin: 1
     termMax: 7
     termScale: 1
     isTrigger: 1
     triggerStatus1: 5
-    triggerCondition1: 7
+    triggerCondition1: -1
     triggerThreshold1: 60
     triggerStatus2: 5
     triggerCondition2: 6
@@ -1052,13 +1052,13 @@ MonoBehaviour:
     category: 6
     scope: 2
     targetMin: 1
-    targetMax: 2
+    targetMax: 3
     termMin: 1
     termMax: 7
     termScale: 1
     isTrigger: 1
     triggerStatus1: 5
-    triggerCondition1: 7
+    triggerCondition1: -1
     triggerThreshold1: 40
     triggerStatus2: 5
     triggerCondition2: 6
@@ -1076,13 +1076,13 @@ MonoBehaviour:
     category: 6
     scope: 2
     targetMin: 1
-    targetMax: 2
+    targetMax: 3
     termMin: 1
     termMax: 7
     termScale: 1
     isTrigger: 1
     triggerStatus1: 5
-    triggerCondition1: 7
+    triggerCondition1: -1
     triggerThreshold1: 20
     triggerStatus2: 0
     triggerCondition2: 0
@@ -1098,7 +1098,7 @@ MonoBehaviour:
     context: 2
     condition: 1
     category: 3
-    scope: 7
+    scope: 2
     targetMin: 1
     targetMax: 1
     termMin: 0
@@ -1115,14 +1115,14 @@ MonoBehaviour:
     effect2: 
     effect3: 
     isProbable: 1
-    probability: 0.1
+    probability: 1
     description: text_diag_000001_000
   - id: event_100002
     name: "\uC0C8\uB85C\uC6B4 \uBA54\uC2DC\uC9C0."
     context: 2
     condition: 1
     category: 3
-    scope: 7
+    scope: 2
     targetMin: 1
     targetMax: 1
     termMin: 0
@@ -1146,7 +1146,7 @@ MonoBehaviour:
     context: 2
     condition: 1
     category: 3
-    scope: 7
+    scope: 2
     targetMin: 1
     targetMax: 1
     termMin: 0
@@ -1170,7 +1170,7 @@ MonoBehaviour:
     context: 2
     condition: 1
     category: 3
-    scope: 7
+    scope: 2
     targetMin: 1
     targetMax: 1
     termMin: 0
@@ -1194,7 +1194,7 @@ MonoBehaviour:
     context: 2
     condition: 1
     category: 3
-    scope: 7
+    scope: 2
     targetMin: 1
     targetMax: 1
     termMin: 0
@@ -1218,7 +1218,7 @@ MonoBehaviour:
     context: 2
     condition: 1
     category: 3
-    scope: 7
+    scope: 2
     targetMin: 1
     targetMax: 1
     termMin: 0
@@ -1242,7 +1242,7 @@ MonoBehaviour:
     context: 2
     condition: 1
     category: 3
-    scope: 7
+    scope: 2
     targetMin: 1
     targetMax: 1
     termMin: 0
@@ -1266,7 +1266,7 @@ MonoBehaviour:
     context: 2
     condition: 1
     category: 3
-    scope: 7
+    scope: 2
     targetMin: 1
     targetMax: 1
     termMin: 0
@@ -1290,7 +1290,7 @@ MonoBehaviour:
     context: 2
     condition: 1
     category: 3
-    scope: 7
+    scope: 2
     targetMin: 1
     targetMax: 1
     termMin: 0
@@ -1314,7 +1314,7 @@ MonoBehaviour:
     context: 2
     condition: 1
     category: 3
-    scope: 7
+    scope: 2
     targetMin: 1
     targetMax: 1
     termMin: 0
@@ -1338,7 +1338,7 @@ MonoBehaviour:
     context: 2
     condition: 1
     category: 3
-    scope: 7
+    scope: 2
     targetMin: 1
     targetMax: 1
     termMin: 0
@@ -1362,7 +1362,7 @@ MonoBehaviour:
     context: 2
     condition: 1
     category: 3
-    scope: 7
+    scope: 2
     targetMin: 1
     targetMax: 1
     termMin: 0
@@ -1386,7 +1386,7 @@ MonoBehaviour:
     context: 2
     condition: 1
     category: 3
-    scope: 7
+    scope: 2
     targetMin: 1
     targetMax: 1
     termMin: 0
@@ -1410,7 +1410,7 @@ MonoBehaviour:
     context: 2
     condition: 1
     category: 3
-    scope: 7
+    scope: 2
     targetMin: 1
     targetMax: 1
     termMin: 0
@@ -1434,7 +1434,7 @@ MonoBehaviour:
     context: 2
     condition: 1
     category: 3
-    scope: 7
+    scope: 2
     targetMin: 1
     targetMax: 1
     termMin: 0
@@ -1458,7 +1458,7 @@ MonoBehaviour:
     context: 2
     condition: 1
     category: 3
-    scope: 7
+    scope: 2
     targetMin: 1
     targetMax: 1
     termMin: 0
@@ -1482,7 +1482,7 @@ MonoBehaviour:
     context: 2
     condition: 1
     category: 3
-    scope: 7
+    scope: 2
     targetMin: 1
     targetMax: 1
     termMin: 0
@@ -1506,7 +1506,7 @@ MonoBehaviour:
     context: 2
     condition: 1
     category: 3
-    scope: 7
+    scope: 2
     targetMin: 1
     targetMax: 1
     termMin: 0
@@ -1530,7 +1530,7 @@ MonoBehaviour:
     context: 2
     condition: 1
     category: 3
-    scope: 7
+    scope: 2
     targetMin: 1
     targetMax: 1
     termMin: 0
@@ -1554,7 +1554,7 @@ MonoBehaviour:
     context: 2
     condition: 1
     category: 3
-    scope: 7
+    scope: 2
     targetMin: 1
     targetMax: 1
     termMin: 0
@@ -1575,7 +1575,7 @@ MonoBehaviour:
     description: text_diag_000020_000
   - id: event_110001
     name: "[\uACF5\uC9C0] \uAE08\uC77C \uC9C0\uAC01\uC790"
-    context: 2
+    context: 1
     condition: 1
     category: 2
     scope: 2
@@ -1599,7 +1599,7 @@ MonoBehaviour:
     description: text_diag_100001_000
   - id: event_110002
     name: "[\uACF5\uC9C0] \uD559\uC0DD \uC785\uC6D0"
-    context: 2
+    context: 1
     condition: 1
     category: 2
     scope: 2
@@ -1623,7 +1623,7 @@ MonoBehaviour:
     description: text_diag_110000_000
   - id: event_110003
     name: "[\uACF5\uC9C0] \uD559\uC0DD \uC785\uC6D0"
-    context: 2
+    context: 1
     condition: 1
     category: 2
     scope: 2
@@ -1647,7 +1647,7 @@ MonoBehaviour:
     description: text_diag_110001_000
   - id: event_110004
     name: "[\uACF5\uC9C0] \uD559\uC0DD \uC785\uC6D0"
-    context: 2
+    context: 1
     condition: 1
     category: 2
     scope: 2
@@ -1671,12 +1671,12 @@ MonoBehaviour:
     description: text_diag_110002_000
   - id: event_001002
     name: "[\uACF5\uC9C0] \uD559\uC0DD \uC785\uC6D0"
-    context: 2
+    context: 1
     condition: 4
     category: 6
     scope: 2
     targetMin: 1
-    targetMax: 2
+    targetMax: 3
     termMin: 1
     termMax: 3
     termScale: 1
@@ -1695,12 +1695,12 @@ MonoBehaviour:
     description: text_diag_111001_000
   - id: event_001002
     name: "[\uACF5\uC9C0] \uD559\uC0DD \uC785\uC6D0"
-    context: 2
+    context: 1
     condition: 4
     category: 6
     scope: 2
     targetMin: 1
-    targetMax: 2
+    targetMax: 3
     termMin: 1
     termMax: 7
     termScale: 1
@@ -1719,12 +1719,12 @@ MonoBehaviour:
     description: text_diag_111002_000
   - id: event_001002
     name: "[\uACF5\uC9C0] \uD559\uC0DD \uC785\uC6D0"
-    context: 2
+    context: 1
     condition: 4
     category: 6
     scope: 2
     targetMin: 1
-    targetMax: 2
+    targetMax: 3
     termMin: 3
     termMax: 7
     termScale: 1
@@ -1743,12 +1743,12 @@ MonoBehaviour:
     description: text_diag_111003_000
   - id: event_001002
     name: "[\uACF5\uC9C0] \uD559\uC0DD \uC785\uC6D0"
-    context: 2
+    context: 1
     condition: 4
     category: 6
     scope: 2
     targetMin: 1
-    targetMax: 2
+    targetMax: 3
     termMin: 7
     termMax: 28
     termScale: 1
@@ -1766,8 +1766,8 @@ MonoBehaviour:
     probability: 1
     description: text_diag_111004_000
   - id: event_120001
-    name: "[\uACF5\uC9C0] \uAC04\uC2DD \uC81C\uACF5 \uD589\uC0AC \uC548\uB0B4"
-    context: 2
+    name: "[\uACF5\uC9C0] \uAC04\uC2DD \uD589\uC0AC"
+    context: 1
     condition: 1
     category: 1
     scope: 2
@@ -1790,9 +1790,8 @@ MonoBehaviour:
     probability: 0.1
     description: text_diag_200001_000
   - id: event_120002
-    name: "[\uACF5\uC9C0]\uC9C0\uC5ED \uC8FC\uBBFC \uAC10\uC0AC\uC7A5 \uC218\uC5EC
-      \uC548\uB0B4"
-    context: 2
+    name: "[\uACF5\uC9C0] \uAC10\uC0AC\uC7A5 \uC218\uC5EC"
+    context: 1
     condition: 1
     category: 1
     scope: 7
@@ -1815,8 +1814,8 @@ MonoBehaviour:
     probability: 0.1
     description: text_diag_200002_000
   - id: event_120003
-    name: "[\uACF5\uC9C0]\uD2B9\uBCC4 \uC608\uC0B0 \uC9C0\uC6D0 \uC548\uB0B4"
-    context: 2
+    name: "[\uACF5\uC9C0]\uD2B9\uBCC4 \uC608\uC0B0 \uC9C0\uC6D0"
+    context: 1
     condition: 1
     category: 1
     scope: 7
