@@ -25,6 +25,9 @@ public class CalendarMonthView : UIBase
     [SerializeField] private float _slideOffsetX = 600f;
     [SerializeField] private float _slideDuration = 0.2f;
 
+    [Header("날짜 팝업")]
+    [SerializeField] private CalendarDayPopup _dayPopup;
+
     private readonly List<CalendarCell> _cells = new();
 
     private int _viewYear;
@@ -52,7 +55,7 @@ public class CalendarMonthView : UIBase
             _swipeHandler.OnSwipeLeft += OnNextMonth;
             _swipeHandler.OnSwipeRight += OnPrevMonth;
         }
-
+        CalendarDayDetailPopup.Bind(_dayPopup);
         BuildCellPool();
     }
 
