@@ -1010,7 +1010,7 @@ MonoBehaviour:
     termScale: 1
     isTrigger: 1
     triggerStatus1: 5
-    triggerCondition1: -1
+    triggerCondition1: 7
     triggerThreshold1: 80
     triggerStatus2: 5
     triggerCondition2: 6
@@ -1034,7 +1034,7 @@ MonoBehaviour:
     termScale: 1
     isTrigger: 1
     triggerStatus1: 5
-    triggerCondition1: -1
+    triggerCondition1: 7
     triggerThreshold1: 60
     triggerStatus2: 5
     triggerCondition2: 6
@@ -1058,7 +1058,7 @@ MonoBehaviour:
     termScale: 1
     isTrigger: 1
     triggerStatus1: 5
-    triggerCondition1: -1
+    triggerCondition1: 7
     triggerThreshold1: 40
     triggerStatus2: 5
     triggerCondition2: 6
@@ -1082,7 +1082,7 @@ MonoBehaviour:
     termScale: 1
     isTrigger: 1
     triggerStatus1: 5
-    triggerCondition1: -1
+    triggerCondition1: 7
     triggerThreshold1: 20
     triggerStatus2: 0
     triggerCondition2: 0
@@ -1669,7 +1669,7 @@ MonoBehaviour:
     isProbable: 0
     probability: 1
     description: text_diag_110002_000
-  - id: event_001002
+  - id: event_111001
     name: "[\uACF5\uC9C0] \uD559\uC0DD \uC785\uC6D0"
     context: 1
     condition: 4
@@ -1693,7 +1693,7 @@ MonoBehaviour:
     isProbable: 1
     probability: 0.2
     description: text_diag_111001_000
-  - id: event_001002
+  - id: event_111002
     name: "[\uACF5\uC9C0] \uD559\uC0DD \uC785\uC6D0"
     context: 1
     condition: 4
@@ -1717,7 +1717,7 @@ MonoBehaviour:
     isProbable: 1
     probability: 0.5
     description: text_diag_111002_000
-  - id: event_001002
+  - id: event_111003
     name: "[\uACF5\uC9C0] \uD559\uC0DD \uC785\uC6D0"
     context: 1
     condition: 4
@@ -1741,7 +1741,7 @@ MonoBehaviour:
     isProbable: 1
     probability: 0.7
     description: text_diag_111003_000
-  - id: event_001002
+  - id: event_111004
     name: "[\uACF5\uC9C0] \uD559\uC0DD \uC785\uC6D0"
     context: 1
     condition: 4
