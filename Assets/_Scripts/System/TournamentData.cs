@@ -4,7 +4,7 @@ using System;
 [Serializable]
 public struct TournamentData
 {
-    public int PendingMySchoolReachedRoundTeamCount; // 내가 진입한 라운드 팀 수 (32,16,8,4,2,1)
+    public int PendingMySchoolReachedRoundTeamCount; // 1~4위 또는 탈락 라운드 팀 수(8,16,32) 담음
 
     // 초기값
     public static TournamentData Default => new()
@@ -50,10 +50,14 @@ public struct TournamentData
         if (reachedRoundTeamCount == 2)
             return "2위";
 
+        if (reachedRoundTeamCount == 3)
+            return "3위";
+
+        if (reachedRoundTeamCount == 4)
+            return "4위";
+
         if (reachedRoundTeamCount <= 0)
             return "결과 없음";
-
-            // 나중에 3,4위전도 추가되나? 기획서상으론 < 4 일때만 성공, 나머지 탈락
 
         return $"{reachedRoundTeamCount}강";
     }

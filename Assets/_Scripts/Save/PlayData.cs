@@ -160,7 +160,10 @@ public class SavedTournamentData
     public bool isInProgress;
     public int teamCount;
     public int currentRoundIndex;
-    public int mySchoolReachedRoundTeamCount;             // 현재까지 도달한 라운드의 팀 수
+    public int mySchoolReachedRoundTeamCount;             // 1~4위 또는 도달 라운드 팀 수(8/16/32)
+    public bool isWaitingThirdPlaceMatch;                 // 4강 탈락 후 3/4위전 진입 대기
+    public bool isThirdPlaceMatchInProgress;              // 3/4위전 경기 진행 중 여부
+    public string thirdPlaceOpponentName;                 // 3/4위전 상대 학교명
     public List<SavedRoundData> allRounds = new();        // _allRounds 대응
 }
 
