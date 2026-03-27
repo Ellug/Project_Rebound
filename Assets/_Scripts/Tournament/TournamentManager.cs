@@ -443,7 +443,7 @@ public class TournamentManager : MonoBehaviour
             return;
         }
 
-        if (didWin) SoundManager.Instance.PlayBGM(108);
+        if (didWin) SoundManager.Instance.PlayBGM(106);
 
         _matchGameManager.AbortCurrentMatch();
 
@@ -491,7 +491,7 @@ public class TournamentManager : MonoBehaviour
         _mySchoolDefeatedThisMatch = !didWin;
         _isWaitingForResultNext = true;
 
-        if (didWin) SoundManager.Instance.PlayBGM(108);
+        if (didWin) SoundManager.Instance.PlayBGM(106);
 
         GameManager.Instance.SetPendingFriendlyMatchResult(didWin, _friendlyOpponentName);
 

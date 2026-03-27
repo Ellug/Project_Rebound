@@ -168,7 +168,7 @@ public class HeadCoachPopup : UIBase
 
         if (success)
         {
-            SoundManager.Instance.PlayEffect(212);
+            SoundManager.Instance.PlayEffect(211);
             SaveManager.Instance.SaveCurrent();
 
             RestoreHighlight();

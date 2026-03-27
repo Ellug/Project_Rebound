@@ -21,6 +21,7 @@ public sealed class VNManager : MonoBehaviour
     private bool _isWaitingForFinishTap;
     private bool _isCompleted;
     private bool _isTypingLine;
+    private bool _hasActiveLineSfx;
     private float _inputUnlockTime;
     private TextTypewriter _typingPlayer;
 
@@ -46,6 +47,9 @@ public sealed class VNManager : MonoBehaviour
     // 브릿지 요청과 테이블 데이터를 기반으로 현재 시나리오 구성
     private void InitializeScenario()
     {
+        StopActiveLineSfx();
+        StopBgm();
+
         int storyId = _fallbackStoryId;
         _returnSceneName = DefaultReturnSceneName;
 
@@ -88,6 +92,7 @@ public sealed class VNManager : MonoBehaviour
         _isWaitingForFinishTap = false;
         _isCompleted = false;
         _isTypingLine = false;
+        _hasActiveLineSfx = false;
         StopTypingRoutine();
         _inputUnlockTime = Time.unscaledTime + _inputLockDuration;
 
@@ -122,6 +127,8 @@ public sealed class VNManager : MonoBehaviour
             return;
         }
 
+        StopActiveLineSfx();
+
         StoryRow row = _activeRows[_nextRowIndex];
         _nextRowIndex++;
 
@@ -137,22 +144,51 @@ public sealed class VNManager : MonoBehaviour
     private void HandleLineAudio(StoryRow row)
     {
         if (row.bgmIndex > 0)
-            PlayBgmByIndex(row.bgmIndex);
+            PlayBgm(row.bgmIndex);
+        else if (row.bgmIndex == 0)
+            StopBgm();
 
-        if (!string.IsNullOrWhiteSpace(row.sfxName))
-            PlaySfxByName(row.sfxName);
+        if (row.sfxName > 0)
+        {
+            PlaySfx(row.sfxName);
+            _hasActiveLineSfx = true;
+        }
+        else
+        {
+            _hasActiveLineSfx = false;
+        }
     }
 
-    // TODO: 실제 오디오 매니저 연동 지점
     // BGM 인덱스를 실제 오디오 시스템으로 전달
-    private void PlayBgmByIndex(int bgmIndex)
+    private void PlayBgm(int bgmIndex)
     {
+        if (bgmIndex <= 0) return;
+
+        SoundManager.Instance.PlayBGM(bgmIndex);
     }
 
-    // TODO: 실제 오디오 매니저 연동 지점
-    // SFX 이름을 실제 오디오 시스템으로 전달
-    private void PlaySfxByName(string sfxName)
+    // 현재 재생 중인 BGM 정지
+    private void StopBgm()
     {
+        SoundManager.Instance.StopBGM();
+    }
+
+    // 현재 라인에 의해 재생 중인 SFX를 정지
+    private void StopActiveLineSfx()
+    {
+        if (!_hasActiveLineSfx)
+            return;
+
+        SoundManager.Instance.StopEffect();
+        _hasActiveLineSfx = false;
+    }
+
+    // SFX 인덱스를 실제 오디오 시스템으로 전달 (1회성)
+    private void PlaySfx(int sfxIndex)
+    {
+        if (sfxIndex <= 0) return;
+
+        SoundManager.Instance.PlayEffect(sfxIndex);
     }
 
     // 스킵 버튼 클릭 시 현재 VN을 완료 처리하고 복귀 씬으로 이동
@@ -201,6 +237,8 @@ public sealed class VNManager : MonoBehaviour
         if (_isCompleted) return;
 
         StopTypingRoutine();
+        StopActiveLineSfx();
+        StopBgm();
         _isTypingLine = false;
         _isCompleted = true;
 

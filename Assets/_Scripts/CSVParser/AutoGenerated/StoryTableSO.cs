@@ -12,8 +12,8 @@ public sealed class StoryRow
     public string bgImg;
     public string imgLeft;
     public string imgRight;
-    public int bgmIndex;
-    public string sfxName;
+    public int bgmIndex = -1;
+    public int sfxName = -1;
 }
 
 [CreateAssetMenu(menuName = "Game/Data/Story Table", fileName = "SO_StoryTable")]

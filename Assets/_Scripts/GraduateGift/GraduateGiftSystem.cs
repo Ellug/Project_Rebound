@@ -160,6 +160,7 @@ public static class GraduateGiftSystem
             showCancel: false,
             primaryKind: UIPopupRequest.PrimaryButtonKind.Confirm
         ));
+        SoundManager.Instance.PlayEffect(212);
     }
 
     // 등급 기반 보상 추첨

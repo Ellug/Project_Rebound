@@ -14,15 +14,15 @@ public class SoundManager : Singleton<SoundManager>
 
     private static readonly int[] DefaultPreloadAudioIds =
     {
-        101, 102, 103, 104, 105, 108,
-        201, 202, 203, 204, 205, 206, 207, 209, 211, 212,
-        301, 302, 305
+        101, 102, 103, 104, 105, 106,
+        201, 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213,
+        301, 302, 303, 304, 305
     };
 
     // 아래 SFX가 재생되는 클릭에서는 201(터치음)을 겹치지 않게 막는다.
     private static readonly HashSet<int> TouchSfxNoOverlapIds = new()
     {
-        202, 203, 204, 205, 209, 211, 212
+        202, 203, 204, 205, 209, 210, 211, 213, 304
     };
 
     [SerializeField] private AudioMixer _audioMixer;
@@ -241,6 +241,15 @@ public class SoundManager : Singleton<SoundManager>
 
         _bgmSource.Stop();
         _bgmSource.clip = null;
+    }
+
+    // 현재 재생 중인 효과음을 정지
+    public void StopEffect()
+    {
+        if (_effectSource == null) return;
+
+        _effectSource.Stop();
+        _effectSource.clip = null;
     }
 
     public void FadeOutBGM(float duration = 0.2f)

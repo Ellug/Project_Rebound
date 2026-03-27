@@ -71,7 +71,7 @@ public class MessengerRoomPopup : UIBase
         _spawnedCount = 0;
         _lastDate = null;
 
-        SpawnMissingMessages(room);
+        SpawnMissingMessages(room, playMessageSfx: false);
 
         if (MessengerManager.Instance != null)
             MessengerManager.Instance.MarkAsRead(CurrentRoomId);
@@ -128,7 +128,7 @@ public class MessengerRoomPopup : UIBase
             isNearBottom = _scrollRect.verticalNormalizedPosition <= 0.05f;
         }
 
-        SpawnMissingMessages(room);
+        SpawnMissingMessages(room, playMessageSfx: true);
 
         // 유저가 밑을 보고 있었을 때만 스크롤을 자동으로 내려줌
         if (isNearBottom && gameObject.activeInHierarchy)
@@ -157,7 +157,7 @@ public class MessengerRoomPopup : UIBase
         _spawnedItems.Add(divider);
     }
 
-    private void SpawnMissingMessages(ChatRoom room)
+    private void SpawnMissingMessages(ChatRoom room, bool playMessageSfx)
     {
         if (room == null || room.Messages == null) return;
 
@@ -189,6 +189,9 @@ public class MessengerRoomPopup : UIBase
                     bubble.Setup(msg.Content);
                     bubble.gameObject.SetActive(true);
                     _spawnedItems.Add(bubble.gameObject);
+
+                    if (playMessageSfx)
+                        SoundManager.Instance.PlayEffect(213);
                 }
             }
             else
@@ -201,6 +204,9 @@ public class MessengerRoomPopup : UIBase
                     bubble.Setup(msg.Content);
                     bubble.gameObject.SetActive(true);
                     _spawnedItems.Add(bubble.gameObject);
+
+                    if (playMessageSfx)
+                        SoundManager.Instance.PlayEffect(213);
                 }
             }
 
