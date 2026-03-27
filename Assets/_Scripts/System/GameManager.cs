@@ -459,16 +459,20 @@ public class GameManager : Singleton<GameManager>
     {
         if (StudentManager.Instance == null) return;
         if (_lobbyUI == null) return;
+        if (students == null || students.Count == 0) return;
 
         List<StudentSlot> fieldSlots = _lobbyUI.GetFieldSlots();
         if (fieldSlots == null || fieldSlots.Count == 0) return;
 
-        int count = Mathf.Min(students.Count, fieldSlots.Count);
+        List<Student> assignableStudents = students.FindAll(student =>
+            student != null && student.abnormalState == Student.AbnormalType.None);
+
+        int count = Mathf.Min(assignableStudents.Count, fieldSlots.Count);
 
         for (int i = 0; i < count; i++)
         {
             StudentSlot slot = fieldSlots[i];
-            Student student = students[i];
+            Student student = assignableStudents[i];
 
             if (slot == null || student == null) continue;
 
