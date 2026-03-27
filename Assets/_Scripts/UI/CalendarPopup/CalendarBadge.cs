@@ -14,6 +14,16 @@ public class CalendarBadge : MonoBehaviour
     [SerializeField] private Color _colorAcademic = new Color(0.7f, 0.7f, 0.7f);      // 회색
     [SerializeField] private Color _colorVacation = new Color(0.2f, 0.7f, 0.4f);      // 녹색
 
+
+    private void Awake()
+    {
+        if (_label == null)
+            _label = GetComponent<TMP_Text>();
+
+        if (_label == null)
+            Debug.LogError($"[CalendarBadge] _label 없음: {gameObject.name}", gameObject);
+    }
+
     // CalendarCell에서 CalendarEntry 데이터를 받아 텍스트와 색상을 갱신
     public void Render(CalendarEntry entry)
     {

@@ -8,8 +8,8 @@ using TMPro;
 public class CalendarMonthView : UIBase
 {
     [Header("헤더")]
-    [SerializeField] private TMP_Text _txtYear;        // "26년"
-    [SerializeField] private TMP_Text _txtMonth;       // "3월"
+    [SerializeField] private TMP_Text _txtYear;
+    [SerializeField] private TMP_Text _txtMonth;
     [SerializeField] private Button _btnPrevMonth;
     [SerializeField] private Button _btnNextMonth;
     [SerializeField] private Button _btnClose;

@@ -32,6 +32,7 @@ public class CalendarCell : MonoBehaviour
         _button = GetComponent<Button>();
         if (_button != null)
             _button.onClick.AddListener(HandleClick);
+
     }
 
     // CalendarMonthView에서 매 Refresh마다 호출, 셀 전체를 갱신
@@ -54,12 +55,23 @@ public class CalendarCell : MonoBehaviour
         // 클릭은 현재 월 날짜만 허용
         if (_button != null)
             _button.interactable = data.IsCurrentMonth;
+
     }
 
     private Color GetDayTextColor(CalendarDayData data)
     {
         if (data.IsCurrentMonth)
         {
+            if (data.Entries != null)
+            {
+                foreach (var e in data.Entries)
+                {
+                    if (e.Type == CalendarEntry.EntryType.FriendlyMatch ||
+                        e.Type == CalendarEntry.EntryType.Tournament)
+                        return new Color(0.6f, 0.2f, 1f);
+                }
+            }
+
             return data.DayColor switch
             {
                 CalendarDayData.DayColorType.Red => _colorRed,
