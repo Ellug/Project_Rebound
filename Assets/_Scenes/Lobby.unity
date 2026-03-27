@@ -674,7 +674,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PopupAnimator
   _type: 1
-  _panelRoot: {fileID: 0}
+  _panelRoot: {fileID: 584214460709922039}
   _hiddenOffsetX: 0
   _hiddenOffsetY: -400
   _slideInDuration: 0.2
