@@ -318,4 +318,22 @@ public class AlwaysEventManager : MonoBehaviour
                 return null;
         }
     }
+
+    // CalendarManager가 해당 월과 겹치는 AlwaysEventRow 목록을 읽을 때 사용
+    // termStart ~ termEnd가 [from, to] 범위와 하나라도 겹치는 row를 반환
+    public static List<AlwaysEventRow> GetRowsInRange(DateTime from, DateTime to)
+    {
+        var table = CachedSOData.Get<AlwaysEventTableSO>();
+        var result = new List<AlwaysEventRow>();
+
+        if (table == null) return result;
+        foreach (var row in table.Rows)
+        {
+            if (row == null) continue;
+            if (!AlwaysEventDateUtil.TryParseTableDate(row.termStart, out DateTime termStart)) continue;
+            if (!AlwaysEventDateUtil.TryParseTableDate(row.termEnd, out DateTime termEnd)) continue;
+            if (termEnd.Date >= from.Date && termStart.Date <= to.Date) result.Add(row);
+        }
+        return result;
+    }
 }

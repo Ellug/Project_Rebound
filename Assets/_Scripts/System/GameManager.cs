@@ -181,6 +181,8 @@ public class GameManager : Singleton<GameManager>
 
         _flowData.Clear();
         _tournamentData.Clear();
+
+        CalendarManager.Instance?.Unbind(); // CalendarManager의 TurnManager 구독 해제
     }
 
     public void OpenLeague()
@@ -335,6 +337,9 @@ public class GameManager : Singleton<GameManager>
             _recruitmentManager.OnRecruitmentCompleted -= HandleRecruitmentCompleted;
             _recruitmentManager.OnRecruitmentCompleted += HandleRecruitmentCompleted;
         }
+
+        // CalendarManager가 TurnManager 이벤트를 구독하여 매 턴 날짜 변경 시 일정 갱신하도록 바인딩
+        CalendarManager.Instance?.Bind(_turnManager);
     }
 
     // TurnManager 이벤트 구독
