@@ -8,18 +8,31 @@ using TMPro;
 public class CalendarMonthView : UIBase
 {
     [Header("헤더")]
-    [SerializeField] private TMP_Text _txtMonthYear;
+    [SerializeField] private TMP_Text _txtYear;        // "26년"
+    [SerializeField] private TMP_Text _txtMonth;       // "3월"
     [SerializeField] private Button _btnPrevMonth;
     [SerializeField] private Button _btnNextMonth;
+    [SerializeField] private Button _btnClose;
 
     [Header("셀 풀")]
     [SerializeField] private Transform _gridRoot;
     [SerializeField] private CalendarCell _cellPrefab;
 
+    [Header("연출")]
+    [SerializeField] private PopupAnimator _popAnimator;   // 팝업 등장/퇴장 (Pop 또는 Slide 타입)
+    [SerializeField] private PopupAnimator _slideAnimator; // 월 전환 슬라이드 (Swipe 타입)
+    [SerializeField] private CalendarSwipeHandler _swipeHandler;
+    [SerializeField] private float _slideOffsetX = 600f;
+    [SerializeField] private float _slideDuration = 0.2f;
+
     private readonly List<CalendarCell> _cells = new();
 
     private int _viewYear;
     private int _viewMonth;
+    private bool _isAnimating;
+
+    private float _defaultSlideX;
+    private bool _slideBasePosCached;
 
     private static readonly DateTime MinViewDate = new DateTime(2026, 3, 1);
     private static readonly DateTime MaxViewDate = CalendarManager.MaxDate;
@@ -27,12 +40,23 @@ public class CalendarMonthView : UIBase
     public override void Init()
     {
         base.Init();
+
         _btnPrevMonth.onClick.AddListener(OnPrevMonth);
         _btnNextMonth.onClick.AddListener(OnNextMonth);
+
+        if (_btnClose != null)
+            _btnClose.onClick.AddListener(OnCloseClicked);
+
+        if (_swipeHandler != null)
+        {
+            _swipeHandler.OnSwipeLeft += OnNextMonth;
+            _swipeHandler.OnSwipeRight += OnPrevMonth;
+        }
+
         BuildCellPool();
     }
 
-    // 팝업이 열릴 때 현재 날짜로 초기화하여 달력 표시
+    // 팝업 등장 — Pop 애니메이션 후 달력 표시
     public override void Open()
     {
         base.Open();
@@ -49,7 +73,33 @@ public class CalendarMonthView : UIBase
             _viewMonth = DateTime.Today.Month;
         }
 
+        if (_slideAnimator != null && !_slideBasePosCached)
+        {
+            _defaultSlideX = _slideAnimator.GetPositionX();
+            _slideBasePosCached = true;
+        }
+
         Refresh();
+
+        if (_slideAnimator != null)
+            _slideAnimator.SetPositionX(_defaultSlideX);
+
+        if (_popAnimator != null)
+            _popAnimator.PlayIn();
+    }
+
+    // 팝업 퇴장 — Pop 애니메이션 후 닫기
+    public override void Close()
+    {
+        if (_popAnimator != null)
+            _popAnimator.PlayOut(() => base.Close());
+        else
+            base.Close();
+    }
+
+    private void OnCloseClicked()
+    {
+        Close();
     }
 
     // 이전 달로 이동 (최소 MinViewDate까지)
@@ -57,9 +107,7 @@ public class CalendarMonthView : UIBase
     {
         var prev = new DateTime(_viewYear, _viewMonth, 1).AddMonths(-1);
         if (prev < MinViewDate) return;
-        _viewYear = prev.Year;
-        _viewMonth = prev.Month;
-        Refresh();
+        NavigateTo(prev.Year, prev.Month, direction: -1);
     }
 
     // 다음 달로 이동 (최대 MaxViewDate까지)
@@ -67,15 +115,50 @@ public class CalendarMonthView : UIBase
     {
         var next = new DateTime(_viewYear, _viewMonth, 1).AddMonths(1);
         if (next > MaxViewDate) return;
-        _viewYear = next.Year;
-        _viewMonth = next.Month;
-        Refresh();
+        NavigateTo(next.Year, next.Month, direction: 1);
+    }
+
+    // 월 전환 — slideAnimator가 있으면 슬라이드 연출, 없으면 즉시 전환
+    // direction: +1 = 다음 달(왼쪽으로 나감), -1 = 이전 달(오른쪽으로 나감)
+    private void NavigateTo(int year, int month, int direction)
+    {
+        if (_isAnimating) return;
+
+        if (_slideAnimator != null)
+        {
+            _isAnimating = true;
+
+            float outOffsetX = direction > 0 ? -_slideOffsetX : _slideOffsetX;
+            float inOffsetX = direction > 0 ? _slideOffsetX : -_slideOffsetX;
+
+            _slideAnimator.StopSlide();
+            _slideAnimator.SetPositionX(_defaultSlideX);
+            _slideAnimator.SlideToX(_defaultSlideX + outOffsetX, _slideDuration, () =>
+            {
+                _viewYear = year;
+                _viewMonth = month;
+                Refresh();
+
+                _slideAnimator.SetPositionX(_defaultSlideX + inOffsetX);
+                _slideAnimator.SlideToX(_defaultSlideX, _slideDuration, () =>
+                {
+                    _isAnimating = false;
+                });
+            });
+        }
+        else
+        {
+            _viewYear = year;
+            _viewMonth = month;
+            Refresh();
+        }
     }
 
     // 현재 보고 있는 연월에 맞춰 달력 셀을 갱신
     private void Refresh()
     {
-        _txtMonthYear.text = $"{_viewYear}년 {_viewMonth}월";
+        _txtYear.text = $"{_viewYear % 100}";
+        _txtMonth.text = $"{_viewMonth}";
 
         var thisMonth = new DateTime(_viewYear, _viewMonth, 1);
         _btnPrevMonth.interactable = thisMonth.AddMonths(-1) >= MinViewDate;
@@ -89,34 +172,45 @@ public class CalendarMonthView : UIBase
 
         for (int i = 0; i < _cells.Count; i++)
         {
-            if (i >= days.Count) { _cells[i].gameObject.SetActive(false); continue; }
+            if (i >= days.Count)
+            {
+                _cells[i].gameObject.SetActive(false);
+                continue;
+            }
 
             DateTime cellDate = days[i];
             bool isCurrent = cellDate.Year == _viewYear && cellDate.Month == _viewMonth;
 
             var dayEntries = new List<CalendarEntry>();
             foreach (var e in entries)
-                if (e.Date == cellDate.Date) dayEntries.Add(e);
+                if (e.Date == cellDate.Date)
+                    dayEntries.Add(e);
+
             dayEntries.Sort((a, b) => a.DisplayPriority.CompareTo(b.DisplayPriority));
 
-            var dayData = new CalendarDayData(cellDate, isCurrent, cellDate.Date == today.Date, dayEntries);
+            var dayData = new CalendarDayData(
+                cellDate,
+                isCurrent,
+                cellDate.Date == today.Date,
+                dayEntries
+            );
 
             _cells[i].gameObject.SetActive(true);
             _cells[i].Render(dayData, OnCellClicked);
         }
     }
 
-    // 6주 × 7일(월요일 시작) 날짜 배열을 생성
-    // 일요일=0 → 오프셋 6, 월요일=1 → 오프셋 0
+    // 6주 × 7일(일요일 시작) 날짜 배열을 생성
     private static List<DateTime> BuildDayGrid(int year, int month)
     {
         var grid = new List<DateTime>(42);
         DateTime first = new DateTime(year, month, 1);
-        int dow = (int)first.DayOfWeek;
-        int offset = dow == 0 ? 6 : dow - 1;
+        int offset = (int)first.DayOfWeek; // 일요일=0 기준
 
         DateTime start = first.AddDays(-offset);
-        for (int i = 0; i < 42; i++) grid.Add(start.AddDays(i));
+        for (int i = 0; i < 42; i++)
+            grid.Add(start.AddDays(i));
+
         return grid;
     }
 
@@ -129,8 +223,11 @@ public class CalendarMonthView : UIBase
     // 셀 프리팹을 42개 인스턴스화하여 풀 구축 (최대 6주 × 7일)
     private void BuildCellPool()
     {
-        foreach (var c in _cells) Destroy(c.gameObject);
+        foreach (var c in _cells)
+            Destroy(c.gameObject);
+
         _cells.Clear();
+
         for (int i = 0; i < 42; i++)
             _cells.Add(Instantiate(_cellPrefab, _gridRoot));
     }
