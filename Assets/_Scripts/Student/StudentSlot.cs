@@ -24,6 +24,9 @@ public class StudentSlot : MonoBehaviour, IPointerClickHandler
     [Header("Assigned Student Icon")]
     [SerializeField] private Image _imgAssignedIcon;             // 배치된 학생 아이콘
 
+    [SerializeField] private GameObject _disease;
+    [SerializeField] private GameObject _injury;
+
     [Header("Portrait")]
     [SerializeField] private PortraitLibrary _portraitLibrary;   // iconSprite null 시 자동 조회용
 
@@ -84,6 +87,7 @@ public class StudentSlot : MonoBehaviour, IPointerClickHandler
 
         _assignedIconSprite = iconSprite;
         ApplyAssignedIcon(iconSprite);
+        RefreshAbnormalIndicator();
 
         Debug.Log($"[StudentSlot] {_slotPositionName} 슬롯에 {student.studentName} 배치됨.");
     }
@@ -95,6 +99,7 @@ public class StudentSlot : MonoBehaviour, IPointerClickHandler
         _assignedIconSprite = null;
 
         ApplyAssignedIcon(null);
+        RefreshAbnormalIndicator();
 
         Debug.Log($"[StudentSlot] {_slotPositionName} 슬롯 비워짐.");
     }
@@ -112,6 +117,25 @@ public class StudentSlot : MonoBehaviour, IPointerClickHandler
 
         if (has)
             _imgAssignedIcon.preserveAspect = true;
+    }
+
+    private void RefreshAbnormalIndicator()
+    {
+        if (_assignedStudent == null)
+        {
+            SafeSetActive(_disease, false);
+            SafeSetActive(_injury, false);
+            return;
+        }
+
+        SafeSetActive(_disease, _assignedStudent.abnormalState == Student.AbnormalType.Disease);
+        SafeSetActive(_injury, _assignedStudent.abnormalState == Student.AbnormalType.Injury);
+    }
+
+    private static void SafeSetActive(GameObject target, bool active)
+    {
+        if (target != null)
+            target.SetActive(active);
     }
 
     // UI 클릭 처리
