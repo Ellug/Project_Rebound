@@ -16,8 +16,8 @@ event_000013,자금 획득,PreProcess,School,Positive,Player,1,1,0,0,FALSE,none,
 event_000014,자금 손실,PreProcess,School,Negative,Player,1,1,0,0,FALSE,none,none,-1,none,none,-1,none,event_effect_1_money_m5,-,-,FALSE,1,text_SuddenEvent_000004
 event_000015,명성치 증가,PreProcess,School,Positive,Player,1,1,0,0,FALSE,none,none,-1,none,none,-1,none,event_effect_1_fame_p5,-,-,FALSE,1,text_SuddenEvent_000001
 event_000016,명성치 감소,PreProcess,School,Negative,Player,1,1,0,0,FALSE,none,none,-1,none,none,-1,none,event_effect_1_fame_m5,-,-,FALSE,1,text_SuddenEvent_000002
-event_000017,랜덤 스탯 증가,PreProcess,School,Positive | Body | Mind,Member,1,1,0,0,FALSE,none,none,-1,none,none,-1,none,event_effect_1_randomPlayerStat_p5,-,-,FALSE,1,text_SuddenEvent_000001
-event_000018,랜덤 스탯 감소,PreProcess,School,Negative | Body | Mind,Member,1,1,0,0,FALSE,none,none,-1,none,none,-1,none,event_effect_1_randomPlayerStat_m5,-,-,FALSE,1,text_SuddenEvent_000002
+event_000017,랜덤 스탯 증가,PreProcess,School,Positive | Body | Mind,Player,1,1,0,0,FALSE,none,none,-1,none,none,-1,none,event_effect_1_randomPlayerStat_p5,-,-,FALSE,1,text_SuddenEvent_000001
+event_000018,랜덤 스탯 감소,PreProcess,School,Negative | Body | Mind,Player,1,1,0,0,FALSE,none,none,-1,none,none,-1,none,event_effect_1_randomPlayerStat_m5,-,-,FALSE,1,text_SuddenEvent_000002
 event_000019,넘치는 힘,PreProcess,School,Neutral | Body | Mind,Member,1,1,0,0,FALSE,none,none,-1,none,none,-1,none,event_effect_1_speed_p5,event_effect_1_stamina_p5,event_effect_1_condition_m5,FALSE,1,text_SuddenEvent_000009
 event_000020,운동기구 파손,PreProcess,School,Negative,Player,1,1,0,0,FALSE,none,none,-1,none,none,-1,none,event_effect_1_money_m10,-,-,FALSE,1,text_SuddenEvent_000004
 event_000021,농구부 회식,PreProcess,School,Positive | Body | Mind,Member,7,21,0,0,FALSE,none,none,-1,none,none,-1,none,event_effect_1_condition_p10,event_effect_1_experience_p10,-,FALSE,1,text_SuddenEvent_000008
@@ -45,26 +45,26 @@ event_001007,부상(돌발이벤트),PostProcess,School,Negative | Body,Member,1
 event_001008,부상(돌발이벤트),PostProcess,School,Negative | Body,Member,1,3,1,7,TRUE,condition,less,60,condition,or_more,40,Day,event_effect_1_unable_match_p1,event_effect_1_experience_m50,-,TRUE,0.5,text_diag_111002_000
 event_001009,부상(돌발이벤트),PostProcess,School,Negative | Body,Member,1,3,1,7,TRUE,condition,less,40,condition,or_more,20,Day,event_effect_1_unable_match_p1,event_effect_1_experience_m50,-,TRUE,0.7,text_diag_111003_000
 event_001010,부상(돌발이벤트),PostProcess,School,Negative | Body,Member,1,3,1,7,TRUE,condition,less,20,none,none,-1,Day,event_effect_1_unable_match_p1,event_effect_1_experience_m50,-,FALSE,1,text_diag_111004_000
-event_100001,새로운 메시지.,PostProcess,Daily,Neutral,Member,1,1,0,0,FALSE,none,none,-1,none,none,-1,none,-,-,-,TRUE,1,text_diag_000001_000
-event_100002,새로운 메시지.,PostProcess,Daily,Neutral,Member,1,1,0,0,FALSE,none,none,-1,none,none,-1,none,-,-,-,TRUE,0.1,text_diag_000002_000
-event_100003,새로운 메시지.,PostProcess,Daily,Neutral,Member,1,1,0,0,FALSE,none,none,-1,none,none,-1,none,-,-,-,TRUE,0.1,text_diag_000003_000
-event_100004,새로운 메시지.,PostProcess,Daily,Neutral,Member,1,1,0,0,FALSE,none,none,-1,none,none,-1,none,-,-,-,TRUE,0.1,text_diag_000004_000
-event_100005,새로운 메시지.,PostProcess,Daily,Neutral,Member,1,1,0,0,FALSE,none,none,-1,none,none,-1,none,-,-,-,TRUE,0.1,text_diag_000005_000
-event_100006,새로운 메시지.,PostProcess,Daily,Neutral,Member,1,1,0,0,FALSE,none,none,-1,none,none,-1,none,-,-,-,TRUE,0.1,text_diag_000006_000
-event_100007,새로운 메시지.,PostProcess,Daily,Neutral,Member,1,1,0,0,FALSE,none,none,-1,none,none,-1,none,-,-,-,TRUE,0.1,text_diag_000007_000
-event_100008,새로운 메시지.,PostProcess,Daily,Neutral,Member,1,1,0,0,FALSE,none,none,-1,none,none,-1,none,-,-,-,TRUE,0.1,text_diag_000008_000
-event_100009,새로운 메시지.,PostProcess,Daily,Neutral,Member,1,1,0,0,FALSE,none,none,-1,none,none,-1,none,-,-,-,TRUE,0.1,text_diag_000009_000
-event_100010,새로운 메시지.,PostProcess,Daily,Neutral,Member,1,1,0,0,FALSE,none,none,-1,none,none,-1,none,-,-,-,TRUE,0.1,text_diag_000010_000
-event_100011,새로운 메시지.,PostProcess,Daily,Neutral,Member,1,1,0,0,FALSE,none,none,-1,none,none,-1,none,-,-,-,TRUE,0.1,text_diag_000011_000
-event_100012,새로운 메시지.,PostProcess,Daily,Neutral,Member,1,1,0,0,FALSE,none,none,-1,none,none,-1,none,-,-,-,TRUE,0.1,text_diag_000012_000
-event_100013,새로운 메시지.,PostProcess,Daily,Neutral,Member,1,1,0,0,FALSE,none,none,-1,none,none,-1,none,-,-,-,TRUE,0.1,text_diag_000013_000
-event_100014,새로운 메시지.,PostProcess,Daily,Neutral,Member,1,1,0,0,FALSE,none,none,-1,none,none,-1,none,-,-,-,TRUE,0.1,text_diag_000014_000
-event_100015,새로운 메시지.,PostProcess,Daily,Neutral,Member,1,1,0,0,FALSE,none,none,-1,none,none,-1,none,-,-,-,TRUE,0.1,text_diag_000015_000
-event_100016,새로운 메시지.,PostProcess,Daily,Neutral,Member,1,1,0,0,FALSE,none,none,-1,none,none,-1,none,-,-,-,TRUE,0.1,text_diag_000016_000
-event_100017,새로운 메시지.,PostProcess,Daily,Neutral,Member,1,1,0,0,FALSE,none,none,-1,none,none,-1,none,-,-,-,TRUE,0.1,text_diag_000017_000
-event_100018,새로운 메시지.,PostProcess,Daily,Neutral,Member,1,1,0,0,FALSE,none,none,-1,none,none,-1,none,-,-,-,TRUE,0.1,text_diag_000018_000
-event_100019,새로운 메시지.,PostProcess,Daily,Neutral,Member,1,1,0,0,FALSE,none,none,-1,none,none,-1,none,-,-,-,TRUE,0.1,text_diag_000019_000
-event_100020,새로운 메시지.,PostProcess,Daily,Neutral,Member,1,1,0,0,FALSE,none,none,-1,none,none,-1,none,-,-,-,TRUE,0.1,text_diag_000020_000
+event_100001,새로운 메시지.,PostProcess,Daily,Neutral,Player,1,1,0,0,FALSE,none,none,-1,none,none,-1,none,-,-,-,TRUE,1,text_diag_000001_000
+event_100002,새로운 메시지.,PostProcess,Daily,Neutral,Player,1,1,0,0,FALSE,none,none,-1,none,none,-1,none,-,-,-,TRUE,0.1,text_diag_000002_000
+event_100003,새로운 메시지.,PostProcess,Daily,Neutral,Player,1,1,0,0,FALSE,none,none,-1,none,none,-1,none,-,-,-,TRUE,0.1,text_diag_000003_000
+event_100004,새로운 메시지.,PostProcess,Daily,Neutral,Player,1,1,0,0,FALSE,none,none,-1,none,none,-1,none,-,-,-,TRUE,0.1,text_diag_000004_000
+event_100005,새로운 메시지.,PostProcess,Daily,Neutral,Player,1,1,0,0,FALSE,none,none,-1,none,none,-1,none,-,-,-,TRUE,0.1,text_diag_000005_000
+event_100006,새로운 메시지.,PostProcess,Daily,Neutral,Player,1,1,0,0,FALSE,none,none,-1,none,none,-1,none,-,-,-,TRUE,0.1,text_diag_000006_000
+event_100007,새로운 메시지.,PostProcess,Daily,Neutral,Player,1,1,0,0,FALSE,none,none,-1,none,none,-1,none,-,-,-,TRUE,0.1,text_diag_000007_000
+event_100008,새로운 메시지.,PostProcess,Daily,Neutral,Player,1,1,0,0,FALSE,none,none,-1,none,none,-1,none,-,-,-,TRUE,0.1,text_diag_000008_000
+event_100009,새로운 메시지.,PostProcess,Daily,Neutral,Player,1,1,0,0,FALSE,none,none,-1,none,none,-1,none,-,-,-,TRUE,0.1,text_diag_000009_000
+event_100010,새로운 메시지.,PostProcess,Daily,Neutral,Player,1,1,0,0,FALSE,none,none,-1,none,none,-1,none,-,-,-,TRUE,0.1,text_diag_000010_000
+event_100011,새로운 메시지.,PostProcess,Daily,Neutral,Player,1,1,0,0,FALSE,none,none,-1,none,none,-1,none,-,-,-,TRUE,0.1,text_diag_000011_000
+event_100012,새로운 메시지.,PostProcess,Daily,Neutral,Player,1,1,0,0,FALSE,none,none,-1,none,none,-1,none,-,-,-,TRUE,0.1,text_diag_000012_000
+event_100013,새로운 메시지.,PostProcess,Daily,Neutral,Player,1,1,0,0,FALSE,none,none,-1,none,none,-1,none,-,-,-,TRUE,0.1,text_diag_000013_000
+event_100014,새로운 메시지.,PostProcess,Daily,Neutral,Player,1,1,0,0,FALSE,none,none,-1,none,none,-1,none,-,-,-,TRUE,0.1,text_diag_000014_000
+event_100015,새로운 메시지.,PostProcess,Daily,Neutral,Player,1,1,0,0,FALSE,none,none,-1,none,none,-1,none,-,-,-,TRUE,0.1,text_diag_000015_000
+event_100016,새로운 메시지.,PostProcess,Daily,Neutral,Player,1,1,0,0,FALSE,none,none,-1,none,none,-1,none,-,-,-,TRUE,0.1,text_diag_000016_000
+event_100017,새로운 메시지.,PostProcess,Daily,Neutral,Player,1,1,0,0,FALSE,none,none,-1,none,none,-1,none,-,-,-,TRUE,0.1,text_diag_000017_000
+event_100018,새로운 메시지.,PostProcess,Daily,Neutral,Player,1,1,0,0,FALSE,none,none,-1,none,none,-1,none,-,-,-,TRUE,0.1,text_diag_000018_000
+event_100019,새로운 메시지.,PostProcess,Daily,Neutral,Player,1,1,0,0,FALSE,none,none,-1,none,none,-1,none,-,-,-,TRUE,0.1,text_diag_000019_000
+event_100020,새로운 메시지.,PostProcess,Daily,Neutral,Player,1,1,0,0,FALSE,none,none,-1,none,none,-1,none,-,-,-,TRUE,0.1,text_diag_000020_000
 event_110001,[공지] 금일 지각자,PreProcess,Daily,Negative,Member,1,1,0,0,FALSE,none,none,-1,none,none,-1,none,-,-,-,TRUE,0.075,text_diag_100001_000
 event_110002,[공지] 학생 입원,PreProcess,Daily,Negative,Member,1,1,0,0,TRUE,condition,less,60,condition,or_more,40,Day,-,-,-,TRUE,0.1,text_diag_110000_000
 event_110003,[공지] 학생 입원,PreProcess,Daily,Negative,Member,1,1,0,0,TRUE,condition,less,40,condition,or_more,20,Day,-,-,-,TRUE,0.2,text_diag_110001_000

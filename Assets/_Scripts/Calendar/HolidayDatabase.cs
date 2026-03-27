@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -22,6 +22,22 @@ public class HolidayDatabase : ScriptableObject
 
         entry = null;
         return false;
+    }
+
+    // CalendarManager가 월 단위로 공휴일을 한 번에 읽을 때 사용
+    // key가 yyyyMMdd이므로 연·월 범위로 필터링
+    public List<HolidayEntry> GetHolidaysInMonth(int year, int month)
+    {
+        int min = year * 10000 + month * 100 + 1;
+        int max = year * 10000 + month * 100 + 31;
+
+        var result = new List<HolidayEntry>();
+        foreach (var e in entries)
+        {
+            if (e.date >= min && e.date <= max)
+                result.Add(e);
+        }
+        return result;
     }
 }
 

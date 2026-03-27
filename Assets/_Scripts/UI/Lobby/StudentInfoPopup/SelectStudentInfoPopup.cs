@@ -15,6 +15,8 @@ public class SelectStudentInfoPopup : UIBase
 
     [Header("Left - Portrait")]
     [SerializeField] private Image _imgPortrait;                      // 초상화
+    [SerializeField] private GameObject _disease;
+    [SerializeField] private GameObject _injury;
 
     [Header("Right - Summary")]
     [SerializeField] private TMP_Text _txtName;                       // 이름
@@ -107,6 +109,7 @@ public class SelectStudentInfoPopup : UIBase
             _txtTitle.text = string.IsNullOrEmpty(title) ? "학생 정보" : title;
 
         ApplyPortrait(portrait);
+        ApplyAbnormalIndicator(student);
         ApplySummary(student);
         ApplyConditionGauge(student);
         BuildStatList(student);
@@ -154,6 +157,19 @@ public class SelectStudentInfoPopup : UIBase
 
         // 이미지 없으면 반투명 표시
         _imgPortrait.color = has ? Color.white : new Color(1f, 1f, 1f, 0.15f);
+    }
+
+    private void ApplyAbnormalIndicator(Student student)
+    {
+        if (student == null)
+        {
+            SafeSetActive(_disease, false);
+            SafeSetActive(_injury, false);
+            return;
+        }
+
+        SafeSetActive(_disease, student.abnormalState == Student.AbnormalType.Disease);
+        SafeSetActive(_injury, student.abnormalState == Student.AbnormalType.Injury);
     }
 
     // 기본 정보 표시
@@ -214,5 +230,11 @@ public class SelectStudentInfoPopup : UIBase
             if (row != null) Destroy(row.gameObject);
         }
         _spawnedRows.Clear();
+    }
+
+    private static void SafeSetActive(GameObject target, bool active)
+    {
+        if (target != null)
+            target.SetActive(active);
     }
 }

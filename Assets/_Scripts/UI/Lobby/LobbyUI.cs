@@ -37,13 +37,17 @@ public class LobbyUI : UIBase
     [SerializeField] private HeadCoachPopup _headCoachPopup; // 씬에 배치된 감독 노드 팝업 (비활성화 상태)
     [SerializeField] private FacilityPopup _facilityPopup; // 씬에 배치된 감독 노드 팝업 (비활성화 상태)
     [SerializeField] private AlwaysEffectPopup _alwaysEffectPopup; // 씬에 배치된 상시 효과 확인 팝업 (비활성화 상태)
-    [SerializeField] private EquipmentStatusPopup _equipmentPopup;
+    [SerializeField] private EquipmentStatusPopup _equipmentPopup; // 씬에 배치된 졸업 선물 팝업 (비활성화 상태)
+    [SerializeField] private CalendarMonthView _calendarPopup; // 씬에 배치된 캘린더 팝업 (비활성화 상태)
 
     [Header("Center Message")]
     [SerializeField] private TMP_Text _txtMessage;
     [Header("Messenger")]
     [SerializeField] private Button _btnCenterMessage;
     [SerializeField] private MessengerInboxPopup _messengerInboxPopup;
+
+    [Header("Calendar")]
+    [SerializeField] private Button _btnCalendar; // 캘린더 버튼
 
     [Header("Bottom Navigation Buttons")]
     [SerializeField] private Button _btnTraining; // 훈련 (구 일과)
@@ -265,6 +269,10 @@ public class LobbyUI : UIBase
         // 졸업 선물 버튼
         if (_btnGift != null)
             _btnGift.onClick.AddListener(OnClickGraduateGift);
+
+        // 캘린더 버튼
+        if (_btnCalendar != null)
+            _btnCalendar.onClick.AddListener(OnClickCalendar);
     }
 
     private void OnClickTraining()
@@ -459,6 +467,22 @@ public class LobbyUI : UIBase
         RefreshBottomNavTabSprites();
     }
 
+    // 캘린더 팝업
+    private void OnClickCalendar()
+    {
+        if (_calendarPopup == null) return;
+
+        if (_calendarPopup.gameObject.activeSelf)
+        {
+            _calendarPopup.Close();
+            return;
+        }
+
+        _calendarPopup.Init();
+        _calendarPopup.transform.SetAsLastSibling();
+        _calendarPopup.Open();
+    }
+
     // 데이터 매니저 등에서 정보를 받아와 UI 갱신
     private void ShowNotImplemented(string featureName)
     {
@@ -634,6 +658,12 @@ public class LobbyUI : UIBase
         {
             _equipmentPopup.Close();
         }
+
+        if (_calendarPopup != null && _calendarPopup.gameObject.activeSelf)
+        {
+            _calendarPopup.Close();
+        }
+
         RefreshBottomNavTabSprites();
     }
 

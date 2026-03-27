@@ -105,7 +105,7 @@ public class FacilityPopup : UIBase
         Debug.Log("Upgrade Click: " + facility);
         if (FacilitySystem.Instance.TryUpgrade(facility))
         {
-            SoundManager.Instance.PlayEffect(211);
+            SoundManager.Instance.PlayEffect(210);
 
             RefreshAll();
         }
