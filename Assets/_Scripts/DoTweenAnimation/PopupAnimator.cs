@@ -197,4 +197,11 @@ public class PopupAnimator : AnimatorBase
         _slideTween?.Kill();
         _popTween?.Kill();
     }
+
+    public void SetHiddenOffsetX(float offsetX)
+    {
+        if (_type != AnimationType.Slide) return;
+        _hiddenOffsetX = offsetX;
+        _hiddenPos = _shownPos + new Vector2(_hiddenOffsetX, _hiddenOffsetY);
+    }
 }
