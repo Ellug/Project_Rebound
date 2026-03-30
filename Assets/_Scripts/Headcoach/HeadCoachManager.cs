@@ -9,10 +9,8 @@ using UnityEngine;
 public class HeadCoachManager : Singleton<HeadCoachManager>
 {
     public event Action OnTreeChanged;
-    public event Action<string> OnContentUnlocked;
 
     private readonly HeadCoachNodeContainer _container = new();
-    private readonly Dictionary<int, HeadCoachContentUnlockData> _contentUnlockMap = new();
 
     public bool IsInitialized { get; private set; }
 
@@ -24,7 +22,6 @@ public class HeadCoachManager : Singleton<HeadCoachManager>
     public void ResetContainer()
     {
         _container.Clear();
-        _contentUnlockMap.Clear();
         IsInitialized = false;
     }
 
@@ -33,8 +30,7 @@ public class HeadCoachManager : Singleton<HeadCoachManager>
         IEnumerable<HeadCoachNodeData> masterRows,
         IEnumerable<HeadCoachEffectData> effectRows,
         IEnumerable<HeadCoachPrerequisiteData> prerequisiteRows,
-        IEnumerable<HeadCoachTierConfigData> tierConfigRows,
-        IEnumerable<HeadCoachContentUnlockData> contentUnlockRows)
+        IEnumerable<HeadCoachTierConfigData> tierConfigRows)
     {
         if (IsInitialized) return;
         IsInitialized = true;
@@ -44,9 +40,6 @@ public class HeadCoachManager : Singleton<HeadCoachManager>
 
         foreach (HeadCoachTierConfigData tierConfig in tierConfigRows)
             _container.RegisterTierConfig(tierConfig);
-
-        foreach (HeadCoachContentUnlockData content in contentUnlockRows)
-            _contentUnlockMap[content.functionId] = content;
 
         foreach (HeadCoachNodeData nodeData in masterRows)
         {
@@ -89,7 +82,6 @@ public class HeadCoachManager : Singleton<HeadCoachManager>
         // 해금된 노드의 스탯 증분을 전체 학생에게 즉시 적용
         ApplyNodeBonusToAll(node);
 
-        HandleContentUnlock(node);
         CheckTierGateActivation(node.TierId);
 
         OnTreeChanged?.Invoke();
@@ -113,15 +105,6 @@ public class HeadCoachManager : Singleton<HeadCoachManager>
         ApplyNodeBonusToAll(gateNode);
 
         OnTreeChanged?.Invoke();
-    }
-
-    private void HandleContentUnlock(HeadCoachNode node)
-    {
-        int functionId = node.effectData.functionId;
-        if (functionId == 0) return;
-        if (!_contentUnlockMap.TryGetValue(functionId, out HeadCoachContentUnlockData content)) return;
-
-        OnContentUnlocked?.Invoke(content.functionKey);
     }
 
     public HeadCoachNode GetNode(int nodeId)
