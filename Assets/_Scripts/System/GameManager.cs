@@ -519,7 +519,7 @@ public class GameManager : Singleton<GameManager>
             }
             else if (FriendlyMatchManager.Instance != null)
             {
-                var schedule = FriendlyMatchManager.Instance.GetBookedMatchSchedule(tomorrow.Year);
+                var schedule = FriendlyMatchManager.Instance.GetBookedMatchSchedule();
                 if (schedule.TryGetValue(tomorrow, out string foundOpponent))
                 {
                     hasMatchTomorrow = true;
