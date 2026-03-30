@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -308,7 +309,8 @@ public class GameManager : Singleton<GameManager>
         if (SaveManager.Instance != null && SaveManager.Instance.ConsumePendingTournamentRestore())
         {
             TournamentSceneBridge.RequestTournament();
-            SceneTransitionManager.Instance.LoadScene("Tournament");
+            Debug.Log("[GameManager] 토너먼트 복원 - 코루틴 시작");
+            StartCoroutine(LoadTournamentNextFrame());
             return;
         }
 
@@ -733,4 +735,13 @@ public class GameManager : Singleton<GameManager>
 
     // itemeffect_07: 신규 영입 학생에게 누적 배율 적용
     public void ApplyTrainingEfficiencyPermBonusToStudent(Student student) => _graduateGiftBonusTracker.ApplyToStudent(student);
+
+    // 토너먼트 씬으로 이동하는 코루틴, 씬 전환 중복 방지 위해 SceneTransitionManager.Instance.IsTransitioning이 false가 될 때까지 대기
+    private IEnumerator LoadTournamentNextFrame()
+    {
+        Debug.Log("[GameManager] LoadTournamentNextFrame - 대기 시작");
+        yield return new WaitUntil(() => !SceneTransitionManager.Instance.IsTransitioning);
+        Debug.Log("[GameManager] LoadTournamentNextFrame - LoadScene 호출");
+        SceneTransitionManager.Instance.LoadScene("Tournament");
+    }
 }
