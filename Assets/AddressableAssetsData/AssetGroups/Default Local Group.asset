@@ -15,11 +15,6 @@ MonoBehaviour:
   m_GroupName: Default Local Group
   m_GUID: c63a1636634c9254b8a68dd081a2d9d7
   m_SerializeEntries:
-  - m_GUID: 02583003e2569e54fb8b0c062276990a
-    m_Address: ContentUnlockFeatureTable
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 165f817500be3c049a6e07b29df86d9b
     m_Address: CoachNodeMasterTable
     m_ReadOnly: 0

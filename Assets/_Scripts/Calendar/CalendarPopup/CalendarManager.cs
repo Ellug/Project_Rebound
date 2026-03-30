@@ -11,6 +11,7 @@ public class CalendarManager : Singleton<CalendarManager>
 
     private HolidayDatabase _holidayDb;
     private TurnManager _turnManager;
+    public event Action OnCalendarChanged;
 
     protected override void OnSingletonAwake()
     {
@@ -46,6 +47,7 @@ public class CalendarManager : Singleton<CalendarManager>
     public void InvalidateMonth(DateTime date)
     {
         _monthCache.Remove(date.Year * 100 + date.Month);
+        OnCalendarChanged?.Invoke();
     }
 
     // 전체 캐시를 제거 (씬 전환,게임 리셋 시 호출)
