@@ -7,6 +7,4 @@ int,string,string,float,int
 3001,Facility_Upgrade_Cost,Add,-5,0
 3002,Fame_Gain_Rate,Add,10,0
 3003,Condition_Drain_TeamPractice,Add,-3,0
-4001,Content_Unlock,Add,1,401
-4002,Content_Unlock,Add,1,402
 5001,All_Stat,Add,1,0

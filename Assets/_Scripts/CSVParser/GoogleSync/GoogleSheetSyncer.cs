@@ -55,6 +55,7 @@ public static class GoogleSheetSyncer
         bool importedNow;
         bool deferredByCompile;
         var changedTables = new List<string>();
+        var failedTables = new List<string>();
         GoogleSheetCloudUploadResult cloudResult;
 
         try
@@ -71,6 +72,7 @@ public static class GoogleSheetSyncer
                 if (csvContent == null)
                 {
                     Debug.LogError($"[GoogleSheetSyncer] Failed to download: {tableName}");
+                    failedTables.Add($"{tableName} (download failed: {entry.SheetUrl})");
                     failed++;
                     continue;
                 }
@@ -93,6 +95,7 @@ public static class GoogleSheetSyncer
                 catch (Exception e)
                 {
                     Debug.LogError($"[GoogleSheetSyncer] Failed to write CSV: {tableName}\n{e.Message}");
+                    failedTables.Add($"{tableName} (write failed: {e.Message})");
                     failed++;
                 }
             }
@@ -138,6 +141,8 @@ public static class GoogleSheetSyncer
         string summary = $"Pipeline Complete!\n\nDownloaded: {downloaded}\nSkipped (no change): {skipped}\nFailed: {failed}";
         if (changedTables.Count > 0)
             summary += $"\n\nChanged tables:\n- {string.Join("\n- ", changedTables)}";
+        if (failedTables.Count > 0)
+            summary += $"\n\nFailed tables:\n- {string.Join("\n- ", failedTables)}";
         if (deferredByCompile)
             summary += "\n\nSO script was generated. Import will resume automatically after compile.";
         else if (!importedNow)

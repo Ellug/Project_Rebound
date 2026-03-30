@@ -35,7 +35,7 @@ public static class GoogleSheetSyncConfig
     private const string GID_COACH_NODE_MASTER              = "1141857137";           // 감독노드마스터테이블
     private const string GID_COACH_NODE_PREREQUISITE        = "1492463210";           // 감독노드선행조건테이블
     private const string GID_COACH_NODE_EFFECT_DETAIL       = "756317486";            // 감독노드효과상세테이블
-    private const string GID_CONTENT_UNLOCK_FEATURE         = "1941271437";           // 컨텐츠 기능 해금 테이블
+    // private const string GID_CONTENT_UNLOCK_FEATURE         = "1941271437";           // 컨텐츠 기능 해금 테이블
     private const string GID_TIER_MANAGE_OPEN_CONDITION     = "1252285184";           // 티어 관리 및 개방 조건 테이블
     private const string GID_GRADUATE_GRADE                 = "2023062391";           // 졸업생 등급
     private const string GID_GRADUATE_GIFT_POPUP            = "1794259775";           // 졸업생의 선물 팝업
@@ -85,7 +85,7 @@ public static class GoogleSheetSyncConfig
         new("CoachNodeMasterTable.csv",                 Url(GID_COACH_NODE_MASTER)),                       // 감독노드마스터테이블
         new("CoachNodePrerequisiteTable.csv",           Url(GID_COACH_NODE_PREREQUISITE)),                 // 감독노드선행조건테이블
         new("CoachNodeEffectDetailTable.csv",           Url(GID_COACH_NODE_EFFECT_DETAIL)),                // 감독노드효과상세테이블
-        new("ContentUnlockFeatureTable.csv",            Url(GID_CONTENT_UNLOCK_FEATURE)),                  // 컨텐츠 기능 해금 테이블
+        // new("ContentUnlockFeatureTable.csv",            Url(GID_CONTENT_UNLOCK_FEATURE)),                  // 컨텐츠 기능 해금 테이블
         new("TierManageOpenConditionTable.csv",         Url(GID_TIER_MANAGE_OPEN_CONDITION)),              // 티어 관리 및 개방 조건 테이블
         new("GraduateGradeTable.csv",                   Url(GID_GRADUATE_GRADE)),                          // 졸업생 등급
         new("GraduateGiftPopupTable.csv",               Url(GID_GRADUATE_GIFT_POPUP)),                     // 졸업생의 선물 팝업

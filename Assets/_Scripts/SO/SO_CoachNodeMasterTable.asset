@@ -90,10 +90,3 @@ MonoBehaviour:
     description: "\uBAA8\uB4E0 \uB2E8\uCCB4 \uD6C8\uB828 \uC2DC \uCEE8\uB514\uC158
       \uC18C\uBAA8\uAC00\n3% \uAC10\uC18C\uD569\uB2C8\uB2E4."
     effectId: 3003
-  - id: 401
-    tierId: 6002
-    name: "\uC120\uBB3C \uAE30\uB2A5 \uD574\uAE08"
-    unlockCost: 25
-    description: "\uD559\uC0DD\uB4E4\uC5D0\uAC8C \uC120\uBB3C\uC744 \uC904 \uC218
-      \uC788\uB294 \n\uAE30\uB2A5\uC774 \uD574\uAE08\uB429\uB2C8\uB2E4."
-    effectId: 4001
