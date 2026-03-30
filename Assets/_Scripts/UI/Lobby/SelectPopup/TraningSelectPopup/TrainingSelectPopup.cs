@@ -296,8 +296,10 @@ public class TrainingSelectPopup : UIPopup
             return;
         }
 
+        bool restCommandException = data.trainingKey == "cmd_1004";
+
         // 훈련 불가 학생 체크
-        if (!data.requiresStudentSelection)
+        if (!data.requiresStudentSelection && !restCommandException)
         {
             bool allBlocked = true;
             if (StudentManager.Instance != null)
@@ -377,7 +379,10 @@ public class TrainingSelectPopup : UIPopup
             {
                 List<Student> students = GetDefaultStudentsForNoSelect();
 
-                students.RemoveAll(student => _abnormalStatusEffect.IsTrainingBlocked(student, isIndividualTraining: false));
+                if (!restCommandException)
+                {
+                    students.RemoveAll(student => _abnormalStatusEffect.IsTrainingBlocked(student, isIndividualTraining: false));
+                }
 
                 if (students.Count == 0) return;
 
@@ -547,7 +552,8 @@ public class TrainingSelectPopup : UIPopup
         {
             if (student == null) continue;
 
-            if (_abnormalStatusEffect.IsTrainingBlocked(student, data.requiresStudentSelection))
+            bool restCommandException = data.trainingKey == "cmd_1004";
+            if (!restCommandException && _abnormalStatusEffect.IsTrainingBlocked(student, data.requiresStudentSelection))
                 continue;
 
             float trainingExpMultiplier = _abnormalStatusEffect.GetTrainingExpMultiplier(student);
