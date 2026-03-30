@@ -52,7 +52,7 @@ public class FriendlyMatchManager : Singleton<FriendlyMatchManager>
         }
     }
 
-    public Dictionary<DateTime, string> GetBookedMatchSchedule(int currentYear)
+    public Dictionary<DateTime, string> GetBookedMatchSchedule()
     {
         Dictionary<DateTime, string> schedule = new Dictionary<DateTime, string>();
         if (MessengerManager.Instance == null) return schedule;
@@ -74,11 +74,11 @@ public class FriendlyMatchManager : Singleton<FriendlyMatchManager>
                             {
                                 try
                                 {
-                                    DateTime dt = new DateTime(currentYear, m, d).Date;
+                                    // msg.Timestamp.Year로 실제 예약 연도 사용
+                                    int matchYear = msg.Timestamp.Year;
+                                    DateTime dt = new DateTime(matchYear, m, d).Date;
                                     if (!schedule.ContainsKey(dt))
-                                    {
                                         schedule.Add(dt, room.RoomName);
-                                    }
                                 }
                                 catch { }
                             }
@@ -110,7 +110,7 @@ public class FriendlyMatchManager : Singleton<FriendlyMatchManager>
         // 3. 현재 인게임 날짜 기준으로 가장 가까운 토요일 3개
         List<DateTime> saturdays = new List<DateTime>();
         DateTime tempDate = currentDate.AddDays(1); // 내일부터 탐색 시작
-        Dictionary<DateTime, string> schedule = GetBookedMatchSchedule(currentDate.Year);
+        Dictionary<DateTime, string> schedule = GetBookedMatchSchedule();
 
         while (saturdays.Count < 3)
         {
