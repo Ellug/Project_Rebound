@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -62,6 +63,9 @@ public class HeadCoachNodeInfoPopup : MonoBehaviour
     private Action _onHide; // 닫힐 때 호출 (하이라이트 해제 등)
     private bool _isInited;
 
+    [Header("입력 차단 패널")]
+    [SerializeField] private Image _blockerPanel; // 투명 전체화면 패널
+
     void Awake()
     {
         Init();
@@ -83,16 +87,25 @@ public class HeadCoachNodeInfoPopup : MonoBehaviour
         _onHide = onHide;
 
         _animator.Initialize();
-
         gameObject.SetActive(true);
         transform.SetAsLastSibling();
         RefreshPopup();
-        _animator.PlayIn();
+
+        // PlayIn 완료 후 Blocker OFF
+        _animator.PlayIn(() =>
+        {
+            if (_blockerPanel != null)
+                _blockerPanel.gameObject.SetActive(false);
+        });
     }
 
     public void Hide()
     {
         if (!gameObject.activeSelf) return;
+
+        // 닫힐 때 Blocker ON
+        if (_blockerPanel != null)
+            _blockerPanel.gameObject.SetActive(true);
 
         _animator.PlayOut(() =>
         {
@@ -151,38 +164,33 @@ public class HeadCoachNodeInfoPopup : MonoBehaviour
 
     private void RefreshButton(bool isUnlocked, bool prereqBlock)
     {
+        _btnUnlock.onClick.RemoveAllListeners(); // 항상 초기화
+
         bool isFameShort = !isUnlocked && !prereqBlock
             && MoneyManager.Instance.Reputation < _selectedNode.UnlockCost;
 
         if (_btnUnlockImage != null)
             _btnUnlockImage.sprite = GetButtonSprite(isUnlocked, prereqBlock, isFameShort);
 
-        // 해금 가능 또는 명성치 부족 모두 cost 텍스트 표시
         SetActive(_txtBtnCost?.gameObject, !isUnlocked && !prereqBlock);
 
         if (!isUnlocked && !prereqBlock && _txtBtnCost != null)
             _txtBtnCost.text = $"{_selectedNode.UnlockCost}";
 
-        if (_btnUnlock != null)
-        {
-            _btnUnlock.interactable = true;
-            _btnUnlock.onClick.RemoveAllListeners();
+        if (_btnUnlock == null) return;
 
-            if (isUnlocked || prereqBlock)
-            {
-                // 해금 완료 / 선행 미충족 → 아무것도 하지 않음
-            }
-            else if (isFameShort)
-            {
-                // 명성치 부족 → 안내 팝업
-                _btnUnlock.onClick.AddListener(ShowShortageModal);
-            }
-            else
-            {
-                // 해금 가능 → 해금 실행
-                _btnUnlock.onClick.AddListener(() => _onUnlockRequested?.Invoke(_selectedNode.NodeId));
-            }
+        // interactable을 상태에 따라 명시적으로 제어
+        if (isUnlocked || prereqBlock)
+        {
+            _btnUnlock.interactable = false; // 클릭 자체를 막음
+            return;
         }
+
+        _btnUnlock.interactable = true;
+        if (isFameShort)
+            _btnUnlock.onClick.AddListener(ShowShortageModal);
+        else
+            _btnUnlock.onClick.AddListener(() => _onUnlockRequested?.Invoke(_selectedNode.NodeId));
     }
 
     private void OnUnlockClicked()
