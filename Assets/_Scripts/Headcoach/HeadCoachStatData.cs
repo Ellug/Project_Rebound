@@ -31,7 +31,6 @@ public struct HeadCoachEffectData
     public string targetStat;           // 적용 대상 스탯 키
     public ApplyMethod applyMethod;
     public float effectValue;
-    public int functionId;              // 0이면 콘텐츠 해금 없음
 }
 
 // 노드 선행 조건 테이블 데이터 구조체(1행)
@@ -42,18 +41,6 @@ public struct HeadCoachPrerequisiteData
     public int id;
     public int nodeId;                  // 해금 대상 노드
     public int targetPrerequisiteId;    // 필요 선행 노드
-}
-
-// 콘텐츠/기능 해금 테이블 데이터 구조체(1행)
-// id, function_key, name, category, description
-[Serializable]
-public struct HeadCoachContentUnlockData
-{
-    public int functionId;
-    public string functionKey;
-    public string contentName;
-    public string category;
-    public string description;
 }
 
 // 티어 관리 및 개방 조건 테이블 1행 데이터 구조체
