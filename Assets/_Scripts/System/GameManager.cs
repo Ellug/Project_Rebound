@@ -17,6 +17,7 @@ public class GameManager : Singleton<GameManager>
     private LobbyStoryFlowManager _lobbyStoryFlowManager; // 로비 스토리 트리거 전담 매니저
     private RecruitmentManager _recruitmentManager; // Lobby 씬의 RecruitmentManager
     private MonthlySubsidyModule _monthlySubsidyModule; // 매 턴 월급 지급 모듈 (TurnManager에 등록)
+    private EndingManager _endingManager;           // 엔딩 흐름 전담 매니저 (Tournament 씬 또는 별도 Ending 씬에 배치)
     private bool _initialRecruitmentTriggered;      // 게임 시작 시 최초 영입 트리거 여부 (중복 방지)
     private bool _lobbyInitialized;                 // 로비 씬 초기화 완료 여부 (이중 호출 방지)
     private bool _isNewGame;                        // 새 게임 여부 (SyncFlowState 실행 전에 판단해야 하므로 별도 보관)
@@ -743,5 +744,28 @@ public class GameManager : Singleton<GameManager>
         yield return new WaitUntil(() => !SceneTransitionManager.Instance.IsTransitioning);
         Debug.Log("[GameManager] LoadTournamentNextFrame - LoadScene 호출");
         SceneTransitionManager.Instance.LoadScene("Tournament");
+    }
+
+    // 토너먼트 결과 처리가 끝난 뒤 호출
+    // 4년차 겨울 토너먼트라면 엔딩 시퀀스 시작
+    // 반환값: 엔딩이 시작되었으면 true (이후 일반 로비 복귀 흐름 생략)
+    public bool TryTriggerEnding()
+    {
+        if (!EndingConditionChecker.IsEndingReached(this))
+            return false;
+
+        // EndingManager 캐싱
+        if (_endingManager == null)
+            _endingManager = UnityEngine.Object.FindFirstObjectByType<EndingManager>();
+
+        if (_endingManager == null)
+        {
+            Debug.LogError("[GameManager] EndingManager를 찾을 수 없습니다. 엔딩을 시작할 수 없습니다.");
+            return false;
+        }
+
+        Debug.Log("[GameManager] 4년차 겨울 토너먼트 종료 → 엔딩 시퀀스 시작");
+        _endingManager.TriggerEnding();
+        return true;
     }
 }
