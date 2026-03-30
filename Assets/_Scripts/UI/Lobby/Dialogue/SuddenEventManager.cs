@@ -21,6 +21,9 @@ public class SuddenEventManager : Singleton<SuddenEventManager>
     // 현재 적용 중인 기간제 효과 목록
     [SerializeField] private List<ActiveTermEffect> _activeTermEffects = new List<ActiveTermEffect>();
 
+
+    private DateTime _lastTickDate;
+    private bool _isLastTickDateSet = false;
     public void EvaluateEvents(SuddenEventConditionFlags condition, SuddenEventContextFlags context)
     {
         TurnManager tm = FindFirstObjectByType<TurnManager>();
@@ -332,9 +335,32 @@ public class SuddenEventManager : Singleton<SuddenEventManager>
         {
             Debug.Log($"[상태이상 발생!] {student.studentName} 학생에게 상태이상 번호 {statInt} 적용 (수치: {amount})");
 
-            // =====================================================================
-            // [TODO] 여기에 학생 상태이상 처리 코드 추가 
-            // =====================================================================
+            if (amount > 0)
+            {
+                if (statInt == 21 || statInt == 22) student.isTrainingBlocked = true;
+
+                if (statInt == 21) student.abnormalState = Student.AbnormalType.Disease;
+                else if (statInt == 22 || statInt == 23) student.abnormalState = Student.AbnormalType.Injury;
+
+          
+                if (StudentManager.Instance != null)
+                {
+                    StudentManager.Instance.RemoveStudentFromSlots(student);
+                }
+            }
+            else // amount < 0 (회복 이벤트)
+            {
+                student.isTrainingBlocked = false;
+                student.abnormalState = Student.AbnormalType.None;
+
+                // 해당 학생이 가지고 있던 모든 기간제 질병 데이터를 삭제하여 더 이상 추적하지 않게 함
+                _activeTermEffects.RemoveAll(e => e.StudentName == student.studentName && ((int)e.StatType == 21 || (int)e.StatType == 22 || (int)e.StatType == 23));
+            }
+
+            if (statInt == 21 || statInt == 22)
+            {
+                student.isTrainingBlocked = (amount > 0);
+            }
 
             return true;
         }
@@ -375,21 +401,45 @@ public class SuddenEventManager : Singleton<SuddenEventManager>
     // ==========================================
     public void TickTermEffects()
     {
+        int daysToSubtract = 1;
+        TurnManager tm = FindFirstObjectByType<TurnManager>();
+
+        if (tm != null && tm.DateManager != null)
+        {
+            DateTime currentDate = tm.DateManager.CurrentDate.Date;
+
+            if (_isLastTickDateSet && currentDate > _lastTickDate)
+            {
+                daysToSubtract = (currentDate - _lastTickDate).Days;
+            }
+
+            _lastTickDate = currentDate;
+            _isLastTickDateSet = true;
+        }
+
         for (int i = _activeTermEffects.Count - 1; i >= 0; i--)
         {
             var effect = _activeTermEffects[i];
-            effect.RemainingDays--;
 
+            // 스킵된 주말 날짜까지 한 번에 차감
+            effect.RemainingDays -= daysToSubtract;
 
-            // 기간 만료 시 스탯 롤백 
             if (effect.RemainingDays <= 0)
             {
                 var student = StudentManager.Instance?.Students.FirstOrDefault(s => s.studentName == effect.StudentName);
                 if (student != null)
                 {
-
-                    // 깎였던 수치만큼 다시 더해줌 (반전술식)
-                    ApplyStudentStat(student, effect.StatType, -effect.Amount);
+                    int statInt = (int)effect.StatType;
+                    if (statInt == 21 || statInt == 22 || statInt == 23)
+                    {
+                        // 상태이상 완치
+                        student.isTrainingBlocked = false;
+                        student.abnormalState = Student.AbnormalType.None;
+                    }
+                    else
+                    {
+                        ApplyStudentStat(student, effect.StatType, -effect.Amount);
+                    }
                     StudentManager.Instance.NotifyStudentModified(student);
                 }
                 _activeTermEffects.RemoveAt(i);

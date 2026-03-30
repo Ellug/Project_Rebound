@@ -33,7 +33,7 @@ public class FriendlyMatchManager : Singleton<FriendlyMatchManager>
             {
                 _lastMonth = currentMonth;
             }
-            // 달이 바뀌었다면 즉시 0으로 리셋!
+            // 달이 바뀌었다면 즉시 0으로 리셋
             else if (_lastMonth != currentMonth)
             {
                 _lastMonth = currentMonth;
