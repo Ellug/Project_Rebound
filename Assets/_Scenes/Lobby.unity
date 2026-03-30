@@ -2041,7 +2041,6 @@ MonoBehaviour:
   _descColorUnlocked: {r: 1, g: 1, b: 1, a: 1}
   _blockReasonColor: {r: 1, g: 0.13876066, b: 0, a: 1}
   _animator: {fileID: 148651021}
-  _raycaster: {fileID: 0}
   _blockerPanel: {fileID: 1395912562}
 --- !u!114 &148651021
 MonoBehaviour:
@@ -16015,7 +16014,7 @@ MonoBehaviour:
     m_Left: 44
     m_Right: 0
     m_Top: 0
-    m_Bottom: 0
+    m_Bottom: 280
   m_ChildAlignment: 0
   m_StartCorner: 0
   m_StartAxis: 0
