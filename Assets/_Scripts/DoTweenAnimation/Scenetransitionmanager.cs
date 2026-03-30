@@ -18,6 +18,8 @@ public class SceneTransitionManager : Singleton<SceneTransitionManager>
 
     private bool _isTransitioning;
 
+    public bool IsTransitioning => _isTransitioning; // 외부에서 전환 중 여부 확인 가능
+
     // 씬에 배치 없이 첫 접근 시 Resources에서 자동 생성
     public static new SceneTransitionManager Instance
     {
@@ -153,5 +155,13 @@ public class SceneTransitionManager : Singleton<SceneTransitionManager>
         }
 
         yield return new WaitUntil(() => completed >= total);
+    }
+
+    // 진행 중인 전환을 중단하고 즉시 새 씬으로 전환
+    public void ForceLoadScene(string sceneName, Action onMidpoint = null)
+    {
+        StopAllCoroutines();
+        _isTransitioning = false;
+        LoadScene(sceneName, onMidpoint);
     }
 }

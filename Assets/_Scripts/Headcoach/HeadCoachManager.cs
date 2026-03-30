@@ -40,9 +40,6 @@ public class HeadCoachManager : Singleton<HeadCoachManager>
         IsInitialized = true;
         Debug.Log("[HeadCoachTableInitializer] 초기화 완료");
 
-        SaveManager.Instance?.RestoreHeadCoachNodesIfPossible();
-
-
         Dictionary<int, HeadCoachEffectData> effectMap = effectRows.ToDictionary(e => e.effectId);
 
         foreach (HeadCoachTierConfigData tierConfig in tierConfigRows)
