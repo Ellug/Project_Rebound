@@ -37,7 +37,7 @@ public class TournamentHalfTimeSelectionUI : MonoBehaviour
         BindButton(_button2, 1);
         BindButton(_button3, 2);
         _selectionPanel.SetActive(true);
-        SoundManager.Instance?.PlayEffect(303);
+        SoundManager.Instance.PlayEffect(303);
     }
 
     private void Close()
