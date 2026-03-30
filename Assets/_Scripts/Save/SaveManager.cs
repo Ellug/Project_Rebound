@@ -62,21 +62,32 @@ public class SaveManager : Singleton<SaveManager>
 
         // 돈과 평판은 런타임 매니저가 존재할 때만 적용 (로비 씬에서 먼저 적용, 이후 씬에서도 계속 유지)
         if (MoneyManager.Instance != null)
+        {
             MoneyManager.Instance.ApplySaveData(
                 data.gold,
                 CurrentUserData != null ? CurrentUserData.reputation : data.reputation);
+        }
 
         // 슬롯 로드 시 시설 상태를 먼저 현재 슬롯 데이터 기준으로 맞춤
         if (FacilitySystem.Instance != null)
+        {
             ApplyFacilityData(data.facilities);
+        }
 
         // 슬롯 로드 시 메신저 상태도 현재 슬롯 기준으로 먼저 맞춤
         if (MessengerManager.Instance != null)
+        {
+            MessengerManager.Instance.ClearAll(); // 이전 슬롯 데이터 초기화
             MessengerManager.Instance.RestoreSaveData(data.messenger);
+        }
+
+        FriendlyMatchManager.Instance?.Reset();
+        GameManager.Instance?.ClearFriendlyMatchSchedule();
 
         // 토너먼트 진행 중이면 로비를 경유해 토너먼트로 이동
         // (UIManager가 로비에 있으므로 로비를 반드시 거쳐야 함)
         _pendingTournamentRestore = IsTournamentInProgress(data);
+        CalendarManager.Instance?.InvalidateAll();
         LoadSceneSafe(sceneName);
     }
 
@@ -192,6 +203,10 @@ public class SaveManager : Singleton<SaveManager>
         {
             EquipmentSystem.Instance.ResetToDefault();
         }
+
+        FriendlyMatchManager.Instance?.Reset(); // 친선경기 매니저 초기화
+        GameManager.Instance?.ClearFriendlyMatchSchedule();
+        CalendarManager.Instance?.InvalidateAll();
 
         IsPendingNewGame = true;
         CurrentData.isRecruitmentInProgress = true; // 새 게임 첫 영입이 시작되기 전까지는 모집 진행 중 상태로 표시
@@ -331,6 +346,8 @@ public class SaveManager : Singleton<SaveManager>
         {
             MessengerManager.Instance.ClearAll();
         }
+
+        FriendlyMatchManager.Instance?.Reset();
     }
 
     private void SaveUserData()
@@ -881,7 +898,9 @@ public class SaveManager : Singleton<SaveManager>
         }
 
         if (unlockedNodeIds == null)
+        {
             unlockedNodeIds = new List<int>();
+        }
 
         HeadCoachManager.Instance.RestoreUnlockedNodes(unlockedNodeIds);
         Debug.Log($"[SaveManager] 감독 노드 복원 완료. count={unlockedNodeIds.Count}");

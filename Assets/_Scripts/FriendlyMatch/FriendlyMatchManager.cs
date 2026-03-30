@@ -158,4 +158,11 @@ public class FriendlyMatchManager : Singleton<FriendlyMatchManager>
         _lastMonth = lastMonth;
         Debug.Log($"[FriendlyMatch] 세이브 복원 | applyCount={count}, lastMonth={lastMonth}");
     }
+
+    public void Reset()
+    {
+        _currentApplyCount = 0;
+        _lastMonth = -1;
+        Debug.Log("[FriendlyMatch] 친선전 신청 횟수 초기화");
+    }
 }

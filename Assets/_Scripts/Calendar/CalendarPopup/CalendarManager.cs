@@ -24,6 +24,8 @@ public class CalendarManager : Singleton<CalendarManager>
         Unbind();
         _turnManager = turnManager;
 
+        InvalidateAll();
+
         if (_turnManager != null)
             _turnManager.OnTurnCompleted += HandleTurnCompleted;
     }
