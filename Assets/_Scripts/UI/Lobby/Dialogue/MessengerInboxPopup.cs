@@ -114,6 +114,13 @@ public class MessengerInboxPopup : UIBase
             slot.gameObject.SetActive(true);
             _spawnedItems.Add(slot.gameObject);
         }
+
+        Canvas.ForceUpdateCanvases();
+        UnityEngine.UI.ScrollRect scrollRect = GetComponentInChildren<UnityEngine.UI.ScrollRect>();
+        if (scrollRect != null)
+        {
+            scrollRect.verticalNormalizedPosition = 1f;
+        }
     }
 
     public void OpenRoom(string roomId)

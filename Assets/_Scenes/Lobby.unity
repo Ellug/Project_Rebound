@@ -266,6 +266,7 @@ GameObject:
   - component: {fileID: 31166443}
   - component: {fileID: 31166442}
   - component: {fileID: 31166444}
+  - component: {fileID: 31166445}
   m_Layer: 0
   m_Name: SuddenEventManager
   m_TagString: Untagged
@@ -316,6 +317,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DialogueRunner
   _dontDestroyOnLoad: 1
   _typingDelay: 1.5
+--- !u!114 &31166445
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 31166441}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7fb2a0bb23250e49a90b7be0fb1f497, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SuddenEventTester
+  eventIdToTest: event_000001
 --- !u!1 &38739029
 GameObject:
   m_ObjectHideFlags: 0
