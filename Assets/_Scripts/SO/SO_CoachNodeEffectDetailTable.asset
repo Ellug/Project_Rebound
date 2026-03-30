@@ -48,16 +48,6 @@ MonoBehaviour:
     applyMethod: Add
     effectValue: -3
     functionId: 0
-  - id: 4001
-    targetStat: Content_Unlock
-    applyMethod: Add
-    effectValue: 1
-    functionId: 401
-  - id: 4002
-    targetStat: Content_Unlock
-    applyMethod: Add
-    effectValue: 1
-    functionId: 402
   - id: 5001
     targetStat: All_Stat
     applyMethod: Add

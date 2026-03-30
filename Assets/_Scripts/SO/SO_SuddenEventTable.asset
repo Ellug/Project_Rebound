@@ -732,7 +732,7 @@ MonoBehaviour:
     effect3: 
     isProbable: 1
     probability: 0.2
-    description: text_SuddenEvent_000005
+    description: text_diag_111001_000
   - id: event_001002
     name: "\uBD80\uC0C1(\uC6B4\uB3D9)"
     context: 2
@@ -756,7 +756,7 @@ MonoBehaviour:
     effect3: 
     isProbable: 1
     probability: 0.5
-    description: text_SuddenEvent_000005
+    description: text_diag_111002_000
   - id: event_001002
     name: "\uBD80\uC0C1(\uC6B4\uB3D9)"
     context: 2
@@ -780,7 +780,7 @@ MonoBehaviour:
     effect3: 
     isProbable: 1
     probability: 0.7
-    description: text_SuddenEvent_000005
+    description: text_diag_111003_000
   - id: event_001002
     name: "\uBD80\uC0C1(\uC6B4\uB3D9)"
     context: 2
@@ -804,7 +804,7 @@ MonoBehaviour:
     effect3: 
     isProbable: 0
     probability: 1
-    description: text_SuddenEvent_000005
+    description: text_diag_111004_000
   - id: event_001002
     name: "\uBD80\uC0C1(\uACBD\uAE30)"
     context: 2
