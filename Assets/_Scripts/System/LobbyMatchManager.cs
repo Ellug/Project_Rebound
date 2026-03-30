@@ -13,6 +13,8 @@ public class LobbyMatchManager : MonoBehaviour
     private const int FriendlyMatchWinRewardId = 100;
     private const string DefaultFriendlyOpponentName = "친선고등학교";
 
+    private static readonly AbnormalStatusEffect _abnormalStatusEffect = new();
+
     private GameManager _gameManager;
     private TurnManager _turnManager;
     private LobbyUI _lobbyUI;
@@ -166,6 +168,12 @@ public class LobbyMatchManager : MonoBehaviour
     // Tournament 씬을 일반 토너먼트 모드 진입
     private void ProceedToTournament()
     {
+        if (!HasEnoughMatchEntryPlayers(out string reason))
+        {
+            HandleTournamentEntryForfeit(reason);
+            return;
+        }
+
         TournamentSceneBridge.RequestTournament();
         _gameManager.MarkLeagueHandled();
         _turnManager.SetPhase(GamePhase.MatchInProgress);
@@ -179,6 +187,12 @@ public class LobbyMatchManager : MonoBehaviour
     private void EnterFriendlyMatch()
     {
         string opponentName = NormalizeOpponentName(_gameManager.FriendlyOpponentName);
+
+        if (!HasEnoughMatchEntryPlayers(out string reason))
+        {
+            HandleFriendlyMatchEntryForfeit(opponentName, reason);
+            return;
+        }
 
         TournamentSceneBridge.RequestFriendlyMatch(opponentName);
         _gameManager.ClearFriendlyMatchSchedule();
@@ -231,6 +245,98 @@ public class LobbyMatchManager : MonoBehaviour
         return string.IsNullOrWhiteSpace(opponentName)
             ? GetRandomOpponentName()
             : opponentName.Trim();
+    }
+
+    // 상태이상 제외 출전 가능 인원이 5명 이상인지 확인
+    private static bool HasEnoughMatchEntryPlayers(out string reason)
+    {
+        reason = string.Empty;
+
+        int totalCount = 0;
+        int blockedCount = 0;
+
+        foreach (Student student in StudentManager.Instance.Students)
+        {
+            if (student == null) continue;
+
+            totalCount++;
+
+            if (_abnormalStatusEffect.IsMatchBlocked(student))
+                blockedCount++;
+        }
+
+        int availableCount = totalCount - blockedCount;
+        if (availableCount >= 5)
+            return true;
+
+        reason = $"출전 가능 인원 부족 (전체 {totalCount}명 / 상태이상 {blockedCount}명 / 출전 가능 {availableCount}명)";
+        return false;
+    }
+
+    // 토너먼트 시작 불가 시 안내 팝업 후 로비 패배 결과 팝업으로 전환
+    private void HandleTournamentEntryForfeit(string reason)
+    {
+        Debug.LogWarning($"[LobbyMatchManager] 토너먼트 진입 불가: {reason} - 실격패 안내 팝업을 표시합니다.");
+
+        void proceedDefeatFlow()
+        {
+            _gameManager.MarkLeagueHandled();
+            _gameManager.SetPendingTournamentResult(32);
+            HandleTournamentResult();
+        }
+
+        if (UIManager.Instance == null)
+        {
+            proceedDefeatFlow();
+            return;
+        }
+
+        string message = $"출전 가능 인원이 부족하여 실격패 처리됩니다.";
+        UIPopupRequest req = UIPopupRequest.Default(
+            title: "토너먼트",
+            message: message,
+            previewImageId: AlwaysEventImageIds.Tournament,
+            onPrimary: proceedDefeatFlow,
+            onCancel: null,
+            showCancel: false
+        );
+
+        UIPopup popup = UIManager.Instance.ShowPopup(req);
+        if (popup != null)
+            popup.DisableBackKey = true;
+    }
+
+    // 친선전 시작 불가 시 안내 팝업 후 로비 패배 결과 팝업으로 전환
+    private void HandleFriendlyMatchEntryForfeit(string opponentName, string reason)
+    {
+        Debug.LogWarning($"[LobbyMatchManager] 친선전 진입 불가: {reason} - 실격패 안내 팝업을 표시합니다.");
+
+        void proceedDefeatFlow()
+        {
+            _gameManager.ClearFriendlyMatchSchedule();
+            _gameManager.SetPendingFriendlyMatchResult(false, opponentName);
+            HandleFriendlyMatchResult();
+        }
+
+        if (UIManager.Instance == null)
+        {
+            proceedDefeatFlow();
+            return;
+        }
+
+        string message = $"출전 가능 인원이 부족하여 실격패 처리됩니다.";
+        UIPopupRequest req = UIPopupRequest.Default(
+            title: "친선경기",
+            message: message,
+            previewImageId: AlwaysEventImageIds.Tournament,
+            onPrimary: proceedDefeatFlow,
+            onCancel: null,
+            showCancel: false
+        );
+
+        UIPopup popup = UIManager.Instance.ShowPopup(req);
+        if (popup != null)
+            popup.DisableBackKey = true;
     }
 
     // SchoolNameTable에서 친선전 상대 학교명을 랜덤으로 뽑는다.
