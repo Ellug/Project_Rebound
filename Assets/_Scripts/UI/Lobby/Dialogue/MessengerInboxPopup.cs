@@ -172,4 +172,14 @@ public class MessengerInboxPopup : UIBase
             }
         });
     }
+
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
+
+        if (MessengerManager.Instance != null)
+        {
+            MessengerManager.Instance.OnRoomListUpdated -= RefreshList;
+        }
+    }
 }
