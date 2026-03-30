@@ -92,8 +92,8 @@ public class SoundManager : Singleton<SoundManager>
     {
         if (value <= 0.0001f)
             return -80f;
-
-        return Mathf.Lerp(-80f, 0f, value);
+            
+            return Mathf.Clamp(Mathf.Log10(value) * 20f, -80f, 0f);
     }
 
     private void ApplyVolume(SoundType type, float normalized)

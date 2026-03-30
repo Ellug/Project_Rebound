@@ -123,6 +123,12 @@ public class AlwaysEventManager : MonoBehaviour
         {
             AlwaysEffectApplier.ApplyEffect(capturedRow);
 
+            if (IsFestivalCheck(capturedRow))
+            {
+                StartCoroutine(FestivitiesRest());
+                return;
+            }
+
             // 방학 이벤트는 "토너먼트 확인 팝업 -> 학생 배치 팝업 -> 진입" 순서로 진행
             if (!IsLeagueBreakEvent(capturedRow))
                 return;
@@ -167,12 +173,23 @@ public class AlwaysEventManager : MonoBehaviour
         if (!GameManager.Instance.TryShowTournamentEntryPopup())
             Debug.Log("[AlwaysEvent] 토너먼트 진입 조건이 충족되지 않아 진입을 건너뜁니다.");
     }
+    // 휴식 진행
+    private IEnumerator FestivitiesRest()
+    {
+        yield return null;
+        _turnManager.ExecuteTurn(TurnActionType.Rest);
+    }
 
     private static string GetRowId(AlwaysEventRow row)
     {
         string id = string.IsNullOrWhiteSpace(row.id) ? "(no-id)" : row.id.Trim();
         string start = string.IsNullOrWhiteSpace(row.termStart) ? "" : row.termStart.Trim();
         return $"{id}_{start}"; // 예: roster_recruit_260302, roster_recruit_260810
+    }
+    // 체육대회나 학교제
+    private bool IsFestivalCheck(AlwaysEventRow row)
+    {
+        return row != null && (row.name == "festival_sports_day" || row.name == "festival_school");
     }
 
     private bool TryGetAlwaysEventTable(out AlwaysEventTableSO table)
