@@ -64,6 +64,9 @@ public class CalendarMonthView : UIBase
     {
         base.Open();
 
+        if (CalendarManager.Instance != null)
+            CalendarManager.Instance.OnCalendarChanged += Refresh;
+
         TurnManager tm = FindFirstObjectByType<TurnManager>();
         if (tm != null)
         {
@@ -94,6 +97,9 @@ public class CalendarMonthView : UIBase
     // 팝업 퇴장 — Pop 애니메이션 후 닫기
     public override void Close()
     {
+        if (CalendarManager.Instance != null)
+            CalendarManager.Instance.OnCalendarChanged -= Refresh;
+
         if (_popAnimator != null)
             _popAnimator.PlayOut(() => base.Close());
         else

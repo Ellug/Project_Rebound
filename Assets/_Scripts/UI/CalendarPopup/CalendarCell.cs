@@ -66,8 +66,10 @@ public class CalendarCell : MonoBehaviour
             {
                 foreach (var e in data.Entries)
                 {
-                    if (e.Type == CalendarEntry.EntryType.FriendlyMatch ||
-                        e.Type == CalendarEntry.EntryType.Tournament)
+                    if (e.Type == CalendarEntry.EntryType.FriendlyMatch)
+                        return new Color(1f, 0.765f, 0f, 1f);
+
+                    if (e.Type == CalendarEntry.EntryType.Tournament)
                         return new Color(0.6f, 0.2f, 1f);
                 }
             }

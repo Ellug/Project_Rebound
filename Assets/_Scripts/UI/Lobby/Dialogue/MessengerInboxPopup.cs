@@ -44,6 +44,13 @@ public class MessengerInboxPopup : UIBase
 
     public override void Open()
     {
+        // 재구독 (씬 복귀 시 중복 방지)
+        if (MessengerManager.Instance != null)
+        {
+            MessengerManager.Instance.OnRoomListUpdated -= RefreshList;
+            MessengerManager.Instance.OnRoomListUpdated += RefreshList;
+        }
+
         if (_animator == null)
         {
             Debug.LogWarning("[MessengerInboxPopup] _animator가 연결되지 않았습니다. 인스펙터에서 PopupAnimator를 연결해주세요.");
@@ -64,6 +71,10 @@ public class MessengerInboxPopup : UIBase
 
     public override void Close()
     {
+        // 구독 해제
+        if (MessengerManager.Instance != null)
+            MessengerManager.Instance.OnRoomListUpdated -= RefreshList;
+
         if (UIManager.Instance != null) UIManager.Instance.PopMessenger(this);
 
         if (_animator == null || !gameObject.activeSelf)

@@ -258,7 +258,7 @@ public class TournamentResultUI : MonoBehaviour
 
     private static bool IsAchievedResult(int reachedRoundTeamCount)
     {
-        return reachedRoundTeamCount > 0 && reachedRoundTeamCount <= 4;
+        return reachedRoundTeamCount > 0 && reachedRoundTeamCount <= 3;
     }
 
     private static string ResolveTournamentResultImageId(int reachedRoundTeamCount)

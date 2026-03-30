@@ -11,6 +11,7 @@ public class CalendarManager : Singleton<CalendarManager>
 
     private HolidayDatabase _holidayDb;
     private TurnManager _turnManager;
+    public event Action OnCalendarChanged;
 
     protected override void OnSingletonAwake()
     {
@@ -22,6 +23,8 @@ public class CalendarManager : Singleton<CalendarManager>
     {
         Unbind();
         _turnManager = turnManager;
+
+        InvalidateAll();
 
         if (_turnManager != null)
             _turnManager.OnTurnCompleted += HandleTurnCompleted;
@@ -46,6 +49,7 @@ public class CalendarManager : Singleton<CalendarManager>
     public void InvalidateMonth(DateTime date)
     {
         _monthCache.Remove(date.Year * 100 + date.Month);
+        OnCalendarChanged?.Invoke();
     }
 
     // 전체 캐시를 제거 (씬 전환,게임 리셋 시 호출)
@@ -183,13 +187,26 @@ public class CalendarManager : Singleton<CalendarManager>
             }
         }
 
-        // 메신저 채팅 예약 (GameManager 예약 날짜 중복 제외)
+        // 메신저 채팅 예약
         if (FriendlyMatchManager.Instance == null) return;
 
-        var schedule = FriendlyMatchManager.Instance.GetBookedMatchSchedule(from.Year);
+        // from.Year와 to.Year 모두 조회 (연말 경계 처리)
+        var scheduleFromYear = FriendlyMatchManager.Instance.GetBookedMatchSchedule();
+        var schedule = new Dictionary<DateTime, string>(scheduleFromYear);
+
+        if (to.Year != from.Year)
+        {
+            var scheduleToYear = FriendlyMatchManager.Instance.GetBookedMatchSchedule();
+            foreach (var kvp in scheduleToYear)
+                if (!schedule.ContainsKey(kvp.Key))
+                    schedule[kvp.Key] = kvp.Value;
+        }
+
         foreach (var kvp in schedule)
         {
             DateTime matchDate = kvp.Key;
+
+            // 날짜 범위 체크 (연도 포함)
             if (matchDate < from || matchDate > to) continue;
 
             if (GameManager.Instance.IsFriendlyMatchConfirmed &&

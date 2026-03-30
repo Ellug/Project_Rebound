@@ -14,8 +14,7 @@ public static class HeadCoachTableInitializer
                 out CoachNodeMasterTableSO masterTable,
                 out CoachNodeEffectDetailTableSO effectTable,
                 out CoachNodePrerequisiteTableSO prerequisiteTable,
-                out TierManageOpenConditionTableSO tierTable,
-                out ContentUnlockFeatureTableSO contentTable))
+                out TierManageOpenConditionTableSO tierTable))
         {
             Debug.LogError("[HeadCoachTableInitializer] 필수 테이블이 CachedSOData에 등록되지 않았습니다.");
             return;
@@ -27,8 +26,7 @@ public static class HeadCoachTableInitializer
             ConvertMasterRows(masterTable),
             ConvertEffectRows(effectTable),
             ConvertPrerequisiteRows(prerequisiteTable),
-            ConvertTierConfigRows(tierTable),
-            ConvertContentUnlockRows(contentTable, effectTable));
+            ConvertTierConfigRows(tierTable));
 
         RestoreUnlockedNodes();
         Debug.Log("[HeadCoachTableInitializer] 초기화 완료");
@@ -38,15 +36,13 @@ public static class HeadCoachTableInitializer
         out CoachNodeMasterTableSO masterTable,
         out CoachNodeEffectDetailTableSO effectTable,
         out CoachNodePrerequisiteTableSO prerequisiteTable,
-        out TierManageOpenConditionTableSO tierTable,
-        out ContentUnlockFeatureTableSO contentTable)
+        out TierManageOpenConditionTableSO tierTable)
     {
         bool isAllLoaded = true;
         isAllLoaded &= CachedSOData.TryGet(out masterTable);
         isAllLoaded &= CachedSOData.TryGet(out effectTable);
         isAllLoaded &= CachedSOData.TryGet(out prerequisiteTable);
         isAllLoaded &= CachedSOData.TryGet(out tierTable);
-        isAllLoaded &= CachedSOData.TryGet(out contentTable);
         return isAllLoaded;
     }
 
@@ -80,7 +76,6 @@ public static class HeadCoachTableInitializer
                 targetStat = row.targetStat,
                 applyMethod = ParseApplyMethod(row.applyMethod),
                 effectValue = row.effectValue,
-                functionId = row.functionId,
             });
         }
         return result;
@@ -117,31 +112,6 @@ public static class HeadCoachTableInitializer
                 unlockConditionCount = row.unlockConditionCount,
                 maxNodeCount = row.maxNodeCount,
                 tierBonusEffectId = row.tierBonusEffectId,
-            });
-        }
-        return result;
-    }
-
-    // 효과 테이블에서 참조되는 functionId만 등록
-    private static IEnumerable<HeadCoachContentUnlockData> ConvertContentUnlockRows(
-        ContentUnlockFeatureTableSO contentTable,
-        CoachNodeEffectDetailTableSO effectTable)
-    {
-        HashSet<int> referencedFunctionIds = new();
-        foreach (CoachNodeEffectDetailRow row in effectTable.Rows)
-            if (row.functionId != 0) referencedFunctionIds.Add(row.functionId);
-
-        List<HeadCoachContentUnlockData> result = new();
-        foreach (ContentUnlockFeatureRow row in contentTable.Rows)
-        {
-            if (!referencedFunctionIds.Contains(row.id)) continue;
-            result.Add(new HeadCoachContentUnlockData
-            {
-                functionId = row.id,
-                functionKey = row.functionKey,
-                contentName = row.name,
-                category = row.category,
-                description = row.description,
             });
         }
         return result;

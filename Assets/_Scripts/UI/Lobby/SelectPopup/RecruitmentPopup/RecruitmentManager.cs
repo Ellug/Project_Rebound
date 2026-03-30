@@ -254,17 +254,7 @@ public class RecruitmentManager : MonoBehaviour
     // 영입 포기 → 후보 초기화
     private void HandleRecruitmentSkipped()
     {
-        // 포기 시에도 StudentManager(보유 학생) 건드리지 않음
-        // 후보만 폐기
-        _candidateStudents.Clear();
-
-        // 새 게임 첫 영입 포기 시 진행 중 플래그 해제 후 저장
-        if (SaveManager.Instance?.CurrentData != null)
-        {
-            SaveManager.Instance.CurrentData.isRecruitmentInProgress = false;
-        }
-
-        SaveManager.Instance?.SaveCurrent();
+        _candidateStudents.Clear(); // 다음 영입 이벤트까지 후보 학생 정보 유지할 필요 없음
 
         Debug.Log("[RecruitmentManager] 영입 포기");
     }
@@ -315,6 +305,5 @@ public class RecruitmentManager : MonoBehaviour
         if (SaveManager.Instance?.CurrentData == null) return;
 
         SaveManager.Instance.CurrentData.isRecruitmentInProgress = inProgress;
-        SaveManager.Instance.SaveCurrent();
     }
 }

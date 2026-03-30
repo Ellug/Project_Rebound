@@ -11,7 +11,6 @@ public class PlayData
     public int gold;                                            // 재화
     public int reputation;                                      // 명성치
 
-    //public List<string> items = new();                        // 보유 아이템 목록
     public List<int> unlockedNodeIds = new();                   // 감독 노드 해금 목록 (농구부 폐부 후 재시작해도 유지)
     public SavedFlowData flowData = new();                      // 날짜 / 턴 진행 상태 (GameFlowData 대응)
     public SavedFacilityData facilities = new();                // 시설 레벨

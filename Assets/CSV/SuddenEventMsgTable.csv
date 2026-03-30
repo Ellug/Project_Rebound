@@ -317,7 +317,7 @@ diag_000016,index_027,text_diag_000016_030,index_028,FALSE,-,-,-,-,-,-,-
 diag_000016,index_028,text_diag_000016_031,END,FALSE,-,-,-,-,-,-,-
 diag_000017,index_000,text_diag_000017_000,index_001,FALSE,-,-,-,-,-,-,-
 diag_000017,index_001,text_diag_000017_001,index_002,FALSE,-,-,-,-,-,-,-
-diag_000017,index_002,text_diag_000017_002,-,FALSE,text_diag_000017_003,index_003,text_diag_000017_010,index_009,text_diag_000017_017,index_015,-
+diag_000017,index_002,text_diag_000017_002,-,TRUE,text_diag_000017_003,index_003,text_diag_000017_010,index_009,text_diag_000017_017,index_015,-
 diag_000017,index_003,text_diag_000017_004,index_004,FALSE,-,-,-,-,-,-,-
 diag_000017,index_004,text_diag_000017_005,index_005,FALSE,-,-,-,-,-,-,-
 diag_000017,index_005,text_diag_000017_006,index_006,FALSE,-,-,-,-,-,-,-
