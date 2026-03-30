@@ -9,7 +9,7 @@ public class CalendarBadge : MonoBehaviour
 
     [Header("배지 색상")]
     [SerializeField] private Color _colorHoliday = new Color(1f, 0.3f, 0.3f);         // 빨간
-    [SerializeField] private Color _colorFriendlyMatch = new Color(0.6f, 0.2f, 1f);   // 보라
+    [SerializeField] private Color _colorFriendlyMatch = new Color(1f, 0.765f, 0f, 1f); //노랑
     [SerializeField] private Color _colorTournament = new Color(0.6f, 0.2f, 1f);      // 보라
     [SerializeField] private Color _colorAcademic = new Color(0.7f, 0.7f, 0.7f);      // 회색
     [SerializeField] private Color _colorVacation = new Color(0.2f, 0.7f, 0.4f);      // 녹색
