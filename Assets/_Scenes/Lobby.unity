@@ -9531,6 +9531,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CalendarManager
   _dontDestroyOnLoad: 1
+  _holidayDb: {fileID: 11400000, guid: 8fff598480324174a82173f60c9b1aa8, type: 2}
 --- !u!1 &741505615
 GameObject:
   m_ObjectHideFlags: 0
