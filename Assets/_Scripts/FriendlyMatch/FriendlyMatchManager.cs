@@ -10,6 +10,8 @@ public class FriendlyMatchManager : Singleton<FriendlyMatchManager>
     private int _currentApplyCount = 0;
     private int _lastMonth = -1;
 
+
+    private HashSet<string> _unlockedSchools = new HashSet<string>();
     public int LastMonth => _lastMonth; // 세이브/로드용으로 현재 월 정보 제공
 
     public int CurrentApplyCount
@@ -20,7 +22,74 @@ public class FriendlyMatchManager : Singleton<FriendlyMatchManager>
             return _currentApplyCount;
         }
     }
+    public void UnlockSchool(string schoolName)
+    {
+        if (string.IsNullOrEmpty(schoolName)) return;
 
+        if (!_unlockedSchools.Contains(schoolName))
+        {
+            _unlockedSchools.Add(schoolName);
+            Debug.Log($"[FriendlyMatch] 토너먼트에서 조우하여 친선전 상대로 해금됨: {schoolName}");
+        }
+    }
+
+    public HashSet<string> GetUnlockedSchools()
+    {
+        int AdditionalRandomCount = 6;
+
+        if (_unlockedSchools.Count < AdditionalRandomCount)
+        {
+            SeedInitialRandomSchools(AdditionalRandomCount - _unlockedSchools.Count);
+        }
+        return _unlockedSchools;
+    }
+    private void SeedInitialRandomSchools(int countNeeded)
+    {
+        var nameTable = CachedSOData.Get<SchoolNameTableSO>();
+        var listTable = CachedSOData.Get<FriendlyMatchScheduleMsgListTableSO>(); // 기본 학교 테이블
+        if (nameTable == null || nameTable.Rows == null || nameTable.Rows.Count == 0) return;
+
+        // 1. 기본 제공되는 6개 학교 랜덤 풀에서 제외
+        HashSet<string> defaultSchoolNames = new HashSet<string>();
+        if (listTable != null)
+        {
+            foreach (var row in listTable.Rows)
+            {
+                var nameRow = nameTable.Rows.FirstOrDefault(r => r.id == row.schoolName);
+                if (nameRow != null) defaultSchoolNames.Add(nameRow.name);
+            }
+        }
+
+        // 2. 이미 해금된 학교 + 기본 6개 학교를 제외한 나머지 후보 명단 작성
+        List<string> candidateNames = nameTable.Rows
+            .Select(r => r.name)
+            .Where(n => !string.IsNullOrEmpty(n) && !_unlockedSchools.Contains(n) && !defaultSchoolNames.Contains(n))
+            .ToList();
+
+        // 3. 후보 명단 랜덤 셔플
+        for (int i = 0; i < candidateNames.Count; i++)
+        {
+            int rnd = UnityEngine.Random.Range(0, candidateNames.Count);
+            string temp = candidateNames[i];
+            candidateNames[i] = candidateNames[rnd];
+            candidateNames[rnd] = temp;
+        }
+
+        // 4. 부족한 개수만큼 뽑아서 해금 목록에 추가
+        for (int i = 0; i < countNeeded && i < candidateNames.Count; i++)
+        {
+            _unlockedSchools.Add(candidateNames[i]);
+            Debug.Log($"[FriendlyMatch] 초기 랜덤 추가 라이벌 학교 배정: {candidateNames[i]}");
+        }
+    }
+    public void RestoreUnlockedSchools(List<string> savedSchools)
+    {
+        _unlockedSchools.Clear();
+        if (savedSchools != null)
+        {
+            foreach (var s in savedSchools) _unlockedSchools.Add(s);
+        }
+    }
     private void CheckMonthlyReset()
     {
         TurnManager tm = FindFirstObjectByType<TurnManager>();

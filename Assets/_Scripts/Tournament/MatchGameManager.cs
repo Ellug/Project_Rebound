@@ -383,6 +383,11 @@ public class MatchGameManager : MonoBehaviour
         _matchLogPresenter.WriteLog($"승자: {winnerTeamName}");
         _matchLogPresenter.WriteLog(MatchGameLogTokens.Divider, MatchLogStyle.Divider);
 
+
+        if (FriendlyMatchManager.Instance != null && _context != null)
+        {
+            FriendlyMatchManager.Instance.UnlockSchool(_context.OpponentTeamName);
+        }
         MatchResult result = new()
         {
             winnerTeamName = winnerTeamName,

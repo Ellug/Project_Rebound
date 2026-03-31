@@ -342,7 +342,7 @@ public class SuddenEventManager : Singleton<SuddenEventManager>
                 if (statInt == 21) student.abnormalState = Student.AbnormalType.Disease;
                 else if (statInt == 22 || statInt == 23) student.abnormalState = Student.AbnormalType.Injury;
 
-          
+
                 if (StudentManager.Instance != null)
                 {
                     StudentManager.Instance.RemoveStudentFromSlots(student);
@@ -535,7 +535,7 @@ public class SuddenEventManager : Singleton<SuddenEventManager>
         TurnManager tm = FindFirstObjectByType<TurnManager>();
         if (tm != null && tm.DateManager != null)
         {
-            firstMsgDate = tm.DateManager.CurrentDate; 
+            firstMsgDate = tm.DateManager.CurrentDate;
 
             string contextStr = eventRow.context.ToString().ToLower();
 
