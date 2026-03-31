@@ -14,4 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EndingCreditDataSO
   _scrollSpeed: 130
   _totalDuration: 88
-  _bgmId: 106
+  _bgmId: 101
+  _logoB3: {fileID: 8585079451540012284, guid: 7a2348a4ecbc40c499a4cfb16f5d532d, type: 3}
+  _logoB3Size: {x: 373, y: 373}
+  _logoKyungil: {fileID: 21300000, guid: 9e5ac103e0aabc5448da115aa8fed217, type: 3}
+  _logoKyungilSize: {x: 822, y: 164.4}
+  _thankYouImage: {fileID: 21300000, guid: de92037ceaf235b4c94e5ea35974e4b6, type: 3}
+  _thankYouSize: {x: 825, y: 143}
