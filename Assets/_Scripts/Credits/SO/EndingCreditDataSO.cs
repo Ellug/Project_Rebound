@@ -2,6 +2,7 @@
 using UnityEngine;
 
 // 엔딩 크레딧 전체 데이터 ScriptableObject
+// Assets 우클릭 → Game/Data/Ending Credit Data 로 생성
 [CreateAssetMenu(menuName = "Game/Data/Ending Credit Data", fileName = "SO_EndingCreditData")]
 public class EndingCreditDataSO : ScriptableObject
 {
@@ -14,7 +15,17 @@ public class EndingCreditDataSO : ScriptableObject
 
     [Header("오디오")]
     [Tooltip("엔딩 BGM ID. 기획서: bgm_start_lp.mp3")]
-    [SerializeField] private int _bgmId = 106;
+    [SerializeField] private int _bgmId = 101;
+
+    [Header("하단 로고 이미지")]
+    [SerializeField] private Sprite _logoB3;
+    [SerializeField] private Vector2 _logoB3Size = new Vector2(200f, 200f);
+
+    [SerializeField] private Sprite _logoKyungil;
+    [SerializeField] private Vector2 _logoKyungilSize = new Vector2(400f, 100f);
+
+    [SerializeField] private Sprite _thankYouImage;
+    [SerializeField] private Vector2 _thankYouSize = new Vector2(600f, 120f);
 
     public float ScrollSpeed => _scrollSpeed;
     public float TotalDuration => _totalDuration;
@@ -22,7 +33,7 @@ public class EndingCreditDataSO : ScriptableObject
 
     public List<EndingCreditLine> GetCreditLines()
     {
-        return new List<EndingCreditLine>
+        var lines = new List<EndingCreditLine>
         {
             // DIRECTOR
             EndingCreditLine.Section("DIRECTOR"),
@@ -43,8 +54,8 @@ public class EndingCreditDataSO : ScriptableObject
 
             EndingCreditLine.Name("성백규 (Sung Baek-gyu)"),
             EndingCreditLine.Role("Deputy Team Lead / Documentation"),
-            EndingCreditLine.Role("System Design"),
-            EndingCreditLine.Role("(Progression, Tutorial, Reward, Save/Load, Tournament)"),
+            EndingCreditLine.Role("System Design (Progression, Tutorial,"),
+            EndingCreditLine.Role("Reward, Save/Load, Tournament)"),
             EndingCreditLine.Role("Data Table Setup & Management"),
             EndingCreditLine.Role("AI Image Resource (Gemini)"),
             EndingCreditLine.Empty(),
@@ -58,8 +69,8 @@ public class EndingCreditDataSO : ScriptableObject
             EndingCreditLine.Empty(),
 
             EndingCreditLine.Name("황영재 (Hwang Young-jae)"),
-            EndingCreditLine.Role("System Design"),
-            EndingCreditLine.Role("(Calendar, Always Events, Roster Management)"),
+            EndingCreditLine.Role("System Design (Calendar,"),
+            EndingCreditLine.Role("Always Events, Roster Management)"),
             EndingCreditLine.Role("Ending Direction"),
             EndingCreditLine.Role("Promotion Video (PV) Production"),
             EndingCreditLine.Empty(),
@@ -75,8 +86,8 @@ public class EndingCreditDataSO : ScriptableObject
 
             EndingCreditLine.Name("김인엽 (Kim In-yeop)"),
             EndingCreditLine.Role("Data Table Management"),
-            EndingCreditLine.Role("Event System Design"),
-            EndingCreditLine.Role("(Random Events, Friendly Match Events)"),
+            EndingCreditLine.Role("Event System Design (Random Events,"),
+            EndingCreditLine.Role("Friendly Match Events)"),
             EndingCreditLine.Role("Match Halftime Choice System"),
             EndingCreditLine.Role("Graduation Reward Upgrade System"),
             EndingCreditLine.Role("TC List Management & Validation"),
@@ -98,7 +109,7 @@ public class EndingCreditDataSO : ScriptableObject
             EndingCreditLine.Section("PROGRAMMING"),
             EndingCreditLine.Empty(),
 
-            EndingCreditLine.Name("이덕기 (Lee Deok-gi)"),
+            EndingCreditLine.Name("이덕기 (Lee Duk-gi)"),
             EndingCreditLine.Role("Lead Programmer"),
             EndingCreditLine.Role("Architecture Design & System Framework"),
             EndingCreditLine.Role("Task & GitHub Version Control Management"),
@@ -167,5 +178,30 @@ public class EndingCreditDataSO : ScriptableObject
             EndingCreditLine.Empty(),
             EndingCreditLine.Empty(),
         };
+
+        // 하단 로고 이미지 3종 — Inspector에서 연결되지 않은 항목은 생략
+        if (_logoB3 != null)
+        {
+            lines.Add(EndingCreditLine.Logo(_logoB3, _logoB3Size));
+            lines.Add(EndingCreditLine.Empty());
+        }
+
+        if (_logoKyungil != null)
+        {
+            lines.Add(EndingCreditLine.Logo(_logoKyungil, _logoKyungilSize));
+            lines.Add(EndingCreditLine.Empty());
+            lines.Add(EndingCreditLine.Empty());
+        }
+
+        if (_thankYouImage != null)
+        {
+            lines.Add(EndingCreditLine.Logo(_thankYouImage, _thankYouSize));
+        }
+
+        lines.Add(EndingCreditLine.Empty());
+        lines.Add(EndingCreditLine.Empty());
+        lines.Add(EndingCreditLine.Empty());
+
+        return lines;
     }
 }

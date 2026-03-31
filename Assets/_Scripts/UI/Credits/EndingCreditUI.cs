@@ -26,6 +26,13 @@ public class EndingCreditUI : MonoBehaviour
     [SerializeField] private TMP_Text _rolePrefab;     // 역할
     [SerializeField] private TMP_Text _specialPrefab;  // SPECIAL THANKS 본문 (미연결 시 _namePrefab 사용)
 
+    [Header("이미지 프리팹")]
+    [Tooltip("크레딧 하단 로고/이미지 줄에 사용할 Image 프리팹. 미연결 시 빈 GameObject에 Image를 자동 추가.")]
+    [SerializeField] private Image _logoPrefab;
+
+    [Tooltip("EndingCreditLine.ImageSize가 (0,0)일 때 적용되는 기본 크기 (px). x=폭, y=높이.")]
+    [SerializeField] private Vector2 _defaultLogoSize = new Vector2(200f, 200f);
+
     [Header("버튼")]
     [SerializeField] private Button _btnSkip;
 
@@ -65,7 +72,6 @@ public class EndingCreditUI : MonoBehaviour
         _scrollSpeed = _creditData.ScrollSpeed;
         _totalDuration = _creditData.TotalDuration;
 
-        BuildCreditLines(_creditData.GetCreditLines());
         PlayBgm();
 
         if (_scrollCoroutine != null)
@@ -74,56 +80,13 @@ public class EndingCreditUI : MonoBehaviour
         _scrollCoroutine = StartCoroutine(CreditSequence());
     }
 
-    private void BuildCreditLines(List<EndingCreditLine> lines)
-    {
-        foreach (Transform child in _creditContainer)
-            Destroy(child.gameObject);
-
-        float viewport = GetViewportHeight();
-        float currentY = -viewport; // 화면 아래 밖에서 시작
-
-        foreach (EndingCreditLine line in lines)
-        {
-            TMP_Text prefab = GetPrefabForType(line.Type);
-            if (prefab == null)
-            {
-                currentY -= _lineSpacing; // Empty: 간격만 추가
-                continue;
-            }
-
-            TMP_Text instance = Instantiate(prefab, _creditContainer);
-            instance.text = line.Text;
-
-            RectTransform rt = instance.rectTransform;
-            rt.anchorMin = new Vector2(0.5f, 1f);
-            rt.anchorMax = new Vector2(0.5f, 1f);
-            rt.pivot = new Vector2(0.5f, 1f);
-            rt.anchoredPosition = new Vector2(0f, currentY);
-
-            float lineHeight = instance.preferredHeight > 0 ? instance.preferredHeight : _lineSpacing;
-            currentY -= lineHeight + _lineSpacing * 1f;
-        }
-
-        _totalHeight = Mathf.Abs(currentY) + viewport;
-        _creditContainer.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, _totalHeight);
-    }
-
-    private TMP_Text GetPrefabForType(EndingCreditLine.LineType type)
-    {
-        return type switch
-        {
-            EndingCreditLine.LineType.Section => _sectionPrefab,
-            EndingCreditLine.LineType.Name => _namePrefab,
-            EndingCreditLine.LineType.Role => _rolePrefab,
-            EndingCreditLine.LineType.Special => _specialPrefab != null ? _specialPrefab : _namePrefab,
-            _ => null
-        };
-    }
-
     private IEnumerator CreditSequence()
     {
         _isSkipRequested = false;
         _isPlaying = true;
+
+        // 줄 빌드 — 한 프레임 대기 후 TMP preferredHeight 확정
+        yield return StartCoroutine(BuildCreditLinesAsync(_creditData.GetCreditLines()));
 
         yield return PlayAnimatorIn();
 
@@ -149,6 +112,129 @@ public class EndingCreditUI : MonoBehaviour
 
         _isPlaying = false;
         FinishCredit();
+    }
+
+    private IEnumerator BuildCreditLinesAsync(List<EndingCreditLine> lines)
+    {
+        foreach (Transform child in _creditContainer)
+            Destroy(child.gameObject);
+
+        yield return null; // Destroy 처리 대기
+
+        float viewport = GetViewportHeight();
+        float currentY = -viewport; // 화면 아래 밖에서 시작
+
+        foreach (EndingCreditLine line in lines)
+        {
+            if (line.Type == EndingCreditLine.LineType.Empty)
+            {
+                currentY -= _lineSpacing;
+                continue;
+            }
+
+            if (line.Type == EndingCreditLine.LineType.Logo)
+            {
+                currentY = PlaceLogoLine(line, currentY);
+                continue;
+            }
+
+            TMP_Text prefab = GetPrefabForType(line.Type);
+            if (prefab == null) continue;
+
+            TMP_Text instance = Instantiate(prefab, _creditContainer);
+            instance.text = line.Text;
+
+            RectTransform rt = instance.rectTransform;
+            rt.anchorMin = new Vector2(0.5f, 1f);
+            rt.anchorMax = new Vector2(0.5f, 1f);
+            rt.pivot = new Vector2(0.5f, 1f);
+            rt.anchoredPosition = new Vector2(0f, currentY);
+
+            // TMP preferredHeight는 레이아웃 갱신 전 0 반환 — 강제 갱신
+            Canvas.ForceUpdateCanvases();
+            float lineHeight = instance.preferredHeight > 0 ? instance.preferredHeight : _lineSpacing;
+            currentY -= lineHeight + _lineSpacing * 0.3f;
+        }
+
+        _totalHeight = Mathf.Abs(currentY) + viewport;
+        _creditContainer.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, _totalHeight);
+    }
+
+    // Logo 타입 줄을 컨테이너에 배치하고 다음 currentY를 반환
+    // EndingCreditLine.ImageSize 규칙:
+    //   (w, h) : 폭·높이 모두 고정
+    //   (w, 0) : 폭 고정, 높이는 원본 비율로 자동 계산
+    //   (0, h) : 높이 고정, 폭은 원본 비율로 자동 계산
+    //   (0, 0) : _defaultLogoSize 사용
+    private float PlaceLogoLine(EndingCreditLine line, float currentY)
+    {
+        if (line.Sprite == null) return currentY;
+
+        Image instance;
+        if (_logoPrefab != null)
+        {
+            instance = Instantiate(_logoPrefab, _creditContainer);
+        }
+        else
+        {
+            GameObject go = new GameObject("CreditLogo", typeof(RectTransform), typeof(Image));
+            go.transform.SetParent(_creditContainer, false);
+            instance = go.GetComponent<Image>();
+        }
+
+        instance.sprite = line.Sprite;
+        instance.preserveAspect = true;
+        instance.raycastTarget = false;
+
+        float srcW = line.Sprite.rect.width;
+        float srcH = line.Sprite.rect.height;
+        float aspect = srcW / srcH;
+
+        Vector2 size = (line.ImageSize == Vector2.zero) ? _defaultLogoSize : line.ImageSize;
+
+        float width, height;
+
+        if (size.x > 0f && size.y > 0f)
+        {
+            width = size.x;
+            height = size.y;
+        }
+        else if (size.x > 0f)
+        {
+            width = size.x;
+            height = width / aspect;
+        }
+        else if (size.y > 0f)
+        {
+            height = size.y;
+            width = height * aspect;
+        }
+        else
+        {
+            width = srcW;
+            height = srcH;
+        }
+
+        RectTransform rt = instance.rectTransform;
+        rt.anchorMin = new Vector2(0.5f, 1f);
+        rt.anchorMax = new Vector2(0.5f, 1f);
+        rt.pivot = new Vector2(0.5f, 1f);
+        rt.sizeDelta = new Vector2(width, height);
+        rt.anchoredPosition = new Vector2(0f, currentY);
+
+        return currentY - height - _lineSpacing * 0.3f;
+    }
+
+    private TMP_Text GetPrefabForType(EndingCreditLine.LineType type)
+    {
+        return type switch
+        {
+            EndingCreditLine.LineType.Section => _sectionPrefab,
+            EndingCreditLine.LineType.Name => _namePrefab,
+            EndingCreditLine.LineType.Role => _rolePrefab,
+            EndingCreditLine.LineType.Special => _specialPrefab != null ? _specialPrefab : _namePrefab,
+            _ => null
+        };
     }
 
     private IEnumerator PlayAnimatorIn()

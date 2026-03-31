@@ -6,7 +6,6 @@ public static class EndingConditionChecker
 {
     private const int FinalYear = 4; // 1년차 시작 기준 4년차
 
-    // GameManager에서 현재 연차와 날짜를 받아 판정
     public static bool IsEndingReached(GameManager gameManager)
     {
         if (gameManager == null)
@@ -18,7 +17,7 @@ public static class EndingConditionChecker
         return IsEndingReached(gameManager.CurrentYear, gameManager.CurrentDate);
     }
 
-    // 연차와 날짜를 직접 받아 판정 (유닛 테스트용)
+    // 연차·날짜를 직접 받아 판정 (테스트용)
     public static bool IsEndingReached(int currentYear, DateTime currentDate)
     {
         if (currentYear < FinalYear)
