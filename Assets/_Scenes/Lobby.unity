@@ -12815,7 +12815,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EndingManager
   _endingCreditUI: {fileID: 405262991}
-  _autoTriggerOnStart: 0
+  _autoTriggerOnStart: 1
 --- !u!4 &958815367
 Transform:
   m_ObjectHideFlags: 0
