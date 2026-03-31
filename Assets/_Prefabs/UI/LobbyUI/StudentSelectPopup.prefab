@@ -471,7 +471,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -20, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: -40, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &993216354963078392
@@ -488,15 +488,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.GridLayoutGroup
   m_Padding:
     m_Left: 0
-    m_Right: 0
+    m_Right: 40
     m_Top: 0
     m_Bottom: 250
-  m_ChildAlignment: 0
+  m_ChildAlignment: 1
   m_StartCorner: 0
   m_StartAxis: 0
   m_CellSize: {x: 414, y: 493}
   m_Spacing: {x: 22, y: 38}
-  m_Constraint: 0
+  m_Constraint: 1
   m_ConstraintCount: 2
 --- !u!114 &299648880852205016
 MonoBehaviour:
@@ -522,6 +522,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6412038805686240035}
   - component: {fileID: 5655431246991369327}
+  - component: {fileID: -1120819533905994846}
   m_Layer: 0
   m_Name: StudentSelectPopup
   m_TagString: Untagged
@@ -591,6 +592,7 @@ MonoBehaviour:
   _dotActiveScale: 1.4
   _dotNormalColor: {r: 0.75, g: 0.75, b: 0.75, a: 1}
   _dotActiveColor: {r: 1, g: 1, b: 1, a: 1}
+  _animator: {fileID: -1120819533905994846}
   _scrollRect: {fileID: 4858785308997978918}
   _buttonClose: {fileID: 0}
   _cardRoot: {fileID: 6488850486929087961}
@@ -598,6 +600,33 @@ MonoBehaviour:
   _btnComplete: {fileID: 3023424442386322666}
   _txtComplete: {fileID: 1651729042115086910}
   _showStatsOnOpen: 0
+  _selfAnimator: {fileID: -1120819533905994846}
+--- !u!114 &-1120819533905994846
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5622815969563848638}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54caaa4d7717c834b9150a5328b13bfe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PopupAnimator
+  _type: 1
+  _panelRoot: {fileID: 6318306778101705442}
+  _hiddenOffsetX: 0
+  _hiddenOffsetY: -400
+  _slideInDuration: 0.2
+  _slideOutDuration: 0.28
+  _slideInEase: 9
+  _slideOutEase: 8
+  _popInDuration: 0.18
+  _popOutDuration: 0.14
+  _popInEase: 27
+  _popOutEase: 26
+  _popOvershoot: 2
+  _disableRaycastWhileTween: 1
 --- !u!1 &6435418160760961662
 GameObject:
   m_ObjectHideFlags: 0
@@ -843,11 +872,11 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 6318306778101705442}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 1, y: 1}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -731.58, y: -126}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 103, y: -126}
   m_SizeDelta: {x: 123, y: 74}
-  m_Pivot: {x: 1, y: 1}
+  m_Pivot: {x: 0, y: 1}
 --- !u!222 &5894609727161833543
 CanvasRenderer:
   m_ObjectHideFlags: 0

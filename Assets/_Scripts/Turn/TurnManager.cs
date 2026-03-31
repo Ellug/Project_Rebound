@@ -19,6 +19,7 @@ public class TurnManager : MonoBehaviour
     private bool _isTurnRunning;
     private TurnState _turnState = TurnState.WaitingForInput;
     private GamePhase _currentPhase = GamePhase.Init;
+    private readonly SuddenEvent _abnormalEvent = new SuddenEvent();
 
     public DateManager DateManager => _dateManager;
     public TurnContext CurrentContext => _currentContext;
@@ -98,10 +99,7 @@ public class TurnManager : MonoBehaviour
         {
             if (SuddenEventManager.Instance != null)
             {
-                SuddenEventManager.Instance.EvaluateEvents(
-                    SuddenEventConditionFlags.Daily,
-                    SuddenEventContextFlags.PreProcess
-                );
+                SuddenEventManager.Instance.ResetDailyEventCount();
             }
 
             SetState(TurnState.PreTurn);
@@ -127,8 +125,17 @@ public class TurnManager : MonoBehaviour
                     SuddenEventContextFlags.PostProcess
                 );
             }
-                _dateManager.AdvanceDay();
+            _dateManager.AdvanceDay();
             _turnIndex++;
+            ProcessDayStartAbnormal();
+
+            if (SuddenEventManager.Instance != null)
+            {
+                SuddenEventManager.Instance.EvaluateEvents(
+                    SuddenEventConditionFlags.Daily,
+                    SuddenEventContextFlags.PreProcess
+                );
+            }
 
             SetState(TurnState.WaitingForInput);
             OnTurnCompleted?.Invoke(_currentContext);
@@ -172,6 +179,55 @@ public class TurnManager : MonoBehaviour
         _turnState = newState;
         OnTurnStateChanged?.Invoke(newState);
     }
+    // 상태이상 처리
+    private void ProcessDayStartAbnormal()
+    {
+        if (StudentManager.Instance == null)
+            return;
+
+        List<Student> students = StudentManager.Instance.Students;
+        if (students == null || students.Count == 0)
+            return;
+
+        List<string> activeAbnormals = new List<string>();
+
+        foreach (Student student in students)
+        {
+            if (student == null) continue;
+
+            Student.AbnormalType beforeState = student.abnormalState;
+            int beforeRemainTurn = student.abnormalRemainTurn;
+
+            if (student.abnormalState != Student.AbnormalType.None)
+            {
+                _abnormalEvent.TickAbnormal(student);
+            }
+
+            if (beforeState != student.abnormalState || beforeRemainTurn != student.abnormalRemainTurn)
+            {
+                StudentManager.Instance.NotifyStudentModified(student);
+            }
+
+            if (student.abnormalState != Student.AbnormalType.None)
+            {
+                activeAbnormals.Add($"{student.studentName}({GetAbnormalTypeLabel(student.abnormalState)}, {student.abnormalRemainTurn}턴)");
+            }
+        }
+
+        Debug.Log(activeAbnormals.Count > 0
+            ? $"[TurnManager] 날짜 시작 상태이상 현황 | {string.Join(", ", activeAbnormals)}"
+            : "[TurnManager] 날짜 시작 상태이상 현황 | 없음");
+    }
+
+    private string GetAbnormalTypeLabel(Student.AbnormalType abnormalType)
+    {
+        return abnormalType switch
+        {
+            Student.AbnormalType.Disease => "질병",
+            Student.AbnormalType.Injury => "부상",
+            _ => "없음"
+        };
+    }
 
     // 로비로 복구시 턴, 데이트 데이터 복구
     public void RestoreRuntimeState(DateTime currentDate, int turnIndex, int dayIndex, int currentYear, GamePhase phase)
@@ -205,6 +261,10 @@ public class TurnManager : MonoBehaviour
         {
             _dateManager.AdvanceDay();
             _turnIndex++;
+        }
+        if (SuddenEventManager.Instance != null)
+        {
+            SuddenEventManager.Instance.TickTermEffects();
         }
         // 이게 갱신 시키는거 같음
         InitTurnContext(TurnActionType.Rest);

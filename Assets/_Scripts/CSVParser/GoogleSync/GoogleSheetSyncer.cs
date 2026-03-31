@@ -13,25 +13,50 @@ public static class GoogleSheetSyncer
     private const string CSV_FOLDER = "Assets/CSV";
     private const int TIMEOUT_SECONDS = 30;
 
-    // 구글 시트 동기화부터 전체 임포트/등록까지 데이터 파이프라인을 실행한다.
-    [MenuItem("Tools/Data/Sync from Google Sheets")]
+    // 시트 동기화 + 임포트 + 등록 + 클라우드 업로드 실행
+    [MenuItem("Tools/Data/Sync from Google Sheets (Full)")]
     public static void SyncAll()
     {
-        if (!EditorUtility.DisplayDialog("Sync from Google Sheets",
-            "Run pipeline?\n\n1) Download changed CSV from Google Sheets\n2) Import all CSV tables\n3) Sync TableLoadConfig and Addressables",
-            "Run", "Cancel"))
+        RunSyncPipeline(includeCloudUpload: true);
+    }
+
+    // 시트 동기화 + 임포트 + 등록까지만 실행
+    [MenuItem("Tools/Data/Sync from Google Sheets (No Cloud Upload)")]
+    public static void SyncOnly()
+    {
+        RunSyncPipeline(includeCloudUpload: false);
+    }
+
+    // 실행 모드별 파이프라인 진입점
+    public static void RunSyncPipeline(bool includeCloudUpload)
+    {
+        if (includeCloudUpload && !GoogleSheetCloudUploader.TryValidateUgsCliForPipeline(out string ugsValidationMessage))
+        {
+            Debug.LogError($"[GoogleSheetSyncer] {ugsValidationMessage}");
+            EditorUtility.DisplayDialog("Sync 차단 - UGS CLI 필요", ugsValidationMessage, "확인");
+            return;
+        }
+
+        string steps = includeCloudUpload
+            ? "1) Download changed CSV from Google Sheets\n2) Import all CSV tables\n3) Sync TableLoadConfig and Addressables\n4) Build Addressables and upload to CCD (if there are changes)"
+            : "1) Download changed CSV from Google Sheets\n2) Import all CSV tables\n3) Sync TableLoadConfig and Addressables\n4) Stop before cloud upload";
+
+        if (!EditorUtility.DisplayDialog("Sync from Google Sheets", $"Run pipeline?\n\n{steps}", "Run", "Cancel"))
             return;
 
-        SyncTables(GoogleSheetSyncConfig.Tables);
+        SyncTables(GoogleSheetSyncConfig.Tables, includeCloudUpload);
     }
 
     // 시트 목록을 순회하며 다운로드, 비교, 임포트를 처리한다.
-    private static void SyncTables(IReadOnlyList<SheetTableEntry> tables)
+    private static void SyncTables(IReadOnlyList<SheetTableEntry> tables, bool includeCloudUpload)
     {
         int total = tables.Count;
         int downloaded = 0, skipped = 0, failed = 0;
-        bool importedNow = true;
+        bool importedNow;
+        bool deferredByCompile;
         var changedTables = new List<string>();
+        var failedTables = new List<string>();
+        GoogleSheetCloudUploadResult cloudResult;
 
         try
         {
@@ -41,12 +66,13 @@ public static class GoogleSheetSyncer
                 string tableName = Path.GetFileNameWithoutExtension(entry.CsvFileName);
                 float progress = (float)i / total;
 
-                EditorUtility.DisplayProgressBar("Syncing from Google Sheets", $"Checking {tableName}... ({i + 1}/{total})", progress);
+                EditorUtility.DisplayProgressBar("데이터 동기화", $"로딩 중... ({i + 1}/{total})", progress);
 
                 string csvContent = DownloadCsvSync(entry.SheetUrl);
                 if (csvContent == null)
                 {
                     Debug.LogError($"[GoogleSheetSyncer] Failed to download: {tableName}");
+                    failedTables.Add($"{tableName} (download failed: {entry.SheetUrl})");
                     failed++;
                     continue;
                 }
@@ -60,9 +86,18 @@ public static class GoogleSheetSyncer
                     continue;
                 }
 
-                File.WriteAllText(csvPath, csvContent, new UTF8Encoding(encoderShouldEmitUTF8Identifier: false));
-                downloaded++;
-                changedTables.Add(tableName);
+                try
+                {
+                    File.WriteAllText(csvPath, csvContent, new UTF8Encoding(encoderShouldEmitUTF8Identifier: false));
+                    downloaded++;
+                    changedTables.Add(tableName);
+                }
+                catch (Exception e)
+                {
+                    Debug.LogError($"[GoogleSheetSyncer] Failed to write CSV: {tableName}\n{e.Message}");
+                    failedTables.Add($"{tableName} (write failed: {e.Message})");
+                    failed++;
+                }
             }
         }
         finally
@@ -71,14 +106,50 @@ public static class GoogleSheetSyncer
         }
 
         AssetDatabase.Refresh();
-        // 시트 동기화 후에는 전체 임포트 + 등록 동기화를 단일 경로로 실행
-        importedNow = CsvBatchImporter.ImportAllTables(showDialog: false);
+        try
+        {
+            // 시트 동기화 후에는 전체 임포트 + 등록 동기화를 단일 경로로 실행
+            EditorUtility.DisplayProgressBar("데이터 동기화", "로딩 중... (임포트)", 0.7f);
+            importedNow = CsvBatchImporter.ImportAllTables(showDialog: false, out deferredByCompile, allowCompileDefer: true);
+
+            if (includeCloudUpload)
+            {
+                EditorUtility.DisplayProgressBar("데이터 동기화", "로딩 중... (클라우드 업로드)", 0.9f);
+                if (importedNow && downloaded > 0)
+                    cloudResult = GoogleSheetCloudUploader.BuildAndUploadAddressables();
+                else if (deferredByCompile)
+                {
+                    if (downloaded > 0)
+                        CsvImportCompileBridge.QueueCloudUploadAfterPendingImport();
+                    cloudResult = GoogleSheetCloudUploadResult.Skip("Skipped cloud upload because import is deferred until script compile.");
+                }
+                else if (!importedNow)
+                    cloudResult = GoogleSheetCloudUploadResult.Skip("Skipped cloud upload because import failed.");
+                else
+                    cloudResult = GoogleSheetCloudUploadResult.Skip("Skipped cloud upload because no CSV changes were detected.");
+            }
+            else
+            {
+                cloudResult = GoogleSheetCloudUploadResult.Skip("Skipped cloud upload because this mode only runs Syncer.");
+            }
+        }
+        finally
+        {
+            EditorUtility.ClearProgressBar();
+        }
 
         string summary = $"Pipeline Complete!\n\nDownloaded: {downloaded}\nSkipped (no change): {skipped}\nFailed: {failed}";
         if (changedTables.Count > 0)
             summary += $"\n\nChanged tables:\n- {string.Join("\n- ", changedTables)}";
-        if (!importedNow)
+        if (failedTables.Count > 0)
+            summary += $"\n\nFailed tables:\n- {string.Join("\n- ", failedTables)}";
+        if (deferredByCompile)
             summary += "\n\nSO script was generated. Import will resume automatically after compile.";
+        else if (!importedNow)
+            summary += "\n\nCSV import failed. Check Console for details.";
+        summary += $"\n\nCloud Upload:\n{cloudResult.Message}";
+        if (!cloudResult.Success && !cloudResult.Skipped)
+            summary += "\n\nCloud upload failed. Check Console for details.";
 
         EditorUtility.DisplayDialog("Data Pipeline", summary, "OK");
     }

@@ -1,0 +1,447 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ce87a846ff2da045ba0ec1563d4d059, type: 3}
+  m_Name: SO_EquipmentUpgradeTable
+  m_EditorClassIdentifier: Assembly-CSharp::EquipmentUpgradeTableSO
+  _rows:
+  - id: upgrade_0
+    presentCategory: category_001
+    outlineImage: img_outline_gray
+    tierName: "\uBBF8\uAC15\uD654"
+    rank: 0
+    target1: fame
+    amount1: 0
+    target2: 
+    amount: 0
+  - id: upgrade_1
+    presentCategory: category_001
+    outlineImage: image_outline_white
+    tierName: "\uB178\uBA40"
+    rank: 1
+    target1: fame
+    amount1: 5
+    target2: 
+    amount: 0
+  - id: upgrade_2
+    presentCategory: category_001
+    outlineImage: image_outline_white
+    tierName: "\uB178\uBA40+"
+    rank: 2
+    target1: fame
+    amount1: 10
+    target2: 
+    amount: 0
+  - id: upgrade_3
+    presentCategory: category_001
+    outlineImage: image_outline_green
+    tierName: "\uC5B8\uCEE4\uBA3C"
+    rank: 3
+    target1: fame
+    amount1: 10
+    target2: 
+    amount: 0
+  - id: upgrade_4
+    presentCategory: category_001
+    outlineImage: image_outline_green
+    tierName: "\uC5B8\uCEE4\uBA3C+"
+    rank: 4
+    target1: fame
+    amount1: 10
+    target2: 
+    amount: 0
+  - id: upgrade_5
+    presentCategory: category_001
+    outlineImage: image_outline_blue
+    tierName: "\uB808\uC5B4"
+    rank: 5
+    target1: fame
+    amount1: 15
+    target2: 
+    amount: 0
+  - id: upgrade_6
+    presentCategory: category_001
+    outlineImage: image_outline_blue
+    tierName: "\uB808\uC5B4+"
+    rank: 6
+    target1: fame
+    amount1: 15
+    target2: 
+    amount: 0
+  - id: upgrade_7
+    presentCategory: category_001
+    outlineImage: image_outline_purple
+    tierName: "\uC5D0\uD53D"
+    rank: 7
+    target1: fame
+    amount1: 15
+    target2: 
+    amount: 0
+  - id: upgrade_8
+    presentCategory: category_001
+    outlineImage: image_outline_purple
+    tierName: "\uC5D0\uD53D+"
+    rank: 8
+    target1: fame
+    amount1: 15
+    target2: 
+    amount: 0
+  - id: upgrade_9
+    presentCategory: category_001
+    outlineImage: image_outline_orange
+    tierName: "\uB808\uC804\uB354\uB9AC"
+    rank: 9
+    target1: fame
+    amount1: 15
+    target2: 
+    amount: 0
+  - id: upgrade_10
+    presentCategory: category_001
+    outlineImage: image_outline_orange
+    tierName: "\uB808\uC804\uB354\uB9AC+"
+    rank: 10
+    target1: fame
+    amount1: 15
+    target2: 
+    amount: 0
+  - id: upgrade_11
+    presentCategory: category_001
+    outlineImage: image_outline_red
+    tierName: "\uBBF8\uC2A4\uD2F1"
+    rank: 11
+    target1: fame
+    amount1: 20
+    target2: 
+    amount: 0
+  - id: upgrade_12
+    presentCategory: category_001
+    outlineImage: image_outline_red
+    tierName: "\uBBF8\uC2A4\uD2F1+"
+    rank: 12
+    target1: fame
+    amount1: 20
+    target2: 
+    amount: 0
+  - id: upgrade_13
+    presentCategory: category_001
+    outlineImage: image_outline_rainbow
+    tierName: "\uC5BC\uD2F0\uBC0B"
+    rank: 13
+    target1: fame
+    amount1: 20
+    target2: 
+    amount: 0
+  - id: upgrade_14
+    presentCategory: category_001
+    outlineImage: image_outline_rainbow
+    tierName: "\uC5BC\uD2F0\uBC0B+"
+    rank: 14
+    target1: fame
+    amount1: 20
+    target2: 
+    amount: 0
+  - id: upgrade_over_14
+    presentCategory: category_001
+    outlineImage: image_outline_rainbow
+    tierName: "\uC5BC\uD2F0\uBC0B+"
+    rank: 14
+    target1: monthly_grant
+    amount1: 1.1
+    target2: 
+    amount: 0
+  - id: upgrade_0
+    presentCategory: category_002
+    outlineImage: img_outline_gray
+    tierName: "\uBBF8\uAC15\uD654"
+    rank: 0
+    target1: experience
+    amount1: 0
+    target2: 
+    amount: 0
+  - id: upgrade_1
+    presentCategory: category_002
+    outlineImage: image_outline_white
+    tierName: "\uB178\uBA40"
+    rank: 1
+    target1: experience
+    amount1: 1.05
+    target2: 
+    amount: 0
+  - id: upgrade_2
+    presentCategory: category_002
+    outlineImage: image_outline_white
+    tierName: "\uB178\uBA40+"
+    rank: 2
+    target1: experience
+    amount1: 1.15
+    target2: 
+    amount: 0
+  - id: upgrade_3
+    presentCategory: category_002
+    outlineImage: image_outline_green
+    tierName: "\uC5B8\uCEE4\uBA3C"
+    rank: 3
+    target1: experience
+    amount1: 1.25
+    target2: 
+    amount: 0
+  - id: upgrade_4
+    presentCategory: category_002
+    outlineImage: image_outline_green
+    tierName: "\uC5B8\uCEE4\uBA3C+"
+    rank: 4
+    target1: experience
+    amount1: 1.35
+    target2: 
+    amount: 0
+  - id: upgrade_5
+    presentCategory: category_002
+    outlineImage: image_outline_blue
+    tierName: "\uB808\uC5B4"
+    rank: 5
+    target1: experience
+    amount1: 1.45
+    target2: 
+    amount: 0
+  - id: upgrade_6
+    presentCategory: category_002
+    outlineImage: image_outline_blue
+    tierName: "\uB808\uC5B4+"
+    rank: 6
+    target1: experience
+    amount1: 1.6
+    target2: 
+    amount: 0
+  - id: upgrade_7
+    presentCategory: category_002
+    outlineImage: image_outline_purple
+    tierName: "\uC5D0\uD53D"
+    rank: 7
+    target1: experience
+    amount1: 1.65
+    target2: 
+    amount: 0
+  - id: upgrade_8
+    presentCategory: category_002
+    outlineImage: image_outline_purple
+    tierName: "\uC5D0\uD53D+"
+    rank: 8
+    target1: experience
+    amount1: 1.7
+    target2: 
+    amount: 0
+  - id: upgrade_9
+    presentCategory: category_002
+    outlineImage: image_outline_orange
+    tierName: "\uB808\uC804\uB354\uB9AC"
+    rank: 9
+    target1: experience
+    amount1: 1.75
+    target2: 
+    amount: 0
+  - id: upgrade_10
+    presentCategory: category_002
+    outlineImage: image_outline_orange
+    tierName: "\uB808\uC804\uB354\uB9AC+"
+    rank: 10
+    target1: experience
+    amount1: 1.8
+    target2: 
+    amount: 0
+  - id: upgrade_11
+    presentCategory: category_002
+    outlineImage: image_outline_red
+    tierName: "\uBBF8\uC2A4\uD2F1"
+    rank: 11
+    target1: experience
+    amount1: 1.85
+    target2: 
+    amount: 0
+  - id: upgrade_12
+    presentCategory: category_002
+    outlineImage: image_outline_red
+    tierName: "\uBBF8\uC2A4\uD2F1+"
+    rank: 12
+    target1: experience
+    amount1: 1.9
+    target2: 
+    amount: 0
+  - id: upgrade_13
+    presentCategory: category_002
+    outlineImage: image_outline_rainbow
+    tierName: "\uC5BC\uD2F0\uBC0B"
+    rank: 13
+    target1: experience
+    amount1: 1.95
+    target2: 
+    amount: 0
+  - id: upgrade_14
+    presentCategory: category_002
+    outlineImage: image_outline_rainbow
+    tierName: "\uC5BC\uD2F0\uBC0B+"
+    rank: 14
+    target1: experience
+    amount1: 2
+    target2: 
+    amount: 0
+  - id: upgrade_over_14
+    presentCategory: category_002
+    outlineImage: image_outline_rainbow
+    tierName: "\uC5BC\uD2F0\uBC0B+"
+    rank: 14
+    target1: monthly_grant
+    amount1: 1.1
+    target2: 
+    amount: 0
+  - id: upgrade_0
+    presentCategory: category_003
+    outlineImage: img_outline_gray
+    tierName: "\uBBF8\uAC15\uD654"
+    rank: 0
+    target1: condition_efficiency
+    amount1: 1
+    target2: jump
+    amount: 0
+  - id: upgrade_1
+    presentCategory: category_003
+    outlineImage: image_outline_white
+    tierName: "\uB178\uBA40"
+    rank: 1
+    target1: condition_efficiency
+    amount1: 0.95
+    target2: jump
+    amount: 0
+  - id: upgrade_2
+    presentCategory: category_003
+    outlineImage: image_outline_white
+    tierName: "\uB178\uBA40+"
+    rank: 2
+    target1: condition_efficiency
+    amount1: 0.95
+    target2: jump
+    amount: 0
+  - id: upgrade_3
+    presentCategory: category_003
+    outlineImage: image_outline_green
+    tierName: "\uC5B8\uCEE4\uBA3C"
+    rank: 3
+    target1: condition_efficiency
+    amount1: 0.94
+    target2: jump
+    amount: 0
+  - id: upgrade_4
+    presentCategory: category_003
+    outlineImage: image_outline_green
+    tierName: "\uC5B8\uCEE4\uBA3C+"
+    rank: 4
+    target1: condition_efficiency
+    amount1: 0.93
+    target2: jump
+    amount: 0
+  - id: upgrade_5
+    presentCategory: category_003
+    outlineImage: image_outline_blue
+    tierName: "\uB808\uC5B4"
+    rank: 5
+    target1: condition_efficiency
+    amount1: 0.92
+    target2: jump
+    amount: 0
+  - id: upgrade_6
+    presentCategory: category_003
+    outlineImage: image_outline_blue
+    tierName: "\uB808\uC5B4+"
+    rank: 6
+    target1: condition_efficiency
+    amount1: 0.91
+    target2: jump
+    amount: 0
+  - id: upgrade_7
+    presentCategory: category_003
+    outlineImage: image_outline_purple
+    tierName: "\uC5D0\uD53D"
+    rank: 7
+    target1: condition_efficiency
+    amount1: 0.91
+    target2: jump
+    amount: 0
+  - id: upgrade_8
+    presentCategory: category_003
+    outlineImage: image_outline_purple
+    tierName: "\uC5D0\uD53D+"
+    rank: 8
+    target1: condition_efficiency
+    amount1: 0.9
+    target2: jump
+    amount: 0
+  - id: upgrade_9
+    presentCategory: category_003
+    outlineImage: image_outline_orange
+    tierName: "\uB808\uC804\uB354\uB9AC"
+    rank: 9
+    target1: condition_efficiency
+    amount1: 0.89
+    target2: jump
+    amount: 0
+  - id: upgrade_10
+    presentCategory: category_003
+    outlineImage: image_outline_orange
+    tierName: "\uB808\uC804\uB354\uB9AC+"
+    rank: 10
+    target1: condition_efficiency
+    amount1: 0.88
+    target2: jump
+    amount: 0
+  - id: upgrade_11
+    presentCategory: category_003
+    outlineImage: image_outline_red
+    tierName: "\uBBF8\uC2A4\uD2F1"
+    rank: 11
+    target1: condition_efficiency
+    amount1: 0.87
+    target2: jump
+    amount: 1
+  - id: upgrade_12
+    presentCategory: category_003
+    outlineImage: image_outline_red
+    tierName: "\uBBF8\uC2A4\uD2F1+"
+    rank: 12
+    target1: condition_efficiency
+    amount1: 0.86
+    target2: jump
+    amount: 2
+  - id: upgrade_13
+    presentCategory: category_003
+    outlineImage: image_outline_rainbow
+    tierName: "\uC5BC\uD2F0\uBC0B"
+    rank: 13
+    target1: condition_efficiency
+    amount1: 0.85
+    target2: jump
+    amount: 3
+  - id: upgrade_14
+    presentCategory: category_003
+    outlineImage: image_outline_rainbow
+    tierName: "\uC5BC\uD2F0\uBC0B+"
+    rank: 14
+    target1: condition_efficiency
+    amount1: 0.85
+    target2: jump
+    amount: 4
+  - id: upgrade_over_14
+    presentCategory: category_003
+    outlineImage: image_outline_rainbow
+    tierName: "\uC5BC\uD2F0\uBC0B+"
+    rank: 14
+    target1: monthly_grant
+    amount1: 1.1
+    target2: jump
+    amount: 0

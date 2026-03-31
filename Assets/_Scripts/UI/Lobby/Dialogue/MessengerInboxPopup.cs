@@ -16,6 +16,9 @@ public class MessengerInboxPopup : UIBase
     [SerializeField] private Button _btnFriendlyMatch;
     [SerializeField] private FriendlyMatchSelectPopup _friendlyMatchSelectPopup;
 
+    [Header("애니메이션")]
+    [SerializeField] private PopupAnimator _animator;
+
     private MessengerRoomPopup _currentRoomPopup;
     private List<GameObject> _spawnedItems = new List<GameObject>();
     private bool _isInited;
@@ -41,17 +44,57 @@ public class MessengerInboxPopup : UIBase
 
     public override void Open()
     {
-        base.Open();
+        // 재구독 (씬 복귀 시 중복 방지)
+        if (MessengerManager.Instance != null)
+        {
+            MessengerManager.Instance.OnRoomListUpdated -= RefreshList;
+            MessengerManager.Instance.OnRoomListUpdated += RefreshList;
+        }
+
+        if (_animator == null)
+        {
+            Debug.LogWarning("[MessengerInboxPopup] _animator가 연결되지 않았습니다. 인스펙터에서 PopupAnimator를 연결해주세요.");
+            base.Open();
+        }
+        else
+        {
+            _animator.Initialize();
+            base.Open();
+            _animator.PlayIn();
+        }
+
         if (UIManager.Instance != null) UIManager.Instance.PushMessenger(this);
 
         RefreshList();
         RefreshFriendlyMatchUI();
     }
+
     public override void Close()
     {
+        // 구독 해제
+        if (MessengerManager.Instance != null)
+            MessengerManager.Instance.OnRoomListUpdated -= RefreshList;
+
         if (UIManager.Instance != null) UIManager.Instance.PopMessenger(this);
 
-        base.Close();
+        if (_animator == null || !gameObject.activeSelf)
+        {
+            base.Close();
+        }
+        else
+        {
+            PlayPopupCloseSfx();
+            _animator.PlayOut(() =>
+            {
+                gameObject.SetActive(false);
+
+                if (SuddenEventManager.Instance != null)
+                {
+                    SuddenEventManager.Instance.ProcessNextPopup();
+                }
+            });
+            return;
+        }
 
         if (SuddenEventManager.Instance != null)
         {
@@ -81,6 +124,13 @@ public class MessengerInboxPopup : UIBase
             slot.Setup(room, this);
             slot.gameObject.SetActive(true);
             _spawnedItems.Add(slot.gameObject);
+        }
+
+        Canvas.ForceUpdateCanvases();
+        UnityEngine.UI.ScrollRect scrollRect = GetComponentInChildren<UnityEngine.UI.ScrollRect>();
+        if (scrollRect != null)
+        {
+            scrollRect.verticalNormalizedPosition = 1f;
         }
     }
 
@@ -132,5 +182,15 @@ public class MessengerInboxPopup : UIBase
                 _friendlyMatchSelectPopup.Open();
             }
         });
+    }
+
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
+
+        if (MessengerManager.Instance != null)
+        {
+            MessengerManager.Instance.OnRoomListUpdated -= RefreshList;
+        }
     }
 }

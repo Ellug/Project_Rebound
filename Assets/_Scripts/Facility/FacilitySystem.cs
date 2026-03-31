@@ -89,6 +89,9 @@ public class FacilitySystem : Singleton<FacilitySystem>
 
         Debug.Log($"{facility} 업그레이드 Lv {next.facilityLv}");
 
+        // 업그레이드 직후 누적 보너스 확인 로그
+        LogAccumulatedBonus(facility);
+
         if (SaveManager.Instance != null)
         {
             Debug.Log($"[FacilitySystem] 업그레이드 저장 | facility={facility} | level={next.facilityLv}");
@@ -116,25 +119,25 @@ public class FacilitySystem : Singleton<FacilitySystem>
     // 학교
     public int GetConditionDecayBonus()
     {
-        return GetCurrentData("school").conditionDecayEfficiency;
+        return GetAccumulatedBonus("school", r => r.conditionDecayEfficiency);
     }
 
     // 체육관
     public int GetTrainingExpBonus()
     {
-        return GetCurrentData("gym").trainingExpEfficiency;
+        return GetAccumulatedBonus("gym", r => r.trainingExpEfficiency);
     }
 
     // 상담
     public int GetMentalBonus()
     {
-        return GetCurrentData("counselingcenter").trainingExpEfficiency;
+        return GetAccumulatedBonus("counselingcenter", r => r.trainingExpEfficiency);
     }
 
     // 식당
     public int GetCafeteriaBonus()
     {
-        return GetCurrentData("cafeteria").trainingExpEfficiency;
+        return GetAccumulatedBonus("cafeteria", r => r.trainingExpEfficiency);
     }
 
     public int GetFinalUpgradeCost(string facility)
@@ -159,5 +162,66 @@ public class FacilitySystem : Singleton<FacilitySystem>
         Debug.Log($"[FacilitySystem] {facility} 업그레이드 비용 계산 | 기본:{baseCost} | 할인:{discountPercent}% | 배율:{multiplier} | 최종:{finalCost}");
 
         return Mathf.Max(1, finalCost);
+    }
+
+    // 공통 누적 합산 헬퍼
+    // Lv1부터 현재 레벨까지 각 행의 값을 더해 총 보너스를 반환
+    private int GetAccumulatedBonus(string facility, System.Func<FacilityUpgradeRow, int> selector)
+    {
+        int currentLv = GetLevel(facility);
+        var table = CachedSOData.Get<FacilityUpgradeTableSO>();
+        int total = 0;
+
+        for (int lv = 1; lv <= currentLv; lv++)
+        {
+            var row = table.Get(facility, lv);
+            if (row != null)
+            {
+                int value = selector(row);
+                total += value;
+            }
+        }
+        return total;
+    }
+
+    // 업그레이드 후 누적 보너스 확인용 로그 출력
+    private void LogAccumulatedBonus(string facility)
+    {
+        switch (facility)
+        {
+            case "school":
+                Debug.Log($"[FacilitySystem] school 컨디션 감소 누적 보너스 최종 | Lv{GetLevel("school")} | 합계:{GetConditionDecayBonus()}");
+                break;
+            case "gym":
+                Debug.Log($"[FacilitySystem] gym 훈련 경험치 누적 보너스 최종 | Lv{GetLevel("gym")} | 합계:{GetTrainingExpBonus()}%");
+                break;
+            case "cafeteria":
+                Debug.Log($"[FacilitySystem] cafeteria 식당 누적 보너스 최종 | Lv{GetLevel("cafeteria")} | 합계:{GetCafeteriaBonus()}%");
+                break;
+            case "counselingcenter":
+                Debug.Log($"[FacilitySystem] counselingcenter 멘탈 누적 보너스 최종 | Lv{GetLevel("counselingcenter")} | 합계:{GetMentalBonus()}%");
+                break;
+        }
+    }
+
+    // 비용 없이 강제 업그레이드 (졸업 선물 전용)
+    public void ForceUpgrade(string facility)
+    {
+        var next = GetNextData(facility);
+        if (next == null)
+        {
+            Debug.LogWarning($"[FacilitySystem] {facility} 이미 최대 레벨입니다.");
+            return;
+        }
+
+        _levels[facility] = next.facilityLv;
+        Debug.Log($"[FacilitySystem] {facility} 강제 업그레이드 완료 → Lv{next.facilityLv}");
+
+        LogAccumulatedBonus(facility);
+
+        if (SaveManager.Instance != null)
+        {
+            SaveManager.Instance.SaveCurrent();
+        }
     }
 }

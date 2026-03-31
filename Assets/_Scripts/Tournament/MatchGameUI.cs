@@ -103,7 +103,7 @@ public class MatchGameUI : MonoBehaviour
         }
     }
 
-    // 로그 한 줄 추가 후 스크롤을 최하단으로 이동
+    // 일반 로그 즉시 출력
     public void AppendMatchLog(string logLine)
     {
         if (logLine == null)
@@ -111,14 +111,51 @@ public class MatchGameUI : MonoBehaviour
 
         _matchLogLines.Add(logLine);
         _matchLogText.text = string.Join("\n", _matchLogLines);
+        RevealMatchLogsInstantly();
         RebuildMatchLogLayout();
     }
 
-    // 로그 전체 초기화
+    // 타이핑 시작/종료 문자 인덱스 계산
+    public int AppendMatchLogForTyping(string logLine, out int startVisibleCharacters)
+    {
+        ForceMatchLogMeshUpdate();
+        startVisibleCharacters = _matchLogText.textInfo.characterCount;
+
+        if (logLine == null)
+            return startVisibleCharacters;
+
+        _matchLogLines.Add(logLine);
+        _matchLogText.text = string.Join("\n", _matchLogLines);
+        ForceMatchLogMeshUpdate();
+
+        int totalCharacters = _matchLogText.textInfo.characterCount;
+        _matchLogText.maxVisibleCharacters = Mathf.Clamp(startVisibleCharacters, 0, totalCharacters);
+        RebuildMatchLogLayout();
+        return totalCharacters;
+    }
+
+    // 로그 가시 문자 수 제어
+    public void SetMatchLogVisibleCharacters(int count)
+    {
+        ForceMatchLogMeshUpdate();
+        int totalCharacters = _matchLogText.textInfo.characterCount;
+        _matchLogText.maxVisibleCharacters = Mathf.Clamp(count, 0, totalCharacters);
+        MoveMatchLogToBottom();
+    }
+
+    // 로그 전체 즉시 노출
+    public void RevealMatchLogsInstantly()
+    {
+        _matchLogText.maxVisibleCharacters = int.MaxValue;
+        MoveMatchLogToBottom();
+    }
+
+    // 로그 초기화 + 가시 문자 리셋
     public void ClearMatchLogs()
     {
         _matchLogLines.Clear();
         _matchLogText.text = string.Empty;
+        _matchLogText.maxVisibleCharacters = int.MaxValue;
         RebuildMatchLogLayout();
     }
 
@@ -261,6 +298,12 @@ public class MatchGameUI : MonoBehaviour
     {
         Canvas.ForceUpdateCanvases();
         _matchLogScrollRect.verticalNormalizedPosition = 0f;
+    }
+
+    // 문자 수 계산 전 메쉬 강제 갱신
+    private void ForceMatchLogMeshUpdate()
+    {
+        _matchLogText.ForceMeshUpdate();
     }
 
     // 로그 텍스트 추가 후 ContentSizeFitter 재계산 + 스크롤을 항상 하단으로 이동

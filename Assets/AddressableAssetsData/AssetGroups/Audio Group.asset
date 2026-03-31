@@ -1,4 +1,4 @@
-﻿%YAML 1.1
+%YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
 --- !u!114 &11400000
 MonoBehaviour:
@@ -30,6 +30,21 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0fd99782075acc147a9e4a822ce39bca
+    m_Address: bgm_scenario_comical_lp
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 11485be7e4daf0c40824bc684530ae46
+    m_Address: sfx_scene_student_chatter_lp
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1604d713f3e11e04fbd591520a544be8
+    m_Address: sfx_ui_msg_receive_os
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 1e663698cb23b944aa82c2b56b6d3307
     m_Address: sfx_ui_touch_os
     m_ReadOnly: 0
@@ -42,6 +57,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 2abc5ae852d1f9b4d8898c92d41685a7
     m_Address: bgm_lobby_lp
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2cf061a366ec9d54eb079d33fb537300
+    m_Address: sfx_ui_gift_arrival_os
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -60,6 +80,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5f113f015b23e454bbe41e9bc5ae29e2
+    m_Address: sfx_match_choice_open_os
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 6d50f22e9d66b1647a7643b9dc67036b
     m_Address: bgm_tournament_victory_lp
     m_ReadOnly: 0
@@ -70,13 +95,68 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 70f80fd7ed22c3d4094004a9db7769d6
+    m_Address: sfx_scene_paper_pick_os
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 71b3502c6754f2441a5a097e040aad3b
+    m_Address: sfx_scene_pen_tap_os
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7e1f3b8680fc35d41b8e468c2a3cda27
+    m_Address: sfx_scene_punch_os
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8108cdcfd720ec04783c987956a88661
+    m_Address: sfx_scene_court_lp
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 84f72b471402eb346b9e854740e56ae2
+    m_Address: sfx_match_choice_select_os
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 89f91839e955f8644af0e6da6c04804a
+    m_Address: sfx_scene_door_close_os
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 8b6d978181a371543a50bdda72437b48
     m_Address: sfx_match_final_os
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9bfd4806c3e359e4ea78f580f1456255
+    m_Address: bgm_scenario_graduation_lp
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9e69a908977850343b93d9ce7285acec
+    m_Address: sfx_scene_walk_dirt_os
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b35334d5402544e4eba540ed5eff48fb
+    m_Address: sfx_scene_phone_ring_os
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b5a524452a9bda142a6eaac14fcc5d42
     m_Address: sfx_ui_start_click_os
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b719295af7138084a9eb2605b24d7766
+    m_Address: sfx_scene_clap_os
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b9b75b73d1a7b8d44b6f294c833e81bc
+    m_Address: sfx_scene_press_shutter_os
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -90,13 +170,38 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c9782ac6a8eeea74e96684b3ae2e07f4
+    m_Address: sfx_scene_msg_notif_os
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: d116c828454bbdd499e824a03abaea99
     m_Address: sfx_ui_facility_levelup_os
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d3c65af0809f50142b1a58984813427b
+    m_Address: sfx_scene_floor_wood_creak_os
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: d578679a5a012994b83dd6697d7bd15d
     m_Address: bgm_tournament_lp
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e1d1f9c85a18afb41a6c2265941b07eb
+    m_Address: bgm_scenario_tension_lp
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e689c7c7130b25e42a21c5ace0247640
+    m_Address: sfx_ui_training_gauge_fill_os
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: eaa992d2c43a0e044ad70d7abb014f5a
+    m_Address: sfx_scene_phone_accept_os
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -115,12 +220,14 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ff76cc6142aeac14fbeb7b7c4b44a520
+    m_Address: Assets/AudioSources/bgm/bgm_Ending_start_lp.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: d3179b69a3360a04d9911317df1a1a42, type: 2}
   m_SchemaSet:
     m_Schemas:
     - {fileID: 11400000, guid: 653bd9d2248946d38b2f8253116d95d2, type: 2}
     - {fileID: 11400000, guid: 01f9d4f7ab0547edb25b29fc4c428481, type: 2}
-
-
-

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using UnityEngine;
 
 public enum StudentCoreStat
@@ -54,6 +54,11 @@ public static class StudentStatExpSystem
         float amount = baseIncrease;
         amount += baseIncrease * (facilityBonusRate * diff);
         amount += baseIncrease * coachBonusRate;
+
+        // itemeffect_06 일시적 훈련 효과 배율 적용
+        if (GameManager.Instance != null)
+            amount *= GameManager.Instance.GetTrainingBoostMultiplier(stat);
+
         return AddRawExp(student, stat, Mathf.RoundToInt(amount));
     }
 
@@ -68,6 +73,11 @@ public static class StudentStatExpSystem
         float amount = baseIncrease;
         amount += baseIncrease * facilityBonusRate;
         amount += baseIncrease * coachBonusRate;
+
+        // itemeffect_06 일시적 훈련 효과 배율 적용
+        if (GameManager.Instance != null)
+            amount *= GameManager.Instance.GetTrainingBoostMultiplier(stat);
+
         return AddRawExp(student, stat, Mathf.RoundToInt(amount));
     }
 
@@ -117,6 +127,9 @@ public static class StudentStatExpSystem
             return 0;
 
         StudentStatExpTableSO table = CachedSOData.Get<StudentStatExpTableSO>();
+
+        // 테이블 없으면 레벨 변화 예측 불가
+        if (table == null || table.Rows == null || table.Rows.Count == 0) return 0;
 
         int maxLevel = GetMaxLevel(table);
         int level = Mathf.Clamp(GetStatValue(student, stat), 1, maxLevel);

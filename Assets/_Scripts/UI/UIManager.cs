@@ -5,6 +5,8 @@ using UnityEngine.SceneManagement;
 
 public class UIManager : Singleton<UIManager>
 {
+    private const string FixedContentRootName = "FixedContentRoot";
+
     // UI 관리용 스택
     private Stack<UIBase> _uiStack = new Stack<UIBase>();
 
@@ -25,6 +27,10 @@ public class UIManager : Singleton<UIManager>
 
     private QuitPopup _quitPopupInstance;
     private InputSystem_Actions _input;
+
+    // 타이틀 씬 등 외부에서 BackKey를 먼저 소비할 때 호출
+    // HandleBackKey()가 같은 프레임에 실행되지 않도록 플래그로 차단
+    private bool _backKeyConsumed;
 
     protected override void OnSingletonAwake()
     {
@@ -62,6 +68,12 @@ public class UIManager : Singleton<UIManager>
     // 백스페이스 키 처리
     private void HandleBackKey()
     {
+        if (_backKeyConsumed)
+        {
+            _backKeyConsumed = false;
+            return;
+        }
+
         if (_messengerStack.Count > 0)
         {
             _messengerStack.Peek().Close();
@@ -368,20 +380,69 @@ public class UIManager : Singleton<UIManager>
         Scene activeScene = SceneManager.GetActiveScene();
         Canvas[] canvases = FindObjectsByType<Canvas>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
 
+        Transform activeSceneCanvasFallback = null;
+        Transform anySceneFixedRootFallback = null;
+        Transform anySceneCanvasFallback = null;
+
         for (int i = 0; i < canvases.Length; i++)
         {
             if (canvases[i] == null)
                 continue;
 
-            if (canvases[i].gameObject.scene == activeScene)
+            Transform canvasTransform = canvases[i].transform;
+            Transform fixedContentRoot = FindFixedContentRoot(canvasTransform);
+
+            if (anySceneFixedRootFallback == null && fixedContentRoot != null)
+                anySceneFixedRootFallback = fixedContentRoot;
+
+            if (anySceneCanvasFallback == null)
+                anySceneCanvasFallback = canvasTransform;
+
+            if (canvases[i].gameObject.scene != activeScene)
+                continue;
+
+            if (fixedContentRoot != null)
             {
-                _canvasRoot = canvases[i].transform;
+                _canvasRoot = fixedContentRoot;
                 return;
             }
+
+            if (activeSceneCanvasFallback == null)
+                activeSceneCanvasFallback = canvasTransform;
         }
 
-        if (canvases.Length > 0 && canvases[0] != null)
-            _canvasRoot = canvases[0].transform;
+        if (activeSceneCanvasFallback != null)
+        {
+            _canvasRoot = activeSceneCanvasFallback;
+            return;
+        }
+
+        if (anySceneFixedRootFallback != null)
+        {
+            _canvasRoot = anySceneFixedRootFallback;
+            return;
+        }
+
+        _canvasRoot = anySceneCanvasFallback;
+    }
+
+    private Transform FindFixedContentRoot(Transform canvasTransform)
+    {
+        if (canvasTransform == null)
+            return null;
+
+        Transform fixedRoot = canvasTransform.Find(FixedContentRootName);
+        if (fixedRoot != null)
+            return fixedRoot;
+
+        Transform[] children = canvasTransform.GetComponentsInChildren<Transform>(true);
+        for (int i = 0; i < children.Length; i++)
+        {
+            if (children[i] != null && children[i].name == FixedContentRootName)
+                return children[i];
+        }
+
+        return null;
     }
 
     public void PushUI(UIBase ui)
@@ -392,4 +453,8 @@ public class UIManager : Singleton<UIManager>
         }
     }
 
+    public void ConsumeBackKey()
+    {
+        _backKeyConsumed = true;
+    }
 }

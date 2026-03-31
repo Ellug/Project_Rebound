@@ -14,9 +14,14 @@ text_diag_schedule_011,accept,left,ㅇㅋ.
 text_diag_schedule_012,accept,left,좋아요 좋아요.
 text_diag_schedule_013,accept,left,네. 경기 가능합니다.
 text_diag_schedule_014,accept,left,윤허하노라.
-text_diag_schedule_015,decline,left,일신 상의 사정으로 {date_choice}일은 안됩니다.
-text_diag_schedule_016,decline,left,개교기념일이라 쉽니다.
-text_diag_schedule_017,decline,left,그 날은 쉽지 않습니다.
-text_diag_schedule_018,decline,left,그 날은 공대 뛰어야 해서 어렵습니다.
-text_diag_schedule_019,decline,left,거절한다.
-text_diag_schedule_020,decline,left,"{date_choice}일 이라니, 이븐하지 않군요"
+text_diag_schedule_015,accept,left,끼얏호우
+text_diag_schedule_016,accept,left,농구하겠수산시장\n요즘 제가 미는 유행어 입니다.
+text_diag_schedule_017,decline,left,일신 상의 사정으로 {date_choice}일은 안됩니다.
+text_diag_schedule_018,decline,left,개교기념일이라 쉽니다.
+text_diag_schedule_019,decline,left,그 날은 쉽지 않습니다.
+text_diag_schedule_020,decline,left,그 날은 공대 뛰어야 해서 어렵습니다.
+text_diag_schedule_021,decline,left,거절한다.
+text_diag_schedule_022,decline,left,"{date_choice}일 이라니, 이븐하지 않군요"
+text_diag_schedule_023,decline,left,그게 권유하는 태도입니까?
+text_diag_schedule_024,decline,left,싫습니다.
+text_diag_schedule_025,decline,left,당신은 정말 나쁜사람이에요

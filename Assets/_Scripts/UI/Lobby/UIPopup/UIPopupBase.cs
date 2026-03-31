@@ -42,6 +42,7 @@ public class UIPopupBase : UIBase
     // BackKey 처리(UIManager 스택에서 호출)
     public override void OnBackKey()
     {
+        if (DisableBackKey) return;
         // 기본: X 버튼과 동일 취급
         OnCloseButtonClicked();
     }

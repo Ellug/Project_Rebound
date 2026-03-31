@@ -52,6 +52,9 @@ public class UIPopup : UIPopupBase
     [SerializeField] private Color _dotNormalColor = new Color(0.75f, 0.75f, 0.75f, 1f);  // 비활성 색상
     [SerializeField] private Color _dotActiveColor = Color.white;                         // 활성화 색상
 
+    [Header("애니메이션")]
+    [SerializeField] private PopupAnimator _animator;
+
     private readonly List<Image> _spawnedDots = new();          // 생성된 페이지 도트 캐시
 
     private UIPopupRequest _request;                            // 현재 팝업 요청 데이터
@@ -65,6 +68,39 @@ public class UIPopup : UIPopupBase
         SetAllPanels(false); // 초기에는 모든 패널 비활성
     }
 
+    // 파생 클래스(RecruitmentPopup 등)에서 자체 애니메이션을 쓸 때 호출
+    // UIPopup._animator를 거치지 않고 UIBase.Open()만 실행
+    public void OpenBase()
+    {
+        base.Open();
+    }
+
+    public override void Open()
+    {
+        if (_animator == null)
+        {
+            base.Open();
+            return;
+        }
+
+        // SetActive(true) 전에 Initialize로 위치/스케일 초기화 보장
+        _animator.Initialize();
+
+        base.Open();
+
+        _animator.PlayIn();
+    }
+
+    public override void Close()
+    {
+        TryInvokePrimaryOnClose(); // 닫힘 시 Primary 호출 옵션 처리
+        ReleaseDefaultImage();
+        ReleaseGuideImage();
+
+        // PlayOut 완료 후 base.Close() (SetActive(false)) 처리
+        _animator.PlayOut(() => base.Close());
+    }
+
     // UIManager가 UIPopupRequest를 주입
     public void Setup(UIPopupRequest request)
     {
@@ -72,6 +108,8 @@ public class UIPopup : UIPopupBase
 
         if (_request == null)
             return;
+
+        this.DisableBackKey = _request.DisableBackKey;
 
         switch (_request.Type)
         {
@@ -87,14 +125,6 @@ public class UIPopup : UIPopupBase
                 SetupGuide(_request);
                 break;
         }
-    }
-
-    public override void Close()
-    {
-        TryInvokePrimaryOnClose(); // 닫힘 시 Primary 호출 옵션 처리
-        ReleaseDefaultImage();
-        ReleaseGuideImage();
-        base.Close();
     }
 
     // 팝업이 닫힐 때 PrimaryAction을 실행해야 하는 케이스 지원 (예: 리그 진입)

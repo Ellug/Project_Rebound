@@ -33,7 +33,6 @@ RectTransform:
   - {fileID: 1912305525168402375}
   - {fileID: 661038525290170117}
   - {fileID: 1685123017530262112}
-  - {fileID: 4019235011712539863}
   - {fileID: 6142902917763404360}
   m_Father: {fileID: 7500355896381857312}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -147,7 +146,7 @@ MonoBehaviour:
       m_Calls: []
   m_Sprite: {fileID: -3405145098264287692, guid: 7d10374b539ddb4408d7b5e2c046c3ee, type: 3}
   m_Type: 0
-  m_PreserveAspect: 0
+  m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1
@@ -320,13 +319,14 @@ GameObject:
   m_Component:
   - component: {fileID: 7372118617542321803}
   - component: {fileID: 8913316296741631172}
+  - component: {fileID: 6227172884369901999}
   m_Layer: 0
   m_Name: TrainingProgressUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &7372118617542321803
 RectTransform:
   m_ObjectHideFlags: 0
@@ -360,10 +360,38 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TrainingProgressUI
   _isModal: 1
-  _imgBackground: {fileID: 8208459115265765917}
+  _imgBackground: {fileID: 444045818049889668}
   _imgGaugeFill: {fileID: 6033339100136021023}
   _txtPercent: {fileID: 4811709918241476712}
   _txtStatus: {fileID: 257927432017690482}
+  _gaugeSpeed: 2
+  _animator: {fileID: 6227172884369901999}
+--- !u!114 &6227172884369901999
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2918446747182333518}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54caaa4d7717c834b9150a5328b13bfe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PopupAnimator
+  _type: 1
+  _panelRoot: {fileID: 8070688845849017563}
+  _hiddenOffsetX: 0
+  _hiddenOffsetY: -400
+  _slideInDuration: 0.2
+  _slideOutDuration: 0.28
+  _slideInEase: 9
+  _slideOutEase: 8
+  _popInDuration: 0.18
+  _popOutDuration: 0.14
+  _popInEase: 27
+  _popOutEase: 26
+  _popOvershoot: 2
+  _disableRaycastWhileTween: 1
 --- !u!1 &3203500313609153469
 GameObject:
   m_ObjectHideFlags: 0
@@ -435,81 +463,6 @@ MonoBehaviour:
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 0
-  m_FillClockwise: 1
-  m_FillOrigin: 2
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
---- !u!1 &3903527376483470558
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4019235011712539863}
-  - component: {fileID: 1396439946203799989}
-  - component: {fileID: 8208459115265765917}
-  m_Layer: 0
-  m_Name: ImgBackground
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &4019235011712539863
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3903527376483470558}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 8070688845849017563}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 630, y: 630}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!222 &1396439946203799989
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3903527376483470558}
-  m_CullTransparentMesh: 1
---- !u!114 &8208459115265765917
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3903527376483470558}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: -3190635627398169127, guid: bacc5cc1f8e0ed64d8a96e321aa89713, type: 3}
-  m_Type: 0
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 2
   m_UseSpriteMesh: 0

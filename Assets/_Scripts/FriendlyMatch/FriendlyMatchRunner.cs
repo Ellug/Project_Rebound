@@ -66,6 +66,7 @@ public class FriendlyMatchRunner : Singleton<FriendlyMatchRunner>
                                 int d = int.Parse(parts[1].Trim());
                                 DateTime matchDate = new DateTime(currentYear, m, d);
                                 GameManager.Instance.ScheduleFriendlyMatch(matchDate, roomName);
+                                CalendarManager.Instance?.InvalidateMonth(matchDate);
                                 SaveManager.Instance.AutoSaveByBranch("친선전 일정 설정 완료");
                             }
                         }

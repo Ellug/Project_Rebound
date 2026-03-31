@@ -30,7 +30,10 @@ public class TrainingResultPopup : UIPopup
     [Header("Buttons")]
     [SerializeField] private Button _btnConfirm;                        // 확인 버튼
 
-    private readonly List<TrainingResultStudentRow> _spawnedRows = new List<TrainingResultStudentRow>(); // 생성된 Row 목록
+    [Header("Animation")]
+    [SerializeField] private PopupAnimator _selfAnimator; // UIPopup._animator와 중복 방지
+
+    private readonly List<TrainingResultStudentRow> _spawnedRows = new List<TrainingResultStudentRow>();
     private string _currentPreviewImageId;                              // 현재 로드된 이미지 ID (해제용)
 
     public event Action OnConfirm; // 확인 버튼 클릭 이벤트
@@ -52,8 +55,29 @@ public class TrainingResultPopup : UIPopup
 
     public override void Open()
     {
-        base.Open();
+        if (_selfAnimator == null)
+        {
+            Debug.LogWarning($"[{GetType().Name}] _selfAnimator가 연결되지 않았습니다.");
+            OpenBase();
+            return;
+        }
+
+        // SetActive(true) 전에 Initialize로 위치/스케일 초기화 보장
+        _selfAnimator.Initialize();
+
+        OpenBase();
+
+        _selfAnimator.PlayIn();
         StartCoroutine(ForceScrollTopRoutine());
+    }
+
+    public override void Close()
+    {
+        if (!gameObject.activeSelf) return;
+
+        PlayPopupCloseSfx();
+
+        _selfAnimator.PlayOut(() => gameObject.SetActive(false));
     }
 
     // 외부에서 결과 데이터 세팅
@@ -151,7 +175,7 @@ public class TrainingResultPopup : UIPopup
         CloseAndCleanup();
     }
 
-    // 팝업 종료 및 내부 정리
+    // PlayOut 완료 후 정리해야 애니메이션이 끝까지 재생됨
     private void CloseAndCleanup()
     {
         if (!string.IsNullOrEmpty(_currentPreviewImageId))
@@ -161,8 +185,12 @@ public class TrainingResultPopup : UIPopup
         }
 
         OnConfirm = null;   // 이벤트 초기화
-        ClearRows();
-        Close();
+
+        _selfAnimator.PlayOut(() =>
+        {
+            ClearRows();
+            gameObject.SetActive(false);
+        });
     }
 
     // 생성된 Row 제거

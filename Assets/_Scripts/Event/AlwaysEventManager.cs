@@ -123,6 +123,12 @@ public class AlwaysEventManager : MonoBehaviour
         {
             AlwaysEffectApplier.ApplyEffect(capturedRow);
 
+            if (IsFestivalCheck(capturedRow))
+            {
+                StartCoroutine(FestivitiesRest());
+                return;
+            }
+
             // 방학 이벤트는 "토너먼트 확인 팝업 -> 학생 배치 팝업 -> 진입" 순서로 진행
             if (!IsLeagueBreakEvent(capturedRow))
                 return;
@@ -167,12 +173,23 @@ public class AlwaysEventManager : MonoBehaviour
         if (!GameManager.Instance.TryShowTournamentEntryPopup())
             Debug.Log("[AlwaysEvent] 토너먼트 진입 조건이 충족되지 않아 진입을 건너뜁니다.");
     }
+    // 휴식 진행
+    private IEnumerator FestivitiesRest()
+    {
+        yield return null;
+        _turnManager.ExecuteTurn(TurnActionType.Rest);
+    }
 
     private static string GetRowId(AlwaysEventRow row)
     {
         string id = string.IsNullOrWhiteSpace(row.id) ? "(no-id)" : row.id.Trim();
         string start = string.IsNullOrWhiteSpace(row.termStart) ? "" : row.termStart.Trim();
         return $"{id}_{start}"; // 예: roster_recruit_260302, roster_recruit_260810
+    }
+    // 체육대회나 학교제
+    private bool IsFestivalCheck(AlwaysEventRow row)
+    {
+        return row != null && (row.name == "festival_sports_day" || row.name == "festival_school");
     }
 
     private bool TryGetAlwaysEventTable(out AlwaysEventTableSO table)
@@ -280,43 +297,60 @@ public class AlwaysEventManager : MonoBehaviour
             case "first_final_exam":
             case "second_midterm_exam":
             case "second_final_exam":
-                return "EventPopup_exam_img";
+                return AlwaysEventImageIds.Exam;
 
             // 학교 행사
             case "festival_sports_day":
-                return "EventPopup_tournament_img";
+                return AlwaysEventImageIds.Tournament;
             case "festival_school":
-                return "EventPopup_festival_img";
+                return AlwaysEventImageIds.Festival;
 
             // 방학
             case "vacation_summer":
-                return "EventPopup_summer_img";
+                return AlwaysEventImageIds.Summer;
             case "vacation_winter":
-                return "EventPopup_winter_img";
+                return AlwaysEventImageIds.Winter;
 
             // 공휴일
             case "holiday_children_day":
-                return "EventPopup_children_img";
+                return AlwaysEventImageIds.Children;
             case "holiday_buddha":
-                return "EventPopup_buddha_img";
+                return AlwaysEventImageIds.Buddha;
             case "holiday_memorial_day":
-                return "EventPopup_memorial_img";
+                return AlwaysEventImageIds.Memorial;
             case "holiday_liberation_Day":
             case "holiday_liberation_day":
-                return "EventPopup_liberation_img";
+                return AlwaysEventImageIds.Liberation;
             case "holiday_chuseok":
-                return "EventPopup_chuseok_img";
+                return AlwaysEventImageIds.Chuseok;
             case "holiday_foundation_day":
-                return "EventPopup_national_img";
+                return AlwaysEventImageIds.National;
             case "holiday_hangul_day":
-                return "EventPopup_hangul_img";
+                return AlwaysEventImageIds.Hangul;
             case "holiday_christmas":
-                return "EventPopup_christmas_img";
+                return AlwaysEventImageIds.Christmas;
             case "holiday_independence":
-                return "EventPopup_independence_img";
-
+                return AlwaysEventImageIds.Independence;
             default:
                 return null;
         }
+    }
+
+    // CalendarManager가 해당 월과 겹치는 AlwaysEventRow 목록을 읽을 때 사용
+    // termStart ~ termEnd가 [from, to] 범위와 하나라도 겹치는 row를 반환
+    public static List<AlwaysEventRow> GetRowsInRange(DateTime from, DateTime to)
+    {
+        var table = CachedSOData.Get<AlwaysEventTableSO>();
+        var result = new List<AlwaysEventRow>();
+
+        if (table == null) return result;
+        foreach (var row in table.Rows)
+        {
+            if (row == null) continue;
+            if (!AlwaysEventDateUtil.TryParseTableDate(row.termStart, out DateTime termStart)) continue;
+            if (!AlwaysEventDateUtil.TryParseTableDate(row.termEnd, out DateTime termEnd)) continue;
+            if (termEnd.Date >= from.Date && termStart.Date <= to.Date) result.Add(row);
+        }
+        return result;
     }
 }

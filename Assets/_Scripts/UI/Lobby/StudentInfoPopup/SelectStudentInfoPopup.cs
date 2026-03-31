@@ -15,6 +15,8 @@ public class SelectStudentInfoPopup : UIBase
 
     [Header("Left - Portrait")]
     [SerializeField] private Image _imgPortrait;                      // 초상화
+    [SerializeField] private GameObject _disease;
+    [SerializeField] private GameObject _injury;
 
     [Header("Right - Summary")]
     [SerializeField] private TMP_Text _txtName;                       // 이름
@@ -32,25 +34,11 @@ public class SelectStudentInfoPopup : UIBase
     [SerializeField] private Button _btnSelect;                       // 학생 선택 버튼 (영입 팝업 전용)
     [SerializeField] private TMP_Text _txtSelectButton;               // 선택 버튼 텍스트 (선택/해제 라벨)
 
-    [Header("Slide Animation")]
-    [SerializeField] private RectTransform _panelRoot;                // 실제로 움직일 루트(패널)
-    [SerializeField] private float _hiddenOffsetY = -600f;            // 아래로 숨길 거리(픽셀)
-    [SerializeField] private bool _disableRaycastWhileTween = true;   // 애니메이션 중 입력 차단
-
-    // 위아래로 슬라이드 되는 애니메이션 설정
-    [SerializeField] private float _slideInDuration = 0.2f;
-    [SerializeField] private float _slideOutDuration = 0.28f;
-    [SerializeField] private Ease _slideInEase = Ease.OutCubic;       // 슬라이드 인 이징
-    [SerializeField] private Ease _slideOutEase = Ease.InCubic;       // 슬라이드 아웃 이징
+    [Header("애니메이션")]
+    [SerializeField] private PopupAnimator _animator;
 
     private readonly List<SelectStudentStatRow> _spawnedRows = new(); // 생성된 스탯 행
     private bool _isInited;
-
-    private Vector2 _shownPos;
-    private Vector2 _hiddenPos;
-
-    private Tweener _slideTween;  // 현재 진행 중인 슬라이드 Tween
-    private CanvasGroup _canvasGroup;
 
     public override void Init()
     {
@@ -58,25 +46,6 @@ public class SelectStudentInfoPopup : UIBase
         _isInited = true;
 
         base.Init();
-
-        // 움직일 루트 기본값 보정 (Panel Root 미연결 시 자신의 RectTransform으로 fallback)
-        if (_panelRoot == null)
-            _panelRoot = GetComponent<RectTransform>();
-
-        // "표시 위치"는 에디터에서 잡힌 현재 위치
-        _shownPos = _panelRoot.anchoredPosition;
-        _hiddenPos = _shownPos + new Vector2(0f, _hiddenOffsetY);
-
-        // 초기에는 숨김 위치로 이동 (비활성 상태에서 위치 선설정)
-        _panelRoot.anchoredPosition = _hiddenPos;
-
-        // 입력 차단용 (선택)
-        if (_disableRaycastWhileTween)
-        {
-            _canvasGroup = GetComponent<CanvasGroup>();
-            if (_canvasGroup == null)
-                _canvasGroup = gameObject.AddComponent<CanvasGroup>();
-        }
 
         // 닫기 버튼 바인딩
         if (_btnInfoClose != null)
@@ -106,33 +75,17 @@ public class SelectStudentInfoPopup : UIBase
         if (!_isInited)
             Init();
 
-        // Panel Root가 없으면 자신의 RectTransform으로 fallback
-        if (_panelRoot == null)
-            _panelRoot = GetComponent<RectTransform>();
+        // SetActive(true) 전에 Initialize를 먼저 호출해야 _shownPos를 올바르게 읽음
+        // Instantiate 후 Awake가 정상 호출되면 내부 _isInited 플래그로 중복 실행 방지
+        _animator.Initialize();
 
         // 활성화 + 최상단
         gameObject.SetActive(true);
         PlayPopupOpenSfx();
         transform.SetAsLastSibling();
 
-        // 슬라이드 인은 다음 프레임에 실행
-        // → SetActive(true) 직후에는 레이아웃이 미반영된 anchoredPosition을 읽을 수 있으므로
-        //   한 프레임 뒤에 실제 위치를 읽고 슬라이드 시작
-        StartCoroutine(OpenSlideRoutine());
-    }
-
-    private IEnumerator OpenSlideRoutine()
-    {
-        // 한 프레임 대기해 레이아웃 확정
-        yield return null;
-
-        Canvas.ForceUpdateCanvases();
-
-        // 시작은 아래(숨김)에서
-        _panelRoot.anchoredPosition = _hiddenPos;
-
-        // 슬라이드 인
-        PlaySlide(_shownPos, _slideInDuration, _slideInEase, null);
+        // SetActive(true) 직후 레이아웃 미반영 문제로 PlayIn 내부에서 한 프레임 대기 후 실행
+        _animator.PlayIn();
     }
 
     public override void Close()
@@ -143,10 +96,8 @@ public class SelectStudentInfoPopup : UIBase
         PlayPopupCloseSfx();
 
         // 슬라이드 아웃 → 끝나면 비활성
-        PlaySlide(_hiddenPos, _slideOutDuration, _slideOutEase, () =>
+        _animator.PlayOut(() =>
         {
-            // 다음 Open을 위해 Panel 위치 초기화
-            _panelRoot.anchoredPosition = _hiddenPos;
             gameObject.SetActive(false);
         });
     }
@@ -158,6 +109,7 @@ public class SelectStudentInfoPopup : UIBase
             _txtTitle.text = string.IsNullOrEmpty(title) ? "학생 정보" : title;
 
         ApplyPortrait(portrait);
+        ApplyAbnormalIndicator(student);
         ApplySummary(student);
         ApplyConditionGauge(student);
         BuildStatList(student);
@@ -193,44 +145,6 @@ public class SelectStudentInfoPopup : UIBase
         Close(); // 내려가며 닫힘
     }
 
-    // DoTween 기반 슬라이드 실행
-    // 진행 중인 Tween이 있으면 즉시 Kill 후 새로 시작
-    private void PlaySlide(Vector2 targetPos, float duration, Ease ease, Action onComplete)
-    {
-        // 기존 Tween 즉시 중단
-        _slideTween?.Kill();
-
-        // 입력 차단 시작
-        SetRaycastBlock(false);
-
-        _slideTween = _panelRoot
-            .DOAnchorPos(targetPos, duration)
-            .SetEase(ease)
-            .SetUpdate(true) // TimeScale 영향 제외 (unscaledDeltaTime 대응)
-            .OnComplete(() =>
-            {
-                // 입력 차단 해제
-                SetRaycastBlock(true);
-                _slideTween = null;
-                onComplete?.Invoke();
-            });
-    }
-
-    // CanvasGroup 기반 입력 차단 On/Off
-    private void SetRaycastBlock(bool allow)
-    {
-        if (_canvasGroup == null) return;
-
-        _canvasGroup.blocksRaycasts = allow;
-        _canvasGroup.interactable = allow;
-    }
-
-    protected override void OnDestroy()
-    {
-        // 오브젝트 파괴 시 Tween 정리
-        _slideTween?.Kill();
-    }
-
     // 초상화 적용
     private void ApplyPortrait(Sprite portrait)
     {
@@ -243,6 +157,19 @@ public class SelectStudentInfoPopup : UIBase
 
         // 이미지 없으면 반투명 표시
         _imgPortrait.color = has ? Color.white : new Color(1f, 1f, 1f, 0.15f);
+    }
+
+    private void ApplyAbnormalIndicator(Student student)
+    {
+        if (student == null)
+        {
+            SafeSetActive(_disease, false);
+            SafeSetActive(_injury, false);
+            return;
+        }
+
+        SafeSetActive(_disease, student.abnormalState == Student.AbnormalType.Disease);
+        SafeSetActive(_injury, student.abnormalState == Student.AbnormalType.Injury);
     }
 
     // 기본 정보 표시
@@ -303,5 +230,11 @@ public class SelectStudentInfoPopup : UIBase
             if (row != null) Destroy(row.gameObject);
         }
         _spawnedRows.Clear();
+    }
+
+    private static void SafeSetActive(GameObject target, bool active)
+    {
+        if (target != null)
+            target.SetActive(active);
     }
 }

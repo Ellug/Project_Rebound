@@ -53,10 +53,34 @@ MonoBehaviour:
       m_SubObjectType: 
       m_SubObjectGUID: 
       m_EditorAssetChanged: 0
-  - id: 108
+  - id: 106
     name: bgm_tournament_victory_lp
     clipReference:
       m_AssetGUID: 6d50f22e9d66b1647a7643b9dc67036b
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+  - id: 107
+    name: bgm_scenario_tension_lp
+    clipReference:
+      m_AssetGUID: e1d1f9c85a18afb41a6c2265941b07eb
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+  - id: 108
+    name: bgm_scenario_comical_lp
+    clipReference:
+      m_AssetGUID: 0fd99782075acc147a9e4a822ce39bca
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+  - id: 109
+    name: bgm_scenario_graduation_lp
+    clipReference:
+      m_AssetGUID: 9bfd4806c3e359e4ea78f580f1456255
       m_SubObjectName: 
       m_SubObjectType: 
       m_SubObjectGUID: 
@@ -117,6 +141,14 @@ MonoBehaviour:
       m_SubObjectType: 
       m_SubObjectGUID: 
       m_EditorAssetChanged: 0
+  - id: 208
+    name: sfx_ui_training_gauge_fill_os
+    clipReference:
+      m_AssetGUID: e689c7c7130b25e42a21c5ace0247640
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
   - id: 209
     name: sfx_ui_char_assign_os
     clipReference:
@@ -125,7 +157,7 @@ MonoBehaviour:
       m_SubObjectType: 
       m_SubObjectGUID: 
       m_EditorAssetChanged: 0
-  - id: 211
+  - id: 210
     name: sfx_ui_facility_levelup_os
     clipReference:
       m_AssetGUID: d116c828454bbdd499e824a03abaea99
@@ -133,10 +165,26 @@ MonoBehaviour:
       m_SubObjectType: 
       m_SubObjectGUID: 
       m_EditorAssetChanged: 0
-  - id: 212
+  - id: 211
     name: sfx_ui_director_unlock_os
     clipReference:
       m_AssetGUID: fdb99296fb793504f831e1a494347ca8
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+  - id: 212
+    name: sfx_ui_gift_arrival_os
+    clipReference:
+      m_AssetGUID: 2cf061a366ec9d54eb079d33fb537300
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+  - id: 213
+    name: sfx_ui_msg_receive_os
+    clipReference:
+      m_AssetGUID: 1604d713f3e11e04fbd591520a544be8
       m_SubObjectName: 
       m_SubObjectType: 
       m_SubObjectGUID: 
@@ -157,10 +205,138 @@ MonoBehaviour:
       m_SubObjectType: 
       m_SubObjectGUID: 
       m_EditorAssetChanged: 0
+  - id: 303
+    name: sfx_match_choice_open_os
+    clipReference:
+      m_AssetGUID: 5f113f015b23e454bbe41e9bc5ae29e2
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+  - id: 304
+    name: sfx_match_choice_select_os
+    clipReference:
+      m_AssetGUID: 84f72b471402eb346b9e854740e56ae2
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
   - id: 305
     name: sfx_match_final_os
     clipReference:
       m_AssetGUID: 8b6d978181a371543a50bdda72437b48
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+  - id: 401
+    name: sfx_scene_court_lp
+    clipReference:
+      m_AssetGUID: 8108cdcfd720ec04783c987956a88661
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+  - id: 402
+    name: sfx_scene_clap_os
+    clipReference:
+      m_AssetGUID: b719295af7138084a9eb2605b24d7766
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+  - id: 404
+    name: sfx_scene_press_shutter_os
+    clipReference:
+      m_AssetGUID: b9b75b73d1a7b8d44b6f294c833e81bc
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+  - id: 406
+    name: sfx_scene_msg_notif_os
+    clipReference:
+      m_AssetGUID: c9782ac6a8eeea74e96684b3ae2e07f4
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+  - id: 408
+    name: sfx_scene_student_chatter_lp
+    clipReference:
+      m_AssetGUID: 11485be7e4daf0c40824bc684530ae46
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+  - id: 409
+    name: sfx_scene_walk_dirt_os
+    clipReference:
+      m_AssetGUID: 9e69a908977850343b93d9ce7285acec
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+  - id: 410
+    name: sfx_scene_paper_pick_os
+    clipReference:
+      m_AssetGUID: 70f80fd7ed22c3d4094004a9db7769d6
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+  - id: 411
+    name: sfx_scene_floor_wood_creak_os
+    clipReference:
+      m_AssetGUID: d3c65af0809f50142b1a58984813427b
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+  - id: 412
+    name: sfx_scene_pen_tap_os
+    clipReference:
+      m_AssetGUID: 71b3502c6754f2441a5a097e040aad3b
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+  - id: 413
+    name: sfx_scene_door_close_os
+    clipReference:
+      m_AssetGUID: 89f91839e955f8644af0e6da6c04804a
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+  - id: 414
+    name: sfx_scene_punch_os
+    clipReference:
+      m_AssetGUID: 7e1f3b8680fc35d41b8e468c2a3cda27
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+  - id: 415
+    name: sfx_scene_phone_ring_os
+    clipReference:
+      m_AssetGUID: b35334d5402544e4eba540ed5eff48fb
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+  - id: 416
+    name: sfx_scene_phone_accept_os
+    clipReference:
+      m_AssetGUID: eaa992d2c43a0e044ad70d7abb014f5a
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+  - id: 110
+    name: bgm_Ending_start_lp
+    clipReference:
+      m_AssetGUID: ff76cc6142aeac14fbeb7b7c4b44a520
       m_SubObjectName: 
       m_SubObjectType: 
       m_SubObjectGUID: 

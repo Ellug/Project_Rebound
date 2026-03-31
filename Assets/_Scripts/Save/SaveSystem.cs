@@ -21,10 +21,27 @@ public class SaveSystem : Singleton<SaveSystem>
 
     public void Save(PlayData data)
     {
-        string json = JsonUtility.ToJson(data, true);
-        File.WriteAllText(GetPath(data.slotIndex), json);
+        try
+        {
+            string path = GetPath(data.slotIndex);
+            string json = JsonUtility.ToJson(data, true);
+            File.WriteAllText(path, json);
 
-        OnSaveListChanged?.Invoke();
+            // 저장 후 파일 존재 여부 검증
+            if (!File.Exists(path))
+            {
+                Debug.LogError($"[SaveSystem] 저장 실패 - 파일이 존재하지 않음: {path}");
+                return;
+            }
+#if UNITY_EDITOR
+            Debug.Log($"[SaveSystem] 저장 완료 | slot={data.slotIndex} | path={path} | size={new FileInfo(path).Length}bytes");
+#endif
+            OnSaveListChanged?.Invoke();
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"[SaveSystem] 저장 중 예외 발생: {e.Message}");
+        }
     }
 
     public PlayData Load(int slotIndex)

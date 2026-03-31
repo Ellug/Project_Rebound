@@ -1063,3 +1063,17 @@ MonoBehaviour:
       m_SubObjectType: 
       m_SubObjectGUID: 
       m_EditorAssetChanged: 0
+  - fileName: Gift_popup_img
+    spriteReference:
+      m_AssetGUID: 45f1d6a7e3c121b46807a6de72f9bf75
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
+  - fileName: EndingPopup_img
+    spriteReference:
+      m_AssetGUID: b8798145dd9f19544a65e771b1f5e303
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0

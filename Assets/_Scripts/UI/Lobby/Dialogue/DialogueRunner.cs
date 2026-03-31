@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -29,7 +30,7 @@ public class DialogueRunner : Singleton<DialogueRunner>
         }
     }
 
-    public void PlayDialogue(string roomId, string roomName, string diagId, string startNodeId = "index_000", Dictionary<string, string> textVars = null, string systemMsgContent = "")
+    public void PlayDialogue(string roomId, string roomName, string diagId, string startNodeId = "index_000", Dictionary<string, string> textVars = null, string systemMsgContent = "", DateTime? firstMsgDate = null)
     {
         if (_activeRoutines.Contains(roomId)) return;
         _activeRoutines.Add(roomId);
@@ -37,10 +38,10 @@ public class DialogueRunner : Singleton<DialogueRunner>
         // 대화가 새로 시작될 때 스킵 상태 초기화
         _skippedRooms.Remove(roomId);
 
-        StartCoroutine(ProcessNodeRoutine(roomId, roomName, diagId, startNodeId, textVars, systemMsgContent));
+        StartCoroutine(ProcessNodeRoutine(roomId, roomName, diagId, startNodeId, textVars, systemMsgContent, firstMsgDate));
     }
 
-    private IEnumerator ProcessNodeRoutine(string roomId, string roomName, string diagId, string nodeId, Dictionary<string, string> textVars, string systemMsgContent)
+    private IEnumerator ProcessNodeRoutine(string roomId, string roomName, string diagId, string nodeId, Dictionary<string, string> textVars, string systemMsgContent, DateTime? firstMsgDate = null)
     {
         // ==========================================
         // 1. 대화 종료 조건
@@ -62,6 +63,7 @@ public class DialogueRunner : Singleton<DialogueRunner>
                 if (wasSkipped) MessengerManager.Instance.CurrentViewingRoomId = roomId;
 
                 ChatMessage sysMsg = new ChatMessage(MessageSenderType.Them, systemMsgContent, MessageEventType.System);
+                if (firstMsgDate.HasValue) sysMsg.Timestamp = firstMsgDate.Value;
                 MessengerManager.Instance.ReceiveMessage(roomId, roomName, sysMsg);
  
                 if (wasSkipped) MessengerManager.Instance.CurrentViewingRoomId = originalViewingId;
@@ -131,13 +133,17 @@ public class DialogueRunner : Singleton<DialogueRunner>
             if (!string.IsNullOrEmpty(messageText) && messageText != "-")
             {
                 ChatMessage preMsg = new ChatMessage(senderType, messageText, MessageEventType.NormalText);
+                if (firstMsgDate.HasValue) preMsg.Timestamp = firstMsgDate.Value;
                 MessengerManager.Instance.ReceiveMessage(roomId, roomName, preMsg);
                 if (!isSkipping) yield return new WaitForSeconds(_typingDelay);
+
+                firstMsgDate = null;
             }
 
             bool choiceMade = false;
             string nextNodeToPlay = "";
             ChatMessage choiceMsg = new ChatMessage(MessageSenderType.Them, "", MessageEventType.Choice);
+            if (firstMsgDate.HasValue) choiceMsg.Timestamp = firstMsgDate.Value;
 
             void AddChoice(string choiceTextId, string choiceNextId)
             {
@@ -168,7 +174,7 @@ public class DialogueRunner : Singleton<DialogueRunner>
             {
                 choiceMsg.SelectedChoiceIndex = 0; // 1번 선택지를 고른 것으로 강제 처리
                 MessengerManager.Instance.ReceiveMessage(roomId, roomName, choiceMsg);
-                StartCoroutine(ProcessNodeRoutine(roomId, roomName, diagId, row.choice1Next, textVars, systemMsgContent));
+                StartCoroutine(ProcessNodeRoutine(roomId, roomName, diagId, row.choice1Next, textVars, systemMsgContent, null));
                 yield break;
             }
 
@@ -182,8 +188,7 @@ public class DialogueRunner : Singleton<DialogueRunner>
             {
                 if (MessengerManager.Instance != null)
                 {
-                    var room = MessengerManager.Instance.GetRoom(roomId);
-                    if (room != null) room.HasUnread = false;
+                    MessengerManager.Instance.MarkAsRead(roomId);
                 }
 
                 choiceMsg.SelectedChoiceIndex = 0; // 1번 선택지로 강제 세팅 
@@ -200,7 +205,10 @@ public class DialogueRunner : Singleton<DialogueRunner>
         else
         {
             ChatMessage normalMsg = new ChatMessage(senderType, messageText, MessageEventType.NormalText);
+            if (firstMsgDate.HasValue) normalMsg.Timestamp = firstMsgDate.Value;
             MessengerManager.Instance.ReceiveMessage(roomId, roomName, normalMsg);
+
+            firstMsgDate = null;
 
             yield return new WaitUntil(() =>
                 (MessengerManager.Instance != null && MessengerManager.Instance.CurrentViewingRoomId == roomId) ||
@@ -211,8 +219,7 @@ public class DialogueRunner : Singleton<DialogueRunner>
 
             if (isSkipping && MessengerManager.Instance != null)
             {
-                var room = MessengerManager.Instance.GetRoom(roomId);
-                if (room != null) room.HasUnread = false;
+                MessengerManager.Instance.MarkAsRead(roomId);
             }
 
             if (!isSkipping)
@@ -221,7 +228,7 @@ public class DialogueRunner : Singleton<DialogueRunner>
                 else yield return new WaitForSeconds(_typingDelay * 0.5f);
             }
 
-            StartCoroutine(ProcessNodeRoutine(roomId, roomName, diagId, row.next, textVars, systemMsgContent));
+            StartCoroutine(ProcessNodeRoutine(roomId, roomName, diagId, row.next, textVars, systemMsgContent, null));
         }
     }
 }

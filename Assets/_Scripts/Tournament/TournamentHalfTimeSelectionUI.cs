@@ -37,6 +37,7 @@ public class TournamentHalfTimeSelectionUI : MonoBehaviour
         BindButton(_button2, 1);
         BindButton(_button3, 2);
         _selectionPanel.SetActive(true);
+        SoundManager.Instance.PlayEffect(303);
     }
 
     private void Close()
@@ -110,7 +111,7 @@ public class TournamentHalfTimeSelectionUI : MonoBehaviour
                 }
             },
             subMessage: ResolveText(row.effectDescription),
-            previewImageId: "EventGame00_img_halftime",
+            previewImageId: AlwaysEventImageIds.Halftime,
             showCancel: true,
             primaryKind: UIPopupRequest.PrimaryButtonKind.Confirm
         );
@@ -148,6 +149,8 @@ public class TournamentHalfTimeSelectionUI : MonoBehaviour
 
     private void ConfirmSelection(HalftimeSelectRow row)
     {
+        SoundManager.Instance.PlayEffect(304);
+
         // effect1 / effect2 / effect3 기반 효과 실행
         ApplyHalftimeEffect(row.effect1);
         ApplyHalftimeEffect(row.effect2);

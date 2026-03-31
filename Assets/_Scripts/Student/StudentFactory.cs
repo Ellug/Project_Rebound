@@ -234,21 +234,55 @@ public static class StudentFactory
     // 포지션 기반으로 잠재능력 할당 : 가중치 기반 랜덤 선택
     private static void GeneratePotential(Student student, string id)
     {
+        // 잠재력 테이블 로드
         var potentialTable = CachedSOData.Get<StudentPotentialTableSO>();
-        var potentialData = potentialTable.GetOrNull(id);
+        if (potentialTable == null)
+        {
+            Debug.LogError("[StudentFactory] StudentPotentialTableSO를 찾을 수 없습니다.");
+            student.potential_tier = 3;
+            student.potential = "";
+            return;
+        }
 
-        // 총 확률 계산
-        int totalWeight = potentialData.tier1Prob + potentialData.tier2Prob + potentialData.tier3Prob;
+        // 포지션 ID로 잠재력 데이터 조회
+        var potentialData = potentialTable.GetOrNull(id);
+        if (potentialData == null)
+        {
+            Debug.LogError($"[StudentFactory] positionId='{id}'에 해당하는 잠재력 데이터가 없습니다.");
+            student.potential_tier = 3;
+            student.potential = "";
+            return;
+        }
+
+        // 티어별 확률 및 스탯 수치 로컬 변수로 분리
+        int tier1Prob = potentialData.tier1Prob;
+        int tier2Prob = potentialData.tier2Prob;
+        int tier3Prob = potentialData.tier3Prob;
+
+        string tier1Stat = potentialData.tier1Stat;
+        string tier2Stat = potentialData.tier2Stat;
+        string tier3Stat = potentialData.tier3Stat;
+
+        // 확률 합계 계산 및 유효성 검사
+        int totalWeight = tier1Prob + tier2Prob + tier3Prob;
+        if (totalWeight <= 0)
+        {
+            Debug.LogWarning($"[StudentFactory] positionId='{id}'의 잠재력 확률 합계가 0입니다. tier3로 강제 설정합니다.");
+            student.potential_tier = 3;
+            student.potential = tier3Stat;
+            return;
+        }
+
+        // 가중치 기반 랜덤 티어 선택
         int randomValue = _random.Next(0, totalWeight);
         int currentWeight = 0;
 
-        // 티어별 확률 체크 및 티어별 정의
         var tiers = new[]
         {
-            (tier: 1, prob: potentialData.tier1Prob, stat: potentialData.tier1Stat),
-            (tier: 2, prob: potentialData.tier2Prob, stat: potentialData.tier2Stat),
-            (tier: 3, prob: potentialData.tier3Prob, stat: potentialData.tier3Stat)
-        };
+        (tier: 1, prob: tier1Prob, stat: tier1Stat),
+        (tier: 2, prob: tier2Prob, stat: tier2Stat),
+        (tier: 3, prob: tier3Prob, stat: tier3Stat)
+    };
 
         foreach (var t in tiers)
         {
@@ -261,8 +295,9 @@ public static class StudentFactory
             }
         }
 
+        // foreach 루프를 통과한 경우 tier3로 fallback
         student.potential_tier = 3;
-        student.potential = potentialData.tier3Stat;
+        student.potential = tier3Stat;
     }
 
     // 팀 색 결정 _isColorInitialized = false 로 바꾸면 새로운 회차 시작할 때 색 랜덤

@@ -54,10 +54,19 @@ public class Student
     public int appliedJumpBonus;      // 점프력
     public int appliedAllStatBonus;   // 올스텟
 
+    public AbnormalType abnormalState = AbnormalType.None;  // 상태이상 종류
+    public int abnormalRemainTurn = 0;                      // 상태이상 남은턴
+
     public static int ClampCondition(int value)
     {
         if (value < ConditionMin) return ConditionMin;
         if (value > ConditionMax) return ConditionMax;
         return value;
+    }
+    public enum AbnormalType
+    {
+        None = 0,
+        Disease = 1,
+        Injury = 2
     }
 }

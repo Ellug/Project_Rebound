@@ -15,6 +15,21 @@ public class SaveManager : Singleton<SaveManager>
 
     public int CurrentSlotIndex => _currentRuntimeSlotIndex;
 
+#if UNITY_EDITOR
+    void Update()
+    {
+        var keyboard = UnityEngine.InputSystem.Keyboard.current;
+        if (keyboard == null) return;
+
+        if (keyboard.leftCtrlKey.isPressed && keyboard.qKey.wasPressedThisFrame)
+        {
+            Debug.Log("[SaveSystem] 에디터 종료 시뮬레이션 - 저장 후 종료");
+            SaveManager.Instance?.SaveCurrent();
+            UnityEditor.EditorApplication.isPlaying = false;
+        }
+    }
+#endif
+
     private void Start()
     {
         CleanupIncompleteNewGameSlots(); // SaveSystem이 초기화된 이후 실행
@@ -47,22 +62,33 @@ public class SaveManager : Singleton<SaveManager>
 
         // 돈과 평판은 런타임 매니저가 존재할 때만 적용 (로비 씬에서 먼저 적용, 이후 씬에서도 계속 유지)
         if (MoneyManager.Instance != null)
+        {
             MoneyManager.Instance.ApplySaveData(
                 data.gold,
                 CurrentUserData != null ? CurrentUserData.reputation : data.reputation);
+        }
 
         // 슬롯 로드 시 시설 상태를 먼저 현재 슬롯 데이터 기준으로 맞춤
         if (FacilitySystem.Instance != null)
+        {
             ApplyFacilityData(data.facilities);
+        }
 
         // 슬롯 로드 시 메신저 상태도 현재 슬롯 기준으로 먼저 맞춤
         if (MessengerManager.Instance != null)
+        {
+            MessengerManager.Instance.ClearAll(); // 이전 슬롯 데이터 초기화
             MessengerManager.Instance.RestoreSaveData(data.messenger);
+        }
+
+        FriendlyMatchManager.Instance?.Reset();
+        GameManager.Instance?.ClearFriendlyMatchSchedule();
 
         // 토너먼트 진행 중이면 로비를 경유해 토너먼트로 이동
         // (UIManager가 로비에 있으므로 로비를 반드시 거쳐야 함)
         _pendingTournamentRestore = IsTournamentInProgress(data);
-        SceneManager.LoadScene(sceneName); // 항상 로비로 먼저 이동
+        CalendarManager.Instance?.InvalidateAll();
+        LoadSceneSafe(sceneName);
     }
 
     // 로비 씬 초기화 완료 시점(GameManager 등)에서 호출
@@ -99,19 +125,6 @@ public class SaveManager : Singleton<SaveManager>
         ApplyActiveEventEffects(CurrentData.flowData);  // 이벤트 activeEffectIds 복원
         RestoreHeadCoachNodesIfPossible();              // 감독 노드 복원 시도 (HeadCoachManager 초기화 여부에 따라 내부에서 처리)
 
-        // HeadCoachManager는 InitFromTable() 완료 이후에 복원 가능
-        if (HeadCoachManager.Instance != null && HeadCoachManager.Instance.IsInitialized)
-        {
-            HeadCoachManager.Instance.RestoreUnlockedNodes(
-                CurrentUserData != null && CurrentUserData.unlockedNodeIds != null && CurrentUserData.unlockedNodeIds.Count > 0
-                    ? CurrentUserData.unlockedNodeIds
-                    : CurrentData.unlockedNodeIds);
-        }
-        else
-        {
-            Debug.LogWarning("[SaveManager] HeadCoachManager 초기화 전에 ApplyLoadedData 호출됨. 감독 노드 복원 생략.");
-        }
-
         // 친선경기 매니저는 TurnManager의 날짜 변경 체크에서 Load된 flowData 기준으로 월별 신청 횟수 복원
         if (FriendlyMatchManager.Instance != null && CurrentData.flowData != null)
         {
@@ -119,6 +132,12 @@ public class SaveManager : Singleton<SaveManager>
                 CurrentData.flowData.friendlyMatchApplyCount,
                 CurrentData.flowData.friendlyMatchLastMonth
             );
+        }
+
+        //졸업 선물 보너스 트래커는 TurnManager의 날짜 변경 체크에서 Load된 flowData 기준으로 4강 진출 횟수 및 훈련 효율 영구 보너스 복원
+        if (EquipmentSystem.Instance != null)
+        {
+            EquipmentSystem.Instance.RestoreFromSave(CurrentData.equipment);
         }
     }
 
@@ -139,6 +158,9 @@ public class SaveManager : Singleton<SaveManager>
             return false;
         }
 
+        // 명성치를 변수로 고정 (이후 SaveUserData에서 덮어쓰기 방지)
+        int inheritedReputation = CurrentUserData != null ? CurrentUserData.reputation : 0;
+
         CurrentData = new PlayData
         {
             slotIndex = slotIndex,
@@ -146,7 +168,7 @@ public class SaveManager : Singleton<SaveManager>
             playTime = "게임 시작",
             saveTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm"),
             gold = 0,
-            reputation = CurrentUserData != null ? CurrentUserData.reputation : 0,
+            reputation = inheritedReputation,
             unlockedNodeIds = CurrentUserData != null
                 ? new List<int>(CurrentUserData.unlockedNodeIds)
                 : new List<int>(),
@@ -158,28 +180,39 @@ public class SaveManager : Singleton<SaveManager>
             messenger = new SavedMessengerData(),
         };
 
-        // 새로 만든 슬롯을 현재 런타임 슬롯으로 고정
         _currentRuntimeSlotIndex = slotIndex;
         CurrentData.slotIndex = slotIndex;
 
-        // 새 게임 생성 시 런타임 시설 상태도 반드시 기본값으로 초기화
+        // 이전 슬롯 값이 MoneyManager에 잔존하지 않도록 새 게임 기준값으로 초기화
+        if (MoneyManager.Instance != null)
+        {
+            MoneyManager.Instance.ApplySaveData(0, inheritedReputation);
+        }
+
         if (FacilitySystem.Instance != null)
         {
             FacilitySystem.Instance.ResetLevelsToDefault();
         }
 
-        // 새 게임 생성 시 메신저 상태도 반드시 초기화
         if (MessengerManager.Instance != null)
         {
             MessengerManager.Instance.ClearAll();
         }
 
-        IsPendingNewGame = true;
+        if (EquipmentSystem.Instance != null)
+        {
+            EquipmentSystem.Instance.ResetToDefault();
+        }
 
-        SaveUserData();
+        FriendlyMatchManager.Instance?.Reset(); // 친선경기 매니저 초기화
+        GameManager.Instance?.ClearFriendlyMatchSchedule();
+        CalendarManager.Instance?.InvalidateAll();
+
+        IsPendingNewGame = true;
+        CurrentData.isRecruitmentInProgress = true; // 새 게임 첫 영입이 시작되기 전까지는 모집 진행 중 상태로 표시
+
         return true;
     }
-
     public void SaveCurrent()
     {
         if (CurrentData == null)
@@ -194,6 +227,11 @@ public class SaveManager : Singleton<SaveManager>
             Debug.LogWarning("[SaveManager] 현재 슬롯 인덱스가 없어 저장을 중단합니다.");
             return;
         }
+
+#if UNITY_EDITOR
+        Debug.Log($"[SaveManager] SaveCurrent 시작 | slotIndex={_currentRuntimeSlotIndex} | isRecruitmentInProgress={CurrentData.isRecruitmentInProgress} | isMatchRunning={CurrentData.matchSim?.isMatchRunning}");
+#endif
+
 
         int studentCountBeforeSave = StudentManager.Instance != null
             ? StudentManager.Instance.Students.Count
@@ -250,10 +288,18 @@ public class SaveManager : Singleton<SaveManager>
             ? GameManager.Instance.CurrentDate.ToString("yyyy.MM.dd")
             : string.Empty;
 
+        // 장비 강화 상태 수집
+        CurrentData.equipment = EquipmentSystem.Instance != null
+            ? EquipmentSystem.Instance.CollectSaveData()
+            : new EquipmentSaveData();
+
         // 저장 직전 현재 플레이 중인 슬롯 번호를 강제로 유지
         CurrentData.slotIndex = _currentRuntimeSlotIndex;
 
         SaveSystem.Instance.Save(CurrentData);
+#if UNITY_EDITOR
+        Debug.Log($"[SaveManager] SaveCurrent 완료 | slotIndex={_currentRuntimeSlotIndex} | isMatchRunning={CurrentData.matchSim?.isMatchRunning}");
+#endif
     }
 
     public void AutoSaveByBranch(string branchName)
@@ -288,7 +334,7 @@ public class SaveManager : Singleton<SaveManager>
             MessengerManager.Instance.ClearAll();
         }
 
-        SceneManager.LoadScene("Title");
+        LoadSceneSafe("Title");
     }
 
     public void Clear()
@@ -300,6 +346,8 @@ public class SaveManager : Singleton<SaveManager>
         {
             MessengerManager.Instance.ClearAll();
         }
+
+        FriendlyMatchManager.Instance?.Reset();
     }
 
     private void SaveUserData()
@@ -331,14 +379,18 @@ public class SaveManager : Singleton<SaveManager>
         CurrentUserData = SaveSystem.Instance.LoadUserData();
         if (CurrentUserData == null)
             CurrentUserData = new UserData();
-
+#if UNITY_EDITOR
         Debug.Log($"[SaveManager] LoadUserData | unlockedNodeIds.Count={(CurrentUserData.unlockedNodeIds != null ? CurrentUserData.unlockedNodeIds.Count : -1)}");
+#endif
     }
 
     private static SavedFlowData CollectFlowData()
     {
         if (GameManager.Instance == null)
             return new SavedFlowData();
+
+        // itemeffect_06 세이브 데이터 수집
+        var boostData = GameManager.Instance.GetTrainingBoostSaveData();
 
         return new SavedFlowData
         {
@@ -369,6 +421,21 @@ public class SaveManager : Singleton<SaveManager>
             friendlyMatchLastMonth = FriendlyMatchManager.Instance != null
                 ? FriendlyMatchManager.Instance.LastMonth
                 : -1,
+
+            // itemeffect_01 영구 지원금 보너스 저장
+            subsidyPermBonusRate = GameManager.Instance.GetSubsidyPermBonusRate(),
+
+            // itemeffect_06 일시적 훈련 효과 저장
+            trainingBoostExpireDate = boostData.hasBoost && boostData.expireDate != default
+                ? boostData.expireDate.ToString("yyyy-MM-dd")
+                : string.Empty,
+            trainingBoostStatKey = boostData.hasBoost
+                ? boostData.stat.ToString().ToLowerInvariant()
+                : string.Empty,
+
+            // 토너먼트 관련 저장
+            semiFinalReachedCount = GameManager.Instance.GetSemiFinalReachedCount(),
+            trainingEfficiencyPermBonusRate = GameManager.Instance.GetTrainingEfficiencyPermBonusRate(),
         };
     }
 
@@ -412,6 +479,8 @@ public class SaveManager : Singleton<SaveManager>
                 conditionRecoveryBonus = s.conditionRecoveryBonus,
                 trainingEfficiencyBonus = s.trainingEfficiencyBonus,
                 isTrainingBlocked = s.isTrainingBlocked,
+                abnormalState = (int)s.abnormalState,
+                abnormalRemainTurn = s.abnormalRemainTurn,
             });
         }
 
@@ -462,23 +531,44 @@ public class SaveManager : Singleton<SaveManager>
     {
         TournamentManager tm = UnityEngine.Object.FindFirstObjectByType<TournamentManager>();
 
-        // 토너먼트 씬이 아닐 때는 빈 데이터 반환
         if (tm == null)
         {
-            return new SavedTournamentData();
+            SavedTournamentData existing = SaveManager.Instance?.CurrentData?.tournament
+                ?? new SavedTournamentData();
+#if UNITY_EDITOR
+            Debug.Log($"[SaveManager] 토너먼트 씬 아님 → 기존 데이터 유지 | isInProgress={existing.isInProgress}");
+#endif
+            return existing;
         }
-        return tm.CollectSaveData();
+
+        SavedTournamentData collected = tm.CollectSaveData();
+#if UNITY_EDITOR
+        Debug.Log($"[SaveManager] 토너먼트 데이터 수집 | isInProgress={collected.isInProgress}, roundIndex={collected.currentRoundIndex}");
+#endif
+        return collected;
     }
 
     // 경기 시뮬레이션 상태 수집
     private static SavedMatchSimData CollectMatchSimData()
     {
         MatchGameManager mgm = UnityEngine.Object.FindFirstObjectByType<MatchGameManager>();
+
         if (mgm == null)
         {
-            return new SavedMatchSimData { isMatchRunning = false };
+            SavedMatchSimData existing = SaveManager.Instance?.CurrentData?.matchSim
+                ?? new SavedMatchSimData { isMatchRunning = false };
+#if UNITY_EDITOR
+            Debug.Log($"[SaveManager] 토너먼트 씬 아님 → 기존 경기 데이터 유지 | isMatchRunning={existing.isMatchRunning}");
+#endif
+            return existing;
+
         }
-        return mgm.CollectSaveData();
+
+        SavedMatchSimData collected = mgm.CollectSaveData();
+#if UNITY_EDITOR
+        Debug.Log($"[SaveManager] 경기 데이터 수집 | isMatchRunning={collected.isMatchRunning}, stageIndex={collected.progressStageIndex}");
+#endif
+        return collected;
     }
 
     // 메신저 상태 수집
@@ -549,6 +639,8 @@ public class SaveManager : Singleton<SaveManager>
                 conditionRecoveryBonus = data.conditionRecoveryBonus,
                 trainingEfficiencyBonus = data.trainingEfficiencyBonus,
                 isTrainingBlocked = data.isTrainingBlocked,
+                abnormalState = (Student.AbnormalType)data.abnormalState,
+                abnormalRemainTurn = data.abnormalRemainTurn,
             };
 
             if (student.id > maxId)
@@ -806,7 +898,9 @@ public class SaveManager : Singleton<SaveManager>
         }
 
         if (unlockedNodeIds == null)
+        {
             unlockedNodeIds = new List<int>();
+        }
 
         HeadCoachManager.Instance.RestoreUnlockedNodes(unlockedNodeIds);
         Debug.Log($"[SaveManager] 감독 노드 복원 완료. count={unlockedNodeIds.Count}");
@@ -832,18 +926,51 @@ public class SaveManager : Singleton<SaveManager>
             if (!data.isRecruitmentInProgress) continue;
 
             bool hasStudents = data.students != null && data.students.Count > 0;
+
+            // 토너먼트 진행 중이면 삭제하지 않음
+            bool isTournamentInProgress = data.tournament != null && data.tournament.isInProgress;
+            bool isMatchRunning = data.matchSim != null && data.matchSim.isMatchRunning;
+
+            if (isTournamentInProgress || isMatchRunning)
+            {
+                Debug.Log($"[SaveManager] 슬롯 {i}: 토너먼트/경기 진행 중 → 삭제 스킵");
+                continue;
+            }
+
             if (hasStudents)
             {
-                // 학기 중 영입 강제종료 → 플래그만 초기화 후 슬롯 유지
                 data.isRecruitmentInProgress = false;
                 SaveSystem.Instance.Save(data);
                 Debug.Log($"[SaveManager] 슬롯 {i}: 학기 영입 미완료 감지 → 플래그 초기화 후 유지");
                 continue;
             }
 
-            // 새 게임 첫 영입 강제종료 → 슬롯 삭제
             Debug.LogWarning($"[SaveManager] 슬롯 {i}: 새 게임 영입 미완료 감지 → 삭제");
             SaveSystem.Instance.Delete(i);
+        }
+    }
+
+    // SceneTransitionManager가 없으면 기본 씬 전환으로 폴백
+    private static void LoadSceneSafe(string sceneName)
+    {
+        if (SceneTransitionManager.Instance != null)
+            SceneTransitionManager.Instance.LoadScene(sceneName);
+        else
+            SceneManager.LoadScene(sceneName);
+    }
+
+    private void OnApplicationQuit()
+    {
+        Debug.Log("[SaveManager] OnApplicationQuit - 저장 시도");
+        SaveCurrent();
+    }
+
+    private void OnApplicationPause(bool pauseStatus)
+    {
+        if (pauseStatus)
+        {
+            Debug.Log("[SaveManager] OnApplicationPause - 저장 시도");
+            SaveCurrent();
         }
     }
 }

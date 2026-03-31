@@ -5,6 +5,9 @@ using UnityEngine.UI;
 // 훈련 선택 팝업 (페이지 전환 방식)
 public class TrainingSelectPopup : UIPopup
 {
+    private static readonly AbnormalStatusEffect _abnormalStatusEffect = new AbnormalStatusEffect();
+    private readonly SuddenEvent _suddenEvent = new SuddenEvent();
+
     private enum TrainingPageKind
     {
         Default = 0,
@@ -31,6 +34,9 @@ public class TrainingSelectPopup : UIPopup
     [Header("Navigation")]
     [SerializeField] private Button _btnBack;
     [SerializeField] private Button _btnTrainingClose;
+
+    [Header("애니메이션")]
+    [SerializeField] private PopupAnimator _selfAnimator; // UIPopup._animator와 중복 방지
 
     private TrainingFlowController _trainingFlow;
 
@@ -67,7 +73,41 @@ public class TrainingSelectPopup : UIPopup
     public override void Open()
     {
         if (!TryBuildPageDataFromCache()) return;
-        base.Open();
+
+        if (_selfAnimator == null)
+        {
+            Debug.LogWarning("[TrainingSelectPopup] _selfAnimator가 연결되지 않았습니다. 인스펙터에서 PopupAnimator를 연결해주세요.");
+            OpenBase();
+            return;
+        }
+
+        // SetActive(true) 전에 Initialize로 위치/스케일 초기화 보장
+        _selfAnimator.Initialize();
+
+        OpenBase();
+
+        _selfAnimator.PlayIn();
+    }
+
+    public override void Close()
+    {
+        if (!gameObject.activeSelf) return;
+
+        PlayPopupCloseSfx();
+
+        if (_selfAnimator == null)
+        {
+            gameObject.SetActive(false);
+            return;
+        }
+
+        _selfAnimator.PlayOut(() => gameObject.SetActive(false));
+    }
+
+    // 훈련 플로우 진입 시 전용 — 로딩 UI로 즉시 전환하므로 애니메이션 없이 꺼짐
+    private void CloseImmediate()
+    {
+        gameObject.SetActive(false);
     }
 
     private bool TryBuildPageDataFromCache()
@@ -256,15 +296,17 @@ public class TrainingSelectPopup : UIPopup
             return;
         }
 
+        bool restCommandException = data.trainingKey == "cmd_1004";
+
         // 훈련 불가 학생 체크
-        if (!data.requiresStudentSelection)
+        if (!data.requiresStudentSelection && !restCommandException)
         {
             bool allBlocked = true;
             if (StudentManager.Instance != null)
             {
                 foreach (Student student in StudentManager.Instance.Students)
                 {
-                    if (student != null && !student.isTrainingBlocked)
+                    if (!_abnormalStatusEffect.IsTrainingBlocked(student, isIndividualTraining: false))
                     {
                         allBlocked = false;
                         break;
@@ -321,6 +363,12 @@ public class TrainingSelectPopup : UIPopup
         {
             req.OnStudentsSelected = (students) =>
             {
+                students.RemoveAll(student => _abnormalStatusEffect.IsTrainingBlocked(student, isIndividualTraining: true));
+                if (students.Count == 0)
+                {
+                    return;
+                }
+
                 StartTrainingFlowFromConfirm(data, students);
             };
             req.OnPrimary = () => { };
@@ -331,8 +379,10 @@ public class TrainingSelectPopup : UIPopup
             {
                 List<Student> students = GetDefaultStudentsForNoSelect();
 
-                // isTrainingBlocked 학생 제거
-                students.RemoveAll(s => s == null || s.isTrainingBlocked);
+                if (!restCommandException)
+                {
+                    students.RemoveAll(student => _abnormalStatusEffect.IsTrainingBlocked(student, isIndividualTraining: false));
+                }
 
                 if (students.Count == 0) return;
 
@@ -351,7 +401,9 @@ public class TrainingSelectPopup : UIPopup
 
         ClearPageHistory();
         ClearButtons();
-        Close();
+
+        // 훈련 로딩 UI로 즉시 전환하므로 애니메이션 없이 꺼짐
+        CloseImmediate();
 
         string key = data.trainingKey;
         string name = data.trainingName;
@@ -442,9 +494,9 @@ public class TrainingSelectPopup : UIPopup
             // 슈팅 드릴 (index: 1201)
             if (trainingKey == "cmd_1201")
             {
-                nodeConditionBonus += 
+                nodeConditionBonus +=
                     HeadCoachManager.Instance.GetStatBonusValue("Condition_Drain_ShootingDrill") * 0.01f;
-                
+
                 int previewCost =
                     Mathf.Max(
                         0, Mathf.FloorToInt(
@@ -461,7 +513,7 @@ public class TrainingSelectPopup : UIPopup
             {
                 nodeConditionBonus +=
                     HeadCoachManager.Instance.GetStatBonusValue("Condition_Drain_DefenceWork") * 0.01f;
-                
+
                 int previewCost =
                     Mathf.Max(
                         0, Mathf.FloorToInt(
@@ -479,7 +531,7 @@ public class TrainingSelectPopup : UIPopup
                 nodeConditionBonus +=
                     HeadCoachManager.Instance.GetStatBonusValue("Condition_Drain_TeamPractice") * 0.01f;
 
-                int previewCost = 
+                int previewCost =
                     Mathf.Max(
                         0, Mathf.FloorToInt(
                             data.conditionDelta *
@@ -491,19 +543,35 @@ public class TrainingSelectPopup : UIPopup
             }
         }
 
+        // 농구공 장비 보너스 적용 (훈련 경험치 효율 증가)
+        float basketballRate = EquipmentSystem.Instance != null
+            ? EquipmentSystem.Instance.GetBasketballBonusRate()
+            : 1f;
+
         foreach (Student student in students)
         {
             if (student == null) continue;
 
-            // 훈련 차단된 학생은 효과 적용 안함
-            if (student.isTrainingBlocked) continue;
+            bool restCommandException = data.trainingKey == "cmd_1004";
+            if (!restCommandException && _abnormalStatusEffect.IsTrainingBlocked(student, data.requiresStudentSelection))
+                continue;
+
+            float trainingExpMultiplier = _abnormalStatusEffect.GetTrainingExpMultiplier(student);
+            float shootDelta = data.shootDelta * basketballRate * trainingExpMultiplier;
+            float speedDelta = data.speedDelta * basketballRate * trainingExpMultiplier;
+            float jumpDelta = data.jumpDelta * basketballRate * trainingExpMultiplier;
+            float staminaDelta = data.staminaDelta * basketballRate * trainingExpMultiplier;
+            float mentalDelta = data.mentalDelta * basketballRate * trainingExpMultiplier;
 
             // 컨디션
             if (data.conditionDelta >= 0)
             {
-                // 소모량에 노드 감소 보너스 적용 (Floor로 내림 처리해 소량 보너스도 반영)
+                float shoesDecayRate = EquipmentSystem.Instance != null
+                    ? EquipmentSystem.Instance.GetShoesConditionDecayRate()
+                    : 1f;
                 int cost = Mathf.FloorToInt(data.conditionDelta * (1f + nodeConditionBonus));
                 cost = Mathf.Max(0, cost);
+                cost = Mathf.RoundToInt(cost * shoesDecayRate);
                 student.condition -= cost;
             }
             else
@@ -515,16 +583,16 @@ public class TrainingSelectPopup : UIPopup
             student.condition = Student.ClampCondition(student.condition);
 
             // 스탯 경험치(훈련 공식 적용)
-            int shootExpDelta = StudentStatExpSystem.AddTrainingExp(student, StudentCoreStat.Shoot, data.shootDelta, gymBonus, gymLv, requiredLv, nodeTrainingBonus);
-            int speedExpDelta = StudentStatExpSystem.AddTrainingExp(student, StudentCoreStat.Speed, data.speedDelta, gymBonus, gymLv, requiredLv, nodeTrainingBonus);
-            int jumpExpDelta = StudentStatExpSystem.AddTrainingExp(student, StudentCoreStat.Jump, data.jumpDelta, gymBonus, gymLv, requiredLv, nodeTrainingBonus);
-            int staminaExpDelta = StudentStatExpSystem.AddTrainingExp(student, StudentCoreStat.Stamina, data.staminaDelta, gymBonus, gymLv, requiredLv, nodeTrainingBonus);
+            int shootExpDelta = StudentStatExpSystem.AddTrainingExp(student, StudentCoreStat.Shoot, shootDelta, gymBonus, gymLv, requiredLv, nodeTrainingBonus);
+            int speedExpDelta = StudentStatExpSystem.AddTrainingExp(student, StudentCoreStat.Speed, speedDelta, gymBonus, gymLv, requiredLv, nodeTrainingBonus);
+            int jumpExpDelta = StudentStatExpSystem.AddTrainingExp(student, StudentCoreStat.Jump, jumpDelta, gymBonus, gymLv, requiredLv, nodeTrainingBonus);
+            int staminaExpDelta = StudentStatExpSystem.AddTrainingExp(student, StudentCoreStat.Stamina, staminaDelta, gymBonus, gymLv, requiredLv, nodeTrainingBonus);
 
             // 멘탈
             int mentalExpDelta;
             if (data.mentalDelta >= 0)
             {
-                mentalExpDelta = StudentStatExpSystem.AddTrainingExpWithRate(student, StudentCoreStat.Mental, data.mentalDelta, mentalBonus, nodeTrainingBonus);
+                mentalExpDelta = StudentStatExpSystem.AddTrainingExpWithRate(student, StudentCoreStat.Mental, mentalDelta, mentalBonus, nodeTrainingBonus);
             }
             else
             {
@@ -541,6 +609,9 @@ public class TrainingSelectPopup : UIPopup
                 staminaExpDelta);
 
             if (StudentManager.Instance != null)
+                StudentManager.Instance.NotifyStudentModified(student);
+
+            if (_suddenEvent.TryApplyTrainingInjury(student) && StudentManager.Instance != null)
                 StudentManager.Instance.NotifyStudentModified(student);
         }
 

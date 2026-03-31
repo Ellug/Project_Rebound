@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 // 로비 주말 분기(친선 우선/주말훈련) 전담
 public class LobbyWeekendManager
@@ -41,7 +41,7 @@ public class LobbyWeekendManager
         UIPopupRequest req = UIPopupRequest.Default(
             title: "주말 훈련 제안",
             message: "금요일 일정이 끝났습니다.\n주말 훈련을 진행하시겠습니까?",
-            previewImageId: "EventPopup_weekend_img",
+            previewImageId: AlwaysEventImageIds.Weekend,
             onPrimary: OnWeekendTrainingConfirmed,
             onCancel: OnWeekendTrainingCancelled,
             subMessage: "확인: 전원 스탯 소량 상승, 주말 휴식 효율 50%\n취소: 주말 푹 쉬기 (체력 대폭 회복)",

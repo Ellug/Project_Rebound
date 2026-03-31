@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
@@ -22,6 +22,10 @@ public class OptionUI : MonoBehaviour
     [SerializeField] private Sprite _volume1Sprite;
     [SerializeField] private Sprite _volume2Sprite;
 
+    // _optinonPanel 오브젝트에 붙어있는 PopupAnimator
+    [Header("애니메이션")]
+    [SerializeField] private PopupAnimator _animator;
+
     private bool _bgmMuted;
     private bool _effectMuted;
 
@@ -35,14 +39,43 @@ public class OptionUI : MonoBehaviour
     {
         InitUI();
         SoundManager.Instance.PlayEffect(202);
+
+        if (_animator == null)
+        {
+            Debug.LogWarning("[OptionUI] _animator가 연결되지 않았습니다. 인스펙터에서 PopupAnimator를 연결해주세요.");
+            _optinonPanel.SetActive(true);
+            return;
+        }
+
+        // SetActive(true) 전에 Initialize로 위치/스케일 초기화 보장
+        _animator.Initialize();
+
         _optinonPanel.SetActive(true);
+        _animator.PlayIn();
     }
 
     public void OptinonPanelClose()
     {
         SoundManager.Instance.PlayEffect(203);
+
+        if (_animator == null)
+        {
+            _optinonPanel.SetActive(false);
+            return;
+        }
+
+        _animator.PlayOut(() => _optinonPanel.SetActive(false));
+    }
+
+    // 씬 전환 전 애니메이션 없이 즉시 닫기
+    public void CloseImmediate()
+    {
+        if (_animator != null)
+            _animator.StopImmediate();
+
         _optinonPanel.SetActive(false);
     }
+
     private void InitUI()
     {
         float bgm = PlayerPrefs.GetFloat("BGM_VOL", 1f);
@@ -102,7 +135,6 @@ public class OptionUI : MonoBehaviour
         UpdateVolumeIcon(_bgmSlider.value, _bgmIcon, _bgmMuted);
     }
 
-
     private void OnEffectIconClicked()
     {
         _effectMuted = !_effectMuted;
@@ -143,5 +175,4 @@ public class OptionUI : MonoBehaviour
         _bgmValueText.text = bgm.ToString();
         _effectValueText.text = effect.ToString();
     }
-
 }

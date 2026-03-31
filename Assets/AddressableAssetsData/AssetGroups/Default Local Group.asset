@@ -15,11 +15,6 @@ MonoBehaviour:
   m_GroupName: Default Local Group
   m_GUID: c63a1636634c9254b8a68dd081a2d9d7
   m_SerializeEntries:
-  - m_GUID: 02583003e2569e54fb8b0c062276990a
-    m_Address: ContentUnlockFeatureTable
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 165f817500be3c049a6e07b29df86d9b
     m_Address: CoachNodeMasterTable
     m_ReadOnly: 0
@@ -87,6 +82,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 41c1d4c214c73e4469337a604d487db5
     m_Address: AlwaysEventTable
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 45f1d6a7e3c121b46807a6de72f9bf75
+    m_Address: Assets/_Images/GraduateGift/Gift_popup_img.png
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -185,6 +185,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b8798145dd9f19544a65e771b1f5e303
+    m_Address: Assets/_Images/Credits/EndingPopup_img.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: caaa9da3c0da24b4eab850394767170b
     m_Address: SuddenEventMsgTextTable
     m_ReadOnly: 0
@@ -197,6 +202,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: d62916513a463a24b83931edfd3a775a
     m_Address: CoachNodeEffectDetailTable
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d7ce51f313b96d1428741c22b8b13ede
+    m_Address: EquipmentUpgradeTable
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

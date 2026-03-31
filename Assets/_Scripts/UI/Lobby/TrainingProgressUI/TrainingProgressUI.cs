@@ -16,18 +16,26 @@ public class TrainingProgressUI : UIBase
     [SerializeField] private float _gaugeSpeed = 1f; // 1 = 1배속, 2 = 2배속, 1.5 = 1.5배속
     public float GaugeSpeed => _gaugeSpeed;
 
+    [Header("애니메이션")]
+    [SerializeField] private PopupAnimator _animator;
+
     private string _currentBackgroundImageId;        // 현재 로드된 배경 이미지 ID (해제용)
 
     // UI 표시 및 초기화
     public void Show(string backgroundImageId = null)
     {
-        gameObject.SetActive(true);
+        // SetActive(true) 전에 Initialize로 위치/스케일 초기화 보장
+        _animator.Initialize();
 
+        gameObject.SetActive(true);
         SetProgress01(0f);
         SetStatus("진행중..");
 
         // 배경 이미지 ID가 있으면 Addressable로 비동기 로드
         LoadBackgroundImage(backgroundImageId);
+        SoundManager.Instance.PlayEffect(208);
+
+        _animator.PlayIn();
     }
 
     public void SetGaugeSpeed(float gaugeSpeed)
@@ -39,7 +47,7 @@ public class TrainingProgressUI : UIBase
     public void SetProgress01(float fill01)
     {
         fill01 = Mathf.Clamp01(fill01);
-
+        
         if (_imgGaugeFill != null)
             _imgGaugeFill.fillAmount = fill01;
 
@@ -57,8 +65,11 @@ public class TrainingProgressUI : UIBase
     // UI 숨김
     public void Hide()
     {
-        ReleaseBackgroundImage();
-        gameObject.SetActive(false);
+        _animator.PlayOut(() =>
+        {
+            ReleaseBackgroundImage();
+            gameObject.SetActive(false);
+        });
     }
 
     // 이미지 ID 기준으로 Addressable 비동기 로드

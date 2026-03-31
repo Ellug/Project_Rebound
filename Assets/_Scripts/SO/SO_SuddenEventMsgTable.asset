@@ -2305,6 +2305,2286 @@ MonoBehaviour:
     choice3Dialogue: 
     choice3Next: 
     suddenEvent: 
+  - iD: diag_000011
+    messageIndex: index_000
+    messageDialogue: text_diag_000011_000
+    next: index_001
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000011
+    messageIndex: index_001
+    messageDialogue: text_diag_000011_001
+    next: index_002
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000011
+    messageIndex: index_002
+    messageDialogue: text_diag_000011_002
+    next: index_003
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000011
+    messageIndex: index_003
+    messageDialogue: text_diag_000011_003
+    next: 
+    isChoice: 1
+    choice1Dialogue: text_diag_000011_004
+    choice1Next: index_004
+    choice2Dialogue: text_diag_000011_007
+    choice2Next: index_006
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000011
+    messageIndex: index_004
+    messageDialogue: text_diag_000011_005
+    next: index_005
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000011
+    messageIndex: index_005
+    messageDialogue: text_diag_000011_006
+    next: END
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000011
+    messageIndex: index_006
+    messageDialogue: text_diag_000011_008
+    next: index_007
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000011
+    messageIndex: index_007
+    messageDialogue: text_diag_000011_009
+    next: index_008
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000011
+    messageIndex: index_008
+    messageDialogue: text_diag_000011_010
+    next: index_009
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000011
+    messageIndex: index_009
+    messageDialogue: text_diag_000011_011
+    next: index_010
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000011
+    messageIndex: index_010
+    messageDialogue: text_diag_000011_012
+    next: index_011
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000011
+    messageIndex: index_011
+    messageDialogue: text_diag_000011_013
+    next: END
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000012
+    messageIndex: index_000
+    messageDialogue: text_diag_000012_000
+    next: index_001
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000012
+    messageIndex: index_001
+    messageDialogue: text_diag_000012_001
+    next: index_002
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000012
+    messageIndex: index_002
+    messageDialogue: text_diag_000012_002
+    next: index_003
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000012
+    messageIndex: index_003
+    messageDialogue: text_diag_000012_003
+    next: index_004
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000012
+    messageIndex: index_004
+    messageDialogue: text_diag_000012_004
+    next: index_005
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000012
+    messageIndex: index_005
+    messageDialogue: text_diag_000012_005
+    next: index_006
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000012
+    messageIndex: index_006
+    messageDialogue: text_diag_000012_006
+    next: index_007
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000012
+    messageIndex: index_007
+    messageDialogue: text_diag_000012_007
+    next: index_008
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000012
+    messageIndex: index_008
+    messageDialogue: text_diag_000012_008
+    next: 
+    isChoice: 1
+    choice1Dialogue: text_diag_000012_009
+    choice1Next: index_009
+    choice2Dialogue: text_diag_000012_013
+    choice2Next: index_012
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000012
+    messageIndex: index_009
+    messageDialogue: text_diag_000012_010
+    next: index_010
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000012
+    messageIndex: index_010
+    messageDialogue: text_diag_000012_011
+    next: index_011
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000012
+    messageIndex: index_011
+    messageDialogue: text_diag_000012_012
+    next: END
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: event_000022
+  - iD: diag_000012
+    messageIndex: index_012
+    messageDialogue: text_diag_000012_014
+    next: index_013
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000012
+    messageIndex: index_013
+    messageDialogue: text_diag_000012_015
+    next: index_014
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000012
+    messageIndex: index_014
+    messageDialogue: text_diag_000012_016
+    next: index_015
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000012
+    messageIndex: index_015
+    messageDialogue: text_diag_000012_017
+    next: index_016
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000012
+    messageIndex: index_016
+    messageDialogue: text_diag_000012_018
+    next: index_017
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000012
+    messageIndex: index_017
+    messageDialogue: text_diag_000012_019
+    next: END
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000013
+    messageIndex: index_000
+    messageDialogue: text_diag_000013_000
+    next: index_001
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000013
+    messageIndex: index_001
+    messageDialogue: text_diag_000013_001
+    next: index_002
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000013
+    messageIndex: index_002
+    messageDialogue: text_diag_000013_002
+    next: index_003
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000013
+    messageIndex: index_003
+    messageDialogue: text_diag_000013_003
+    next: index_004
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000013
+    messageIndex: index_004
+    messageDialogue: text_diag_000013_004
+    next: index_005
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000013
+    messageIndex: index_005
+    messageDialogue: text_diag_000013_005
+    next: index_006
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000013
+    messageIndex: index_006
+    messageDialogue: text_diag_000013_006
+    next: 
+    isChoice: 1
+    choice1Dialogue: text_diag_000013_007
+    choice1Next: index_007
+    choice2Dialogue: text_diag_000013_014
+    choice2Next: index_013
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000013
+    messageIndex: index_007
+    messageDialogue: text_diag_000013_008
+    next: index_008
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000013
+    messageIndex: index_008
+    messageDialogue: text_diag_000013_009
+    next: index_009
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000013
+    messageIndex: index_009
+    messageDialogue: text_diag_000013_010
+    next: index_010
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000013
+    messageIndex: index_010
+    messageDialogue: text_diag_000013_011
+    next: index_011
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000013
+    messageIndex: index_011
+    messageDialogue: text_diag_000013_012
+    next: index_012
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000013
+    messageIndex: index_012
+    messageDialogue: text_diag_000013_013
+    next: END
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000013
+    messageIndex: index_013
+    messageDialogue: text_diag_000013_015
+    next: index_014
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000013
+    messageIndex: index_014
+    messageDialogue: text_diag_000013_016
+    next: index_015
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000013
+    messageIndex: index_015
+    messageDialogue: text_diag_000013_017
+    next: index_016
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000013
+    messageIndex: index_016
+    messageDialogue: text_diag_000013_018
+    next: END
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000014
+    messageIndex: index_000
+    messageDialogue: text_diag_000014_000
+    next: index_001
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000014
+    messageIndex: index_001
+    messageDialogue: text_diag_000014_001
+    next: index_002
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000014
+    messageIndex: index_002
+    messageDialogue: text_diag_000014_002
+    next: index_003
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000014
+    messageIndex: index_003
+    messageDialogue: text_diag_000014_003
+    next: index_004
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000014
+    messageIndex: index_004
+    messageDialogue: text_diag_000014_004
+    next: index_005
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000014
+    messageIndex: index_005
+    messageDialogue: text_diag_000014_005
+    next: index_006
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000014
+    messageIndex: index_006
+    messageDialogue: text_diag_000014_006
+    next: index_007
+    isChoice: 1
+    choice1Dialogue: text_diag_000014_007
+    choice1Next: index_007
+    choice2Dialogue: text_diag_000014_011
+    choice2Next: index_010
+    choice3Dialogue: text_diag_000014_017
+    choice3Next: index_015
+    suddenEvent: 
+  - iD: diag_000014
+    messageIndex: index_007
+    messageDialogue: text_diag_000014_008
+    next: index_008
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000014
+    messageIndex: index_008
+    messageDialogue: text_diag_000014_009
+    next: index_009
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000014
+    messageIndex: index_009
+    messageDialogue: text_diag_000014_010
+    next: END
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: event_000023
+  - iD: diag_000014
+    messageIndex: index_010
+    messageDialogue: text_diag_000014_012
+    next: index_011
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000014
+    messageIndex: index_011
+    messageDialogue: text_diag_000014_013
+    next: index_012
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000014
+    messageIndex: index_012
+    messageDialogue: text_diag_000014_014
+    next: index_013
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000014
+    messageIndex: index_013
+    messageDialogue: text_diag_000014_015
+    next: index_014
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000014
+    messageIndex: index_014
+    messageDialogue: text_diag_000014_016
+    next: END
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: event_000024
+  - iD: diag_000014
+    messageIndex: index_015
+    messageDialogue: text_diag_000014_018
+    next: index_016
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000014
+    messageIndex: index_016
+    messageDialogue: text_diag_000014_019
+    next: index_017
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000014
+    messageIndex: index_017
+    messageDialogue: text_diag_000014_020
+    next: index_018
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000014
+    messageIndex: index_018
+    messageDialogue: text_diag_000014_021
+    next: index_019
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000014
+    messageIndex: index_019
+    messageDialogue: text_diag_000014_022
+    next: index_020
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000014
+    messageIndex: index_020
+    messageDialogue: text_diag_000014_023
+    next: index_021
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000014
+    messageIndex: index_021
+    messageDialogue: text_diag_000014_024
+    next: END
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: event_000025
+  - iD: diag_000015
+    messageIndex: index_000
+    messageDialogue: text_diag_000015_000
+    next: index_001
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000015
+    messageIndex: index_001
+    messageDialogue: text_diag_000015_001
+    next: index_002
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000015
+    messageIndex: index_002
+    messageDialogue: text_diag_000015_002
+    next: index_003
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000015
+    messageIndex: index_003
+    messageDialogue: text_diag_000015_003
+    next: index_004
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000015
+    messageIndex: index_004
+    messageDialogue: text_diag_000015_004
+    next: 
+    isChoice: 1
+    choice1Dialogue: text_diag_000015_005
+    choice1Next: index_005
+    choice2Dialogue: text_diag_000015_015
+    choice2Next: index_014
+    choice3Dialogue: text_diag_000015_020
+    choice3Next: index_018
+    suddenEvent: 
+  - iD: diag_000015
+    messageIndex: index_005
+    messageDialogue: text_diag_000015_006
+    next: index_006
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000015
+    messageIndex: index_006
+    messageDialogue: text_diag_000015_007
+    next: index_007
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000015
+    messageIndex: index_007
+    messageDialogue: text_diag_000015_008
+    next: index_008
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000015
+    messageIndex: index_008
+    messageDialogue: text_diag_000015_009
+    next: index_009
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000015
+    messageIndex: index_009
+    messageDialogue: text_diag_000015_010
+    next: index_010
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000015
+    messageIndex: index_010
+    messageDialogue: text_diag_000015_011
+    next: index_011
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000015
+    messageIndex: index_011
+    messageDialogue: text_diag_000015_012
+    next: index_012
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000015
+    messageIndex: index_012
+    messageDialogue: text_diag_000015_013
+    next: index_013
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000015
+    messageIndex: index_013
+    messageDialogue: text_diag_000015_014
+    next: END
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: event_000007
+  - iD: diag_000015
+    messageIndex: index_014
+    messageDialogue: text_diag_000015_016
+    next: index_015
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000015
+    messageIndex: index_015
+    messageDialogue: text_diag_000015_017
+    next: index_016
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000015
+    messageIndex: index_016
+    messageDialogue: text_diag_000015_018
+    next: index_017
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000015
+    messageIndex: index_017
+    messageDialogue: text_diag_000015_019
+    next: END
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: event_000007
+  - iD: diag_000015
+    messageIndex: index_018
+    messageDialogue: text_diag_000015_021
+    next: index_019
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000015
+    messageIndex: index_019
+    messageDialogue: text_diag_000015_022
+    next: index_020
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000015
+    messageIndex: index_020
+    messageDialogue: text_diag_000015_023
+    next: index_021
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000015
+    messageIndex: index_021
+    messageDialogue: text_diag_000015_024
+    next: index_022
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000015
+    messageIndex: index_022
+    messageDialogue: text_diag_000015_025
+    next: index_023
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000015
+    messageIndex: index_023
+    messageDialogue: text_diag_000015_026
+    next: index_024
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000015
+    messageIndex: index_024
+    messageDialogue: text_diag_000015_027
+    next: index_025
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000015
+    messageIndex: index_025
+    messageDialogue: text_diag_000015_028
+    next: END
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: event_000007
+  - iD: diag_000016
+    messageIndex: index_000
+    messageDialogue: text_diag_000016_000
+    next: index_001
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000016
+    messageIndex: index_001
+    messageDialogue: text_diag_000016_001
+    next: index_002
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000016
+    messageIndex: index_002
+    messageDialogue: text_diag_000016_002
+    next: index_003
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000016
+    messageIndex: index_003
+    messageDialogue: text_diag_000016_003
+    next: index_004
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000016
+    messageIndex: index_004
+    messageDialogue: text_diag_000016_004
+    next: index_005
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000016
+    messageIndex: index_005
+    messageDialogue: text_diag_000016_005
+    next: index_006
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000016
+    messageIndex: index_006
+    messageDialogue: text_diag_000016_006
+    next: index_007
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000016
+    messageIndex: index_007
+    messageDialogue: text_diag_000016_007
+    next: index_008
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000016
+    messageIndex: index_008
+    messageDialogue: text_diag_000016_008
+    next: index_009
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000016
+    messageIndex: index_009
+    messageDialogue: text_diag_000016_009
+    next: 
+    isChoice: 1
+    choice1Dialogue: text_diag_000016_010
+    choice1Next: index_010
+    choice2Dialogue: text_diag_000016_017
+    choice2Next: index_016
+    choice3Dialogue: text_diag_000016_027
+    choice3Next: index_025
+    suddenEvent: 
+  - iD: diag_000016
+    messageIndex: index_010
+    messageDialogue: text_diag_000016_011
+    next: index_011
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000016
+    messageIndex: index_011
+    messageDialogue: text_diag_000016_012
+    next: index_012
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000016
+    messageIndex: index_012
+    messageDialogue: text_diag_000016_013
+    next: index_013
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000016
+    messageIndex: index_013
+    messageDialogue: text_diag_000016_014
+    next: index_014
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000016
+    messageIndex: index_014
+    messageDialogue: text_diag_000016_015
+    next: index_015
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000016
+    messageIndex: index_015
+    messageDialogue: text_diag_000016_016
+    next: END
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: event_000011
+  - iD: diag_000016
+    messageIndex: index_016
+    messageDialogue: text_diag_000016_018
+    next: index_017
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000016
+    messageIndex: index_017
+    messageDialogue: text_diag_000016_019
+    next: index_018
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000016
+    messageIndex: index_018
+    messageDialogue: text_diag_000016_020
+    next: index_019
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000016
+    messageIndex: index_019
+    messageDialogue: text_diag_000016_021
+    next: index_020
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000016
+    messageIndex: index_020
+    messageDialogue: text_diag_000016_022
+    next: index_021
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000016
+    messageIndex: index_021
+    messageDialogue: text_diag_000016_023
+    next: index_022
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000016
+    messageIndex: index_022
+    messageDialogue: text_diag_000016_024
+    next: index_023
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000016
+    messageIndex: index_023
+    messageDialogue: text_diag_000016_025
+    next: index_024
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000016
+    messageIndex: index_024
+    messageDialogue: text_diag_000016_026
+    next: END
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000016
+    messageIndex: index_025
+    messageDialogue: text_diag_000016_028
+    next: index_026
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000016
+    messageIndex: index_026
+    messageDialogue: text_diag_000016_029
+    next: index_027
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000016
+    messageIndex: index_027
+    messageDialogue: text_diag_000016_030
+    next: index_028
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000016
+    messageIndex: index_028
+    messageDialogue: text_diag_000016_031
+    next: END
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000017
+    messageIndex: index_000
+    messageDialogue: text_diag_000017_000
+    next: index_001
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000017
+    messageIndex: index_001
+    messageDialogue: text_diag_000017_001
+    next: index_002
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000017
+    messageIndex: index_002
+    messageDialogue: text_diag_000017_002
+    next: 
+    isChoice: 1
+    choice1Dialogue: text_diag_000017_003
+    choice1Next: index_003
+    choice2Dialogue: text_diag_000017_010
+    choice2Next: index_009
+    choice3Dialogue: text_diag_000017_017
+    choice3Next: index_015
+    suddenEvent: 
+  - iD: diag_000017
+    messageIndex: index_003
+    messageDialogue: text_diag_000017_004
+    next: index_004
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000017
+    messageIndex: index_004
+    messageDialogue: text_diag_000017_005
+    next: index_005
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000017
+    messageIndex: index_005
+    messageDialogue: text_diag_000017_006
+    next: index_006
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000017
+    messageIndex: index_006
+    messageDialogue: text_diag_000017_007
+    next: index_007
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000017
+    messageIndex: index_007
+    messageDialogue: text_diag_000017_008
+    next: index_008
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000017
+    messageIndex: index_008
+    messageDialogue: text_diag_000017_009
+    next: END
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000017
+    messageIndex: index_009
+    messageDialogue: text_diag_000017_011
+    next: index_010
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000017
+    messageIndex: index_010
+    messageDialogue: text_diag_000017_012
+    next: index_011
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000017
+    messageIndex: index_011
+    messageDialogue: text_diag_000017_013
+    next: index_012
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000017
+    messageIndex: index_012
+    messageDialogue: text_diag_000017_014
+    next: index_013
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000017
+    messageIndex: index_013
+    messageDialogue: text_diag_000017_015
+    next: index_014
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000017
+    messageIndex: index_014
+    messageDialogue: text_diag_000017_016
+    next: END
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000017
+    messageIndex: index_015
+    messageDialogue: text_diag_000017_018
+    next: index_016
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000017
+    messageIndex: index_016
+    messageDialogue: text_diag_000017_019
+    next: index_017
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000017
+    messageIndex: index_017
+    messageDialogue: text_diag_000017_020
+    next: index_018
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000017
+    messageIndex: index_018
+    messageDialogue: text_diag_000017_021
+    next: index_019
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000017
+    messageIndex: index_019
+    messageDialogue: text_diag_000017_022
+    next: index_020
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000017
+    messageIndex: index_020
+    messageDialogue: text_diag_000017_023
+    next: END
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000018
+    messageIndex: index_000
+    messageDialogue: text_diag_000018_000
+    next: index_001
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000018
+    messageIndex: index_001
+    messageDialogue: text_diag_000018_001
+    next: index_002
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000018
+    messageIndex: index_002
+    messageDialogue: text_diag_000018_002
+    next: index_003
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000018
+    messageIndex: index_003
+    messageDialogue: text_diag_000018_003
+    next: index_004
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000018
+    messageIndex: index_004
+    messageDialogue: text_diag_000018_004
+    next: index_005
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000018
+    messageIndex: index_005
+    messageDialogue: text_diag_000018_005
+    next: index_006
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000018
+    messageIndex: index_006
+    messageDialogue: text_diag_000018_006
+    next: index_007
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000018
+    messageIndex: index_007
+    messageDialogue: text_diag_000018_007
+    next: index_008
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000018
+    messageIndex: index_008
+    messageDialogue: text_diag_000018_008
+    next: END
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000019
+    messageIndex: index_000
+    messageDialogue: text_diag_000019_000
+    next: index_001
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000019
+    messageIndex: index_001
+    messageDialogue: text_diag_000019_001
+    next: index_002
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000019
+    messageIndex: index_002
+    messageDialogue: text_diag_000019_002
+    next: index_003
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000019
+    messageIndex: index_003
+    messageDialogue: text_diag_000019_003
+    next: index_004
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000019
+    messageIndex: index_004
+    messageDialogue: text_diag_000019_004
+    next: 
+    isChoice: 1
+    choice1Dialogue: text_diag_000019_005
+    choice1Next: index_005
+    choice2Dialogue: text_diag_000019_010
+    choice2Next: index_009
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000019
+    messageIndex: index_005
+    messageDialogue: text_diag_000019_006
+    next: index_006
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000019
+    messageIndex: index_006
+    messageDialogue: text_diag_000019_007
+    next: index_007
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000019
+    messageIndex: index_007
+    messageDialogue: text_diag_000019_008
+    next: index_008
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000019
+    messageIndex: index_008
+    messageDialogue: text_diag_000019_009
+    next: END
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000019
+    messageIndex: index_009
+    messageDialogue: text_diag_000019_011
+    next: index_010
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000019
+    messageIndex: index_010
+    messageDialogue: text_diag_000019_012
+    next: index_011
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000019
+    messageIndex: index_011
+    messageDialogue: text_diag_000019_013
+    next: index_012
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000019
+    messageIndex: index_012
+    messageDialogue: text_diag_000019_014
+    next: index_013
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000019
+    messageIndex: index_013
+    messageDialogue: text_diag_000019_015
+    next: END
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000020
+    messageIndex: index_000
+    messageDialogue: text_diag_000020_000
+    next: index_001
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000020
+    messageIndex: index_001
+    messageDialogue: text_diag_000020_001
+    next: index_002
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000020
+    messageIndex: index_002
+    messageDialogue: text_diag_000020_002
+    next: index_003
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000020
+    messageIndex: index_003
+    messageDialogue: text_diag_000020_003
+    next: index_004
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000020
+    messageIndex: index_004
+    messageDialogue: text_diag_000020_004
+    next: index_005
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000020
+    messageIndex: index_005
+    messageDialogue: text_diag_000020_005
+    next: index_006
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000020
+    messageIndex: index_006
+    messageDialogue: text_diag_000020_006
+    next: index_007
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000020
+    messageIndex: index_007
+    messageDialogue: text_diag_000020_007
+    next: index_008
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000020
+    messageIndex: index_008
+    messageDialogue: text_diag_000020_008
+    next: 
+    isChoice: 1
+    choice1Dialogue: text_diag_000020_009
+    choice1Next: index_009
+    choice2Dialogue: text_diag_000020_012
+    choice2Next: index_011
+    choice3Dialogue: text_diag_000020_016
+    choice3Next: index_014
+    suddenEvent: 
+  - iD: diag_000020
+    messageIndex: index_009
+    messageDialogue: text_diag_000020_010
+    next: index_010
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000020
+    messageIndex: index_010
+    messageDialogue: text_diag_000020_011
+    next: END
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: event_000022
+  - iD: diag_000020
+    messageIndex: index_011
+    messageDialogue: text_diag_000020_013
+    next: index_012
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000020
+    messageIndex: index_012
+    messageDialogue: text_diag_000020_014
+    next: index_013
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000020
+    messageIndex: index_013
+    messageDialogue: text_diag_000020_015
+    next: END
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000020
+    messageIndex: index_014
+    messageDialogue: text_diag_000020_017
+    next: index_015
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000020
+    messageIndex: index_015
+    messageDialogue: text_diag_000020_018
+    next: index_016
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000020
+    messageIndex: index_016
+    messageDialogue: text_diag_000020_019
+    next: index_017
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000020
+    messageIndex: index_017
+    messageDialogue: text_diag_000020_020
+    next: index_018
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000020
+    messageIndex: index_018
+    messageDialogue: text_diag_000020_021
+    next: index_019
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000020
+    messageIndex: index_019
+    messageDialogue: text_diag_000020_022
+    next: index_020
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000020
+    messageIndex: index_020
+    messageDialogue: text_diag_000020_023
+    next: index_021
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_000020
+    messageIndex: index_021
+    messageDialogue: text_diag_000020_024
+    next: END
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: event_000022
   - iD: diag_100000
     messageIndex: index_000
     messageDialogue: text_diag_100000_000
@@ -2329,6 +4609,90 @@ MonoBehaviour:
     choice3Dialogue: 
     choice3Next: 
     suddenEvent: event_000010
+  - iD: diag_110000
+    messageIndex: index_000
+    messageDialogue: text_diag_110000_000
+    next: END
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: event_001003
+  - iD: diag_110001
+    messageIndex: index_000
+    messageDialogue: text_diag_110001_000
+    next: END
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: event_001004
+  - iD: diag_110002
+    messageIndex: index_000
+    messageDialogue: text_diag_110002_000
+    next: END
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: event_001005
+  - iD: diag_111001
+    messageIndex: index_000
+    messageDialogue: text_diag_111001_000
+    next: END
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_111002
+    messageIndex: index_000
+    messageDialogue: text_diag_111002_000
+    next: END
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_111003
+    messageIndex: index_000
+    messageDialogue: text_diag_111003_000
+    next: END
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
+  - iD: diag_111004
+    messageIndex: index_000
+    messageDialogue: text_diag_111004_000
+    next: END
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: 
   - iD: diag_200001
     messageIndex: index_000
     messageDialogue: text_diag_200001_000
@@ -2341,3 +4705,27 @@ MonoBehaviour:
     choice3Dialogue: 
     choice3Next: 
     suddenEvent: event_000021
+  - iD: diag_200002
+    messageIndex: index_000
+    messageDialogue: text_diag_200002_000
+    next: END
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: event_000015
+  - iD: diag_200003
+    messageIndex: index_000
+    messageDialogue: text_diag_200003_000
+    next: END
+    isChoice: 0
+    choice1Dialogue: 
+    choice1Next: 
+    choice2Dialogue: 
+    choice2Next: 
+    choice3Dialogue: 
+    choice3Next: 
+    suddenEvent: event_000026

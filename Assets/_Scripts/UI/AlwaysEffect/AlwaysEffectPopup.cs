@@ -11,6 +11,9 @@ public class AlwaysEffectPopup : UIBase
     [SerializeField] private Transform _content;         // ScrollView > Content
     [SerializeField] private GameObject _rowPrefab;      // AlwaysEffectRowUI Prefab
 
+    [Header("애니메이션")]
+    [SerializeField] private PopupAnimator _animator;
+
     public override void Init()
     {
         base.Init();
@@ -19,8 +22,23 @@ public class AlwaysEffectPopup : UIBase
 
     public override void Open()
     {
+        // SetActive(true) 전에 Initialize로 위치/스케일 초기화 보장
+        _animator.Initialize();
+
         base.Open();
+
+        _animator.PlayIn();
+
         RefreshEffectList();
+    }
+
+    public override void Close()
+    {
+        if (!gameObject.activeSelf) return;
+
+        PlayPopupCloseSfx();
+
+        _animator.PlayOut(() => gameObject.SetActive(false));
     }
 
     // 기존 Row 제거 후 현재 활성 효과 기준으로 재생성
@@ -89,6 +107,7 @@ public class AlwaysEffectPopup : UIBase
 
         return result;
     }
+
     // AlwaysEffectRow 한 행 → 값이 있는 항목만 EffectEntry 리스트로 분해
     private static List<EffectEntry> BuildEntries(AlwaysEffectRow effect)
     {

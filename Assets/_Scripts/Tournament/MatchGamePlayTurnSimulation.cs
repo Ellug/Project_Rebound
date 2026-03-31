@@ -5,37 +5,29 @@ using UnityEngine;
 public readonly struct PlayTurnSimulationResult
 {
     public readonly IReadOnlyList<QuarterLogEntry> logs;
-    public readonly string contextImageId; // 공방 결과 상황 이미지 ID
+    public readonly MatchContextVisualCue contextVisualCue; // 공방 결과 상황 연출 타입
 
-    public PlayTurnSimulationResult(IReadOnlyList<QuarterLogEntry> logs, string contextImageId)
+    public PlayTurnSimulationResult(IReadOnlyList<QuarterLogEntry> logs, MatchContextVisualCue contextVisualCue)
     {
         this.logs = logs;
-        this.contextImageId = contextImageId;
+        this.contextVisualCue = contextVisualCue;
     }
 }
 
 public sealed class RandomPlayTurnSimulator
 {
-    private const string DefaultImageId = "EventGameTable04_img";
-    private const string AttackFirstImageId = "EventGame00_img_attack_first";
-    private const string AttackSecondImageId = "EventGame00_img_attack_second";
-    private const string AttackSuccessImageId = "EventGame00_img_attack_success";
-    private const string AttackFailedImageId = "EventGame00_img_attack_failed";
-    private const string DefenseSuccessImageId = "EventGame00_img_defense_success";
-    private const string DefenseFailedImageId = "EventGame00_img_defense_failed";
-
     // 공방 1회를 시뮬레이션하고 점수/로그를 반영
     public PlayTurnSimulationResult SimulatePlayTurn(MatchContext context, QuarterPodSession session)
     {
         List<QuarterLogEntry> logs = new(10);
-        string contextImageId = DefaultImageId; // 기본 이미지
+        MatchContextVisualCue contextVisualCue = MatchContextVisualCue.PlayTurnDefault;
 
         Student myPlayer = PickRandom(context.FieldPlayers);
 
         if (myPlayer == null)
         {
             logs.Add(Normal($"[{context.MySchoolName}] 출전 선수가 없어 공방을 진행할 수 없었다."));
-            return new PlayTurnSimulationResult(logs, contextImageId);
+            return new PlayTurnSimulationResult(logs, contextVisualCue);
         }
 
         // 3-3 나레이션: 선수 출전
@@ -52,12 +44,12 @@ public sealed class RandomPlayTurnSimulator
             logs);
 
         // 선공 이미지
-        contextImageId = myOffense
-            ? AttackFirstImageId
-            : AttackSecondImageId;
+        contextVisualCue = myOffense
+            ? MatchContextVisualCue.PlayTurnAttackFirst
+            : MatchContextVisualCue.PlayTurnAttackSecond;
 
         // 공방 판정 및 득점 처리
-        string resolvedImageId = ResolvePlayTurn(
+        MatchContextVisualCue resolvedVisualCue = ResolvePlayTurn(
             myPlayer,
             context.OpponentStat,
             myOffense,
@@ -66,9 +58,8 @@ public sealed class RandomPlayTurnSimulator
             context.MySchoolName,
             context.OpponentTeamName);
 
-        // 공방 결과 이미지로 교체
-        if (!string.IsNullOrEmpty(resolvedImageId))
-            contextImageId = resolvedImageId;
+        if (resolvedVisualCue != MatchContextVisualCue.None)
+            contextVisualCue = resolvedVisualCue;
 
         PostPlayTurnEvents();
 
@@ -78,7 +69,7 @@ public sealed class RandomPlayTurnSimulator
         logs.Add(System($"[{context.MySchoolName}] {myPlayer.studentName} 컨디션 -{conditionLoss}"));
         logs.Add(Normal(string.Empty));
 
-        return new PlayTurnSimulationResult(logs, contextImageId);
+        return new PlayTurnSimulationResult(logs, contextVisualCue);
     }
 
     private static void PrePlayTurnEvents()
@@ -108,8 +99,8 @@ public sealed class RandomPlayTurnSimulator
         return myOffense;
     }
 
-    // 공격/수비/리바운드 판정 후 득점 반영, 결과 이미지 ID 반환
-    private static string ResolvePlayTurn(
+    // 공격/수비/리바운드 판정 후 득점 반영, 결과 연출 타입 반환
+    private static MatchContextVisualCue ResolvePlayTurn(
         Student myPlayer,
         EnemyStatRow enemy,
         bool myOffense,
@@ -134,9 +125,46 @@ public sealed class RandomPlayTurnSimulator
         if (attackSuccess)
         {
             myWin = myOffense;
+
+            float threePointFieldGoal;
+
+            if (myOffense)
+            {
+                threePointFieldGoal = 30f;
+
+                switch (myPlayer.positionId)
+                {
+                    case "guard":
+                        threePointFieldGoal += (myPlayer.shoot * 3 + myPlayer.speed * 2 + myPlayer.jump) / 40f;
+                        break;
+
+                    case "forward":
+                        threePointFieldGoal += (myPlayer.shoot + myPlayer.speed * 3 + myPlayer.jump * 2) / 40f;
+                        break;
+
+                    case "center":
+                        threePointFieldGoal += (myPlayer.shoot * 2 + myPlayer.speed + myPlayer.jump * 3) / 40f;
+                        break;
+                }
+            }
+            else
+            {
+                threePointFieldGoal = 35f;
+            }
+
+
+                // 0~100 사이의 값을 랜덤 뽑아서 그 값보다 3점슛 확률이 높으면 3점슛
+            bool isThree = Random.Range(0f, 100f) < threePointFieldGoal;
+            int score = isThree ? 3 : 2;
+
+            if (myWin)
+                session.AddMyScore(score);
+            else
+                session.AddOpponentScore(score);
+
             logs.Add(Normal(myWin
-                ? $"[{myTeam}] 득점에 성공했다."
-                : $"[{opponentTeam}] 상대가 득점했다."));
+                ? $"[{myTeam}] {(isThree ? "3점" : "2점")} 득점에 성공했다."
+                : $"[{opponentTeam}] 상대가 {(isThree ? "3점" : "2점")} 득점했다."));
         }
         else
         {
@@ -149,21 +177,57 @@ public sealed class RandomPlayTurnSimulator
                 : $"{attackerTag} {attackerName}이(가) 리바운드를 놓쳤다."));
 
             myWin = myOffense == reboundSuccess;
-            logs.Add(Normal(myWin
-                ? $"[{myTeam}] 득점에 성공했다."
-                : $"[{opponentTeam}] 상대가 득점했다."));
-        }
 
-        if (myWin)
-            session.AddMyScore(session.ScorePerPlayTurnWin);
-        else
-            session.AddOpponentScore(session.ScorePerPlayTurnWin);
+            float threePointFieldGoal = 30f;
+
+            if (myOffense)
+            {
+                threePointFieldGoal = 30f;
+
+                // 리바운드 성공시 10% 추가
+                if (reboundSuccess)
+                    threePointFieldGoal += 10f;
+
+                switch (myPlayer.positionId)
+                {
+                    case "guard":
+                        threePointFieldGoal += (myPlayer.shoot * 3 + myPlayer.speed * 2 + myPlayer.jump) / 40f;
+                        break;
+
+                    case "forward":
+                        threePointFieldGoal += (myPlayer.shoot + myPlayer.speed * 3 + myPlayer.jump * 2) / 40f;
+                        break;
+
+                    case "center":
+                        threePointFieldGoal += (myPlayer.shoot * 2 + myPlayer.speed + myPlayer.jump * 3) / 40f;
+                        break;
+                }
+            }
+
+            else
+            {
+                threePointFieldGoal = 35f;
+            }
+
+            // 0~100 사이의 값을 랜덤 뽑아서 그 값보다 3점슛 확률이 높으면 3점슛
+            bool isThree = Random.Range(0f, 100f) < threePointFieldGoal;
+            int score = isThree ? 3 : 2;
+
+            if (myWin)
+                session.AddMyScore(score);
+            else
+                session.AddOpponentScore(score);
+
+            logs.Add(Normal(myWin
+                ? $"[{myTeam}] {(isThree ? "3점" : "2점")} 득점에 성공했다."
+                : $"[{opponentTeam}] 상대가 {(isThree ? "3점" : "2점")} 득점했다."));
+        }
 
         // 최종 공방 결과 기준 이미지 결정
         if (myOffense)
-            return myWin ? AttackSuccessImageId : AttackFailedImageId;
-        else
-            return myWin ? DefenseSuccessImageId : DefenseFailedImageId;
+            return myWin ? MatchContextVisualCue.PlayTurnAttackSuccess : MatchContextVisualCue.PlayTurnAttackFailed;
+
+        return myWin ? MatchContextVisualCue.PlayTurnDefenseSuccess : MatchContextVisualCue.PlayTurnDefenseFailed;
     }
 
     private static Student PickRandom(List<Student> players)

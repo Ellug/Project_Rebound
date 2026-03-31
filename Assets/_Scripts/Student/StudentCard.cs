@@ -51,6 +51,10 @@ public class StudentCard : MonoBehaviour
     [Header("Managing Overlay")]
     [SerializeField] private GameObject _managingOverlayPanel;
 
+
+    [SerializeField] private GameObject _disease;
+    [SerializeField] private GameObject _injury;
+
     private Student _studentData;
     private StudentCardPreviewDelta _previewDelta;
     private CardViewState _currentState = CardViewState.Normal;
@@ -98,6 +102,7 @@ public class StudentCard : MonoBehaviour
         SafeSetActive(_statsOverlayPanel, _currentState == CardViewState.ShowStats);
         SafeSetActive(_placingOverlayPanel, _currentState == CardViewState.Placing);
         SafeSetActive(_managingOverlayPanel, _currentState == CardViewState.Managing);
+        RefreshAbnormalIndicator();
 
         if (_currentState == CardViewState.ShowStats && _studentData != null)
             PopulateStatsOverlay(_studentData);
@@ -205,6 +210,20 @@ public class StudentCard : MonoBehaviour
     {
         if (target != null)
             target.SetActive(active);
+    }
+
+    // 상태이상 학생 카드에 표시
+    private void RefreshAbnormalIndicator()
+    {
+        if (_studentData == null)
+        {
+            SafeSetActive(_disease, false);
+            SafeSetActive(_injury, false);
+            return;
+        }
+
+        SafeSetActive(_disease, _studentData.abnormalState == Student.AbnormalType.Disease);
+        SafeSetActive(_injury, _studentData.abnormalState == Student.AbnormalType.Injury);
     }
 
     private void ApplyPortrait(Student student)

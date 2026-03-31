@@ -4715,13 +4715,14 @@ GameObject:
   - component: {fileID: 2812596403667044894}
   - component: {fileID: 2972282781487823811}
   - component: {fileID: 5131529032933238261}
+  - component: {fileID: 865498736929852011}
   m_Layer: 5
   m_Name: FacilityPpopup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2346678216771792611
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4853,6 +4854,33 @@ MonoBehaviour:
     normalImage2: {fileID: 4931386770265915687}
     maxImage: {fileID: 7972653122123229219}
     maxImage2: {fileID: 5279776998601407687}
+  _animator: {fileID: 865498736929852011}
+--- !u!114 &865498736929852011
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6276620468352386204}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54caaa4d7717c834b9150a5328b13bfe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PopupAnimator
+  _type: 0
+  _panelRoot: {fileID: 2346678216771792611}
+  _hiddenOffsetX: 0
+  _hiddenOffsetY: -400
+  _slideInDuration: 0.2
+  _slideOutDuration: 0.28
+  _slideInEase: 9
+  _slideOutEase: 8
+  _popInDuration: 0.18
+  _popOutDuration: 0.14
+  _popInEase: 27
+  _popOutEase: 26
+  _popOvershoot: 2
+  _disableRaycastWhileTween: 1
 --- !u!1 &6296157283436976655
 GameObject:
   m_ObjectHideFlags: 0

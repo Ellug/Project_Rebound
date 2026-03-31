@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30ec94c8ae4285e43abe05c18c74db2f, type: 3}
+  m_Name: SO_EndingCreditData
+  m_EditorClassIdentifier: Assembly-CSharp::EndingCreditDataSO
+  _scrollSpeed: 150
+  _totalDuration: 63
+  _bgmId: 110
+  _logoB3: {fileID: 8585079451540012284, guid: 7a2348a4ecbc40c499a4cfb16f5d532d, type: 3}
+  _logoB3Size: {x: 373, y: 373}
+  _logoKyungil: {fileID: 21300000, guid: 9e5ac103e0aabc5448da115aa8fed217, type: 3}
+  _logoKyungilSize: {x: 822, y: 164.4}
+  _thankYouImage: {fileID: 21300000, guid: de92037ceaf235b4c94e5ea35974e4b6, type: 3}
+  _thankYouSize: {x: 825, y: 143}
