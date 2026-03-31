@@ -177,12 +177,17 @@ public class EndingCreditDataSO : ScriptableObject
             EndingCreditLine.Empty(),
             EndingCreditLine.Empty(),
             EndingCreditLine.Empty(),
+            EndingCreditLine.Empty(),
+            EndingCreditLine.Empty(),
+            EndingCreditLine.Empty(),
+            EndingCreditLine.Empty(),
         };
 
         // 하단 로고 이미지 3종 — Inspector에서 연결되지 않은 항목은 생략
         if (_logoB3 != null)
         {
             lines.Add(EndingCreditLine.Logo(_logoB3, _logoB3Size));
+            lines.Add(EndingCreditLine.Empty());
             lines.Add(EndingCreditLine.Empty());
         }
 
@@ -191,11 +196,13 @@ public class EndingCreditDataSO : ScriptableObject
             lines.Add(EndingCreditLine.Logo(_logoKyungil, _logoKyungilSize));
             lines.Add(EndingCreditLine.Empty());
             lines.Add(EndingCreditLine.Empty());
+            lines.Add(EndingCreditLine.Empty());
         }
 
         if (_thankYouImage != null)
         {
             lines.Add(EndingCreditLine.Logo(_thankYouImage, _thankYouSize));
+            lines.Add(EndingCreditLine.Empty());
         }
 
         lines.Add(EndingCreditLine.Empty());

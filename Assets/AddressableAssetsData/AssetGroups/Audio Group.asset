@@ -1,4 +1,4 @@
-﻿%YAML 1.1
+%YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
 --- !u!114 &11400000
 MonoBehaviour:
@@ -220,12 +220,14 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ff76cc6142aeac14fbeb7b7c4b44a520
+    m_Address: Assets/AudioSources/bgm/bgm_Ending_start_lp.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: d3179b69a3360a04d9911317df1a1a42, type: 2}
   m_SchemaSet:
     m_Schemas:
     - {fileID: 11400000, guid: 653bd9d2248946d38b2f8253116d95d2, type: 2}
     - {fileID: 11400000, guid: 01f9d4f7ab0547edb25b29fc4c428481, type: 2}
-
-
-
