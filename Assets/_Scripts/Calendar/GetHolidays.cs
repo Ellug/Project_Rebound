@@ -1,4 +1,4 @@
-#if UNITY_EDITOR
+﻿#if UNITY_EDITOR
 using UnityEngine;
 using UnityEditor;
 using System;
@@ -57,19 +57,13 @@ public class GetHoliday
         DateTime d2 = seollal;
         DateTime d3 = seollal.AddDays(1);
 
-        List<DateTime> days = new() { d1, d2, d3 };
-
         bool hasWeekend = false;
 
-        foreach (var d in days)
+        // 주말 포함 모든 날짜 저장 (주말도 DB에 등록)
+        foreach (var d in new[] { d1, d2, d3 })
         {
-            if (IsWeekend(d))
-                hasWeekend = true;
-
-            if (!IsWeekend(d))
-            {
-                AddRaw(list, d, d == d2 ? "설날" : "설날 연휴");
-            }
+            if (IsWeekend(d)) hasWeekend = true;
+            AddRaw(list, d, d == d2 ? "설날" : "설날 연휴");
         }
 
         if (hasWeekend)
@@ -77,7 +71,6 @@ public class GetHoliday
             DateTime sub = d3.AddDays(1);
             while (IsWeekend(sub))
                 sub = sub.AddDays(1);
-
             AddRaw(list, sub, "대체공휴일(설날)");
         }
     }
@@ -90,19 +83,13 @@ public class GetHoliday
         DateTime d2 = chuseok;
         DateTime d3 = chuseok.AddDays(1);
 
-        List<DateTime> days = new() { d1, d2, d3 };
-
         bool hasWeekend = false;
 
-        foreach (var d in days)
+        // 주말 포함 모든 날짜 저장
+        foreach (var d in new[] { d1, d2, d3 })
         {
-            if (IsWeekend(d))
-                hasWeekend = true;
-
-            if (!IsWeekend(d))
-            {
-                AddRaw(list, d, d == d2 ? "추석" : "추석 연휴");
-            }
+            if (IsWeekend(d)) hasWeekend = true;
+            AddRaw(list, d, d == d2 ? "추석" : "추석 연휴");
         }
 
         if (hasWeekend)
@@ -110,19 +97,36 @@ public class GetHoliday
             DateTime sub = d3.AddDays(1);
             while (IsWeekend(sub))
                 sub = sub.AddDays(1);
-
             AddRaw(list, sub, "대체공휴일(추석)");
         }
     }
 
     static void AddHoliday(List<HolidayEntry> list, DateTime dt, string name)
     {
+        // 이미 연휴(설날/추석)로 등록된 날짜면 본일 추가 skip
+        int key = dt.Year * 10000 + dt.Month * 100 + dt.Day;
+        bool alreadyHoliday = list.Exists(x => x.date == key &&
+            (x.name == "추석" || x.name == "설날" || x.name == "추석 연휴" || x.name == "설날 연휴"));
+
+        if (alreadyHoliday)
+        {
+            // 대체공휴일만 처리 (본일은 이미 연휴로 표시됨)
+            if (IsWeekend(dt))
+            {
+                DateTime sub = dt;
+                while (IsWeekend(sub))
+                    sub = sub.AddDays(1);
+                AddRaw(list, sub, $"대체공휴일({name})");
+            }
+            return;
+        }
+
         if (IsWeekend(dt))
         {
+            AddRaw(list, dt, name);
             DateTime sub = dt;
             while (IsWeekend(sub))
                 sub = sub.AddDays(1);
-
             AddRaw(list, sub, $"대체공휴일({name})");
             return;
         }
@@ -145,13 +149,10 @@ public class GetHoliday
     {
         int key = dt.Year * 10000 + dt.Month * 100 + dt.Day;
 
-        if (!list.Exists(x => x.date == key))
+        // 같은 날짜+이름 조합이 없을 때만 추가
+        if (!list.Exists(x => x.date == key && x.name == name))
         {
-            list.Add(new HolidayEntry
-            {
-                date = key,
-                name = name
-            });
+            list.Add(new HolidayEntry { date = key, name = name });
         }
     }
 

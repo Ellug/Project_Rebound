@@ -69,8 +69,6 @@ public class CalendarDayPopup : MonoBehaviour
 
         foreach (var e in entries)
         {
-            if (e.Type == CalendarEntry.EntryType.FriendlyMatch) continue;
-
             string line = string.IsNullOrEmpty(e.Detail)
                 ? e.Label
                 : $"{e.Label} ({FormatDetail(e.Detail)})";
