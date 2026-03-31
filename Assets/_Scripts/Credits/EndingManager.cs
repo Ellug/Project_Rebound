@@ -51,7 +51,7 @@ public class EndingManager : MonoBehaviour
             onPrimary: StartCreditSequence,
             onCancel: null,
             subMessage: null,
-            previewImageId: AlwaysEventImageIds.Credits,
+            previewImageId: "EndingPopup_img",
             showCancel: false,
             primaryKind: UIPopupRequest.PrimaryButtonKind.Confirm
         );
@@ -62,8 +62,13 @@ public class EndingManager : MonoBehaviour
         UIManager.Instance.ShowPopup(request);
     }
 
+    // 팝업 확인 버튼 클릭 시 호출
+    // 기획서: 팝업 확인 → 세이브 분기 저장 + 엔딩 완료 플래그 기록 → 크레딧 시작
     private void StartCreditSequence()
     {
+        // 팝업 확인 시점에 엔딩 완료 저장
+        MarkEndingReachedAndSave();
+
         if (_endingCreditUI == null)
         {
             Debug.LogWarning("[EndingManager] EndingCreditUI가 연결되지 않았습니다. 타이틀로 복귀합니다.");
@@ -75,6 +80,7 @@ public class EndingManager : MonoBehaviour
         _endingCreditUI.Play();
     }
 
+    // 크레딧 DOFade 아웃 완료 후 호출
     private void ReturnToTitle()
     {
         if (SceneTransitionManager.Instance != null && SceneTransitionManager.Instance.IsTransitioning)
@@ -93,6 +99,19 @@ public class EndingManager : MonoBehaviour
             CleanupGameState();
             SceneManager.LoadScene(TitleScene);
         }
+    }
+
+    // 엔딩 연출 및 엔딩 크레딧 종료 이후 적용
+    // 해당 세이브 파일 상태를 엔딩 완료 상태로 처리
+    private static void MarkEndingReachedAndSave()
+    {
+        if (SaveManager.Instance == null) return;
+        if (SaveManager.Instance.CurrentData == null) return;
+
+        SaveManager.Instance.CurrentData.isEndingReached = true;
+        SaveManager.Instance.SaveCurrent();
+
+        Debug.Log("[EndingManager] 엔딩 완료 저장 완료");
     }
 
     private static void CleanupGameState()

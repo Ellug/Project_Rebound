@@ -23,11 +23,21 @@ public class EndingCreditAnimator : AnimatorBase
             _canvasGroup = GetComponent<CanvasGroup>() ?? gameObject.AddComponent<CanvasGroup>();
 
         _canvasGroup.alpha = 0f;
+        _canvasGroup.blocksRaycasts = false; // 초기 비활성 상태에서 뒤쪽 버튼 클릭 허용
+        _canvasGroup.interactable = false;
     }
 
     public override void PlayIn(Action onComplete = null)
     {
         if (IsAnimating && _fadeTween != null) return;
+
+        // 등장 시작 즉시 레이캐스트 차단 — 크레딧 뒤 버튼 클릭 방지
+        if (_canvasGroup != null)
+        {
+            _canvasGroup.blocksRaycasts = true;
+            _canvasGroup.interactable = true;
+        }
+
         FadeTo(0f, 1f, _fadeInDuration, _fadeInEase, onComplete);
     }
 
@@ -35,7 +45,16 @@ public class EndingCreditAnimator : AnimatorBase
     {
         float current = _canvasGroup != null ? _canvasGroup.alpha : 1f;
         float duration = _fadeOutDuration * current;
-        FadeTo(current, 0f, duration, _fadeOutEase, onComplete);
+        FadeTo(current, 0f, duration, _fadeOutEase, () =>
+        {
+            // 퇴장 완료 후 레이캐스트 해제
+            if (_canvasGroup != null)
+            {
+                _canvasGroup.blocksRaycasts = false;
+                _canvasGroup.interactable = false;
+            }
+            onComplete?.Invoke();
+        });
     }
 
     private void FadeTo(float from, float to, float duration, Ease ease, Action onComplete)
