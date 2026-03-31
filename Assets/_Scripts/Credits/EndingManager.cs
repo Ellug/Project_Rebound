@@ -2,16 +2,6 @@
 using UnityEngine.SceneManagement;
 
 // 엔딩 전체 흐름 관리
-// Tournament 씬(또는 별도 Ending 씬)의 빈 GameObject에 배치
-//
-// 기획서 2. 엔딩 구조 FLOW
-//   경기 결과 화면 → 엔딩 팝업 → 엔딩 크레딧 → 타이틀 복귀
-//
-// SceneTransitionManager 연동
-//   크레딧 DOFade 아웃 완료 후 OnCreditFinished가 발행되므로
-//   ReturnToTitle() 호출 시점에 화면은 이미 완전히 검은 상태.
-//   SceneTransitionManager의 ScaleX 퇴장 연출이 시각적으로 겹치지 않음.
-//   GameManager.ClearFlowRuntimeState()는 onMidpoint(씬 로드 직전)에 실행.
 public class EndingManager : MonoBehaviour
 {
     private const string TitleScene = "Title";
@@ -44,11 +34,6 @@ public class EndingManager : MonoBehaviour
         ShowEndingPopup();
     }
 
-    // 기획서 3. 엔딩 팝업 UI
-    //   제목  : [엔딩] 끝이 아닌 시작   (폰트 24 | Gmarket Sans)
-    //   본문  : 기획서 텍스트           (폰트 13 | Gmarket Sans)
-    //   이미지: EndingPopup_img.png
-    //   버튼  : 확인(Next)만. 취소 없음. BackKey 차단.
     private void ShowEndingPopup()
     {
         if (UIManager.Instance == null)
@@ -66,7 +51,7 @@ public class EndingManager : MonoBehaviour
             onPrimary: StartCreditSequence,
             onCancel: null,
             subMessage: null,
-            previewImageId: "EndingPopup_img",
+            previewImageId: AlwaysEventImageIds.Credits,
             showCancel: false,
             primaryKind: UIPopupRequest.PrimaryButtonKind.Confirm
         );

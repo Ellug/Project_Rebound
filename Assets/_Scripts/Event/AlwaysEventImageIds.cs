@@ -17,4 +17,5 @@
     public const string Weekend = "EventPopup_weekend_img";
     public const string Recruit = "EventPopup_recruit_img";
     public const string Halftime = "EventGame00_img_halftime";
+    public const string Credits = "EndingPopup_img";
 }
