@@ -53,7 +53,8 @@ public class LoadUI : MonoBehaviour
                 slotIndex = data.slotIndex,
                 school = data.school,
                 playTime = data.playTime,
-                saveTime = data.saveTime
+                saveTime = data.saveTime,
+                isEndingReached = data.isEndingReached
             };
 
             var go = Instantiate(_loadPrefab, _loadListpanel);
