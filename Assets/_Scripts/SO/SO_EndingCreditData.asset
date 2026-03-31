@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30ec94c8ae4285e43abe05c18c74db2f, type: 3}
   m_Name: SO_EndingCreditData
   m_EditorClassIdentifier: Assembly-CSharp::EndingCreditDataSO
-  _scrollSpeed: 140
-  _totalDuration: 61
+  _scrollSpeed: 150
+  _totalDuration: 63
   _bgmId: 110
   _logoB3: {fileID: 8585079451540012284, guid: 7a2348a4ecbc40c499a4cfb16f5d532d, type: 3}
   _logoB3Size: {x: 373, y: 373}
