@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 public class CalendarManager : Singleton<CalendarManager>
 {
@@ -9,14 +10,12 @@ public class CalendarManager : Singleton<CalendarManager>
 
     private readonly Dictionary<int, List<CalendarEntry>> _monthCache = new(); // key: yyyyMM
 
-    private HolidayDatabase _holidayDb;
+    [SerializeField] private HolidayDatabase _holidayDb;
     private TurnManager _turnManager;
     public event Action OnCalendarChanged;
+    private Dictionary<string, (DateTime min, DateTime max)> _lastGroupRanges;
 
-    protected override void OnSingletonAwake()
-    {
-        _holidayDb = CachedSOData.Get<HolidayDatabase>();
-    }
+    protected override void OnSingletonAwake() { }
 
     // Lobby 씬 초기화 시 TurnManager를 연결하여 턴 완료 이벤트를 구독
     public void Bind(TurnManager turnManager)
@@ -101,22 +100,250 @@ public class CalendarManager : Singleton<CalendarManager>
     public static bool IsDateInPlayRange(DateTime date)
         => date >= new DateTime(2026, 3, 1) && date <= MaxDate;
 
-    // HolidayDatabase.GetHolidaysInMonth()로 해당 월 공휴일을 한 번에 읽음
+    // 공휴일 수집
+    // 설날·추석 등 연휴는 이름 기준 그룹키로 묶어 기간 Detail을 표시
+    // 월 경계를 넘는 연휴(추석 9월 말 ~ 10월 초 등) 처리를 위해 전월·익월도 수집
+    // 토너먼트(방학) 기간에 겹치는 공휴일은 무시
     private void CollectHolidays(int year, int month, List<CalendarEntry> result)
     {
-        if (_holidayDb == null) return;
-
-        foreach (var entry in _holidayDb.GetHolidaysInMonth(year, month))
+        if (_holidayDb == null)
         {
-            int d = entry.date % 100;
-            var date = new DateTime(year, month, d);
-            result.Add(new CalendarEntry(date, CalendarEntry.EntryType.Holiday, entry.name));
+            Debug.LogWarning("[CalendarManager] _holidayDb가 연결되지 않았습니다. Inspector에서 HolidayDatabase를 연결해주세요.");
+            return;
+        }
+
+        var prevMonth = new DateTime(year, month, 1).AddMonths(-1);
+        var nextMonth = new DateTime(year, month, 1).AddMonths(1);
+        var nextMonth2 = new DateTime(year, month, 1).AddMonths(2);
+
+        var allEntries = new List<HolidayEntry>();
+        allEntries.AddRange(_holidayDb.GetHolidaysInMonth(prevMonth.Year, prevMonth.Month));
+        allEntries.AddRange(_holidayDb.GetHolidaysInMonth(year, month));
+        allEntries.AddRange(_holidayDb.GetHolidaysInMonth(nextMonth.Year, nextMonth.Month));
+        allEntries.AddRange(_holidayDb.GetHolidaysInMonth(nextMonth2.Year, nextMonth2.Month));
+
+        if (allEntries.Count == 0) return;
+
+        allEntries.Sort((a, b) => a.date.CompareTo(b.date));
+
+        foreach (var e in allEntries)
+            if (GetHolidayGroupKey(e.name) != null)
+                Debug.Log($"[Holiday] {e.date} {e.name} → {GetHolidayGroupKey(e.name)}");
+
+        // 그룹키별 날짜 min~max 범위 계산
+        var groupRanges = new Dictionary<string, (DateTime min, DateTime max)>();
+
+        foreach (var e in allEntries)
+        {
+            string groupKey = GetHolidayGroupKey(e.name);
+            if (groupKey == null) continue;
+
+            DateTime date = ParseHolidayDate(e.date);
+
+            if (groupRanges.TryGetValue(groupKey, out var range))
+            {
+                groupRanges[groupKey] = (
+                    date < range.min ? date : range.min,
+                    date > range.max ? date : range.max
+                );
+            }
+            else
+            {
+                groupRanges[groupKey] = (date, date);
+            }
+        }
+
+        // 그룹 범위에 주말 포함
+        // 공휴일이 2일 이상인 그룹(연휴)만 주말 확장
+        // 단일 공휴일(min == max)은 대체공휴일 없는 해이므로 확장 안 함
+        foreach (var key in groupRanges.Keys.ToList())
+        {
+            var (min, max) = groupRanges[key];
+            if (min == max) continue; // 단일 공휴일 — 확장 불필요
+
+            // min 이전 연속 주말 확장
+            DateTime extMin = min;
+            while (extMin.AddDays(-1).DayOfWeek == DayOfWeek.Saturday ||
+                   extMin.AddDays(-1).DayOfWeek == DayOfWeek.Sunday)
+                extMin = extMin.AddDays(-1);
+
+            // max 이후 연속 주말 확장
+            DateTime extMax = max;
+            while (extMax.AddDays(1).DayOfWeek == DayOfWeek.Saturday ||
+                   extMax.AddDays(1).DayOfWeek == DayOfWeek.Sunday)
+                extMax = extMax.AddDays(1);
+
+            groupRanges[key] = (extMin, extMax);
+        }
+
+        // 토너먼트(방학) 기간 날짜 집합 — 해당 날짜의 공휴일은 무시
+        var tournamentDates = GetTournamentDatesInMonth(year, month);
+
+        // 당월 항목만 result에 추가
+        // DB 등록 공휴일 + 연휴 범위 내 주말도 함께 추가
+        var currentEntries = _holidayDb.GetHolidaysInMonth(year, month);
+
+        // 그룹키 없는 단일 공휴일이 그룹 공휴일보다 먼저 오도록 정렬
+        currentEntries.Sort((a, b) =>
+        {
+            bool aIsGroup = GetHolidayGroupKey(a.name) != null;
+            bool bIsGroup = GetHolidayGroupKey(b.name) != null;
+            if (aIsGroup != bIsGroup) return aIsGroup ? -1 : 1;
+            return a.date.CompareTo(b.date);
+        });
+
+        var addedDates = new HashSet<DateTime>();
+
+        // 공휴일 추가
+        foreach (var e in currentEntries)
+        {
+            DateTime date = ParseHolidayDate(e.date);
+            if (tournamentDates.Contains(date.Date)) continue;
+
+            string groupKey = GetHolidayGroupKey(e.name);
+            string detail = null;
+
+            if (groupKey != null &&
+                groupRanges.TryGetValue(groupKey, out var range) &&
+                range.min != range.max)
+            {
+                detail = $"{range.min:M월 d일} ~ {range.max:M월 d일}";
+            }
+
+            if (addedDates.Add(date.Date))
+                result.Add(new CalendarEntry(date, CalendarEntry.EntryType.Holiday, e.name, detail));
+        }
+
+        // 연휴 범위 내 주말 추가 — 그룹별로 한 번만 실행
+        foreach (var kv in groupRanges)
+        {
+            string groupKey = kv.Key;
+            var (min, max) = kv.Value;
+            if (min == max) continue;
+
+            string detail = $"{min:M월 d일} ~ {max:M월 d일}";
+
+            // 그룹의 대표 이름 (전월·당월·익월 중 해당 그룹의 첫 번째 이름 사용)
+            // currentEntries에만 의존하면 본일이 주말이라 당월에 없는 경우 label이 비어있음
+            string label = string.Empty;
+            foreach (var e in allEntries)
+            {
+                if (GetHolidayGroupKey(e.name) == groupKey)
+                {
+                    label = e.name;
+                    break;
+                }
+            }
+
+            for (DateTime wd = min; wd <= max; wd = wd.AddDays(1))
+            {
+                if (wd.Month != month || wd.Year != year) continue;
+                if (wd.DayOfWeek != DayOfWeek.Saturday && wd.DayOfWeek != DayOfWeek.Sunday) continue;
+                if (tournamentDates.Contains(wd.Date)) continue;
+                if (addedDates.Add(wd.Date))
+                    result.Add(new CalendarEntry(wd, CalendarEntry.EntryType.Holiday, label, detail));
+            }
+        }
+
+        _lastGroupRanges = groupRanges;
+    }
+
+    // 해당 월의 토너먼트(vacation 타입) 기간 날짜 집합 반환
+    private static HashSet<DateTime> GetTournamentDatesInMonth(int year, int month)
+    {
+        var result = new HashSet<DateTime>();
+
+        DateTime from = new DateTime(year, month, 1);
+        DateTime to = new DateTime(year, month, DateTime.DaysInMonth(year, month));
+
+        var rows = AlwaysEventManager.GetRowsInRange(from, to);
+        foreach (var row in rows)
+        {
+            if (row == null) continue;
+            if (!AlwaysEventManager.IsLeagueBreakEvent(row)) continue;
+
+            if (!AlwaysEventDateUtil.TryParseTableDate(row.termStart, out DateTime termStart)) continue;
+            if (!AlwaysEventDateUtil.TryParseTableDate(row.termEnd, out DateTime termEnd)) continue;
+
+            DateTime start = termStart.Date < from.Date ? from.Date : termStart.Date;
+            DateTime end = termEnd.Date > to.Date ? to.Date : termEnd.Date;
+
+            for (DateTime d = start; d <= end; d = d.AddDays(1))
+                result.Add(d.Date);
+        }
+
+        return result;
+    }
+
+    // 공휴일 이름 → 연휴 그룹 키
+    // 단일 공휴일이라도 대체공휴일과 묶이면 기간 표시
+    // 연휴가 없는 해에는 range.min == range.max 이므로 Detail null 처리됨
+    private static string GetHolidayGroupKey(string name)
+    {
+        switch (name)
+        {
+            case "설날":
+            case "설날 연휴":
+            case "대체공휴일(설날)":
+                return "seollal";
+
+            case "추석":
+            case "추석 연휴":
+            case "대체공휴일(추석)":
+                return "chuseok";
+
+            case "광복절":
+            case "광복절 연휴":
+            case "대체공휴일(광복절)":
+                return "liberation";
+
+            case "석가탄신일":
+            case "대체공휴일(석가탄신일)":
+                return "buddha";
+
+            case "현충일":
+            case "대체공휴일(현충일)":
+                return "memorial";
+
+            case "어린이날":
+            case "대체공휴일(어린이날)":
+                return "children";
+
+            case "개천절":
+            case "대체공휴일(개천절)":
+                return "foundation";
+
+            case "성탄절":
+            case "대체공휴일(성탄절)":
+                return "christmas";
+
+            case "개헌절":
+            case "대체공휴일(개헌절)":
+                return "constitution";
+
+            case "삼일절":
+            case "대체공휴일(삼일절)":
+                return "independence";
+
+            case "한글날":
+            case "대체공휴일(한글날)":
+                return "hangul";
+
+            default:
+                return null;
         }
     }
 
-    // AlwaysEventManager.GetRowsInRange()로 해당 월과 겹치는 row를 읽어
-    // type에 따라 AcademicExam / AcademicFestival / Holiday / Tournament 엔트리를 생성
-    private static void CollectAlwaysEvents(DateTime from, DateTime to, List<CalendarEntry> result)
+    // yyyymmdd 정수 → DateTime 변환
+    private static DateTime ParseHolidayDate(int yyyymmdd)
+    {
+        int y = yyyymmdd / 10000;
+        int m = (yyyymmdd / 100) % 100;
+        int d = yyyymmdd % 100;
+        return new DateTime(y, m, d);
+    }
+
+    private void CollectAlwaysEvents(DateTime from, DateTime to, List<CalendarEntry> result)
     {
         var seen = new HashSet<(DateTime, CalendarEntry.EntryType)>();
 
@@ -159,12 +386,26 @@ public class CalendarManager : Singleton<CalendarManager>
 
             for (DateTime d = start; d <= end; d = d.AddDays(1))
             {
-                // Holiday 중복 제거 (HolidayDatabase 항목 우선)
                 if (entryType == CalendarEntry.EntryType.Holiday &&
                     !seen.Add((d, entryType)))
                     continue;
 
-                result.Add(new CalendarEntry(d, entryType, label, detail));
+                // AlwaysEventTable holiday는 단일 날짜 detail=null이므로
+                // _lastGroupRanges에서 연휴 기간 detail을 보정
+                string finalDetail = detail;
+                if (entryType == CalendarEntry.EntryType.Holiday && finalDetail == null)
+                {
+                    string gk = GetAlwaysEventGroupKey(row.name);
+                    if (gk != null &&
+                        _lastGroupRanges != null &&
+                        _lastGroupRanges.TryGetValue(gk, out var gr) &&
+                        gr.min != gr.max)
+                    {
+                        finalDetail = $"{gr.min:M월 d일} ~ {gr.max:M월 d일}";
+                    }
+                }
+
+                result.Add(new CalendarEntry(d, entryType, label, finalDetail));
             }
         }
     }
@@ -190,14 +431,12 @@ public class CalendarManager : Singleton<CalendarManager>
         // 메신저 채팅 예약
         if (FriendlyMatchManager.Instance == null) return;
 
-        // from.Year와 to.Year 모두 조회 (연말 경계 처리)
-        var scheduleFromYear = FriendlyMatchManager.Instance.GetBookedMatchSchedule();
-        var schedule = new Dictionary<DateTime, string>(scheduleFromYear);
+        var schedule = new Dictionary<DateTime, string>(
+            FriendlyMatchManager.Instance.GetBookedMatchSchedule());
 
         if (to.Year != from.Year)
         {
-            var scheduleToYear = FriendlyMatchManager.Instance.GetBookedMatchSchedule();
-            foreach (var kvp in scheduleToYear)
+            foreach (var kvp in FriendlyMatchManager.Instance.GetBookedMatchSchedule())
                 if (!schedule.ContainsKey(kvp.Key))
                     schedule[kvp.Key] = kvp.Value;
         }
@@ -258,10 +497,25 @@ public class CalendarManager : Singleton<CalendarManager>
     // 기간이 하루 이상이면 "M월 d일 ~ M월 d일" 형식의 Detail 문자열을 생성
     private static string BuildDetail(string type, DateTime termStart, DateTime termEnd)
     {
-        if (type == "holiday") return null; // 공휴일은 단일 날짜이므로 기간 불필요
-
         return termStart.Date == termEnd.Date
             ? null
             : $"{termStart:M월 d일} ~ {termEnd:M월 d일}";
     }
+
+    // GetHolidayGroupKey와 대응되는 AlwaysEventRow.name → 그룹키 매핑 (연휴 기간 Detail 보정용)
+    private static string GetAlwaysEventGroupKey(string rowName) => rowName switch
+    {
+        "holiday_chuseok" => "chuseok",
+        "holiday_seollal" => "seollal",
+        "holiday_buddha" => "buddha",
+        "holiday_liberation_day" or "holiday_liberation_Day" => "liberation",
+        "holiday_children_day" => "children",
+        "holiday_memorial_day" => "memorial",
+        "holiday_foundation_day" => "foundation",
+        "holiday_hangul_day" => "hangul",
+        "holiday_christmas" => "christmas",
+        "holiday_independence" => "independence",
+        _ => null
+    };
 }
+

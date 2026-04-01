@@ -333,3 +333,11 @@ MonoBehaviour:
       m_SubObjectType: 
       m_SubObjectGUID: 
       m_EditorAssetChanged: 0
+  - id: 110
+    name: bgm_Ending_start_lp
+    clipReference:
+      m_AssetGUID: ff76cc6142aeac14fbeb7b7c4b44a520
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0

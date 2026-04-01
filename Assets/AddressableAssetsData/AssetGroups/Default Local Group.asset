@@ -185,6 +185,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b8798145dd9f19544a65e771b1f5e303
+    m_Address: Assets/_Images/Credits/EndingPopup_img.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: caaa9da3c0da24b4eab850394767170b
     m_Address: SuddenEventMsgTextTable
     m_ReadOnly: 0

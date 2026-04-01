@@ -120,6 +120,13 @@ public class LobbyMatchManager : MonoBehaviour
     {
         HandleTournamentResult();
         HandleFriendlyMatchResult();
+
+        // 엔딩 판정
+        if (GameManager.Instance != null && GameManager.Instance.TryTriggerEnding())
+        {
+            // 엔딩 시퀀스가 시작됨 → 이후 일반 로비 복귀 흐름을 모두 건너뜀
+            return;
+        }
     }
 
     // 금요일 종료 시 친선전 예약이 있으면 진입 팝업
