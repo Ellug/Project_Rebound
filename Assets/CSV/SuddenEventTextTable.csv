@@ -90,3 +90,4 @@ text_SuddenEvent_000015,Daily,18,[SYSTEM],"팀 {effect1.target_name} {effect1.am
 text_SuddenEvent_000015,Daily,19,[SYSTEM],"팀 {effect1.target_name} {effect1.amount} 증가, {effect2.target_name} {effect2.amount} 증가, {effect3.target_name} {effect3.amount} 감소"
 text_SuddenEvent_000015,Daily,20,[SYSTEM],"팀 {effect1.target_name} {effect1.amount} 증가, {effect2.target_name} {effect2.amount} 증가, {effect3.target_name} {effect3.amount} 감소"
 text_SuddenEvent_100001,Daily,1,[SYSTEM],{term} 일 입원(훈련 및 출전 불가)
+text_SuddenEvent_111000,Daily,1,[SYSTEM],{term} 일 출전 불가 및 훈련 효율 {effect2.amount}% 감소
