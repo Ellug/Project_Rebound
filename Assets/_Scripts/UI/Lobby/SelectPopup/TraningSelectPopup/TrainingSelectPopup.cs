@@ -6,8 +6,6 @@ using UnityEngine.UI;
 public class TrainingSelectPopup : UIPopup
 {
     private static readonly AbnormalStatusEffect _abnormalStatusEffect = new AbnormalStatusEffect();
-    private readonly SuddenEvent _suddenEvent = new SuddenEvent();
-
     private enum TrainingPageKind
     {
         Default = 0,
@@ -611,8 +609,6 @@ public class TrainingSelectPopup : UIPopup
             if (StudentManager.Instance != null)
                 StudentManager.Instance.NotifyStudentModified(student);
 
-            if (_suddenEvent.TryApplyTrainingInjury(student) && StudentManager.Instance != null)
-                StudentManager.Instance.NotifyStudentModified(student);
         }
 
         if (SaveManager.Instance != null)
