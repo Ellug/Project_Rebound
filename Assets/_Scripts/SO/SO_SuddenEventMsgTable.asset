@@ -4656,7 +4656,7 @@ MonoBehaviour:
     choice2Next: 
     choice3Dialogue: 
     choice3Next: 
-    suddenEvent: 
+    suddenEvent: event_001007
   - iD: diag_111002
     messageIndex: index_000
     messageDialogue: text_diag_111002_000
@@ -4668,7 +4668,7 @@ MonoBehaviour:
     choice2Next: 
     choice3Dialogue: 
     choice3Next: 
-    suddenEvent: 
+    suddenEvent: event_001008
   - iD: diag_111003
     messageIndex: index_000
     messageDialogue: text_diag_111003_000
@@ -4680,7 +4680,7 @@ MonoBehaviour:
     choice2Next: 
     choice3Dialogue: 
     choice3Next: 
-    suddenEvent: 
+    suddenEvent: event_001009
   - iD: diag_111004
     messageIndex: index_000
     messageDialogue: text_diag_111004_000
@@ -4692,7 +4692,7 @@ MonoBehaviour:
     choice2Next: 
     choice3Dialogue: 
     choice3Next: 
-    suddenEvent: 
+    suddenEvent: event_001010
   - iD: diag_200001
     messageIndex: index_000
     messageDialogue: text_diag_200001_000

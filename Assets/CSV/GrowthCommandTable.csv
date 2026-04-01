@@ -7,7 +7,7 @@ int,string,string,int,enum,enum,int,enum,int,int,float,float,float,float,enum,st
 1101,근력 운동,TrainingPopup02_img_01,1001,action,gym,1,team,3,0,0,0,20,10,-,모든 선수의 점프력과 지구력이 증가합니다.
 1102,셔틀런,TrainingPopup02_img_02,1001,action,gym,1,team,6,0,0,20,0,50,-,모든 선수의 속도와 지구력이 대폭 증가합니다.
 1103,전술훈련,TrainingPopup02_img_03,1001,action,gym,1,team,2,0,10,0,10,0,-,모든 선수의 슈팅과 점프력이 증가합니다.
-1201,슈팅 드릴,TrainingPopup02_img_04,1002,action,gym,1,individual,5,0,40,0,0,0,-,슈팅 능력치를 집중 성장시킵니다.
-1202,속공 훈련,TrainingPopup02_img_05,1002,action,gym,1,individual,5,0,20,0,20,0,-,슈팅과 점프력을 성장시킵니다.
-1203,디펜스 워크,TrainingPopup02_img_06,1002,action,gym,1,individual,5,0,0,0,40,0,-,점프력 능력치를 집중 성장시킵니다.
-1204,핸들링/개인기,TrainingPopup02_img_07,1002,action,gym,1,individual,5,0,0,20,20,0,-,속도와 점프력을 성장시킵니다.
+1201,슈팅 드릴,TrainingPopup02_img_04,1002,action,gym,1,individual,20,0,90,0,0,0,-,슈팅 능력치를 집중 성장시킵니다.
+1202,속공 훈련,TrainingPopup02_img_05,1002,action,gym,1,individual,20,0,50,0,50,0,-,슈팅과 점프력을 성장시킵니다.
+1203,디펜스 워크,TrainingPopup02_img_06,1002,action,gym,1,individual,20,0,0,0,90,0,-,점프력 능력치를 집중 성장시킵니다.
+1204,핸들링/개인기,TrainingPopup02_img_07,1002,action,gym,1,individual,20,0,0,50,50,0,-,속도와 점프력을 성장시킵니다.

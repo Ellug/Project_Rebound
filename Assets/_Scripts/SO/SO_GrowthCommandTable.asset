@@ -136,9 +136,9 @@ MonoBehaviour:
     facilityReq: 2
     facilityLv: 1
     target: 2
-    conditionCost: 5
+    conditionCost: 20
     mental: 0
-    shoot: 40
+    shoot: 90
     speed: 0
     jump: 0
     stamina: 0
@@ -152,11 +152,11 @@ MonoBehaviour:
     facilityReq: 2
     facilityLv: 1
     target: 2
-    conditionCost: 5
+    conditionCost: 20
     mental: 0
-    shoot: 20
+    shoot: 50
     speed: 0
-    jump: 20
+    jump: 50
     stamina: 0
     linkedEventId: 
     desc: "\uC288\uD305\uACFC \uC810\uD504\uB825\uC744 \uC131\uC7A5\uC2DC\uD0B5\uB2C8\uB2E4."
@@ -168,11 +168,11 @@ MonoBehaviour:
     facilityReq: 2
     facilityLv: 1
     target: 2
-    conditionCost: 5
+    conditionCost: 20
     mental: 0
     shoot: 0
     speed: 0
-    jump: 40
+    jump: 90
     stamina: 0
     linkedEventId: 
     desc: "\uC810\uD504\uB825 \uB2A5\uB825\uCE58\uB97C \uC9D1\uC911 \uC131\uC7A5\uC2DC\uD0B5\uB2C8\uB2E4."
@@ -184,11 +184,11 @@ MonoBehaviour:
     facilityReq: 2
     facilityLv: 1
     target: 2
-    conditionCost: 5
+    conditionCost: 20
     mental: 0
     shoot: 0
-    speed: 20
-    jump: 20
+    speed: 50
+    jump: 50
     stamina: 0
     linkedEventId: 
     desc: "\uC18D\uB3C4\uC640 \uC810\uD504\uB825\uC744 \uC131\uC7A5\uC2DC\uD0B5\uB2C8\uB2E4."

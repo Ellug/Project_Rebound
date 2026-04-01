@@ -512,3 +512,9 @@ MonoBehaviour:
     target: 1
     speaker: '[SYSTEM]'
     description: "{term} \uC77C \uC785\uC6D0(\uD6C8\uB828 \uBC0F \uCD9C\uC804 \uBD88\uAC00)"
+  - id: text_SuddenEvent_111000
+    condition: 1
+    target: 1
+    speaker: '[SYSTEM]'
+    description: "{term} \uC77C \uCD9C\uC804 \uBD88\uAC00 \uBC0F \uD6C8\uB828 \uD6A8\uC728
+      {effect2.amount}% \uAC10\uC18C"
