@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -131,6 +132,20 @@ public class MessengerInboxPopup : UIBase
         if (scrollRect != null)
         {
             scrollRect.verticalNormalizedPosition = 1f;
+        }
+        StartCoroutine(ForceScrollTopRoutine());
+    }
+    private IEnumerator ForceScrollTopRoutine()
+    {
+        yield return null; // UI 레이아웃이 크기를 완전히 잡을 때까지 1프레임 대기
+        Canvas.ForceUpdateCanvases();
+
+        UnityEngine.UI.ScrollRect scrollRect = GetComponentInChildren<UnityEngine.UI.ScrollRect>();
+        if (scrollRect != null)
+        {
+            scrollRect.StopMovement(); // 진행 중인 관성 스크롤 강제 정지
+            scrollRect.verticalNormalizedPosition = 1f; // 최상단으로 이동
+            scrollRect.velocity = Vector2.zero;
         }
     }
 

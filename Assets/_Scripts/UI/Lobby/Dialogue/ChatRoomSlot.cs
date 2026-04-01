@@ -42,10 +42,8 @@ public class ChatRoomSlot : MonoBehaviour
             if (room.Messages.Count > 0)
             {
                 string lastMsg = room.Messages[room.Messages.Count - 1].Content;
-                if (room.RoomName.StartsWith("["))
-                    _txtPreview.text = $"{room.RoomName}\n{lastMsg}";
-                else
-                    _txtPreview.text = $"{room.RoomName}: {lastMsg}";
+                string cleanMsg = lastMsg.Replace("\n", " ");
+                _txtPreview.text = $"<b>{room.RoomName}</b>\n{cleanMsg}";
             }
         }
 
