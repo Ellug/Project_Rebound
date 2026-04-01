@@ -24,27 +24,60 @@ public class SuddenEventManager : Singleton<SuddenEventManager>
 
     private DateTime _lastTickDate;
     private bool _isLastTickDateSet = false;
-
-
     private int _lastRolledTermDays = 0;
 
     private HashSet<int> _pickedStudentsThisTurn = new HashSet<int>();
-    private HashSet<string> _triggeredEventIdsThisTurn = new HashSet<string>();
+    private Dictionary<string, int> _triggeredEventIdsWithTurn = new Dictionary<string, int>();
+
+    void Update()
+    {
+        TurnManager tm = FindFirstObjectByType<TurnManager>();
+        GameManager gm = FindFirstObjectByType<GameManager>();
+
+        bool isMatchOrVacation = (tm != null && (tm.CurrentPhase == GamePhase.MatchDay || tm.CurrentPhase == GamePhase.MatchInProgress)) ||
+                                 (gm != null && (gm.HasPendingFriendlyMatch || gm.IsLeagueOpened));
+        if (isMatchOrVacation)
+        {
+            if (_popupQueue.Count > 0)
+            {
+                _popupQueue.Clear();
+                _isPopupShowing = false;
+            }
+        }
+    }
+
+    
 
     // ==========================================
     // 이벤트 통합 평가 (훈련 부상 포함)
     // ==========================================
     public void EvaluateEvents(SuddenEventConditionFlags condition, SuddenEventContextFlags context)
     {
+        GameManager gm = FindFirstObjectByType<GameManager>();
         TurnManager tm = FindFirstObjectByType<TurnManager>();
-        int currentTurn = tm != null ? tm.TurnIndex : -1;
+        if (gm != null && tm != null && tm.DateManager != null)
+        {
+            DateTime today = tm.DateManager.CurrentDate.Date;
+            DateTime tomorrow = today.AddDays(1);
 
+            
+            if (gm.IsLeagueOpened) return;
+
+            int dDay = gm.GetTournamentDday();
+            if (dDay == 0 || dDay == 1) return;
+
+            if (gm.IsFriendlyMatchConfirmed)
+            {
+                if (gm.FriendlyMatchDate.Date == today || gm.FriendlyMatchDate.Date == tomorrow)
+                    return;
+            }
+        }
 
         if (tm != null)
         {
             // 시합 당일 차단
             if (tm.CurrentPhase == GamePhase.MatchDay) return;
-
+           
             if (tm.DateManager != null)
             {
                 DayOfWeek currentDay = tm.DateManager.CurrentDate.DayOfWeek;
@@ -108,10 +141,16 @@ public class SuddenEventManager : Singleton<SuddenEventManager>
         // 대화 종료 후 파생 이벤트가 아닐 때만 카운트 체크 및 증가
         if (!fromDialogue && _dailyEventCount >= MAX_EVENTS_PER_TURN) return false;
 
+        TurnManager tm = FindFirstObjectByType<TurnManager>();
+        int currentTurn = tm != null ? tm.TurnIndex : -1;
+
         if (!fromDialogue)
         {
-            if (_triggeredEventIdsThisTurn.Contains(row.id)) return false;
-            _triggeredEventIdsThisTurn.Add(row.id);
+            if (_triggeredEventIdsWithTurn.TryGetValue(row.id, out int recordedTurn))
+            {
+                if (Mathf.Abs(currentTurn - recordedTurn) <= 1) return false;
+            }
+            _triggeredEventIdsWithTurn[row.id] = currentTurn;
         }
 
         List<Student> targets = new List<Student>();
@@ -493,8 +532,16 @@ public class SuddenEventManager : Singleton<SuddenEventManager>
     {
         _dailyEventCount = 0;
         _pickedStudentsThisTurn.Clear();
-        _triggeredEventIdsThisTurn.Clear();
         _lastRolledTermDays = 0;
+
+        TurnManager tm = FindFirstObjectByType<TurnManager>();
+        int currentTurn = tm != null ? tm.TurnIndex : -1;
+
+        var keysToRemove = _triggeredEventIdsWithTurn.Where(kvp => currentTurn - kvp.Value > 2).Select(kvp => kvp.Key).ToList();
+        foreach (var key in keysToRemove)
+        {
+            _triggeredEventIdsWithTurn.Remove(key);
+        }
     }
     private void ShowEventTextOrDialogue(SuddenEventRow eventRow, List<Student> targets, Dictionary<string, string> textVars, bool fromDialogue, string originRoomId, bool isStudentScope)
     {
@@ -652,6 +699,15 @@ public class SuddenEventManager : Singleton<SuddenEventManager>
 
     private void EnqueueEventPopup(string title, string roomId, string roomName, string preview)
     {
+        foreach (var item in _popupQueue)
+        {
+            if (item.roomId == roomId && item.previewText == preview)
+            {
+                Debug.Log($"[중복 팝업 방어] 완전히 동일한 팝업이 대기 중이므로 무시합니다: {preview}");
+                return;
+            }
+        }
+
         _popupQueue.Enqueue(new EventPopupData { title = title, roomId = roomId, roomName = roomName, previewText = preview });
 
         if (!_isPopupShowing)
@@ -663,6 +719,12 @@ public class SuddenEventManager : Singleton<SuddenEventManager>
     public void ProcessNextPopup()
     {
         _isPopupShowing = false;
+
+        TurnManager tm = FindFirstObjectByType<TurnManager>();
+        if (tm != null && (tm.CurrentPhase == GamePhase.MatchDay || tm.CurrentPhase == GamePhase.MatchInProgress))
+        {
+            return;
+        }
 
         if (_popupQueue.Count > 0)
         {
