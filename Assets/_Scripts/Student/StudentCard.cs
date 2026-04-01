@@ -68,7 +68,27 @@ public class StudentCard : MonoBehaviour
         btn.onClick.RemoveAllListeners();
         btn.onClick.AddListener(() => OnCardClicked?.Invoke(this));
     }
+    void OnEnable()
+    {
+        if (StudentManager.Instance != null)
+            StudentManager.Instance.OnStudentModified += HandleStudentModified;
+    }
 
+    void OnDisable()
+    {
+        if (StudentManager.Instance != null)
+            StudentManager.Instance.OnStudentModified -= HandleStudentModified;
+    }
+
+    private void HandleStudentModified(Student student)
+    {
+        // 내 카드에 할당된 학생의 데이터가 바뀌었다면 즉시 UI 새로고침
+        if (_studentData != null && _studentData.id == student.id)
+        {
+            _studentData = student;
+            RefreshDisplay();
+        }
+    }
     public void SetStudentData(Student student)
     {
         _studentData = student;

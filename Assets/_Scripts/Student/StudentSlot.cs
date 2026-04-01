@@ -41,6 +41,28 @@ public class StudentSlot : MonoBehaviour, IPointerClickHandler
 
     public event Action<StudentSlot> OnSlotClicked;             // 슬롯 클릭 이벤트
 
+
+    void OnEnable()
+    {
+        if (StudentManager.Instance != null)
+            StudentManager.Instance.OnStudentModified += HandleStudentModified;
+    }
+
+    void OnDisable()
+    {
+        if (StudentManager.Instance != null)
+            StudentManager.Instance.OnStudentModified -= HandleStudentModified;
+    }
+
+    private void HandleStudentModified(Student student)
+    {
+        // 슬롯에 있는 학생의 데이터가 바뀌면 부상 아이콘 상태 새로고침
+        if (_assignedStudent != null && _assignedStudent.id == student.id)
+        {
+            _assignedStudent = student;
+            RefreshAbnormalIndicator();
+        }
+    }
     // 해당 학생이 이 슬롯에 추천 대상인지 판단
     public bool IsRecommendedFor(Student student)
     {
