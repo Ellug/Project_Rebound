@@ -19,7 +19,6 @@ public class TurnManager : MonoBehaviour
     private bool _isTurnRunning;
     private TurnState _turnState = TurnState.WaitingForInput;
     private GamePhase _currentPhase = GamePhase.Init;
-    private readonly SuddenEvent _abnormalEvent = new SuddenEvent();
 
     public DateManager DateManager => _dateManager;
     public TurnContext CurrentContext => _currentContext;
@@ -127,6 +126,12 @@ public class TurnManager : MonoBehaviour
             }
             _dateManager.AdvanceDay();
             _turnIndex++;
+
+            if (SuddenEventManager.Instance != null)
+            {
+                SuddenEventManager.Instance.TickTermEffects();
+            }
+
             ProcessDayStartAbnormal();
 
             if (SuddenEventManager.Instance != null)
@@ -194,19 +199,6 @@ public class TurnManager : MonoBehaviour
         foreach (Student student in students)
         {
             if (student == null) continue;
-
-            Student.AbnormalType beforeState = student.abnormalState;
-            int beforeRemainTurn = student.abnormalRemainTurn;
-
-            if (student.abnormalState != Student.AbnormalType.None)
-            {
-                _abnormalEvent.TickAbnormal(student);
-            }
-
-            if (beforeState != student.abnormalState || beforeRemainTurn != student.abnormalRemainTurn)
-            {
-                StudentManager.Instance.NotifyStudentModified(student);
-            }
 
             if (student.abnormalState != Student.AbnormalType.None)
             {

@@ -129,7 +129,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ChatBubble
   _txtContent: {fileID: 6897340654855071405}
   _textLayoutElement: {fileID: 0}
-  _maxWidth: 441
+  _maxWidth: 460
 --- !u!114 &4309787513979202990
 MonoBehaviour:
   m_ObjectHideFlags: 0

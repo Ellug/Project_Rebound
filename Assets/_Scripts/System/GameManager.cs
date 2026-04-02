@@ -260,7 +260,7 @@ public class GameManager : Singleton<GameManager>
     }
 
     // 다음 토너먼트까지 남은 일수 계산 — CachedSOData를 직접 읽어 AEM 의존 없음
-    private int GetTournamentDday()
+    public int GetTournamentDday()
     {
         if (_turnManager == null)
             return -1;

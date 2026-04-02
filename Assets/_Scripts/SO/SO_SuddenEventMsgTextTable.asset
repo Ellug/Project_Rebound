@@ -693,7 +693,7 @@ MonoBehaviour:
     speaker: choice
     dialogue: "\uC0AC\uC9C4\uC740"
   - iD: text_diag_000011_008
-    speaker: player
+    speaker: student
     dialogue: "\uB124?"
   - iD: text_diag_000011_009
     speaker: player
@@ -1392,25 +1392,24 @@ MonoBehaviour:
       \uC6B0\uC6B8\uC99D"
   - iD: text_diag_111001_000
     speaker: student
-    dialogue: "\uC18C\uC18D \uD559\uC0DD\uC758 \uCE58\uB8CC \uC2E0\uACE0 \uB0B4\uC5ED\uC744
-      \uB2E4\uC74C\uACFC \uAC19\uC774 \uC548\uB0B4\uB4DC\uB9BD\uB2C8\uB2E4.\\n\\n\uB300\uC0C1:
-      \uB18D\uAD6C\uBD80 {target1.grade} {target1.name} \uD559\uC0DD\\n\uC0AC\uC720:
-      \uD0C0\uBC15\uC0C1"
+    dialogue: "\uC18C\uC18D \uD559\uC0DD\uC758 \uC785\uC6D0 \uB0B4\uC5ED\uC744 \uB2E4\uC74C\uACFC
+      \uAC19\uC774 \uC548\uB0B4\uB4DC\uB9BD\uB2C8\uB2E4.\\n\\n\uB300\uC0C1: \uB18D\uAD6C\uBD80
+      {target1.grade} {target1.name} \uD559\uC0DD\\n\uC0AC\uC720: \uD0C0\uBC15\uC0C1"
   - iD: text_diag_111002_000
     speaker: student
-    dialogue: "\uC18C\uC18D \uD559\uC0DD\uC758 \uCE58\uB8CC \uC2E0\uACE0 \uB0B4\uC5ED\uC744
+    dialogue: "\uC18C\uC18D \uD559\uC0DD\uC758 \uC785\uC6D0 \uC2E0\uACE0 \uB0B4\uC5ED\uC744
       \uB2E4\uC74C\uACFC \uAC19\uC774 \uC548\uB0B4\uB4DC\uB9BD\uB2C8\uB2E4.\\n\\n\uB300\uC0C1:
       \uB18D\uAD6C\uBD80 {target1.grade} {target1.name} \uD559\uC0DD\\n\uC0AC\uC720:
       \uC6B4\uB3D9 \uC911 \uBC1C\uBAA9 \uC5FC\uC88C"
   - iD: text_diag_111003_000
     speaker: student
-    dialogue: "\uC18C\uC18D \uD559\uC0DD\uC758 \uCE58\uB8CC \uC2E0\uACE0 \uB0B4\uC5ED\uC744
+    dialogue: "\uC18C\uC18D \uD559\uC0DD\uC758 \uC785\uC6D0 \uC2E0\uACE0 \uB0B4\uC5ED\uC744
       \uB2E4\uC74C\uACFC \uAC19\uC774 \uC548\uB0B4\uB4DC\uB9BD\uB2C8\uB2E4.\\n\\n\uB300\uC0C1:
       \uB18D\uAD6C\uBD80 {target1.grade} {target1.name} \uD559\uC0DD\\n\uC0AC\uC720:
       \uC190\uAC00\uB77D \uC778\uB300 \uBD80\uC0C1"
   - iD: text_diag_111004_000
     speaker: student
-    dialogue: "\uC18C\uC18D \uD559\uC0DD\uC758 \uCE58\uB8CC \uC2E0\uACE0 \uB0B4\uC5ED\uC744
+    dialogue: "\uC18C\uC18D \uD559\uC0DD\uC758 \uC785\uC6D0 \uC2E0\uACE0 \uB0B4\uC5ED\uC744
       \uB2E4\uC74C\uACFC \uAC19\uC774 \uC548\uB0B4\uB4DC\uB9BD\uB2C8\uB2E4.\\n\\n\uB300\uC0C1:
       \uB18D\uAD6C\uBD80 {target1.grade} {target1.name} \uD559\uC0DD\\n\uC0AC\uC720:
       \uC2ED\uC790\uC778\uB300 \uBD80\uC0C1"

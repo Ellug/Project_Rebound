@@ -234,6 +234,11 @@ public class StudentManager : Singleton<StudentManager>
         {
             if (student == null) continue;
 
+            if (student.abnormalState != Student.AbnormalType.Disease)
+            {
+                student.isTrainingBlocked = false;
+            }
+
             if (student.isTrainingBlocked)
             {
                 Debug.Log($"[StudentManager] {student.studentName} 학생은 현재 상태 이상으로 인해 훈련/휴식을 진행할 수 없습니다.");

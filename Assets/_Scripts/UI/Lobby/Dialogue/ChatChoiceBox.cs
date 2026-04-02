@@ -38,7 +38,8 @@ public class ChatChoiceBox : MonoBehaviour
             if (i < messageData.Choices.Count)
             {
                 _choiceButtons[i].button.gameObject.SetActive(true);
-                _choiceButtons[i].text.text = messageData.Choices[i].Text;
+                string rawText = messageData.Choices[i].Text;
+                _choiceButtons[i].text.text = $"<margin-left=1.5em><space=-1.5em>{i + 1}. {rawText}";
 
                 int choiceIndex = i;
                 _choiceButtons[i].button.onClick.RemoveAllListeners();

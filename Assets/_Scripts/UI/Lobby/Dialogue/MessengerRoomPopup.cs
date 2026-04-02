@@ -9,6 +9,7 @@ public class MessengerRoomPopup : UIBase
     [SerializeField] private TMP_Text _txtRoomName;
     [SerializeField] private Transform _chatContentRoot;
     [SerializeField] private Button _btnRoomClose;
+    [SerializeField] private Button _btnBack;
 
     [SerializeField] private GameObject _dateDividerPrefab;
     [SerializeField] private ChatBubble _bubbleLeftPrefab;
@@ -37,7 +38,11 @@ public class MessengerRoomPopup : UIBase
             _btnRoomClose.onClick.RemoveAllListeners();
             _btnRoomClose.onClick.AddListener(Close);
         }
-
+        if (_btnBack != null)
+        {
+            _btnBack.onClick.RemoveAllListeners();
+            _btnBack.onClick.AddListener(Close);
+        }
         if (MessengerManager.Instance != null)
         {
             MessengerManager.Instance.OnMessageAdded -= HandleNewMessage;

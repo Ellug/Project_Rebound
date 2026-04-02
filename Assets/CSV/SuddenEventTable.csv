@@ -29,10 +29,6 @@ event_000026,학부모 기금,PreProcess,School,Positive,Player,1,1,0,0,FALSE,no
 event_001001,부담감,PostProcess,Match,Negative | Body | Mental,Team_Key_Member,1,6,1,4,TRUE,condition,less,90,condition,or_more,80,Quarter,event_effect_1_randomPlayerStat_m3,-,-,TRUE,0.2,text_SuddenEvent_000004
 event_001001,부담감,PostProcess,Match,Negative | Body | Mental,Team_Key_Member,1,6,1,4,TRUE,condition,less,80,condition,or_more,70,Quarter,event_effect_1_randomPlayerStat_m3,-,-,TRUE,0.6,text_SuddenEvent_000004
 event_001001,부담감,PostProcess,Match,Negative | Body | Mental,Team_Key_Member,1,6,1,4,TRUE,condition,less,70,none,none,-1,Quarter,event_effect_1_randomPlayerStat_m3,-,-,TRUE,0.8,text_SuddenEvent_000004
-event_001002,부상(운동),PostProcess,Exercise,Negative | Body,Member,1,3,1,7,TRUE,condition,less,80,condition,or_more,60,Day,event_effect_1_unable_match_p1,event_effect_1_experience_m50,-,TRUE,0.2,text_diag_111001_000
-event_001002,부상(운동),PostProcess,Exercise,Negative | Body,Member,1,3,1,7,TRUE,condition,less,60,condition,or_more,40,Day,event_effect_1_unable_match_p1,event_effect_1_experience_m50,-,TRUE,0.5,text_diag_111002_000
-event_001002,부상(운동),PostProcess,Exercise,Negative | Body,Member,1,3,1,7,TRUE,condition,less,40,condition,or_more,20,Day,event_effect_1_unable_match_p1,event_effect_1_experience_m50,-,TRUE,0.7,text_diag_111003_000
-event_001002,부상(운동),PostProcess,Exercise,Negative | Body,Member,1,3,1,7,TRUE,condition,less,20,none,none,-1,Day,event_effect_1_unable_match_p1,event_effect_1_experience_m50,-,FALSE,1,text_diag_111004_000
 event_001002,부상(경기),PostProcess,Match,Negative | Body,Team_Key_Member,1,3,1,3,TRUE,condition,less,80,condition,or_more,60,Day,event_effect_1_unable_match_p1,event_effect_1_experience_m50,-,TRUE,0.2,text_SuddenEvent_000005
 event_001002,부상(경기),PostProcess,Match,Negative | Body,Team_Key_Member,1,3,1,7,TRUE,condition,less,60,condition,or_more,40,Day,event_effect_1_unable_match_p1,event_effect_1_experience_m50,-,TRUE,0.5,text_SuddenEvent_000005
 event_001002,부상(경기),PostProcess,Match,Negative | Body,Team_Key_Member,1,3,3,7,TRUE,condition,less,40,condition,or_more,20,Day,event_effect_1_unable_match_p1,event_effect_1_experience_m50,-,TRUE,0.7,text_SuddenEvent_000005
@@ -41,10 +37,10 @@ event_001003,질병(돌발이벤트),PostProcess,School,Negative | Body,Member,1
 event_001004,질병(돌발이벤트),PostProcess,School,Negative | Body,Member,1,3,3,7,FALSE,none,none,-1,none,none,-1,none,event_effect_1_unable_training_p1,event_effect_1_unable_match_p1,-,FALSE,1,text_SuddenEvent_100001
 event_001005,질병(돌발이벤트),PostProcess,School,Negative | Body,Member,1,3,7,28,FALSE,none,none,-1,none,none,-1,none,event_effect_1_unable_training_p1,event_effect_1_unable_match_p1,-,FALSE,1,text_SuddenEvent_100001
 event_001006,회복,PostProcess,School,Positive | Body | Mind,Member,1,3,0,0,FALSE,none,none,-1,none,none,-1,none,event_effect_1_unable_training_m1,event_effect_unable_match_m1,-,FALSE,1,text_SuddenEvent_000010
-event_001007,부상(돌발이벤트),PostProcess,School,Negative | Body,Member,1,3,1,7,TRUE,condition,less,80,condition,or_more,60,Day,event_effect_1_unable_match_p1,event_effect_1_experience_m50,-,TRUE,0.2,text_diag_111001_000
-event_001008,부상(돌발이벤트),PostProcess,School,Negative | Body,Member,1,3,1,7,TRUE,condition,less,60,condition,or_more,40,Day,event_effect_1_unable_match_p1,event_effect_1_experience_m50,-,TRUE,0.5,text_diag_111002_000
-event_001009,부상(돌발이벤트),PostProcess,School,Negative | Body,Member,1,3,1,7,TRUE,condition,less,40,condition,or_more,20,Day,event_effect_1_unable_match_p1,event_effect_1_experience_m50,-,TRUE,0.7,text_diag_111003_000
-event_001010,부상(돌발이벤트),PostProcess,School,Negative | Body,Member,1,3,1,7,TRUE,condition,less,20,none,none,-1,Day,event_effect_1_unable_match_p1,event_effect_1_experience_m50,-,FALSE,1,text_diag_111004_000
+event_001007,부상(돌발이벤트),PostProcess,School,Negative | Body,Member,1,3,1,7,TRUE,condition,less,80,condition,or_more,60,Day,event_effect_1_unable_match_p1,event_effect_1_experience_m50,-,TRUE,0.2,text_SuddenEvent_111000
+event_001008,부상(돌발이벤트),PostProcess,School,Negative | Body,Member,1,3,1,7,TRUE,condition,less,60,condition,or_more,40,Day,event_effect_1_unable_match_p1,event_effect_1_experience_m50,-,TRUE,0.5,text_SuddenEvent_111000
+event_001009,부상(돌발이벤트),PostProcess,School,Negative | Body,Member,1,3,1,7,TRUE,condition,less,40,condition,or_more,20,Day,event_effect_1_unable_match_p1,event_effect_1_experience_m50,-,TRUE,0.7,text_SuddenEvent_111000
+event_001010,부상(돌발이벤트),PostProcess,School,Negative | Body,Member,1,3,1,7,TRUE,condition,less,20,none,none,-1,Day,event_effect_1_unable_match_p1,event_effect_1_experience_m50,-,FALSE,1,text_SuddenEvent_111000
 event_100001,새로운 메시지.,PostProcess,Daily,Neutral,Member,1,1,0,0,FALSE,none,none,-1,none,none,-1,none,-,-,-,TRUE,1,text_diag_000001_000
 event_100002,새로운 메시지.,PostProcess,Daily,Neutral,Member,1,1,0,0,FALSE,none,none,-1,none,none,-1,none,-,-,-,TRUE,0.1,text_diag_000002_000
 event_100003,새로운 메시지.,PostProcess,Daily,Neutral,Member,1,1,0,0,FALSE,none,none,-1,none,none,-1,none,-,-,-,TRUE,0.1,text_diag_000003_000

@@ -24,16 +24,60 @@ public class SuddenEventManager : Singleton<SuddenEventManager>
 
     private DateTime _lastTickDate;
     private bool _isLastTickDateSet = false;
-    public void EvaluateEvents(SuddenEventConditionFlags condition, SuddenEventContextFlags context)
+    private int _lastRolledTermDays = 0;
+
+    private HashSet<int> _pickedStudentsThisTurn = new HashSet<int>();
+    private Dictionary<string, int> _triggeredEventIdsWithTurn = new Dictionary<string, int>();
+
+    void Update()
     {
         TurnManager tm = FindFirstObjectByType<TurnManager>();
-        int currentTurn = tm != null ? tm.TurnIndex : -1;
+        GameManager gm = FindFirstObjectByType<GameManager>();
+
+        bool isMatchOrVacation = (tm != null && (tm.CurrentPhase == GamePhase.MatchDay || tm.CurrentPhase == GamePhase.MatchInProgress)) ||
+                                 (gm != null && (gm.HasPendingFriendlyMatch || gm.IsLeagueOpened));
+        if (isMatchOrVacation)
+        {
+            if (_popupQueue.Count > 0)
+            {
+                _popupQueue.Clear();
+                _isPopupShowing = false;
+            }
+        }
+    }
+
+    
+
+    // ==========================================
+    // 이벤트 통합 평가 (훈련 부상 포함)
+    // ==========================================
+    public void EvaluateEvents(SuddenEventConditionFlags condition, SuddenEventContextFlags context)
+    {
+        GameManager gm = FindFirstObjectByType<GameManager>();
+        TurnManager tm = FindFirstObjectByType<TurnManager>();
+        if (gm != null && tm != null && tm.DateManager != null)
+        {
+            DateTime today = tm.DateManager.CurrentDate.Date;
+            DateTime tomorrow = today.AddDays(1);
+
+            
+            if (gm.IsLeagueOpened) return;
+
+            int dDay = gm.GetTournamentDday();
+            if (dDay == 0 || dDay == 1) return;
+
+            if (gm.IsFriendlyMatchConfirmed)
+            {
+                if (gm.FriendlyMatchDate.Date == today || gm.FriendlyMatchDate.Date == tomorrow)
+                    return;
+            }
+        }
 
         if (tm != null)
         {
             // 시합 당일 차단
             if (tm.CurrentPhase == GamePhase.MatchDay) return;
-
+           
             if (tm.DateManager != null)
             {
                 DayOfWeek currentDay = tm.DateManager.CurrentDate.DayOfWeek;
@@ -49,106 +93,119 @@ public class SuddenEventManager : Singleton<SuddenEventManager>
             }
         }
 
-        if (_dailyEventCount >= MAX_EVENTS_PER_TURN) return;
+
+        // 하루 3개 제한 확인
+        if (_dailyEventCount >= MAX_EVENTS_PER_TURN)
+            return;
 
         var table = CachedSOData.Get<SuddenEventTableSO>();
         if (table == null) return;
 
-        List<SuddenEventRow> triggeredEvents = new List<SuddenEventRow>();
-
-        foreach (var row in table.Rows)
-        {
-            if (row.condition.ToString().Contains("School")) continue;
-            if ((row.condition & condition) == 0) continue;
-            if ((row.context & context) == 0) continue;
-
-
-            // isProbable 플래그 확인 및 발동 확률 연산
-            if (row.isProbable && UnityEngine.Random.value > row.probability) continue;
-
-            triggeredEvents.Add(row);
-        }
+        // 조건에 맞는 모든 이벤트 추출
+        List<SuddenEventRow> triggeredEvents = table.Rows.Where(row =>
+            !row.condition.ToString().Contains("School") &&
+            (row.condition & condition) != 0 &&
+            (row.context & context) != 0).ToList();
 
         if (triggeredEvents.Count > 0)
         {
-            // 셔플
-            for (int i = 0; i < triggeredEvents.Count; i++)
-            {
-                int rnd = UnityEngine.Random.Range(0, triggeredEvents.Count);
-                var temp = triggeredEvents[i];
-                triggeredEvents[i] = triggeredEvents[rnd];
-                triggeredEvents[rnd] = temp;
-            }
-
-            foreach (var evt in triggeredEvents)
+            // 랜덤성 부여를 위한 셔플 후 실행
+            foreach (var evt in triggeredEvents.OrderBy(x => UnityEngine.Random.value))
             {
                 if (_dailyEventCount >= MAX_EVENTS_PER_TURN) break;
 
-                bool executed = ExecuteEvent(evt);
-                if (executed) _dailyEventCount++;
+                // 확률 검사 (엑셀 확률이 1보다 크면 %로 간주하여 보정)
+                float prob = evt.probability > 1f ? evt.probability / 100f : evt.probability;
+                if (!evt.isProbable || UnityEngine.Random.value <= prob)
+                {
+                    ExecuteEvent(evt);
+                }
             }
         }
     }
 
     public void ExecuteEventById(string eventId, string specificTargetName = "", bool fromDialogue = false, Dictionary<string, string> passedVars = null, string originRoomId = "")
     {
+        fromDialogue = true;
         var table = CachedSOData.Get<SuddenEventTableSO>();
         if (table != null && table.TryGet(eventId, out var row))
-        {
             ExecuteEvent(row, specificTargetName, fromDialogue, passedVars, originRoomId);
-        }
     }
 
+
+    // ==========================================
+    // 이벤트 실행 및 상태이상 판별 (이름 기준)
+    // ==========================================
     private bool ExecuteEvent(SuddenEventRow row, string specificTargetName = "", bool fromDialogue = false, Dictionary<string, string> passedVars = null, string originRoomId = "")
     {
+        // 대화 종료 후 파생 이벤트가 아닐 때만 카운트 체크 및 증가
+        if (!fromDialogue && _dailyEventCount >= MAX_EVENTS_PER_TURN) return false;
+
+        TurnManager tm = FindFirstObjectByType<TurnManager>();
+        int currentTurn = tm != null ? tm.TurnIndex : -1;
+
+        if (!fromDialogue)
+        {
+            if (_triggeredEventIdsWithTurn.TryGetValue(row.id, out int recordedTurn))
+            {
+                if (Mathf.Abs(currentTurn - recordedTurn) <= 1) return false;
+            }
+            _triggeredEventIdsWithTurn[row.id] = currentTurn;
+        }
+
         List<Student> targets = new List<Student>();
 
-        if (fromDialogue && passedVars != null && passedVars.TryGetValue("{target1.name}", out string tName))
+        if (passedVars != null && passedVars.TryGetValue("{target1.name}", out string tName))
         {
-            if (StudentManager.Instance != null)
-            {
-                var student = StudentManager.Instance.Students.FirstOrDefault(s => s.studentName == tName);
-                if (student != null) targets.Add(student);
-            }
+            var student = StudentManager.Instance?.Students.FirstOrDefault(s => s.studentName == tName);
+            if (student != null) targets.Add(student);
         }
-        else if (fromDialogue && !string.IsNullOrEmpty(specificTargetName) && !specificTargetName.Contains("[공지]"))
+        // 특정 타겟 이름이 넘어왔을 때
+        else if (!string.IsNullOrEmpty(specificTargetName) && !specificTargetName.Contains("[공지]") && specificTargetName != "sys_notice")
         {
-            if (StudentManager.Instance != null)
-            {
-                string parsedName = specificTargetName.Replace("student_", "");
-                var student = StudentManager.Instance.Students.FirstOrDefault(s => s.studentName == parsedName);
-                if (student != null) targets.Add(student);
-            }
+            string parsedName = specificTargetName.Replace("student_", "");
+            var student = StudentManager.Instance?.Students.FirstOrDefault(s => s.studentName == parsedName);
+            if (student != null) targets.Add(student);
         }
 
-        bool isStudentScope = ((int)row.scope == 2 || (int)row.scope == 3 || (int)row.scope == 4);
-
-        if (targets.Count == 0 && isStudentScope)
+        //자동 타겟 탐색 
+        if (targets.Count == 0 && ((int)row.scope >= 2 && (int)row.scope <= 4))
         {
             targets = PickTargets(row);
-
-
-            // 학생을 뽑아야 하는데 못 뽑았으면 이벤트 취소
             if (targets.Count == 0 && row.targetMin > 0) return false;
         }
 
+        if (!fromDialogue) _dailyEventCount++;
+
+        // 지속 기간 설정
+        int termDays = 0;
+        // 1. 대화창 변수에서 가져오기 시도
+        if (passedVars != null && passedVars.TryGetValue("{term}", out string passedTerm))
+            int.TryParse(passedTerm, out termDays);
+
+        // 2. 현재 CSV에서 가져오기 (첫 공지 이벤트일 경우)
+        if (termDays <= 0 && row.termMax > 0)
+            termDays = UnityEngine.Random.Range(row.termMin, row.termMax + 1);
+
+        // 3. 2번째 파생 이벤트인데 다이얼로그가 기간 변수를 잃어버렸다면? -> 아까 쥐고 있던 기간 사용!
+        if (termDays <= 0 && _lastRolledTermDays > 0)
+            termDays = _lastRolledTermDays;
+
+        // 4. 다음 파생 이벤트를 위해 무조건 백업
+        if (termDays > 0) _lastRolledTermDays = termDays;
+
+        // 파생된 시스템 이벤트 이름으로 질병/부상 구분
+        bool isDisease = row.name.Contains("질병");
+        bool isInjury = row.name.Contains("부상");
+
+        if ((isDisease || isInjury) && termDays <= 0) termDays = 3;
+
         Dictionary<string, string> textVars = new Dictionary<string, string>();
-
-
-        // 학생이 뽑혔을 때만 치환 변수에 이름 할당
         for (int i = 0; i < targets.Count; i++)
         {
             textVars[$"{{target{i + 1}.name}}"] = targets[i].studentName;
             textVars[$"{{target{i + 1}.grade}}"] = targets[i].grade.ToString() + "학년";
         }
-
-        //기간제 연산
-        int termDays = 0;
-        if (row.termMax > 0)
-        {
-            termDays = UnityEngine.Random.Range(row.termMin, row.termMax + 1);
-        }
-
         textVars["{term}"] = termDays.ToString();
 
         void ProcessEffect(string effectId, int effectIndex)
@@ -159,29 +216,43 @@ public class SuddenEventManager : Singleton<SuddenEventManager>
             if (effectTable != null && effectTable.TryGet(effectId.Trim(), out var effectRow))
             {
                 int amount = UnityEngine.Random.Range(effectRow.amountMin, effectRow.amountMax + 1);
+                PlayerStat targetStatId = (PlayerStat)effectRow.targetMin;
 
-                bool isPercentage = ((int)effectRow.type == 2);
-
-                ApplyEffectWithCalculatedAmount(effectRow.targetMin, targets, amount, isPercentage, termDays);
-
-                string statName = GetStatNameKorean(effectRow.targetMin);
-
-                textVars[$"{{effect{effectIndex}.target_name}}"] = statName;
-                textVars[$"{{effect{effectIndex}.amount}}"] = isPercentage ? $"{Mathf.Abs(amount)}%" : Mathf.Abs(amount).ToString();
-
-                if (effectIndex == 1)
+                // 질병/부상일 경우 무조건 적용되도록 보정 
+                if (isDisease)
                 {
-                    textVars["{event_effect.target_name}"] = statName;
-                    textVars["{event_effect.amount}"] = isPercentage ? $"{Mathf.Abs(amount)}%" : Mathf.Abs(amount).ToString();
+                    targetStatId = (PlayerStat)21;
+                    if (amount <= 0) amount = 1; // 강제 적용
                 }
+                else if (isInjury)
+                {
+                    targetStatId = (PlayerStat)22;
+                    if (amount <= 0) amount = 1; // 강제 적용
+                }
+
+                ApplyEffectWithCalculatedAmount(targetStatId, targets, amount, ((int)effectRow.type == 2), termDays);
+
+                string statName = GetStatNameKorean(targetStatId);
+                textVars[$"{{effect{effectIndex}.target_name}}"] = statName;
+                textVars[$"{{effect{effectIndex}.amount}}"] = ((int)effectRow.type == 2) ? $"{Mathf.Abs(amount)}%" : Mathf.Abs(amount).ToString();
             }
         }
 
-        ProcessEffect(row.effect1, 1);
-        ProcessEffect(row.effect2, 2);
-        ProcessEffect(row.effect3, 3);
+        // 이름이 부상/질병이면 강제로 적용
+        bool hasEffect = !string.IsNullOrEmpty(row.effect1) && row.effect1 != "-";
+        if (!hasEffect && (isDisease || isInjury))
+        {
+            PlayerStat forceStat = isDisease ? (PlayerStat)21 : (PlayerStat)22;
+            ApplyEffectWithCalculatedAmount(forceStat, targets, 1, false, termDays);
+        }
+        else
+        {
+            ProcessEffect(row.effect1, 1);
+            ProcessEffect(row.effect2, 2);
+            ProcessEffect(row.effect3, 3);
+        }
 
-        ShowEventTextOrDialogue(row, targets, textVars, fromDialogue, originRoomId, isStudentScope);
+        ShowEventTextOrDialogue(row, targets, textVars, fromDialogue, originRoomId, targets.Count > 0);
         return true;
     }
 
@@ -214,6 +285,12 @@ public class SuddenEventManager : Singleton<SuddenEventManager>
             }
         }
 
+        pool = pool.Where(s => !_pickedStudentsThisTurn.Contains(s.id)).ToList();
+        bool isBadEvent = row.name.Contains("질병") || row.name.Contains("부상") || row.name.Contains("입원");
+        if (isBadEvent)
+        {
+            pool = pool.Where(s => s.abnormalState == Student.AbnormalType.None).ToList();
+        }
         if (row.isTrigger && pool.Count > 0)
         {
             pool = pool.Where(student =>
@@ -224,19 +301,13 @@ public class SuddenEventManager : Singleton<SuddenEventManager>
 
         if (pool.Count == 0) return pool;
         // 셔플
-        for (int i = 0; i < pool.Count; i++)
-        {
-            int rnd = UnityEngine.Random.Range(0, pool.Count);
-            var temp = pool[i];
-            pool[i] = pool[rnd];
-            pool[rnd] = temp;
-        }
-
+        pool = pool.OrderBy(x => UnityEngine.Random.value).ToList();
         int count = UnityEngine.Random.Range(row.targetMin, row.targetMax + 1);
         count = Mathf.Clamp(count, 0, pool.Count);
 
         return pool.Take(count).ToList();
     }
+
     // 트리거 충족 여부 연산
     private bool CheckTriggerCondition(Student student, int statusType, int conditionType, int threshold)
     {
@@ -276,9 +347,7 @@ public class SuddenEventManager : Singleton<SuddenEventManager>
     // ==========================================
     private void ApplyEffectWithCalculatedAmount(PlayerStat targetStat, List<Student> targets, int amount, bool isPercentage, int termDays)
     {
-        bool isPlayerStat = targetStat == PlayerStat.Money || targetStat == PlayerStat.Fame;
-
-        if (isPlayerStat)
+        if (targetStat == PlayerStat.Money || targetStat == PlayerStat.Fame)
         {
             ApplyPlayerStat(targetStat, amount);
             return;
@@ -287,18 +356,19 @@ public class SuddenEventManager : Singleton<SuddenEventManager>
         bool statIncreased = false;
         foreach (var student in targets)
         {
-            // 실제 반영할 수치 계산 (비율일 경우 현재 스탯 기반 퍼센트 연산)
             int finalAmount = amount;
+
+            // 퍼센트 계산 로직
             if (isPercentage)
             {
                 int currentStat = GetStudentStatValue(student, targetStat);
                 finalAmount = Mathf.RoundToInt(currentStat * (amount / 100f));
             }
 
-            statIncreased |= ApplyStudentStat(student, targetStat, finalAmount);
+            statIncreased |= ApplyStudentStat(student, targetStat, finalAmount, termDays);
 
-            // 기간제 스탯 증감일 경우, 롤백을 위해 리스트에 등록
-            if (termDays > 0)
+            // 상태이상이 아닌 일반 버프/디버프 스탯일 때만 리스트에 보관
+            if (termDays > 0 && (int)targetStat < 21)
             {
                 _activeTermEffects.Add(new ActiveTermEffect
                 {
@@ -309,15 +379,6 @@ public class SuddenEventManager : Singleton<SuddenEventManager>
                 });
             }
         }
-
-        if (targets.Count > 0 && StudentManager.Instance != null)
-        {
-            foreach (var s in targets)
-            {
-                StudentManager.Instance.NotifyStudentModified(s);
-            }
-        }
-
         if (statIncreased) SoundManager.Instance?.PlayStatUpSfx();
     }
 
@@ -328,71 +389,70 @@ public class SuddenEventManager : Singleton<SuddenEventManager>
         else if (statType == PlayerStat.Fame) { if (amount > 0) MoneyManager.Instance.AddReputation(amount); else MoneyManager.Instance.TrySpendReputation(-amount); }
     }
 
-    private bool ApplyStudentStat(Student student, PlayerStat statType, int amount)
+    private bool ApplyStudentStat(Student student, PlayerStat statType, int amount, int termDays = 0)
     {
         int statInt = (int)statType;
-        if (statInt == 21 || statInt == 22 || statInt == 23)
-        {
-            Debug.Log($"[상태이상 발생!] {student.studentName} 학생에게 상태이상 번호 {statInt} 적용 (수치: {amount})");
+        bool changed = false;
 
+        // 상태이상(21, 22) 처리
+        if (statInt == 21 || statInt == 22)
+        {
             if (amount > 0)
             {
-                if (statInt == 21 || statInt == 22) student.isTrainingBlocked = true;
-
-                if (statInt == 21) student.abnormalState = Student.AbnormalType.Disease;
-                else if (statInt == 22 || statInt == 23) student.abnormalState = Student.AbnormalType.Injury;
-
-          
-                if (StudentManager.Instance != null)
+                if (statInt == 21)
                 {
-                    StudentManager.Instance.RemoveStudentFromSlots(student);
+                    student.isTrainingBlocked = true;
+                    student.abnormalState = Student.AbnormalType.Disease;
                 }
+                else if (statInt == 22)
+                {
+                    student.isTrainingBlocked = false;
+                    student.abnormalState = Student.AbnormalType.Injury;
+                }
+
+                int finalTerm = termDays > 0 ? termDays : (amount > 1 ? amount : 3);
+                student.abnormalRemainTurn = finalTerm;
+
+                Debug.Log($"[상태이상 정상 적용] {student.studentName} : {student.abnormalState} ({finalTerm}일 지속)");
             }
-            else // amount < 0 (회복 이벤트)
+            else // 완치
             {
                 student.isTrainingBlocked = false;
                 student.abnormalState = Student.AbnormalType.None;
-
-                // 해당 학생이 가지고 있던 모든 기간제 질병 데이터를 삭제하여 더 이상 추적하지 않게 함
-                _activeTermEffects.RemoveAll(e => e.StudentName == student.studentName && ((int)e.StatType == 21 || (int)e.StatType == 22 || (int)e.StatType == 23));
+                student.abnormalRemainTurn = 0;
             }
-
-            if (statInt == 21 || statInt == 22)
-            {
-                student.isTrainingBlocked = (amount > 0);
-            }
-
-            return true;
+            changed = true;
         }
-
-        switch (statType)
+        else
         {
-            case PlayerStat.Condition:
-                int beforeC = student.condition;
-                student.condition = Student.ClampCondition(student.condition + amount);
-                return student.condition > beforeC;
-            case PlayerStat.Mental:
-                int beforeM = student.mental;
-                student.mental += amount;
-                return student.mental > beforeM;
-            case PlayerStat.Shoot:
-                int beforeSh = student.shoot;
-                student.shoot += amount;
-                return student.shoot > beforeSh;
-            case PlayerStat.Speed:
-                int beforeSp = student.speed;
-                student.speed += amount;
-                return student.speed > beforeSp;
-            case PlayerStat.Jump:
-                int beforeJ = student.jump;
-                student.jump += amount;
-                return student.jump > beforeJ;
-            case PlayerStat.Stamina:
-                int beforeSt = student.stamina;
-                student.stamina += amount;
-                return student.stamina > beforeSt;
+            // 일반 스탯 증감 (기존 로직 유지)
+            switch (statType)
+            {
+                case PlayerStat.Condition: student.condition = Student.ClampCondition(student.condition + amount);
+                    changed = true;
+                    break;
+                case PlayerStat.Mental: student.mental += amount;
+                    changed = true;
+                    break;
+                case PlayerStat.Shoot: student.shoot += amount; 
+                    changed = true; 
+                    break;
+                case PlayerStat.Speed: student.speed += amount; 
+                    changed = true; 
+                    break;
+                case PlayerStat.Jump: student.jump += amount; 
+                    changed = true; 
+                    break;
+                case PlayerStat.Stamina: student.stamina += amount; 
+                    changed = true; 
+                    break;
+            }
         }
-        return false;
+
+        if (changed && StudentManager.Instance != null)
+            StudentManager.Instance.NotifyStudentModified(student);
+
+        return changed;
     }
 
 
@@ -401,7 +461,7 @@ public class SuddenEventManager : Singleton<SuddenEventManager>
     // ==========================================
     public void TickTermEffects()
     {
-        int daysToSubtract = 1;
+        int daysToSubtract = 0;
         TurnManager tm = FindFirstObjectByType<TurnManager>();
 
         if (tm != null && tm.DateManager != null)
@@ -416,37 +476,73 @@ public class SuddenEventManager : Singleton<SuddenEventManager>
             _lastTickDate = currentDate;
             _isLastTickDateSet = true;
         }
-
+        if (daysToSubtract <= 0) return;
+        // =======================================================
+        // 1. 일반 기간제 스탯 (버프/디버프) 차감 
+        // =======================================================
         for (int i = _activeTermEffects.Count - 1; i >= 0; i--)
         {
             var effect = _activeTermEffects[i];
-
-            // 스킵된 주말 날짜까지 한 번에 차감
             effect.RemainingDays -= daysToSubtract;
 
             if (effect.RemainingDays <= 0)
             {
                 var student = StudentManager.Instance?.Students.FirstOrDefault(s => s.studentName == effect.StudentName);
-                if (student != null)
+                if (student != null && (int)effect.StatType < 21)
                 {
-                    int statInt = (int)effect.StatType;
-                    if (statInt == 21 || statInt == 22 || statInt == 23)
-                    {
-                        // 상태이상 완치
-                        student.isTrainingBlocked = false;
-                        student.abnormalState = Student.AbnormalType.None;
-                    }
-                    else
-                    {
-                        ApplyStudentStat(student, effect.StatType, -effect.Amount);
-                    }
+                    ApplyStudentStat(student, effect.StatType, -effect.Amount);
                     StudentManager.Instance.NotifyStudentModified(student);
                 }
                 _activeTermEffects.RemoveAt(i);
             }
         }
+
+        // =======================================================
+        // 2. 상태이상 (입원/부상) 차감 (학생 데이터 직접 사용)
+        // =======================================================
+        if (StudentManager.Instance != null)
+        {
+            foreach (var student in StudentManager.Instance.Students)
+            {
+                if (student.abnormalState == Student.AbnormalType.None && student.isTrainingBlocked)
+                {
+                    student.isTrainingBlocked = false;
+                    StudentManager.Instance.NotifyStudentModified(student);
+                    Debug.Log($"[훈련 차단 해제] {student.studentName} 학생의 잘못된 훈련 차단 상태를 초기화했습니다.");
+                }
+                if (student.abnormalState != Student.AbnormalType.None)
+                {
+                    student.abnormalRemainTurn -= daysToSubtract;
+
+                    if (student.abnormalRemainTurn <= 0)
+                    {
+                        student.abnormalState = Student.AbnormalType.None;
+                        student.isTrainingBlocked = false;
+                        student.abnormalRemainTurn = 0;
+
+                        StudentManager.Instance.NotifyStudentModified(student);
+                        Debug.Log($"[상태이상 완치] {student.studentName} 학생이 다 나았습니다");
+                    }
+                }
+            }
+        }
     }
 
+    public void ResetDailyEventCount()
+    {
+        _dailyEventCount = 0;
+        _pickedStudentsThisTurn.Clear();
+        _lastRolledTermDays = 0;
+
+        TurnManager tm = FindFirstObjectByType<TurnManager>();
+        int currentTurn = tm != null ? tm.TurnIndex : -1;
+
+        var keysToRemove = _triggeredEventIdsWithTurn.Where(kvp => currentTurn - kvp.Value > 2).Select(kvp => kvp.Key).ToList();
+        foreach (var key in keysToRemove)
+        {
+            _triggeredEventIdsWithTurn.Remove(key);
+        }
+    }
     private void ShowEventTextOrDialogue(SuddenEventRow eventRow, List<Student> targets, Dictionary<string, string> textVars, bool fromDialogue, string originRoomId, bool isStudentScope)
     {
         string desc = eventRow.description?.Trim();
@@ -535,7 +631,7 @@ public class SuddenEventManager : Singleton<SuddenEventManager>
         TurnManager tm = FindFirstObjectByType<TurnManager>();
         if (tm != null && tm.DateManager != null)
         {
-            firstMsgDate = tm.DateManager.CurrentDate; 
+            firstMsgDate = tm.DateManager.CurrentDate;
 
             string contextStr = eventRow.context.ToString().ToLower();
 
@@ -603,6 +699,15 @@ public class SuddenEventManager : Singleton<SuddenEventManager>
 
     private void EnqueueEventPopup(string title, string roomId, string roomName, string preview)
     {
+        foreach (var item in _popupQueue)
+        {
+            if (item.roomId == roomId && item.previewText == preview)
+            {
+                Debug.Log($"[중복 팝업 방어] 완전히 동일한 팝업이 대기 중이므로 무시합니다: {preview}");
+                return;
+            }
+        }
+
         _popupQueue.Enqueue(new EventPopupData { title = title, roomId = roomId, roomName = roomName, previewText = preview });
 
         if (!_isPopupShowing)
@@ -614,6 +719,12 @@ public class SuddenEventManager : Singleton<SuddenEventManager>
     public void ProcessNextPopup()
     {
         _isPopupShowing = false;
+
+        TurnManager tm = FindFirstObjectByType<TurnManager>();
+        if (tm != null && (tm.CurrentPhase == GamePhase.MatchDay || tm.CurrentPhase == GamePhase.MatchInProgress))
+        {
+            return;
+        }
 
         if (_popupQueue.Count > 0)
         {
@@ -633,10 +744,5 @@ public class SuddenEventManager : Singleton<SuddenEventManager>
             _isPopupShowing = true;
             OnPopupRequested?.Invoke(_popupQueue.Dequeue());
         }
-    }
-
-    public void ResetDailyEventCount()
-    {
-        _dailyEventCount = 0;
     }
 }

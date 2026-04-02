@@ -710,102 +710,6 @@ MonoBehaviour:
     probability: 0.8
     description: text_SuddenEvent_000004
   - id: event_001002
-    name: "\uBD80\uC0C1(\uC6B4\uB3D9)"
-    context: 2
-    condition: 4
-    category: 6
-    scope: 2
-    targetMin: 1
-    targetMax: 3
-    termMin: 1
-    termMax: 7
-    termScale: 1
-    isTrigger: 1
-    triggerStatus1: 5
-    triggerCondition1: 7
-    triggerThreshold1: 80
-    triggerStatus2: 5
-    triggerCondition2: 6
-    triggerThreshold2: 60
-    effect1: event_effect_1_unable_match_p1
-    effect2: event_effect_1_experience_m50
-    effect3: 
-    isProbable: 1
-    probability: 0.2
-    description: text_diag_111001_000
-  - id: event_001002
-    name: "\uBD80\uC0C1(\uC6B4\uB3D9)"
-    context: 2
-    condition: 4
-    category: 6
-    scope: 2
-    targetMin: 1
-    targetMax: 3
-    termMin: 1
-    termMax: 7
-    termScale: 1
-    isTrigger: 1
-    triggerStatus1: 5
-    triggerCondition1: 7
-    triggerThreshold1: 60
-    triggerStatus2: 5
-    triggerCondition2: 6
-    triggerThreshold2: 40
-    effect1: event_effect_1_unable_match_p1
-    effect2: event_effect_1_experience_m50
-    effect3: 
-    isProbable: 1
-    probability: 0.5
-    description: text_diag_111002_000
-  - id: event_001002
-    name: "\uBD80\uC0C1(\uC6B4\uB3D9)"
-    context: 2
-    condition: 4
-    category: 6
-    scope: 2
-    targetMin: 1
-    targetMax: 3
-    termMin: 1
-    termMax: 7
-    termScale: 1
-    isTrigger: 1
-    triggerStatus1: 5
-    triggerCondition1: 7
-    triggerThreshold1: 40
-    triggerStatus2: 5
-    triggerCondition2: 6
-    triggerThreshold2: 20
-    effect1: event_effect_1_unable_match_p1
-    effect2: event_effect_1_experience_m50
-    effect3: 
-    isProbable: 1
-    probability: 0.7
-    description: text_diag_111003_000
-  - id: event_001002
-    name: "\uBD80\uC0C1(\uC6B4\uB3D9)"
-    context: 2
-    condition: 4
-    category: 6
-    scope: 2
-    targetMin: 1
-    targetMax: 3
-    termMin: 1
-    termMax: 7
-    termScale: 1
-    isTrigger: 1
-    triggerStatus1: 5
-    triggerCondition1: 7
-    triggerThreshold1: 20
-    triggerStatus2: 0
-    triggerCondition2: 0
-    triggerThreshold2: -1
-    effect1: event_effect_1_unable_match_p1
-    effect2: event_effect_1_experience_m50
-    effect3: 
-    isProbable: 0
-    probability: 1
-    description: text_diag_111004_000
-  - id: event_001002
     name: "\uBD80\uC0C1(\uACBD\uAE30)"
     context: 2
     condition: 8
@@ -1020,7 +924,7 @@ MonoBehaviour:
     effect3: 
     isProbable: 1
     probability: 0.2
-    description: text_diag_111001_000
+    description: text_SuddenEvent_111000
   - id: event_001008
     name: "\uBD80\uC0C1(\uB3CC\uBC1C\uC774\uBCA4\uD2B8)"
     context: 2
@@ -1044,7 +948,7 @@ MonoBehaviour:
     effect3: 
     isProbable: 1
     probability: 0.5
-    description: text_diag_111002_000
+    description: text_SuddenEvent_111000
   - id: event_001009
     name: "\uBD80\uC0C1(\uB3CC\uBC1C\uC774\uBCA4\uD2B8)"
     context: 2
@@ -1068,7 +972,7 @@ MonoBehaviour:
     effect3: 
     isProbable: 1
     probability: 0.7
-    description: text_diag_111003_000
+    description: text_SuddenEvent_111000
   - id: event_001010
     name: "\uBD80\uC0C1(\uB3CC\uBC1C\uC774\uBCA4\uD2B8)"
     context: 2
@@ -1092,7 +996,7 @@ MonoBehaviour:
     effect3: 
     isProbable: 0
     probability: 1
-    description: text_diag_111004_000
+    description: text_SuddenEvent_111000
   - id: event_100001
     name: "\uC0C8\uB85C\uC6B4 \uBA54\uC2DC\uC9C0."
     context: 2

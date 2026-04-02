@@ -62,8 +62,6 @@ public class FriendlyMatchSelectPopup : UIBase
         var listTable = CachedSOData.Get<FriendlyMatchScheduleMsgListTableSO>();
         var nameTable = CachedSOData.Get<SchoolNameTableSO>();
 
-        if (listTable == null || nameTable == null) return;
-
         TurnManager tm = FindFirstObjectByType<TurnManager>();
         int currentYear = -1;
         int currentMonth = -1;
@@ -73,16 +71,50 @@ public class FriendlyMatchSelectPopup : UIBase
             currentMonth = tm.DateManager.CurrentDate.Month;
         }
 
-        foreach (var row in listTable.Rows)
-        {
-            string schoolId = row.schoolName;
-            string realSchoolName = schoolId;
+        // 중복 출력을 막기 위한 HashSet 및 이름 매핑용 Dictionary
+        HashSet<string> allAvailableSchoolIds = new HashSet<string>();
+        Dictionary<string, string> idToNameMap = new Dictionary<string, string>();
 
-            var nameRow = nameTable.Rows.FirstOrDefault(r => r.id == schoolId);
-            if (nameRow != null)
+        // 1. 기존 테이블에 세팅된 기본 학교들 병합
+        if (listTable != null)
+        {
+            foreach (var row in listTable.Rows)
             {
-                realSchoolName = nameRow.name;
+                string sId = row.schoolName;
+                string sName = sId;
+
+                var nameRow = nameTable?.Rows.FirstOrDefault(r => r.id == sId);
+                if (nameRow != null) sName = nameRow.name;
+
+                allAvailableSchoolIds.Add(sId);
+                idToNameMap[sId] = sName;
             }
+        }
+
+        // 2. 토너먼트에서 만나 해금된 학교들 병합
+        if (FriendlyMatchManager.Instance != null)
+        {
+            foreach (string unlockedName in FriendlyMatchManager.Instance.GetUnlockedSchools())
+            {
+                // 이름 기반으로 SchoolNameTable에서 ID를 역추적
+                var nameRow = nameTable?.Rows.FirstOrDefault(r => r.name == unlockedName);
+
+                // 만약 테이블에 없는 예외적인 더미 이름이라면, 이름 자체를 임시 ID로 사용
+                string sId = nameRow != null ? nameRow.id : unlockedName;
+                string sName = unlockedName;
+
+                if (!allAvailableSchoolIds.Contains(sId))
+                {
+                    allAvailableSchoolIds.Add(sId);
+                    idToNameMap[sId] = sName;
+                }
+            }
+        }
+
+        // 3. 통합된 리스트를 바탕으로 UI 버튼 생성
+        foreach (string schoolId in allAvailableSchoolIds)
+        {
+            string realSchoolName = idToNameMap[schoolId];
 
             if (!string.IsNullOrEmpty(filter) && !realSchoolName.Contains(filter))
                 continue;
@@ -109,7 +141,6 @@ public class FriendlyMatchSelectPopup : UIBase
                     {
                         hasHistory = true;
 
-                        // 시스템 메시지가 이번 연도, 이번 달에 찍힌 것인지까지 검사
                         if (room.Messages.Any(m => m.EventType == MessageEventType.System
                                                 && m.Content.Contains("친선전 신청 횟수")
                                                 && m.Timestamp.Year == currentYear
@@ -120,14 +151,12 @@ public class FriendlyMatchSelectPopup : UIBase
                     }
                 }
 
-                // 1. 이미 수락/거절이 끝난 방이면 횟수 차감이나 롤백 없이 그냥 대화 내역만 보여줌
                 if (isCompletedThisMonth)
                 {
                     inbox.OpenRoom(roomId);
                     return;
                 }
 
-                // 2. 아직 안 끝났거나 새로운 매치 신청
                 bool isSuccess = FriendlyMatchManager.Instance.StartFriendlyMatch(sId, sName);
 
                 if (isSuccess)
@@ -137,7 +166,7 @@ public class FriendlyMatchSelectPopup : UIBase
                 }
                 else if (hasHistory)
                 {
-                    inbox.OpenRoom(roomId); 
+                    inbox.OpenRoom(roomId);
                 }
                 else
                 {

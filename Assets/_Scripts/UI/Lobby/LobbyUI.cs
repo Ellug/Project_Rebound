@@ -195,10 +195,7 @@ public class LobbyUI : UIBase
 
     private void UpdateMessagePreview(ChatMessage latestMessage)
     {
-        if (_txtMessage != null && latestMessage != null)
-        {
-            _txtMessage.text = latestMessage.Content;
-        }
+        UpdateUI();
     }
 
     private void OpenMessengerInbox()
