@@ -225,6 +225,13 @@ public class LobbyMatchManager : MonoBehaviour
 
         _turnManager.SetPhase(GamePhase.DailyTraining);
         _gameManager.ResetLeagueWindowState();
+
+        // 결과창 띄우기 전에 보상 먼저 지급
+        _tournamentResultUI.ApplyRewardBeforeShow(tournamentResultData);
+
+        // 결과 소비 + 날짜 전진 완료 상태를 즉시 저장
+        SaveManager.Instance?.AutoSaveByBranch("토너먼트 결과 처리 완료");
+
         _tournamentResultUI.ShowResult(tournamentResultData);
     }
 

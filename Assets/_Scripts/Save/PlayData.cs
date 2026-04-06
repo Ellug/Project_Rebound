@@ -64,6 +64,7 @@ public class SavedFlowData
     // 토너먼트 관련 저장
     public int semiFinalReachedCount;
     public float trainingEfficiencyPermBonusRate;
+    public int pendingTournamentReachedCount; // 0이면 대기 없음
 
     public DateTime ParseTrainingBoostExpireDate()
     {
