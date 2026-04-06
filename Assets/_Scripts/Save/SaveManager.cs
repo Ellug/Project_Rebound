@@ -436,6 +436,11 @@ public class SaveManager : Singleton<SaveManager>
             // 토너먼트 관련 저장
             semiFinalReachedCount = GameManager.Instance.GetSemiFinalReachedCount(),
             trainingEfficiencyPermBonusRate = GameManager.Instance.GetTrainingEfficiencyPermBonusRate(),
+
+            // 대기 중인 토너먼트 결과가 있으면 해당 토너먼트의 학교별 도달 라운드 수 저장, 없으면 0으로 저장
+            pendingTournamentReachedCount = GameManager.Instance.GetLastTournamentData().HasPendingResult
+                ? GameManager.Instance.GetLastTournamentData().PendingMySchoolReachedRoundTeamCount
+                : 0,
         };
     }
 

@@ -204,6 +204,9 @@ public class TournamentManager : MonoBehaviour
         _matchGameManager.ApplyPendingAbnormals();
         GameManager.Instance.SetPendingTournamentResult(_mySchoolReachedRoundTeamCount);
 
+        // 탈락 처리 완료 후 세이브 (isInProgress=false 상태로 저장)
+        SaveManager.Instance?.AutoSaveByBranch("토너먼트 탈락 처리");
+
         if (_mySchoolReachedRoundTeamCount == 1)
         {
             if (GameManager.Instance.TryEnterFirstWinterChampionStory())
@@ -460,6 +463,7 @@ public class TournamentManager : MonoBehaviour
 
             _matchGameManager.ApplyPendingAbnormals();
             GameManager.Instance.SetPendingTournamentResult(_mySchoolReachedRoundTeamCount);
+            SaveManager.Instance?.AutoSaveByBranch("토너먼트 탈락 처리");
             SceneTransitionManager.Instance.LoadScene(LobbyScene);
             return;
         }
@@ -487,6 +491,17 @@ public class TournamentManager : MonoBehaviour
         UpdateMySchoolTournamentProgress(didWin);
         PrepareThirdPlaceMatchIfNeeded(didWin);
         _mySchoolDefeatedThisMatch = !didWin;
+
+        // 세이브 전에 결과를 미리 GameManager에 등록
+        // pendingTournamentReachedCount가 세이브에 포함됨
+        if (!didWin || IsAllRoundsComplete())
+        {
+            GameManager.Instance.SetPendingTournamentResult(_mySchoolReachedRoundTeamCount);
+        }
+
+        // winner 기록 완료 후 즉시 세이브
+        // 이 시점에 IsAllRoundsComplete()가 true면 isInProgress=false로 저장됨
+        SaveManager.Instance?.AutoSaveByBranch("경기 결과 확정");
 
         _matchGameUi.HideMatchGamePanel();
         _matchGameUi.ShowMatchResultPanel(didWin);
@@ -662,10 +677,13 @@ public class TournamentManager : MonoBehaviour
     // 현재 토너먼트 상태 직렬화 데이터 생성 수행
     public SavedTournamentData CollectSaveData()
     {
+        // 결승전까지 모든 라운드의 winner가 확정된 경우 → 토너먼트 종료로 판단
+        bool allRoundsComplete = _allRounds.Count > 0 && IsAllRoundsComplete();
+
         SavedTournamentData data = new()
         {
             // _isMatchRunning은 MatchGameManager 소유 — 대진표가 존재하면 진행 중으로 판단
-            isInProgress = _allRounds.Count > 0,
+            isInProgress = _allRounds.Count > 0 && !allRoundsComplete,
             teamCount = _teamCount,
             currentRoundIndex = _currentRoundIndex,
             mySchoolReachedRoundTeamCount = _mySchoolReachedRoundTeamCount,
@@ -736,4 +754,68 @@ public class TournamentManager : MonoBehaviour
         RefreshUI();
         Debug.Log($"[TournamentManager] 대진표 복원 완료 — 라운드 {_currentRoundIndex}, 팀 수 {_teamCount}");
     }
+
+    // 모든 라운드의 모든 매치에 winner가 기록됐는지 확인
+    private bool IsAllRoundsComplete()
+    {
+        foreach (List<Matchup> round in _allRounds)
+        {
+            foreach (Matchup matchup in round)
+            {
+                if (string.IsNullOrEmpty(matchup.Winner))
+                    return false;
+            }
+        }
+        return true;
+    }
+
+#if UNITY_EDITOR
+    [ContextMenu("Debug - Skip To Final Win")]
+    private void DebugSkipToFinalWin()
+    {
+        for (int roundIdx = 0; roundIdx < _allRounds.Count; roundIdx++)
+        {
+            List<Matchup> round = _allRounds[roundIdx];
+            bool isLastRound = (roundIdx == _allRounds.Count - 1);
+
+            for (int i = 0; i < round.Count; i++)
+            {
+                Matchup matchup = round[i];
+                if (matchup.Winner != null) continue;
+                matchup.Winner = matchup.IncludeMySchool ? _mySchoolName : matchup.UpTeam;
+            }
+
+            if (!isLastRound)
+            {
+                List<string> winners = new();
+                foreach (Matchup m in round) winners.Add(m.Winner);
+
+                _currentRoundIndex = roundIdx + 1;
+                List<Matchup> nextRound = _allRounds[_currentRoundIndex];
+                nextRound.Clear();
+
+                int nextMatchupCount = winners.Count / 2;
+                for (int i = 0; i < nextMatchupCount; i++)
+                    nextRound.Add(CreateMatchup(winners[i * 2], winners[i * 2 + 1]));
+            }
+        }
+
+        RefreshUI();
+
+        _currentRoundIndex = _allRounds.Count - 1;
+        UpdateMySchoolTournamentProgress(true);
+        _mySchoolDefeatedThisMatch = false;
+
+        _matchGameManager.AbortCurrentMatch();
+        _matchGameUi.HideMatchGamePanel();
+
+        GameManager.Instance.SetPendingTournamentResult(_mySchoolReachedRoundTeamCount);
+        SaveManager.Instance?.AutoSaveByBranch("경기 결과 확정");
+
+        _matchGameUi.ShowMatchResultPanel(true);
+        _isWaitingForResultNext = true;
+
+        Debug.Log($"[Debug] 결승 승리 스킵 완료 | reachedCount={_mySchoolReachedRoundTeamCount}");
+    }
+#endif
 }

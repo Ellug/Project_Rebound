@@ -679,6 +679,13 @@ public class GameManager : Singleton<GameManager>
             RestoreTrainingBoost(boostStat, boostExpire);
         }
 
+        // 토너먼트 결과 복원 - 이미 대기 중인 결과가 없을 때만 복원
+        if (saved.pendingTournamentReachedCount > 0 && !_tournamentData.HasPendingResult)
+        {
+            Debug.Log($"[GameManager] pendingTournamentReachedCount 복원: {saved.pendingTournamentReachedCount}");
+            SetPendingTournamentResult(saved.pendingTournamentReachedCount);
+        }
+
         // 토너먼트 관련 데이터 복원
         _graduateGiftBonusTracker.RestoreFromSave(saved.semiFinalReachedCount, saved.trainingEfficiencyPermBonusRate);
 
