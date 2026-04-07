@@ -180,10 +180,8 @@ public class TournamentResultUI : MonoBehaviour
     // 승리(입상) 확인
     private void OnConfirmAchieved()
     {
-        // 보상 row를 조회해 지급한다.
-        RewardPopupRow row = GetRewardRow(_currentRewardId);
-        MoneyManager.Instance.ApplyReward(row.money, row.fame);
         Hide();
+        SaveManager.Instance?.AutoSaveByBranch("토너먼트 보상 지급"); // 보상 지급 후 즉시 세이브
         RestoreLobbyBgmIfLobby();
     }
 
@@ -317,5 +315,16 @@ public class TournamentResultUI : MonoBehaviour
     {
         if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name != LobbySceneName) return;
         SoundManager.Instance.PlayBGM(LobbyBgmClipId);
+    }
+
+    // 결과창 표시 전 보상 선지급
+    public void ApplyRewardBeforeShow(TournamentData tournamentResultData)
+    {
+        int reachedRoundTeamCount = tournamentResultData.PendingMySchoolReachedRoundTeamCount;
+        int rewardId = ResolveRewardId(reachedRoundTeamCount);
+        RewardPopupRow row = GetRewardRow(rewardId);
+
+        if (MoneyManager.Instance != null)
+            MoneyManager.Instance.ApplyReward(row.money, row.fame);
     }
 }

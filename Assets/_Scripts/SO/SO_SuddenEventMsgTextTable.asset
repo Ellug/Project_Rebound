@@ -591,7 +591,7 @@ MonoBehaviour:
     speaker: player
     dialogue: "\uB2E4\uC2DC \uD574\uBD10."
   - iD: text_diag_000009_017
-    speaker: player
+    speaker: student
     dialogue: "....\uC5B4?"
   - iD: text_diag_000009_018
     speaker: player
@@ -971,19 +971,19 @@ MonoBehaviour:
     speaker: choice
     dialogue: "\uADF8\uB7EC\uB2E4 \uB2E4\uCE5C\uB2E4."
   - iD: text_diag_000015_016
-    speaker: student
+    speaker: player
     dialogue: "\uD559\uAD50\uC5D0\uC11C \uC2E0\uBC1C \uC815\uB3C4\uB294 \uC9C0\uC6D0\uD574\uC904
       \uC218 \uC788\uB2E4."
   - iD: text_diag_000015_017
-    speaker: student
+    speaker: player
     dialogue: "\uB0B4\uAC00 \uD559\uAD50\uC5D0 \uAC74\uC758\uD574 \uBCFC \uD14C\uB2C8\uAE4C,\\n\uB0B4\uC77C\uAE4C\uC9C0
       \uC0AC\uC774\uC988 \uBB38\uC790\uB85C \uBCF4\uB0B4\uB77C"
   - iD: text_diag_000015_018
-    speaker: player
+    speaker: student
     dialogue: "\uB124, \uAC10\uB3C5\uB2D8."
   - iD: text_diag_000015_019
-    speaker: player
-    dialogue: "\uC800 280 \uC2E0\uC5B4\uC694."
+    speaker: student
+    dialogue: "\uC800 285 \uC2E0\uC5B4\uC694."
   - iD: text_diag_000015_020
     speaker: choice
     dialogue: "\uC73C\uC74C..."

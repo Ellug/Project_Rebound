@@ -60,7 +60,7 @@ diag_000004,index_004,text_diag_000004_004,index_005,FALSE,-,-,-,-,-,-,-
 diag_000004,index_005,text_diag_000004_005,index_006,FALSE,-,-,-,-,-,-,-
 diag_000004,index_006,text_diag_000004_006,index_007,FALSE,-,-,-,-,-,-,-
 diag_000004,index_007,text_diag_000004_007,index_008,FALSE,-,-,-,-,-,-,-
-diag_000004,index_008,text_diag_000004_008,-,TRUE,text_diag_000004_009,index_009,text_diag_000004_014,index_013,-,-,-
+diag_000004,index_008,text_diag_000004_008,-,TRUE,text_diag_000004_009,index_009,text_diag_000004_013,index_013,-,-,-
 diag_000004,index_009,text_diag_000004_010,index_010,FALSE,-,-,-,-,-,-,-
 diag_000004,index_010,text_diag_000004_011,index_011,FALSE,-,-,-,-,-,-,-
 diag_000004,index_011,text_diag_000004_012,END,FALSE,-,-,-,-,-,-,event_000005
