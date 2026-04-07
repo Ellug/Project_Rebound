@@ -740,7 +740,7 @@ MonoBehaviour:
     isChoice: 1
     choice1Dialogue: text_diag_000004_009
     choice1Next: index_009
-    choice2Dialogue: text_diag_000004_014
+    choice2Dialogue: text_diag_000004_013
     choice2Next: index_013
     choice3Dialogue: 
     choice3Next: 
