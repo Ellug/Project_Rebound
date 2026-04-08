@@ -5,6 +5,41 @@
 
 ---
 
+<details>
+<summary><strong>Ellug(팀장) 작업 파트</strong></summary>
+
+<br/>
+
+**집계 기준**
+- 작성자: `Ellug` (`116817127+Ellug@users.noreply.github.com`, `auron975@nate.com`)
+- 기간: `2026-02-09` ~ `2026-04-07`
+- 커밋: 총 `507`건 / 직접 작업(`--no-merges`) `177`건
+
+**Ellug(팀장) 직접 작업 파트 요약**
+1. 프로젝트 초기 세팅과 실행 진입 구조 구성 (`Start`/`Title`/`Lobby`, Addressable 로딩 베이스).
+2. CSV Importer 고도화 및 Google Sheets 동기화 자동화, SO 코드 자동 생성, CCD 업로드 자동화.
+3. Tournament 코어 로직(대진 생성, 쿼터·공방 시뮬레이션, 하프타임/실격/3·4위전/결과 처리) 구현·개선.
+4. VN 시스템(기본 실행, 스킵, 타이핑, 오디오 연동) 구축 및 로비 대화 흐름 분리.
+5. 학생 생성/성장/훈련 및 이벤트 연계 로직 보강, 관련 버그 수정.
+6. 멀티 디바이스 대응(레터박스, Flip/Fold 대응)과 커스텀 TMP 외곽선 등 UI 품질 개선.
+7. 데이터 테이블/Addressables/릴리즈 운영 작업(빌드 및 OBT 릴리즈 포함).
+
+**관련 소스코드 링크 구조**
+
+| 영역 | 코드 링크 |
+|---|---|
+| 실행/시스템 코어 | [`GameManager.cs`](Assets/_Scripts/System/GameManager.cs), [`StartManager.cs`](Assets/_Scripts/_Start/StartManager.cs), [`TitleManager.cs`](Assets/_Scripts/_Title/TitleManager.cs), [`LobbyMatchManager.cs`](Assets/_Scripts/System/LobbyMatchManager.cs) |
+| 데이터 파이프라인 자동화 | [`GoogleSheetSyncer.cs`](Assets/_Scripts/CSVParser/GoogleSync/GoogleSheetSyncer.cs), [`CsvBatchImporter.cs`](Assets/_Scripts/CSVParser/CsvBatchImporter.cs), [`CsvSoAutoCreator.cs`](Assets/_Scripts/CSVParser/CsvSoAutoCreator.cs), [`TableLoadConfigAutoSync.cs`](Assets/_Scripts/CSVParser/TableLoadConfigAutoSync.cs), [`GoogleSheetCloudUploader.cs`](Assets/_Scripts/CSVParser/GoogleSync/GoogleSheetCloudUploader.cs) |
+| Addressables/오디오 | [`AddressableImageManager.cs`](Assets/_Scripts/AddressableManager/AddressableImageManager.cs), [`AddressableAudioManager.cs`](Assets/_Scripts/AddressableManager/AddressableAudioManager.cs), [`SoundManager.cs`](Assets/_Scripts/Audio/SoundManager.cs) |
+| 토너먼트 시뮬레이션 | [`TournamentManager.cs`](Assets/_Scripts/Tournament/TournamentManager.cs), [`MatchGameManager.cs`](Assets/_Scripts/Tournament/MatchGameManager.cs), [`MatchGameQuarterSimulation.cs`](Assets/_Scripts/Tournament/MatchGameQuarterSimulation.cs), [`MatchGamePlayTurnSimulation.cs`](Assets/_Scripts/Tournament/MatchGamePlayTurnSimulation.cs), [`MatchGameModels.cs`](Assets/_Scripts/Tournament/MatchGameModels.cs) |
+| VN/내러티브 | [`VNManager.cs`](Assets/_Scripts/_VN/VNManager.cs), [`VNBridge.cs`](Assets/_Scripts/_VN/VNBridge.cs), [`DialogueRunner.cs`](Assets/_Scripts/UI/Lobby/Dialogue/DialogueRunner.cs) |
+| 학생/성장/훈련 | [`StudentFactory.cs`](Assets/_Scripts/Student/StudentFactory.cs), [`StudentManager.cs`](Assets/_Scripts/Student/StudentManager.cs), [`StudentStatExpSystem.cs`](Assets/_Scripts/Student/StudentStatExpSystem.cs), [`TrainingSelectPopup.cs`](Assets/_Scripts/UI/Lobby/SelectPopup/TraningSelectPopup/TrainingSelectPopup.cs) |
+| UI 품질/멀티디바이스 | [`TMPExternalStroke.cs`](Assets/_Scripts/Util/TMPExternalStroke.cs), [`SelectStudentInfoPopup.cs`](Assets/_Scripts/UI/Lobby/StudentInfoPopup/SelectStudentInfoPopup.cs) |
+
+</details>
+
+---
+
 ## 소개
 
 학교 농구부 감독이 되어 학생을 육성하고 토너먼트를 완주하는 턴 기반 시뮬레이션 게임.  
